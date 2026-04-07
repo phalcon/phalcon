@@ -17,7 +17,7 @@ use PDOStatement;
 use Phalcon\DataMapper\Query\Select;
 use Phalcon\DataMapper\Query\Update;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 
 use function uniqid;
 

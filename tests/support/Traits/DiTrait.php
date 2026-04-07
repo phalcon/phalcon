@@ -50,6 +50,7 @@ use Phalcon\Session\Manager;
 use Phalcon\Storage\AdapterFactory as StorageAdapterFactory;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
+
 use function getOptionsLibmemcached;
 use function getOptionsModelCacheStream;
 use function getOptionsMysql;
@@ -203,7 +204,7 @@ trait DiTrait
     {
         switch ($service) {
             case 'annotations':
-                return new AnnotationsMemory();
+                return new AnnotationsMemory(new SerializerFactory());
             case 'cliFactoryDefault':
                 return new CliFactoryDefault();
             case 'console':

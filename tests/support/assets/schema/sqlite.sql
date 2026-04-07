@@ -130,6 +130,18 @@ create table co_manufacturers (
             
 
 
+drop table if exists no_primary_key;
+            
+
+
+create table no_primary_key
+(
+    nokey_id   integer,
+    nokey_name text not null
+);
+            
+
+
 drop table if exists `objects`;
             
 

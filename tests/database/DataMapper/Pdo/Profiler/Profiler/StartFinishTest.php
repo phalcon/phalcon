@@ -15,7 +15,7 @@ use InvalidArgumentException;
 use Phalcon\DataMapper\Pdo\Profiler\MemoryLogger;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Pdo\ProfilerJsonEncodeFixture;
+use Phalcon\Tests\Support\DataMapper\Pdo\ProfilerJsonEncodeFixture;
 
 use function sleep;
 

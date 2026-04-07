@@ -29,7 +29,6 @@ class OrdersProducts extends Model
 
     public function initialize()
     {
-        $this->setSchema('private');
         $this->setSource('co_orders_x_products');
     }
 }

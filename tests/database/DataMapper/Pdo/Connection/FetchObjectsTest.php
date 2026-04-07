@@ -13,8 +13,8 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Resultset;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Resultset;
 use stdClass;
 
 final class FetchObjectsTest extends AbstractDatabaseTestCase
