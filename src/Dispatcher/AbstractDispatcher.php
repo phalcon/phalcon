@@ -24,7 +24,6 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Mvc\ControllerInterface;
 use Phalcon\Mvc\Model\BinderInterface;
-
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Support\Collection;
 
