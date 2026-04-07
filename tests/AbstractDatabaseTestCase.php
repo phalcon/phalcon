@@ -47,6 +47,11 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
     private static ?PDO $connection = null;
 
     /**
+     * @var bool
+     */
+    private static bool $schemaLoaded = false;
+
+    /**
      * @var string
      */
     private static string $driver = 'sqlite';
@@ -142,17 +147,13 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
      */
     public static function getDatabaseOptions(): array
     {
-        switch (self::$driver) {
-            case 'pgsql':
-            case 'postgres':
-                return getOptionsPostgresql();
-            case 'sqlsrv':
-                return getOptionsSqlite();
-            case 'mysql':
-                return getOptionsMysql();
-            default:
-                return [];
-        }
+
+        return match (self::$driver) {
+            'pgsql', 'postgres' => getOptionsPostgresql(),
+            'sqlsrv' => getOptionsSqlite(),
+            'mysql' => getOptionsMysql(),
+            default => [],
+        };
     }
 
     /**
@@ -212,36 +213,35 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
     {
         self::$driver = env('driver');
 
-        /**
-         * username and password are populated here
-         */
-        $dsn = self::getDatabaseDsn();
+        if (self::$connection === null) {
+            /**
+             * username and password are populated here
+             */
+            $dsn = self::getDatabaseDsn();
 
-        self::$connection = new PDO(
-            $dsn,
-            self::$username,
-            self::$password
-        );
+            self::$connection = new PDO(
+                $dsn,
+                self::$username,
+                self::$password
+            );
 
-        $queries = explode(';', env('initial_queries', ''));
-        $queries = array_filter($queries);
-        foreach ($queries as $query) {
-            self::$connection->exec($query);
+            $queries = explode(';', env('initial_queries', ''));
+            $queries = array_filter($queries);
+            foreach ($queries as $query) {
+                self::$connection->exec($query);
+            }
         }
 
-        /**
-         * Clean DB
-         */
+        if (!self::$schemaLoaded) {
+            $dumpFile = env('dump_file', '');
+            if (file_exists($dumpFile)) {
+                $sql = file_get_contents($dumpFile);
+                self::load(
+                    preg_split('#\r\n|\n|\r#', $sql, -1, PREG_SPLIT_NO_EMPTY)
+                );
+            }
 
-        /**
-         * Populate DB
-         */
-        $dumpFile = env('dump_file', '');
-        if (file_exists($dumpFile)) {
-            $sql = file_get_contents($dumpFile);
-            self::load(
-                preg_split('#\r\n|\n|\r#', $sql, -1, PREG_SPLIT_NO_EMPTY)
-            );
+            self::$schemaLoaded = true;
         }
     }
 
@@ -250,7 +250,6 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        self::$connection = null;
     }
 
     /**
@@ -282,6 +281,15 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
             }
 
             $query .= "\n" . $singleSql;
+
+            // Skip delimiter check when inside a PostgreSQL dollar-quoted block
+            // ($TAG$...$TAG$ pairs must be balanced before we can split)
+            if (
+                preg_match_all('/\$[A-Za-z0-9_]*\$/', $query, $matches) &&
+                count($matches[0]) % 2 !== 0
+            ) {
+                continue;
+            }
 
             // Execute the query if it ends with the delimiter
             if (substr($query, -$delimiterLength) === $delimiter) {
