@@ -38,7 +38,7 @@ class ForwardTest extends AbstractUnitTestCase
                 $view = new View();
 
                 $view->setViewsDir(
-                    dataDir('fixtures/views/')
+                    supportDir('assets/views/')
                 );
 
                 return $view;
@@ -52,7 +52,7 @@ class ForwardTest extends AbstractUnitTestCase
             function ($event, $dispatcher, $exception) {
                 $dispatcher->forward(
                     [
-                        'namespace' => 'Phalcon\Tests\Controllers',
+                        'namespace' => 'Phalcon\Tests\Support\Controllers',
                         'controller' => 'exception',
                         'action' => 'second',
                     ]

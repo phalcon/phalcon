@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\Router\Group;
 
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
-use Phalcon\Tests\Fixtures\Traits\RouterTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class GetSetHostnameTest extends AbstractUnitTestCase
 {

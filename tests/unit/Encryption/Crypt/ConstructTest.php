@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFunctionExistsFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\Crypt\FakeCryptFunctionExists;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -69,6 +69,6 @@ final class ConstructTest extends AbstractUnitTestCase
             'This class requires the openssl extension for PHP'
         );
 
-        (new CryptFunctionExistsFixture());
+        (new FakeCryptFunctionExists());
     }
 }

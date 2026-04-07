@@ -28,6 +28,10 @@ final class GetSetDefaultResetTest extends AbstractUnitTestCase
      */
     public function testDiFactorydefaultCliGetDefault(): void
     {
+        // Reset and create a Cli so it becomes the default
+        Di::reset();
+        $container = new Di();
+
         // there is a DI container
         $this->assertInstanceOf(Di::class, Di::getDefault());
 

@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Config;
 
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class GetTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config\Config :: __get()
+     * Tests Phalcon\Config\Config :: get()
      *
      * @author Cameron Hall <me@chall.id.au>
      * @since  2019-06-17
@@ -38,7 +38,7 @@ final class GetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\Config :: __get()
+     * Tests Phalcon\Config\Config :: get()
      *
      * @author Cameron Hall <me@chall.id.au>
      * @since  2019-06-17

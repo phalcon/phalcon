@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Phalcon\Tests\Fixtures\Traits\FormsTrait;
+use Phalcon\Forms\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Forms\Fake\FormsTrait;
 
 use function array_flip;
 use function uniqid;

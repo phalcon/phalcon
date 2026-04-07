@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Di;
 use Phalcon\Di\Di;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: __construct()

@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the
- * LICENSE.txt file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -17,19 +17,19 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\Fixtures\Traits\FactoryTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\FactoryTrait;
 
 use function hash;
 use function supportDir;
+
+use const INI_SCANNER_NORMAL;
 
 final class LoadTest extends AbstractUnitTestCase
 {
     use FactoryTrait;
 
     /**
-     * Executed before each test
-     *
      * @return void
      */
     public function setUp(): void
@@ -39,8 +39,6 @@ final class LoadTest extends AbstractUnitTestCase
 
     /**
      * Tests Phalcon\Config\ConfigFactory :: load() - array
-     *
-     * @return void
      *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-03-02
@@ -58,8 +56,6 @@ final class LoadTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Config\ConfigFactory :: load() - Config
      *
-     * @return void
-     *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-03-02
      */
@@ -73,7 +69,7 @@ final class LoadTest extends AbstractUnitTestCase
         $this->assertInstanceOf($class, $ini);
 
         //Issue 14756
-        $configFile = dataDir('assets/config/config-with.in-file.name.ini');
+        $configFile = supportDir('assets/config/config-with.in-file.name.ini');
         $ini        = new Ini($configFile, INI_SCANNER_NORMAL);
         $this->assertInstanceOf($class, $ini);
 
@@ -86,9 +82,7 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\ConfigFactory :: load() -  exception
-     *
-     * @return void
+     * Tests Phalcon\Config\ConfigFactory :: load() - exception - missing adapter
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19
@@ -101,15 +95,13 @@ final class LoadTest extends AbstractUnitTestCase
         );
 
         $config = [
-            'filePath' => dataDir('assets/config/config.ini'),
+            'filePath' => supportDir('assets/config/config.ini'),
         ];
         (new ConfigFactory())->load($config);
     }
 
     /**
-     * Tests Phalcon\Config\ConfigFactory :: load() -  exception
-     *
-     * @return void
+     * Tests Phalcon\Config\ConfigFactory :: load() - exception - no extension
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19
@@ -125,9 +117,7 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\ConfigFactory :: load() -  exception
-     *
-     * @return void
+     * Tests Phalcon\Config\ConfigFactory :: load() - exception - missing filePath
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19
@@ -148,8 +138,6 @@ final class LoadTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Config\ConfigFactory :: load() - string
      *
-     * @return void
-     *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-11-24
      */
@@ -164,26 +152,24 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\ConfigFactory :: load() -  two calls new instances
+     * Tests Phalcon\Config\ConfigFactory :: load() - two calls new instances
      *
-     * @return void
-     *
+     * @issue  14584
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-07
-     * @issue  14584
      */
     public function testConfigFactoryLoadTwoCallsNewInstances(): void
     {
         $factory = new ConfigFactory();
 
-        $configFile1 = dataDir('assets/config/config.php');
+        $configFile1 = supportDir('assets/config/config.php');
         $config      = $factory->load($configFile1);
 
         $expected = "/phalcon/";
         $actual   = $config->get('phalcon')->baseUri;
         $this->assertSame($expected, $actual);
 
-        $configFile2 = dataDir('assets/config/config-2.php');
+        $configFile2 = supportDir('assets/config/config-2.php');
         $config2     = $factory->load($configFile2);
 
         $expected = "/phalcon4/";
@@ -192,9 +178,7 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\ConfigFactory :: load() -  yaml callback
-     *
-     * @return void
+     * Tests Phalcon\Config\ConfigFactory :: load() - yaml callback
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-06-19
@@ -205,7 +189,7 @@ final class LoadTest extends AbstractUnitTestCase
         $factory = new ConfigFactory();
         $config  = [
             'adapter'   => 'yaml',
-            'filePath'  => dataDir('assets/config/callbacks.yml'),
+            'filePath'  => supportDir('assets/config/callbacks.yml'),
             'callbacks' => [
                 '!decrypt' => function ($value) {
                     return hash('sha256', $value);

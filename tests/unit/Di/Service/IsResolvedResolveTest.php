@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class IsResolvedResolveTest extends AbstractUnitTestCase
+final class IsResolvedResolveTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: isResolved()/resolve()

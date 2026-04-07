@@ -21,7 +21,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
-class GetSetAliasTest extends AbstractUnitTestCase
+final class GetSetAliasTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di :: getAlias()/setAlias()
@@ -121,7 +121,7 @@ class GetSetAliasTest extends AbstractUnitTestCase
 
         $aliases = [
             EscaperInterface::class,
-            'escaper'
+            'escaper',
         ];
 
         $container->set('escaper', Escaper::class, true);

@@ -394,7 +394,7 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'user'  => 'user',
+                'user'  => 'users',
                 'admin' => null,
             ]
         );

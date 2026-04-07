@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Filter;
 
 use Phalcon\Filter\Filter;
-use Phalcon\Tests\Fixtures\Filter\Sanitize\IPv4;
+use Phalcon\Tests\Support\Filter\Sanitize\IPv4;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class CustomTest extends AbstractUnitTestCase
@@ -47,7 +47,9 @@ final class CustomTest extends AbstractUnitTestCase
         $sanitizer = (new Filter(['ipv4' => IPv4::class]))->get('ipv4');
 
         $this->assertInstanceOf(IPv4::class, $sanitizer);
-        $this->assertSame('127.0.0.1', $sanitizer('127.0.0.1'));
+        $expected = '127.0.0.1';
+        $actual   = $sanitizer('127.0.0.1');
+        $this->assertSame($expected, $actual);
         $this->assertFalse($sanitizer('127.0.0'));
     }
 }

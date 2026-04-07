@@ -26,16 +26,24 @@ final class GetAlgorithmTest extends AbstractUnitTestCase
      */
     public function testEncryptionSecurityJWTSignerHmacGetAlgorithm(): void
     {
-        $signer = new Hmac();
-        $this->assertSame('sha512', $signer->getAlgorithm());
+        $signer   = new Hmac();
+        $expected = 'sha512';
+        $actual   = $signer->getAlgorithm();
+        $this->assertSame($expected, $actual);
 
-        $signer = new Hmac('sha512');
-        $this->assertSame('sha512', $signer->getAlgorithm());
+        $signer   = new Hmac('sha512');
+        $expected = 'sha512';
+        $actual   = $signer->getAlgorithm();
+        $this->assertSame($expected, $actual);
 
-        $signer = new Hmac('sha384');
-        $this->assertSame('sha384', $signer->getAlgorithm());
+        $signer   = new Hmac('sha384');
+        $expected = 'sha384';
+        $actual   = $signer->getAlgorithm();
+        $this->assertSame($expected, $actual);
 
-        $signer = new Hmac('sha256');
-        $this->assertSame('sha256', $signer->getAlgorithm());
+        $signer   = new Hmac('sha256');
+        $expected = 'sha256';
+        $actual   = $signer->getAlgorithm();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -31,7 +31,7 @@ final class IsFinishedTest extends AbstractUnitTestCase
     public function testCliDispatcherIsFinished(): void
     {
         $dispatcher = new Dispatcher();
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setDI(new DiFactoryDefault());
 
         $actual = $dispatcher->isFinished();

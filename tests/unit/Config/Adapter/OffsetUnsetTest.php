@@ -13,24 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Adapter;
 
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class OffsetUnsetTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config\Adapter\Grouped :: offsetUnset()
+     * Tests Phalcon\Config\Adapter :: offsetUnset()
      *
      * @dataProvider providerConfigAdapters
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
      */
-    public function testConfigAdapterOffsetUnset(
-        string $adapter
-    ): void {
+    public function testConfigAdapterOffsetUnset(string $adapter): void
+    {
         $config = $this->getConfig($adapter);
 
         $actual = $config->offsetExists('database');

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Mvc\Application;
-use Phalcon\Tests\Modules\Frontend\Module;
+use Phalcon\Tests\Support\Modules\Frontend\Module;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetModulesTest extends AbstractUnitTestCase
@@ -35,11 +35,11 @@ class GetModulesTest extends AbstractUnitTestCase
         $definition = [
             'frontend' => [
                 'className' => Module::class,
-                'path'      => dataDir('fixtures/modules/frontend/Module.php'),
+                'path'      => supportDir('Modules/Frontend/Module.php'),
             ],
             'backend'  => [
-                'className' => \Phalcon\Tests\Modules\Backend\Module::class,
-                'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                'className' => \Phalcon\Tests\Support\Modules\Backend\Module::class,
+                'path'      => supportDir('Modules/Backend/Module.php'),
             ],
         ];
 

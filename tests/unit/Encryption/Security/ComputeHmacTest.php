@@ -14,10 +14,29 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security;
 
 use Phalcon\Encryption\Security;
+use Phalcon\Encryption\Security\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ComputeHmacTest extends AbstractUnitTestCase
 {
+    /**
+     * Tests the HMAC computation with an unknown algorithm throws an exception
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2022-08-25
+     */
+    public function testEncryptionSecurityComputeHmacUnknownAlgorithmException(): void
+    {
+        $security = new Security();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unknown hashing algorithm: unknown-algo');
+
+        $security->computeHmac('data', 'key', 'unknown-algo');
+    }
+
     /**
      * @return array
      */

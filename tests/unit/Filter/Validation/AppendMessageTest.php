@@ -18,7 +18,7 @@ use Phalcon\Filter\Validation\Validator\PresenceOf;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
 use stdClass;
 
 final class AppendMessageTest extends AbstractUnitTestCase

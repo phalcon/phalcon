@@ -27,7 +27,9 @@ final class GetSetOptionsTest extends AbstractUnitTestCase
     public function testCliDispatcherGetOptions(): void
     {
         $dispatcher = new Dispatcher();
-        $this->assertSame([], $dispatcher->getOptions());
+        $expected = [];
+        $actual   = $dispatcher->getOptions();
+        $this->assertSame($expected, $actual);
 
         $options = ["Phalcon", "Rocks"];
         $dispatcher->setOptions($options);

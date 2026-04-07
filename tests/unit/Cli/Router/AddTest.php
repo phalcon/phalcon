@@ -28,7 +28,9 @@ final class AddTest extends AbstractUnitTestCase
     {
         Router\Route::reset();
         $router = new Router(false);
-        $this->assertSame([], $router->getRoutes());
+        $expected = [];
+        $actual   = $router->getRoutes();
+        $this->assertSame($expected, $actual);
 
         $router->add(
             'route',

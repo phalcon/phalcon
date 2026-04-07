@@ -26,7 +26,7 @@ final class HandleTest extends AbstractUnitTestCase
      * @return void
      * @throws Exception
      */
-    public function cliRouterHandleRouterDelimiter(
+    public function testCliRouterHandleRouterDelimiter(
         string $uri,
         string $module,
         string $task,
@@ -55,7 +55,7 @@ final class HandleTest extends AbstractUnitTestCase
     /**
      * @return void
      */
-    public function cliRouterHandleRouterInvalidPathsException(): void
+    public function testCliRouterHandleRouterInvalidPathsException(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The route contains invalid paths');
@@ -70,7 +70,7 @@ final class HandleTest extends AbstractUnitTestCase
     /**
      * @dataProvider getExamplesRouterParams
      */
-    public function cliRouterHandleRouterParams(
+    public function testCliRouterHandleRouterParams(
         string $uri,
         string $module,
         string $task,
@@ -643,6 +643,7 @@ final class HandleTest extends AbstractUnitTestCase
         array $params
     ): void {
         Route::reset();
+        Route::delimiter(Route::DEFAULT_DELIMITER);
 
         $router = new Router();
         $routes = $this->setupRoutes('router');

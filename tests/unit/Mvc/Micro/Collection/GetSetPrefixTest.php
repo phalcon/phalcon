@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\Collection;
-use Phalcon\Tests\Controllers\Micro\Collections\CustomersController;
+use Phalcon\Tests\Support\Controllers\Micro\Collections\CustomersController;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetSetPrefixTest extends AbstractUnitTestCase

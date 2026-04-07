@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFunctionExistsTwiceFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\Crypt\FakeCryptFunctionExistsTwice;
 
 use function function_exists;
 use function hash_hmac_algos;
@@ -40,7 +40,7 @@ final class GetAvailableHashAlgorithmsTest extends AbstractUnitTestCase
             $this->assertSame($expected, $actual);
         }
 
-        $crypt    = new CryptFunctionExistsTwiceFixture();
+        $crypt    = new FakeCryptFunctionExistsTwice();
         $expected = hash_algos();
         $actual   = $crypt->getAvailableHashAlgorithms();
         $this->assertSame($expected, $actual);

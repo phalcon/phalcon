@@ -18,7 +18,7 @@ use Phalcon\Di\Exception;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetGetTest extends AbstractUnitTestCase
+final class OffsetGetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di :: offsetGet()
@@ -64,7 +64,7 @@ class OffsetGetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Unit Tests Phalcon\Di :: offsetGet() - exception
+     * Unit Tests Phalcon\Di :: offsetGet() - exception offsetGet
      *
      * @return void
      *

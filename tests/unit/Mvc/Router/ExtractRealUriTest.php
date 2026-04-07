@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Mvc\RouterFixture;
-use Phalcon\Tests\Fixtures\Traits\RouterTrait;
+use Phalcon\Tests\Unit\Mvc\Fake\FakeRouter;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class ExtractRealUriTest extends AbstractUnitTestCase
 {
@@ -31,7 +31,7 @@ final class ExtractRealUriTest extends AbstractUnitTestCase
      */
     public function testExtractRealUri(): void
     {
-        $router = new RouterFixture(false);
+        $router = new FakeRouter(false);
         $router->setDI(new FactoryDefault());
 
         $expected = '/admin/private/businesses/list/my/123';

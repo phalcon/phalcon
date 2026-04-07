@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Cli\Console;
 
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Modules\Backend\Module as BackendModule;
-use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Modules\Backend\Module as BackendModule;
+use Phalcon\Tests\Support\Modules\Frontend\Module as FrontendModule;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class GetModulesTest extends AbstractUnitTestCase
 {
@@ -40,11 +40,11 @@ final class GetModulesTest extends AbstractUnitTestCase
         $definition = [
             'frontend' => [
                 'className' => FrontendModule::class,
-                'path'      => dataDir('fixtures/modules/frontend/Module.php'),
+                'path'      => supportDir('Modules/Frontend/Module.php'),
             ],
             'backend'  => [
                 'className' => BackendModule::class,
-                'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                'path'      => supportDir('Modules/Backend/Module.php'),
             ],
         ];
 

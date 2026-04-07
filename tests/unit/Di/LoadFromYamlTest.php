@@ -19,7 +19,7 @@ use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class LoadFromYamlTest extends AbstractUnitTestCase
+final class LoadFromYamlTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: loadFromYaml()
@@ -36,7 +36,7 @@ class LoadFromYamlTest extends AbstractUnitTestCase
         $container = new Di();
 
         // load yaml
-        $container->loadFromYaml(dataDir('fixtures/Di/services.yml'));
+        $container->loadFromYaml(supportDir('assets/Di/services.yml'));
 
         // there are 3
         $this->assertCount(3, $container->getServices());

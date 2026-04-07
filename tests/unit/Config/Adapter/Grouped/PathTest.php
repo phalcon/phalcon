@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Adapter\Grouped;
 
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class PathTest extends AbstractUnitTestCase
 {
@@ -33,7 +33,6 @@ final class PathTest extends AbstractUnitTestCase
         $expected = 2;
         $actual   = $config->path('test');
         $this->assertCount($expected, $actual);
-
 
         $expected = 'something-else';
         $actual   = $config->path('test.property2');

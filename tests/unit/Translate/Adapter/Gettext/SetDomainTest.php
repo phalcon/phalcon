@@ -38,7 +38,7 @@ final class SetDomainTest extends AbstractUnitTestCase
 
         $this->assertSame('Hello', $translator->_('hi'));
 
-        //Check with a domain which doesn't exist
+        //Check with a domain which does not exist
         $translator->setDomain('no_exist');
         $this->assertSame('hi', $translator->_('hi'));
 

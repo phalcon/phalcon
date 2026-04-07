@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Attributes;
 
 use Phalcon\Html\Attributes;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class RenderTest extends AbstractUnitTestCase
 {

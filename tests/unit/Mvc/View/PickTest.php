@@ -15,10 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Di\Di;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-
-use function dataDir;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 class PickTest extends AbstractUnitTestCase
 {
@@ -36,7 +34,7 @@ class PickTest extends AbstractUnitTestCase
         $view      = new View();
 
         $view->setViewsDir(
-            $this->getDirSeparator(dataDir('fixtures/views'))
+            $this->getDirSeparator(supportDir('assets/views'))
         );
 
         $view->setDI($container);

@@ -26,7 +26,9 @@ final class GetAlgHeaderTest extends AbstractUnitTestCase
      */
     public function testEncryptionSecurityJWTSignerNoneGetAlgHeader(): void
     {
-        $signer = new None();
-        $this->assertSame('none', $signer->getAlgHeader());
+        $signer   = new None();
+        $expected = 'none';
+        $actual   = $signer->getAlgHeader();
+        $this->assertSame($expected, $actual);
     }
 }

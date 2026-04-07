@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
 use stdClass;
 
 final class GetEntityTest extends AbstractUnitTestCase
@@ -95,14 +95,29 @@ final class GetEntityTest extends AbstractUnitTestCase
             ->bind($user, $postData, ['name', 'password'])
             ->validate();
 
-        $this->assertSame('John Doe', $validation->getEntity()->name);
-        $this->assertSame('John Doe', $validation->getValue('name'));
+        $expected = 'John Doe';
+        $actual   = $validation->getEntity()->name;
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame('', $validation->getEntity()->email);
-        $this->assertSame('', $validation->getValue('email'));
+        $expected = 'John Doe';
+        $actual   = $validation->getValue('name');
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame('new_password', $validation->getEntity()->password);
-        $this->assertSame('new_password', $validation->getValue('password'));
+        $expected = '';
+        $actual   = $validation->getEntity()->email;
+        $this->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $validation->getValue('email');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'new_password';
+        $actual   = $validation->getEntity()->password;
+        $this->assertSame($expected, $actual);
+
+        $expected = 'new_password';
+        $actual   = $validation->getValue('password');
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -129,13 +144,28 @@ final class GetEntityTest extends AbstractUnitTestCase
         $validation = new Validation();
         $validation->validate($postData, $user, ['name', 'password']);
 
-        $this->assertSame('John Doe', $validation->getEntity()->name);
-        $this->assertSame('John Doe', $validation->getValue('name'));
+        $expected = 'John Doe';
+        $actual   = $validation->getEntity()->name;
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame('', $validation->getEntity()->email);
-        $this->assertSame('', $validation->getValue('email'));
+        $expected = 'John Doe';
+        $actual   = $validation->getValue('name');
+        $this->assertSame($expected, $actual);
 
-        $this->assertSame('new_password', $validation->getEntity()->password);
-        $this->assertSame('new_password', $validation->getValue('password'));
+        $expected = '';
+        $actual   = $validation->getEntity()->email;
+        $this->assertSame($expected, $actual);
+
+        $expected = '';
+        $actual   = $validation->getValue('email');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'new_password';
+        $actual   = $validation->getEntity()->password;
+        $this->assertSame($expected, $actual);
+
+        $expected = 'new_password';
+        $actual   = $validation->getValue('password');
+        $this->assertSame($expected, $actual);
     }
 }

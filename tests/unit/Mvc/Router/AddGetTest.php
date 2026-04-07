@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
-use Phalcon\Tests\Fixtures\Traits\RouterTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class AddGetTest extends AbstractUnitTestCase
 {

@@ -17,9 +17,9 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\Size\Equal;
 use Phalcon\Filter\Validation\Validator\File\Size\Max;
 use Phalcon\Filter\Validation\Validator\File\Size\Min;
-use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\EqualFixture;
-use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MaxFixture;
-use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\Size\MinFixture;
+use Phalcon\Tests\Unit\Filter\Validation\Validator\File\Size\Fake\FakeEqual;
+use Phalcon\Tests\Unit\Filter\Validation\Validator\File\Size\Fake\FakeMax;
+use Phalcon\Tests\Unit\Filter\Validation\Validator\File\Size\Fake\FakeMin;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -35,21 +35,21 @@ final class ValidateTest extends AbstractUnitTestCase
     {
         return [
             [
-                MinFixture::class,
+                FakeMin::class,
                 [
                     'size' => '1K',
                     ':field is smaller than file size (:size)',
                 ],
             ],
             [
-                MaxFixture::class,
+                FakeMax::class,
                 [
                     'size' => '20K',
                     ':field is larger than file size (:size)',
                 ],
             ],
             [
-                EqualFixture::class,
+                FakeEqual::class,
                 [
                     'size' => '11768',
                     ':field is not equal to file size (:size)',
@@ -65,7 +65,7 @@ final class ValidateTest extends AbstractUnitTestCase
     {
         return [
             [
-                MinFixture::class,
+                FakeMin::class,
                 'thumbnail is smaller than file size (20K)',
                 [
                     'size' => '20K',
@@ -73,7 +73,7 @@ final class ValidateTest extends AbstractUnitTestCase
                 ],
             ],
             [
-                MinFixture::class,
+                FakeMin::class,
                 'thumbnail is smaller or equal than file size (11768)',
                 [
                     'included' => true,
@@ -82,7 +82,7 @@ final class ValidateTest extends AbstractUnitTestCase
                 ],
             ],
             [
-                MaxFixture::class,
+                FakeMax::class,
                 'thumbnail is larger than file size (10K)',
                 [
                     'size' => '10K',
@@ -90,7 +90,7 @@ final class ValidateTest extends AbstractUnitTestCase
                 ],
             ],
             [
-                MaxFixture::class,
+                FakeMax::class,
                 'thumbnail is larger or equal than file size (11768)',
                 [
                     'included' => true,
@@ -99,7 +99,7 @@ final class ValidateTest extends AbstractUnitTestCase
                 ],
             ],
             [
-                EqualFixture::class,
+                FakeEqual::class,
                 'thumbnail is not equal to file size (11700)',
                 [
                     'size' => '11700',
@@ -112,12 +112,11 @@ final class ValidateTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Filter\Validation\Validator\File\Size :: validate
      *
-     * @return void
-     * @throws Validation\Exception
+     * @dataProvider getExamples
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-28
      */
-    #[DataProvider("getExamples")]
     public function testFilterValidationValidatorFileSize(
         string $class,
         array $options
@@ -151,13 +150,11 @@ final class ValidateTest extends AbstractUnitTestCase
      * Tests Phalcon\Filter\Validation\Validator\File\Size :: errors
      *
      *
-     * @return void
-     * @throws Validation\Exception
+     * @dataProvider getExamplesErrors
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-28
      */
-    #[DataProvider("getExamplesErrors")]
     public function testFilterValidationValidatorFileSizeErrors(
         string $class,
         string $message,

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Mvc\View;
-use Phalcon\Tests\Fixtures\Traits\ViewTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\ViewTrait;
 
 class GetSetPartialsDirTest extends AbstractUnitTestCase
 {

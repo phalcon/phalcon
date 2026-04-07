@@ -16,13 +16,26 @@ namespace Phalcon\Tests\Unit\Filter\Validation\Validator\File;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Filter\Validation\Validator\File\MimeTypeFixture;
+use Phalcon\Tests\Unit\Filter\Validation\Validator\File\Fake\FakeMimeType;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\Test;
 
 #[BackupGlobals(true)]
 final class MimeTest extends AbstractUnitTestCase
 {
+    private string $tmpFile = '';
+
+    public function setUp(): void
+    {
+        // Write minimal JPEG magic bytes so finfo_file() detects image/jpeg
+        $this->tmpFile = tempnam(sys_get_temp_dir(), 'phalcon_mime_');
+        file_put_contents($this->tmpFile, "\xFF\xD8\xFF\xE0\x00\x10JFIF\x00");
+    }
+
+    public function tearDown(): void
+    {
+        $this->safeDeleteFile($this->tmpFile);
+    }
     /**
      * Tests Phalcon\Filter\Validation\Validator\File :: validate()
      *
@@ -75,7 +88,7 @@ final class MimeTest extends AbstractUnitTestCase
                 'name'      => 'IMG-20180403-WA0000.jpg',
                 'full_path' => 'IMG-20180403-WA0000.jpg',
                 'type'      => 'image/jpeg',
-                'tmp_name'  => '/tmp/phpsjLIQJ',
+                'tmp_name'  => $this->tmpFile,
                 'error'     => 0,
                 'size'      => 11768,
             ],
@@ -85,7 +98,7 @@ final class MimeTest extends AbstractUnitTestCase
             'types'   => ['image/gif'],
             'message' => 'Allowed file types are :types'
         ];
-        $validator = new MimeTypeFixture($options);
+        $validator = new FakeMimeType($options);
         $validation = new Validation();
         $validation->add('thumbnail', $validator);
 
@@ -114,7 +127,7 @@ final class MimeTest extends AbstractUnitTestCase
                 'name'      => 'IMG-20180403-WA0000.jpg',
                 'full_path' => 'IMG-20180403-WA0000.jpg',
                 'type'      => 'image/jpeg',
-                'tmp_name'  => '/tmp/phpsjLIQJ',
+                'tmp_name'  => $this->tmpFile,
                 'error'     => 0,
                 'size'      => 11768,
             ],
@@ -124,7 +137,7 @@ final class MimeTest extends AbstractUnitTestCase
             'types'   => ['image/jpeg', 'image/png'],
             'message' => 'Allowed file types are :types'
         ];
-        $validator = new MimeTypeFixture($options);
+        $validator = new FakeMimeType($options);
         $validation = new Validation();
         $validation->add('thumbnail', $validator);
 
@@ -158,12 +171,12 @@ final class MimeTest extends AbstractUnitTestCase
         $options = [
             'message' => 'Allowed file types are :types'
         ];
-        $validator = new MimeTypeFixture($options);
+        $validator = new FakeMimeType($options);
         $validation = new Validation();
         $validation->add('thumbnail', $validator);
 
         $this->expectException(Validation\Exception::class);
-        $this->expectExceptionMessage('Option \'types\' must be an array');
+        $this->expectExceptionMessage('Option \'allowedTypes\' must be an array');
         $validation->validate($_FILES);
     }
 

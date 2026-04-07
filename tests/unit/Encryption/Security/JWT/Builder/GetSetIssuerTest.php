@@ -36,6 +36,8 @@ final class GetSetIssuerTest extends AbstractUnitTestCase
         $return = $builder->setIssuer('issuer');
         $this->assertInstanceOf(Builder::class, $return);
 
-        $this->assertSame('issuer', $builder->getIssuer());
+        $expected = 'issuer';
+        $actual   = $builder->getIssuer();
+        $this->assertSame($expected, $actual);
     }
 }

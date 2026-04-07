@@ -9,11 +9,13 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Phalcon\Tests\Unit\Config\Config;
 
 use Phalcon\Config\Config;
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class ConfigTest extends AbstractUnitTestCase
 {
@@ -46,10 +48,6 @@ final class ConfigTest extends AbstractUnitTestCase
 
     /**
      * Test insensitive in sub arrays
-     *
-     * @return void
-     *
-     * @return void
      *
      * @issue  16171
      * @author Phalcon Team <team@phalcon.io>

@@ -19,8 +19,8 @@ use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\RouterTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class HandleTest extends AbstractUnitTestCase
 {

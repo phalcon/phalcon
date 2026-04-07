@@ -196,7 +196,7 @@ final class SetArgumentTest extends AbstractUnitTestCase
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = $di->getShared('dispatcher');
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $console->setArgument(
             [
                 'php',
@@ -290,7 +290,7 @@ final class SetArgumentTest extends AbstractUnitTestCase
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = $di->getShared('dispatcher');
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
 
         $console->setArgument($argument)
                 ->handle()
@@ -337,7 +337,7 @@ final class SetArgumentTest extends AbstractUnitTestCase
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = $di->getShared('dispatcher');
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
 
         $console->setArgument($argument, $str, $shift)
                 ->handle()

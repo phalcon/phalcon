@@ -30,14 +30,16 @@ use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Model\MetaData\Adapter\Memory;
+use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Settings;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]
@@ -94,6 +96,10 @@ class ConstructTest extends AbstractUnitTestCase
                 HelperFactory::class,
             ],
             [
+                'settings',
+                Settings::class,
+            ],
+            [
                 'modelsManager',
                 ModelsManager::class,
             ],
@@ -116,6 +122,10 @@ class ConstructTest extends AbstractUnitTestCase
             [
                 'security',
                 Security::class,
+            ],
+            [
+                'storageSerializer',
+                SerializerFactory::class,
             ],
             [
                 'tag',
@@ -144,7 +154,7 @@ class ConstructTest extends AbstractUnitTestCase
     {
         $container = new FactoryDefault();
 
-        $expected = 22;
+        $expected = 23;
         $actual   = count($container->getServices());
         $this->assertSame($expected, $actual);
     }
@@ -152,10 +162,10 @@ class ConstructTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Di\FactoryDefault :: __construct() - Check services
      *
+     * @dataProvider getServices
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
-     *
-     * @dataProvider getServices
      */
     public function testDiFactoryDefaultConstructServices(
         string $service,

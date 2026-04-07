@@ -12,8 +12,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Validator;
 
 use Phalcon\Encryption\Security\JWT\Validator;
-use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\JWTTrait;
 
 final class ValidateExpirationTest extends AbstractUnitTestCase
 {

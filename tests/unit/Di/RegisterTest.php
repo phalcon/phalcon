@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use Phalcon\Tests\Fixtures\Di\SomeComponent;
-use Phalcon\Tests\Fixtures\Di\SomeServiceProvider;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Di\SomeComponent;
+use Phalcon\Tests\Support\Di\SomeServiceProvider;
 
-class RegisterTest extends AbstractUnitTestCase
+final class RegisterTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: register()

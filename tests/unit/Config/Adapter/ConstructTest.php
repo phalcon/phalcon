@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Adapter;
 
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -26,32 +26,23 @@ final class ConstructTest extends AbstractUnitTestCase
     public static function providerAdapters(): array
     {
         return [
-            [
-                '',
-            ],
-            [
-                'Json',
-            ],
-            [
-                'Php',
-            ],
-            [
-                'Yaml',
-            ],
+            [''],
+            ['Json'],
+            ['Php'],
+            ['Yaml'],
         ];
     }
 
     /**
-     * Tests Phalcon\Config\Adapter\Grouped :: toArray()
+     * Tests Phalcon\Config\Adapter :: __construct()
      *
      * @dataProvider providerAdapters
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
      */
-    public function testConfigAdapterToArray(
-        string $adapter
-    ): void {
+    public function testConfigAdapterConstruct(string $adapter): void
+    {
         $config = $this->getConfig($adapter);
 
         $this->compareConfig($this->config, $config);

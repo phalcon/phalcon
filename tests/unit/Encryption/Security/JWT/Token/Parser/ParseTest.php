@@ -16,8 +16,8 @@ use Phalcon\Encryption\Security\JWT\Signer\None;
 use Phalcon\Encryption\Security\JWT\Token\Item;
 use Phalcon\Encryption\Security\JWT\Token\Parser;
 use Phalcon\Encryption\Security\JWT\Token\Signature;
-use Phalcon\Tests\Fixtures\Traits\JWTTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\JWTTrait;
 
 final class ParseTest extends AbstractUnitTestCase
 {
@@ -47,8 +47,13 @@ final class ParseTest extends AbstractUnitTestCase
         $this->assertTrue($headers->has('typ'));
         $this->assertTrue($headers->has('alg'));
 
-        $this->assertSame('JWT', $headers->get('typ'));
-        $this->assertSame('HS512', $headers->get('alg'));
+        $expected = 'JWT';
+        $actual   = $headers->get('typ');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'HS512';
+        $actual   = $headers->get('alg');
+        $this->assertSame($expected, $actual);
 
         $this->assertTrue($claims->has('aud'));
         $this->assertTrue($claims->has('exp'));
@@ -58,25 +63,39 @@ final class ParseTest extends AbstractUnitTestCase
         $this->assertTrue($claims->has('nbf'));
         $this->assertTrue($claims->has('sub'));
 
-        $this->assertSame(['my-audience'], $claims->get('aud'));
+        $expected = ['my-audience'];
+        $actual   = $claims->get('aud');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('exp'),
             $claims->get('exp')
         );
-        $this->assertSame('PH-JWT', $claims->get('jti'));
+
+        $expected = 'PH-JWT';
+        $actual   = $claims->get('jti');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('iat'),
             $claims->get('iat')
         );
-        $this->assertSame('Phalcon JWT', $claims->get('iss'));
+
+        $expected = 'Phalcon JWT';
+        $actual   = $claims->get('iss');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('nbf'),
             $claims->get('nbf')
         );
-        $this->assertSame('Mary had a little lamb', $claims->get('sub'));
+
+        $expected = 'Mary had a little lamb';
+        $actual   = $claims->get('sub');
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -111,8 +130,13 @@ final class ParseTest extends AbstractUnitTestCase
         $this->assertTrue($headers->has('typ'));
         $this->assertTrue($headers->has('alg'));
 
-        $this->assertSame('JWT', $headers->get('typ'));
-        $this->assertSame('HS512', $headers->get('alg'));
+        $expected = 'JWT';
+        $actual   = $headers->get('typ');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'HS512';
+        $actual   = $headers->get('alg');
+        $this->assertSame($expected, $actual);
 
         $this->assertTrue($claims->has('aud'));
         $this->assertTrue($claims->has('exp'));
@@ -122,25 +146,39 @@ final class ParseTest extends AbstractUnitTestCase
         $this->assertTrue($claims->has('nbf'));
         $this->assertTrue($claims->has('sub'));
 
-        $this->assertSame(['my-audience'], $claims->get('aud'));
+        $expected = ['my-audience'];
+        $actual   = $claims->get('aud');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('exp'),
             $claims->get('exp')
         );
-        $this->assertSame('PH-JWT', $claims->get('jti'));
+
+        $expected = 'PH-JWT';
+        $actual   = $claims->get('jti');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('iat'),
             $claims->get('iat')
         );
-        $this->assertSame('Phalcon JWT', $claims->get('iss'));
+
+        $expected = 'Phalcon JWT';
+        $actual   = $claims->get('iss');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('nbf'),
             $claims->get('nbf')
         );
-        $this->assertSame('Mary had a little lamb', $claims->get('sub'));
+
+        $expected = 'Mary had a little lamb';
+        $actual   = $claims->get('sub');
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -264,8 +302,13 @@ final class ParseTest extends AbstractUnitTestCase
         $this->assertTrue($headers->has('typ'));
         $this->assertTrue($headers->has('alg'));
 
-        $this->assertSame('JWT', $headers->get('typ'));
-        $this->assertSame('none', $headers->get('alg'));
+        $expected = 'JWT';
+        $actual   = $headers->get('typ');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'none';
+        $actual   = $headers->get('alg');
+        $this->assertSame($expected, $actual);
 
         $this->assertTrue($claims->has('aud'));
         $this->assertTrue($claims->has('exp'));
@@ -275,25 +318,39 @@ final class ParseTest extends AbstractUnitTestCase
         $this->assertTrue($claims->has('nbf'));
         $this->assertTrue($claims->has('sub'));
 
-        $this->assertSame(['my-audience'], $claims->get('aud'));
+        $expected = ['my-audience'];
+        $actual   = $claims->get('aud');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('exp'),
             $claims->get('exp')
         );
-        $this->assertSame('PH-JWT', $claims->get('jti'));
+
+        $expected = 'PH-JWT';
+        $actual   = $claims->get('jti');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('iat'),
             $claims->get('iat')
         );
-        $this->assertSame('Phalcon JWT', $claims->get('iss'));
+
+        $expected = 'Phalcon JWT';
+        $actual   = $claims->get('iss');
+        $this->assertSame($expected, $actual);
+
         $this->assertSame(
             $token->getClaims()
                   ->get('nbf'),
             $claims->get('nbf')
         );
-        $this->assertSame('Mary had a little lamb', $claims->get('sub'));
+
+        $expected = 'Mary had a little lamb';
+        $actual   = $claims->get('sub');
+        $this->assertSame($expected, $actual);
 
         $this->assertEmpty($signature->getEncoded());
     }

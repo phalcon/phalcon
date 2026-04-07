@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Fake;
 
-
 use Phalcon\Events\Traits\EventsAwareTrait;
 
 class ComponentTwo

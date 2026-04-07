@@ -17,12 +17,28 @@ use Exception;
 use Phalcon\Mvc\Application;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
-class HandleTest extends AbstractUnitTestCase
+final class HandleTest extends AbstractUnitTestCase
 {
     use DiTrait;
+
+    private int $obLevel = 0;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->obLevel = ob_get_level();
+    }
+
+    protected function tearDown(): void
+    {
+        while (ob_get_level() > $this->obLevel) {
+            ob_end_clean();
+        }
+        parent::tearDown();
+    }
 
     /**
      * Tests Phalcon\Mvc\Application :: handle() - exception handling
@@ -31,11 +47,8 @@ class HandleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-10-17
      */
-    public function dispatcherException(): void
+    public function testMvcApplicationHandleDispatcherException(): void
     {
-        $this->markTestSkipped('TODO: Check this');
-        $this->wantTo('Phalcon\Mvc\Application :: handle() - exception handling');
-
         $this->setNewFactoryDefault();
 
         $this->container->set(
@@ -44,7 +57,7 @@ class HandleTest extends AbstractUnitTestCase
                 $view = new View();
 
                 $view->setViewsDir(
-                    dataDir('fixtures/views/simple/')
+                    supportDir('assets/views/simple/')
                 );
 
                 return $view;
@@ -52,14 +65,14 @@ class HandleTest extends AbstractUnitTestCase
             true
         );
 
-        $eventsManager = $this->container->getEventsManager();
+        $eventsManager = $this->container->getShared('eventsManager');
 
         $this->container->set(
             'dispatcher',
             function () use ($eventsManager) {
                 $dispatcher = new Dispatcher();
                 $dispatcher->setDefaultNamespace(
-                    'Phalcon\Tests\Controllers'
+                    'Phalcon\Tests\Support\Controllers'
                 );
 
                 $eventsManager->attach(
@@ -84,10 +97,9 @@ class HandleTest extends AbstractUnitTestCase
 
         $response = $application->handle('/exception');
 
-        $this->assertEquals(
-            'whoops: whups bad controller',
-            $response->getContent()
-        );
+        $expected = 'whoops: whups bad controller';
+        $actual   = $response->getContent();
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -99,7 +111,7 @@ class HandleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-10-17
      */
-    public function dispatcherExceptionForward(): void
+    public function testMvcApplicationHandleDispatcherExceptionForward(): void
     {
         $this->setNewFactoryDefault();
 
@@ -109,7 +121,7 @@ class HandleTest extends AbstractUnitTestCase
                 $view = new View();
 
                 $view->setViewsDir(
-                    dataDir('fixtures/views/simple/')
+                    supportDir('assets/views/simple/')
                 );
 
                 return $view;
@@ -124,7 +136,7 @@ class HandleTest extends AbstractUnitTestCase
             function () use ($eventsManager) {
                 $dispatcher = new Dispatcher();
                 $dispatcher->setDefaultNamespace(
-                    'Phalcon\Tests\Controllers'
+                    'Phalcon\Tests\Support\Controllers'
                 );
 
                 $eventsManager->attach(
@@ -166,9 +178,6 @@ class HandleTest extends AbstractUnitTestCase
      */
     public function testMvcApplicationHandleSingleModule(): void
     {
-        $this->markTestSkipped('TODO: Check this');
-        $this->wantTo('Phalcon\Mvc\Application :: handle() - single module');
-
         $this->setNewFactoryDefault();
 
         $this->container->set(
@@ -177,7 +186,7 @@ class HandleTest extends AbstractUnitTestCase
                 $view = new View();
 
                 $view->setViewsDir(
-                    dataDir('fixtures/views/simple/')
+                    supportDir('assets/views/simple/')
                 );
 
                 return $view;
@@ -190,7 +199,7 @@ class HandleTest extends AbstractUnitTestCase
             function () {
                 $dispatcher = new Dispatcher();
                 $dispatcher->setDefaultNamespace(
-                    'Phalcon\Tests\Controllers'
+                    'Phalcon\Tests\Support\Controllers'
                 );
 
                 return $dispatcher;

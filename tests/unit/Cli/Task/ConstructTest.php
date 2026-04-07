@@ -16,14 +16,14 @@ namespace Phalcon\Tests\Unit\Cli\Task;
 use Phalcon\Cli\Task;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Support\Registry;
-use Phalcon\Tests\Fixtures\Tasks\EchoTask;
-use Phalcon\Tests\Fixtures\Tasks\MainTask;
-use Phalcon\Tests\Fixtures\Tasks\OnConstructTask;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Tasks\EchoTask;
+use Phalcon\Tests\Support\Tasks\MainTask;
+use Phalcon\Tests\Support\Tasks\OnConstructTask;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
-    public function echoTask(): void
+    public function testEchoTask(): void
     {
         $task = new EchoTask();
         $di   = new DiFactoryDefault();
@@ -35,7 +35,7 @@ final class ConstructTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function extendTask(): void
+    public function testExtendTask(): void
     {
         $di             = new DiFactoryDefault();
         $di['registry'] = function () {

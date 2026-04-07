@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 
 use Phalcon\Di\Di;
 use Phalcon\Mvc\Micro;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 class GetSetDITest extends AbstractUnitTestCase
 {

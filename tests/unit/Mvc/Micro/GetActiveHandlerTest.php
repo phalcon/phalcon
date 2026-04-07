@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Mvc\Micro\LazyLoader;
-use Phalcon\Tests\Fixtures\Micro\RestHandler;
+use Phalcon\Tests\Support\Micro\RestHandler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 use function is_array;

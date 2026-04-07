@@ -31,7 +31,10 @@ final class InitTest extends AbstractUnitTestCase
         $builder = new Builder($signer);
 
         $builder->setSubject('abcdef');
-        $this->assertSame('abcdef', $builder->getSubject());
+
+        $expected = 'abcdef';
+        $actual   = $builder->getSubject();
+        $this->assertSame($expected, $actual);
 
         $builder->init();
 

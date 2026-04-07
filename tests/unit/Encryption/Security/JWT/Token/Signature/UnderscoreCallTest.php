@@ -28,7 +28,12 @@ final class UnderscoreCallTest extends AbstractUnitTestCase
     {
         $signature = new Signature('sig-hash', 'encoded-string-here');
 
-        $this->assertSame('encoded-string-here', $signature->getEncoded());
-        $this->assertSame('sig-hash', $signature->getHash());
+        $expected = 'encoded-string-here';
+        $actual   = $signature->getEncoded();
+        $this->assertSame($expected, $actual);
+
+        $expected = 'sig-hash';
+        $actual   = $signature->getHash();
+        $this->assertSame($expected, $actual);
     }
 }

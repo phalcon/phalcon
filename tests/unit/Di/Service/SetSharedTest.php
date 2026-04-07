@@ -17,7 +17,7 @@ use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetSharedTest extends AbstractUnitTestCase
+final class SetSharedTest extends AbstractUnitTestCase
 {
     /**
      * @return Service[][]

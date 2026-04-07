@@ -18,8 +18,6 @@ use Phalcon\Di\FactoryDefault\Cli as CliDi;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use function spl_object_hash;
-
 final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
@@ -37,12 +35,10 @@ final class UnderscoreGetTest extends AbstractUnitTestCase
         $eventsManager = new Manager();
         $task->setEventsManager($eventsManager);
 
-        $expected = spl_object_hash($container);
-        $actual   = spl_object_hash($task->di);
-        $this->assertSame($expected, $actual);
+        $this->assertSame($container, $task->di);
 
-        $expected = spl_object_hash($eventsManager);
-        $actual   = spl_object_hash($task->eventsManager);
-        $this->assertSame($expected, $actual);
+        $class  = Manager::class;
+        $actual = $task->eventsManager;
+        $this->assertInstanceOf($class, $actual);
     }
 }

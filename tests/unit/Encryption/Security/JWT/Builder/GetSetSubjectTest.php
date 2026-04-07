@@ -36,6 +36,8 @@ final class GetSetSubjectTest extends AbstractUnitTestCase
         $return = $builder->setSubject('subject');
         $this->assertInstanceOf(Builder::class, $return);
 
-        $this->assertSame('subject', $builder->getSubject());
+        $expected = 'subject';
+        $actual   = $builder->getSubject();
+        $this->assertSame($expected, $actual);
     }
 }

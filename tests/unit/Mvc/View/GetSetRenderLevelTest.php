@@ -15,11 +15,9 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\Fixtures\Mvc\View\AfterRenderListener;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-
-use function dataDir;
+use Phalcon\Tests\Support\Mvc\View\AfterRenderListener;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use const DIRECTORY_SEPARATOR;
 
@@ -45,7 +43,7 @@ class GetSetRenderLevelTest extends AbstractUnitTestCase
         $this->setDiService('view');
         $view = $this->getService('view');
 
-        $view->setViewsDir(dataDir('fixtures/views' . DIRECTORY_SEPARATOR));
+        $view->setViewsDir(supportDir('assets/views' . DIRECTORY_SEPARATOR));
         $view->setEventsManager($eventsManager);
 
         $view->start();

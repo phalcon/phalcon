@@ -18,7 +18,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class OffsetSetTest extends AbstractUnitTestCase
+final class OffsetSetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: offsetSet()

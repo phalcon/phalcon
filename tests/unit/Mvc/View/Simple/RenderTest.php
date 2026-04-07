@@ -14,12 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Mvc\View\Exception;
-use Phalcon\Tests\Fixtures\Objects\ChildObject;
-use Phalcon\Tests\Fixtures\Objects\ParentObject;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\ViewTrait;
+use Phalcon\Volt\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Objects\ChildObject;
+use Phalcon\Tests\Support\Objects\ParentObject;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Mvc\Fake\ViewTrait;
 
 use function dataDir;
 use function ob_end_clean;
@@ -50,7 +50,7 @@ class RenderTest extends AbstractUnitTestCase
     public function testMvcViewRenderChildobject(): void
     {
         $this->safeDeleteFile(
-            dataDir('fixtures/views/currentrender/subobject.volt.php')
+            supportDir('assets/views/currentrender/subobject.volt.php')
         );
 
         $view = $this->container->get('viewSimple');
@@ -71,7 +71,7 @@ class RenderTest extends AbstractUnitTestCase
         $this->assertEquals($expected, $actual);
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/currentrender/subobject.volt.php')
+            supportDir('assets/views/currentrender/subobject.volt.php')
         );
     }
 
@@ -160,11 +160,11 @@ class RenderTest extends AbstractUnitTestCase
         );
 
         $this->assertFileExists(
-            dataDir('fixtures/views/mustache') . '/index.mhtml.php'
+            supportDir('assets/views/mustache') . '/index.mhtml.php'
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/mustache') . '/index.mhtml.php'
+            supportDir('assets/views/mustache') . '/index.mhtml.php'
         );
     }
 

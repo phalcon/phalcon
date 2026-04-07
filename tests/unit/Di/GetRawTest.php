@@ -18,12 +18,10 @@ use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class GetRawTest extends AbstractUnitTestCase
+final class GetRawTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: getRaw()
-     *
-     * @return void
      *
      * @return void
      *

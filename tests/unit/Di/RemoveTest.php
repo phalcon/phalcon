@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class RemoveTest extends AbstractUnitTestCase
+final class RemoveTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: remove()

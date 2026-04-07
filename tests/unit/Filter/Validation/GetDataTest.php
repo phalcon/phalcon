@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
 use stdClass;
 
 final class GetDataTest extends AbstractUnitTestCase

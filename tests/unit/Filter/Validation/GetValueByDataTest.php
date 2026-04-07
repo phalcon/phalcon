@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Filter\Validation;
 
 use Phalcon\Filter\Validation;
-use Phalcon\Tests\Models\EntityWithPublic;
+use Phalcon\Tests\Support\Models\EntityWithPublic;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 

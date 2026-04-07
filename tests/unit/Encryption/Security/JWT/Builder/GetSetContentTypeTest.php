@@ -34,6 +34,9 @@ final class GetSetContentTypeTest extends AbstractUnitTestCase
         $this->assertNull($builder->getContentType());
 
         $builder->setContentType('abcde');
-        $this->assertSame('abcde', $builder->getContentType());
+
+        $expected = 'abcde';
+        $actual   = $builder->getContentType();
+        $this->assertSame($expected, $actual);
     }
 }

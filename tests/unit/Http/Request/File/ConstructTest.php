@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Http\Request\File;
 
 use Phalcon\Http\Request\File;
 use Phalcon\Http\Request\FileInterface;
-use Phalcon\Tests\Fixtures\Page\Http;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Page\Http;
 
-use function dataDir;
+use function supportDir;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -34,7 +34,7 @@ final class ConstructTest extends AbstractUnitTestCase
             [
                 'name'     => 'test',
                 'type'     => Http::CONTENT_TYPE_PLAIN,
-                'tmp_name' => dataDir('/assets/images/example-jpg.jpg'),
+                'tmp_name' => supportDir('/assets/images/example-jpg.jpg'),
                 'size'     => 1,
                 'error'    => 0,
             ]

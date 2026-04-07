@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Form;
-use Phalcon\Tests\Fixtures\Forms\SetActionForm;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Forms\SetActionForm;
 
 final class GetSetActionTest extends AbstractUnitTestCase
 {

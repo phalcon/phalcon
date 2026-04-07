@@ -13,7 +13,7 @@ namespace Phalcon\Tests\Unit\Http\Cookie;
 
 use Exception;
 use Phalcon\Http\Cookie;
-use Phalcon\Tests\Fixtures\Traits\CookieTrait;
+use Phalcon\Tests\Unit\Http\Fake\CookieTrait;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function explode;

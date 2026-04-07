@@ -19,7 +19,7 @@ use Phalcon\Html\Escaper;
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetTest extends AbstractUnitTestCase
+final class SetTest extends AbstractUnitTestCase
 {
     /**
      * @return array
@@ -55,6 +55,7 @@ class SetTest extends AbstractUnitTestCase
      * @dataProvider getExamples
      *
      * @return void
+     *
      * @throws Exception
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -70,7 +71,7 @@ class SetTest extends AbstractUnitTestCase
         // set non shared service
         $container->set($name, $service);
 
-        $actual = $container->get($class);
+        $actual = $container->get($name);
         $this->assertInstanceOf($class, $actual);
     }
 

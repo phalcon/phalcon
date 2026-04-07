@@ -29,7 +29,9 @@ final class GetSetDefaultNamespaceTest extends AbstractUnitTestCase
     {
         $dispatcher = new Dispatcher();
 
-        $this->assertSame('', $dispatcher->getDefaultNamespace());
+        $expected = '';
+        $actual   = $dispatcher->getDefaultNamespace();
+        $this->assertSame($expected, $actual);
 
         $namespace = "Phalcon\Rules";
         $dispatcher->setDefaultNamespace($namespace);

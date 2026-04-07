@@ -19,7 +19,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class SetSharedInstanceTest extends AbstractUnitTestCase
+final class SetSharedInstanceTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: setSharedInstance()
