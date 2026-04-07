@@ -96,10 +96,10 @@ final class AddForeignKeyTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: addForeignKey
+     * Tests Phalcon\Db\Dialect :: addForeignKey - sqlite throws exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-20
      *
      * @group sqlite
      */
@@ -150,7 +150,7 @@ final class AddForeignKeyTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: addForeignKey
+     * Tests Phalcon\Db\Dialect :: addForeignKey - onDelete
      *
      * @dataProvider getDialectsOnDelete
      *
@@ -178,7 +178,7 @@ final class AddForeignKeyTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: addForeignKey
+     * Tests Phalcon\Db\Dialect :: addForeignKey - onUpdate
      *
      * @dataProvider getDialectsOnUpdate
      *

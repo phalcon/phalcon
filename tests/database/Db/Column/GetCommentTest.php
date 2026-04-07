@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DbTrait;
+use Phalcon\Tests\Database\Db\Fake\DbTrait;
 
 final class GetCommentTest extends AbstractDatabaseTestCase
 {
@@ -35,7 +35,7 @@ final class GetCommentTest extends AbstractDatabaseTestCase
 
         foreach ($expectedColumns as $index => $column) {
             $this->assertSame(
-                isset($columns[$index]['comment']) ? $columns[$index]['comment'] : "",
+                $columns[$index]['comment'] ?? null,
                 $column->getComment()
             );
         }

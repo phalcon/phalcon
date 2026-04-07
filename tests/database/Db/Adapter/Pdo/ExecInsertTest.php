@@ -18,8 +18,8 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Migrations\DialectMigration;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class ExecInsertTest extends AbstractDatabaseTestCase
 {

@@ -17,11 +17,11 @@ use PDO;
 use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Models\InvoicesGetters;
-use Phalcon\Tests\Models\InvoicesMap;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\InvoicesGetters;
+use Phalcon\Tests\Support\Models\InvoicesMap;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function date;
 use function getOptionsMysql;
@@ -216,9 +216,8 @@ final class ToArrayTest extends AbstractDatabaseTestCase
         $migration->insert(4, 1, 0, $title, 111.26, $date);
         $migration->insert(5, 2, 1, $title, 222.19, $date);
 
-        $options               = getOptionsMysql();
-        $options['persistent'] = true;
-        $options['options']    = [
+        $options            = getOptionsMysql();
+        $options['options'] = [
             PDO::ATTR_EMULATE_PREPARES  => false,
             PDO::ATTR_STRINGIFY_FETCHES => false,
         ];
@@ -261,6 +260,8 @@ final class ToArrayTest extends AbstractDatabaseTestCase
         ];
         $actual   = $invoices->toArray();
         $this->assertSame($expected, $actual);
+
+        $db->close();
 
         Invoices::setup(
             [

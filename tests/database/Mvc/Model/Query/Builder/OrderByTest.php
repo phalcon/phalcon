@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Database\Mvc\RecordsTrait;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class OrderByTest extends AbstractDatabaseTestCase
 {
@@ -61,7 +61,7 @@ final class OrderByTest extends AbstractDatabaseTestCase
         ;
 
         $expected = 'SELECT inv_id, inv_title '
-            . 'FROM [Phalcon\Tests\Models\Invoices] '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
             . 'ORDER BY inv_title';
         $actual   = $phql;
         $this->assertEquals($expected, $actual);
@@ -72,7 +72,7 @@ final class OrderByTest extends AbstractDatabaseTestCase
         ;
 
         $expected = 'SELECT inv_id, inv_title '
-            . 'FROM [Phalcon\Tests\Models\Invoices] '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
             . 'ORDER BY inv_title DESC';
         $actual   = $phql;
         $this->assertEquals($expected, $actual);

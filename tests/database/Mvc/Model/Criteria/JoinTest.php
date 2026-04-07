@@ -18,11 +18,11 @@ use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Customers;
-use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Models\Orders;
-use Phalcon\Tests\Models\Products;
+use Phalcon\Tests\Support\Models\Customers;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\Orders;
+use Phalcon\Tests\Support\Models\Products;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class JoinTest extends AbstractDatabaseTestCase
 {
@@ -58,9 +58,9 @@ final class JoinTest extends AbstractDatabaseTestCase
 
         $this->assertInstanceOf(Builder::class, $builder);
 
-        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-            . 'FROM [Phalcon\Tests\Models\Invoices] '
-            . 'JOIN [Phalcon\Tests\Models\Customers] AS [customer] ON inv_cst_id = cst_id';
+        $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
+            . 'JOIN [Phalcon\Tests\Support\Models\Customers] AS [customer] ON inv_cst_id = cst_id';
         $actual   = $builder->getPhql();
         $this->assertEquals($expected, $actual);
     }

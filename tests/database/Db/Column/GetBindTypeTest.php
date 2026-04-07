@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Db\Column;
 
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DbTrait;
+use Phalcon\Tests\Database\Db\Fake\DbTrait;
 
 final class GetBindTypeTest extends AbstractDatabaseTestCase
 {

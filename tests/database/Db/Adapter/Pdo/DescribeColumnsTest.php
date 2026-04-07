@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Column;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\ComplexDefaultMigration;
-use Phalcon\Tests\Fixtures\Migrations\DialectMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
+use Phalcon\Tests\Support\Migrations\ComplexDefaultMigration;
+use Phalcon\Tests\Support\Migrations\DialectMigration;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class DescribeColumnsTest extends AbstractDatabaseTestCase
 {
@@ -77,7 +77,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
 
         $columns = $db->describeColumns($migration->getTable());
 
-        $this->assertSame('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP', $columns[2]->getDefault());
+        $this->assertSame('CURRENT_TIMESTAMP DEFAULT_GENERATED on update CURRENT_TIMESTAMP', $columns[2]->getDefault());
         $this->assertSame('NULL on update CURRENT_TIMESTAMP', $columns[3]->getDefault());
     }
 
@@ -98,7 +98,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
         $migration = new DialectMigration(self::getConnection());
         $columns   = $db->describeColumns($migration->getTable());
 
-        $expected = 41;
+        $expected = 40;
         $this->assertCount($expected, $columns);
 
         $expected = Column::class;
@@ -109,7 +109,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
             $expected = $this->getExpected($index);
             $actual   = $this->getActual($column);
 
-            $this->assertEquals($expected, $actual);
+            $this->assertSame($expected, $actual);
         }
     }
 
@@ -170,7 +170,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getDefault'       => null,
                 'getName'          => 'field_primary',
                 'getScale'         => 0,
-                'getSize'          => 11,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_INTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -270,7 +270,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getDefault'       => null,
                 'getName'          => 'field_bigint',
                 'getScale'         => 0,
-                'getSize'          => 20,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_BIGINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -280,7 +280,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isNotNull'        => false,
                 'isNumeric'        => true,
                 'isPrimary'        => false,
-                'isUnsigned'       => 6,
+                'isUnsigned'       => true,
             ],
             // field_bigint_default     bigint        default 1                     null,
             6  => [
@@ -290,7 +290,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getDefault'       => '1',
                 'getName'          => 'field_bigint_default',
                 'getScale'         => 0,
-                'getSize'          => 20,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_BIGINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -310,7 +310,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getDefault'       => null,
                 'getName'          => 'field_boolean',
                 'getScale'         => 0,
-                'getSize'          => 1,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_TINYINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -450,7 +450,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getDefault'       => null,
                 'getName'          => 'field_integer',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_INTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -460,7 +460,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isNotNull'        => false,
                 'isNumeric'        => true,
                 'isPrimary'        => false,
-                'isUnsigned'       => true,
+                'isUnsigned'       => false,
             ],
             // field_integer_default    int(10)       default 1                     null,
             15 => [
@@ -470,7 +470,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'getDefault'       => "1",
                 'getName'          => 'field_integer_default',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_INTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -702,35 +702,15 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isPrimary'        => false,
                 'isUnsigned'       => false,
             ],
-            // field_timestamp_default  timestamp unsigned                      null,
+            // field_mediumint_default  mediumint(10)                            null,
             27 => [
                 'getAfterPosition' => "field_timestamp_default",
-                'getBindType'      => Column::BIND_PARAM_STR,
-                'getComment'       => "field_timestamp_current field",
-                'getDefault'       => 'CURRENT_TIMESTAMP',
-                'getName'          => 'field_timestamp_current',
-                'getScale'         => 0,
-                'getSize'          => 0,
-                'getType'          => Column::TYPE_TIMESTAMP,
-                'getTypeReference' => -1,
-                'getTypeValues'    => [],
-                'hasDefault'       => true,
-                'isAutoIncrement'  => false,
-                'isFirst'          => false,
-                'isNotNull'        => false,
-                'isNumeric'        => false,
-                'isPrimary'        => false,
-                'isUnsigned'       => false,
-            ],
-            // field_mediumint_default  mediumint(10)                            null,
-            28 => [
-                'getAfterPosition' => "field_timestamp_current",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "field_mediumint field",
                 'getDefault'       => null,
                 'getName'          => 'field_mediumint',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_MEDIUMINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -743,14 +723,14 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => true,
             ],
             // field_mediumint_default  mediumint(10) default 1                     null,
-            29 => [
+            28 => [
                 'getAfterPosition' => "field_mediumint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "field_mediumint_default field",
                 'getDefault'       => "1",
                 'getName'          => 'field_mediumint_default',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_MEDIUMINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -763,14 +743,14 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_smallint           smallint(10)  unsigned                      null,
-            30 => [
+            29 => [
                 'getAfterPosition' => "field_mediumint_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "field_smallint field",
                 'getDefault'       => null,
                 'getName'          => 'field_smallint',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_SMALLINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -783,14 +763,14 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => true,
             ],
             // field_smallint_default   smallint(10)  default 1                     null,
-            31 => [
+            30 => [
                 'getAfterPosition' => "field_smallint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "field_smallint_default field",
                 'getDefault'       => "1",
                 'getName'          => 'field_smallint_default',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_SMALLINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -803,14 +783,14 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_tinyint            tinyint(10)   unsigned                      null,
-            32 => [
+            31 => [
                 'getAfterPosition' => "field_smallint_default",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "field_tinyint field",
                 'getDefault'       => null,
                 'getName'          => 'field_tinyint',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_TINYINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -823,14 +803,14 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => true,
             ],
             // field_tinyint_default    tinyint(10)   default 1                     null,
-            33 => [
+            32 => [
                 'getAfterPosition' => "field_tinyint",
                 'getBindType'      => Column::BIND_PARAM_INT,
                 'getComment'       => "field_tinyint_default field",
                 'getDefault'       => "1",
                 'getName'          => 'field_tinyint_default',
                 'getScale'         => 0,
-                'getSize'          => 10,
+                'getSize'          => 0,
                 'getType'          => Column::TYPE_TINYINTEGER,
                 'getTypeReference' => -1,
                 'getTypeValues'    => [],
@@ -843,7 +823,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_longtext           longtext                                    null,
-            34 => [
+            33 => [
                 'getAfterPosition' => "field_tinyint_default",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_longtext field",
@@ -863,7 +843,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_mediumtext         mediumtext                                  null,
-            35 => [
+            34 => [
                 'getAfterPosition' => "field_longtext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_mediumtext field",
@@ -883,7 +863,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_tinytext           tinytext                                    null,
-            36 => [
+            35 => [
                 'getAfterPosition' => "field_mediumtext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_tinytext field",
@@ -903,7 +883,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_text               text                                        null,
-            37 => [
+            36 => [
                 'getAfterPosition' => "field_tinytext",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_text field",
@@ -923,7 +903,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_varbinary          varbinary(10)                               null,
-            38 => [
+            37 => [
                 'getAfterPosition' => "field_text",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_varbinary field",
@@ -943,7 +923,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_varchar            varchar(10)                                 null,
-            39 => [
+            38 => [
                 'getAfterPosition' => "field_varbinary",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_varchar field",
@@ -963,7 +943,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'isUnsigned'       => false,
             ],
             // field_varchar_default    varchar(10) 'D'                             null,
-            40 => [
+            39 => [
                 'getAfterPosition' => "field_varchar",
                 'getBindType'      => Column::BIND_PARAM_STR,
                 'getComment'       => "field_varchar_default field",

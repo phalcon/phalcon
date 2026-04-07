@@ -30,15 +30,15 @@ final class ViewExistsTest extends AbstractDatabaseTestCase
                 Mysql::class,
                 "SELECT IF(COUNT(*) > 0, 1, 0) "
                 . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-                . "WHERE `TABLE_NAME` = 'view' "
-                . "AND `TABLE_SCHEMA` = 'schema'",
+                . "WHERE `TABLE_NAME`= 'view' "
+                . "AND `TABLE_SCHEMA`='schema'",
             ],
             [
                 Postgresql::class,
                 "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
                 . "FROM pg_views "
                 . "WHERE viewname='view' "
-                . "AND schemaname='public'",
+                . "AND schemaname='schema'",
             ],
             [
                 Sqlite::class,
@@ -60,7 +60,7 @@ final class ViewExistsTest extends AbstractDatabaseTestCase
                 Mysql::class,
                 "SELECT IF(COUNT(*) > 0, 1, 0) "
                 . "FROM `INFORMATION_SCHEMA`.`VIEWS` "
-                . "WHERE `TABLE_NAME` = 'view' "
+                . "WHERE `TABLE_NAME`='view' "
                 . "AND `TABLE_SCHEMA` = DATABASE()",
             ],
             [
@@ -68,7 +68,7 @@ final class ViewExistsTest extends AbstractDatabaseTestCase
                 "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
                 . "FROM pg_views "
                 . "WHERE viewname='view' "
-                . "AND schemaname=''",
+                . "AND schemaname='public'",
             ],
             [
                 Sqlite::class,
@@ -90,7 +90,7 @@ final class ViewExistsTest extends AbstractDatabaseTestCase
      *
      * @group mysql
      */
-    public function testDbDialectTableExists(
+    public function testDbDialectViewExists(
         string $dialectClass,
         string $expected
     ): void {
@@ -102,7 +102,7 @@ final class ViewExistsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: viewExists
+     * Tests Phalcon\Db\Dialect :: viewExists - no schema
      *
      * @dataProvider getDialectsNoSchema
      *
@@ -111,7 +111,7 @@ final class ViewExistsTest extends AbstractDatabaseTestCase
      *
      * @group mysql
      */
-    public function testDbDialectTableExistsNoSchema(
+    public function testDbDialectViewExistsNoSchema(
         string $dialectClass,
         string $expected
     ): void {

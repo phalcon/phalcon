@@ -30,14 +30,14 @@ final class TableExistsTest extends AbstractDatabaseTestCase
                 Mysql::class,
                 "SELECT IF(COUNT(*) > 0, 1, 0) "
                 . "FROM `INFORMATION_SCHEMA`.`TABLES` "
-                . "WHERE `TABLE_NAME` = 'table' "
+                . "WHERE `TABLE_NAME`= 'table' "
                 . "AND `TABLE_SCHEMA` = 'schema'",
             ],
             [
                 Postgresql::class,
                 "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
                 . "FROM information_schema.tables "
-                . "WHERE table_schema = 'public' "
+                . "WHERE table_schema = 'schema' "
                 . "AND table_name='table'",
             ],
             [
@@ -67,7 +67,7 @@ final class TableExistsTest extends AbstractDatabaseTestCase
                 Postgresql::class,
                 "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
                 . "FROM information_schema.tables "
-                . "WHERE table_schema = '' "
+                . "WHERE table_schema = 'public' "
                 . "AND table_name='table'",
             ],
             [
@@ -102,7 +102,7 @@ final class TableExistsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: tableExists
+     * Tests Phalcon\Db\Dialect :: tableExists - no schema
      *
      * @dataProvider getDialectsNoSchema
      *

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\CustomersDefaults;
+use Phalcon\Tests\Support\Models\CustomersDefaults;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class HasChangedTest extends AbstractDatabaseTestCase
 {
@@ -29,7 +29,7 @@ final class HasChangedTest extends AbstractDatabaseTestCase
 
     public function tearDown(): void
     {
-        $this->container['db']->close();
+        $this->tearDownDatabase();
     }
 
     /**

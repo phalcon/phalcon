@@ -94,7 +94,7 @@ final class AddIndexTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: addIndex
+     * Tests Phalcon\Db\Dialect :: addIndex - with type
      *
      * @dataProvider getDialectsType
      *

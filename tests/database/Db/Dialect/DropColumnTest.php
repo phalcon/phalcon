@@ -17,7 +17,6 @@ use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
-use Phalcon\Db\Reference;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class DropColumnTest extends AbstractDatabaseTestCase
@@ -41,10 +40,10 @@ final class DropColumnTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: dropColumn
+     * Tests Phalcon\Db\Dialect :: dropColumn - sqlite throws exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-20
      *
      * @group sqlite
      */

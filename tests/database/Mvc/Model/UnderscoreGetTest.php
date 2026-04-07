@@ -17,11 +17,11 @@ use PDO;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Migrations\CustomersMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Models;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class UnderscoreGetTest extends AbstractDatabaseTestCase
 {
@@ -35,7 +35,7 @@ final class UnderscoreGetTest extends AbstractDatabaseTestCase
 
     public function tearDown(): void
     {
-        $this->container['db']->close();
+        $this->tearDownDatabase();
     }
 
     /**

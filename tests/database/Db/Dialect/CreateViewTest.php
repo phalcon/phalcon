@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Database\Db\Dialect;
 use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
-use Phalcon\Db\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class CreateViewTest extends AbstractDatabaseTestCase
@@ -53,11 +52,9 @@ final class CreateViewTest extends AbstractDatabaseTestCase
             ],
             [
                 Postgresql::class,
-                '3',
             ],
             [
                 Sqlite::class,
-                '4',
             ],
         ];
     }
@@ -85,7 +82,7 @@ final class CreateViewTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: createView
+     * Tests Phalcon\Db\Dialect :: createView - exception on missing sql definition
      *
      * @dataProvider getDialectsException
      *
@@ -100,7 +97,7 @@ final class CreateViewTest extends AbstractDatabaseTestCase
         /** @var Mysql $dialect */
         $dialect = new $dialectClass();
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Phalcon\Db\Exception::class);
         $this->expectExceptionMessage(
             "The index 'sql' is required in the definition array"
         );

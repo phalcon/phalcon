@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class ColumnsTest extends AbstractDatabaseTestCase
 {
@@ -51,7 +51,7 @@ final class ColumnsTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(Builder::class, $builder);
 
         $expected = 'SELECT inv_id, inv_total '
-            . 'FROM [Phalcon\Tests\Models\Invoices]';
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices]';
         $actual   = $builder->getPhql();
         $this->assertEquals($expected, $actual);
     }
@@ -84,7 +84,7 @@ final class ColumnsTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(Builder::class, $builder);
 
         $expected = 'SELECT inv_id AS [id], inv_total AS [total] '
-            . 'FROM [Phalcon\Tests\Models\Invoices]';
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices]';
         $actual   = $builder->getPhql();
         $this->assertEquals($expected, $actual);
     }

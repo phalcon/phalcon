@@ -84,7 +84,7 @@ final class TruncateTableTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: truncateTable
+     * Tests Phalcon\Db\Dialect :: truncateTable - no schema
      *
      * @dataProvider getDialectsNoSchema
      *
@@ -100,7 +100,7 @@ final class TruncateTableTest extends AbstractDatabaseTestCase
         /** @var Mysql $dialect */
         $dialect = new $dialectClass();
 
-        $actual = $dialect->truncateTable('table');
+        $actual = $dialect->truncateTable('table', '');
         $this->assertSame($expected, $actual);
     }
 }

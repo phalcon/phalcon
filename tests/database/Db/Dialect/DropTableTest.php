@@ -86,7 +86,7 @@ final class DropTableTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: dropTable
+     * Tests Phalcon\Db\Dialect :: dropTable - ifExists false
      *
      * @dataProvider getDialectsNotExists
      *

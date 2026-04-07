@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class InWhereTest extends AbstractDatabaseTestCase
 {
@@ -50,8 +50,8 @@ final class InWhereTest extends AbstractDatabaseTestCase
 
         $this->assertInstanceOf(Builder::class, $builder);
 
-        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-            . 'FROM [Phalcon\Tests\Models\Invoices] '
+        $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
             . 'WHERE inv_cst_id IN (:ACP0:, :ACP1:)';
         $actual   = $builder->getPhql();
         $this->assertEquals($expected, $actual);
