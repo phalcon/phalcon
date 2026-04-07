@@ -1349,7 +1349,7 @@ class Compiler implements InjectionAwareInterface
         $compilation .= "<?php endswitch ?>";
 
         return $compilation;
-    }Does
+    }
 
     /**
      * Resolves an expression node in an AST volt tree

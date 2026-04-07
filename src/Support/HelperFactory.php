@@ -91,7 +91,12 @@ use function call_user_func_array;
  * @method string decrement(string $text, string $separator = '_')
  * @method string dirFromFile(string $file)
  * @method string dirSeparator(string $directory)
- * @method string dynamic(string $text, string $leftDelimiter = "{", string $rightDelimiter = "}", string $separator = "|")
+ * @method string dynamic(
+ *      string $text,
+ *      string $leftDelimiter = "{",
+ *      string $rightDelimiter = "}",
+ *      string $separator = "|"
+ * )
  * @method string encode($data, int $options = 0, int $depth = 512)
  * @method bool   endsWith(string $haystack, string $needle, bool $ignoreCase = true)
  * @method mixed  filter(array $collection, callable|null $method)
