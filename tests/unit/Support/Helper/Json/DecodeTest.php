@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Json;
 use InvalidArgumentException;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class DecodeTest extends AbstractUnitTestCase
 {
@@ -30,13 +29,13 @@ final class DecodeTest extends AbstractUnitTestCase
      */
     public function testSupportHelperJsonDecode(): void
     {
-        $object   = new Decode();
-        $data     = '{"one":"two","0":"three"}';
+        $object = new Decode();
+        $data = '{"one":"two","0":"three"}';
         $expected = [
             'one' => 'two',
             'three',
         ];
-        $actual   = $object($data, true);
+        $actual = $object($data, true);
         $this->assertSame($expected, $actual);
     }
 
@@ -53,7 +52,7 @@ final class DecodeTest extends AbstractUnitTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             "Control character error, " .
-            "possibly incorrectly encoded"
+            "possibly incorrectly encoded",
         );
         $this->expectExceptionCode(3);
 

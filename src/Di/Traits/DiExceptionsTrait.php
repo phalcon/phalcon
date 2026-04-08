@@ -288,7 +288,7 @@ trait DiExceptionsTrait
     private function throwUndefinedMethod(string $method): void
     {
         /**
-         * The method doesn't start with set/get throw an exception
+         * The method does not start with set/get throw an exception
          */
         throw new Exception(
             "Call to undefined method or service '" . $method . "'"

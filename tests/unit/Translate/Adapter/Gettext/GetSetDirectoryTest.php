@@ -13,17 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-use PHPUnit\Framework\Attributes\Test;
 
 use function dataDir;
 use function supportDir;
 
-#[RequiresPhpExtension('gettext')]
 final class GetSetDirectoryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -38,11 +35,12 @@ final class GetSetDirectoryTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextGetSetDirectory(): void
     {
+
         $params = $this->getGettextConfig();
 
         $translator = new Gettext(new InterpolatorFactory(), $params);
 
-        $expected = dataDir('assets/translation/gettext');
+        $expected = supportDir('assets/translation/gettext');
         $actual   = $translator->getDirectory();
         $this->assertSame($expected, $actual);
 

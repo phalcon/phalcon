@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the
- * LICENSE.txt file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
 
-class GetServicesTest extends AbstractUnitTestCase
+final class GetServicesTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di :: getServices()

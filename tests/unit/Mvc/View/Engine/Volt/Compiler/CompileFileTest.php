@@ -41,7 +41,7 @@ class CompileFileTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerCompileFile(): void
     {
-        $viewFile    = dataDir('fixtures/views/layouts/compiler.volt');
+        $viewFile    = supportDir('assets/views/layouts/compiler.volt');
         $compileFile = $viewFile . '.php';
 
         $expected = '<?php if ($some_eval) { ?>
@@ -73,8 +73,8 @@ Clearly, the song is: <?= $this->getContent() ?>.
         $volt = new Compiler();
 
         $viewFile = sprintf(
-            '%sfixtures/views/filters/%s.volt',
-            dataDir(),
+            '%sassets/views/filters/%s.volt',
+            supportDir(),
             $view
         );
 

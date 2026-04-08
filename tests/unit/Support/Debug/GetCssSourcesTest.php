@@ -15,9 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 
 use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
-
-use function sprintf;
 
 /**
  * Class GetCssSourcesTest extends AbstractUnitTestCase
@@ -37,17 +34,17 @@ final class GetCssSourcesTest extends AbstractUnitTestCase
     public function testSupportDebugGetCssSources(): void
     {
         $debug = new Debug();
-        $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
+        $uri = 'https://assets.phalcon.io/debug/6.0.x/';
 
         $expected = "
     <link href='{$uri}assets/jquery-ui/themes/ui-lightness/jquery-ui.min.css'
-          rel='stylesheet' 
+          rel='stylesheet'
           type='text/css' />
     <link href='{$uri}assets/jquery-ui/themes/ui-lightness/theme.css'
-          rel='stylesheet' 
+          rel='stylesheet'
           type='text/css' />
     <link href='{$uri}themes/default/style.css'
-          rel='stylesheet' 
+          rel='stylesheet'
           type='text/css' />";
 
         $actual = $debug->getCssSources();

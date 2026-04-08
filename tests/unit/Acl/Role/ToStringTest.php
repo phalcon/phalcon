@@ -33,9 +33,22 @@ final class ToStringTest extends AbstractUnitTestCase
         $expected = 'Administrator';
         $actual   = $role->__toString();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Role :: __toString() - cast
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclRoleToStringCast(): void
+    {
+        $role = new Role('Administrator');
 
         $expected = 'Administrator';
-        $actual   = (string)$role;
+        $actual   = (string) $role;
         $this->assertSame($expected, $actual);
     }
 }

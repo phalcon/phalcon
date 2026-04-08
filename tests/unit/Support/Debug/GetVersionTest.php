@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 use Phalcon\Support\Debug;
 use Phalcon\Support\Version;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetVersionTest extends AbstractUnitTestCase
 {
@@ -30,13 +29,13 @@ final class GetVersionTest extends AbstractUnitTestCase
      */
     public function testSupportDebugGetVersion(): void
     {
-        $debug   = new Debug();
+        $debug = new Debug();
         $version = new Version();
 
-        $target  = "'_new'";
-        $uri     = "'https://docs.phalcon.io/"
-            . $version->getPart(Version::VERSION_MAJOR) . '.'
-            . $version->getPart(Version::VERSION_MEDIUM) . "/'";
+        $target = "'_new'";
+        $uri = "'https://docs.phalcon.io/"
+               . $version->getPart(Version::VERSION_MAJOR) . '.'
+               . $version->getPart(Version::VERSION_MEDIUM) . "/'";
         $version = $version->get();
 
         $expected = "<div class='version'>

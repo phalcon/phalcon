@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use PHPUnit\Framework\Attributes\Test;
 
 final class UnserializeTest extends AbstractRegistryTestCase
 {
@@ -40,7 +39,7 @@ final class UnserializeTest extends AbstractRegistryTestCase
 
         $this->assertSame(
             $data,
-            $registry->toArray()
+            $registry->toArray(),
         );
     }
 }

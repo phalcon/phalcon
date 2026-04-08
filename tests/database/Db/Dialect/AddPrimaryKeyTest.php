@@ -18,7 +18,6 @@ use Phalcon\Db\Dialect\Postgresql;
 use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
-use Phalcon\Db\Reference;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class AddPrimaryKeyTest extends AbstractDatabaseTestCase
@@ -45,10 +44,10 @@ final class AddPrimaryKeyTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: addPrimaryKey
+     * Tests Phalcon\Db\Dialect :: addPrimaryKey - sqlite throws exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-20
      *
      * @group sqlite
      */

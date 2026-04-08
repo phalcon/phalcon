@@ -25,8 +25,8 @@ use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Tests\Fixtures\Storage\Adapter\Libmemcached as LibmemcachedFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Storage\Fake\FakeLibmemcached;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
@@ -120,7 +120,7 @@ final class ConstructTest extends AbstractUnitTestCase
     {
         $this->checkExtensionIsLoaded('memcached');
         $serializer = new SerializerFactory();
-        $adapter    = new LibmemcachedFixture($serializer);
+        $adapter    = new FakeLibmemcached($serializer);
 
         $expected = [
             'servers' => [
@@ -148,7 +148,7 @@ final class ConstructTest extends AbstractUnitTestCase
     {
         $this->checkExtensionIsLoaded('memcached');
         $serializer = new SerializerFactory();
-        $adapter    = new LibmemcachedFixture(
+        $adapter    = new FakeLibmemcached(
             $serializer,
             getOptionsLibmemcached()
         );

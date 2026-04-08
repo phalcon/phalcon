@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptOpensslCipherIvLengthFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\Crypt\FakeCryptOpensslCipherIvLength;
 
 final class IsValidDecryptLengthTest extends AbstractUnitTestCase
 {
@@ -51,7 +51,7 @@ final class IsValidDecryptLengthTest extends AbstractUnitTestCase
      */
     public function testEncryptionCryptGetSetKeyFalseLength(): void
     {
-        $crypt = new CryptOpensslCipherIvLengthFixture();
+        $crypt = new FakeCryptOpensslCipherIvLength();
         $crypt->setKey('1234');
 
         $actual = $crypt->isValidDecryptLength('text');

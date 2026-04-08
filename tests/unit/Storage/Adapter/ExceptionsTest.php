@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
 use Phalcon\Storage\Adapter\Redis;
+use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
@@ -23,6 +24,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use function array_merge;
 use function file_put_contents;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function is_dir;
 use function mkdir;
 use function outputDir;
@@ -180,5 +182,33 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
 
         $this->safeDeleteFile($target . 'test-key');
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\RedisCluster :: getAdapter() - failed connection
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-01
+     */
+    public function testStorageAdapterRedisClusterGetAdapterFailedConnection(): void
+    {
+        $this->checkExtensionIsLoaded('redis');
+
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage(
+            'Could not connect to the Redis Cluster server due to: '
+        );
+
+        $serializer = new SerializerFactory();
+        $adapter    = new RedisCluster(
+            $serializer,
+            [
+                'hosts' => ['127.0.0.1:19999'],
+            ]
+        );
+
+        $adapter->get('test');
     }
 }

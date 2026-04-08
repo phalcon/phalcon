@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class GetImageTest extends AbstractUnitTestCase
 {
@@ -32,11 +32,7 @@ final class GetImageTest extends AbstractUnitTestCase
         foreach ($this->getImages() as $image) {
             $gd = new Gd($image);
 
-            if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
-                $actual = is_object($gd->getImage());
-            } else {
-                $actual = is_resource($gd->getImage());
-            }
+            $actual = is_object($gd->getImage());
 
             $this->assertTrue($actual);
         }

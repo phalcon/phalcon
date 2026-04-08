@@ -92,17 +92,6 @@ final class AttributesTest extends AbstractUnitTestCase
                     'notPrinted2' => null,
                 ],
             ],
-            [
-                ENT_HTML5,
-                'text="Ferrari Ford Dodge"',
-                [
-                    'text' => [
-                        'Ferrari',
-                        'Ford',
-                        'Dodge',
-                    ],
-                ],
-            ],
         ];
     }
 
@@ -125,6 +114,25 @@ final class AttributesTest extends AbstractUnitTestCase
         $escaper->setFlags($flags);
 
         $actual = $escaper->attributes($text);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Escaper :: attributes() with array value
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
+     */
+    public function testEscaperAttributesWithArrayValue(): void
+    {
+        $escaper = new Escaper();
+        $escaper->setFlags(ENT_HTML5);
+
+        $input    = ['text' => ['Ferrari', 'Ford', 'Dodge']];
+        $expected = 'text="Ferrari Ford Dodge"';
+        $actual   = $escaper->attributes($input);
         $this->assertSame($expected, $actual);
     }
 }

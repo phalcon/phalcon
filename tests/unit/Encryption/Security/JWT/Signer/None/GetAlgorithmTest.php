@@ -26,7 +26,9 @@ final class GetAlgorithmTest extends AbstractUnitTestCase
      */
     public function testEncryptionSecurityJWTSignerNoneGetAlgorithm(): void
     {
-        $signer = new None();
-        $this->assertSame('None', $signer->getAlgorithm());
+        $signer   = new None();
+        $expected = 'None';
+        $actual   = $signer->getAlgorithm();
+        $this->assertSame($expected, $actual);
     }
 }

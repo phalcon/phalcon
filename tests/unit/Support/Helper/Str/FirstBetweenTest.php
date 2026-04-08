@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\FirstBetween;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FirstBetweenTest extends AbstractUnitTestCase
 {
@@ -29,10 +28,10 @@ final class FirstBetweenTest extends AbstractUnitTestCase
      */
     public function testSupportHelperStrFirstBetween(): void
     {
-        $object   = new FirstBetween();
-        $source   = 'This is a [custom] string';
+        $object = new FirstBetween();
+        $source = 'This is a [custom] string';
         $expected = 'custom';
-        $actual   = $object($source, '[', ']');
+        $actual = $object($source, '[', ']');
         $this->assertSame($expected, $actual);
     }
 }

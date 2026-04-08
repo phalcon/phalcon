@@ -33,9 +33,22 @@ final class ToStringTest extends AbstractUnitTestCase
         $expected = 'Customers';
         $actual   = $component->__toString();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Component :: __toString() - cast
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclComponentToStringCast(): void
+    {
+        $component = new Component('Customers');
 
         $expected = 'Customers';
-        $actual   = (string)$component;
+        $actual   = (string) $component;
         $this->assertSame($expected, $actual);
     }
 }

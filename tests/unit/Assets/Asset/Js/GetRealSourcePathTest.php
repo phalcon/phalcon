@@ -18,7 +18,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
-use function dataDir;
+use function supportDir;
 
 final class GetRealSourcePathTest extends AbstractUnitTestCase
 {
@@ -36,7 +36,7 @@ final class GetRealSourcePathTest extends AbstractUnitTestCase
             $this->markTestSkipped('Need to fix Windows new lines...');
         }
 
-        $file  = dataDir('assets/assets/jquery.js');
+        $file  = supportDir('assets/assets/jquery.js');
         $asset = new Js($file);
 
         $expected = $file;

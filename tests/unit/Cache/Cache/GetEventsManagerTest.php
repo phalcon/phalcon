@@ -74,9 +74,18 @@ final class GetEventsManagerTest extends AbstractUnitTestCase
 
         $this->assertInstanceOf($manager::class, $adapter->getEventsManager());
 
+        // Seed keys so Memory adapter does not throw on get/getMultiple
+        if ($method === 'get') {
+            $adapter->set('test', 'value');
+        } elseif ($method === 'getMultiple') {
+            $adapter->setMultiple(['test' => 'value', 'test2' => 'value']);
+        }
+
         call_user_func_array([$adapter, $method], $data);
         call_user_func_array([$adapter, $method], $data);
-        $this->assertEquals(2, $counter);
+
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**

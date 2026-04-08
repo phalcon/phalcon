@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Example\Namespaces\Adapter\Another;
 use Example\Namespaces\Adapter\Mongo;
 use Phalcon\Autoload\Loader;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 final class AutoloadTest extends AbstractUnitTestCase
 {
@@ -38,11 +38,11 @@ final class AutoloadTest extends AbstractUnitTestCase
         $loader
             ->addClass(
                 'One',
-                dataDir('fixtures/Loader/Example/Classes/One.php')
+                supportDir('assets/Loader/Example/Classes/One.php')
             )
             ->addClass(
                 'Two',
-                dataDir('fixtures/Loader/Example/Classes/Two.php')
+                supportDir('assets/Loader/Example/Classes/Two.php')
             )
         ;
 
@@ -50,8 +50,8 @@ final class AutoloadTest extends AbstractUnitTestCase
 
         $expected = [
             'Loading: One',
-            'Require: ' . dataDir('fixtures/Loader/Example/Classes/One.php'),
-            'Class: load: ' . dataDir('fixtures/Loader/Example/Classes/One.php'),
+            'Require: ' . supportDir('assets/Loader/Example/Classes/One.php'),
+            'Class: load: ' . supportDir('assets/Loader/Example/Classes/One.php'),
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);
@@ -60,8 +60,8 @@ final class AutoloadTest extends AbstractUnitTestCase
 
         $expected = [
             'Loading: Two',
-            'Require: ' . dataDir('fixtures/Loader/Example/Classes/Two.php'),
-            'Class: load: ' . dataDir('fixtures/Loader/Example/Classes/Two.php'),
+            'Require: ' . supportDir('assets/Loader/Example/Classes/Two.php'),
+            'Class: load: ' . supportDir('assets/Loader/Example/Classes/Two.php'),
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);
@@ -101,9 +101,9 @@ final class AutoloadTest extends AbstractUnitTestCase
             )
             ->setNamespaces(
                 [
-                    'Example\Namespaces\Base' => dataDir('fixtures/Loader/Example/Namespaces/Base/'),
-                    'Example\Namespaces'      => dataDir('fixtures/Loader/Example/Namespaces/'),
-                    'Example'                 => dataDir('fixtures/Loader/Example/Namespaces/'),
+                    'Example\Namespaces\Base' => supportDir('assets/Loader/Example/Namespaces/Base/'),
+                    'Example\Namespaces'      => supportDir('assets/Loader/Example/Namespaces/'),
+                    'Example'                 => supportDir('assets/Loader/Example/Namespaces/'),
                 ]
             )
         ;
@@ -114,11 +114,11 @@ final class AutoloadTest extends AbstractUnitTestCase
             'Loading: Example\Namespaces\Engines\Alcohol',
             'Class: 404: Example\Namespaces\Engines\Alcohol',
             'Require: 404: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.php'),
+            supportDir('assets/Loader/Example/Namespaces/Engines/Alcohol.php'),
             'Require: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
+            supportDir('assets/Loader/Example/Namespaces/Engines/Alcohol.inc'),
             'Namespace: Example\Namespaces\ - ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Engines/Alcohol.inc'),
+            supportDir('assets/Loader/Example/Namespaces/Engines/Alcohol.inc'),
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);
@@ -142,15 +142,15 @@ final class AutoloadTest extends AbstractUnitTestCase
         $loader
             ->addNamespace(
                 'Example\Namespaces\Base',
-                dataDir('fixtures/Loader/Example/Namespaces/Base/')
+                supportDir('assets/Loader/Example/Namespaces/Base/')
             )
             ->addNamespace(
                 'Example\Namespaces\Adapter',
-                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
+                supportDir('assets/Loader/Example/Namespaces/Adapter/')
             )
             ->addNamespace(
                 'Example\Namespaces',
-                dataDir('fixtures/Loader/Example/Namespaces/')
+                supportDir('assets/Loader/Example/Namespaces/')
             )
         ;
 
@@ -160,10 +160,10 @@ final class AutoloadTest extends AbstractUnitTestCase
             'Loading: Example\Namespaces\Adapter\Mongo',
             'Class: 404: Example\Namespaces\Adapter\Mongo',
             'Require: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Adapter/') .
+            supportDir('assets/Loader/Example/Namespaces/Adapter/') .
             'Mongo.php',
             'Namespace: Example\Namespaces\Adapter\ - ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Adapter/') .
+            supportDir('assets/Loader/Example/Namespaces/Adapter/') .
             'Mongo.php',
         ];
         $actual   = $loader->getDebug();
@@ -188,7 +188,7 @@ final class AutoloadTest extends AbstractUnitTestCase
         $loader
             ->addNamespace(
                 'Example\Namespaces\Adapter',
-                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
+                supportDir('assets/Loader/Example/Namespaces/Adapter/')
             )
         ;
 
@@ -198,7 +198,7 @@ final class AutoloadTest extends AbstractUnitTestCase
             'Loading: Example\Namespaces\Adapter\Unknown',
             'Class: 404: Example\Namespaces\Adapter\Unknown',
             'Require: 404: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Adapter/Unknown.php'),
+            supportDir('assets/Loader/Example/Namespaces/Adapter/Unknown.php'),
             'Namespace: 404: Example\Namespaces\Adapter\Unknown',
             'Directories: 404: Example\Namespaces\Adapter\Unknown',
         ];
@@ -207,8 +207,9 @@ final class AutoloadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces multiple
-     * folders
+     * Tests Phalcon\Autoloader\Loader :: autoload() = namespaces multiple folders
+     *
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -223,23 +224,23 @@ final class AutoloadTest extends AbstractUnitTestCase
         $loader
             ->addNamespace(
                 'Example\Namespaces\Base',
-                dataDir('fixtures/Loader/Example/Namespaces/Base/')
+                supportDir('assets/Loader/Example/Namespaces/Base/')
             )
             ->addNamespace(
                 'Example\Namespaces\Adapter',
-                dataDir('fixtures/Loader/Example/Namespaces/Adapter/')
+                supportDir('assets/Loader/Example/Namespaces/Adapter/')
             )
             ->addNamespace(
                 'Example\Namespaces',
-                dataDir('fixtures/Loader/Example/Namespaces/')
+                supportDir('assets/Loader/Example/Namespaces/')
             )
         ;
         $loader
             ->setNamespaces(
                 [
                     'Example\Namespaces\Adapter' => [
-                        dataDir('fixtures/Loader/Example/Namespaces/Adapter/'),
-                        dataDir('fixtures/Loader/Example/Namespaces/Plugin/'),
+                        supportDir('assets/Loader/Example/Namespaces/Adapter/'),
+                        supportDir('assets/Loader/Example/Namespaces/Plugin/'),
                     ],
                 ]
             )
@@ -251,11 +252,11 @@ final class AutoloadTest extends AbstractUnitTestCase
             'Loading: Example\Namespaces\Adapter\Another',
             'Class: 404: Example\Namespaces\Adapter\Another',
             'Require: 404: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Adapter/Another.php'),
+            supportDir('assets/Loader/Example/Namespaces/Adapter/Another.php'),
             'Require: ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Plugin/Another.php'),
+            supportDir('assets/Loader/Example/Namespaces/Plugin/Another.php'),
             'Namespace: Example\Namespaces\Adapter\ - ' .
-            dataDir('fixtures/Loader/Example/Namespaces/Plugin/Another.php'),
+            supportDir('assets/Loader/Example/Namespaces/Plugin/Another.php'),
         ];
         $actual   = $loader->getDebug();
         $this->assertSame($expected, $actual);
@@ -281,9 +282,6 @@ final class AutoloadTest extends AbstractUnitTestCase
         $expected = [
             'Loading: Example\Namespaces\Adapter\Mongo',
             'Class: 404: Example\Namespaces\Adapter\Mongo',
-            //            'Load: No folders registered: Example\Namespaces\Adapter\\',
-            //            'Load: No folders registered: Example\Namespaces\\',
-            //            'Load: No folders registered: Example\\',
             'Namespace: 404: Example\Namespaces\Adapter\Mongo',
             'Directories: 404: Example\Namespaces\Adapter\Mongo',
         ];

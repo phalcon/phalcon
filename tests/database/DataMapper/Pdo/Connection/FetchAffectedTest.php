@@ -13,7 +13,7 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 
 final class FetchAffectedTest extends AbstractDatabaseTestCase
 {

@@ -385,7 +385,9 @@ abstract class AbstractPdo extends AbstractAdapter
             preg_match_all($bindPattern, $sql, $matches, $setOrder)
         ) {
             foreach ($matches as $placeMatch) {
-                if (!isset($parameters[$placeMatch[1]])) {
+                if (isset($parameters[$placeMatch[1]])) {
+                    $value = $parameters[$placeMatch[1]];
+                } else {
                     if (!isset($placeMatch[2])) {
                         throw new Exception(
                             "Matched parameter was not found in parameters list"
@@ -397,9 +399,11 @@ abstract class AbstractPdo extends AbstractAdapter
                             "Matched parameter was not found in parameters list"
                         );
                     }
+
+                    $value = $parameters[$placeMatch[2]];
                 }
 
-                $placeHolders[] = $parameters[$placeMatch[1]];
+                $placeHolders[] = $value;
             }
 
             $boundSql = preg_replace($bindPattern, "?", $sql);
@@ -430,7 +434,7 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Sends SQL statements to the database server returning the success state.
-     * Use this method only when the SQL statement sent to the server doesn't
+     * Use this method only when the SQL statement sent to the server does not
      * return any rows
      *
      *```php

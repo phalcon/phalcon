@@ -23,13 +23,13 @@ use Phalcon\DataMapper\Table\Exception\PrimaryValueNotScalarException;
 use Phalcon\DataMapper\Table\Exception\UnexpectedRowCountAffectedException;
 use Phalcon\DataMapper\Table\TableLocator;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesRow;
-use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesTable;
-use Phalcon\Tests\Fixtures\DataMapper\Table\NoPrimaryKey\NoPrimaryKeyTable;
-use Phalcon\Tests\Fixtures\DataMapper\Table\OrdersXProducts\OrdersXProductsRow;
-use Phalcon\Tests\Fixtures\DataMapper\Table\OrdersXProducts\OrdersXProductsTable;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Migrations\OrdersProductsMigration;
+use Phalcon\Tests\Support\DataMapper\Table\Invoices\InvoicesRow;
+use Phalcon\Tests\Support\DataMapper\Table\Invoices\InvoicesTable;
+use Phalcon\Tests\Support\DataMapper\Table\NoPrimaryKey\NoPrimaryKeyTable;
+use Phalcon\Tests\Support\DataMapper\Table\OrdersXProducts\OrdersXProductsRow;
+use Phalcon\Tests\Support\DataMapper\Table\OrdersXProducts\OrdersXProductsTable;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\OrdersProductsMigration;
 
 use function uniqid;
 

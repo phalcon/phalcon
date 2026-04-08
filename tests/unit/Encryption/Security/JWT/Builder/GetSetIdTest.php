@@ -35,6 +35,8 @@ final class GetSetIdTest extends AbstractUnitTestCase
         $return = $builder->setId('id');
         $this->assertInstanceOf(Builder::class, $return);
 
-        $this->assertSame('id', $builder->getId());
+        $expected = 'id';
+        $actual   = $builder->getId();
+        $this->assertSame($expected, $actual);
     }
 }

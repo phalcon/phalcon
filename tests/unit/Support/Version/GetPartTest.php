@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Version;
 
 use Phalcon\Support\Version;
-use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Unit\Support\Fake\VersionTrait;
 
 final class GetPartTest extends AbstractUnitTestCase
 {
@@ -38,35 +37,35 @@ final class GetPartTest extends AbstractUnitTestCase
          */
 
         $version = new Version();
-        $id      = $version->getId();
+        $id = $version->getId();
 
         // The major version is the first digit
         $expected = (string)$id[0];
-        $actual   = $version->getPart(Version::VERSION_MAJOR);
+        $actual = $version->getPart(Version::VERSION_MAJOR);
         $this->assertSame($expected, $actual);
 
         // The medium version is the second and third digits
         // This is int to string because we might end up with "00"
         $expected = (string)intval($id[1] . $id[2]);
-        $actual   = $version->getPart(Version::VERSION_MEDIUM);
+        $actual = $version->getPart(Version::VERSION_MEDIUM);
         $this->assertSame($expected, $actual);
 
         // The minor version is the fourth and fifth digits
         $expected = (string)intval($id[3] . $id[4]);
-        $actual   = $version->getPart(Version::VERSION_MINOR);
+        $actual = $version->getPart(Version::VERSION_MINOR);
         $this->assertSame($expected, $actual);
 
         $expected = $this->numberToSpecial((string)$id[5]);
-        $actual   = $version->getPart(Version::VERSION_SPECIAL);
+        $actual = $version->getPart(Version::VERSION_SPECIAL);
         $this->assertSame($expected, $actual);
 
-        $special  = $this->numberToSpecial((string)$id[6]);
+        $special = $this->numberToSpecial((string)$id[6]);
         $expected = (string)(($special) ? $id[6] : 0);
-        $actual   = $version->getPart(Version::VERSION_SPECIAL_NUMBER);
+        $actual = $version->getPart(Version::VERSION_SPECIAL_NUMBER);
         $this->assertSame($expected, $actual);
 
         $expected = $version->get();
-        $actual   = $version->getPart(7);
+        $actual = $version->getPart(7);
         $this->assertSame($expected, $actual);
     }
 }

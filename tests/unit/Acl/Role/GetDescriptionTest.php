@@ -47,6 +47,7 @@ final class GetDescriptionTest extends AbstractUnitTestCase
     {
         $role = new Role('Administrators');
 
-        $this->assertEmpty($role->getDescription());
+        $actual = $role->getDescription();
+        $this->assertEmpty($actual);
     }
 }

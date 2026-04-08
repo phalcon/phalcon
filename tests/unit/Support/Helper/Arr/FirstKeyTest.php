@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\FirstKey;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FirstKeyTest extends AbstractUnitTestCase
 {
@@ -29,14 +28,14 @@ final class FirstKeyTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrFirstKey(): void
     {
-        $object     = new FirstKey();
+        $object = new FirstKey();
         $collection = [
             1 => 'Phalcon',
             3 => 'Framework',
         ];
 
         $expected = 1;
-        $actual   = $object($collection);
+        $actual = $object($collection);
         $this->assertSame($expected, $actual);
     }
 
@@ -50,18 +49,18 @@ final class FirstKeyTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrFirstKeyFunction(): void
     {
-        $object     = new FirstKey();
+        $object = new FirstKey();
         $collection = [
             1 => 'Phalcon',
             3 => 'Framework',
         ];
 
         $expected = 3;
-        $actual   = $object(
+        $actual = $object(
             $collection,
             function ($element) {
                 return strlen($element) > 8;
-            }
+            },
         );
         $this->assertSame($expected, $actual);
     }

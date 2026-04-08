@@ -20,10 +20,11 @@ use Phalcon\Storage\Serializer\Json;
 use Phalcon\Storage\Serializer\Msgpack;
 use Phalcon\Storage\Serializer\Php;
 use Phalcon\Support\Collection;
-use Phalcon\Tests\Fixtures\Storage\Serializer\Base64DecodeFixture;
-use Phalcon\Tests\Fixtures\Storage\Serializer\IgbinarySerializeFixture;
-use Phalcon\Tests\Fixtures\Storage\Serializer\IgbinaryUnserializeFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Storage\Fake\FakeBase64Decode;
+use Phalcon\Tests\Unit\Storage\Fake\FakeIgbinarySerialize;
+use Phalcon\Tests\Unit\Storage\Fake\FakeIgbinaryUnserialize;
+use Phalcon\Tests\Unit\Storage\Fake\FakeIgbinaryUnserializeWarning;
 use stdClass;
 
 use function json_encode;
@@ -79,7 +80,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
      */
     public function testStorageSerializerBase64UnserializeFailReturnsEmptyString(): void
     {
-        $serializer = new Base64DecodeFixture();
+        $serializer = new FakeBase64Decode();
 
         $serializer->unserialize("Phalcon Framework");
         $actual = $serializer->getData();
@@ -100,7 +101,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
      */
     public function testStorageSerializerIgbinarySerializeFailReturnsEmptyString(): void
     {
-        $serializer = new IgbinarySerializeFixture();
+        $serializer = new FakeIgbinarySerialize();
 
         $serializer->setData('Phalcon Framework');
         $actual = $serializer->serialize();
@@ -122,7 +123,28 @@ final class ExceptionsTest extends AbstractUnitTestCase
      */
     public function testStorageSerializerIgbinaryUnserializeFailReturnsEmptyString(): void
     {
-        $serializer = new IgbinaryUnserializeFixture();
+        $serializer = new FakeIgbinaryUnserialize();
+
+        $serializer->unserialize("Phalcon Framework");
+        $actual = $serializer->getData();
+        $this->assertEmpty($actual);
+
+        $actual = $serializer->isSuccess();
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Serializer\Igbinary :: unserialize() - fail warning
+     *
+     * @return void
+     *
+     * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2022-02-24
+     */
+    public function testStorageSerializerIgbinaryUnserializeFailWarning(): void
+    {
+        $serializer = new FakeIgbinaryUnserializeWarning();
 
         $serializer->unserialize("Phalcon Framework");
         $actual = $serializer->getData();

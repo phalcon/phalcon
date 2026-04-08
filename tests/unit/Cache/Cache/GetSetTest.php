@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
-use Phalcon\Cache\Exception\Exception;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -31,7 +31,7 @@ final class GetSetTest extends AbstractUnitTestCase
      */
     public function testCacheCacheGetSetExceptionGetInvalid(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The key contains invalid characters');
 
         $serializer = new SerializerFactory();
@@ -50,7 +50,7 @@ final class GetSetTest extends AbstractUnitTestCase
      */
     public function testCacheCacheGetSetExceptionSetInvalid(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The key contains invalid characters');
 
         $serializer = new SerializerFactory();
@@ -88,8 +88,9 @@ final class GetSetTest extends AbstractUnitTestCase
 
         $adapter->set($key3, 'test');
         $this->assertTrue($adapter->has($key3));
-        $this->assertEquals('test', $adapter->get($key1));
-        $this->assertEquals('test', $adapter->get($key2));
-        $this->assertEquals('test', $adapter->get($key3));
+        $expected = 'test';
+        $this->assertEquals($expected, $adapter->get($key1));
+        $this->assertEquals($expected, $adapter->get($key2));
+        $this->assertEquals($expected, $adapter->get($key3));
     }
 }

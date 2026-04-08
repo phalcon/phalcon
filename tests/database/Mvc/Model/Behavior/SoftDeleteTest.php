@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Database\Mvc\Model\Behavior;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventManager;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Models\InvoicesBehavior;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\InvoicesBehavior;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function uniqid;
 
@@ -109,10 +109,13 @@ final class SoftDeleteTest extends AbstractDatabaseTestCase
     /**
      * Tests Phalcon\Mvc\Model\Behavior :: removeBehavior()
      *
+     * @todo Enable once Phalcon\Mvc\Model\Manager::removeBehavior() is ported to cphalcon
+     *
      * @group mysql
      */
     public function testMvcModelBehaviorRemoveBehavior(): void
     {
+        $this->markTestSkipped('TODO: Phalcon\Mvc\Model\Manager::removeBehavior() not yet ported to cphalcon');
         /** Add row to SoftDelete then */
         $title = uniqid('inv-');
         $date  = date('Y-m-d H:i:s');

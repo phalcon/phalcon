@@ -28,7 +28,12 @@ final class GetTest extends AbstractUnitTestCase
     {
         $item = new Item(['sub' => 'subject'], 'encoded-string-here');
 
-        $this->assertSame('subject', $item->get('sub'));
-        $this->assertSame('default', $item->get('jti', 'default'));
+        $expected = 'subject';
+        $actual   = $item->get('sub');
+        $this->assertSame($expected, $actual);
+
+        $expected = 'default';
+        $actual   = $item->get('jti', 'default');
+        $this->assertSame($expected, $actual);
     }
 }

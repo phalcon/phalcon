@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Order;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class OrderTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,7 @@ final class OrderTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrOrder(): void
     {
-        $object     = new Order();
+        $object = new Order();
         $collection = [
             [
                 'id'   => 2,
@@ -59,7 +58,7 @@ final class OrderTest extends AbstractUnitTestCase
                 'name' => 'Peter',
             ],
         ];
-        $actual   = $object($collection, 'id');
+        $actual = $object($collection, 'id');
         $this->assertSame($expected, $actual);
 
         $expected = [
@@ -76,7 +75,7 @@ final class OrderTest extends AbstractUnitTestCase
                 'name' => 'John',
             ],
         ];
-        $actual   = $object($collection, 'id', $object::ORDER_DESC);
+        $actual = $object($collection, 'id', $object::ORDER_DESC);
         $this->assertSame($expected, $actual);
 
         $collection = [
@@ -108,7 +107,7 @@ final class OrderTest extends AbstractUnitTestCase
                 'name' => 'Peter',
             ],
         ];
-        $actual   = $object($collection, 'id');
+        $actual = $object($collection, 'id');
         $this->assertEquals($expected, $actual);
     }
 }

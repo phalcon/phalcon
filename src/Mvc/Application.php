@@ -166,7 +166,7 @@ class Application extends AbstractApplication
         }
 
         /**
-         * If the router doesn't return a valid module we use the default module
+         * If the router does not return a valid module we use the default module
          */
         $moduleName = $router->getModuleName();
 

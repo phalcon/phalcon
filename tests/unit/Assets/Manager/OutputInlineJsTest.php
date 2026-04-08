@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Assets\Manager;
 
+use Phalcon\Assets\Manager;
+use Phalcon\Html\Escaper;
+use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+
+use const PHP_EOL;
 
 final class OutputInlineJsTest extends AbstractUnitTestCase
 {
@@ -26,6 +30,14 @@ final class OutputInlineJsTest extends AbstractUnitTestCase
      */
     public function testAssetsManagerOutputInlineJs(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $manager = new Manager(new TagFactory(new Escaper()));
+        $js      = 'alert("Hello world");';
+
+        $manager->addInlineJs($js);
+        $manager->useImplicitOutput(false);
+
+        $expected = "<script type=\"application/javascript\">{$js}</script>" . PHP_EOL;
+        $actual   = $manager->outputInlineJs();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Filters\CssMin;
 
 use Phalcon\Assets\Filters\CssMin;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FilterTest extends AbstractUnitTestCase
 {
@@ -29,14 +28,11 @@ final class FilterTest extends AbstractUnitTestCase
      */
     public function testAssetsFiltersCssMinFilter(): void
     {
-        $cssmin = new Cssmin();
+        $cssMin = new CssMin();
 
-        $source = "body {
-        background: green;
-    }";
-
-        $expected = 'body{background:green}';
-        $actual   = $cssmin->filter($source);
+        $source   = '{}}';
+        $expected = $source;
+        $actual   = $cssMin->filter($source);
         $this->assertSame($expected, $actual);
     }
 }

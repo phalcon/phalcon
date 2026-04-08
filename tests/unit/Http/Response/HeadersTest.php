@@ -14,7 +14,7 @@ namespace Phalcon\Tests\Unit\Http\Response;
 use Phalcon\Events\Event;
 use Phalcon\Http\Response\Headers;
 use Phalcon\Http\Response\HeadersInterface;
-use Phalcon\Tests\Fixtures\Page\Http;
+use Phalcon\Tests\Support\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 use function uniqid;

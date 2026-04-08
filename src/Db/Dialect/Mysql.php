@@ -595,7 +595,13 @@ class Mysql extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        return $this->getExistsSql('TABLES', $tableName, $schemaName);
+        if (!empty($schemaName)) {
+            return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`= '"
+                . $tableName . "' AND `TABLE_SCHEMA` = '" . $schemaName . "'";
+        }
+
+        return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = '"
+            . $tableName . "' AND `TABLE_SCHEMA` = DATABASE()";
     }
 
     /**
@@ -648,6 +654,12 @@ class Mysql extends Dialect
         string $viewName,
         string | null $schemaName = null
     ): string {
-        return $this->getExistsSql('VIEWS', $viewName, $schemaName);
+        if (!empty($schemaName)) {
+            return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`= '"
+                . $viewName . "' AND `TABLE_SCHEMA`='" . $schemaName . "'";
+        }
+
+        return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`='"
+            . $viewName . "' AND `TABLE_SCHEMA` = DATABASE()";
     }
 }

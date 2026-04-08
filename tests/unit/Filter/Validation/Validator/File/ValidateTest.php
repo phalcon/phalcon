@@ -56,20 +56,20 @@ final class ValidateTest extends AbstractUnitTestCase
         $actual    = $validators[0];
         $this->assertInstanceOf($expected, $actual);
 
-        $expected  = File\Resolution\Max::class;
+        $expected  = File\Size\Max::class;
         $actual    = $validators[1];
         $this->assertInstanceOf($expected, $actual);
 
-        $expected  = File\Resolution\Min::class;
-        $actual = $validators[2];
+        $expected  = File\Size\Min::class;
+        $actual    = $validators[2];
         $this->assertInstanceOf($expected, $actual);
 
-        $expected  = File\Size\Max::class;
+        $expected  = File\Resolution\Max::class;
         $actual    = $validators[3];
         $this->assertInstanceOf($expected, $actual);
 
-        $expected  = File\Size\Min::class;
-        $actual = $validators[4];
+        $expected  = File\Resolution\Min::class;
+        $actual    = $validators[4];
         $this->assertInstanceOf($expected, $actual);
     }
 }

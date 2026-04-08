@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\Collection;
-use Phalcon\Tests\Fixtures\Micro\HttpMethodHandler;
+use Phalcon\Tests\Support\Micro\HttpMethodHandler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetTest extends AbstractUnitTestCase

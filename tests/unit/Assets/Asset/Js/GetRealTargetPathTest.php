@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 
 use Phalcon\Assets\Asset\Js;
-use Phalcon\Tests\Fixtures\Traits\AssetsTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Assets\Fake\AssetsTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
@@ -26,16 +25,17 @@ final class GetRealTargetPathTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Assets\Asset\Js :: getRealTargetPath()
      *
-     * @dataProvider providerJs
-     *
      * @return void
+     *
+     * @dataProvider providerJs
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
     #[DataProvider('providerJs')]
     public function testAssetsAssetJsGetAssetKey(
-        string $path
+        string $path,
+        bool $local
     ): void {
         $asset = new Js($path);
 

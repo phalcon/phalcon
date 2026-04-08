@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
-use function dataDir;
 use function outputDir;
+use function supportDir;
 
 final class TextTest extends AbstractUnitTestCase
 {
@@ -123,7 +123,7 @@ final class TextTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $outputDir   = 'tests/image/gd/';
-        $image       = new Gd(dataDir('assets/images/example-jpg.jpg'));
+        $image       = new Gd(supportDir('assets/images/example-jpg.jpg'));
         $outputImage = $index . 'text.jpg';
         $output      = outputDir($outputDir . '/' . $outputImage);
 
@@ -159,7 +159,7 @@ final class TextTest extends AbstractUnitTestCase
 
         $outputDir = 'tests/image/gd/';
 
-        $image       = dataDir('assets/images/example-jpg.jpg');
+        $image       = supportDir('assets/images/example-jpg.jpg');
         $outputImage = '15188-text.jpg';
         $output      = outputDir($outputDir . '/' . $outputImage);
         $text        = 'Hello Phalcon!';
@@ -168,7 +168,7 @@ final class TextTest extends AbstractUnitTestCase
         $opacity     = 60;
         $color       = '0000FF';
         $size        = 24;
-        $font        = dataDir('assets/fonts/Roboto-Light.ttf');
+        $font        = supportDir('assets/fonts/Roboto-Light.ttf');
         $hash        = 'fbf9f3e3c3c18183';
 
         $object = new Gd($image);

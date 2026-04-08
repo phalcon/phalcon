@@ -33,6 +33,16 @@ abstract class AbstractFormatter implements FormatterInterface
     protected string $dateFormat = 'c';
 
     /**
+     * @var string
+     */
+    protected string $interpolatorLeft = '%';
+
+    /**
+     * @var string
+     */
+    protected string $interpolatorRight = '%';
+
+    /**
      * @return string
      */
     public function getDateFormat(): string
@@ -60,5 +70,23 @@ abstract class AbstractFormatter implements FormatterInterface
         return $item->getDateTime()
                     ->format($this->dateFormat)
         ;
+    }
+
+    /**
+     * Returns the interpolated message, replacing context placeholders.
+     *
+     * @param Item   $item
+     * @param string $message
+     *
+     * @return string
+     */
+    protected function getInterpolatedMessage(Item $item, string $message): string
+    {
+        return $this->toInterpolate(
+            $message,
+            $item->getContext(),
+            $this->interpolatorLeft,
+            $this->interpolatorRight
+        );
     }
 }

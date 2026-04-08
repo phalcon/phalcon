@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Application;
 
-use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Application\Fake\FakeApplication;
 
 final class GetSetDefaultModuleTest extends AbstractUnitTestCase
 {
@@ -28,12 +28,14 @@ final class GetSetDefaultModuleTest extends AbstractUnitTestCase
      */
     public function testApplicationGetSetDefaultModule(): void
     {
-        $application = new ApplicationFixture();
+        $application = new FakeApplication();
 
-        $actual = $application->getDefaultModule();
-        $this->assertSame('', $actual);
+        $expected = '';
+        $actual   = $application->getDefaultModule();
+        $this->assertSame($expected, $actual);
 
         $application->setDefaultModule('admin');
+
         $expected = 'admin';
         $actual   = $application->getDefaultModule();
         $this->assertSame($expected, $actual);

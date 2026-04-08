@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use Phalcon\Tests\Fixtures\Di\InjectableComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Di\InjectableComponent;
 use ReflectionClass;
 use ReflectionException;
 use stdClass;
@@ -30,13 +30,12 @@ final class GetDITest extends AbstractUnitTestCase
      * Controller class
      *
      * @throws ReflectionException
-     * @since  2020-08-13
+     *
      * @author Stijn Leenknegt <stijn@diagro.be>
+     * @since  2020-08-13
      */
     public function testDiInjectableGetDIContainer(): void
     {
-        require_once dataDir('fixtures/Di/InjectableComponent.php');
-
         Di::reset();
 
         $di = new Di();
@@ -69,13 +68,12 @@ final class GetDITest extends AbstractUnitTestCase
      * Setting the container to the default DI, should not happen!
      *
      * @throws ReflectionException
-     * @since  2020-08-13
+     *
      * @author Stijn Leenknegt <stijn@diagro.be>
+     * @since  2020-08-13
      */
     public function testDiInjectableGetDIOtherContainer(): void
     {
-        require_once dataDir('fixtures/Di/InjectableComponent.php');
-
         Di::reset();
 
         $di    = new Di();

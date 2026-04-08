@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ToJsonTest extends AbstractUnitTestCase
 {
@@ -35,7 +34,7 @@ final class ToJsonTest extends AbstractUnitTestCase
         $dump = new Dump();
 
         $expected = "{\n    \"key\": \"value\"\n}";
-        $actual   = $dump->toJson($test);
+        $actual = $dump->toJson($test);
         $this->assertSame($expected, $actual);
     }
 }

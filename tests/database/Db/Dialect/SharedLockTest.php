@@ -58,7 +58,7 @@ final class SharedLockTest extends AbstractDatabaseTestCase
         /** @var Mysql $dialect */
         $dialect = new $dialectClass();
 
-        $actual   = $dialect->sharedLock('SQL-QUERY');
+        $actual = $dialect->sharedLock('SQL-QUERY');
         $this->assertSame($expected, $actual);
     }
 }

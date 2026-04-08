@@ -27,9 +27,9 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Support\Settings;
-use Psr\SimpleCache\CacheInterface;
+use Phalcon\Cache\CacheInterface;
+use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
 use function array_merge;
@@ -416,12 +416,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 );
             }
 
-            $key = $cacheOptions["key"];
-
-            /**
-             * By default use use 3600 seconds (1 hour) as cache lifetime
-             */
-            $lifetime     = (int)($cacheOptions["lifetime"] ?? 3600);
+            $key          = $cacheOptions["key"];
             $cacheService = $cacheOptions["service"] ?? "modelsCache";
 
             /** @var CacheInterface $cache */
@@ -430,19 +425,17 @@ class Query implements QueryInterface, InjectionAwareInterface
             if (!$cache instanceof CacheInterface) {
                 throw new Exception(
                     "Cache service must be an object implementing " .
-                    "Psr\SimpleCache\CacheInterface"
+                    "Phalcon\Cache\CacheInterface"
                 );
             }
 
             /**
-             * If the lifetime is different than the cache lifetime, assign
-             * the cache lifetime to the current cache setting
+             * If the lifetime is not specified in the options, use the
+             * adapter's lifetime as a fallback
              */
             $adapter       = $cache->getAdapter();
             $cacheLifetime = $adapter->getLifetime();
-            if ($lifetime !== $cacheLifetime) {
-                $lifetime = $cacheLifetime;
-            }
+            $lifetime      = (int)($cacheOptions["lifetime"] ?? $cacheLifetime);
 
             $result = $cache->get($key);
 
@@ -1319,7 +1312,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 }
             } else {
                 /**
-                 * Create an alias if the column doesn't have one
+                 * Create an alias if the column does not have one
                  */
                 if (is_int($aliasCopy)) {
                     $columnAlias = [$sqlColumn, null];
@@ -1351,7 +1344,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          * Replace the placeholders
          */
         foreach ($bindParams as $wildcard => $value) {
-            if ($wildcard == "integer") {
+            if (is_int($wildcard)) {
                 $wildcardValue = ":" . $wildcard;
             } else {
                 $wildcardValue = $wildcard;
@@ -2374,7 +2367,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         /**
-         * If the expression doesn't have a type it's a list of nodes
+         * If the expression does not have a type it's a list of nodes
          */
         if (isset($expr[0])) {
             $listItems = [];
@@ -3256,7 +3249,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     throw new Exception(
                         "Column '"
                         . $columnName
-                        . "' doesn't belong to the model or alias '"
+                        . "' does not belong to the model or alias '"
                         . $columnDomain . "', when executing: "
                         . $this->phql
                     );
@@ -3268,7 +3261,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             }
         } else {
             /**
-             * If the column IR doesn't have a domain, we must check for
+             * If the column IR does not have a domain, we must check for
              * ambiguities
              */
             $number   = 0;
@@ -3302,7 +3295,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 throw new Exception(
                     "Column '"
                     . $columnName
-                    . "' doesn't belong to any of the selected models (1), when preparing: "
+                    . "' does not belong to any of the selected models (1), when preparing: "
                     . $this->phql
                 );
             }
@@ -3349,7 +3342,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     throw new Exception(
                         "Column '"
                         . $columnName
-                        . "' doesn't belong to any of the selected models (3), when preparing: "
+                        . "' does not belong to any of the selected models (3), when preparing: "
                         . $this->phql
                     );
                 }
@@ -3980,7 +3973,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     throw new Exception(
                         "The model '"
                         . $modelName
-                        . "' doesn't have the attribute '"
+                        . "' does not have the attribute '"
                         . $name
                         . "', when preparing: "
                         . $this->phql

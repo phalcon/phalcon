@@ -31,7 +31,7 @@ final class DispatchTest extends AbstractUnitTestCase
         // test 1
         $dispatcher = new Dispatcher();
         $dispatcher->setDI(new DiFactoryDefault());
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->dispatch();
 
         $expected = 'main';
@@ -53,7 +53,7 @@ final class DispatchTest extends AbstractUnitTestCase
         // Test 2
         $dispatcher = new Dispatcher();
         $dispatcher->setDI(new DiFactoryDefault());
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setTaskName('echo');
         $dispatcher->dispatch();
 
@@ -76,7 +76,7 @@ final class DispatchTest extends AbstractUnitTestCase
         // Test 3
         $dispatcher = new Dispatcher();
         $dispatcher->setDI(new DiFactoryDefault());
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setTaskName('main');
         $dispatcher->setActionName('hello');
         $dispatcher->dispatch();
@@ -100,7 +100,7 @@ final class DispatchTest extends AbstractUnitTestCase
         // Test 4
         $dispatcher = new Dispatcher();
         $dispatcher->setDI(new DiFactoryDefault());
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setActionName('hello');
         $dispatcher->setParams(
             [
@@ -132,7 +132,7 @@ final class DispatchTest extends AbstractUnitTestCase
         //Test 5
         $dispatcher = new Dispatcher();
         $dispatcher->setDI(new DiFactoryDefault());
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setActionName('hello');
         $dispatcher->setParams(
             [

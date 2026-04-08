@@ -121,7 +121,7 @@ class RedisCluster extends Redis
             } catch (Throwable $e) {
                 throw new StorageException(
                     sprintf(
-                        "Could not connect to the Redis cluster server due to: %s",
+                        "Could not connect to the Redis Cluster server due to: %s",
                         $e->getMessage()
                     ),
                     previous: $e

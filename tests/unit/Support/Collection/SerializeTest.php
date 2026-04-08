@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SerializeTest extends AbstractCollectionTestCase
 {
@@ -24,18 +23,20 @@ final class SerializeTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
     public function testSupportCollectionSerialize(
-        string $class
+        string $class,
     ): void {
         $data = $this->getData();
         $collection = new $class($data);
 
         $expected = serialize($data);
-        $actual   = $collection->serialize();
+        $actual = $collection->serialize();
         $this->assertSame($expected, $actual);
     }
 
@@ -53,8 +54,8 @@ final class SerializeTest extends AbstractCollectionTestCase
         $collection = new Collection($data);
 
         $expected = 'O:26:"Phalcon\Support\Collection":'
-            . '3:{s:3:"one";s:3:"two";s:5:"three";s:4:"four";s:4:"five";s:3:"six";}';
-        $actual   = serialize($collection);
+                    . '3:{s:3:"one";s:3:"two";s:5:"three";s:4:"four";s:4:"five";s:3:"six";}';
+        $actual = serialize($collection);
         $this->assertSame($expected, $actual);
     }
 }

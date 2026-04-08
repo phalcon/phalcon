@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Models\Invoices;
 
 final class GetModelNameTest extends AbstractDatabaseTestCase
 {

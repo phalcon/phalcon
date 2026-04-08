@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Http\Request;
 
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Request;
-use Phalcon\Tests\Fixtures\Http\RequestFixture;
-use Phalcon\Tests\Fixtures\Page\Http;
+use Phalcon\Tests\Support\Page\Http;
+use Phalcon\Tests\Unit\Http\Fake\FakeRequest;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 final class GetClientAddressTest extends AbstractHttpBase
@@ -103,7 +103,7 @@ final class GetClientAddressTest extends AbstractHttpBase
     {
         $container = new FactoryDefault();
 
-        $request = new RequestFixture();
+        $request = new FakeRequest();
         $request->setDI($container);
         $request->setTrustedProxies([
             '25.25.25.0/24'

@@ -31,10 +31,10 @@ class CompilerFilesTest extends AbstractUnitTestCase
     public function setUp(): void
     {
         $compiledFiles = [
-            dataDir('fixtures/views/blocks/base.volt.php'),
-            dataDir('fixtures/views/blocks/index/login.volt.php'),
-            dataDir('fixtures/views/blocks/index/main.volt.php'),
-            dataDir('fixtures/views/blocks/partials/header.volt.php'),
+            supportDir('assets/views/blocks/base.volt.php'),
+            supportDir('assets/views/blocks/index/login.volt.php'),
+            supportDir('assets/views/blocks/index/main.volt.php'),
+            supportDir('assets/views/blocks/partials/header.volt.php'),
         ];
         foreach ($compiledFiles as $fileName) {
             $this->safeDeleteFile($fileName);
@@ -44,19 +44,19 @@ class CompilerFilesTest extends AbstractUnitTestCase
     public function tearDown(): void
     {
         $compiledFiles = [
-            dataDir('fixtures/views/blocks/base.volt.php'),
-            dataDir('fixtures/views/blocks/base.volt%%e%%.php'),
-            dataDir('fixtures/views/blocks/index/login.volt.php'),
-            dataDir('fixtures/views/blocks/index/main.volt.php'),
-            dataDir('fixtures/views/blocks/partials/header.volt.php'),
-            dataDir('fixtures/views/extends/children.extends.volt.php'),
-            dataDir('fixtures/views/extends/import.volt.php'),
-            dataDir('fixtures/views/extends/import2.volt.php'),
-            dataDir('fixtures/views/layouts/extends.volt.php'),
-            dataDir('fixtures/views/partials/header.volt.php'),
-            dataDir('fixtures/views/partials/header2.volt.php'),
-            dataDir('fixtures/views/partials/header3.volt.php'),
-            dataDir('fixtures/views/partials/footer.volt.php'),
+            supportDir('assets/views/blocks/base.volt.php'),
+            supportDir('assets/views/blocks/base.volt%%e%%.php'),
+            supportDir('assets/views/blocks/index/login.volt.php'),
+            supportDir('assets/views/blocks/index/main.volt.php'),
+            supportDir('assets/views/blocks/partials/header.volt.php'),
+            supportDir('assets/views/extends/children.extends.volt.php'),
+            supportDir('assets/views/extends/import.volt.php'),
+            supportDir('assets/views/extends/import2.volt.php'),
+            supportDir('assets/views/layouts/extends.volt.php'),
+            supportDir('assets/views/partials/header.volt.php'),
+            supportDir('assets/views/partials/header2.volt.php'),
+            supportDir('assets/views/partials/header3.volt.php'),
+            supportDir('assets/views/partials/footer.volt.php'),
         ];
 
         foreach ($compiledFiles as $fileName) {
@@ -94,7 +94,7 @@ class CompilerFilesTest extends AbstractUnitTestCase
         $view = new View();
         $view->setViewsDir(
             [
-                dataDir('fixtures/views/blocks'),
+                supportDir('assets/views/blocks'),
             ]
         );
 
@@ -104,11 +104,11 @@ class CompilerFilesTest extends AbstractUnitTestCase
          * Login - no header output
          */
         $volt->compileFile(
-            dataDir('fixtures/views/blocks/index/login.volt'),
-            dataDir('fixtures/views/blocks/index/login.volt.php')
+            supportDir('assets/views/blocks/index/login.volt'),
+            supportDir('assets/views/blocks/index/login.volt.php')
         );
 
-        $file     = dataDir('fixtures/views/blocks/index/login.volt.php');
+        $file     = supportDir('assets/views/blocks/index/login.volt.php');
         $expected = sprintf($template, '<p>This is the login page</p>');
         $this->assertFileContentsEqual($file, $expected);
 
@@ -116,11 +116,11 @@ class CompilerFilesTest extends AbstractUnitTestCase
          * Main page = header output
          */
         $volt->compileFile(
-            dataDir('fixtures/views/blocks/index/main.volt'),
-            dataDir('fixtures/views/blocks/index/main.volt.php')
+            supportDir('assets/views/blocks/index/main.volt'),
+            supportDir('assets/views/blocks/index/main.volt.php')
         );
 
-        $file = dataDir('fixtures/views/blocks/index/main.volt.php');
+        $file = supportDir('assets/views/blocks/index/main.volt.php');
 
         $expected = sprintf($template, '<p>This is the main page</p>');
         $this->assertFileContentsEqual($file, $expected);
@@ -135,17 +135,17 @@ class CompilerFilesTest extends AbstractUnitTestCase
     public function testMvcViewEngineVoltCompileExtendsFile(): void
     {
         $view = new View();
-        $view->setViewsDir(dataDir('fixtures/views/'));
+        $view->setViewsDir(supportDir('assets/views/'));
 
         $volt = new Compiler($view);
 
         //extends
         $volt->compileFile(
-            dataDir('fixtures/views/extends/children.extends.volt'),
-            dataDir('fixtures/views/extends/children.extends.volt.php')
+            supportDir('assets/views/extends/children.extends.volt'),
+            supportDir('assets/views/extends/children.extends.volt.php')
         );
 
-        $file     = dataDir('fixtures/views/extends/children.extends.volt.php');
+        $file     = supportDir('assets/views/extends/children.extends.volt.php');
         $contents = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">'
             . '<html lang="en"><html xmlns="http://www.w3.org/1999/xhtml">'
             . '<head><style type="text/css">.important { color: #336699; }</style>'
@@ -166,17 +166,17 @@ class CompilerFilesTest extends AbstractUnitTestCase
     public function testMvcViewEngineVoltCompileImportFile(): void
     {
         $view = new View();
-        $view->setViewsDir(dataDir('fixtures/views/'));
+        $view->setViewsDir(supportDir('assets/views/'));
 
         $volt = new Compiler($view);
 
         //extends
         $volt->compileFile(
-            dataDir('fixtures/views/extends/import.volt'),
-            dataDir('fixtures/views/extends/import.volt.php')
+            supportDir('assets/views/extends/import.volt'),
+            supportDir('assets/views/extends/import.volt.php')
         );
 
-        $file     = dataDir('fixtures/views/extends/import.volt.php');
+        $file     = supportDir('assets/views/extends/import.volt.php');
         $contents = '<div class="header"><h1>This is the header</h1></div>'
             . '<div class="footer"><p>This is the footer</p></div>';
         $this->assertFileContentsEqual($file, $contents);
@@ -192,17 +192,17 @@ class CompilerFilesTest extends AbstractUnitTestCase
     public function testMvcViewEngineVoltCompileImportRecursiveFiles(): void
     {
         $view = new View();
-        $view->setViewsDir(dataDir('fixtures/views/'));
+        $view->setViewsDir(supportDir('assets/views/'));
 
         $volt = new Compiler($view);
 
         //extends
         $volt->compileFile(
-            dataDir('fixtures/views/extends/import2.volt'),
-            dataDir('fixtures/views/extends/import2.volt.php')
+            supportDir('assets/views/extends/import2.volt'),
+            supportDir('assets/views/extends/import2.volt.php')
         );
 
-        $file     = dataDir('fixtures/views/extends/import2.volt.php');
+        $file     = supportDir('assets/views/extends/import2.volt.php');
         $contents = '<div class="header"><h1>This is the title</h1></div>';
         $this->assertFileContentsEqual($file, $contents);
     }

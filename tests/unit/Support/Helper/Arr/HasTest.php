@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Has;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class HasTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,7 @@ final class HasTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrHas(): void
     {
-        $object     = new Has();
+        $object = new Has();
         $collection = [
             1        => 'Phalcon',
             'suffix' => 'Framework',

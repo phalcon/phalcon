@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
-use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function dataDir;
 use function outputDir;
+use function supportDir;
 
 final class CropTest extends AbstractUnitTestCase
 {
@@ -33,7 +33,7 @@ final class CropTest extends AbstractUnitTestCase
     public function testImageAdapterImagickCrop(): void
     {
         $image = new Imagick(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);
@@ -47,14 +47,13 @@ final class CropTest extends AbstractUnitTestCase
             outputDir('tests/image/imagick/crop.jpg')
         );
 
-        $this->assertSame(
-            200,
-            $image->getWidth()
-        );
-        $this->assertSame(
-            200,
-            $image->getHeight()
-        );
+        $expected = 200;
+        $actual   = $image->getWidth();
+        $this->assertSame($expected, $actual);
+
+        $expected = 200;
+        $actual   = $image->getHeight();
+        $this->assertSame($expected, $actual);
 
         $this->safeDeleteFile('crop.jpg');
     }

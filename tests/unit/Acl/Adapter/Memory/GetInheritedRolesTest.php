@@ -38,9 +38,6 @@ final class GetInheritedRolesTest extends AbstractUnitTestCase
         $acl->addRole(new Role('guestOne'));
         $acl->addRole(new Role('guestTwo'));
 
-        /**
-         * Inheritance
-         */
         $actual = $acl->addInherit('administrator', 'memberOne');
         $this->assertTrue($actual);
         $actual = $acl->addInherit('administrator', 'memberTwo');

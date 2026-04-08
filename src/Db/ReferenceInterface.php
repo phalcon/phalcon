@@ -35,16 +35,16 @@ interface ReferenceInterface
     /**
      * Gets the referenced on delete
      *
-     * @return string
+     * @return string|null
      */
-    public function getOnDelete(): string;
+    public function getOnDelete(): ?string;
 
     /**
      * Gets the referenced on update
      *
-     * @return string
+     * @return string|null
      */
-    public function getOnUpdate(): string;
+    public function getOnUpdate(): ?string;
 
     /**
      * Gets referenced columns

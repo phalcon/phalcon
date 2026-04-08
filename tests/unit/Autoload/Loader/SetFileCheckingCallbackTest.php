@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 use function class_exists;
 use function function_exists;
@@ -26,6 +26,9 @@ final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
 {
     use LoaderTrait;
 
+    /**
+     * @return array
+     */
     public static function getExamples(): array
     {
         return [
@@ -39,16 +42,16 @@ final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback()
+     * Tests Phalcon\Autoload\Loader :: setFileCheckingCallback() - callback false
      *
      * @return void
+     *
      * @throws EventsException
      * @throws Exception
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13360
      * @issue  https://github.com/phalcon/cphalcon/issues/10472
-     *
-     * @author Phalcon Team <team@phalcon.io>
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackFalse(): void
     {
@@ -57,12 +60,12 @@ final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
         $loader
             ->setFiles(
                 [
-                    dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassThree.php'),
+                    supportDir('assets/Loader/Example/Functions/FunctionsNoClassThree.php'),
                 ]
             )
             ->setNamespaces(
                 [
-                    'Example' => dataDir('fixtures/Loader/Example/'),
+                    'Example' => supportDir('assets/Loader/Example/'),
                 ],
                 true
             )
@@ -91,13 +94,13 @@ final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
      * @param string|null $callback
      *
      * @return void
+     *
      * @throws Exception
      * @throws EventsException
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      * @issue  https://github.com/phalcon/cphalcon/issues/13360
      * @issue  https://github.com/phalcon/cphalcon/issues/10472
-     *
      */
     public function testAutoloaderLoaderSetFileCheckingCallbackValid(
         ?string $callback
@@ -107,12 +110,12 @@ final class SetFileCheckingCallbackTest extends AbstractUnitTestCase
         $loader
             ->setFiles(
                 [
-                    dataDir('fixtures/Loader/Example/Functions/FunctionsNoClassThree.php'),
+                    supportDir('assets/Loader/Example/Functions/FunctionsNoClassThree.php'),
                 ]
             )
             ->setNamespaces(
                 [
-                    'Example\Namespaces' => dataDir('fixtures/Loader/Example/Namespaces'),
+                    'Example\Namespaces' => supportDir('assets/Loader/Example/Namespaces'),
                 ],
                 true
             )

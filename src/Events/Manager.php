@@ -126,7 +126,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface
         $priorityQueue = $this->events[$eventType] ?? null;
         if (null !== $priorityQueue) {
             /**
-             * SplPriorityQueue doesn't have a method for element deletion so we
+             * SplPriorityQueue does not have a method for element deletion so we
              * need to rebuild the queue
              */
             $newPriorityQueue = new SplPriorityQueue();

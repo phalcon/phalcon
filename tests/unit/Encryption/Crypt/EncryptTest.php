@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFixture;
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptOpensslRandomPseudoBytesFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\Crypt\FakeCrypt;
+use Phalcon\Tests\Unit\Encryption\Fake\Crypt\FakeCryptOpensslRandomPseudoBytes;
 
 use function str_repeat;
 use function substr;
@@ -110,7 +110,7 @@ final class EncryptTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Cannot calculate Random Pseudo Bytes");
 
-        $crypt = new CryptOpensslRandomPseudoBytesFixture();
+        $crypt = new FakeCryptOpensslRandomPseudoBytes();
 
         $crypt->encrypt('test', '1234');
     }
@@ -131,7 +131,7 @@ final class EncryptTest extends AbstractUnitTestCase
             "Padding size cannot be less than 0 or greater than 256"
         );
 
-        $crypt       = new CryptFixture();
+        $crypt       = new FakeCrypt();
         $input       = str_repeat("A", 4096);
         $mode        = "cbc";
         $blockSize   = 1024;
@@ -156,7 +156,7 @@ final class EncryptTest extends AbstractUnitTestCase
             "Padding size cannot be less than 0 or greater than 256"
         );
 
-        $crypt       = new CryptFixture();
+        $crypt       = new FakeCrypt();
         $input       = str_repeat("A", 4096);
         $mode        = "cbc";
         $blockSize   = -1024;
@@ -175,7 +175,7 @@ final class EncryptTest extends AbstractUnitTestCase
      */
     public function testEncryptionCryptEncryptCryptPadZeroPaddingReturnsInput(): void
     {
-        $crypt       = new CryptFixture();
+        $crypt       = new FakeCrypt();
         $input       = str_repeat("A", 32);
         $mode        = "ccb";
         $blockSize   = 16;
@@ -285,8 +285,9 @@ final class EncryptTest extends AbstractUnitTestCase
                 ->setAuthData('abcd')
             ;
 
-            $actual = $crypt->decrypt($encryption);
-            $this->assertSame('phalcon', $actual);
+            $expected = 'phalcon';
+            $actual   = $crypt->decrypt($encryption);
+            $this->assertSame($expected, $actual);
         }
     }
 }

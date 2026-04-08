@@ -108,22 +108,6 @@ final class ValidateTest extends AbstractUnitTestCase
             $messages->count()
         );
 
-        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
-            $messages = $validation->validate(
-                [
-                    'password'  => null,
-                    'password2' => 'test123',
-                ]
-            );
-
-            $this->assertSame(
-                1,
-                $messages->count()
-            );
-
-            $this->assertEquals($expected, $messages);
-        }
-
         $validation = new Validation();
 
         $validation->add(

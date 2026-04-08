@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use Phalcon\Di\Di;
-use Phalcon\Tests\Fixtures\Di\InitializationAwareComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Di\InitializationAwareComponent;
 
-class InitializationAwareTest extends AbstractUnitTestCase
+final class InitializationAwareTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: initialization aware interface

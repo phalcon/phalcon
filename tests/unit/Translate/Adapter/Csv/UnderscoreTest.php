@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateCsvHelperTrait;
-use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateCsvHelperTrait;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateCsvTrait;
 
 final class UnderscoreTest extends AbstractUnitTestCase
 {
@@ -27,6 +27,7 @@ final class UnderscoreTest extends AbstractUnitTestCase
      */
     protected function func(): string
     {
+
         return '_';
     }
 }

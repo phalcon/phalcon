@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Phalcon\Support\Debug;
+use Phalcon\Debug;
+use Phalcon\Di\FactoryDefault;
+use Phalcon\Tag;
 
 $_ENV['APP_DEBUG'] = true;
 
@@ -15,3 +17,18 @@ $debug->setBlacklist(
 );
 
 $debug->listen();
+
+$container = new FactoryDefault();
+
+$x = new C();
+
+$x->rump();
+
+
+class C
+{
+    public function rump()
+    {
+        $return = Tag::displayTo(false, true);
+    }
+}

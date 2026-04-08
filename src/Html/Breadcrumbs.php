@@ -50,7 +50,7 @@ class Breadcrumbs
      *
      * @var string
      */
-    private $template = '<dt><a href="{link}">{label}</a></dt>';
+    private $template = '<dt><a href="%link%">%label%</a></dt>';
 
     /**
      * Adds a new crumb.
@@ -185,8 +185,8 @@ class Breadcrumbs
     {
         return str_replace(
             [
-                '{label}',
-                '{link}',
+                '%label%',
+                '%link%',
             ],
             [
                 $label,

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use ReflectionException;
 
 final class SetStylesTest extends AbstractUnitTestCase
@@ -34,15 +33,15 @@ final class SetStylesTest extends AbstractUnitTestCase
     {
         $dump = new Dump(
             [],
-            true
+            true,
         );
 
         $expected = 'color:gray';
-        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'unknown');
+        $actual = $this->callProtectedMethod($dump, 'getStyle', 'unknown');
         $this->assertSame($expected, $actual);
 
         $expected = 'color:blue';
-        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'int');
+        $actual = $this->callProtectedMethod($dump, 'getStyle', 'int');
         $this->assertSame($expected, $actual);
     }
 
@@ -60,21 +59,21 @@ final class SetStylesTest extends AbstractUnitTestCase
     {
         $dump = new Dump(
             [],
-            true
+            true,
         );
 
         $expected = 'color:blue';
-        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'int');
+        $actual = $this->callProtectedMethod($dump, 'getStyle', 'int');
         $this->assertSame($expected, $actual);
 
         $dump->setStyles(
             [
                 'int' => 'color:indigo',
-            ]
+            ],
         );
 
         $expected = 'color:indigo';
-        $actual   = $this->callProtectedMethod($dump, 'getStyle', 'int');
+        $actual = $this->callProtectedMethod($dump, 'getStyle', 'int');
         $this->assertSame($expected, $actual);
     }
 }

@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Asset;
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class HasTest extends AbstractUnitTestCase
 {
@@ -36,7 +35,10 @@ final class HasTest extends AbstractUnitTestCase
 
         $collection->add($asset1);
 
-        $this->assertTrue($collection->has($asset1));
-        $this->assertFalse($collection->has($asset2));
+        $actual = $collection->has($asset1);
+        $this->assertTrue($actual);
+
+        $actual = $collection->has($asset2);
+        $this->assertFalse($actual);
     }
 }

@@ -127,10 +127,10 @@ class Min extends AbstractValidator
         bool $included = false
     ): bool {
         if (true === $included) {
-            return $source <= $target;
+            return $source < $target;
         }
 
-        return $source < $target;
+        return $source <= $target;
     }
 
     /**

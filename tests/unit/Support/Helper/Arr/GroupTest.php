@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Group;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GroupTest extends AbstractUnitTestCase
@@ -30,7 +29,7 @@ final class GroupTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrGroup(): void
     {
-        $object     = new Group();
+        $object = new Group();
         $collection = [
             [
                 'name' => 'Paul',
@@ -81,14 +80,14 @@ final class GroupTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrGroupFunction(): void
     {
-        $object     = new Group();
+        $object = new Group();
         $collection = ['one', 'two', 'three'];
 
         $expected = [
             3 => ['one', 'two'],
             5 => ['three'],
         ];
-        $actual   = $object($collection, 'strlen');
+        $actual = $object($collection, 'strlen');
         $this->assertSame($expected, $actual);
     }
 
@@ -102,14 +101,14 @@ final class GroupTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrGroupObject(): void
     {
-        $object      = new Group();
-        $peter       = new stdClass();
+        $object = new Group();
+        $peter = new stdClass();
         $peter->name = 'Peter';
-        $peter->age  = 34;
+        $peter->age = 34;
 
-        $paul       = new stdClass();
+        $paul = new stdClass();
         $paul->name = 'Paul';
-        $paul->age  = 31;
+        $paul->age = 31;
 
         $collection = [
             'peter' => $peter,
@@ -121,7 +120,7 @@ final class GroupTest extends AbstractUnitTestCase
             'Peter' => [$peter],
             'Paul'  => [$paul],
         ];
-        $actual   = $object($collection, 'name');
+        $actual = $object($collection, 'name');
         $this->assertSame($expected, $actual);
     }
 }

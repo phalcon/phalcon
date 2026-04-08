@@ -9,16 +9,18 @@
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Migrations\CustomersMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
 {
@@ -32,7 +34,7 @@ final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
 
     public function tearDown(): void
     {
-        $this->container['db']->close();
+        $this->tearDownDatabase();
     }
 
     /**
@@ -110,7 +112,7 @@ final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
          */
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            "The method 'nonExistentStaticMethod' doesn't exist on model '"
+            "The method 'nonExistentStaticMethod' does not exist on model '"
             . Invoices::class . "'"
         );
         Invoices::nonExistentStaticMethod(1);

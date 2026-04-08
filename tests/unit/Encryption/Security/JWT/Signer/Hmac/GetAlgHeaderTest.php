@@ -26,16 +26,24 @@ final class GetAlgHeaderTest extends AbstractUnitTestCase
      */
     public function testEncryptionSecurityJWTSignerHmacGetAlgHeader(): void
     {
-        $signer = new Hmac();
-        $this->assertSame('HS512', $signer->getAlgHeader());
+        $signer   = new Hmac();
+        $expected = 'HS512';
+        $actual   = $signer->getAlgHeader();
+        $this->assertSame($expected, $actual);
 
-        $signer = new Hmac('sha512');
-        $this->assertSame('HS512', $signer->getAlgHeader());
+        $signer   = new Hmac('sha512');
+        $expected = 'HS512';
+        $actual   = $signer->getAlgHeader();
+        $this->assertSame($expected, $actual);
 
-        $signer = new Hmac('sha384');
-        $this->assertSame('HS384', $signer->getAlgHeader());
+        $signer   = new Hmac('sha384');
+        $expected = 'HS384';
+        $actual   = $signer->getAlgHeader();
+        $this->assertSame($expected, $actual);
 
-        $signer = new Hmac('sha256');
-        $this->assertSame('HS256', $signer->getAlgHeader());
+        $signer   = new Hmac('sha256');
+        $expected = 'HS256';
+        $actual   = $signer->getAlgHeader();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Humanize;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class HumanizeTest extends AbstractUnitTestCase
 {
@@ -29,21 +28,21 @@ final class HumanizeTest extends AbstractUnitTestCase
      */
     public function testSupportHelperStrHumanize(): void
     {
-        $object   = new Humanize();
+        $object = new Humanize();
         $expected = 'start a horse';
-        $actual   = $object('start_a_horse');
+        $actual = $object('start_a_horse');
         $this->assertSame($expected, $actual);
 
         $expected = 'five cats';
-        $actual   = $object('five-cats');
+        $actual = $object('five-cats');
         $this->assertSame($expected, $actual);
 
         $expected = 'kittens are cats';
-        $actual   = $object('kittens-are_cats');
+        $actual = $object('kittens-are_cats');
         $this->assertSame($expected, $actual);
 
         $expected = 'Awesome Phalcon';
-        $actual   = $object(" \t Awesome-Phalcon \t ");
+        $actual = $object(" \t Awesome-Phalcon \t ");
         $this->assertSame($expected, $actual);
     }
 }

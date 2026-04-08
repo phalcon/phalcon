@@ -20,8 +20,8 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\Fixtures\Forms\ValidationForm;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Forms\ValidationForm;
 
 final class IsValidTest extends AbstractUnitTestCase
 {

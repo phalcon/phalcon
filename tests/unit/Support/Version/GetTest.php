@@ -13,13 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Version;
 
-use Phalcon\Tests\Fixtures\Support\Version\VersionAlphaFixture;
-use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
-use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
-use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionAlpha;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionBeta;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionRc;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionStable;
 
 use function is_string;
 
@@ -32,19 +30,19 @@ final class GetTest extends AbstractUnitTestCase
     {
         return [
             [
-                VersionAlphaFixture::class,
+                FakeVersionAlpha::class,
                 '5.0.0alpha1',
             ],
             [
-                VersionBetaFixture::class,
+                FakeVersionBeta::class,
                 '5.0.0beta2',
             ],
             [
-                VersionRcFixture::class,
+                FakeVersionRc::class,
                 '5.0.0RC3',
             ],
             [
-                VersionStableFixture::class,
+                FakeVersionStable::class,
                 '5.0.0',
             ],
         ];
@@ -53,14 +51,15 @@ final class GetTest extends AbstractUnitTestCase
     /**
      * Tests get()
      *
+     * @dataProvider getExamples
+     * *
      * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    #[DataProvider('getExamples')]
     public function testSupportVersionGet(
         string $class,
-        string $expected
+        string $expected,
     ): void {
         $version = new $class();
 

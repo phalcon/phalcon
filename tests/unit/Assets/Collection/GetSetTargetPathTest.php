@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetSetTargetPathTest extends AbstractUnitTestCase
 {
@@ -33,6 +32,8 @@ final class GetSetTargetPathTest extends AbstractUnitTestCase
         $targetPath = '/assets';
         $collection->setTargetPath($targetPath);
 
-        $this->assertSame($targetPath, $collection->getTargetPath());
+        $expected = $targetPath;
+        $actual   = $collection->getTargetPath();
+        $this->assertSame($expected, $actual);
     }
 }

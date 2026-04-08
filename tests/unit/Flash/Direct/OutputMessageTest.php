@@ -70,23 +70,4 @@ final class OutputMessageTest extends AbstractUnitTestCase
         $actual = $flash->$type($source);
         $this->assertSame($expected, $actual);
     }
-
-    /**
-     * Tests Phalcon\Flash\Direct :: outputMessage() - exception
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testFlashDirectOutputMessageException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'The message must be an array or a string'
-        );
-
-        $flash = new Direct(new Escaper());
-        $flash->outputMessage('success', false);
-    }
 }

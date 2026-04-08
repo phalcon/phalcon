@@ -24,13 +24,15 @@ use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Tests\Fixtures\Storage\Adapter\ApcuApcuDeleteFixture;
-use Phalcon\Tests\Fixtures\Storage\Adapter\StreamUnlinkFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Storage\Fake\FakeApcuApcuDelete;
+use Phalcon\Tests\Unit\Storage\Fake\FakeStreamUnlink;
 use stdClass;
 
+use function array_merge;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function uniqid;
 
@@ -92,7 +94,7 @@ final class ClearTest extends AbstractUnitTestCase
         $this->checkExtensionIsLoaded('apcu');
 
         $serializer = new SerializerFactory();
-        $adapter    = new ApcuApcuDeleteFixture($serializer);
+        $adapter    = new FakeApcuApcuDelete($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -123,7 +125,7 @@ final class ClearTest extends AbstractUnitTestCase
         $this->checkExtensionIsLoaded('apcu');
 
         $serializer = new SerializerFactory();
-        $adapter    = new ApcuApcuDeleteFixture($serializer);
+        $adapter    = new FakeApcuApcuDelete($serializer);
 
         $key1 = uniqid();
         $key2 = uniqid();
@@ -199,7 +201,7 @@ final class ClearTest extends AbstractUnitTestCase
     public function testStorageAdapterStreamClearCannotDeleteFile(): void
     {
         $serializer = new SerializerFactory();
-        $adapter    = new StreamUnlinkFixture(
+        $adapter    = new FakeStreamUnlink(
             $serializer,
             [
                 'storageDir' => outputDir(),
@@ -264,5 +266,87 @@ final class ClearTest extends AbstractUnitTestCase
 
         $actual = $adapter->clear();
         $this->assertTrue($actual);
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getExamplesClearWithPrefix(): array
+    {
+        return [
+            [
+                Apcu::class,
+                [],
+                'apcu',
+            ],
+            [
+                Memory::class,
+                [],
+                '',
+            ],
+            [
+                Redis::class,
+                getOptionsRedis(),
+                'redis',
+            ],
+            [
+                Stream::class,
+                [
+                    'storageDir' => outputDir(),
+                ],
+                '',
+            ],
+        ];
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\* :: clear() - only removes keys belonging
+     * to the current prefix, leaving keys from other adapter instances intact.
+     *
+     * @dataProvider getExamplesClearWithPrefix
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2024-10-31
+     */
+    public function testStorageAdapterClearWithPrefix(
+        string $class,
+        array $options,
+        string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $serializer = new SerializerFactory();
+        $adapter1   = new $class($serializer, array_merge($options, ['prefix' => 'test-one-']));
+        $adapter2   = new $class($serializer, array_merge($options, ['prefix' => 'test-two-']));
+
+        $key1 = uniqid();
+        $key2 = uniqid();
+
+        $adapter1->set($key1, 'test-one');
+        $adapter2->set($key2, 'test-two');
+
+        $this->assertTrue($adapter1->has($key1));
+        $this->assertTrue($adapter2->has($key2));
+
+        /**
+         * Clearing adapter1 must not remove adapter2's key
+         */
+        $actual = $adapter1->clear();
+        $this->assertTrue($actual);
+
+        $this->assertFalse($adapter1->has($key1));
+        $this->assertTrue($adapter2->has($key2));
+
+        /**
+         * Clean up adapter2
+         */
+        $adapter2->clear();
+
+        if ($class === Stream::class) {
+            $this->safeDeleteDirectory(outputDir('test-one-'));
+            $this->safeDeleteDirectory(outputDir('test-two-'));
+        }
     }
 }

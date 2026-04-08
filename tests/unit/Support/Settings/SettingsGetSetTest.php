@@ -15,10 +15,18 @@ namespace Phalcon\Tests\Unit\Support\Settings;
 
 use Phalcon\Support\Settings;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SettingsGetSetTest extends AbstractUnitTestCase
 {
+    /**
+     * Restore all overrides after each test so state does not leak.
+     */
+    protected function tearDown(): void
+    {
+        Settings::reset();
+        parent::tearDown();
+    }
+
     /**
      * Tests Phalcon\Support\Settings :: default
      *
@@ -136,5 +144,28 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
         $expected = true;
         $actual = Settings::get('db.force_casting');
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Support\Settings :: reset()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-04
+     */
+    public function testSupportSettingsReset(): void
+    {
+        Settings::set('db.escape_identifiers', false);
+        Settings::set('db.force_casting', true);
+        Settings::set('orm.events', false);
+
+        $this->assertSame(false, Settings::get('db.escape_identifiers'));
+        $this->assertSame(true, Settings::get('db.force_casting'));
+        $this->assertSame(false, Settings::get('orm.events'));
+
+        Settings::reset();
+
+        $this->assertSame(true, Settings::get('db.escape_identifiers'));
+        $this->assertSame(false, Settings::get('db.force_casting'));
+        $this->assertSame(true, Settings::get('orm.events'));
     }
 }

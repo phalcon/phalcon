@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Mvc\View\Engine\Php;
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Tests\Fixtures\Mvc\View\Engine\Mustache;
-use Phalcon\Tests\Fixtures\Mvc\View\Engine\Twig;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Mvc\View\Engine\Fake\FakeMustache;
+use Phalcon\Tests\Unit\Mvc\View\Engine\Fake\FakeTwig;
 
 class GetRegisteredEnginesTest extends AbstractUnitTestCase
 {
@@ -38,9 +38,9 @@ class GetRegisteredEnginesTest extends AbstractUnitTestCase
         $view = $this->container->get('viewSimple');
 
         $engines = [
-            '.mhtml' => Mustache::class,
+            '.mhtml' => FakeMustache::class,
             '.phtml' => Php::class,
-            '.twig'  => Twig::class,
+            '.twig'  => FakeTwig::class,
             '.volt'  => Volt::class,
         ];
 

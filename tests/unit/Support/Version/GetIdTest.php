@@ -13,14 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Version;
 
-use Phalcon\Tests\Fixtures\Support\Version\VersionAlphaFixture;
-use Phalcon\Tests\Fixtures\Support\Version\VersionBetaFixture;
-use Phalcon\Tests\Fixtures\Support\Version\VersionRcFixture;
-use Phalcon\Tests\Fixtures\Support\Version\VersionStableFixture;
-use Phalcon\Tests\Fixtures\Traits\VersionTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Tests\Unit\Support\Fake\VersionTrait;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionAlpha;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionBeta;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionRc;
+use Phalcon\Tests\Unit\Support\Version\Fake\FakeVersionStable;
 
 use function is_string;
 
@@ -35,19 +33,19 @@ final class GetIdTest extends AbstractUnitTestCase
     {
         return [
             [
-                VersionAlphaFixture::class,
+                FakeVersionAlpha::class,
                 '5000011',
             ],
             [
-                VersionBetaFixture::class,
+                FakeVersionBeta::class,
                 '5000022',
             ],
             [
-                VersionRcFixture::class,
+                FakeVersionRc::class,
                 '5000033',
             ],
             [
-                VersionStableFixture::class,
+                FakeVersionStable::class,
                 '5000000',
             ],
         ];
@@ -56,15 +54,16 @@ final class GetIdTest extends AbstractUnitTestCase
     /**
      * Tests get()
      *
+     * @dataProvider getExamples
+     *
      * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
-    #[DataProvider('getExamples')]
     public function testSupportVersionGetId(
         string $class,
-        string $expected
+        string $expected,
     ): void {
         $version = new $class();
 

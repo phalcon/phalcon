@@ -17,25 +17,39 @@ use PDO;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\CustomersDefaultsMigration;
-use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Migrations\SourcesMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Customers;
-use Phalcon\Tests\Models\CustomersDefaults;
-use Phalcon\Tests\Models\CustomersKeepSnapshots;
-use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Models\InvoicesKeepSnapshots;
-use Phalcon\Tests\Models\InvoicesSchema;
-use Phalcon\Tests\Models\InvoicesValidationFails;
-use Phalcon\Tests\Models\Sources;
+use Phalcon\Tests\Support\Migrations\CustomersDefaultsMigration;
+use Phalcon\Tests\Support\Migrations\CustomersMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\SourcesMigration;
+use Phalcon\Tests\Support\Models\Customers;
+use Phalcon\Tests\Support\Models\CustomersDefaults;
+use Phalcon\Tests\Support\Models\CustomersKeepSnapshots;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\InvoicesKeepSnapshots;
+use Phalcon\Tests\Support\Models\InvoicesSchema;
+use Phalcon\Tests\Support\Models\InvoicesValidationFails;
+use Phalcon\Tests\Support\Models\Sources;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function uniqid;
 
 final class SaveTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
+
+    public function setUp(): void
+    {
+
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
+    }
+
+    public function tearDown(): void
+    {
+
+        $this->tearDownDatabase();
+    }
+
 
     /**
      * Tests Phalcon\Mvc\Model\ :: save() Infinite Loop
@@ -44,11 +58,12 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @since  2023-08-09
      * @issue  https://github.com/phalcon/cphalcon/issues/16395
      *
-     * @group mysql
-     * @group sqlite
+     * @group  mysql
+     * @group  sqlite
      */
     public function infiniteSaveLoop(): void
     {
+
         /** @var PDO $connection */
         $connection        = self::getConnection();
         $invoicesMigration = new InvoicesMigration($connection);
@@ -64,17 +79,6 @@ final class SaveTest extends AbstractDatabaseTestCase
         $customer->save();
     }
 
-    public function setUp(): void
-    {
-        $this->setNewFactoryDefault();
-        $this->setDatabase();
-    }
-
-    public function tearDown(): void
-    {
-        $this->container['db']->close();
-    }
-
     /**
      * Tests Phalcon\Mvc\Model :: save()
      *
@@ -83,10 +87,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-10
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSave(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -155,10 +160,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-26
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveAfterFetchingRelated(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -200,10 +206,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-10-09
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveAfterSettingEmptyRelated(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -235,10 +242,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-26
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveAfterUsingRelatedGetters(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -280,10 +288,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-17
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -323,28 +332,25 @@ final class SaveTest extends AbstractDatabaseTestCase
      *
      * @since  2019-04-28
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveCircularRelation(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
         $invoicesMigration  = new InvoicesMigration($connection);
         $customersMigration = new CustomersMigration($connection);
 
-        $invoice = new InvoicesKeepSnapshots(
-            [
-                'inv_title' => 'Test invoice',
-            ]
-        );
+        $invoice = new InvoicesKeepSnapshots([
+                                                 'inv_title' => 'Test invoice',
+                                             ]);
 
-        $customer = new Customers(
-            [
-                'cst_name_last'  => 'Evil',
-                'cst_name_first' => 'Customer',
-            ]
-        );
+        $customer = new Customers([
+                                      'cst_name_last'  => 'Evil',
+                                      'cst_name_first' => 'Customer',
+                                  ]);
 
         // Assign relationship in both directions on unsaved models
         $invoice->customer = $customer;
@@ -371,25 +377,24 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @since  2019-11-16
      * @issue  #11922
      *
-     * @group mysql
-     * @group sqlite
+     * @group  mysql
+     * @group  sqlite
      */
     public function testMvcModelSaveWithPropertySource(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
         $sourcesMigration = new SourcesMigration($connection);
         $sourcesMigration->insert(1, 'llama', 'test_source');
 
-        $model = Sources::findFirst(
-            [
-                'conditions' => 'id = :id:',
-                'bind'       => [
-                    'id' => 1,
-                ],
-            ]
-        );
+        $model = Sources::findFirst([
+                                        'conditions' => 'id = :id:',
+                                        'bind'       => [
+                                            'id' => 1,
+                                        ],
+                                    ]);
 
         $class = Sources::class;
         $this->assertInstanceOf($class, $model);
@@ -429,10 +434,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      *
      * @see    https://github.com/phalcon/cphalcon/issues/15148
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveWithRelatedManyAndBelongsRecordsProperty(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -477,19 +483,18 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveWithRelatedRecords(): void
     {
+
         $invoice = new InvoicesKeepSnapshots();
 
         $invoice->customer = new CustomersKeepSnapshots();
-        $invoice->customer->assign(
-            [
-                'cst_status_flag' => 0,
-                'cst_name_first'  => 'cst_test_firstName',
-            ]
-        );
+        $invoice->customer->assign([
+                                       'cst_status_flag' => 0,
+                                       'cst_name_first'  => 'cst_test_firstName',
+                                   ]);
 
         $actual = $invoice->save();
         $this->assertTrue($actual);
@@ -524,10 +529,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      *
      * @see    https://github.com/phalcon/cphalcon/issues/15148
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveWithRelatedRecordsProperty(): void
     {
+
         /** @var PDO $connection */
         $connection = self::getConnection();
 
@@ -572,10 +578,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-16
      *
-     * @group mysql
+     * @group  mysql
      */
     public function testMvcModelSaveWithSchema(): void
     {
+
         $model = new Invoices();
 
         $model->inv_cst_id      = 1;
@@ -608,11 +615,11 @@ final class SaveTest extends AbstractDatabaseTestCase
      * @since        2019-08-02
      * @dataProvider tinyintProvider
      *
-     * @group mysql
+     * @group        mysql
      */
-    public function testMvcModelSaveWithTinyInt(
-        string $value
-    ): void {
+    public function testMvcModelSaveWithTinyInt(string $value): void
+    {
+
         $customer                  = new Customers();
         $customer->cst_status_flag = $value;
 
@@ -634,6 +641,7 @@ final class SaveTest extends AbstractDatabaseTestCase
      */
     public static function tinyintProvider(): array
     {
+
         return [
             ["1"],
             ["0"],

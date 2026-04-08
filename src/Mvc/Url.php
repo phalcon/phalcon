@@ -16,7 +16,6 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Parsers\Parser;
 
 use function http_build_query;
 use function is_array;
@@ -24,6 +23,7 @@ use function is_string;
 use function preg_match;
 use function preg_replace;
 use function strlen;
+use function substr;
 
 /**
  * This component helps in the generation of: URIs, URLs and Paths
@@ -174,15 +174,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
             /**
              * Replace the patterns by its variables
              */
-            /**
-             * @todo Check the implementation for this
-             */
-//            $uri = phalcon_replace_paths(
-//                $route->getPattern(),
-//                $route->getReversedPaths(),
-//                $uri
-//            );
-            $uri = Parser::replacePaths(
+            $uri = $this->replacePaths(
                 $route->getPattern(),
                 $route->getReversedPaths(),
                 $uri
@@ -232,16 +224,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
     {
         if (null === $this->baseUri) {
             if (isset($_SERVER["PHP_SELF"])) {
-                /**
-                 * @todo Check the implementation for this
-                 */
-                // $uri = phalcon_get_uri($_SERVER["PHP_SELF"]);
-                $uri = $_SERVER["PHP_SELF"];
+                $uri = $this->getUri($_SERVER["PHP_SELF"]);
             } else {
                 $uri = null;
             }
 
-            if (null !== $uri) {
+            if (empty($uri)) {
                 $baseUri = "/";
             } else {
                 $baseUri = "/" . $uri . "/";
@@ -369,5 +357,269 @@ class Url extends AbstractInjectionAware implements UrlInterface
         $this->staticBaseUri = $staticBaseUri;
 
         return $this;
+    }
+
+    /**
+     * Extracts the directory component between the last two path separators.
+     *
+     * Port of the C function phalcon_get_uri() from ext/phalcon/mvc/url/utils.c.
+     *
+     * For example: "/var/www/app/index.php" returns "app"
+     *              "/index.php"             returns ""
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function getUri(string $path): string
+    {
+        $length = strlen($path);
+        if ($length === 0) {
+            return '';
+        }
+
+        $found = 0;
+        $mark  = 0;
+
+        for ($i = $length; $i > 0; $i--) {
+            $ch = $path[$i - 1];
+            if ($ch === '/' || $ch === '\\') {
+                $found++;
+                if ($found === 1) {
+                    $mark = $i - 1;
+                } else {
+                    return substr($path, $i, $mark - $i);
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Looks up the replacement value for a placeholder in the pattern.
+     *
+     * Port of the C function phalcon_replace_marker() from ext/phalcon/mvc/url/utils.c.
+     *
+     * @param bool   $named        true for {name} placeholders, false for (:pos) / :word
+     * @param array  $paths        reversed-paths map (position => name)
+     * @param array  $replacements user-supplied key=>value replacements
+     * @param int    $position     current positional counter (passed by reference)
+     * @param string $pattern      the full route pattern string
+     * @param int    $markerPos    index of the opening delimiter ({ or ( or :)
+     * @param int    $cursorPos    index of the closing delimiter (} or ) or first non-alpha)
+     *
+     * @return string|null  the replacement value, or null if none found
+     */
+    private function replaceMarker(
+        bool $named,
+        array $paths,
+        array $replacements,
+        int &$position,
+        string $pattern,
+        int $markerPos,
+        int $cursorPos
+    ): string | null {
+        $notValid = false;
+        $item     = null;
+        $variable = null;
+
+        if ($named) {
+            // Extract text between { and }: from markerPos+1 up to (not including) cursorPos
+            $length = $cursorPos - $markerPos - 1;
+            $item   = substr($pattern, $markerPos + 1, $length);
+
+            for ($j = 0; $j < $length; $j++) {
+                $ch = $item[$j];
+                if ($j === 0 && !(($ch >= 'a' && $ch <= 'z') || ($ch >= 'A' && $ch <= 'Z'))) {
+                    $notValid = true;
+                    break;
+                }
+                if (
+                    ($ch >= 'a' && $ch <= 'z') || ($ch >= 'A' && $ch <= 'Z') ||
+                    ($ch >= '0' && $ch <= '9') || $ch === '-' || $ch === '_' || $ch === ':'
+                ) {
+                    if ($ch === ':') {
+                        $variable = substr($item, 0, $j);
+                        break;
+                    }
+                } else {
+                    $notValid = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$notValid) {
+            if (array_key_exists($position, $paths)) {
+                if ($named) {
+                    $key = $variable ?? $item;
+                    if (array_key_exists($key, $replacements)) {
+                        $position++;
+                        return (string)$replacements[$key];
+                    }
+                } else {
+                    $pathName = $paths[$position];
+                    if (is_string($pathName) && array_key_exists($pathName, $replacements)) {
+                        $position++;
+                        return (string)$replacements[$pathName];
+                    }
+                }
+            }
+            $position++;
+        }
+
+        return null;
+    }
+
+    /**
+     * Replaces placeholders in a route pattern with values from $replacements.
+     *
+     * Supports three placeholder styles:
+     *   {name}   — named (curly-brace) placeholders
+     *   (...)    — positional (parentheses) placeholders
+     *   :word    — colon-prefixed placeholders
+     *
+     * Port of the C function phalcon_replace_paths() from ext/phalcon/mvc/url/utils.c.
+     *
+     * @param string $pattern      the route pattern (e.g. "/blog/{year}/{month}/{title}")
+     * @param array  $paths        reversed-paths map (position => name)
+     * @param mixed  $replacements user-supplied key=>value replacements (array portion used)
+     *
+     * @return string|false|null
+     */
+    private function replacePaths(
+        string $pattern,
+        array $paths,
+        mixed $replacements
+    ): string | false | null {
+        if (!is_array($replacements)) {
+            return null;
+        }
+
+        $len = strlen($pattern);
+        if ($len === 0) {
+            return false;
+        }
+
+        $i = ($pattern[0] === '/') ? 1 : 0;
+
+        if (empty($paths)) {
+            return substr($pattern, $i);
+        }
+
+        $bracketCount       = 0;
+        $parenthesesCount   = 0;
+        $intermediate       = 0;
+        $lookingPlaceholder = false;
+        $position           = 1;
+        $routeStr           = '';
+        $markerPos          = 0;
+
+        for (; $i < $len; $i++) {
+            $ch = $pattern[$i];
+
+            if ($parenthesesCount === 0 && !$lookingPlaceholder) {
+                if ($ch === '{') {
+                    if ($bracketCount === 0) {
+                        $markerPos    = $i;
+                        $intermediate = 0;
+                    }
+
+                    $bracketCount++;
+                } elseif ($ch === '}') {
+                    $bracketCount--;
+                    if ($intermediate > 0 && $bracketCount === 0) {
+                        $replace = $this->replaceMarker(
+                            true,
+                            $paths,
+                            $replacements,
+                            $position,
+                            $pattern,
+                            $markerPos,
+                            $i
+                        );
+
+                        if ($replace !== null) {
+                            $routeStr .= $replace;
+                        }
+
+                        continue;
+                    }
+                }
+            }
+
+            if ($bracketCount === 0 && !$lookingPlaceholder) {
+                if ($ch === '(') {
+                    if ($parenthesesCount === 0) {
+                        $markerPos    = $i;
+                        $intermediate = 0;
+                    }
+                    $parenthesesCount++;
+                } elseif ($ch === ')') {
+                    $parenthesesCount--;
+                    if ($intermediate > 0 && $parenthesesCount === 0) {
+                        $replace = $this->replaceMarker(
+                            false,
+                            $paths,
+                            $replacements,
+                            $position,
+                            $pattern,
+                            $markerPos,
+                            $i
+                        );
+
+                        if ($replace !== null) {
+                            $routeStr .= $replace;
+                        }
+
+                        continue;
+                    }
+                }
+            }
+
+            if ($bracketCount === 0 && $parenthesesCount === 0) {
+                if ($lookingPlaceholder) {
+                    if ($intermediate > 0) {
+                        if ($ch < 'a' || $ch > 'z' || $i === ($len - 1)) {
+                            $replace = $this->replaceMarker(
+                                false,
+                                $paths,
+                                $replacements,
+                                $position,
+                                $pattern,
+                                $markerPos,
+                                $i
+                            );
+
+                            if ($replace !== null) {
+                                $routeStr .= $replace;
+                            }
+                            $lookingPlaceholder = false;
+
+                            if ($ch < 'a' || $ch > 'z') {
+                                $routeStr .= $ch;
+                            }
+
+                            continue;
+                        }
+                    }
+                } else {
+                    if ($ch === ':') {
+                        $lookingPlaceholder = true;
+                        $markerPos          = $i;
+                        $intermediate       = 0;
+                    }
+                }
+            }
+
+            if ($bracketCount > 0 || $parenthesesCount > 0 || $lookingPlaceholder) {
+                $intermediate++;
+            } else {
+                $routeStr .= $ch;
+            }
+        }
+
+        return $routeStr;
     }
 }

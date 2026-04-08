@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 use function outputDir;
 
@@ -35,11 +35,11 @@ final class WatermarkTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $image = new Gd(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $watermark = new Gd(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
         $watermark->resize(250, null, Enum::WIDTH);
 
@@ -77,11 +77,11 @@ final class WatermarkTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $image = new Gd(
-            dataDir('assets/images/example-png.png')
+            supportDir('assets/images/example-png.png')
         );
 
         $watermark = new Gd(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
         $watermark->resize(50, 50, Enum::NONE);
 
@@ -119,11 +119,11 @@ final class WatermarkTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $image = new Gd(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $watermark = new Gd(
-            dataDir('assets/images/example-png.png')
+            supportDir('assets/images/example-png.png')
         );
 
         $outputDir   = 'tests/image/gd/';
@@ -156,11 +156,11 @@ final class WatermarkTest extends AbstractUnitTestCase
     public function testImageAdapterGdWatermarkPngInsidePng(): void
     {
         $image = new Gd(
-            dataDir('assets/images/example-png.png')
+            supportDir('assets/images/example-png.png')
         );
 
         $watermark = new Gd(
-            dataDir('assets/images/example-png.png')
+            supportDir('assets/images/example-png.png')
         );
         $watermark->resize(null, 30, Enum::HEIGHT);
 

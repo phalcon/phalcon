@@ -35,7 +35,7 @@ final class SerializeUnserializeTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("This object cannot be unserialized");
 
-        $serialized = file_get_contents(dataDir('assets/logger/logger.serialized'));
+        $serialized = file_get_contents(supportDir('assets/logger/logger.serialized'));
         $object     = unserialize($serialized);
     }
 

@@ -2,7 +2,9 @@
 
 /**
  * This file is part of the Phalcon Framework.
+ *
  * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -201,7 +203,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'decrement'], ['test']);
         call_user_func_array([$adapter, 'decrement'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -239,7 +242,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'delete'], ['test']);
         call_user_func_array([$adapter, 'delete'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -274,10 +278,12 @@ final class EventsTest extends AbstractUnitTestCase
 
         $adapter->setEventsManager($manager);
 
+        $adapter->set('test', 'value');
         call_user_func_array([$adapter, 'get'], ['test']);
         call_user_func_array([$adapter, 'get'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -315,7 +321,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'has'], ['test']);
         call_user_func_array([$adapter, 'has'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -353,7 +360,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'increment'], ['test']);
         call_user_func_array([$adapter, 'increment'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -391,7 +399,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'set'], ['test', 'test']);
         call_user_func_array([$adapter, 'set'], ['test', 'test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -429,7 +438,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'decrement'], ['test']);
         call_user_func_array([$adapter, 'decrement'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -467,7 +477,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'delete'], ['test']);
         call_user_func_array([$adapter, 'delete'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -502,10 +513,12 @@ final class EventsTest extends AbstractUnitTestCase
 
         $adapter->setEventsManager($manager);
 
+        $adapter->set('test', 'value');
         call_user_func_array([$adapter, 'get'], ['test']);
         call_user_func_array([$adapter, 'get'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -543,7 +556,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'has'], ['test']);
         call_user_func_array([$adapter, 'has'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -581,7 +595,8 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'increment'], ['test']);
         call_user_func_array([$adapter, 'increment'], ['test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 
     /**
@@ -619,6 +634,7 @@ final class EventsTest extends AbstractUnitTestCase
         call_user_func_array([$adapter, 'set'], ['test', 'test']);
         call_user_func_array([$adapter, 'set'], ['test', 'test']);
 
-        $this->assertEquals(2, $counter);
+        $expected = 2;
+        $this->assertEquals($expected, $counter);
     }
 }

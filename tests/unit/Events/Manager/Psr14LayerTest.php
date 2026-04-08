@@ -4,8 +4,8 @@ namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Event\CancellableEventObject;
-use Phalcon\Tests\Fixtures\Event\EmptyEventObject;
+use Phalcon\Tests\Unit\Events\Fake\CancellableEventObject;
+use Phalcon\Tests\Unit\Events\Fake\EmptyEventObject;
 
 final class Psr14LayerTest extends AbstractUnitTestCase
 {

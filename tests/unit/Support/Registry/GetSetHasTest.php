@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class GetSetHasTest extends AbstractRegistryTestCase
@@ -25,7 +24,7 @@ final class GetSetHasTest extends AbstractRegistryTestCase
      */
     public static function getExamples(): array
     {
-        $sample      = new stdClass();
+        $sample = new stdClass();
         $sample->one = 'two';
 
         return [
@@ -107,7 +106,7 @@ final class GetSetHasTest extends AbstractRegistryTestCase
         $this->assertTrue($actual);
 
         $expected = 'two';
-        $actual   = $registry->get('three');
+        $actual = $registry->get('three');
         $this->assertSame($expected, $actual);
 
         /**
@@ -134,7 +133,7 @@ final class GetSetHasTest extends AbstractRegistryTestCase
         $this->assertTrue($actual);
 
         $expected = 789;
-        $actual   = $registry->six;
+        $actual = $registry->six;
         $this->assertSame($expected, $actual);
 
         /**
@@ -210,18 +209,20 @@ final class GetSetHasTest extends AbstractRegistryTestCase
     /**
      * Tests Phalcon\Support\Registry :: get() - cast
      *
+     * @dataProvider getExamples
+     *
      * @since        2019-10-12
      */
     #[DataProvider('getExamples')]
     public function testSupportRegistryGetCast(
         string $cast,
         mixed $value,
-        mixed $expected
+        mixed $expected,
     ): void {
         $registry = new Registry(
             [
                 'value' => $value,
-            ]
+            ],
         );
 
         /**

@@ -16,11 +16,10 @@ namespace Phalcon\Tests\Unit\Assets\Manager;
 use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
-use function dataDir;
+use function supportDir;
 
 final class AddJsTest extends AbstractUnitTestCase
 {
@@ -53,10 +52,14 @@ final class AddJsTest extends AbstractUnitTestCase
         $collection = $manager->get('js');
 
         foreach ($collection as $resource) {
-            $this->assertSame('js', $resource->getType());
+            $expected = 'js';
+            $actual   = $resource->getType();
+            $this->assertSame($expected, $actual);
         }
 
-        $this->assertCount(2, $collection);
+        $expected = 2;
+        $actual   = count($collection);
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -78,7 +81,7 @@ final class AddJsTest extends AbstractUnitTestCase
         $manager->useImplicitOutput(false);
 
         $manager->addJs(
-            dataDir('assets/assets/assets-version-1.js'),
+            supportDir('assets/assets/assets-version-1.js'),
             true,
             false,
             [],
@@ -86,7 +89,7 @@ final class AddJsTest extends AbstractUnitTestCase
         );
 
         $manager->addJs(
-            dataDir('assets/assets/assets-version-2.js'),
+            supportDir('assets/assets/assets-version-2.js'),
             true,
             false,
             [],
@@ -94,13 +97,13 @@ final class AddJsTest extends AbstractUnitTestCase
         );
 
         $manager->addJs(
-            dataDir('assets/assets/assets-version-3.js'),
+            supportDir('assets/assets/assets-version-3.js'),
             true,
             false,
             []
         );
 
-        $pathData = dataDir('assets/');
+        $pathData = supportDir('assets/');
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL . "%s" . PHP_EOL,
             "<script type=\"application/javascript\" "

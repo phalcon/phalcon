@@ -1,0 +1,56 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Database\Mvc\Model\Transaction;
+
+use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
+
+final class GetConnectionTest extends AbstractDatabaseTestCase
+{
+    use DiTrait;
+
+    public function setUp(): void
+    {
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
+    }
+
+    public function tearDown(): void
+    {
+        $this->tearDownDatabase();
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model\Transaction :: getConnection()
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2012-08-07
+     *
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelTransactionGetConnection(): void
+    {
+        $tm = $this->container->getShared('transactionManager');
+
+        $transaction = $tm->get();
+
+        $this->assertInstanceOf(
+            AdapterInterface::class,
+            $transaction->getConnection()
+        );
+    }
+}

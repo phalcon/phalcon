@@ -98,7 +98,7 @@ final class ListViewsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: listViews
+     * Tests Phalcon\Db\Dialect :: listViews - no schema
      *
      * @dataProvider getDialectsNoSchema
      *

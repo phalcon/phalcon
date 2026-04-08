@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use PHPUnit\Framework\Attributes\Test;
 
 final class JsonSerializeTest extends AbstractRegistryTestCase
 {
@@ -30,7 +29,7 @@ final class JsonSerializeTest extends AbstractRegistryTestCase
         $registry = new Registry($data);
 
         $expected = $data;
-        $actual   = $registry->jsonSerialize();
+        $actual = $registry->jsonSerialize();
         $this->assertSame($expected, $actual);
     }
 }

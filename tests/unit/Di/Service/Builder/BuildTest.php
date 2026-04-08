@@ -17,11 +17,11 @@ use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Service\Builder;
 use Phalcon\Html\Escaper;
-use Phalcon\Tests\Fixtures\Di\PropertiesComponent;
-use Phalcon\Tests\Fixtures\Di\ServiceComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Di\PropertiesComponent;
+use Phalcon\Tests\Support\Di\ServiceComponent;
 
-class BuildTest extends AbstractUnitTestCase
+final class BuildTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service\Builder :: build() - exception argument
@@ -430,7 +430,7 @@ class BuildTest extends AbstractUnitTestCase
 
     /**
      * Unit Tests Phalcon\Di\Service\Builder :: build() - instance with
-     * properties
+     * properties exception
      *
      * @return void
      *

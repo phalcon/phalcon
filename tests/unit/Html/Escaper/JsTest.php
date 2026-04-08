@@ -28,7 +28,6 @@ final class JsTest extends AbstractUnitTestCase
      */
     public function testEscaperJs(): void
     {
-        $this->markTestSkipped("TODO: Enable this after escaping is converted from C to PHP");
         $escaper = new Escaper();
 
         $source = 'function createtoc () {'
@@ -48,7 +47,8 @@ final class JsTest extends AbstractUnitTestCase
             . 'var h \x3d document.createElement(\x27li\x27);'
             . 'l.appendChild(h);'
             . '}}';
-        $actual   = $escaper->js($source);
+
+        $actual = $escaper->js($source);
         $this->assertSame($expected, $actual);
     }
 }

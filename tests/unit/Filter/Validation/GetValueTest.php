@@ -16,14 +16,14 @@ namespace Phalcon\Tests\Unit\Filter\Validation;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\Exception as ValidationException;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Email;
-use Phalcon\Filter\Validation\Exception as ValidationException;
-use Phalcon\Tests\Fixtures\Filter\Validation\ValueAttributeFixture;
-use Phalcon\Tests\Fixtures\Filter\Validation\ValueMethodFixture;
-use Phalcon\Tests\Fixtures\Filter\Validation\ValuePropertyFixture;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Filter\Validation\Fake\FakeValueAttribute;
+use Phalcon\Tests\Unit\Filter\Validation\Fake\FakeValueMethod;
+use Phalcon\Tests\Unit\Filter\Validation\Fake\FakeValueProperty;
 use stdClass;
 
 final class GetValueTest extends AbstractUnitTestCase
@@ -80,7 +80,7 @@ final class GetValueTest extends AbstractUnitTestCase
 
         $validation = new Validation();
 
-        $validation->bind(null, $data);
+        $validation->bind(new stdClass(), $data);
 
         $validation
             ->add('name', $alpha)
@@ -110,7 +110,7 @@ final class GetValueTest extends AbstractUnitTestCase
 
         $validation = new Validation();
 
-        $validation->bind(null, $data);
+        $validation->bind(new stdClass(), $data);
 
         $validation
             ->add('name', $alpha)
@@ -144,7 +144,7 @@ final class GetValueTest extends AbstractUnitTestCase
             ->setFilters('email', 'lower')
             ->add('name', $alpha)
             ->add('email', $email)
-            ->bind(null, $data)
+            ->bind(new stdClass(), $data)
         ;
 
         $expected = 'Leonidas';
@@ -180,7 +180,7 @@ final class GetValueTest extends AbstractUnitTestCase
             ->setFilters('email', 'lower')
             ->add('name', $alpha)
             ->add('email', $email)
-            ->bind(null, $data)
+            ->bind(new stdClass(), $data)
         ;
 
 
@@ -199,7 +199,7 @@ final class GetValueTest extends AbstractUnitTestCase
 
         $alpha = new Alpha();
         $email = new Email();
-        $entity = new ValueAttributeFixture(' Leonidas ');
+        $entity = new FakeValueAttribute(' Leonidas ');
 
         $validation = new Validation();
 
@@ -232,7 +232,7 @@ final class GetValueTest extends AbstractUnitTestCase
 
         $alpha = new Alpha();
         $email = new Email();
-        $entity = new ValueMethodFixture(' Leonidas ');
+        $entity = new FakeValueMethod(' Leonidas ');
 
         $validation = new Validation();
 
@@ -265,7 +265,7 @@ final class GetValueTest extends AbstractUnitTestCase
 
         $alpha = new Alpha();
         $email = new Email();
-        $entity = new ValuePropertyFixture(' Leonidas ');
+        $entity = new FakeValueProperty(' Leonidas ');
 
         $validation = new Validation();
 

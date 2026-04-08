@@ -17,7 +17,7 @@ use Phalcon\Di\Di;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class HasTest extends AbstractUnitTestCase
+final class HasTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: has()

@@ -21,7 +21,6 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\View\ViewInterface;
-use Phalcon\Parsers\Parser;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_keys;

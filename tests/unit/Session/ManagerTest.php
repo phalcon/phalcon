@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Session;
 use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 use function session_abort;
 use function session_destroy;
@@ -27,6 +27,17 @@ use const PHP_SESSION_ACTIVE;
 
 final class ManagerTest extends AbstractUnitTestCase
 {
+    /**
+     * @return array[]
+     */
+    public static function providerSessionValues(): array
+    {
+        return [
+            ['valid', true],
+            ['./invalid', false],
+        ];
+    }
+
     /**
      * Tests Phalcon\Session\Manager :: start()
      *
@@ -55,11 +66,12 @@ final class ManagerTest extends AbstractUnitTestCase
      * Tests to ensure that the session value is alpha numeric and won't
      * cause undefined behaviour when saving or reading sessions.
      *
+     * @dataProvider providerSessionValues
+     *
      * @since   2021-02-02
      */
-    #[TestWith(['valid', true])]
-    #[TestWith(['./invalid', false])]
-    public function validateSessionValue(
+    #[DataProvider('providerSessionValues')]
+    public function testValidateSessionValue(
         string $session,
         bool $expected
     ): void {

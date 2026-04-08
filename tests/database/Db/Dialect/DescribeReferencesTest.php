@@ -146,7 +146,7 @@ final class DescribeReferencesTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: describeReferences
+     * Tests Phalcon\Db\Dialect :: describeReferences - no schema
      *
      * @dataProvider getDialectsNoSchema
      *

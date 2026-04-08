@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Phalcon\Tests\Fixtures\Traits\FormsTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Forms\Fake\FormsTrait;
 
 use function uniqid;
 

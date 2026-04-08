@@ -17,15 +17,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class LoadTest extends AbstractUnitTestCase
 {
-//    use FactoryTrait;
-
-    public function setUp(): void
-    {
-        $this->markTestSkipped('TODO: CHECKME');
-
-        $this->init();
-    }
-
     /**
      * Tests Phalcon\Session\Factory :: load() - array
      *
@@ -34,10 +25,7 @@ final class LoadTest extends AbstractUnitTestCase
      */
     public function testSessionFactoryLoadArray(): void
     {
-        $options = $this->arrayConfig['session'];
-        $data    = $options;
-
-        $this->runTests($options, $data);
+        $this->markTestSkipped('Phalcon\\Session\\Factory does not exist in cphalcon');
     }
 
     /**
@@ -48,27 +36,6 @@ final class LoadTest extends AbstractUnitTestCase
      */
     public function testSessionFactoryLoadConfig(): void
     {
-        $this->wantToTest("Session\Factory - load() - Config");
-
-        $options = $this->config->session;
-        $data    = $options->toArray();
-
-        $this->runTests($options, $data);
-    }
-
-    private function runTests($options, array $data)
-    {
-        $session = Factory::load($options);
-
-        $this->assertInstanceOf(Files::class, $session);
-
-        $expected = $session->getOptions();
-
-        $actual = array_intersect_assoc(
-            $session->getOptions(),
-            $data
-        );
-
-        $this->assertEquals($expected, $actual);
+        $this->markTestSkipped('Phalcon\\Session\\Factory does not exist in cphalcon');
     }
 }

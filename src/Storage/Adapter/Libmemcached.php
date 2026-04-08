@@ -190,6 +190,27 @@ class Libmemcached extends AbstractAdapter
     }
 
     /**
+     * Deletes multiple keys from Memcached using a single deleteMulti call
+     *
+     * @param array $keys
+     *
+     * @return bool
+     * @throws StorageException
+     */
+    protected function doDeleteMultiple(array $keys): bool
+    {
+        if (empty($keys)) {
+            return true;
+        }
+
+        $result = $this->getAdapter()->deleteMulti($keys);
+
+        // deleteMulti returns [key => true] on success, [key => result_code] on failure
+        // all values must be true for a complete success
+        return [] === array_filter($result, fn($v) => $v !== true);
+    }
+
+    /**
      * Checks if an element exists in the cache
      *
      * @param string $key

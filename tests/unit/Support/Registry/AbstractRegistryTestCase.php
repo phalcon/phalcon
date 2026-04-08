@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Registry;
 
-use Phalcon\Support\Registry;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 abstract class AbstractRegistryTestCase extends AbstractUnitTestCase
 {

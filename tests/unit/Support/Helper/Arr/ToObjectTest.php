@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\ToObject;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class ToObjectTest extends AbstractUnitTestCase
@@ -37,8 +36,8 @@ final class ToObjectTest extends AbstractUnitTestCase
         ];
 
 
-        $expected        = new stdClass();
-        $expected->one   = 'two';
+        $expected = new stdClass();
+        $expected->one = 'two';
         $expected->three = 'four';
 
         $actual = $object($source);

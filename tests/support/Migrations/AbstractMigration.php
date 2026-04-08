@@ -1,0 +1,177 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Support\Migrations;
+
+use PDO;
+use Phalcon\DataMapper\Pdo\Connection;
+
+/**
+ * Class AbstractMigration
+ *
+ * @property PDO    $connection
+ * @property string $table
+ */
+abstract class AbstractMigration
+{
+    /**
+     * @var PDO|Connection
+     */
+    protected $connection;
+
+    /**
+     * @var string
+     */
+    protected $table = '';
+
+    /**
+     * Migration constructor.
+     *
+     * @param PDO|Connection|null $connection
+     */
+    final public function __construct(PDO|Connection|null $connection = null, bool $withClear = true)
+    {
+        $this->connection = $connection;
+
+        $withClear && $this->clear();
+    }
+
+    /**
+     * Create the table by running all the SQL statements for it.
+     *
+     * @return void
+     */
+    public function create(): void
+    {
+        $driver = $this
+            ->connection
+            ->getAttribute(PDO::ATTR_DRIVER_NAME);
+
+        $statements = $this->getSql($driver);
+        foreach ($statements as $statement) {
+            $this->connection->exec($statement);
+        }
+    }
+
+    /**
+     *  Retrieve a database connection driver name.
+     *
+     * @return string
+     */
+    public function getDriverName(): string
+    {
+        if (!$this->connection) {
+            return '';
+        }
+
+        return $this
+            ->connection
+            ->getAttribute(PDO::ATTR_DRIVER_NAME);
+    }
+
+    /**
+     * Truncate the table
+     *
+     * @return int The number of rows that were affected
+     */
+    public function clear(): int
+    {
+        if (!$this->connection) {
+            return 0;
+        }
+
+        $driver = $this->getDriverName();
+
+        if ($driver === 'mysql') {
+            $this->connection->exec('SET FOREIGN_KEY_CHECKS=0;');
+            $result = (int) $this->connection->exec('TRUNCATE TABLE ' . $this->table . ';');
+            $this->connection->exec('SET FOREIGN_KEY_CHECKS=1;');
+
+            return $result;
+        }
+
+        if ($driver === 'pgsql' || $driver === 'postgres') {
+            return (int) $this->connection->exec(
+                'TRUNCATE TABLE ' . $this->table . ' RESTART IDENTITY CASCADE;'
+            );
+        }
+
+        return $this->connection->exec(
+            'DELETE FROM ' . $this->table . ';'
+        );
+    }
+
+    /**
+     * Drop the table
+     *
+     * @return void
+     */
+    public function drop(): void
+    {
+        $this->connection->exec(
+            'drop table if exists ' . $this->table . ';'
+        );
+    }
+
+    /**
+     * Get all the SQL statements that create this table
+     *
+     * @param string $driver
+     *
+     * @return array
+     */
+    public function getSql(string $driver): array
+    {
+        switch ($driver) {
+            case 'mysql':
+                return $this->getSqlMysql();
+            case 'sqlite':
+                return $this->getSqlSqlite();
+            case 'pgsql':
+            case 'postgres':
+                return $this->getSqlPgsql();
+            case 'sqlsrv':
+                return $this->getSqlSqlsrv();
+            default:
+                return [];
+        }
+    }
+
+    /**
+     * Sets the connection
+     *
+     * @param PDO $connection
+     */
+    public function setConnection(PDO $connection): void
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * Get table name
+     *
+     * @return string
+     */
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    abstract protected function getSqlMysql(): array;
+
+    abstract protected function getSqlSqlite(): array;
+
+    abstract protected function getSqlPgsql(): array;
+
+    abstract protected function getSqlSqlsrv(): array;
+}

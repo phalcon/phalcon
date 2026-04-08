@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Json;
 use InvalidArgumentException;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 use const JSON_HEX_TAG;
 
@@ -32,13 +31,13 @@ final class EncodeTest extends AbstractUnitTestCase
      */
     public function testSupportHelperJsonEncode(): void
     {
-        $object   = new Encode();
-        $data     = [
+        $object = new Encode();
+        $data = [
             'one' => 'two',
             'three',
         ];
         $expected = '{"one":"two","0":"three"}';
-        $actual   = $object($data);
+        $actual = $object($data);
         $this->assertSame($expected, $actual);
     }
 
@@ -54,7 +53,7 @@ final class EncodeTest extends AbstractUnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            "Malformed UTF-8 characters, possibly incorrectly encoded"
+            "Malformed UTF-8 characters, possibly incorrectly encoded",
         );
         $data = pack("H*", 'c32e');
         (new Encode())($data);
@@ -72,7 +71,7 @@ final class EncodeTest extends AbstractUnitTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            "Malformed UTF-8 characters, possibly incorrectly encoded"
+            "Malformed UTF-8 characters, possibly incorrectly encoded",
         );
         $data = pack("H*", 'c32e');
         (new Encode())($data, JSON_HEX_TAG);

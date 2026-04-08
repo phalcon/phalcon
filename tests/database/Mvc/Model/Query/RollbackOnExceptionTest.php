@@ -13,17 +13,12 @@ namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
 use PDOException;
 use Phalcon\Mvc\Model\Manager;
-use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\RollbackTestMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
+use Phalcon\Tests\Database\Mvc\RecordsTrait;
+use Phalcon\Tests\Support\Migrations\RollbackTestMigration;
+use Phalcon\Tests\Support\Traits\DiTrait;
 use RuntimeException;
 use Throwable;
-
-use function ob_end_clean;
-use function ob_get_contents;
-use function ob_start;
 
 final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
 {
@@ -73,22 +68,22 @@ final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
         }
 
         $modelsManager->executeQuery(
-            'DELETE FROM \\Phalcon\\Tests\\Models\\RbTestModel'
+            'DELETE FROM \\Phalcon\\Tests\\Support\\Models\\RbTestModel'
         );
         $modelsManager->executeQuery(
-            'INSERT INTO \\Phalcon\\Tests\\Models\\RbTestModel (id, name) VALUES (1, "abc")'
+            'INSERT INTO \\Phalcon\\Tests\\Support\\Models\\RbTestModel (id, name) VALUES (1, "abc")'
         );
         $modelsManager->executeQuery(
-            'INSERT INTO \\Phalcon\\Tests\\Models\\RbTestModel (id, name) VALUES (2, "abc")'
+            'INSERT INTO \\Phalcon\\Tests\\Support\\Models\\RbTestModel (id, name) VALUES (2, "abc")'
         );
         $modelsManager->executeQuery(
-            'INSERT INTO \\Phalcon\\Tests\\Models\\RbTestModel (id, name) VALUES (3, "abc")'
+            'INSERT INTO \\Phalcon\\Tests\\Support\\Models\\RbTestModel (id, name) VALUES (3, "abc")'
         );
         $modelsManager->executeQuery(
-            'INSERT INTO \\Phalcon\\Tests\\Models\\RbTestModel (id, name) VALUES (4, "abc")'
+            'INSERT INTO \\Phalcon\\Tests\\Support\\Models\\RbTestModel (id, name) VALUES (4, "abc")'
         );
         $modelsManager->executeQuery(
-            'INSERT INTO \\Phalcon\\Tests\\Models\\RbTestModel (id, name) VALUES (5, "abc")'
+            'INSERT INTO \\Phalcon\\Tests\\Support\\Models\\RbTestModel (id, name) VALUES (5, "abc")'
         );
 
         $messages = [];
@@ -123,7 +118,7 @@ final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
     private function update(int $id, string $name, Manager $modelsManager): string
     {
         try {
-            $query = 'UPDATE \\Phalcon\\Tests\\Models\\RbTestModel '
+            $query = 'UPDATE \\Phalcon\\Tests\\Support\\Models\\RbTestModel '
                 . 'SET name = :name: WHERE id = :id:';
             $modelsManager->executeQuery($query, ['id' => $id, 'name' => $name]);
             return "Update $name";

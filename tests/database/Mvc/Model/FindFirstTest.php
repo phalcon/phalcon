@@ -18,15 +18,15 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Migrations\StringPrimaryMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Customers;
-use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Models\InvoicesExtended;
-use Phalcon\Tests\Models\InvoicesMap;
-use Phalcon\Tests\Models\ModelWithStringPrimary;
+use Phalcon\Tests\Support\Migrations\CustomersMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\StringPrimaryMigration;
+use Phalcon\Tests\Support\Models\Customers;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\InvoicesExtended;
+use Phalcon\Tests\Support\Models\InvoicesMap;
+use Phalcon\Tests\Support\Models\ModelWithStringPrimary;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function uniqid;
 
@@ -41,24 +41,15 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     {
         return [
             [
-                [
-                    'uuid = ?0',
-                    'bind' => ['5741bfd7-6870-40b7-adf6-cbacb515b9a9'],
-                ],
+                "uuid = '5741bfd7-6870-40b7-adf6-cbacb515b9a9'",
                 true,
             ],
             [
-                [
-                    'uuid = ?0',
-                    'bind' => ['1c53079c-249e-0c63-af8d-52413bfa2a2b'],
-                ],
+                "uuid = '1c53079c-249e-0c63-af8d-52413bfa2a2b'",
                 true,
             ],
             [
-                [
-                    'uuid = ?0',
-                    'bind' => ['1c53079c-249e-0c63-af8d-52413bfa2a2c'],
-                ],
+                "uuid = '1c53079c-249e-0c63-af8d-52413bfa2a2c'",
                 false,
             ],
             [
@@ -382,7 +373,7 @@ final class FindFirstTest extends AbstractDatabaseTestCase
 
         $customer = $invoice->getRelated('customer');
 
-        $this->assertFalse($customer);
+        $this->assertNull($customer);
     }
 
     /**

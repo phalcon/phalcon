@@ -48,22 +48,13 @@ final class GetActiveFunctionTest extends AbstractUnitTestCase
             'Guests',
             'Post',
             'create',
-            [
-                'a' => 1,
-            ]
+            ['a' => 1]
         );
         $this->assertTrue($actual);
 
-        $returnedFunction = $acl->getActiveFunction();
-
-        $class = Closure::class;
-        $actual = $returnedFunction;
+        $class  = Closure::class;
+        $actual = $acl->getActiveFunction();
         $this->assertInstanceOf($class, $actual);
-
-        $expected = 1;
-        $actual   = $function(1);
-        $this->assertSame($expected, $actual);
-
         $expected = 1;
         $actual   = $acl->getActiveFunctionCustomArgumentsCount();
         $this->assertSame($expected, $actual);

@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Database\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Fixtures\Traits\RecordsTrait;
+use Phalcon\Tests\Database\Mvc\RecordsTrait;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class UnserializeTest extends AbstractDatabaseTestCase
 {

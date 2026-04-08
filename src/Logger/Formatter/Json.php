@@ -35,10 +35,17 @@ class Json extends AbstractFormatter
      * Json constructor.
      *
      * @param string $dateFormat
+     * @param string $interpolatorLeft
+     * @param string $interpolatorRight
      */
-    public function __construct(string $dateFormat = 'c')
-    {
-        $this->dateFormat = $dateFormat;
+    public function __construct(
+        string $dateFormat = 'c',
+        string $interpolatorLeft = '%',
+        string $interpolatorRight = '%'
+    ) {
+        $this->dateFormat        = $dateFormat;
+        $this->interpolatorLeft  = $interpolatorLeft;
+        $this->interpolatorRight = $interpolatorRight;
     }
 
     /**
@@ -56,10 +63,7 @@ class Json extends AbstractFormatter
             + JSON_HEX_QUOT
             + JSON_UNESCAPED_SLASHES
             + JSON_THROW_ON_ERROR;
-        $message = $this->toInterpolate(
-            $item->getMessage(),
-            $item->getContext()
-        );
+        $message = $this->getInterpolatedMessage($item, $item->getMessage());
 
         return json_encode(
             [

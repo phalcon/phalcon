@@ -20,12 +20,13 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class CollectionTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: collection()
+     *
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
@@ -34,23 +35,36 @@ final class CollectionTest extends AbstractUnitTestCase
     {
         $manager = new Manager(new TagFactory(new Escaper()));
 
-        $collection = $manager->collection('hangout1');
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertInstanceOf(Countable::class, $collection);
-        $this->assertInstanceOf(IteratorAggregate::class, $collection);
+        $class  = Collection::class;
+        $actual = $manager->collection('hangout1');
+        $this->assertInstanceOf($class, $actual);
+        $class = Countable::class;
+        $this->assertInstanceOf($class, $actual);
+        $class = IteratorAggregate::class;
+        $this->assertInstanceOf($class, $actual);
 
-        $collection = $manager->collection('hangout2');
-        $this->assertInstanceOf(Collection::class, $collection);
-        $this->assertInstanceOf(Countable::class, $collection);
-        $this->assertInstanceOf(IteratorAggregate::class, $collection);
+        $class  = Collection::class;
+        $actual = $manager->collection('hangout2');
+        $this->assertInstanceOf($class, $actual);
+        $class = Countable::class;
+        $this->assertInstanceOf($class, $actual);
+        $class = IteratorAggregate::class;
+        $this->assertInstanceOf($class, $actual);
 
         $collections = $manager->getCollections();
 
-        $this->assertCount(2, $collections);
+        $expected = 2;
+        $actual   = count($collections);
+        $this->assertSame($expected, $actual);
+
         foreach ($collections as $collection) {
-            $this->assertInstanceOf(Collection::class, $collection);
-            $this->assertInstanceOf(Countable::class, $collection);
-            $this->assertInstanceOf(IteratorAggregate::class, $collection);
+            $class  = Collection::class;
+            $actual = $collection;
+            $this->assertInstanceOf($class, $actual);
+            $class = Countable::class;
+            $this->assertInstanceOf($class, $actual);
+            $class = IteratorAggregate::class;
+            $this->assertInstanceOf($class, $actual);
         }
     }
 }

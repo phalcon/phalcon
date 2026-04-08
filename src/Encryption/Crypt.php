@@ -306,6 +306,10 @@ class Crypt implements CryptInterface
             throw new Exception("Cannot calculate Random Pseudo Bytes");
         }
 
+        if (false === $iv) {
+            throw new Exception("Cannot calculate Random Pseudo Bytes");
+        }
+
         $padded = $this->encryptGetPadded($mode, $input, $blockSize);
 
         /**

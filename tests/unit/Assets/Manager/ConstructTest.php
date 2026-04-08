@@ -18,12 +18,13 @@ use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: __construct()
+     *
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
@@ -32,7 +33,11 @@ final class ConstructTest extends AbstractUnitTestCase
     {
         $manager = new Manager(new TagFactory(new Escaper()));
 
-        $this->assertInstanceOf(Manager::class, $manager);
-        $this->assertInstanceOf(InjectionAwareInterface::class, $manager);
+        $class  = Manager::class;
+        $actual = $manager;
+        $this->assertInstanceOf($class, $actual);
+
+        $class = InjectionAwareInterface::class;
+        $this->assertInstanceOf($class, $actual);
     }
 }

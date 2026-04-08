@@ -74,8 +74,15 @@ class Mysql extends PdoAdapter
      *                          'charset' => 'utf8mb4'
      *                          ]
      */
-    public function __construct(array $descriptor)
+    /**
+     * @param array $descriptor
+     *
+     * @return void
+     */
+    public function connect(array $descriptor = []): void
     {
+        $descriptor = !empty($descriptor) ? $descriptor : $this->descriptor;
+
         /**
          * Returning numbers as numbers and not strings. If the user already
          * set this option in the descriptor["options"], we do not have to set
@@ -88,7 +95,7 @@ class Mysql extends PdoAdapter
             $descriptor["options"][PDO::ATTR_STRINGIFY_FETCHES] = false;
         }
 
-        parent::__construct($descriptor);
+        parent::connect($descriptor);
     }
 
     /**

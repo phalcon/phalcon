@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
-use Phalcon\Tests\Fixtures\Traits\ImagickTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function dataDir;
 use function outputDir;
+use function supportDir;
 
 final class MaskTest extends AbstractUnitTestCase
 {
@@ -33,13 +33,13 @@ final class MaskTest extends AbstractUnitTestCase
     public function testImageAdapterImagickMask(): void
     {
         $image = new Imagick(
-            dataDir('assets/images/example-jpg.jpg')
+            supportDir('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);
 
         $mask = new Imagick(
-            dataDir('assets/images/example-png.png')
+            supportDir('assets/images/example-png.png')
         );
 
         // Add a watermark to the bottom right of the image

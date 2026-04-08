@@ -370,7 +370,7 @@ interface ManagerInterface
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): ModelInterface | Simple | int | false;
+    ): ModelInterface | Simple | int | false | null;
 
     /**
      * Query all the relationships defined on a model
@@ -538,7 +538,7 @@ interface ManagerInterface
     ): void;
 
     /**
-     * Loads a model throwing an exception if it doesn't exist
+     * Loads a model throwing an exception if it does not exist
      *
      * @param string $modelName
      *

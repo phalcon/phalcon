@@ -13,22 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di\Injectable;
 
-use Exception;
 use Phalcon\Di\Di;
-use Phalcon\Tests\Fixtures\Di\InjectableComponent;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Di\InjectableComponent;
 use stdClass;
 
 use function spl_object_hash;
 
-class UnderscoreGetTest extends AbstractUnitTestCase
+final class UnderscoreGetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Injectable :: __get() - exception
      *
-     * @return void
+     * The Zephir implementation calls trigger_error() (E_USER_NOTICE) for
+     * undefined properties, not throw an exception.
      *
-     * @throws Exception
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-09-09
@@ -48,11 +48,16 @@ class UnderscoreGetTest extends AbstractUnitTestCase
 
         $expected = 'Access to undefined property unknown';
         $actual   = '';
-        try {
-            $result = $component->unknown;
-        } catch (Exception $ex) {
-            $actual = $ex->getMessage();
-        }
+        set_error_handler(
+            function (int $errno, string $errstr) use (&$actual): bool {
+                $actual = $errstr;
+
+                return true;
+            },
+            E_USER_NOTICE
+        );
+        $result = $component->unknown;
+        restore_error_handler();
         $this->assertStringContainsString($expected, $actual);
     }
 

@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\Test;
 
 final class InterpolatorTest extends AbstractUnitTestCase
 {
@@ -30,33 +29,19 @@ final class InterpolatorTest extends AbstractUnitTestCase
      */
     public function testTranslateInterpolatorIndexedArrayInterpolator(): void
     {
-        $language = [
-            'Hello!'          => 'Привет!',
-            'Hello %s %s %s!' => 'Привет, %s %s %s!',
-        ];
 
-        $params = [
-            'content'             => $language,
-            'defaultInterpolator' => 'indexedArray',
-        ];
+        $language = ['Hello!'          => 'Привет!',
+                     'Hello %s %s %s!' => 'Привет, %s %s %s!',];
 
-        $translator = new NativeArray(
-            new InterpolatorFactory(),
-            $params
-        );
+        $params = ['content'             => $language,
+                   'defaultInterpolator' => 'indexedArray',];
 
-        $actual = $translator->_(
-            'Hello %s %s %s!',
-            [
-                'John',
-                'D.',
-                'Doe',
-            ]
-        );
+        $translator = new NativeArray(new InterpolatorFactory(), $params);
 
-        $this->assertSame(
-            'Привет, John D. Doe!',
-            $actual
-        );
+        $actual = $translator->_('Hello %s %s %s!', ['John',
+                                                     'D.',
+                                                     'Doe',]);
+
+        $this->assertSame('Привет, John D. Doe!', $actual);
     }
 }

@@ -14,21 +14,28 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Config\Adapter\Yaml;
 
 use Phalcon\Config\Adapter\Yaml;
+use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\Fixtures\Config\Adapter\YamlExtensionLoadedFixture;
-use Phalcon\Tests\Fixtures\Config\Adapter\YamlParseFileFixture;
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
+use Phalcon\Tests\Unit\Config\Fake\Adapter\FakeYamlExtensionLoaded;
+use Phalcon\Tests\Unit\Config\Fake\Adapter\FakeYamlParseFile;
 
 use function basename;
-use function dataDir;
 use function hash;
-
-use const PATH_DATA;
+use function supportDir;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->checkExtensionIsLoaded('yaml');
+    }
 
     /**
      * Tests Phalcon\Config\Adapter\Yaml :: __construct() - callbacks
@@ -38,19 +45,21 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testConfigAdapterYamlConstructCallbacks(): void
     {
+        $baseDir = supportDir();
+
         $config = new Yaml(
-            dataDir('assets/config/callbacks.yml'),
+            supportDir('assets/config/callbacks.yml'),
             [
                 '!decrypt' => function ($value) {
                     return hash('sha256', $value);
                 },
-                '!approot' => function ($value) {
-                    return PATH_DATA . $value;
+                '!approot' => function ($value) use ($baseDir) {
+                    return $baseDir . $value;
                 },
             ]
         );
 
-        $expected = PATH_DATA . '/app/controllers/';
+        $expected = $baseDir . '/app/controllers/';
         $actual   = $config->application->controllersDir;
         $this->assertSame($expected, $actual);
 
@@ -60,36 +69,50 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\Adapter\Yaml :: __construct() - exceptions
+     * Tests Phalcon\Config\Adapter\Yaml :: __construct() - exception - extension not loaded
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-21
      */
     public function testConfigAdapterYamlConstructExceptionLoaded(): void
     {
-        $filePath = dataDir('assets/config/callbacks.yml');
+        $filePath = supportDir('assets/config/callbacks.yml');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Yaml extension is not loaded');
 
-        (new YamlExtensionLoadedFixture($filePath));
+        (new FakeYamlExtensionLoaded($filePath));
     }
 
     /**
-     * Tests Phalcon\Config\Adapter\Yaml :: __construct() - exceptions
+     * Tests Phalcon\Config\Adapter\Yaml :: __construct() - exception - parse file fails
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-21
      */
     public function testConfigAdapterYamlConstructExceptionParseFile(): void
     {
-        $filePath = dataDir('assets/config/callbacks.yml');
+        $filePath = supportDir('assets/config/callbacks.yml');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             'Configuration file ' . basename($filePath) . ' can\'t be loaded'
         );
 
-        (new YamlParseFileFixture($filePath));
+        (new FakeYamlParseFile($filePath));
+    }
+
+    /**
+     * Tests Phalcon\Config\Adapter\Yaml :: __construct() - empty yaml
+     *
+     * @author ucando.wen <ucando.wen@qq.com>
+     * @since  2025-06-22
+     */
+    public function testConfigAdapterYamlConstructHandlesEmptyYaml(): void
+    {
+        $config = new Yaml(supportDir('assets/config/empty.yml'));
+
+        $this->assertInstanceOf(Config::class, $config);
+        $this->assertEquals([], $config->toArray());
     }
 }

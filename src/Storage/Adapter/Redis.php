@@ -25,6 +25,8 @@ use function defined;
 use function is_bool;
 use function is_int;
 use function mb_strtolower;
+use function strlen;
+use function substr;
 
 /**
  * Redis adapter
@@ -58,9 +60,20 @@ class Redis extends AbstractAdapter
      */
     public function clear(): bool
     {
-        return $this->getAdapter()
-                    ->flushDB()
-        ;
+        $keys = $this->getKeys();
+
+        if (empty($keys)) {
+            return true;
+        }
+
+        $prefixLength = strlen($this->prefix);
+        $strippedKeys = [];
+
+        foreach ($keys as $key) {
+            $strippedKeys[] = substr($key, $prefixLength);
+        }
+
+        return false !== $this->getAdapter()->del($strippedKeys);
     }
 
     /**
@@ -156,6 +169,23 @@ class Redis extends AbstractAdapter
     protected function doDelete(string $key): bool
     {
         return (bool)$this->getAdapter()->unlink($key);
+    }
+
+    /**
+     * Deletes multiple keys from Redis using a single unlink call
+     *
+     * @param array $keys
+     *
+     * @return bool
+     * @throws RedisException
+     * @throws StorageException
+     */
+    protected function doDeleteMultiple(array $keys): bool
+    {
+        $result = $this->getAdapter()->unlink($keys);
+
+        // unlink returns the number of keys deleted; all must be deleted
+        return is_int($result) && $result === count($keys);
     }
 
     /**
@@ -295,13 +325,13 @@ class Redis extends AbstractAdapter
                 $connectionOptions['stream'] = $ssl;
             }
 
-            if (true === $options["persistent"]) {
+            if (true !== $options["persistent"]) {
                 $method    = "connect";
                 $parameter = null;
             } else {
                 $method       = "pconnect";
                 $persistentId = $options["persistentId"];
-                $parameter    = !empty($persistentId) ?: "persistentId" . $options["index"];
+                $parameter    = !empty($persistentId) ? $persistentId : "persistentId" . $options["index"];
             }
 
             $result = $connection->$method(

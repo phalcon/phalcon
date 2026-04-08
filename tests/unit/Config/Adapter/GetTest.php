@@ -13,24 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Adapter;
 
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class GetTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config\Adapter\Grouped :: get()
+     * Tests Phalcon\Config\Adapter :: get()
      *
      * @dataProvider providerConfigAdapters
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
      */
-    public function testConfigAdapterGet(
-        string $adapter
-    ): void {
+    public function testConfigAdapterGet(string $adapter): void
+    {
         $config = $this->getConfig($adapter);
 
         $expected = 'memory';

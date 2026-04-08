@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Split;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class SplitTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,7 @@ final class SplitTest extends AbstractUnitTestCase
      */
     public function testSupportHelperArrSplit(): void
     {
-        $object     = new Split();
+        $object = new Split();
         $collection = [
             1 => 'Phalcon',
             3 => 'Framework',
@@ -39,7 +38,7 @@ final class SplitTest extends AbstractUnitTestCase
             [1, 3],
             ['Phalcon', 'Framework'],
         ];
-        $actual   = $object($collection);
+        $actual = $object($collection);
         $this->assertSame($expected, $actual);
     }
 }

@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateCsvTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateCsvTrait;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\Test;
 
 final class OffsetUnsetTest extends AbstractUnitTestCase
 {
@@ -34,10 +33,9 @@ final class OffsetUnsetTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterCsvOffsetUnset(): void
     {
+
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Translate is an immutable ArrayAccess object'
-        );
+        $this->expectExceptionMessage('Translate is an immutable ArrayAccess object');
 
         $language   = $this->getCsvConfig()['en'];
         $translator = new Csv(new InterpolatorFactory(), $language);

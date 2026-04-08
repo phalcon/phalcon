@@ -47,6 +47,7 @@ final class GetDescriptionTest extends AbstractUnitTestCase
     {
         $component = new Component('Customers');
 
-        $this->assertEmpty($component->getDescription());
+        $actual = $component->getDescription();
+        $this->assertEmpty($actual);
     }
 }

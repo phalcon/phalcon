@@ -45,6 +45,7 @@ use Phalcon\Session\Bag;
 use Phalcon\Session\BagInterface;
 use Phalcon\Session\ManagerInterface as SessionManager;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Settings;
 use stdClass;
 
 //use Phalcon\Annotations\Adapter;
@@ -79,6 +80,7 @@ use stdClass;
  * @property Router|RouterInterface                        $router
  * @property Security                                      $security
  * @property SessionManager                                $session
+ * @property Settings                                      $settings
  * @property Url|UrlInterface                              $url
  *
  * // * @property Manager|ManagerInterface $modelsManager

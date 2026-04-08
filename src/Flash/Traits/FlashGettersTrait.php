@@ -103,6 +103,16 @@ trait FlashGettersTrait
     }
 
     /**
+     * Returns the flag that defines whether to automatically use HTML or not
+     *
+     * @return bool
+     */
+    public function getAutomaticHtml(): bool
+    {
+        return $this->automaticHtml;
+    }
+
+    /**
      * Returns the array of the CSS classes for formatting messages. The key is
      * the type of message and the value is the CSS class
      *

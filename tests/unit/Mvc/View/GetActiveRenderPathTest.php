@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\View;
-use Phalcon\Tests\Fixtures\Mvc\View\AfterRenderListener;
+use Phalcon\Tests\Support\Mvc\View\AfterRenderListener;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 use function dataDir;

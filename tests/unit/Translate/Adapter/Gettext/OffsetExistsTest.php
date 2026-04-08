@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-use PHPUnit\Framework\Attributes\Test;
 
-#[RequiresPhpExtension('gettext')]
 final class OffsetExistsTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -35,6 +32,7 @@ final class OffsetExistsTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextOffsetExists(): void
     {
+
         $params     = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $params);
 

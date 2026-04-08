@@ -21,12 +21,13 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class CollectionAssetsByTypeTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Assets\Manager :: collectionAssetsByType()
+     *
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-19
@@ -43,11 +44,19 @@ final class CollectionAssetsByTypeTest extends AbstractUnitTestCase
         ];
 
         $filtered = $manager->collectionAssetsByType($assets, 'css');
-        $this->assertCount(3, $filtered);
+
+        $expected = 3;
+        $actual   = count($filtered);
+        $this->assertSame($expected, $actual);
+
         foreach ($filtered as $asset) {
-            $this->assertInstanceOf(Css::class, $asset);
-            $this->assertInstanceOf(Asset::class, $asset);
-            $this->assertInstanceOf(AssetInterface::class, $asset);
+            $class  = Css::class;
+            $actual = $asset;
+            $this->assertInstanceOf($class, $actual);
+            $class = Asset::class;
+            $this->assertInstanceOf($class, $actual);
+            $class = AssetInterface::class;
+            $this->assertInstanceOf($class, $actual);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use LoaderEvent;
 use Phalcon\Autoload\Loader;
 use Phalcon\Events\Manager;
-use Phalcon\Tests\Fixtures\Traits\LoaderTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 use function array_pop;
 use function spl_autoload_functions;
@@ -47,17 +47,17 @@ final class RegisterUnregisterTest extends AbstractUnitTestCase
         $loader
             ->setDirectories(
                 [
-                    dataDir('fixtures/Loader/Example/Events/'),
+                    supportDir('assets/Loader/Example/Events/'),
                 ]
             )
             ->setClasses(
                 [
-                    'OtherClass' => dataDir('fixtures/Loader/Example/Events/Other/'),
+                    'OtherClass' => supportDir('assets/Loader/Example/Events/Other/'),
                 ]
             )
             ->setNamespaces(
                 [
-                    'Other\OtherClass' => dataDir('fixtures/Loader/Example/Events/Other/'),
+                    'Other\OtherClass' => supportDir('assets/Loader/Example/Events/Other/'),
                 ]
             )
         ;
@@ -86,16 +86,37 @@ final class RegisterUnregisterTest extends AbstractUnitTestCase
                 0 => null,
             ],
             'beforeCheckPath'  => [
-                0 => dataDir('fixtures/Loader/Example/Events/LoaderEvent.php'),
+                0 => supportDir('assets/Loader/Example/Events/LoaderEvent.php'),
             ],
             'pathFound'        => [
-                0 => dataDir('fixtures/Loader/Example/Events/LoaderEvent.php'),
+                0 => supportDir('assets/Loader/Example/Events/LoaderEvent.php'),
             ],
         ];
 
         $this->assertSame($expected, $trace);
 
         $loader->unregister();
+    }
+
+    /**
+     * Tests Phalcon\Autoload\Loader :: isRegistered()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAutoloaderLoaderIsRegistered(): void
+    {
+        $loader = new Loader();
+
+        $this->assertFalse($loader->isRegistered());
+
+        $loader->register();
+        $this->assertTrue($loader->isRegistered());
+
+        $loader->unregister();
+        $this->assertFalse($loader->isRegistered());
     }
 
     /**
@@ -115,7 +136,10 @@ final class RegisterUnregisterTest extends AbstractUnitTestCase
         $item      = array_pop($functions);
 
         $this->assertSame($loader, $item[0]);
-        $this->assertSame('autoload', $item[1]);
+
+        $expected = 'autoload';
+        $actual   = $item[1];
+        $this->assertSame($expected, $actual);
 
         $loader->unregister();
     }

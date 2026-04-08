@@ -18,7 +18,7 @@ use Phalcon\Image\Exception;
 use Phalcon\Image\ImageFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-use function dataDir;
+use function supportDir;
 use function uniqid;
 
 final class NewInstanceTest extends AbstractUnitTestCase
@@ -34,7 +34,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
         $this->checkExtensionIsLoaded('imagick');
 
         $factory = new ImageFactory();
-        $file    = dataDir('assets/images/example-jpg.jpg');
+        $file    = supportDir('assets/images/example-jpg.jpg');
         $file    = str_replace("/", DIRECTORY_SEPARATOR, $file);
         $name    = 'imagick';
 

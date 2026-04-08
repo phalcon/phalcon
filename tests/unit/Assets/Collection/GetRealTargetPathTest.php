@@ -14,11 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
-use Phalcon\Tests\Fixtures\Assets\CollectionFileExistsFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Tests\Unit\Assets\Fake\FakeCollectionFileExists;
 
-use function dataDir;
+use function supportDir;
 
 final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
@@ -34,7 +33,7 @@ final class GetRealTargetPathTest extends AbstractUnitTestCase
     {
         $collection        = new Collection();
         $targetPath        = '/assets';
-        $basePath          = dataDir('assets');
+        $basePath          = supportDir('assets');
         $constructRealPath = realpath($basePath . $targetPath);
 
         $collection->setTargetPath($targetPath);
@@ -58,9 +57,9 @@ final class GetRealTargetPathTest extends AbstractUnitTestCase
             $this->markTestSkipped('Need to fix Windows new lines...');
         }
 
-        $collection        = new CollectionFileExistsFixture();
+        $collection        = new FakeCollectionFileExists();
         $targetPath        = '/assets';
-        $basePath          = dataDir('assets');
+        $basePath          = supportDir('assets');
         $constructRealPath = realpath($basePath . $targetPath);
 
         $collection->setTargetPath($targetPath);

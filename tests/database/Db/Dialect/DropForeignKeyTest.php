@@ -41,10 +41,10 @@ final class DropForeignKeyTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: dropColumn
+     * Tests Phalcon\Db\Dialect :: dropForeignKey - sqlite throws exception
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-20
      *
      * @group sqlite
      */

@@ -1041,7 +1041,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                         continue;
                     }
 
-                    if (!str_contains($orderItem, " ")) {
+                    if (str_contains($orderItem, " ")) {
                         $itemExplode  = explode(" ", $orderItem);
                         $orderItems[] = $this->autoescape($itemExplode[0]) . " " . $itemExplode[1];
 

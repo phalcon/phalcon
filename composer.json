@@ -45,24 +45,14 @@
   "autoload-dev": {
     "psr-4": {
       "Phalcon\\Tests\\Benchmarks\\": "tests/benchmarks/",
-      "Phalcon\\Tests\\Database\\": "tests/database/",
       "Phalcon\\Tests\\": "tests/",
+      "Phalcon\\Tests\\Support\\": "tests/support/",
       "Phalcon\\Tests\\Unit\\": "tests/unit/",
-      "Phalcon\\Tests\\Controllers\\": "tests/_data/fixtures/controllers/",
-      "Phalcon\\Tests\\Fixtures\\": "tests/_data/fixtures/",
-      "Phalcon\\Tests\\Fixtures\\Listener\\": "tests/_data/fixtures/Listener/",
-      "Phalcon\\Tests\\Models\\": "tests/_data/fixtures/models/",
-      "Phalcon\\Tests\\Modules\\Backend\\": "tests/_data/fixtures/modules/backend/",
-      "Phalcon\\Tests\\Modules\\Backend\\Controllers\\": "tests/_data/fixtures/modules/backend/controllers/",
-      "Phalcon\\Tests\\Modules\\Backend\\Tasks\\": "tests/_data/fixtures/modules/backend/tasks/",
-      "Phalcon\\Tests\\Modules\\Frontend\\": "tests/_data/fixtures/modules/frontend/",
-      "Phalcon\\Tests\\Modules\\Frontend\\Controllers\\": "tests/_data/fixtures/modules/frontend/controllers/"
-    }
-  },
-  "config": {
-    "optimize-autoloader": true,
-    "preferred-install": "dist",
-    "sort-packages": true
+      "Phalcon\\Tests\\Database\\": "tests/database/"
+    },
+    "exclude-from-classmap": [
+      "tests/support/assets/"
+    ]
   },
   "require-dev": {
     "ext-gettext": "*",

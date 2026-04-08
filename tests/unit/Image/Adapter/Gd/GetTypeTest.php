@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 use const IMAGETYPE_GIF;
 use const IMAGETYPE_JPEG;
@@ -35,27 +35,27 @@ final class GetTypeTest extends AbstractUnitTestCase
     {
         return [
             [
-                dataDir('assets/images/example-gif.gif'),
+                supportDir('assets/images/example-gif.gif'),
                 IMAGETYPE_GIF,
             ],
             [
-                dataDir('assets/images/example-jpg.jpg'),
+                supportDir('assets/images/example-jpg.jpg'),
                 IMAGETYPE_JPEG,
             ],
             [
-                dataDir('assets/images/example-png.png'),
+                supportDir('assets/images/example-png.png'),
                 IMAGETYPE_PNG,
             ],
             [
-                dataDir('assets/images/example-wbmp.wbmp'),
+                supportDir('assets/images/example-wbmp.wbmp'),
                 IMAGETYPE_WBMP,
             ],
             [
-                dataDir('assets/images/example-webp.webp'),
+                supportDir('assets/images/example-webp.webp'),
                 IMAGETYPE_WEBP,
             ],
             [
-                dataDir('assets/images/example-xbm.xbm'),
+                supportDir('assets/images/example-xbm.xbm'),
                 IMAGETYPE_XBM,
             ],
         ];

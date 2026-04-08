@@ -35,7 +35,6 @@ final class GetActiveRoleTest extends AbstractUnitTestCase
         $acl->addComponent('Login', ['help', 'index']);
         $acl->allow('Guests', 'Login', '*');
 
-
         $actual = $acl->isAllowed('Guests', 'Login', 'index');
         $this->assertTrue($actual);
 

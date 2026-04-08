@@ -13,8 +13,8 @@ namespace Phalcon\Tests\Unit\Forms\Form;
 
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class IteratorTest extends AbstractUnitTestCase
 {

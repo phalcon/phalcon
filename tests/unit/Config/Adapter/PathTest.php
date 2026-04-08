@@ -13,24 +13,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Adapter;
 
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 final class PathTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 
     /**
-     * Tests Phalcon\Config\Adapter\Grouped :: path()
+     * Tests Phalcon\Config\Adapter :: path()
      *
      * @dataProvider providerConfigAdaptersNotGrouped
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
      */
-    public function testConfigAdapterPath(
-        string $adapter
-    ): void {
+    public function testConfigAdapterPath(string $adapter): void
+    {
         $config = $this->getConfig($adapter);
 
         $expected = 1;
@@ -43,16 +42,15 @@ final class PathTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\Adapter\Grouped :: path() - default
+     * Tests Phalcon\Config\Adapter :: path() - default
      *
      * @dataProvider providerConfigAdapters
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2018-11-13
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
      */
-    public function testConfigAdapterPathDefault(
-        string $adapter
-    ): void {
+    public function testConfigAdapterPathDefault(string $adapter): void
+    {
         $config = $this->getConfig($adapter);
 
         $expected = 'Unknown';

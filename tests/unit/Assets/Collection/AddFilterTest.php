@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Collection;
 use Phalcon\Assets\Filters\None;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class AddFilterTest extends AbstractUnitTestCase
 {
@@ -37,9 +36,13 @@ final class AddFilterTest extends AbstractUnitTestCase
         $filters = $collection->getFilters();
 
         foreach ($filters as $filter) {
-            $this->assertInstanceOf(None::class, $filter);
+            $class  = None::class;
+            $actual = $filter;
+            $this->assertInstanceOf($class, $actual);
         }
 
-        $this->assertCount(2, $filters);
+        $expected = 2;
+        $actual   = count($filters);
+        $this->assertSame($expected, $actual);
     }
 }

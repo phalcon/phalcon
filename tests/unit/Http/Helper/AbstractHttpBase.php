@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Http\Helper;
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
-use Phalcon\Tests\Fixtures\Http\PhpStream;
-use Phalcon\Tests\Fixtures\Page\Http;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Page\Http;
+use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Unit\Http\Fake\FakePhpStream;
 
 use function header_remove;
 use function stream_wrapper_register;
@@ -129,7 +129,7 @@ abstract class AbstractHttpBase extends AbstractUnitTestCase
     protected function registerStream(): void
     {
         stream_wrapper_unregister(Http::STREAM_NAME);
-        stream_wrapper_register(Http::STREAM_NAME, PhpStream::class);
+        stream_wrapper_register(Http::STREAM_NAME, FakePhpStream::class);
     }
 
     /**

@@ -28,7 +28,7 @@ final class SetDefaultActionTest extends AbstractUnitTestCase
     public function testCliDispatcherSetDefaultAction(): void
     {
         $dispatcher = new Dispatcher();
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setDI(new DiFactoryDefault());
 
         $defaultAction = "noop";

@@ -19,7 +19,7 @@ use Phalcon\Di\ServiceInterface;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class SetParameterTest extends AbstractUnitTestCase
+final class SetParameterTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Service :: setParameter()

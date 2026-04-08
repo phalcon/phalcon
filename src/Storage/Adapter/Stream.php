@@ -102,16 +102,18 @@ class Stream extends AbstractAdapter
      */
     public function clear(): bool
     {
-        $result   = true;
-        $iterator = $this->getIterator($this->storageDir);
+        $result    = true;
+        $directory = $this->getDir();
+
+        if (true !== $this->phpFileExists($directory)) {
+            return $result;
+        }
+
+        $iterator = $this->getIterator($directory);
 
         foreach ($iterator as $file) {
-            if (
-                true === $file->isFile() &&
-                true !== $this->phpUnlink($file->getPathName())
-            ) {
+            if (true === $file->isFile() && true !== $this->phpUnlink($file->getPathName())) {
                 $result = false;
-                break;
             }
         }
 

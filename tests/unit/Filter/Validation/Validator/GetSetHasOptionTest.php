@@ -34,15 +34,12 @@ use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation\Validator\Uniqueness;
 use Phalcon\Filter\Validation\Validator\Url;
 use Phalcon\Filter\Validation\ValidatorInterface;
-use Phalcon\Tests\Fixtures\Traits\ValidationTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 use function uniqid;
 
 final class GetSetHasOptionTest extends AbstractUnitTestCase
 {
-    use ValidationTrait;
-
     public static function getExamples(): array
     {
         return [
@@ -136,7 +133,7 @@ final class GetSetHasOptionTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Filter\Validation\Validator :: getOption()/hasOption()/setOption()
      *
-     * @dataProvider getClasses
+     * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-09-20

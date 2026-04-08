@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class GetSetParameterTest extends AbstractUnitTestCase
 {
@@ -30,7 +30,7 @@ final class GetSetParameterTest extends AbstractUnitTestCase
         $dispatcher->setDI($this->container);
 
         // Test $this->dispatcher->getParam()
-        $dispatcher->setNamespaceName('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setNamespaceName('Phalcon\Tests\Support\Tasks');
         $dispatcher->setTaskName('params');
         $dispatcher->setActionName('param');
 

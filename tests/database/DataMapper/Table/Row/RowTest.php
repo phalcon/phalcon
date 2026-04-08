@@ -18,7 +18,7 @@ use Phalcon\DataMapper\Table\Exception\ImmutableAfterDeletedException;
 use Phalcon\DataMapper\Table\Exception\InvalidOptionException;
 use Phalcon\DataMapper\Table\Exception\PropertyDoesNotExistException;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesRow;
+use Phalcon\Tests\Support\DataMapper\Table\Invoices\InvoicesRow;
 
 use function uniqid;
 

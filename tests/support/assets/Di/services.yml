@@ -1,0 +1,12 @@
+unit-test:
+  className: \UnitTester
+
+config:
+  className: \Phalcon\Config\Config
+  shared: true
+
+component:
+  className: Phalcon\Tests\Fixtures\Di\ServiceComponent
+  arguments:
+    - type: service
+      name: config

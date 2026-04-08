@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Prefix;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class PrefixTest extends AbstractUnitTestCase
 {
@@ -32,7 +31,7 @@ final class PrefixTest extends AbstractUnitTestCase
         $object = new Prefix();
 
         $expected = 'ClassConstants';
-        $actual   = $object('Constants', 'Class');
+        $actual = $object('Constants', 'Class');
         $this->assertSame($expected, $actual);
     }
 }

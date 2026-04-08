@@ -14,7 +14,7 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 use BadMethodCallException;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Pdo\ConnectionFixture;
+use Phalcon\Tests\Support\DataMapper\Pdo\ConnectionFixture;
 
 final class UnderscoreCallTest extends AbstractDatabaseTestCase
 {

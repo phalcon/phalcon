@@ -17,8 +17,8 @@ use Phalcon\Di\FactoryDefault;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Micro;
-use Phalcon\Tests\Fixtures\Micro\MyMiddleware;
-use Phalcon\Tests\Fixtures\Micro\MyMiddlewareStop;
+use Phalcon\Tests\Support\Micro\MyMiddleware;
+use Phalcon\Tests\Support\Micro\MyMiddlewareStop;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class AfterBindingTest extends AbstractUnitTestCase

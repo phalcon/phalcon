@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as ManagerAssets;
-use Phalcon\Db\Event\Factory;
+use Phalcon\Db\Event\Factory as EventFactory;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
@@ -31,14 +31,16 @@ use Phalcon\Http\Response;
 use Phalcon\Http\Response\Cookies;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Mvc\Model\MetaData\Adapter\Memory;
+use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
+use Phalcon\Support\Settings;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class ConstructTest extends AbstractUnitTestCase
+final class ConstructTest extends AbstractUnitTestCase
 {
     /**
      * @return string[][]
@@ -87,12 +89,20 @@ class ConstructTest extends AbstractUnitTestCase
                 Session::class,
             ],
             [
+                'modelsEventFactory',
+                EventFactory::class,
+            ],
+            [
                 'filter',
                 Filter::class,
             ],
             [
                 'helper',
                 HelperFactory::class,
+            ],
+            [
+                'settings',
+                Settings::class,
             ],
             [
                 'modelsManager',
@@ -119,6 +129,10 @@ class ConstructTest extends AbstractUnitTestCase
                 Security::class,
             ],
             [
+                'storageSerializer',
+                SerializerFactory::class,
+            ],
+            [
                 'tag',
                 TagFactory::class,
             ],
@@ -132,7 +146,7 @@ class ConstructTest extends AbstractUnitTestCase
             ],
             [
                 'modelsEventFactory',
-                Factory::class,
+                EventFactory::class,
             ]
         ];
     }
@@ -149,7 +163,7 @@ class ConstructTest extends AbstractUnitTestCase
     {
         $container = new FactoryDefault();
 
-        $expected = 23;
+        $expected = 24;
         $actual   = count($container->getServices());
         $this->assertSame($expected, $actual);
     }
@@ -157,10 +171,10 @@ class ConstructTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Di\FactoryDefault :: __construct() - Check services
      *
+     * @dataProvider getServices
+     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2018-11-13
-     *
-     * @dataProvider getServices
      */
     public function testDiFactoryDefaultConstructServices(
         string $service,

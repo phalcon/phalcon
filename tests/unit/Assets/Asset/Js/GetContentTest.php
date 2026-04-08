@@ -18,7 +18,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
-use function dataDir;
+use function supportDir;
 use function file_get_contents;
 
 final class GetContentTest extends AbstractUnitTestCase
@@ -39,8 +39,8 @@ final class GetContentTest extends AbstractUnitTestCase
 
         $asset = new Js('assets/assets/signup.js');
 
-        $expected = file_get_contents(dataDir('assets/assets/signup.js'));
-        $actual   = $asset->getContent(dataDir());
+        $expected = file_get_contents(supportDir('assets/assets/signup.js'));
+        $actual   = $asset->getContent(supportDir());
         $this->assertSame($expected, $actual);
     }
 }

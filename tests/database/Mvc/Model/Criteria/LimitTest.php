@@ -17,8 +17,8 @@ use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class LimitTest extends AbstractDatabaseTestCase
 {
@@ -60,8 +60,8 @@ final class LimitTest extends AbstractDatabaseTestCase
 
         $this->assertInstanceOf(Builder::class, $builder);
 
-        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-            . 'FROM [Phalcon\Tests\Models\Invoices] '
+        $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
             . 'LIMIT :APL0:';
 
         $this->assertEquals($expected, $builder->getPhql());
@@ -90,8 +90,8 @@ final class LimitTest extends AbstractDatabaseTestCase
 
         $this->assertInstanceOf(Builder::class, $builder);
 
-        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-            . 'FROM [Phalcon\Tests\Models\Invoices] '
+        $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
             . 'LIMIT :APL0: OFFSET :APL1:';
 
         $this->assertEquals($expected, $builder->getPhql());
@@ -122,8 +122,8 @@ final class LimitTest extends AbstractDatabaseTestCase
 
         $this->assertInstanceOf(Builder::class, $builder);
 
-        $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-            . 'FROM [Phalcon\Tests\Models\Invoices]';
+        $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+            . 'FROM [Phalcon\Tests\Support\Models\Invoices]';
 
         $this->assertEquals($expected, $builder->getPhql());
         $this->assertEquals(null, $criteria->getLimit());

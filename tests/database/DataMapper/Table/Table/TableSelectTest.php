@@ -16,9 +16,9 @@ namespace Phalcon\Tests\Database\DataMapper\Table\Table;
 use Phalcon\DataMapper\Table\AbstractTableSelect;
 use Phalcon\DataMapper\Table\TableLocator;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesRow;
-use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesTable;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\DataMapper\Table\Invoices\InvoicesRow;
+use Phalcon\Tests\Support\DataMapper\Table\Invoices\InvoicesTable;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 
 use function uniqid;
 

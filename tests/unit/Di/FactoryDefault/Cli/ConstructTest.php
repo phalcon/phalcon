@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Phalcon\Di\Exception;
 use Phalcon\Di\FactoryDefault\Cli;
-use Phalcon\Tests\Fixtures\Traits\CliTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Di\Fake\CliTrait;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -53,18 +53,18 @@ final class ConstructTest extends AbstractUnitTestCase
      * @since        2019-09-09
      */
     public function testDiFactoryDefaultCliConstructServices(
-        string $class,
-        string $service
+        string $service,
+        string $class
     ): void {
         $container = new Cli();
 
-        if ('sessionBag' === $class) {
+        if ('sessionBag' === $service) {
             $params = ['someName'];
         } else {
             $params = null;
         }
 
-        $actual = $container->get($class, $params);
-        $this->assertInstanceOf($service, $actual);
+        $actual = $container->get($service, $params);
+        $this->assertInstanceOf($class, $actual);
     }
 }

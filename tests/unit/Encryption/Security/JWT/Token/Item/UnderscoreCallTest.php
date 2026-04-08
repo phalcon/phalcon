@@ -28,7 +28,12 @@ final class UnderscoreCallTest extends AbstractUnitTestCase
     {
         $item = new Item(['sub' => 'subject'], 'encoded-string-here');
 
-        $this->assertSame('encoded-string-here', $item->getEncoded());
-        $this->assertSame(['sub' => 'subject'], $item->getPayload());
+        $expected = 'encoded-string-here';
+        $actual   = $item->getEncoded();
+        $this->assertSame($expected, $actual);
+
+        $expected = ['sub' => 'subject'];
+        $actual   = $item->getPayload();
+        $this->assertSame($expected, $actual);
     }
 }

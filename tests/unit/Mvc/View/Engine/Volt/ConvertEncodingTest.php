@@ -32,17 +32,17 @@ class ConvertEncodingTest extends AbstractUnitTestCase
         $view   = new View();
         $engine = new Volt($view);
 
-        $text     = 'Schlüssel';
+        $text     = 'Schl' . chr(252) . 'ssel';
         $from     = 'latin1';
         $to       = 'utf8';
-        $expected = 'Schl' . chr(252) . 'ssel';
+        $expected = 'Schlüssel';
         $actual   = $engine->convertEncoding($text, $from, $to);
         $this->assertEquals($expected, $actual);
 
-        $text     = 'Schl' . chr(252) . 'ssel';
+        $text     = 'Schlüssel';
         $from     = 'utf8';
         $to       = 'latin1';
-        $expected = 'Schl' . chr(195) . chr(188) . 'ssel';
+        $expected = 'Schl' . chr(252) . 'ssel';
         $actual   = $engine->convertEncoding($text, $from, $to);
         $this->assertEquals($expected, $actual);
 

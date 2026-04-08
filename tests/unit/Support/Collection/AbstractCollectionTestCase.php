@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 use function array_keys;
@@ -36,7 +35,7 @@ abstract class AbstractCollectionTestCase extends AbstractUnitTestCase
      */
     public static function getExamples(): array
     {
-        $sample      = new stdClass();
+        $sample = new stdClass();
         $sample->one = 'two';
 
         return [
@@ -163,19 +162,6 @@ abstract class AbstractCollectionTestCase extends AbstractUnitTestCase
         ];
     }
 
-
-    /**
-     * @return string[]
-     */
-    protected function getData(): array
-    {
-        return [
-            'one'   => 'two',
-            'three' => 'four',
-            'five'  => 'six',
-        ];
-    }
-
     /**
      * @return string[]
      */
@@ -196,6 +182,18 @@ abstract class AbstractCollectionTestCase extends AbstractUnitTestCase
     protected function getDataKeys(): array
     {
         return array_keys($this->getData());
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getData(): array
+    {
+        return [
+            'one'   => 'two',
+            'three' => 'four',
+            'five'  => 'six',
+        ];
     }
 
     /**

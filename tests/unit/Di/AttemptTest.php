@@ -18,7 +18,7 @@ use Phalcon\Di\Service;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-class AttemptTest extends AbstractUnitTestCase
+final class AttemptTest extends AbstractUnitTestCase
 {
     /**
      * Tests Phalcon\Di\Di :: attempt()

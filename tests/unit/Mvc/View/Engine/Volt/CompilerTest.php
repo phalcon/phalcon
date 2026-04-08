@@ -91,7 +91,7 @@ class CompilerTest extends AbstractUnitTestCase
 
         // Refreshing generated view
         file_put_contents(
-            dataDir('fixtures/views/extends/other.volt'),
+            supportDir('assets/views/extends/other.volt'),
             '{{song}} {{song}}'
         );
 
@@ -117,7 +117,7 @@ class CompilerTest extends AbstractUnitTestCase
 
         // Change the view
         file_put_contents(
-            dataDir('fixtures/views/extends/other.volt'),
+            supportDir('assets/views/extends/other.volt'),
             'Two songs: {{song}} {{song}}'
         );
 
@@ -327,47 +327,47 @@ FORM;
     private function clearFiles(): void
     {
         $this->safeDeleteFile(
-            dataDir('fixtures/views/layouts/extends.volt.php')
+            supportDir('assets/views/layouts/extends.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/extends/index.volt.php')
+            supportDir('assets/views/extends/index.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/extends/other.volt.php')
+            supportDir('assets/views/extends/other.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/hello.volt.php')
+            supportDir('assets/views/macro/hello.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/conditionaldate.volt.php')
+            supportDir('assets/views/macro/conditionaldate.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/my_input.volt.php')
+            supportDir('assets/views/macro/my_input.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/error_messages.volt.php')
+            supportDir('assets/views/macro/error_messages.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/related_links.volt.php')
+            supportDir('assets/views/macro/related_links.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/strtotime.volt.php')
+            supportDir('assets/views/macro/strtotime.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/list.volt.php')
+            supportDir('assets/views/macro/list.volt.php')
         );
 
         $this->safeDeleteFile(
-            dataDir('fixtures/views/macro/form_row.volt.php')
+            supportDir('assets/views/macro/form_row.volt.php')
         );
     }
 
@@ -396,7 +396,7 @@ FORM;
         );
         $view->setDI($di);
 
-        $view->setViewsDir(dataDir('fixtures/views/'));
+        $view->setViewsDir(supportDir('assets/views/'));
 
         return $view;
     }

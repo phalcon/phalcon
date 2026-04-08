@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -29,7 +28,8 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testAssetsCollectionConstruct(): void
     {
-        $collection = new Collection();
-        $this->assertInstanceOf(Collection::class, $collection);
+        $class  = Collection::class;
+        $actual = new Collection();
+        $this->assertInstanceOf($class, $actual);
     }
 }

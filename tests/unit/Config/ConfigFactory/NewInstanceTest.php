@@ -5,8 +5,8 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the
- * LICENSE.txt file that was distributed with this source code.
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
  */
 
 declare(strict_types=1);
@@ -33,36 +33,34 @@ final class NewInstanceTest extends AbstractUnitTestCase
         return [
             [
                 'ini',
-                dataDir('assets/config/config.ini'),
+                supportDir('assets/config/config.ini'),
                 Ini::class,
             ],
             [
                 'json',
-                dataDir('assets/config/config.json'),
+                supportDir('assets/config/config.json'),
                 Json::class,
             ],
             [
                 'php',
-                dataDir('assets/config/config.php'),
+                supportDir('assets/config/config.php'),
                 Php::class,
             ],
             [
                 'yaml',
-                dataDir('assets/config/config.yml'),
+                supportDir('assets/config/config.yml'),
                 Yaml::class,
             ],
         ];
     }
 
     /**
-     * Tests Phalcon\Logger\LoggerFactory :: newInstance()
+     * Tests Phalcon\Config\ConfigFactory :: newInstance()
      *
      * @dataProvider getExamples
      *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2021-10-18
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-10-18
      */
     public function testConfigFactoryNewInstance(
         string $service,
@@ -77,8 +75,6 @@ final class NewInstanceTest extends AbstractUnitTestCase
 
     /**
      * Tests Phalcon\Config\ConfigFactory :: newInstance() - exception
-     *
-     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-18

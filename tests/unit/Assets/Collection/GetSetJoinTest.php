@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetSetJoinTest extends AbstractUnitTestCase
 {
@@ -30,9 +29,13 @@ final class GetSetJoinTest extends AbstractUnitTestCase
     public function testAssetsCollectionGetSetJoin(): void
     {
         $collection = new Collection();
-        $this->assertTrue($collection->getJoin());
+
+        $actual = $collection->getJoin();
+        $this->assertTrue($actual);
 
         $collection->join(false);
-        $this->assertFalse($collection->getJoin());
+
+        $actual = $collection->getJoin();
+        $this->assertFalse($actual);
     }
 }

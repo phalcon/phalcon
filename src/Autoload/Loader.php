@@ -506,6 +506,16 @@ class Loader
     }
 
     /**
+     * returns isRegistered
+     *
+     * @return bool
+     */
+    public function isRegistered(): bool
+    {
+        return $this->isRegistered;
+    }
+
+    /**
      * Unregister the autoload method
      *
      * @return Loader

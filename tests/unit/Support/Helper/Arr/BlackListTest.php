@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Support\Helper\Arr;
 
 use Phalcon\Support\Helper\Arr\Blacklist;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use stdClass;
 
 final class BlackListTest extends AbstractUnitTestCase
@@ -57,14 +56,14 @@ final class BlackListTest extends AbstractUnitTestCase
             'key-3',
         ];
 
-        $object   = new Blacklist();
+        $object = new Blacklist();
         $expected = [
             'value-1',
             12        => 'value-5',
             ' key-6 ' => 'value-6',
             'key-8'   => 'value-8',
         ];
-        $actual   = $object->__invoke($value, $blackList);
+        $actual = $object->__invoke($value, $blackList);
 
         $this->assertSame($expected, $actual);
     }

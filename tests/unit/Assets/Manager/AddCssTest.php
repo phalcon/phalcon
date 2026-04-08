@@ -36,11 +36,14 @@ final class AddCssTest extends AbstractUnitTestCase
 
         $collection = $manager->get('css');
 
+        $expected = 'css';
         foreach ($collection as $resource) {
-            $this->assertSame('css', $resource->getType());
+            $actual = $resource->getType();
+            $this->assertSame($expected, $actual);
         }
 
-        $this->assertCount(2, $collection);
+        $expected = 2;
+        $this->assertCount($expected, $collection);
     }
 
     /**
@@ -62,8 +65,9 @@ final class AddCssTest extends AbstractUnitTestCase
             ;
         }
 
-        $this->assertCount(1, $manager->getCss());
-        $this->assertCount(1, $manager->getJs());
+        $expected = 1;
+        $this->assertCount($expected, $manager->getCss());
+        $this->assertCount($expected, $manager->getJs());
 
         for ($i = 0; $i < 2; $i++) {
             $manager
@@ -72,7 +76,8 @@ final class AddCssTest extends AbstractUnitTestCase
             ;
         }
 
-        $this->assertCount(3, $manager->getCss());
-        $this->assertCount(3, $manager->getJs());
+        $expected = 3;
+        $this->assertCount($expected, $manager->getCss());
+        $this->assertCount($expected, $manager->getJs());
     }
 }

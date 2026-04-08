@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Translate\Interpolator\AssociativeArray;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Interpolator\AssociativeArray;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ReplacePlaceholdersTest extends AbstractUnitTestCase
 {
@@ -30,22 +29,15 @@ final class ReplacePlaceholdersTest extends AbstractUnitTestCase
      */
     public function testTranslateInterpolatorAssociativearrayReplacePlaceholders(): void
     {
+
         $interpolator = new AssociativeArray();
 
         $stringFrom = 'Hello, %fname% %mname% %lname%!';
 
-        $actual = $interpolator->replacePlaceholders(
-            $stringFrom,
-            [
-                'fname' => 'John',
-                'lname' => 'Doe',
-                'mname' => 'D.',
-            ]
-        );
+        $actual = $interpolator->replacePlaceholders($stringFrom, ['fname' => 'John',
+                                                                   'lname' => 'Doe',
+                                                                   'mname' => 'D.',]);
 
-        $this->assertSame(
-            'Hello, John D. Doe!',
-            $actual
-        );
+        $this->assertSame('Hello, John D. Doe!', $actual);
     }
 }

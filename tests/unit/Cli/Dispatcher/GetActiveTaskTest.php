@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
-use Phalcon\Tests\Fixtures\Tasks\MainTask;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Tasks\MainTask;
 
 /**
  * Class GetActiveTaskTest extends AbstractUnitTestCase
@@ -33,7 +33,7 @@ final class GetActiveTaskTest extends AbstractUnitTestCase
     {
         $dispatcher = new Dispatcher();
         $dispatcher->setDI(new DiFactoryDefault());
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
         $dispatcher->setTaskName("main");
         $dispatcher->dispatch();
 

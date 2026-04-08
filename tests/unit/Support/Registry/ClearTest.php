@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Support\Registry;
 
 use Phalcon\Support\Registry;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ClearTest extends AbstractRegistryTestCase
 {
@@ -30,13 +29,13 @@ final class ClearTest extends AbstractRegistryTestCase
         $registry = new Registry($data);
 
         $expected = $data;
-        $actual   = $registry->toArray();
+        $actual = $registry->toArray();
         $this->assertSame($expected, $actual);
 
         $registry->clear();
 
         $expected = 0;
-        $actual   = $registry->count();
+        $actual = $registry->count();
         $this->assertSame($expected, $actual);
     }
 }

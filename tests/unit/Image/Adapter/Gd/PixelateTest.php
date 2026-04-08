@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class PixelateTest extends AbstractUnitTestCase
 {
@@ -38,7 +38,7 @@ final class PixelateTest extends AbstractUnitTestCase
             [60, 'fbfbf3e3c3c3c383'],
         ];
         foreach ($params as [$amount, $hash]) {
-            $image = new Gd(dataDir('assets/images/example-jpg.jpg'));
+            $image = new Gd(supportDir('assets/images/example-jpg.jpg'));
 
             $outputDir   = 'tests/image/gd/';
             $outputImage = $amount . '-pixelate.jpg';

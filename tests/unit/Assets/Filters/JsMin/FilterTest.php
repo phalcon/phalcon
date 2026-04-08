@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Filters\JsMin;
 
 use Phalcon\Assets\Filters\JsMin;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FilterTest extends AbstractUnitTestCase
 {
@@ -29,12 +28,11 @@ final class FilterTest extends AbstractUnitTestCase
      */
     public function testAssetsFiltersJsMinFilter(): void
     {
-        $jsmin  = new JsMin();
-        $source = "// nothing special here
-var a = 1;";
+        $jsMin = new JsMin();
 
-        $expected = 'var a=1';
-        $actual   = $jsmin->filter($source);
+        $source   = "// nothing special here\nvar a = 1;";
+        $expected = "var a=1";
+        $actual   = $jsMin->filter($source);
         $this->assertSame($expected, $actual);
     }
 }

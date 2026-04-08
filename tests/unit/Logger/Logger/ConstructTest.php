@@ -19,7 +19,7 @@ use Phalcon\Logger\Exception;
 use Phalcon\Logger\Formatter\Json;
 use Phalcon\Logger\Logger;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Psr\Log\LoggerInterface;
+use Phalcon\Logger\LoggerInterface;
 
 final class ConstructTest extends AbstractUnitTestCase
 {

@@ -47,15 +47,15 @@ class Reference implements ReferenceInterface
     /**
      * ON DELETE
      *
-     * @var string
+     * @var string|null
      */
-    protected string $onDelete;
+    protected ?string $onDelete = null;
     /**
      * ON UPDATE
      *
-     * @var string
+     * @var string|null
      */
-    protected string $onUpdate;
+    protected ?string $onUpdate = null;
     /**
      * Referenced Columns
      *
@@ -129,8 +129,8 @@ class Reference implements ReferenceInterface
         $this->referencedTable  = $definition["referencedTable"];
         $this->schemaName       = $definition["schema"] ?? "";
         $this->referencedSchema = $definition["referencedSchema"] ?? "";
-        $this->onDelete         = $definition["onDelete"] ?? "";
-        $this->onUpdate         = $definition["onUpdate"] ?? "";
+        $this->onDelete         = $definition["onDelete"] ?? null;
+        $this->onUpdate         = $definition["onUpdate"] ?? null;
     }
 
     /**
@@ -156,9 +156,9 @@ class Reference implements ReferenceInterface
     /**
      * ON DELETE
      *
-     * @return string
+     * @return string|null
      */
-    public function getOnDelete(): string
+    public function getOnDelete(): ?string
     {
         return $this->onDelete;
     }
@@ -166,9 +166,9 @@ class Reference implements ReferenceInterface
     /**
      * ON UPDATE
      *
-     * @return string
+     * @return string|null
      */
-    public function getOnUpdate(): string
+    public function getOnUpdate(): ?string
     {
         return $this->onUpdate;
     }

@@ -13,16 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-use PHPUnit\Framework\Attributes\Test;
 
 use const LC_MESSAGES;
 
-#[RequiresPhpExtension('gettext')]
 final class GetCategoryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -37,6 +34,7 @@ final class GetCategoryTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextGetCategory(): void
     {
+
         $params     = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $params);
 

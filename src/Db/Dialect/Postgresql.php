@@ -947,7 +947,7 @@ class Postgresql extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        if (!empty($schemaName)) {
+        if (empty($schemaName)) {
             $schemaName = "public";
         }
 
@@ -1000,7 +1000,7 @@ class Postgresql extends Dialect
         string $viewName,
         string | null $schemaName = null
     ): string {
-        if (!empty($schemaName)) {
+        if (empty($schemaName)) {
             $schemaName = "public";
         }
 

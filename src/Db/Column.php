@@ -81,7 +81,7 @@ class Column implements ColumnInterface
     /**
      * Binary abstract data type
      */
-    public const TYPE_BINARY = 26;
+    public const TYPE_BINARY = 27;
     /**
      * Bit abstract data type
      */
@@ -209,7 +209,7 @@ class Column implements ColumnInterface
     /**
      * Varbinary abstract data type
      */
-    public const TYPE_VARBINARY = 27;
+    public const TYPE_VARBINARY = 28;
 
     /**
      * Varchar abstract data type
@@ -219,9 +219,9 @@ class Column implements ColumnInterface
     /**
      * Column Position
      *
-     * @var string
+     * @var string|null
      */
-    protected string $after = "";
+    protected ?string $after = null;
 
     /**
      * Bind Type
@@ -233,9 +233,9 @@ class Column implements ColumnInterface
     /**
      * Column's comment
      *
-     * @var string
+     * @var string|null
      */
-    protected string $comment = "";
+    protected ?string $comment = null;
 
     /**
      * Default column value
@@ -305,9 +305,9 @@ class Column implements ColumnInterface
     /**
      * Column data type
      *
-     * @var int
+     * @var int|string
      */
-    protected int $type;
+    protected int | string $type;
 
     /**
      * Column data type reference
@@ -319,9 +319,9 @@ class Column implements ColumnInterface
     /**
      * Column data type values
      *
-     * @var array|string
+     * @var array|string|int
      */
-    protected array | string $typeValues = [];
+    protected array | string | int $typeValues = [];
 
     /**
      * Phalcon\Db\Column constructor
@@ -342,9 +342,9 @@ class Column implements ColumnInterface
             throw new Exception("Column type is required");
         }
 
-        $this->after         = $definition["after"] ?? "";
+        $this->after         = array_key_exists("after", $definition) ? $definition["after"] : "";
         $this->bindType      = $definition["bindType"] ?? 2;
-        $this->comment       = $definition["comment"] ?? "";
+        $this->comment       = $definition["comment"] ?? null;
         $this->defaultValue  = $definition["default"] ?? null;
         $this->isFirst       = (bool)($definition["first"] ?? false);
         $this->isNotNull     = (bool)($definition["notNull"] ?? true);
@@ -398,9 +398,9 @@ class Column implements ColumnInterface
     /**
      * Check whether field absolute to position in table
      *
-     * @return string
+     * @return string|null
      */
-    public function getAfterPosition(): string
+    public function getAfterPosition(): ?string
     {
         return $this->after;
     }
@@ -418,9 +418,9 @@ class Column implements ColumnInterface
     /**
      * Column's comment
      *
-     * @return string
+     * @return string|null
      */
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -468,9 +468,9 @@ class Column implements ColumnInterface
     /**
      * Column data type
      *
-     * @return int
+     * @return int|string
      */
-    public function getType(): int
+    public function getType(): int | string
     {
         return $this->type;
     }
@@ -490,7 +490,7 @@ class Column implements ColumnInterface
      *
      * @return array|string
      */
-    public function getTypeValues(): array | string
+    public function getTypeValues(): array | string | int
     {
         return $this->typeValues;
     }
@@ -569,8 +569,12 @@ class Column implements ColumnInterface
         return $this->isUnsigned;
     }
 
-    private function processColumnType(mixed $type): int
+    private function processColumnType(mixed $type): int | string
     {
+        if (is_string($type)) {
+            return $type;
+        }
+
         $type = (int)$type;
 
         return match ($type) {

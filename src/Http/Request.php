@@ -118,6 +118,7 @@ class Request extends AbstractInjectionAware implements
      * @var string
      */
     protected string $trustedProxyHeader = '';
+
     /**
      * Gets a variable from the $_REQUEST superglobal applying filters if
      * needed. If no parameters are given the $_REQUEST superglobal is returned
@@ -684,6 +685,10 @@ class Request extends AbstractInjectionAware implements
     public function getJsonRawBody(bool $associative = false): array | bool | stdClass
     {
         $rawBody = $this->getRawBody();
+
+        if ('' === $rawBody) {
+            $rawBody = '{}';
+        }
 
         return json_decode($rawBody, $associative);
     }
@@ -1715,10 +1720,10 @@ class Request extends AbstractInjectionAware implements
 
         foreach ($qualityParts as $accept) {
             if (0 === $counter) {
-                $quality      = (double)$accept['quality'];
+                $quality      = (float)$accept['quality'];
                 $selectedName = $accept[$name];
             } else {
-                $acceptQuality = (double)$accept['quality'];
+                $acceptQuality = (float)$accept['quality'];
 
                 if ($acceptQuality > $quality) {
                     $quality      = $acceptQuality;
@@ -1829,7 +1834,7 @@ class Request extends AbstractInjectionAware implements
                     $split = explode('=', $headerPart, 2);
 
                     if ('q' === $split[0]) {
-                        $headerParts['quality'] = (double)$split[1];
+                        $headerParts['quality'] = (float)$split[1];
                     } else {
                         $headerParts[$split[0]] = $split[1];
                     }
@@ -2068,9 +2073,13 @@ class Request extends AbstractInjectionAware implements
         if (empty($data)) {
             if ($this->isJson()) {
                 $result = $this->getJsonRawBody(true);
+            } elseif (
+                $this->getContentType() &&
+                stripos($this->getContentType(), 'multipart/form-data') !== false
+            ) {
+                $result = $this->getFormData();
             } else {
-                // this is more like a fallback to application/x-www-form-urlencoded parsing raw body
-                // the web server should technically take care of adding these to $_POST, but who knows...
+                // fallback to application/x-www-form-urlencoded parsing raw body
                 $result = [];
                 parse_str($this->getRawBody(), $result);
             }
@@ -2078,12 +2087,72 @@ class Request extends AbstractInjectionAware implements
             $result = $data;
         }
 
-        // sanity check, if after all parsing is not an array, set an empty one
         if (!is_array($result)) {
             $result = [];
         }
 
         return $result;
+    }
+
+    /**
+     * Parses multipart/form-data from the raw body.
+     *
+     * @return array
+     */
+    private function getFormData(): array
+    {
+        preg_match('/boundary=(.*)$/is', (string) $this->getContentType(), $matches);
+
+        $boundary = $matches[1];
+        $bodyParts = preg_split('/\R?-+' . preg_quote($boundary, '/') . '/s', $this->getRawBody());
+
+        array_pop($bodyParts);
+
+        $dataset = [];
+
+        foreach ($bodyParts as $bodyPart) {
+            if (empty($bodyPart)) {
+                continue;
+            }
+
+            $splited     = preg_split('/\R\R/', $bodyPart, 2);
+            $headers     = [];
+            $headerParts = preg_split('/\R/s', $splited[0], -1, PREG_SPLIT_NO_EMPTY);
+
+            foreach ($headerParts as $headerPart) {
+                if (strpos($headerPart, ':') === false) {
+                    continue;
+                }
+
+                $exploded    = explode(':', $headerPart, 2);
+                $headerName  = strtolower(trim($exploded[0]));
+                $headerValue = trim($exploded[1]);
+
+                if (strpos($headerValue, ';') !== false) {
+                    $explodedHeader = explode(';', $headerValue);
+
+                    foreach ($explodedHeader as $part) {
+                        $part = preg_replace('/"/', '', trim($part));
+
+                        if (strpos($part, '=') !== false) {
+                            $explodedPart = explode('=', $part, 2);
+                            $namePart     = strtolower(trim($explodedPart[0]));
+                            $valuePart    = trim(trim($explodedPart[1]), '"');
+
+                            $headers[$headerName][$namePart] = $valuePart;
+                        } else {
+                            $headers[$headerName][] = $part;
+                        }
+                    }
+                } else {
+                    $headers[$headerName] = $headerValue;
+                }
+            }
+
+            $dataset[$headers['content-disposition']['name']] = $splited[1];
+        }
+
+        return $dataset;
     }
 
     /**

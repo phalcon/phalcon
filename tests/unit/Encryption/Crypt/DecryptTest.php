@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Encryption\Crypt;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\Exception\Exception;
 use Phalcon\Encryption\Crypt\Exception\Mismatch;
-use Phalcon\Tests\Fixtures\Encryption\Crypt\CryptFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Encryption\Fake\Crypt\FakeCrypt;
 
 use function str_repeat;
 
@@ -33,7 +33,7 @@ final class DecryptTest extends AbstractUnitTestCase
      */
     public function testEncryptionCryptDecryptCryptUnpadZeroPaddingReturnsInput(): void
     {
-        $crypt       = new CryptFixture();
+        $crypt       = new FakeCrypt();
         $input       = str_repeat("A", 32);
         $mode        = "ccb";
         $blockSize   = 16;

@@ -622,14 +622,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function escapeIdentifier(array | string $identifier): string
+    public function escapeIdentifier(array | string | int | float $identifier): string
     {
         if (is_array($identifier)) {
             return $this->dialect->escape($identifier[0])
                 . "." . $this->dialect->escape($identifier[1]);
         }
 
-        return $this->dialect->escape($identifier);
+        return $this->dialect->escape((string) $identifier);
     }
 
     /**
@@ -707,7 +707,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string $sqlQuery,
         array $placeholders = [],
         int | string $column = 0
-    ): string | bool {
+    ): mixed {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
         return $row[$column] ?? false;
@@ -970,7 +970,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function insert(
         string $tableName,
         array $values,
-        array $fields = [],
+        array | null $fields = null,
         array $dataTypes = []
     ): bool {
         /**
@@ -1088,8 +1088,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         return $this->insert(
             $tableName,
-            array_keys($data),
             array_values($data),
+            array_keys($data),
             $dataTypes
         );
     }

@@ -19,11 +19,11 @@ use Phalcon\Acl\Component;
 use Phalcon\Acl\Enum;
 use Phalcon\Acl\Exception as AclException;
 use Phalcon\Acl\Role;
-use Phalcon\Tests\Fixtures\Acl\Adapter\MemoryFixture;
-use Phalcon\Tests\Fixtures\Acl\TestComponentAware;
-use Phalcon\Tests\Fixtures\Acl\TestRoleAware;
-use Phalcon\Tests\Fixtures\Acl\TestRoleComponentAware;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Acl\Fake\Adapter\FakeMemory;
+use Phalcon\Tests\Unit\Acl\Fake\TestComponentAware;
+use Phalcon\Tests\Unit\Acl\Fake\TestRoleAware;
+use Phalcon\Tests\Unit\Acl\Fake\TestRoleComponentAware;
 use stdClass;
 
 use function restore_error_handler;
@@ -76,35 +76,21 @@ final class IsAllowedTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        /**
-         * Setup the ACL
-         */
         $acl->addRole('manager');
         $acl->addRole('accounting');
         $acl->addRole('guest');
 
         $acl->addComponent(
             'admin',
-            [
-                'dashboard',
-                'users',
-                'view',
-            ]
+            ['dashboard', 'users', 'view']
         );
         $acl->addComponent(
             'reports',
-            [
-                'list',
-                'add',
-                'view',
-            ]
+            ['list', 'add', 'view']
         );
         $acl->addComponent(
             'session',
-            [
-                'login',
-                'logout',
-            ]
+            ['login', 'logout']
         );
 
         $acl->allow('manager', 'admin', 'dashboard');
@@ -134,6 +120,54 @@ final class IsAllowedTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - exception (component)
+     *
+     * @return void
+     *
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2019-06-16
+     */
+    public function testAclAdapterMemoryIsAllowedExceptionComponent(): void
+    {
+        $this->expectException(AclException::class);
+        $this->expectExceptionMessage(
+            'Object passed as componentName must implement ' .
+            'Phalcon\Acl\ComponentAwareInterface or Phalcon\Acl\ComponentInterface'
+        );
+
+        $acl = new Memory();
+        $acl->setDefaultAction(Enum::DENY);
+        $acl->addRole('Member');
+        $acl->addComponent('Post', ['update']);
+        $acl->allow('Member', 'Post', 'update');
+        $acl->isAllowed('Member', new stdClass(), 'update');
+    }
+
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - exception
+     *
+     * @return void
+     *
+     * @author  Phalcon Team <team@phalcon.io>
+     * @since   2019-06-16
+     */
+    public function testAclAdapterMemoryIsAllowedExceptionRole(): void
+    {
+        $this->expectException(AclException::class);
+        $this->expectExceptionMessage(
+            'Object passed as roleName must implement ' .
+            'Phalcon\Acl\RoleAwareInterface or Phalcon\Acl\RoleInterface'
+        );
+
+        $acl = new Memory();
+        $acl->setDefaultAction(Enum::DENY);
+        $acl->addRole('Member');
+        $acl->addComponent('Post', ['update']);
+        $acl->allow('Member', 'Post', 'update');
+        $acl->isAllowed(new stdClass(), 'Post', 'update');
+    }
+
+    /**
      * Tests Phalcon\Acl\Adapter\Memory :: isAllowed() - fireEvent returns false
      *
      * @return void
@@ -143,7 +177,7 @@ final class IsAllowedTest extends AbstractUnitTestCase
      */
     public function testAclAdapterMemoryIsAllowedFireEventFalse(): void
     {
-        $acl = new MemoryFixture();
+        $acl = new FakeMemory();
 
         $acl->addRole('Member');
         $acl->addComponent('Post', ['update']);
@@ -162,6 +196,11 @@ final class IsAllowedTest extends AbstractUnitTestCase
      * @author  Phalcon Team <team@phalcon.io>
      * @since   2021-09-27
      */
+    public function tearDown(): void
+    {
+        restore_error_handler();
+    }
+
     public function testAclAdapterMemoryIsAllowedFunctionMoreParameters(): void
     {
         set_error_handler(
@@ -204,8 +243,6 @@ final class IsAllowedTest extends AbstractUnitTestCase
                 'one'       => 2,
             ]
         );
-
-        restore_error_handler();
     }
 
     /**

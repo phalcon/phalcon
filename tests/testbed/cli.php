@@ -8,12 +8,13 @@ use Phalcon\Cli\Console;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Di\FactoryDefault\Cli as CliDI;
 
-require_once 'vendor/autoload.php';
+$rootFolder = dirname(__FILE__, 3);
+require_once $rootFolder . '/vendor/autoload.php';
 
 $container  = new CliDI();
 $dispatcher = new Dispatcher();
 
-$dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+$dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
 $container->setShared('dispatcher', $dispatcher);
 
 $console = new Console($container);

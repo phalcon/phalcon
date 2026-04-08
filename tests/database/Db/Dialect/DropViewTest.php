@@ -86,7 +86,7 @@ final class DropViewTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Dialect :: dropView
+     * Tests Phalcon\Db\Dialect :: dropView - ifExists false
      *
      * @dataProvider getDialectsNotExists
      *

@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class InitTest extends AbstractCollectionTestCase
 {
@@ -24,24 +22,26 @@ final class InitTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
     public function testSupportCollectionInit(
-        string $class
+        string $class,
     ): void {
         $data = $this->getData();
         $collection = new $class();
 
         $expected = 0;
-        $actual   = $collection->count();
+        $actual = $collection->count();
         $this->assertSame($expected, $actual);
 
         $collection->init($data);
 
         $expected = $data;
-        $actual   = $collection->toArray();
+        $actual = $collection->toArray();
         $this->assertSame($expected, $actual);
     }
 }

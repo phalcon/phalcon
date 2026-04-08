@@ -30,13 +30,14 @@ final class GetSetKeyTest extends AbstractUnitTestCase
     {
         $crypt = new Crypt();
 
-        $this->assertSame('', $crypt->getKey());
+        $expected = '';
+        $actual   = $crypt->getKey();
+        $this->assertSame($expected, $actual);
 
         $crypt->setKey('123456');
 
-        $this->assertSame(
-            '123456',
-            $crypt->getKey()
-        );
+        $expected = '123456';
+        $actual   = $crypt->getKey();
+        $this->assertSame($expected, $actual);
     }
 }

@@ -36,9 +36,9 @@ final class AddInheritTest extends AbstractUnitTestCase
         $acl->addRole(new Role('administrator'));
         $acl->addRole(new Role('apprentice'));
 
-        $addedInherit = $acl->addInherit('administrator', 'apprentice');
+        $actual = $acl->addInherit('administrator', 'apprentice');
 
-        $this->assertTrue($addedInherit);
+        $this->assertTrue($actual);
     }
 
     /**
@@ -71,7 +71,7 @@ final class AddInheritTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Acl\Adapter\Memory :: addInherit()
+     * Tests Phalcon\Acl\Adapter\Memory :: addInherit() - check access
      *
      * @return void
      *
@@ -82,15 +82,12 @@ final class AddInheritTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        //New role
         $acl->addRole(new Role('administrator'));
         $acl->addRole(new Role('apprentice'));
 
-        //New Component
         $acl->addComponent(new Component('folder'), 'list');
         $acl->addComponent(new Component('folder'), 'add');
 
-        //Add Inherit
         $actual = $acl->addInherit('administrator', 'apprentice');
         $this->assertTrue($actual);
 
@@ -98,11 +95,9 @@ final class AddInheritTest extends AbstractUnitTestCase
         $actual = $acl->addInherit('administrator', 'apprentice');
         $this->assertTrue($actual);
 
-        //Allow access
         $acl->allow('apprentice', 'folder', 'list');
         $acl->allow('administrator', 'folder', 'add');
 
-        //Check access
         $actual = $acl->isAllowed('apprentice', 'folder', 'list');
         $this->assertTrue($actual);
 
@@ -128,15 +123,12 @@ final class AddInheritTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        // New role
         $acl->addRole(new Role('administrator'));
         $acl->addRole(new Role('apprentice'));
 
-        // New Component
         $acl->addComponent(new Component('folder'), 'list');
         $acl->addComponent(new Component('folder'), 'add');
 
-        // Add Inherit
         $actual = $acl->addInherit('administrator', 'administrator');
         $this->assertFalse($actual);
     }
@@ -158,8 +150,6 @@ final class AddInheritTest extends AbstractUnitTestCase
 
         $acl = new Memory();
         $acl->addRole(new Role('administrator'));
-
-        //Add Inherit
         $acl->addInherit('administrator', 'unknown');
     }
 }

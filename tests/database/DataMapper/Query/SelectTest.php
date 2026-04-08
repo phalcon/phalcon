@@ -17,7 +17,7 @@ use BadMethodCallException;
 use PDOStatement;
 use Phalcon\DataMapper\Query\Select;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 
 use function uniqid;
 

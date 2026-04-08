@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Filters\None;
 
 use Phalcon\Assets\Filters\None;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class FilterTest extends AbstractUnitTestCase
 {

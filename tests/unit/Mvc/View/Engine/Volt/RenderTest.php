@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Tests\Fixtures\Listener\ViewCompileListener;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Listener\ViewCompileListener;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 class RenderTest extends AbstractUnitTestCase
 {
@@ -64,7 +64,7 @@ class RenderTest extends AbstractUnitTestCase
         // render() echoes out its result
         ob_start();
         $volt->render(
-            dataDir('fixtures/views/compiler/partial.volt'),
+            supportDir('assets/views/compiler/partial.volt'),
             [
                 'some_var' => 'aaa',
             ]

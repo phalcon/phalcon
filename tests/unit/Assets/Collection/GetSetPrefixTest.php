@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class GetSetPrefixTest extends AbstractUnitTestCase
 {
@@ -33,6 +32,8 @@ final class GetSetPrefixTest extends AbstractUnitTestCase
         $prefix     = 'phly_';
         $collection->setPrefix($prefix);
 
-        $this->assertSame($prefix, $collection->getPrefix());
+        $expected = $prefix;
+        $actual   = $collection->getPrefix();
+        $this->assertSame($expected, $actual);
     }
 }

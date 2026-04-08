@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Database\Mvc\Model\Criteria;
 
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Invoices;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class FromInputTest extends AbstractDatabaseTestCase
 {
@@ -60,8 +60,8 @@ final class FromInputTest extends AbstractDatabaseTestCase
         $builder = $criteria->createBuilder();
 
         if (self::getDriver() === 'sqlite') {
-            $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-                . 'FROM [Phalcon\Tests\Models\Invoices] '
+            $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+                . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
                 . 'WHERE [inv_id] = :inv_id: '
                 . 'AND [inv_cst_id] = :inv_cst_id: '
                 . 'AND [inv_status_flag] = :inv_status_flag: '
@@ -69,8 +69,8 @@ final class FromInputTest extends AbstractDatabaseTestCase
                 . 'AND [inv_total] LIKE :inv_total: '
                 . 'AND [inv_created_at] = :inv_created_at:';
         } else {
-            $expected = 'SELECT [Phalcon\Tests\Models\Invoices].* '
-                . 'FROM [Phalcon\Tests\Models\Invoices] '
+            $expected = 'SELECT [Phalcon\Tests\Support\Models\Invoices].* '
+                . 'FROM [Phalcon\Tests\Support\Models\Invoices] '
                 . 'WHERE [inv_id] = :inv_id: '
                 . 'AND [inv_cst_id] = :inv_cst_id: '
                 . 'AND [inv_status_flag] = :inv_status_flag: '

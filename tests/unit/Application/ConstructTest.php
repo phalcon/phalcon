@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Application;
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Tests\Fixtures\Application\ApplicationFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Application\Fake\FakeApplication;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -31,10 +31,16 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testApplicationConstruct(): void
     {
-        $application = new ApplicationFixture();
+        $application = new FakeApplication();
 
-        $this->assertInstanceOf(EventsAwareInterface::class, $application);
-        $this->assertInstanceOf(InjectionAwareInterface::class, $application);
-        $this->assertInstanceOf(AbstractApplication::class, $application);
+        $class  = EventsAwareInterface::class;
+        $actual = $application;
+        $this->assertInstanceOf($class, $actual);
+
+        $class = InjectionAwareInterface::class;
+        $this->assertInstanceOf($class, $actual);
+
+        $class = AbstractApplication::class;
+        $this->assertInstanceOf($class, $actual);
     }
 }

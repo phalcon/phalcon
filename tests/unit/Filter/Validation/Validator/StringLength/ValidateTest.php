@@ -45,7 +45,7 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'John',
+                'name' => 'Joe',
             ]
         );
 
@@ -279,8 +279,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
-                'type' => 'Some',
+                'name' => '12345678',
+                'type' => '123',
             ]
         );
 
@@ -292,8 +292,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
-                'type' => 'Some',
+                'name' => '1234567890',
+                'type' => '123',
             ]
         );
 
@@ -310,8 +310,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
-                'type' => 'SomeValue',
+                'name' => '12345678',
+                'type' => '12345',
             ]
         );
 
@@ -328,8 +328,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
-                'type' => 'SomeValue',
+                'name' => '1234567890',
+                'type' => '12345',
             ]
         );
 
@@ -388,8 +388,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
-                'type' => 'SomeValue',
+                'name' => '1234',
+                'type' => '1234',
             ]
         );
 
@@ -401,8 +401,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
-                'type' => 'SomeValue',
+                'name' => '123456789',
+                'type' => '12345678',
             ]
         );
 
@@ -419,8 +419,8 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
-                'type' => 'SomeValue123',
+                'name' => '123456789',
+                'type' => '123456789',
             ]
         );
 
@@ -464,7 +464,7 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
+                'name' => '12345678',
             ]
         );
 

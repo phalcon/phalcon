@@ -32,12 +32,11 @@ final class AddComponentAccessTest extends AbstractUnitTestCase
     {
         $acl = new Memory();
 
-        $component = new Component('Customer', 'Customer component');
-        $added     = $acl->addComponent('Customer', ['index']);
-        $this->assertTrue($added);
-        $accessAdded = $acl->addComponentAccess('Customer', ['new']);
+        $actual = $acl->addComponent('Customer', ['index']);
+        $this->assertTrue($actual);
 
-        $this->assertTrue($accessAdded);
+        $actual = $acl->addComponentAccess('Customer', ['new']);
+        $this->assertTrue($actual);
     }
 
     /**
@@ -52,7 +51,28 @@ final class AddComponentAccessTest extends AbstractUnitTestCase
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Component 'Post' does not exist in the ACL");
+
         $acl = new Memory();
         $acl->addComponentAccess('Post', ['update']);
+    }
+
+    /**
+     * Tests Phalcon\Acl\Adapter\Memory :: addComponentAccess() - wrong access list
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testAclAdapterMemoryAddComponentAccessWrongAccessList(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid value for the accessList');
+
+        $acl  = new Memory();
+        $post = new Component('Post');
+
+        $acl->addComponent($post, ['update']);
+        $acl->addComponentAccess('Post', 123);
     }
 }

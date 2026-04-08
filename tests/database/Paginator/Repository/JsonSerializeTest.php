@@ -22,7 +22,8 @@ final class JsonSerializeTest extends AbstractDatabaseTestCase
     /**
      * Tests Phalcon\Paginator\Repository :: jsonSerialize()
      *
-     * @since 2019-10-16
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-10-16
      */
     public function testPaginatorRepositoryJsonSerialize(): void
     {

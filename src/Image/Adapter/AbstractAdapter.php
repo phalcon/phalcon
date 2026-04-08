@@ -486,7 +486,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $offX = $this->checkHighLow($offsetX, 0, $temp);
 
         $temp = $this->height - $watermark->getHeight();
-        $offY = $this->checkHighLow($offsetX, 0, $temp);
+        $offY = $this->checkHighLow($offsetY, 0, $temp);
 
         $opacity = $this->checkHighLow($opacity);
 
@@ -529,14 +529,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * @return void
      */
     abstract protected function processBlur(int $radius): void;
-
-    /**
-     * @param int $width
-     * @param int $height
-     *
-     * @return false|GdImage|resource
-     */
-    abstract protected function processCreate(int $width, int $height);
 
     /**
      * @param int $width

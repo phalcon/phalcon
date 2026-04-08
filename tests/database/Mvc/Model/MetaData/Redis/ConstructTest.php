@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Redis;
+
+use PDO;
+use Phalcon\Cache\AdapterFactory;
+use Phalcon\Mvc\Model\MetaData\Redis;
+use Phalcon\Storage\Exception;
+use Phalcon\Storage\SerializerFactory;
+use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Traits\DiTrait;
+
+use function env;
+
+final class ConstructTest extends AbstractDatabaseTestCase
+{
+    use DiTrait;
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->checkExtensionIsLoaded('redis');
+
+        try {
+            $this->setNewFactoryDefault();
+        } catch (Exception $e) {
+            $this->fail($e->getMessage());
+        }
+
+        $this->setDatabase();
+
+        $this->container->setShared(
+            'modelsMetadata',
+            function () {
+                $serializer = new SerializerFactory();
+                $factory    = new AdapterFactory($serializer);
+
+                return new Redis(
+                    $factory,
+                    [
+                        'host'  => env('DATA_REDIS_HOST', '127.0.0.1'),
+                        'port'  => env('DATA_REDIS_PORT', 6379),
+                        'index' => env('DATA_REDIS_NAME', 0),
+                    ]
+                );
+            }
+        );
+
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+        $migration  = new InvoicesMigration($connection);
+        $migration->insert(1, 1, 0, 'Test Invoice');
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model\MetaData\Redis :: __construct() - isEmpty and reset
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     *
+     * @group mysql
+     */
+    public function testMvcModelMetadataRedisConstruct(): void
+    {
+        /** @var \Phalcon\Mvc\Model\MetaDataInterface $md */
+        $md = $this->container->getShared('modelsMetadata');
+
+        $md->reset();
+        $this->assertTrue($md->isEmpty());
+
+        Invoices::findFirst();
+
+        $this->assertFalse($md->isEmpty());
+
+        $md->reset();
+        $this->assertTrue($md->isEmpty());
+    }
+}

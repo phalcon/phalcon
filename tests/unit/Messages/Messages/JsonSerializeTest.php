@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Messages\Messages;
 use JsonSerializable;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
-use Phalcon\Tests\Fixtures\Messages\MessageFixture;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Messages\Fake\FakeMessage;
 
 final class JsonSerializeTest extends AbstractUnitTestCase
 {
@@ -72,7 +72,7 @@ final class JsonSerializeTest extends AbstractUnitTestCase
      */
     public function testMessagesMessagesJsonSerializeNoJsonSerialize(): void
     {
-        $fixture = new MessageFixture(
+        $fixture = new FakeMessage(
             'This is a message #1',
             'MyField1',
             'MyType1',

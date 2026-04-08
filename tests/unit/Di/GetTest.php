@@ -22,7 +22,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 use function spl_object_hash;
 
-class GetTest extends AbstractUnitTestCase
+final class GetTest extends AbstractUnitTestCase
 {
     /**
      * Unit Tests Phalcon\Di\Di :: get()

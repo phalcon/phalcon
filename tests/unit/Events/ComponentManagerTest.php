@@ -12,8 +12,8 @@
 namespace Phalcon\Tests\Unit\Events;
 
 use Phalcon\Events\Manager;
-use Phalcon\Tests\Fixtures\Events\ComponentWithEvents;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Events\Fake\ComponentWithEvents;
 
 use function method_exists;
 

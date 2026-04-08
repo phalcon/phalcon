@@ -25,7 +25,7 @@ trait SerializableTrait
      *
      * @link https://php.net/manual/en/serializable.serialize.php
      */
-    public function serialize(): string
+    public function serialize(): string|null
     {
         return serialize($this->toArray());
     }

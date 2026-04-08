@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection;
-use Phalcon\Tests\Fixtures\Support\Collection\CollectionJsonEncodeFixture;
+use Phalcon\Tests\Unit\Support\Fake\FakeCollectionPhpJsonEncode;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ToJsonTest extends AbstractCollectionTestCase
 {
@@ -25,22 +23,24 @@ final class ToJsonTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
     public function testSupportCollectionToJson(
-        string $class
+        string $class,
     ): void {
         $data = $this->getData();
         $collection = new $class($data);
 
         $expected = json_encode($data);
-        $actual   = $collection->toJson();
+        $actual = $collection->toJson();
         $this->assertSame($expected, $actual);
 
         $expected = json_encode($data, JSON_PRETTY_PRINT);
-        $actual   = $collection->toJson(JSON_PRETTY_PRINT);
+        $actual = $collection->toJson(JSON_PRETTY_PRINT);
         $this->assertSame($expected, $actual);
     }
 
@@ -55,7 +55,7 @@ final class ToJsonTest extends AbstractCollectionTestCase
     public function testSupportCollectionToJsonEncodeFail(): void
     {
         $data = $this->getData();
-        $collection = new CollectionJsonEncodeFixture($data);
+        $collection = new FakeCollectionPhpJsonEncode($data);
 
         $actual = $collection->toJson();
         $this->assertEmpty($actual);

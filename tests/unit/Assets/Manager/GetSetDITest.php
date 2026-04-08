@@ -35,6 +35,8 @@ final class GetSetDITest extends AbstractUnitTestCase
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->setDI($container);
 
-        $this->assertSame($container, $manager->getDI());
+        $expected = $container;
+        $actual   = $manager->getDI();
+        $this->assertSame($expected, $actual);
     }
 }

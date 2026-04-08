@@ -20,13 +20,13 @@ use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Router;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Migrations\CustomersMigration;
-use Phalcon\Tests\Fixtures\Migrations\InvoicesMigration;
-use Phalcon\Tests\Fixtures\Migrations\ObjectsMigration;
-use Phalcon\Tests\Fixtures\Traits\DiTrait;
-use Phalcon\Tests\Models\Customers;
-use Phalcon\Tests\Models\Invoices;
-use Phalcon\Tests\Models\Objects;
+use Phalcon\Tests\Support\Migrations\CustomersMigration;
+use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\ObjectsMigration;
+use Phalcon\Tests\Support\Models\Customers;
+use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\Objects;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function getOptionsRedis;
 use function ob_end_clean;
@@ -459,7 +459,7 @@ final class FindTest extends AbstractDatabaseTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             "Cache service must be an object implementing " .
-            "Psr\SimpleCache\CacheInterface"
+            "Phalcon\Cache\CacheInterface"
         );
 
         $options = [
@@ -515,5 +515,78 @@ final class FindTest extends AbstractDatabaseTestCase
         $this->assertEquals(2, count($data));
         $this->assertEquals(1, $data[0]->obj_id);
         $this->assertEquals(2, $data[1]->obj_id);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: find() - cache options lifetime priority over adapter lifetime
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-08-02
+     *
+     * @group mysql
+     */
+    public function testMvcModelFindWithCacheOptionsLifetimePriorityOverCacheService(): void
+    {
+        $connection = self::getConnection();
+        $migration  = new ObjectsMigration($connection);
+        $migration->insert(1, 'random data', 1);
+
+        $options = [
+            'defaultSerializer' => 'Json',
+            'lifetime'          => 2,
+            'prefix'            => 'data-',
+        ];
+
+        /**
+         * Models Cache setup. Adapter's lifetime is 2 seconds
+         */
+        $serializerFactory = new SerializerFactory();
+        $adapterFactory    = new AdapterFactory($serializerFactory);
+        $adapter           = $adapterFactory->newInstance('apcu', $options);
+        $cache             = new Cache($adapter);
+
+        $this->container->setShared('modelsCache', $cache);
+
+        /**
+         * Find records with lifetime 5 sec
+         */
+        $data = Objects::find(
+            [
+                'cache' => [
+                    'key'      => 'my-cache',
+                    'lifetime' => 5,
+                ],
+            ]
+        );
+
+        $this->assertEquals(1, count($data));
+
+        $record = $data[0];
+        $this->assertEquals(1, $record->obj_id);
+        $this->assertEquals('random data', $record->obj_name);
+
+        /**
+         * Get the models cache
+         */
+        $modelsCache = $this->container->get('modelsCache');
+
+        $exists = $modelsCache->has('my-cache');
+        $this->assertTrue($exists);
+
+        /**
+         * Wait for 3 seconds - cache should still be there (lifetime is 5 sec)
+         */
+        sleep(3);
+
+        $data = $modelsCache->get('my-cache');
+        $this->assertNotNull($data);
+
+        /**
+         * Wait extra 3 seconds - now cache should be expired (total 6 > 5 sec)
+         */
+        sleep(3);
+
+        $data = $modelsCache->get('my-cache');
+        $this->assertNull($data);
     }
 }

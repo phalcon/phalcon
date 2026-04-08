@@ -48,7 +48,7 @@ final class GetActiveFunctionCustomArgumentsCountTest extends AbstractUnitTestCa
             }
         );
 
-        $isAllowed = $acl->isAllowed(
+        $actual = $acl->isAllowed(
             'member',
             'group',
             'add',
@@ -58,7 +58,7 @@ final class GetActiveFunctionCustomArgumentsCountTest extends AbstractUnitTestCa
             ]
         );
 
-        $this->assertTrue($isAllowed);
+        $this->assertTrue($actual);
 
         $expected = 2;
         $actual   = $acl->getActiveFunctionCustomArgumentsCount();

@@ -20,18 +20,15 @@ use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
 use Phalcon\Cli\Router\Exception as RouterException;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Events\Event;
-use Phalcon\Tests\Fixtures\Tasks\Issue787Task;
-use Phalcon\Tests\Modules\Backend\Module as BackendModule;
-use Phalcon\Tests\Modules\Frontend\Module as FrontendModule;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Modules\Backend\Module as BackendModule;
+use Phalcon\Tests\Support\Modules\Frontend\Module as FrontendModule;
+use Phalcon\Tests\Support\Tasks\Issue787Task;
 
-use function dataDir;
 use function ob_end_clean;
 use function ob_start;
 use function rootDir;
 use function shell_exec;
-
-use const PHP_OS_FAMILY;
 
 final class HandleTest extends AbstractUnitTestCase
 {
@@ -118,7 +115,7 @@ final class HandleTest extends AbstractUnitTestCase
         $dispatcher = $console->getDI()
                               ->getShared('dispatcher')
         ;
-        $dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
 
         $console->handle($arguments);
 
@@ -152,13 +149,13 @@ final class HandleTest extends AbstractUnitTestCase
         $console = new CliConsole(new DiFactoryDefault());
 
         $dispatcher = $console->dispatcher;
-        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $dispatcher->setNamespaceName('Phalcon\Tests\Support\Modules\Backend\Tasks');
 
         $console->registerModules(
             [
                 'backend' => [
                     'className' => BackendModule::class,
-                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                    'path'      => supportDir('Modules/Backend/Module.php'),
                 ],
             ]
         );
@@ -173,13 +170,13 @@ final class HandleTest extends AbstractUnitTestCase
         $console = new CliConsole(new DiFactoryDefault());
 
         $dispatcher = $console->dispatcher;
-        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $dispatcher->setNamespaceName('Phalcon\Tests\Support\Modules\Backend\Tasks');
 
         $console->registerModules(
             [
                 'backend' => [
                     'className' => BackendModule::class,
-                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                    'path'      => supportDir('Modules/Backend/Module.php'),
                 ],
             ]
         );
@@ -200,7 +197,7 @@ final class HandleTest extends AbstractUnitTestCase
     public function testCliConsoleHandle787(): void
     {
         $console = new CliConsole(new DiFactoryDefault());
-        $console->dispatcher->setDefaultNamespace('Phalcon\Tests\Fixtures\Tasks');
+        $console->dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
 
         $console->handle(
             [
@@ -238,15 +235,15 @@ final class HandleTest extends AbstractUnitTestCase
             [
                 'frontend' => [
                     'className' => FrontendModule::class,
-                    'path'      => dataDir('fixtures/modules/frontend/Module.php'),
+                    'path'      => supportDir('Modules/Frontend/Module.php'),
                 ],
                 'backend'  => [
                     'className' => BackendModule::class,
-                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                    'path'      => supportDir('Modules/Backend/Module.php'),
                 ],
             ]
         );
-        $console->dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $console->dispatcher->setNamespaceName('Phalcon\Tests\Support\Modules\Backend\Tasks');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
@@ -277,7 +274,7 @@ final class HandleTest extends AbstractUnitTestCase
             [
                 'frontend' => [
                     'className' => FrontendModule::class,
-                    'path'      => dataDir('fixtures/modules/frontend/Module.php'),
+                    'path'      => supportDir('Modules/Frontend/Module.php'),
                 ],
                 'backend'  => [
                     'className' => BackendModule::class,
@@ -285,7 +282,7 @@ final class HandleTest extends AbstractUnitTestCase
             ]
         );
 
-        $console->dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $console->dispatcher->setNamespaceName('Phalcon\Tests\Support\Modules\Backend\Tasks');
 
         $eventsManager->attach(
             'console:afterStartModule',
@@ -357,7 +354,7 @@ final class HandleTest extends AbstractUnitTestCase
             [
                 'frontend' => [
                     'className' => FrontendModule::class,
-                    'path'      => dataDir('fixtures/modules/frontend/Module.php'),
+                    'path'      => supportDir('Modules/Frontend/Module.php'),
                 ],
                 'backend'  => [
                     'className' => BackendModule::class,
@@ -365,7 +362,7 @@ final class HandleTest extends AbstractUnitTestCase
             ]
         );
 
-        $console->dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $console->dispatcher->setNamespaceName('Phalcon\Tests\Support\Modules\Backend\Tasks');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
@@ -419,27 +416,29 @@ final class HandleTest extends AbstractUnitTestCase
             [
                 'frontend' => [
                     'className' => FrontendModule::class,
-                    'path'      => dataDir('/fixtures/modules/frontend/Module.php'),
+                    'path'      => supportDir('Modules/Frontend/Module.php'),
                 ],
                 'backend'  => [
                     'className' => BackendModule::class,
-                    'path'      => dataDir('fixtures/modules/backend/Module.php'),
+                    'path'      => supportDir('Modules/Backend/Module.php'),
                 ],
             ]
         );
 
         $dispatcher = $console->dispatcher;
-        $dispatcher->setNamespaceName('Phalcon\Tests\Modules\Backend\Tasks');
+        $dispatcher->setNamespaceName('Phalcon\Tests\Support\Modules\Backend\Tasks');
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Task Run');
-
-        $console->handle(
-            [
-                'module' => 'backend',
-                'action' => 'throw',
-            ]
-        );
+        try {
+            $console->handle(
+                [
+                    'module' => 'backend',
+                    'action' => 'throw',
+                ]
+            );
+            $this->fail('Expected Exception was not thrown');
+        } catch (Exception $e) {
+            $this->assertSame('Task Run', $e->getMessage());
+        }
 
         $expected = 'main';
         $actual   = $dispatcher->getTaskName();
@@ -481,14 +480,10 @@ final class HandleTest extends AbstractUnitTestCase
      */
     public function testCliConsoleHandleNoAction(): void
     {
-        if (PHP_OS_FAMILY === 'Windows') {
-            $this->markTestSkipped('Need to check this under Windows');
-        }
-
         $script = rootDir() . 'tests/testbed/cli.php ';
 
         ob_start();
-        $actual = shell_exec('sudo php ' . $script . 'print');
+        $actual = shell_exec('php ' . $script . 'print');
         ob_end_clean();
 
         $expected = 'printMainAction';

@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Collection;
 
-use Phalcon\Support\Collection;
-use Phalcon\Tests\Fixtures\Support\Collection\JsonFixture;
+use Phalcon\Tests\Unit\Support\Fake\FakeJson;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
 
 final class JsonSerializeTest extends AbstractCollectionTestCase
 {
@@ -25,24 +23,26 @@ final class JsonSerializeTest extends AbstractCollectionTestCase
      *
      * @return void
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @dataProvider getClasses
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2020-09-09
      */
     #[DataProvider('getClasses')]
-    public function testSupportCollectionJsonSerialize(): void
+    public function testSupportCollectionJsonSerialize(string $class): void
     {
         $data = $this->getData();
-        $collection = new Collection($data);
+        $collection = new $class($data);
 
         $expected = $data;
-        $actual   = $collection->jsonSerialize();
+        $actual = $collection->jsonSerialize();
         $this->assertSame($expected, $actual);
 
         $data = [
             'one'    => 'two',
             'three'  => 'four',
             'five'   => 'six',
-            'object' => new JsonFixture(),
+            'object' => new FakeJson(),
         ];
 
         $expected = [
@@ -54,7 +54,7 @@ final class JsonSerializeTest extends AbstractCollectionTestCase
             ],
         ];
 
-        $collection = new Collection($data);
+        $collection = new $class($data);
 
         $actual = $collection->jsonSerialize();
         $this->assertSame($expected, $actual);

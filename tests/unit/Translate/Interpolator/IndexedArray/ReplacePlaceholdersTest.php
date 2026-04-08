@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Translate\Interpolator\IndexedArray;
 
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Translate\Interpolator\IndexedArray;
-use PHPUnit\Framework\Attributes\Test;
 
 final class ReplacePlaceholdersTest extends AbstractUnitTestCase
 {
@@ -30,21 +29,14 @@ final class ReplacePlaceholdersTest extends AbstractUnitTestCase
      */
     public function testTranslateInterpolatorIndexedarrayReplacePlaceholders(): void
     {
+
         $interpolator = new IndexedArray();
 
-        $actual = $interpolator->replacePlaceholders(
-            'Hello, %s %s %s!',
-            [
-                'John',
-                'D.',
-                'Doe',
-            ]
-        );
+        $actual = $interpolator->replacePlaceholders('Hello, %s %s %s!', ['John',
+                                                                          'D.',
+                                                                          'Doe',]);
 
-        $this->assertSame(
-            'Hello, John D. Doe!',
-            $actual
-        );
+        $this->assertSame('Hello, John D. Doe!', $actual);
     }
 
     /**
@@ -58,11 +50,12 @@ final class ReplacePlaceholdersTest extends AbstractUnitTestCase
      */
     public function testTranslateInterpolatorIndexedarrayReplacePlaceholdersWithNoPlaceholders(): void
     {
+
         $interpolator = new IndexedArray();
 
-        $source = 'Hello, %s %s %s!';
+        $source   = 'Hello, %s %s %s!';
         $expected = $source;
-        $actual = $interpolator->replacePlaceholders('Hello, %s %s %s!', []);
+        $actual   = $interpolator->replacePlaceholders('Hello, %s %s %s!', []);
         $this->assertSame($expected, $actual);
     }
 }

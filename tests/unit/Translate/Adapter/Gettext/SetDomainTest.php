@@ -13,14 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Translate\Adapter\Gettext;
 
-use Phalcon\Tests\Fixtures\Traits\TranslateGettextTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-use PHPUnit\Framework\Attributes\Test;
 
-#[RequiresPhpExtension('gettext')]
 final class SetDomainTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;
@@ -35,12 +32,13 @@ final class SetDomainTest extends AbstractUnitTestCase
      */
     public function testTranslateAdapterGettextSetDomain(): void
     {
+
         $params     = $this->getGettextConfig();
         $translator = new Gettext(new InterpolatorFactory(), $params);
 
         $this->assertSame('Hello', $translator->_('hi'));
 
-        //Check with a domain which doesn't exist
+        //Check with a domain which does not exist
         $translator->setDomain('no_exist');
         $this->assertSame('hi', $translator->_('hi'));
 

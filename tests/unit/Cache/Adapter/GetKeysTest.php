@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Cache\Adapter;
 
-use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Apcu;
 use Phalcon\Cache\Adapter\Libmemcached;
 use Phalcon\Cache\Adapter\Memory;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\Exception\Exception as StorageException;
@@ -26,10 +26,12 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
 use Phalcon\Support\Exception as HelperException;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeApcuIterator;
 use stdClass;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
+use function getOptionsRedisCluster;
 use function outputDir;
 use function phpversion;
 use function uniqid;
@@ -168,6 +170,30 @@ final class GetKeysTest extends AbstractUnitTestCase
         $this->assertTrue($adapter->clear());
 
         $this->runTests($adapter, 'ph-memc-');
+    }
+
+    /**
+     * Tests Phalcon\Cache\Adapter\Apcu :: getKeys() - iterator error
+     *
+     * @return void
+     *
+     * @throws Exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testCacheAdapterApcuGetKeysIteratorError(): void
+    {
+        $this->checkExtensionIsLoaded('apcu');
+
+        $serializer = new SerializerFactory();
+        $adapter    = new FakeApcuIterator($serializer);
+
+        $this->setupTest($adapter);
+
+        $actual = $adapter->getKeys();
+        $this->assertIsArray($actual);
+        $this->assertEmpty($actual);
     }
 
     /**

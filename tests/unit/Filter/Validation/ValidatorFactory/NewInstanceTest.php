@@ -17,7 +17,6 @@ use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\ValidatorFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
@@ -30,7 +29,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
     public function testFilterValidationValidatorFactoryNewInstance(): void
     {
         $factory = new ValidatorFactory();
-        $name    = 'alnum';
+        $name = 'alnum';
 
         $validator = $factory->newInstance($name);
 
@@ -46,9 +45,9 @@ final class NewInstanceTest extends AbstractUnitTestCase
     public function testFilterValidationValidatorFactoryNewInstanceException(): void
     {
         $factory = new ValidatorFactory();
-        $name    = 'unknown';
+        $name = 'unknown';
 
-        $this->expectExceptionMessage(Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Service unknown is not registered');
 
         $factory->newInstance($name);

@@ -17,7 +17,7 @@ use Phalcon\DataMapper\Pdo\ConnectionLocator;
 use Phalcon\DataMapper\Table\Exception\TableClassMissingException;
 use Phalcon\DataMapper\Table\TableLocator;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\DataMapper\Table\Invoices\InvoicesTable;
+use Phalcon\Tests\Support\DataMapper\Table\Invoices\InvoicesTable;
 
 final class TableLocatorTest extends AbstractDatabaseTestCase
 {

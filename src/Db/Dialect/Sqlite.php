@@ -63,16 +63,10 @@ class Sqlite extends Dialect
         if (true === $column->hasDefault()) {
             $defaultValue = $column->getDefault();
 
-            if (is_string($defaultValue)) {
-                if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
-                    $sql .= " DEFAULT CURRENT_TIMESTAMP";
-                } else {
-                    $sql .= ' DEFAULT "'
-                        . addcslashes($defaultValue, '"')
-                        . '"';
-                }
+            if (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
+                $sql .= " DEFAULT CURRENT_TIMESTAMP";
             } else {
-                $sql .= " DEFAULT " . $defaultValue;
+                $sql .= ' DEFAULT "' . addcslashes((string)$defaultValue, '"') . '"';
             }
         }
 
@@ -191,11 +185,11 @@ class Sqlite extends Dialect
         /**
          * Create a temporary or normal table
          */
-        $sql = "CREATE ";
         if ($temporary) {
-            $sql = "TEMPORARY";
+            $sql = "CREATE TEMPORARY TABLE " . $tableName;
+        } else {
+            $sql = "CREATE TABLE " . $tableName;
         }
-        $sql .= " TABLE " . $tableName;
 
         $sql .= " (\n\t";
 
@@ -229,16 +223,12 @@ class Sqlite extends Dialect
             if (true === $column->hasDefault()) {
                 $defaultValue = $column->getDefault();
 
-                if (is_string($defaultValue)) {
-                    if (str_contains(strtoupper($defaultValue), "CURRENT_TIMESTAMP")) {
-                        $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
-                    } else {
-                        $columnLine .= " DEFAULT \""
-                            . addcslashes($defaultValue, "\"")
-                            . "\"";
-                    }
+                if (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
+                    $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
                 } else {
-                    $columnLine .= " DEFAULT " . $defaultValue;
+                    $columnLine .= " DEFAULT \""
+                        . addcslashes((string)$defaultValue, "\"")
+                        . "\"";
                 }
             }
 

@@ -45,7 +45,7 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
+                'name' => '12345678',
             ]
         );
 
@@ -57,7 +57,7 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
+                'name' => '1234567890',
             ]
         );
 
@@ -90,7 +90,7 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue',
+                'name' => '1234567890',
             ]
         );
 
@@ -102,12 +102,12 @@ final class ValidateTest extends AbstractUnitTestCase
 
         $messages = $validation->validate(
             [
-                'name' => 'SomeValue123',
+                'name' => '123456789',
             ]
         );
 
         $this->assertSame(
-            0,
+            1,
             $messages->count()
         );
     }

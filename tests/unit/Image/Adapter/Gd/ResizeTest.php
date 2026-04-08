@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
-use Phalcon\Tests\Fixtures\Traits\GdTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
-use function dataDir;
+use function supportDir;
 
 final class ResizeTest extends AbstractUnitTestCase
 {
@@ -32,14 +32,14 @@ final class ResizeTest extends AbstractUnitTestCase
     {
         return [
             [
-                dataDir('assets/images/example-jpg.jpg'),
+                supportDir('assets/images/example-jpg.jpg'),
                 'resize.jpg',
                 75,
                 197,
                 'fbf9f3e3c3c1c183',
             ],
             [
-                dataDir('assets/images/example-png.png'),
+                supportDir('assets/images/example-png.png'),
                 'resize.jpg',
                 50,
                 50,
@@ -177,7 +177,7 @@ final class ResizeTest extends AbstractUnitTestCase
     ): void {
         $this->checkJpegSupport();
 
-        $source = dataDir('assets/images/example-jpg.jpg');
+        $source = supportDir('assets/images/example-jpg.jpg');
         $image  = new Gd($source);
 
         $this->expectException(Exception::class);

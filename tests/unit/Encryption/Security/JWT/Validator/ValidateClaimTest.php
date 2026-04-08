@@ -13,7 +13,7 @@ namespace Phalcon\Tests\Unit\Encryption\Security\JWT\Validator;
 
 use Phalcon\Encryption\Security\JWT\Validator;
 use Phalcon\Tests\AbstractUnitTestCase;
-use Phalcon\Tests\Fixtures\Traits\JWTTrait;
+use Phalcon\Tests\Unit\Encryption\Fake\JWTTrait;
 
 final class ValidateClaimTest extends AbstractUnitTestCase
 {

@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Database\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Repository;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Fixtures\Paginator\Store;
+use Phalcon\Tests\Support\Paginator\Store;
 
 use function array_fill;
 

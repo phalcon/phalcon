@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
-use Phalcon\Tests\Fixtures\Tasks\MainTask;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Tasks\MainTask;
 
 final class CallActionMethodTest extends AbstractUnitTestCase
 {

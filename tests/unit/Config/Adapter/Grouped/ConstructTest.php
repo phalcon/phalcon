@@ -5,8 +5,6 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * (c) Phalcon Team <team@phalcon.io>
- *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -18,10 +16,10 @@ namespace Phalcon\Tests\Unit\Config\Adapter\Grouped;
 use Phalcon\Config\Adapter\Grouped;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\Fixtures\Traits\ConfigTrait;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Traits\ConfigTrait;
 
-use function dataDir;
+use function supportDir;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -29,7 +27,7 @@ final class ConstructTest extends AbstractUnitTestCase
 
     public function tearDown(): void
     {
-        unset($this->config['test']['property']); //Removing Extra Property
+        unset($this->config['test']['property']);
     }
 
     /**
@@ -44,10 +42,10 @@ final class ConstructTest extends AbstractUnitTestCase
         $this->config['test']['property']  = 'blah';
 
         $config = [
-            dataDir('assets/config/config.php'),
+            supportDir('assets/config/config.php'),
             [
                 'adapter'  => 'json',
-                'filePath' => dataDir('assets/config/config.json'),
+                'filePath' => supportDir('assets/config/config.json'),
             ],
             [
                 'adapter' => 'array',
@@ -86,7 +84,7 @@ final class ConstructTest extends AbstractUnitTestCase
 
         $config = [
             [
-                'filePath' => dataDir('assets/config/config.json'),
+                'filePath' => supportDir('assets/config/config.json'),
             ],
             [
                 'adapter' => 'array',
@@ -100,10 +98,7 @@ final class ConstructTest extends AbstractUnitTestCase
 
         $object = new Grouped($config, 'json');
 
-        $this->compareConfig(
-            $this->config,
-            $object
-        );
+        $this->compareConfig($this->config, $object);
     }
 
     /**
