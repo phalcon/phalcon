@@ -27,73 +27,29 @@ class Ip
      */
     public function __invoke(string $input, int $filter = 0): string|false
     {
-        $protocol = $this->getIpAddressProtocolVersion($input);
-        if ($protocol === false) {
+        $input = trim($input);
+
+        if (strpos($input, "/") !== false) {
+            [$ip, $mask] = explode("/", $input, 2);
+
+            $filtered = filter_var($ip, FILTER_VALIDATE_IP, $filter);
+            if ($filtered === false) {
+                return false;
+            }
+
+            if (!ctype_digit($mask)) {
+                return false;
+            }
+
+            $maxMask = strpos($filtered, ':') !== false ? 128 : 32;
+
+            if ((int)$mask <= $maxMask) {
+                return $filtered . "/" . $mask;
+            }
+
             return false;
         }
 
-        // CIDR notation (e.g., 192.168.1.0/24)
-        if (strpos($input, "/") !== false) {
-            $parts = explode("/", $input, 2);
-            $ip    = $parts[0];
-            $mask  = $parts[1];
-
-            // Try IPv4 validation
-            if ($protocol === 4) {
-                $filtered = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | $filter);
-                if ($filtered) {
-                    if (is_numeric($mask) && $mask >= 0 && $mask <= 32) {
-                        return $filtered . "/" . $mask;
-                    }
-                }
-            }
-
-            // Try IPv6 validation
-            if ($protocol === 6) {
-                $filtered = filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | $filter);
-                if ($filtered) {
-                    if (is_numeric($mask) && $mask >= 0 && $mask <= 128) {
-                        return $filtered . "/" . $mask;
-                    }
-                }
-            }
-        } else {
-            // Single IP
-            if ($protocol === 4) {
-                return filter_var($input, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | $filter);
-            }
-
-            if ($protocol === 6) {
-                return filter_var($input, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | $filter);
-            }
-        }
-
-        // return false if nothing filtered.
-        return false;
-    }
-
-    /**
-     * Return the IP address protocol version
-     *
-     * @param string $input
-     * @return int|false
-     */
-    private function getIpAddressProtocolVersion(string $input): int | false
-    {
-        $ip = $input;
-        if (strpos($ip, "/") !== false) {
-            $parts   = explode("/", $ip, 2);
-            $ip      = $parts[0];
-        }
-
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-            return 4;
-        }
-
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
-            return 6;
-        }
-
-        return false;
+        return filter_var($input, FILTER_VALIDATE_IP, $filter);
     }
 }

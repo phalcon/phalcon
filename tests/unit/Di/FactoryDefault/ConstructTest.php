@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
 use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as ManagerAssets;
+use Phalcon\Db\Event\Factory;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
@@ -139,6 +140,10 @@ final class ConstructTest extends AbstractUnitTestCase
                 'url',
                 Url::class,
             ],
+            [
+                'modelsEventFactory',
+                Factory::class,
+            ]
         ];
     }
 
@@ -173,11 +178,11 @@ final class ConstructTest extends AbstractUnitTestCase
     ): void {
         $container = new FactoryDefault();
 
-        if ('sessionBag' === $service) {
-            $params = ['someName'];
-        } else {
-            $params = null;
-        }
+        $params = match ($service) {
+            'sessionBag' => ['someName'],
+            'modelsEventFactory' => [$container],
+            default => null,
+        };
 
         $actual = $container->get($service, $params);
         $this->assertInstanceOf($class, $actual);
