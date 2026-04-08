@@ -118,10 +118,6 @@ class Request extends AbstractInjectionAware implements
      * @var string
      */
     protected string $trustedProxyHeader = '';
-    /**
-     * @var string
-     */
-    protected string $trustedProxyHeader = "";
 
     /**
      * Gets a variable from the $_REQUEST superglobal applying filters if
@@ -2042,42 +2038,6 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $files;
-    }
-
-    /**
-     * Checks whether the given IP address belongs to one of the trusted proxies.
-     *
-     * @param string $ip
-     * @return bool
-     */
-    private function isProxyTrusted(string $ip): bool
-    {
-        foreach ($this->trustedProxies as $trusted) {
-            if (strpos($trusted, '/') !== false) {
-                return $this->isIpAddressInCIDR($ip, $trusted);
-            } else {
-                return $ip === $trusted;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Verifies that the given IP address is public (not private or reserved).
-     *
-     * @param string $forwardedIp
-     * @return string|false
-     */
-    private function isValidPublicIp(string $forwardedIp): string | false
-    {
-        $filterService = $this->getFilterService();
-
-        return $filterService->sanitize($forwardedIp, [
-            "ip" => [
-                "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE,
-            ],
-        ]);
     }
 
     /**
