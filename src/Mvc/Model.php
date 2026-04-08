@@ -1107,7 +1107,7 @@ abstract class Model extends AbstractInjectionAware implements
                     Column::TYPE_TINYINTEGER => intval($value),
                     Column::TYPE_DECIMAL,
                     Column::TYPE_DOUBLE,
-                    Column::TYPE_FLOAT       => (double)$value,
+                    Column::TYPE_FLOAT       => (float)$value,
                     Column::TYPE_BOOLEAN     => (bool)$value,
                     default                  => $value,
                 };

@@ -1668,10 +1668,10 @@ class Request extends AbstractInjectionAware implements
 
         foreach ($qualityParts as $accept) {
             if (0 === $counter) {
-                $quality      = (double)$accept['quality'];
+                $quality      = (float)$accept['quality'];
                 $selectedName = $accept[$name];
             } else {
-                $acceptQuality = (double)$accept['quality'];
+                $acceptQuality = (float)$accept['quality'];
 
                 if ($acceptQuality > $quality) {
                     $quality      = $acceptQuality;
@@ -1782,7 +1782,7 @@ class Request extends AbstractInjectionAware implements
                     $split = explode('=', $headerPart, 2);
 
                     if ('q' === $split[0]) {
-                        $headerParts['quality'] = (double)$split[1];
+                        $headerParts['quality'] = (float)$split[1];
                     } else {
                         $headerParts[$split[0]] = $split[1];
                     }
