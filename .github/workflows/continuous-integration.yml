@@ -249,7 +249,7 @@ jobs:
             ./config/ci/linux-setup-locales.sh
           fi
 
-          cp tests/_config/.env.default .env
+          cp tests/support/_config/.env.default .env
 
       - name: "Run Database Tests (MySQL)"
         env:
