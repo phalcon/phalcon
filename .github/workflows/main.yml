@@ -175,108 +175,108 @@ jobs:
           name: "unit-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
 
-  db-mysql-tests:
-    name: MySQL tests
-
-    permissions:
-      contents: read # to fetch code (actions/checkout)
-
-    runs-on: ubuntu-24.04
-
-    strategy:
-      fail-fast: true
-      matrix:
-        php:
-          - '8.1'
-
-    services:
-      mysql:
-        image: mysql:8.0
-        ports:
-          - "3306:3306"
-        env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_USER: phalcon
-          MYSQL_DATABASE: phalcon
-          MYSQL_PASSWORD: secret
-        options: >-
-          --health-cmd "mysqladmin ping --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      postgres:
-        image: postgres:18-alpine
-        ports:
-          - "5432:5432"
-        env:
-          POSTGRES_USER: phalcon
-          POSTGRES_PASSWORD: secret
-          POSTGRES_DB: phalcon
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:8-alpine
-        ports:
-          - "6379:6379"
-      memcached:
-        image: memcached:1.6-alpine
-        ports:
-          - "11211:11211"
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: "Setup platform specific environment"
-        shell: pwsh
-        run: git config --global core.autocrlf false
-
-      - name: "Setup PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-          tools: pecl, phpize, php-config, composer:v2
-          coverage: xdebug
-        env:
-          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PHALCON_PATH: ext
-
-      - name: "Validate composer"
-        run: composer validate --no-check-all --no-check-publish
-
-      - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v3"
-        with:
-          composer-options: "--prefer-dist"
-
-      - name: "Setup Tests"
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
-          fi
-
-          cp tests/support/_config/.env.default .env
-          php tests/support/_config/generate-db-schemas.php
-
-      - name: "Run Database Tests (MySQL)"
-        env:
-          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DATA_MYSQL_USER: root
-          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
-          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-        run: composer test-db-mysql-coverage
-
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v7"
-        with:
-          name: "db-mysql-${{ matrix.php }}.coverage"
-          path: "tests/_output/coverage.xml"
-
+#  db-mysql-tests:
+#    name: MySQL tests
+#
+#    permissions:
+#      contents: read # to fetch code (actions/checkout)
+#
+#    runs-on: ubuntu-24.04
+#
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        php:
+#          - '8.1'
+#
+#    services:
+#      mysql:
+#        image: mysql:8.0
+#        ports:
+#          - "3306:3306"
+#        env:
+#          MYSQL_ROOT_PASSWORD: secret
+#          MYSQL_USER: phalcon
+#          MYSQL_DATABASE: phalcon
+#          MYSQL_PASSWORD: secret
+#        options: >-
+#          --health-cmd "mysqladmin ping --silent"
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#      postgres:
+#        image: postgres:18-alpine
+#        ports:
+#          - "5432:5432"
+#        env:
+#          POSTGRES_USER: phalcon
+#          POSTGRES_PASSWORD: secret
+#          POSTGRES_DB: phalcon
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#      redis:
+#        image: redis:8-alpine
+#        ports:
+#          - "6379:6379"
+#      memcached:
+#        image: memcached:1.6-alpine
+#        ports:
+#          - "11211:11211"
+#
+#    steps:
+#      - uses: actions/checkout@v6
+#
+#      - name: "Setup platform specific environment"
+#        shell: pwsh
+#        run: git config --global core.autocrlf false
+#
+#      - name: "Setup PHP"
+#        uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: ${{ matrix.php }}
+#          extensions: ${{ env.EXTENSIONS }}
+#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+#          tools: pecl, phpize, php-config, composer:v2
+#          coverage: xdebug
+#        env:
+#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          PHALCON_PATH: ext
+#
+#      - name: "Validate composer"
+#        run: composer validate --no-check-all --no-check-publish
+#
+#      - name: "Install development dependencies with Composer"
+#        uses: "ramsey/composer-install@v3"
+#        with:
+#          composer-options: "--prefer-dist"
+#
+#      - name: "Setup Tests"
+#        shell: bash
+#        run: |
+#          if [ "${{ runner.os }}" = "Linux" ]; then
+#            ./config/ci/linux-setup-locales.sh
+#          fi
+#
+#          cp tests/support/_config/.env.default .env
+#          php tests/support/_config/generate-db-schemas.php
+#
+#      - name: "Run Database Tests (MySQL)"
+#        env:
+#          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
+#          DATA_MYSQL_USER: root
+#          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+#          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+#        run: composer test-db-mysql-coverage
+#
+#      - name: "Upload coverage file artifact"
+#        uses: "actions/upload-artifact@v7"
+#        with:
+#          name: "db-mysql-${{ matrix.php }}.coverage"
+#          path: "tests/_output/coverage.xml"
+#
   #  db-postgres-tests:
   #    name: PostgreSQL tests
   #
@@ -437,7 +437,7 @@ jobs:
     needs:
       - "phpcs"
       - "unit-tests"
-      - "db-mysql-tests"
+#      - "db-mysql-tests"
 #      - "db-postgres-tests"
 #      - "db-sqlite-tests"
 

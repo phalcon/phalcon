@@ -1,6 +1,6 @@
 <?php
 
-namespace Phalcon\Tests\Fixtures\Event;
+namespace Phalcon\Tests\Unit\Events\Fake;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 
