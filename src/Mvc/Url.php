@@ -23,6 +23,7 @@ use function is_string;
 use function preg_match;
 use function preg_replace;
 use function strlen;
+use function substr;
 
 /**
  * This component helps in the generation of: URIs, URLs and Paths
@@ -223,16 +224,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
     {
         if (null === $this->baseUri) {
             if (isset($_SERVER["PHP_SELF"])) {
-                /**
-                 * @todo Check the implementation for this
-                 */
-                // $uri = phalcon_get_uri($_SERVER["PHP_SELF"]);
-                $uri = $_SERVER["PHP_SELF"];
+                $uri = $this->getUri($_SERVER["PHP_SELF"]);
             } else {
                 $uri = null;
             }
 
-            if (null === $uri) {
+            if (empty($uri)) {
                 $baseUri = "/";
             } else {
                 $baseUri = "/" . $uri . "/";
@@ -360,6 +357,43 @@ class Url extends AbstractInjectionAware implements UrlInterface
         $this->staticBaseUri = $staticBaseUri;
 
         return $this;
+    }
+
+    /**
+     * Extracts the directory component between the last two path separators.
+     *
+     * Port of the C function phalcon_get_uri() from ext/phalcon/mvc/url/utils.c.
+     *
+     * For example: "/var/www/app/index.php" returns "app"
+     *              "/index.php"             returns ""
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function getUri(string $path): string
+    {
+        $length = strlen($path);
+        if ($length === 0) {
+            return '';
+        }
+
+        $found = 0;
+        $mark  = 0;
+
+        for ($i = $length; $i > 0; $i--) {
+            $ch = $path[$i - 1];
+            if ($ch === '/' || $ch === '\\') {
+                $found++;
+                if ($found === 1) {
+                    $mark = $i - 1;
+                } else {
+                    return substr($path, $i, $mark - $i);
+                }
+            }
+        }
+
+        return '';
     }
 
     /**

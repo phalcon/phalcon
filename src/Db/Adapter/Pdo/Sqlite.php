@@ -272,7 +272,7 @@ class Sqlite extends PdoAdapter
                  * Text are varchars
                  */
                 case str_contains($lowerType, "text"):
-                    $definition["type"] = Column::TYPE_TEXT;
+                    $definition["type"] = Column::TYPE_VARCHAR;
 
                     break;
                 default:

@@ -31,6 +31,8 @@ use function is_array;
 use function is_bool;
 use function is_int;
 use function method_exists;
+use function preg_quote;
+use function preg_replace_callback;
 
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
@@ -193,6 +195,8 @@ abstract class AbstractConnection
 
         $this->profileStart(__METHOD__);
 
+        [$statement, $values] = $this->rewriteNullBindings($statement, $values);
+
         $sth = $this->pdo->prepare($statement);
         foreach ($values as $name => $value) {
             $this->performBind($sth, $name, $value);
@@ -265,6 +269,44 @@ abstract class AbstractConnection
         $this->profiler = $profiler;
 
         return $this;
+    }
+
+    /**
+     * Rewrites IS :param / IS NOT :param to IS NULL / IS NOT NULL for null
+     * values, as some databases (e.g. PostgreSQL) do not support binding null
+     * to an IS / IS NOT operator.
+     *
+     * @param string $statement
+     * @param array  $values
+     *
+     * @return array
+     */
+    protected function rewriteNullBindings(string $statement, array $values): array
+    {
+        foreach ($values as $name => $value) {
+            if (is_int($name)) {
+                continue;
+            }
+
+            $actual = is_array($value) ? $value[0] : $value;
+            if ($actual !== null) {
+                continue;
+            }
+
+            $pattern = '/\bIS\s+(NOT\s+)?:' . preg_quote((string)$name, '/') . '\b/i';
+            if (preg_match($pattern, $statement)) {
+                $statement = preg_replace_callback(
+                    $pattern,
+                    static function (array $matches): string {
+                        return 'IS ' . (!empty($matches[1]) ? 'NOT ' : '') . 'NULL';
+                    },
+                    $statement
+                );
+                unset($values[$name]);
+            }
+        }
+
+        return [$statement, $values];
     }
 
     /**

@@ -158,7 +158,7 @@ jobs:
             ./config/ci/linux-setup-locales.sh
           fi
 
-          cp tests/_config/.env.default .env
+          cp tests/support/_config/.env.default .env
 
       - name: "Run Unit Tests"
         run: composer test-unit-coverage
@@ -336,7 +336,7 @@ jobs:
   #            ./config/ci/linux-setup-locales.sh
   #          fi
   #
-  #          cp tests/_config/.env.default .env
+  #          cp tests/support/_config/.env.default .env
   #          vendor/bin/codecept build
   #
   #      - name: "Run Database Tests (PostgreSQL)"
@@ -402,7 +402,7 @@ jobs:
             ./config/ci/linux-setup-locales.sh
           fi
 
-          cp tests/_config/.env.default .env
+          cp tests/support/_config/.env.default .env
 
       - name: "Run Database Tests (SQLite)"
         run: composer test-db-sqlite-coverage
