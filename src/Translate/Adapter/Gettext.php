@@ -284,10 +284,12 @@ class Gettext extends AbstractAdapter
         $this->category = $category;
         $this->locale   = setlocale($category, $localeArray);
 
-        putenv("LC_ALL=" . $this->locale);
-        putenv("LANG=" . $this->locale);
-        putenv("LANGUAGE=" . $this->locale);
-        setlocale(LC_ALL, $this->locale);
+        if (false !== $this->locale) {
+            putenv("LC_ALL=" . $this->locale);
+            putenv("LANG=" . $this->locale);
+            putenv("LANGUAGE=" . $this->locale);
+            setlocale(LC_ALL, $this->locale);
+        }
 
         return $this->locale;
     }
