@@ -453,9 +453,15 @@ jobs:
         with:
           path: cv
 
-      - name: Display structure of downloaded files
+      - name: "Display structure of downloaded files"
         run: |
+          mv cv/unit-8.1.coverage/coverage.xml      cv/02.xml
+          mv cv/unit-8.2.coverage/coverage.xml      cv/03.xml
+          mv cv/unit-8.3.coverage/coverage.xml      cv/04.xml
+          mv cv/unit-8.4.coverage/coverage.xml      cv/05.xml
+          mv cv/unit-8.5.coverage/coverage.xml      cv/06.xml
           ls -la cv/
+
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
@@ -470,11 +476,12 @@ jobs:
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.php.coverage.reportPaths=cv/
+            -Dsonar.php.coverage.reportPaths=cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
             -Dsonar.sources=src/
             -Dsonar.tests=tests/
             -Dsonar.test.exclusions=tests/**
             -Dsonar.verbose=true
+
 
 #      - name: "Display structure of downloaded files"
 #        run: |
@@ -485,4 +492,3 @@ jobs:
 #          mv cv/unit-8.4.coverage/coverage.xml      cv/05.xml
 #          mv cv/unit-8.5.coverage/coverage.xml      cv/06.xml
 #          ls -la cv/
-#
