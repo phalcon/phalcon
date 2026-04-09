@@ -65,7 +65,9 @@
     "phpunit/phpunit": "^10.5",
     "predis/predis": "^3.0",
     "squizlabs/php_codesniffer": "^4.0",
-    "vlucas/phpdotenv": "^5.5"
+    "vlucas/phpdotenv": "^5.5",
+    "pds/composer-script-names": "^1.0",
+    "phalcon/phql": "1.0.x-dev"
   },
   "scripts": {
     "analyze": "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1024M",

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use PDOException;
+use Phalcon\Cache\CacheInterface;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -21,15 +22,13 @@ use Phalcon\Db\ResultInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Mvc\Model\Query\Lang;
 use Phalcon\Mvc\Model\Query\Status;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Phql\Parser;
 use Phalcon\Support\Settings;
-use Phalcon\Cache\CacheInterface;
-use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 
 use function array_merge;
@@ -700,7 +699,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          * This function parses the PHQL statement
          */
         $phql = $this->phql;
-        $ast  = Lang::parsePHQL($phql);
+        $ast  = (new Parser((bool) Settings::get('orm.enable_literals')))->parse($phql);
 
         $irPhql   = null;
         $uniqueId = null;
