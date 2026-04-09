@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0afc0479b5673b8111cc95200c4020fe",
+    "content-hash": "f4ae364d43e33ddd35b2a0f9196d658a",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1337,6 +1337,33 @@
             "time": "2025-12-06T11:56:16+00:00"
         },
         {
+            "name": "pds/composer-script-names",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-pds/composer-script-names.git",
+                "reference": "e6a78aaeaee7cef82a995718ab2f5d0445ef8073"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-pds/composer-script-names/zipball/e6a78aaeaee7cef82a995718ab2f5d0445ef8073",
+                "reference": "e6a78aaeaee7cef82a995718ab2f5d0445ef8073",
+                "shasum": ""
+            },
+            "type": "standard",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC-BY-SA-4.0"
+            ],
+            "description": "Standard for Composer script names.",
+            "homepage": "https://github.com/php-pds/composer-script-names",
+            "support": {
+                "issues": "https://github.com/php-pds/composer-script-names/issues",
+                "source": "https://github.com/php-pds/composer-script-names/tree/1.0.0"
+            },
+            "time": "2023-04-06T13:42:16+00:00"
+        },
+        {
             "name": "pds/skeleton",
             "version": "1.0.0",
             "source": {
@@ -1372,17 +1399,92 @@
             "time": "2017-01-25T23:30:41+00:00"
         },
         {
+            "name": "phalcon/phql",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/phql.git",
+                "reference": "2b5d521cbb5f100392011d995894bacd94333670"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/2b5d521cbb5f100392011d995894bacd94333670",
+                "reference": "2b5d521cbb5f100392011d995894bacd94333670",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=8.1 <9.0"
+            },
+            "require-dev": {
+                "pds/composer-script-names": "^1.0",
+                "pds/skeleton": "^1.0",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "suggest": {
+                "phalcon/phalcon": "The Phalcon framework this module integrates with"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "resources/files/parser.php"
+                ],
+                "psr-4": {
+                    "Phalcon\\Phql\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalcon.io",
+                    "homepage": "https://phalcon.io"
+                }
+            ],
+            "description": "Phalcon Query Language (PHQL)",
+            "homepage": "https://phalcon.io",
+            "keywords": [
+                "framework",
+                "phalcon",
+                "php",
+                "phql",
+                "query",
+                "sql"
+            ],
+            "support": {
+                "issues": "https://github.com/phalcon/phql/issues",
+                "source": "https://github.com/phalcon/phql"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2026-04-09T19:14:20+00:00"
+        },
+        {
             "name": "phalcon/volt",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "8d15be25344ac3611ba696d70806573a57cc6f00"
+                "reference": "2495ae92d5e0ab081d0c2991d66b7f7eb457bc48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/8d15be25344ac3611ba696d70806573a57cc6f00",
-                "reference": "8d15be25344ac3611ba696d70806573a57cc6f00",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/2495ae92d5e0ab081d0c2991d66b7f7eb457bc48",
+                "reference": "2495ae92d5e0ab081d0c2991d66b7f7eb457bc48",
                 "shasum": ""
             },
             "require": {
@@ -1448,7 +1550,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-02-16T10:51:39+00:00"
+            "time": "2026-04-06T13:41:00+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -5669,6 +5771,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "phalcon/phql": 20,
         "phalcon/volt": 20
     },
     "prefer-stable": false,
