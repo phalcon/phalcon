@@ -22,7 +22,6 @@ use Phalcon\DataMapper\Pdo\Exception\Exception;
 
 use function preg_match;
 use function preg_match_all;
-use function preg_replace;
 use function str_contains;
 use function str_replace;
 use function strcasecmp;
@@ -173,11 +172,7 @@ class Sqlite extends AbstractAdapter
             true !== empty($defaultValue) &&
             0 !== strcasecmp($defaultValue, "null")
         ) {
-            $defaultValue = preg_replace(
-                "/^'|'$/",
-                "",
-                $defaultValue
-            );
+            $defaultValue = trim($defaultValue, "'");
         }
         [$defaultValue, $hasDefault] = $this->processDefault(
             $defaultValue,
