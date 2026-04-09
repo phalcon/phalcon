@@ -20,6 +20,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use RuntimeException;
 use Throwable;
 
+/**
+ * @group phql
+ */
 final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

@@ -21,6 +21,9 @@ use Phalcon\Tests\Support\Models\Personas;
 use Phalcon\Tests\Support\Models\Select;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class ManagerTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

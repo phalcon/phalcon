@@ -27,6 +27,9 @@ use function date;
 use function getOptionsMysql;
 use function uniqid;
 
+/**
+ * @group phql
+ */
 final class ToArrayTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

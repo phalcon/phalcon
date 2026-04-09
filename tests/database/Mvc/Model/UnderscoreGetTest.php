@@ -23,6 +23,9 @@ use Phalcon\Tests\Support\Models;
 use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class UnderscoreGetTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

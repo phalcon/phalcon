@@ -22,6 +22,9 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class ExecuteQueryTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

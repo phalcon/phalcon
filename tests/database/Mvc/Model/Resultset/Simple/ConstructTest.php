@@ -24,6 +24,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function cacheModelsDir;
 
+/**
+ * @group phql
+ */
 final class ConstructTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

@@ -24,6 +24,9 @@ use Phalcon\Tests\Support\Models\AlbumORama\Artists;
 use Phalcon\Tests\Support\Models\AlbumORama\Songs;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class IsRelationshipLoadedTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
