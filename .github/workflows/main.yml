@@ -8,8 +8,6 @@
 name: "Phalcon CI"
 
 on:
-  schedule:
-    - cron: '0 2 * * *' # Daily at 02:00 runs only on default branch
   push:
     paths-ignore:
       - '**.md'
@@ -43,7 +41,7 @@ jobs:
     permissions:
       contents: read
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: true
@@ -447,15 +445,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "Display structure of downloaded files"
+      - name: Create directory for coverage files
         run: mkdir -p cv
 
-      - name: "Download coverage files"
+      - name: Download coverage files
         uses: "actions/download-artifact@v8"
         with:
-          path: "cv"
+          path: cv
 
-      - name: "Display structure of downloaded files"
+      - name: Display structure of downloaded files
         run: |
           ls -la cv/
 
@@ -464,6 +462,18 @@ jobs:
         with:
           directory: cv/
           fail_ci_if_error: false
+
+      - uses: SonarSource/sonarqube-scan-action@<action version>
+        with:
+          projectBaseDir: src
+          args: >
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+            -Dsonar.php.coverage.reportPaths=cv/
+            -Dsonar.sources=src/
+            -Dsonar.tests=tests/
+            -Dsonar.test.exclusions=tests/**
+            -Dsonar.verbose=true
 
 #      - name: "Display structure of downloaded files"
 #        run: |
