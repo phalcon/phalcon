@@ -479,7 +479,6 @@ jobs:
             -Dsonar.php.coverage.reportPaths=cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
             -Dsonar.sources=src/
             -Dsonar.tests=tests/
-            -Dsonar.test.exclusions=tests/**
             -Dsonar.verbose=true
 
 
