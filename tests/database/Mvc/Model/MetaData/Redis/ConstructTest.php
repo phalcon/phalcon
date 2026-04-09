@@ -25,6 +25,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function env;
 
+/**
+ * @group phql
+ */
 final class ConstructTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

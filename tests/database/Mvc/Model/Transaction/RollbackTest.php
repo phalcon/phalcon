@@ -19,6 +19,9 @@ use Phalcon\Tests\Support\Migrations\PersonasMigration;
 use Phalcon\Tests\Support\Models\Personas;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class RollbackTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

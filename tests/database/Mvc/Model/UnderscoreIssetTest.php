@@ -17,6 +17,9 @@ use Phalcon\Tests\Support\Migrations\CustomersMigration;
 use Phalcon\Tests\Support\Models;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class UnderscoreIssetTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

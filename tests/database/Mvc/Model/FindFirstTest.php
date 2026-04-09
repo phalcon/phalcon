@@ -30,6 +30,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function uniqid;
 
+/**
+ * @group phql
+ */
 final class FindFirstTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

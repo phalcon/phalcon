@@ -25,6 +25,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function date;
 use function uniqid;
 
+/**
+ * @group phql
+ */
 final class DeleteTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

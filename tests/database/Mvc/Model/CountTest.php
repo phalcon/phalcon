@@ -22,6 +22,9 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Models\InvoicesMap;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class CountTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

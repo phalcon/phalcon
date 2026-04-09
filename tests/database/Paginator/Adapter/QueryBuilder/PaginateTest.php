@@ -26,6 +26,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function is_int;
 
+/**
+ * @group phql
+ */
 final class PaginateTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

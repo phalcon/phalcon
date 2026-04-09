@@ -37,6 +37,9 @@ use function sleep;
 use function uniqid;
 use function var_dump;
 
+/**
+ * @group phql
+ */
 final class FindTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

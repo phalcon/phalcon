@@ -21,6 +21,9 @@ use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
+/**
+ * @group phql
+ */
 final class UnderscoreCallTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

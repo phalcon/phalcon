@@ -28,6 +28,9 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function uniqid;
 
+/**
+ * @group phql
+ */
 final class QueryTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
