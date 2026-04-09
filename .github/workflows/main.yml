@@ -463,7 +463,8 @@ jobs:
           directory: cv/
           fail_ci_if_error: false
 
-      - uses: SonarSource/sonarqube-scan-action@<action version>
+      - name: Official SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v7.1.0
         with:
           projectBaseDir: src
           args: >
