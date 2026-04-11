@@ -423,8 +423,8 @@ class Imagick extends AbstractAdapter
      */
     protected function processPixelate(int $amount): void
     {
-        $width  = $this->width / $amount;
-        $height = $this->height / $amount;
+        $width  = (int) ($this->width / $amount);
+        $height = (int) ($this->height / $amount);
 
         $this->image->setIteratorIndex(0);
 
