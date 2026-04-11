@@ -18,6 +18,7 @@ use InvalidArgumentException;
 use Phalcon\Storage\Serializer\Base64;
 use Phalcon\Storage\Serializer\Json;
 use Phalcon\Storage\Serializer\Msgpack;
+use Phalcon\Storage\Serializer\None;
 use Phalcon\Storage\Serializer\Php;
 use Phalcon\Support\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
@@ -28,9 +29,67 @@ use Phalcon\Tests\Unit\Storage\Fake\FakeIgbinaryUnserializeWarning;
 use stdClass;
 
 use function json_encode;
+use function serialize;
+use function unserialize;
 
 final class ExceptionsTest extends AbstractUnitTestCase
 {
+    /**
+     * Tests Phalcon\Storage\Serializer\AbstractSerializer :: __serialize() -
+     * with array data
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageSerializerAbstractSerializerSerializeWithArray(): void
+    {
+        $data       = ['Phalcon', 'Framework'];
+        $serializer = new None($data);
+
+        $expected = $data;
+        $actual   = $serializer->__serialize();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Serializer\AbstractSerializer :: __serialize() -
+     * with non-array data returns empty array
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageSerializerAbstractSerializerSerializeWithNonArray(): void
+    {
+        $serializer = new None('Phalcon Framework');
+
+        $expected = [];
+        $actual   = $serializer->__serialize();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Serializer\AbstractSerializer :: __unserialize()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testStorageSerializerAbstractSerializerUnserialize(): void
+    {
+        $data       = ['Phalcon', 'Framework'];
+        $serializer = new None();
+        $serializer->__unserialize($data);
+
+        $expected = $data;
+        $actual   = $serializer->getData();
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * Tests Phalcon\Storage\Serializer\Base64 :: serialize() - exception
      *

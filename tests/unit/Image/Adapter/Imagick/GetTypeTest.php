@@ -13,21 +13,52 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
+use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+
+use function supportDir;
 
 final class GetTypeTest extends AbstractUnitTestCase
 {
     use ImagickTrait;
 
     /**
+     * @return array[]
+     */
+    public static function getExamples(): array
+    {
+        return [
+            [
+                supportDir('assets/images/example-gif.gif'),
+            ],
+            [
+                supportDir('assets/images/example-jpg.jpg'),
+            ],
+            [
+                supportDir('assets/images/example-png.png'),
+            ],
+        ];
+    }
+
+    /**
      * Tests Phalcon\Image\Adapter\Imagick :: getType()
      *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2016-02-19
+     * @dataProvider getExamples
+     *
+     * @return void
+     *
+     * @author       Phalcon Team <team@phalcon.io>
+     * @since        2016-02-19
      */
-    public function testImageAdapterImagickGetType(): void
+    #[DataProvider('getExamples')]
+    public function testImageAdapterImagickGetType(string $source): void
     {
-        $this->markTestSkipped('Need implementation');
+        $image = new Imagick($source);
+
+        $actual = $image->getType();
+        $this->assertIsInt($actual);
+        $this->assertGreaterThan(0, $actual);
     }
 }

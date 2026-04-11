@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
+use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
+
+use function supportDir;
 
 final class RenderTest extends AbstractUnitTestCase
 {
@@ -28,6 +31,31 @@ final class RenderTest extends AbstractUnitTestCase
      */
     public function testImageAdapterImagickRender(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $source = supportDir('assets/images/example-jpg.jpg');
+        $image  = new Imagick($source);
+        $image->setResourceLimit(6, 1);
+
+        $result = $image->render('jpg', 75);
+
+        $this->assertNotEmpty($result);
+        $this->assertIsString($result);
+    }
+
+    /**
+     * Tests Phalcon\Image\Adapter\Imagick :: render() - default extension
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2022-08-02
+     */
+    public function testImageAdapterImagickRenderDefaultExtension(): void
+    {
+        $source = supportDir('assets/images/example-jpg.jpg');
+        $image  = new Imagick($source);
+        $image->setResourceLimit(6, 1);
+
+        $result = $image->render();
+
+        $this->assertNotEmpty($result);
+        $this->assertIsString($result);
     }
 }
