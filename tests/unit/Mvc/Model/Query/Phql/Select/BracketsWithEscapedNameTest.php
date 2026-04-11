@@ -61,7 +61,7 @@ final class BracketsWithEscapedNameTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

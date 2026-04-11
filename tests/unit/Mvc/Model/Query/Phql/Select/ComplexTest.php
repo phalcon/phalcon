@@ -133,7 +133,7 @@ final class ComplexTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -202,7 +202,7 @@ final class ComplexTest extends AbstractUnitTestCase
                 'name' => 'inv_status_flag',
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -308,7 +308,7 @@ final class ComplexTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

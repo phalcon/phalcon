@@ -33,8 +33,7 @@ final class DistinctTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectAll(): void
     {
-        $source   = "SELECT ALL inv_status_flag "
-            . "FROM Invoices";
+        $source   = "SELECT ALL inv_status_flag " . "FROM Invoices";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -56,7 +55,7 @@ final class DistinctTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -69,8 +68,7 @@ final class DistinctTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectDistinct(): void
     {
-        $source   = "SELECT DISTINCT inv_status_flag "
-            . "FROM Invoices";
+        $source   = "SELECT DISTINCT inv_status_flag " . "FROM Invoices";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -92,7 +90,7 @@ final class DistinctTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -105,8 +103,7 @@ final class DistinctTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectDistinctInt(): void
     {
-        $source   = "SELECT DISTINCT inv_cst_id, inv_status_flag "
-            . "FROM Invoices";
+        $source   = "SELECT DISTINCT inv_cst_id, inv_status_flag " . "FROM Invoices";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -135,7 +132,7 @@ final class DistinctTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

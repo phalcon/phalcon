@@ -61,7 +61,7 @@ final class MatchAgainstTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -74,9 +74,7 @@ final class MatchAgainstTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectMatchAgainst(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE MATCH(inv_title) AGAINST ('invoice')";
+        $source   = "SELECT * FROM Invoices WHERE MATCH(inv_title) AGAINST ('invoice')";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -113,7 +111,7 @@ final class MatchAgainstTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

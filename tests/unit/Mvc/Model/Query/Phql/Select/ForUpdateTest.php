@@ -33,8 +33,7 @@ final class ForUpdateTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectForUpdate(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices FOR UPDATE";
+        $source   = "SELECT * " . "FROM Invoices FOR UPDATE";
         $expected = [
             'type'      => 309,
             'select'    => [
@@ -53,7 +52,7 @@ final class ForUpdateTest extends AbstractUnitTestCase
             'forUpdate' => true,
 
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -66,9 +65,7 @@ final class ForUpdateTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectForUpdateWhere(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE inv_id = 1 FOR UPDATE";
+        $source   = "SELECT * " . "FROM Invoices " . "WHERE inv_id = 1 FOR UPDATE";
         $expected = [
             'type'      => 309,
             'select'    => [
@@ -98,7 +95,7 @@ final class ForUpdateTest extends AbstractUnitTestCase
             'forUpdate' => true,
 
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

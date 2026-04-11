@@ -29,6 +29,104 @@ final class SubqueriesTest extends AbstractUnitTestCase
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcModelQueryPhqlSelectWhereInNestedSubquery(): void
+    {
+        $source   = "SELECT * FROM Invoices "
+            . "WHERE inv_cst_id IN "
+            . "(SELECT id FROM Customers "
+            . "WHERE id IN (SELECT cst_id FROM Orders WHERE status = 1))";
+        $expected = [
+            'type'   => 309,
+            'select' => [
+                'columns' => [
+                    0 => [
+                        'type' => 352,
+                    ],
+                ],
+                'tables'  => [
+                    'qualifiedName' => [
+                        'type' => 355,
+                        'name' => 'Invoices',
+                    ],
+                ],
+            ],
+            'where'  => [
+                'type'  => 315,
+                'left'  => [
+                    'type' => 355,
+                    'name' => 'inv_cst_id',
+                ],
+                'right' => [
+                    'type'   => 309,
+                    'select' => [
+                        'columns' => [
+                            0 => [
+                                'type'   => 354,
+                                'column' => [
+                                    'type' => 355,
+                                    'name' => 'id',
+                                ],
+                            ],
+                        ],
+                        'tables'  => [
+                            'qualifiedName' => [
+                                'type' => 355,
+                                'name' => 'Customers',
+                            ],
+                        ],
+                    ],
+                    'where'  => [
+                        'type'  => 315,
+                        'left'  => [
+                            'type' => 355,
+                            'name' => 'id',
+                        ],
+                        'right' => [
+                            'type'   => 309,
+                            'select' => [
+                                'columns' => [
+                                    0 => [
+                                        'type'   => 354,
+                                        'column' => [
+                                            'type' => 355,
+                                            'name' => 'cst_id',
+                                        ],
+                                    ],
+                                ],
+                                'tables'  => [
+                                    'qualifiedName' => [
+                                        'type' => 355,
+                                        'name' => 'Orders',
+                                    ],
+                                ],
+                            ],
+                            'where'  => [
+                                'type'  => 61,
+                                'left'  => [
+                                    'type' => 355,
+                                    'name' => 'status',
+                                ],
+                                'right' => [
+                                    'type'  => 258,
+                                    'value' => '1',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $actual   = $this->parser->parse($source);
+        unset($actual['id']);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-09
      */
     public function testMvcModelQueryPhqlSelectWhereInSubquery(): void
@@ -91,7 +189,7 @@ final class SubqueriesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -162,7 +260,7 @@ final class SubqueriesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -230,7 +328,7 @@ final class SubqueriesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -298,7 +396,7 @@ final class SubqueriesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -382,7 +480,7 @@ final class SubqueriesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

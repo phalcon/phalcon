@@ -60,7 +60,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -99,7 +99,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -140,7 +140,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -180,7 +180,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -193,12 +193,7 @@ final class AggregateTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectCountSumAvgMinMax(): void
     {
-        $source   = "SELECT COUNT(*), "
-            . "SUM(inv_total), "
-            . "AVG(inv_total), "
-            . "MIN(inv_total), "
-            . "MAX(inv_total) "
-            . "FROM Invoices";
+        $source   = "SELECT COUNT(*), SUM(inv_total), AVG(inv_total), MIN(inv_total), MAX(inv_total) FROM Invoices";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -276,7 +271,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -316,7 +311,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -356,7 +351,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -396,7 +391,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -436,7 +431,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -476,7 +471,7 @@ final class AggregateTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
