@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Model\Query;
 
 use Phalcon\Mvc\Model\Query;
+use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 use ReflectionClass;
 
