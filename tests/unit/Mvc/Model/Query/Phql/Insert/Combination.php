@@ -33,8 +33,7 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlInsert(): void
     {
-        $source   = "INSERT INTO Invoices "
-            . "VALUES (1, 1, 1, 'Test Invoice', 100.00, '2025-01-01 00:00:00')";
+        $source   = "INSERT INTO Invoices " . "VALUES (1, 1, 1, 'Test Invoice', 100.00, '2025-01-01 00:00:00')";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -80,9 +79,8 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqInsertFields(): void
     {
-        $source   = "INSERT INTO Invoices "
-            . "(inv_cst_id, inv_status_flag, inv_title, inv_total, inv_created_at) "
-            . "VALUES (1, 0, 'Test Invoice', 150.50, '2025-01-01 00:00:00')";
+        $source   = "INSERT INTO Invoices " . "(inv_cst_id, inv_status_flag, inv_title, inv_total, inv_created_at) " .
+                    "VALUES (1, 0, 'Test Invoice', 150.50, '2025-01-01 00:00:00')";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -146,9 +144,7 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlInsertFieldsNull(): void
     {
-        $source   = "INSERT INTO Invoices "
-            . "(inv_title, inv_total) "
-            . "VALUES ('Null Test', NULL)";
+        $source   = "INSERT INTO Invoices " . "(inv_title, inv_total) " . "VALUES ('Null Test', NULL)";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -187,8 +183,7 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlInsertFieldsPartial(): void
     {
-        $source   = "INSERT INTO Invoices (inv_title, inv_total) "
-            . "VALUES ('Invoice A', 200.00)";
+        $source   = "INSERT INTO Invoices (inv_title, inv_total) " . "VALUES ('Invoice A', 200.00)";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -228,9 +223,8 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlInsertFieldsPlaceholders(): void
     {
-        $source   = "INSERT INTO Invoices "
-            . "(inv_cst_id, inv_status_flag, inv_title, inv_total) "
-            . "VALUES (:cstId:, :status:, :title:, :total:)";
+        $source   = "INSERT INTO Invoices " . "(inv_cst_id, inv_status_flag, inv_title, inv_total) " .
+                    "VALUES (:cstId:, :status:, :title:, :total:)";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -286,9 +280,7 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlInsertFieldsPlaceholdersNum(): void
     {
-        $source   = "INSERT INTO Invoices "
-            . "(inv_cst_id, inv_title, inv_total) "
-            . "VALUES (?0, ?1, ?2)";
+        $source   = "INSERT INTO Invoices " . "(inv_cst_id, inv_title, inv_total) " . "VALUES (?0, ?1, ?2)";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -336,9 +328,8 @@ final class Combination extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlInsertFieldsPlaceholdersBrackets(): void
     {
-        $source   = "INSERT INTO Invoices "
-            . "(inv_id, inv_cst_id, inv_status_flag, inv_title, inv_total) "
-            . "VALUES ({id}, {cstId}, {status}, {title}, {total})";
+        $source   = "INSERT INTO Invoices " . "(inv_id, inv_cst_id, inv_status_flag, inv_title, inv_total) " .
+                    "VALUES ({id}, {cstId}, {status}, {title}, {total})";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [
@@ -398,12 +389,97 @@ final class Combination extends AbstractUnitTestCase
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcModelQueryPhqlInsertArithmeticInValues(): void
+    {
+        $source   = "INSERT INTO Invoices (inv_total) VALUES (100 + 50)";
+        $expected = [
+            'type'          => 306,
+            'qualifiedName' => [
+                'type' => 355,
+                'name' => 'Invoices',
+            ],
+            'fields'        => [
+                0 => [
+                    'type' => 355,
+                    'name' => 'inv_total',
+                ],
+            ],
+            'values'        => [
+                0 => [
+                    'type'  => 43,
+                    'left'  => [
+                        'type'  => 258,
+                        'value' => '100',
+                    ],
+                    'right' => [
+                        'type'  => 258,
+                        'value' => '50',
+                    ],
+                ],
+            ],
+        ];
+        $actual   = $this->parser->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-10
+     */
+    public function testMvcModelQueryPhqlInsertFuncInValues(): void
+    {
+        $source   = "INSERT INTO Invoices (inv_title, inv_total) "
+            . "VALUES (UPPER('test invoice'), 100.00)";
+        $expected = [
+            'type'          => 306,
+            'qualifiedName' => [
+                'type' => 355,
+                'name' => 'Invoices',
+            ],
+            'fields'        => [
+                0 => [
+                    'type' => 355,
+                    'name' => 'inv_title',
+                ],
+                1 => [
+                    'type' => 355,
+                    'name' => 'inv_total',
+                ],
+            ],
+            'values'        => [
+                0 => [
+                    'type'      => 350,
+                    'name'      => 'UPPER',
+                    'arguments' => [
+                        0 => [
+                            'type'  => 260,
+                            'value' => 'test invoice',
+                        ],
+                    ],
+                ],
+                1 => [
+                    'type'  => 259,
+                    'value' => '100.00',
+                ],
+            ],
+        ];
+        $actual   = $this->parser->parse($source);
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-09
      */
     public function testMvcModelQueryPhqlInsertFieldsTrue(): void
     {
-        $source   = "INSERT INTO Invoices (inv_title, inv_status_flag) "
-            . "VALUES ('New Invoice', TRUE)";
+        $source   = "INSERT INTO Invoices (inv_title, inv_status_flag) VALUES ('New Invoice', TRUE)";
         $expected = [
             'type'          => 306,
             'qualifiedName' => [

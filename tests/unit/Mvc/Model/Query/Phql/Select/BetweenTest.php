@@ -70,7 +70,7 @@ final class BetweenTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -120,7 +120,7 @@ final class BetweenTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -133,9 +133,7 @@ final class BetweenTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectNotBetweenFloat(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE inv_total NOT BETWEEN 10.00 AND 500.00";
+        $source   = "SELECT * " . "FROM Invoices " . "WHERE inv_total NOT BETWEEN 10.00 AND 500.00";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -170,7 +168,7 @@ final class BetweenTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -183,9 +181,7 @@ final class BetweenTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectNotBetweenInt(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE inv_id NOT BETWEEN 1 AND 100";
+        $source   = "SELECT * " . "FROM Invoices " . "WHERE inv_id NOT BETWEEN 1 AND 100";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -220,7 +216,7 @@ final class BetweenTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

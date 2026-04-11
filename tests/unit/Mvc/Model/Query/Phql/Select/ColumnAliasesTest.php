@@ -55,7 +55,7 @@ final class ColumnAliasesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -68,8 +68,7 @@ final class ColumnAliasesTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectAliasStringFloat(): void
     {
-        $source   = "SELECT inv_title AS title, inv_total AS total "
-            . "FROM Invoices";
+        $source   = "SELECT inv_title AS title, inv_total AS total FROM Invoices";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -99,7 +98,7 @@ final class ColumnAliasesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -112,8 +111,7 @@ final class ColumnAliasesTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectAliasTableAlias(): void
     {
-        $source   = "SELECT i.inv_id AS id, i.inv_title title "
-            . "FROM Invoices AS i";
+        $source   = "SELECT i.inv_id AS id, i.inv_title title FROM Invoices AS i";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -146,7 +144,7 @@ final class ColumnAliasesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

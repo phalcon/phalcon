@@ -61,7 +61,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -74,8 +74,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectBracketsFieldSpacesAlias(): void
     {
-        $source   = "SELECT c.[First Name], c.[Last Name] "
-            . "FROM Contacts AS c";
+        $source   = "SELECT c.[First Name], c.[Last Name] " . "FROM Contacts AS c";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -106,7 +105,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -119,9 +118,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectBracketsFieldSpacesAliasWhereString(): void
     {
-        $source   = "SELECT c.[First Name] "
-            . "FROM Contacts AS c "
-            . "WHERE c.[Last Name] = 'Smith'";
+        $source   = "SELECT c.[First Name] " . "FROM Contacts AS c " . "WHERE c.[Last Name] = 'Smith'";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -156,7 +153,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -170,8 +167,8 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
     public function testMvcModelQueryPhqlSelectBracketsFieldSpacesOrderBy(): void
     {
         $source   = "SELECT [First Name] AS firstName, [Last Name] AS lastName "
-            . "FROM Contacts "
-            . "ORDER BY [Last Name] ASC";
+                    . "FROM Contacts "
+                    . "ORDER BY [Last Name] ASC";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -208,7 +205,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
                 'sort'   => 327,
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -238,7 +235,7 @@ final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

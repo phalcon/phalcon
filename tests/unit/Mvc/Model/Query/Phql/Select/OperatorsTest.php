@@ -61,7 +61,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -102,7 +102,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -143,7 +143,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -184,7 +184,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -225,7 +225,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -238,8 +238,7 @@ final class OperatorsTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectMultiplicationAliasAs(): void
     {
-        $source   = "SELECT inv_id, inv_total * 1.1 AS total_with_tax "
-            . "FROM Invoices";
+        $source   = "SELECT inv_id, inv_total * 1.1 AS total_with_tax FROM Invoices";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -275,7 +274,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -334,7 +333,7 @@ final class OperatorsTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

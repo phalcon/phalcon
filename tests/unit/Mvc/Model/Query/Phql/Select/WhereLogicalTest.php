@@ -33,9 +33,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectWhereAnd(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE inv_status_flag = 1 AND inv_total > 0";
+        $source   = "SELECT * FROM Invoices WHERE inv_status_flag = 1 AND inv_total > 0";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -77,7 +75,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -90,9 +88,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectWhereOr(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE inv_status_flag = 0 OR inv_status_flag = 1";
+        $source   = "SELECT * FROM Invoices WHERE inv_status_flag = 0 OR inv_status_flag = 1";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -134,7 +130,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -147,9 +143,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectWhereAndAnd(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE inv_cst_id = 1 AND inv_status_flag = 1 AND inv_total > 0";
+        $source   = "SELECT * FROM Invoices WHERE inv_cst_id = 1 AND inv_status_flag = 1 AND inv_total > 0";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -205,7 +199,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -249,7 +243,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -262,10 +256,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectWhereParenthesesOrAnd(): void
     {
-        $source   = "SELECT * "
-            . "FROM Invoices "
-            . "WHERE (inv_status_flag = 1 OR inv_status_flag = 2) "
-            . "AND inv_total > 0";
+        $source   = "SELECT * FROM Invoices WHERE (inv_status_flag = 1 OR inv_status_flag = 2) AND inv_total > 0";
         $expected = [
             'type'   => 309,
             'select' => [
@@ -324,7 +315,7 @@ final class WhereLogicalTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

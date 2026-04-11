@@ -33,10 +33,8 @@ final class HavingTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectHavingCountAll(): void
     {
-        $source   = "SELECT inv_status_flag, COUNT(*) AS cnt "
-            . "FROM Invoices "
-            . "GROUP BY inv_status_flag "
-            . "HAVING COUNT(*) > 5";
+        $source   = "SELECT inv_status_flag, COUNT(*) AS cnt " . "FROM Invoices " . "GROUP BY inv_status_flag " .
+                    "HAVING COUNT(*) > 5";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -90,7 +88,7 @@ final class HavingTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -103,10 +101,8 @@ final class HavingTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectHavingCountField(): void
     {
-        $source   = "SELECT inv_cst_id, COUNT(*) AS cnt "
-            . "FROM Invoices "
-            . "GROUP BY inv_cst_id "
-            . "HAVING cnt > 10";
+        $source   = "SELECT inv_cst_id, COUNT(*) AS cnt " . "FROM Invoices " . "GROUP BY inv_cst_id " .
+                    "HAVING cnt > 10";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -155,7 +151,7 @@ final class HavingTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -168,10 +164,8 @@ final class HavingTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectHavingSum(): void
     {
-        $source   = "SELECT inv_cst_id, SUM(inv_total) AS total "
-            . "FROM Invoices "
-            . "GROUP BY inv_cst_id "
-            . "HAVING SUM(inv_total) > 1000";
+        $source   = "SELECT inv_cst_id, SUM(inv_total) AS total " . "FROM Invoices " . "GROUP BY inv_cst_id " .
+                    "HAVING SUM(inv_total) > 1000";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -227,7 +221,7 @@ final class HavingTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

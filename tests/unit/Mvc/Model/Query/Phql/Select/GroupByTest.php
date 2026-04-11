@@ -33,9 +33,7 @@ final class GroupByTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectGroupBy(): void
     {
-        $source   = "SELECT inv_status_flag, COUNT(*) "
-            . "FROM Invoices "
-            . "GROUP BY inv_status_flag";
+        $source   = "SELECT inv_status_flag, COUNT(*) " . "FROM Invoices " . "GROUP BY inv_status_flag";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -72,7 +70,7 @@ final class GroupByTest extends AbstractUnitTestCase
                 'name' => 'inv_status_flag',
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -85,9 +83,8 @@ final class GroupByTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectGroupByCountField(): void
     {
-        $source   = "SELECT inv_cst_id, inv_status_flag, COUNT(*) "
-            . "FROM Invoices "
-            . "GROUP BY inv_cst_id, inv_status_flag";
+        $source   = "SELECT inv_cst_id, inv_status_flag, COUNT(*) " . "FROM Invoices " .
+                    "GROUP BY inv_cst_id, inv_status_flag";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -137,7 +134,7 @@ final class GroupByTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -150,9 +147,7 @@ final class GroupByTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryPhqlSelectGroupBySumField(): void
     {
-        $source   = "SELECT inv_cst_id, SUM(inv_total) "
-            . "FROM Invoices "
-            . "GROUP BY inv_cst_id";
+        $source   = "SELECT inv_cst_id, SUM(inv_total) " . "FROM Invoices " . "GROUP BY inv_cst_id";
         $expected = [
             'type'    => 309,
             'select'  => [
@@ -190,7 +185,7 @@ final class GroupByTest extends AbstractUnitTestCase
                 'name' => 'inv_cst_id',
             ],
         ];
-        $actual = $this->parser->parse($source);
+        $actual   = $this->parser->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
