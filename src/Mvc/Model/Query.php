@@ -169,6 +169,11 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected int $nestingLevel = -1;
 
     /**
+     * @var Parser
+     */
+    protected Parser $parser;
+
+    /**
      * @var bool
      */
     protected bool $sharedLock = false;
@@ -246,6 +251,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $this->bindParams = [];
         $this->bindTypes  = [];
+        $this->parser     = new Parser();
     }
 
     /**
@@ -584,7 +590,9 @@ class Query implements QueryInterface, InjectionAwareInterface
          * This function parses the PHQL statement
          */
         $phql = $this->phql;
-        $ast  = (new Parser((bool) Settings::get('orm.enable_literals')))->parse($phql);
+        $ast  = $this->parser
+            ->setEnableLiterals((bool) Settings::get('orm.enable_literals'))
+            ->parse($phql);
 
         $irPhql   = null;
         $uniqueId = null;
