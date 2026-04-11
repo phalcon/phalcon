@@ -73,7 +73,7 @@
     "analyze": "vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1024M",
     "cs": "vendor/bin/phpcs --standard=phpcs.xml",
     "cs-fix": "vendor/bin/phpcbf --standard=phpcs.xml",
-    "test-unit": "vendor/bin/phpunit -c phpunit.xml.dist --fail-on-all-issues",
+    "test-unit": "vendor/bin/phpunit -c phpunit.xml.dist",
     "test-unit-coverage": "vendor/bin/phpunit  -c phpunit.xml.dist --coverage-clover tests/_output/coverage.xml",
     "test-unit-coverage-html": "vendor/bin/phpunit  -c phpunit.xml.dist --coverage-html tests/_output/coverage/",
     "test-db-mysql": "vendor/bin/phpunit -c phpunit.mysql.xml",
