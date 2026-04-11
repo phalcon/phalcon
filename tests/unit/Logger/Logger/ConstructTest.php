@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\Logger;
 
+use DateTimeZone;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Exception;
@@ -23,6 +24,23 @@ use Phalcon\Logger\LoggerInterface;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
+    /**
+     * Tests Phalcon\Logger :: __construct() - with timezone
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testLoggerConstructWithTimezone(): void
+    {
+        $timezone = new DateTimeZone('America/New_York');
+        $logger   = new Logger('my-logger', [], $timezone);
+
+        $this->assertInstanceOf(LoggerInterface::class, $logger);
+        $this->assertSame('my-logger', $logger->getName());
+    }
+
     /**
      * Tests Phalcon\Logger :: __construct() - implement PSR
      *

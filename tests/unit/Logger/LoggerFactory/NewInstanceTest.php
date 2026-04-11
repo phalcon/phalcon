@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Logger\LoggerFactory;
 
+use DateTimeZone;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\AdapterFactory;
 use Phalcon\Logger\Logger;
@@ -29,6 +30,25 @@ use function logsDir;
  */
 final class NewInstanceTest extends AbstractUnitTestCase
 {
+    /**
+     * Tests Phalcon\Logger\LoggerFactory :: newInstance() - with timezone
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testLoggerLoggerFactoryNewInstanceWithTimezone(): void
+    {
+        $timezone = new DateTimeZone('America/New_York');
+        $factory  = new LoggerFactory(new AdapterFactory());
+        $logger   = $factory->newInstance('my-logger', [], $timezone);
+
+        $this->assertInstanceOf(LoggerInterface::class, $logger);
+        $this->assertInstanceOf(Logger::class, $logger);
+        $this->assertSame('my-logger', $logger->getName());
+    }
+
     /**
      * Tests Phalcon\Logger\LoggerFactory :: newInstance()
      *
