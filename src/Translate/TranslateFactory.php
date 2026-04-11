@@ -45,8 +45,6 @@ class TranslateFactory
     use ConfigTrait;
     use FactoryTrait;
 
-    private array $instances = [];
-
     /**
      * AdapterFactory constructor.
      *
