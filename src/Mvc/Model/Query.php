@@ -28,6 +28,7 @@ use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Phql\Parser;
+use Phalcon\Phql\Scanner\Opcode;
 use Phalcon\Support\Settings;
 use Psr\SimpleCache\InvalidArgumentException;
 
@@ -95,122 +96,6 @@ use function str_replace;
 class Query implements QueryInterface, InjectionAwareInterface
 {
     use InjectionAwareTrait;
-
-    private const PHQL_T_ADD         = '+';
-    private const PHQL_T_AGAINST     = 276;
-    private const PHQL_T_ALL         = 338;
-    private const PHQL_T_AND         = 266;
-    private const PHQL_T_AS          = 305;
-    private const PHQL_T_ASC         = 327;
-    private const PHQL_T_BETWEEN     = 331;
-    private const PHQL_T_BETWEEN_NOT = 332;
-    private const PHQL_T_BITWISE_AND = '&';
-    private const PHQL_T_BITWISE_NOT = '~';
-
-    /** Operators */
-    private const PHQL_T_BITWISE_OR   = '|';
-    private const PHQL_T_BITWISE_XOR  = '^';
-    private const PHQL_T_BPLACEHOLDER = 277;
-    private const PHQL_T_BY           = 311;
-    private const PHQL_T_CASE         = 409;
-    private const PHQL_T_CAST         = 333;
-    private const PHQL_T_COLON        = ':';
-    private const PHQL_T_COMMA        = 269;
-    private const PHQL_T_CONVERT      = 336;
-    private const PHQL_T_CROSS        = 324;
-    private const PHQL_T_CROSSJOIN    = 363;
-    private const PHQL_T_DELETE       = 303;
-    private const PHQL_T_DESC         = 328;
-    private const PHQL_T_DISTINCT     = 330;
-    private const PHQL_T_DIV          = '/';
-    private const PHQL_T_DOMAINALL    = 353;
-    private const PHQL_T_DOT          = '.';
-    private const PHQL_T_DOUBLE       = 259;
-    private const PHQL_T_ELSE         = 411;
-    private const PHQL_T_ENCLOSED     = 356;
-    private const PHQL_T_END          = 412;
-    private const PHQL_T_EQUALS       = 61; //'=';
-    private const PHQL_T_EXISTS       = 408;
-    private const PHQL_T_EXPR         = 354;
-    private const PHQL_T_FALSE        = 335;
-    /** Special Tokens */
-    private const PHQL_T_FCALL        = 350;
-    private const PHQL_T_FOR          = 339;
-    private const PHQL_T_FROM         = 304;
-    private const PHQL_T_FULL         = 325;
-    private const PHQL_T_FULLJOIN     = 364;
-    private const PHQL_T_GREATER      = '>';
-    private const PHQL_T_GREATEREQUAL = 272;
-    private const PHQL_T_GROUP        = 313;
-    private const PHQL_T_HAVING       = 314;
-    private const PHQL_T_HINTEGER     = 414;
-    private const PHQL_T_IDENTIFIER   = 265;
-    private const PHQL_T_IGNORE       = 257;
-    private const PHQL_T_ILIKE        = 275;
-    private const PHQL_T_IN           = 315;
-    private const PHQL_T_INNER        = 317;
-    private const PHQL_T_INNERJOIN    = 360;
-    private const PHQL_T_INSERT       = 306;
-    /** Literals & Identifiers */
-    private const PHQL_T_INTEGER   = 258;
-    private const PHQL_T_INTO      = 307;
-    private const PHQL_T_IS        = 321;
-    private const PHQL_T_ISNOTNULL = 366;
-    private const PHQL_T_ISNULL    = 365;
-    private const PHQL_T_JOIN      = 318;
-    private const PHQL_T_LEFT      = 319;
-    private const PHQL_T_LEFTJOIN  = 361;
-    private const PHQL_T_LESS      = 60; // '<';
-    private const PHQL_T_LESSEQUAL = 271;
-    private const PHQL_T_LIKE      = 268;
-    private const PHQL_T_LIMIT     = 312;
-    private const PHQL_T_MINUS     = 367;
-    private const PHQL_T_MOD       = '%';
-    private const PHQL_T_MUL       = '*';
-    private const PHQL_T_NILIKE    = 357;
-    private const PHQL_T_NLIKE     = 351;
-    private const PHQL_T_NOT       = '!';
-    private const PHQL_T_NOTEQUALS = 270;
-    private const PHQL_T_NOTIN     = 323;
-    /** Placeholders */
-    private const PHQL_T_NPLACEHOLDER        = 273;
-    private const PHQL_T_NULL                = 322;
-    private const PHQL_T_OFFSET              = 329;
-    private const PHQL_T_ON                  = 316;
-    private const PHQL_T_OR                  = 267;
-    private const PHQL_T_ORDER               = 310;
-    private const PHQL_T_OUTER               = 326;
-    private const PHQL_T_PARENTHESES_CLOSE   = ')';
-    private const PHQL_T_PARENTHESES_OPEN    = '(';
-    private const PHQL_T_QUALIFIED           = 355;
-    private const PHQL_T_RAW_QUALIFIED       = 358;
-    private const PHQL_T_RIGHT               = 320;
-    private const PHQL_T_RIGHTJOIN           = 362;
-    private const PHQL_T_SELECT              = 309;
-    private const PHQL_T_SET                 = 301;
-    private const PHQL_T_SPLACEHOLDER        = 274;
-    private const PHQL_T_STARALL             = 352;
-    private const PHQL_T_STRING              = 260;
-    private const PHQL_T_SUB                 = '-';
-    private const PHQL_T_SUBQUERY            = 407;
-    private const PHQL_T_THEN                = 413;
-    private const PHQL_T_TRUE                = 334;
-    private const PHQL_T_TS_AND              = 403;
-    private const PHQL_T_TS_CONTAINS_ANOTHER = 405;
-    private const PHQL_T_TS_CONTAINS_IN      = 406;
-
-    /** Postgresql Text Search Operators */
-    private const PHQL_T_TS_MATCHES = 401;
-    private const PHQL_T_TS_NEGATE  = 404;
-    private const PHQL_T_TS_OR      = 402;
-
-    /** Reserved words */
-    private const PHQL_T_UPDATE = 300;
-    private const PHQL_T_USING  = 337;
-    private const PHQL_T_VALUES = 308;
-    private const PHQL_T_WHEN   = 410;
-    private const PHQL_T_WHERE  = 302;
-    private const PHQL_T_WITH   = 415;
 
     public const TYPE_DELETE = 303;
     public const TYPE_INSERT = 306;
@@ -488,22 +373,22 @@ class Query implements QueryInterface, InjectionAwareInterface
         $type = $this->type;
 
         $result = match ($type) {
-            self::PHQL_T_SELECT => $this->executeSelect(
+            Opcode::SELECT->value => $this->executeSelect(
                 $intermediate,
                 $mergedParams,
                 $mergedTypes
             ),
-            self::PHQL_T_INSERT => $this->executeInsert(
+            Opcode::INSERT->value => $this->executeInsert(
                 $intermediate,
                 $mergedParams,
                 $mergedTypes
             ),
-            self::PHQL_T_UPDATE => $this->executeUpdate(
+            Opcode::UPDATE->value => $this->executeUpdate(
                 $intermediate,
                 $mergedParams,
                 $mergedTypes
             ),
-            self::PHQL_T_DELETE => $this->executeDelete(
+            Opcode::DELETE->value => $this->executeDelete(
                 $intermediate,
                 $mergedParams,
                 $mergedTypes
@@ -518,7 +403,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             /**
              * Only PHQL SELECTs can be cached
              */
-            if ($type != self::PHQL_T_SELECT) {
+            if ($type != Opcode::SELECT->value) {
                 throw new Exception(
                     "Only PHQL statements that return resultsets can be cached"
                 );
@@ -636,7 +521,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         $intermediate = $this->parse();
 
-        if ($this->type == self::PHQL_T_SELECT) {
+        if ($this->type == Opcode::SELECT->value) {
             return $this->executeSelect(
                 $intermediate,
                 $this->bindParams,
@@ -730,10 +615,10 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $this->type = $type;
 
                 $irPhql = match ($type) {
-                    self::PHQL_T_SELECT => $this->prepareSelect(),
-                    self::PHQL_T_INSERT => $this->prepareInsert(),
-                    self::PHQL_T_UPDATE => $this->prepareUpdate(),
-                    self::PHQL_T_DELETE => $this->prepareDelete(),
+                    Opcode::SELECT->value => $this->prepareSelect(),
+                    Opcode::INSERT->value => $this->prepareInsert(),
+                    Opcode::UPDATE->value => $this->prepareUpdate(),
+                    Opcode::DELETE->value => $this->prepareDelete(),
                     default             => throw new Exception(
                         "Unknown statement " . $type . ", when preparing: " . $phql
                     ),
@@ -1071,19 +956,19 @@ class Query implements QueryInterface, InjectionAwareInterface
             $exprValue = $value["value"];
 
             switch ($value["type"]) {
-                case self::PHQL_T_STRING:
-                case self::PHQL_T_INTEGER:
-                case self::PHQL_T_DOUBLE:
+                case Opcode::STRING->value:
+                case Opcode::INTEGER->value:
+                case Opcode::DOUBLE->value:
                     $insertValue = $dialect->getSqlExpression($exprValue);
                     break;
 
-                case self::PHQL_T_NULL:
+                case Opcode::NULL->value:
                     $insertValue = null;
                     break;
 
-                case self::PHQL_T_NPLACEHOLDER:
-                case self::PHQL_T_SPLACEHOLDER:
-                case self::PHQL_T_BPLACEHOLDER:
+                case Opcode::NPLACEHOLDER->value:
+                case Opcode::SPLACEHOLDER->value:
+                case Opcode::BPLACEHOLDER->value:
                     $wildcard = str_replace(
                         ":",
                         "",
@@ -1582,19 +1467,19 @@ class Query implements QueryInterface, InjectionAwareInterface
             $fieldName = $field["balias"] ?? $field["name"];
 
             switch ($value["type"]) {
-                case self::PHQL_T_STRING:
-                case self::PHQL_T_INTEGER:
-                case self::PHQL_T_DOUBLE:
+                case Opcode::STRING->value:
+                case Opcode::INTEGER->value:
+                case Opcode::DOUBLE->value:
                     $updateValue = $dialect->getSqlExpression($exprValue);
                     break;
 
-                case self::PHQL_T_NULL:
+                case Opcode::NULL->value:
                     $updateValue = null;
                     break;
 
-                case self::PHQL_T_NPLACEHOLDER:
-                case self::PHQL_T_SPLACEHOLDER:
-                case self::PHQL_T_BPLACEHOLDER:
+                case Opcode::NPLACEHOLDER->value:
+                case Opcode::SPLACEHOLDER->value:
+                case Opcode::BPLACEHOLDER->value:
                     $wildcard = str_replace(
                         ":",
                         "",
@@ -1618,7 +1503,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 /**
                  * @todo duplicate branch
                  */
-//                case self::PHQL_T_BPLACEHOLDER:
+//                case Opcode::BPLACEHOLDER->value:
 //                    throw new Exception("Not supported");
 
                 default:
@@ -1727,7 +1612,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     final protected function getCallArgument(array $argument): array
     {
-        if ($argument["type"] == self::PHQL_T_STARALL) {
+        if ($argument["type"] == Opcode::STARALL->value) {
             return [
                 "type" => "all",
             ];
@@ -1788,7 +1673,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $exprType       = $expr["type"];
             $tempNotQuoting = true;
 
-            if ($exprType != self::PHQL_T_CASE) {
+            if ($exprType != Opcode::CASE->value) {
                 /**
                  * Resolving the left part of the expression if any
                  */
@@ -1810,7 +1695,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * Every node in the AST has a unique integer type
              */
             switch ($exprType) {
-                case self::PHQL_T_LESS:
+                case Opcode::LESS->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "<",
@@ -1820,7 +1705,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_EQUALS:
+                case Opcode::EQUALS->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "=",
@@ -1830,7 +1715,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_GREATER:
+                case Opcode::GREATER->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => ">",
@@ -1840,7 +1725,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NOTEQUALS:
+                case Opcode::NOTEQUALS->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "<>",
@@ -1850,7 +1735,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_LESSEQUAL:
+                case Opcode::LESSEQUAL->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "<=",
@@ -1860,7 +1745,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_GREATEREQUAL:
+                case Opcode::GREATEREQUAL->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => ">=",
@@ -1870,7 +1755,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_AND:
+                case Opcode::AND->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "AND",
@@ -1880,7 +1765,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_OR:
+                case Opcode::OR->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "OR",
@@ -1890,11 +1775,11 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_QUALIFIED:
+                case Opcode::QUALIFIED->value:
                     $exprReturn = $this->getQualified($expr);
                     break;
 
-                case self::PHQL_T_ADD:
+                case Opcode::ADD->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "+",
@@ -1904,7 +1789,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_SUB:
+                case Opcode::SUB->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "-",
@@ -1914,7 +1799,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_MUL:
+                case Opcode::MUL->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "*",
@@ -1924,7 +1809,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_DIV:
+                case Opcode::DIV->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "/",
@@ -1934,7 +1819,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_MOD:
+                case Opcode::MOD->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "%",
@@ -1944,7 +1829,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_BITWISE_AND:
+                case Opcode::BITWISE_AND->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "&",
@@ -1954,7 +1839,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_BITWISE_OR:
+                case Opcode::BITWISE_OR->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "|",
@@ -1964,8 +1849,8 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_ENCLOSED:
-                case self::PHQL_T_SUBQUERY:
+                case Opcode::ENCLOSED->value:
+                case Opcode::SUBQUERY->value:
                     $exprReturn = [
                         "type" => "parentheses",
                         "left" => $left,
@@ -1973,7 +1858,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_MINUS:
+                case Opcode::MINUS->value:
                     $exprReturn = [
                         "type"  => "unary-op",
                         "op"    => "-",
@@ -1982,9 +1867,9 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_INTEGER:
-                case self::PHQL_T_DOUBLE:
-                case self::PHQL_T_HINTEGER:
+                case Opcode::INTEGER->value:
+                case Opcode::DOUBLE->value:
+                case Opcode::HINTEGER->value:
                     $exprReturn = [
                         "type"  => "literal",
                         "value" => $expr["value"],
@@ -1992,7 +1877,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_TRUE:
+                case Opcode::TRUE->value:
                     $exprReturn = [
                         "type"  => "literal",
                         "value" => "TRUE",
@@ -2000,7 +1885,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_FALSE:
+                case Opcode::FALSE->value:
                     $exprReturn = [
                         "type"  => "literal",
                         "value" => "FALSE",
@@ -2008,7 +1893,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_STRING:
+                case Opcode::STRING->value:
                     $value = $expr["value"];
 
                     if ($quoting) {
@@ -2034,7 +1919,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NPLACEHOLDER:
+                case Opcode::NPLACEHOLDER->value:
                     $exprReturn = [
                         "type"  => "placeholder",
                         "value" => str_replace("?", ":", $expr["value"]),
@@ -2042,7 +1927,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_SPLACEHOLDER:
+                case Opcode::SPLACEHOLDER->value:
                     $exprReturn = [
                         "type"  => "placeholder",
                         "value" => ":" . $expr["value"],
@@ -2050,7 +1935,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_BPLACEHOLDER:
+                case Opcode::BPLACEHOLDER->value:
                     $value = $expr["value"];
                     if (str_contains($value, ":")) {
                         $valueParts = explode(":", $value);
@@ -2164,7 +2049,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NULL:
+                case Opcode::NULL->value:
                     $exprReturn = [
                         "type"  => "literal",
                         "value" => "NULL",
@@ -2172,7 +2057,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_LIKE:
+                case Opcode::LIKE->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "LIKE",
@@ -2182,7 +2067,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NLIKE:
+                case Opcode::NLIKE->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "NOT LIKE",
@@ -2192,7 +2077,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_ILIKE:
+                case Opcode::ILIKE->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "ILIKE",
@@ -2202,7 +2087,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NILIKE:
+                case Opcode::NILIKE->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "NOT ILIKE",
@@ -2212,7 +2097,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NOT:
+                case Opcode::NOT->value:
                     $exprReturn = [
                         "type"  => "unary-op",
                         "op"    => "NOT ",
@@ -2221,7 +2106,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_ISNULL:
+                case Opcode::ISNULL->value:
                     $exprReturn = [
                         "type" => "unary-op",
                         "op"   => " IS NULL",
@@ -2230,7 +2115,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_ISNOTNULL:
+                case Opcode::ISNOTNULL->value:
                     $exprReturn = [
                         "type" => "unary-op",
                         "op"   => " IS NOT NULL",
@@ -2239,7 +2124,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_IN:
+                case Opcode::IN->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "IN",
@@ -2249,7 +2134,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_NOTIN:
+                case Opcode::NOTIN->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "NOT IN",
@@ -2259,7 +2144,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_EXISTS:
+                case Opcode::EXISTS->value:
                     $exprReturn = [
                         "type"  => "unary-op",
                         "op"    => "EXISTS",
@@ -2268,7 +2153,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_DISTINCT:
+                case Opcode::DISTINCT->value:
                     $exprReturn = [
                         "type"  => "unary-op",
                         "op"    => "DISTINCT ",
@@ -2277,7 +2162,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_BETWEEN_NOT:
+                case Opcode::BETWEEN_NOT->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "BETWEEN NOT",
@@ -2287,7 +2172,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_BETWEEN:
+                case Opcode::BETWEEN->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "BETWEEN",
@@ -2297,7 +2182,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_AGAINST:
+                case Opcode::AGAINST->value:
                     $exprReturn = [
                         "type"  => "binary-op",
                         "op"    => "AGAINST",
@@ -2307,7 +2192,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_CAST:
+                case Opcode::CAST->value:
                     $exprReturn = [
                         "type"  => "cast",
                         "left"  => $left,
@@ -2316,7 +2201,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_CONVERT:
+                case Opcode::CONVERT->value:
                     $exprReturn = [
                         "type"  => "convert",
                         "left"  => $left,
@@ -2325,7 +2210,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_RAW_QUALIFIED:
+                case Opcode::RAW_QUALIFIED->value:
                     $exprReturn = [
                         "type"  => "literal",
                         "value" => $expr["name"],
@@ -2333,17 +2218,17 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
-                case self::PHQL_T_FCALL:
+                case Opcode::FCALL->value:
                     $exprReturn = $this->getFunctionCall($expr);
 
                     break;
 
-                case self::PHQL_T_CASE:
+                case Opcode::CASE->value:
                     $exprReturn = $this->getCaseExpression($expr);
 
                     break;
 
-                case self::PHQL_T_SELECT:
+                case Opcode::SELECT->value:
                     $exprReturn = [
                         "type"  => "select",
                         "value" => $this->prepareSelect($expr, true),
@@ -2480,7 +2365,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     {
         if (isset($join["qualified"])) {
             $qualified = $join["qualified"];
-            if ($qualified["type"] == self::PHQL_T_QUALIFIED) {
+            if ($qualified["type"] == Opcode::QUALIFIED->value) {
                 $modelName = $qualified["name"];
 
                 $model  = $manager->load($modelName);
@@ -2515,19 +2400,19 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $type = $join["type"];
         switch ($type) {
-            case self::PHQL_T_INNERJOIN:
+            case Opcode::INNERJOIN->value:
                 return "INNER";
 
-            case self::PHQL_T_LEFTJOIN:
+            case Opcode::LEFTJOIN->value:
                 return "LEFT";
 
-            case self::PHQL_T_RIGHTJOIN:
+            case Opcode::RIGHTJOIN->value:
                 return "RIGHT";
 
-            case self::PHQL_T_CROSSJOIN:
+            case Opcode::CROSSJOIN->value:
                 return "CROSS";
 
-            case self::PHQL_T_FULLJOIN:
+            case Opcode::FULLJOIN->value:
                 return "FULL OUTER";
         }
 
@@ -3036,7 +2921,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     "op"    => "=",
                     "left"  => $this->getQualified(
                         [
-                            "type"   => self::PHQL_T_QUALIFIED,
+                            "type"   => Opcode::QUALIFIED->value,
                             "domain" => $modelAlias,
                             "name"   => $field,
                         ]
@@ -3068,7 +2953,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                             "op"    => "=",
                             "left"  => $this->getQualified(
                                 [
-                                    "type"   => self::PHQL_T_QUALIFIED,
+                                    "type"   => Opcode::QUALIFIED->value,
                                     "domain" => $modelAlias,
                                     "name"   => $fields,
                                 ]
@@ -3099,7 +2984,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                             "op"    => "=",
                             "left"  => $this->getQualified(
                                 [
-                                    "type"   => self::PHQL_T_QUALIFIED,
+                                    "type"   => Opcode::QUALIFIED->value,
                                     "domain" => $intermediateModelName,
                                     "name"   => $intermediateReferencedFields,
                                 ]
@@ -3145,7 +3030,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * Check if the order has a predefined ordering mode
              */
             if (isset($orderItem["sort"])) {
-                if ($orderItem["sort"] == self::PHQL_T_ASC) {
+                if ($orderItem["sort"] == Opcode::ASC->value) {
                     $orderPartSort = [$orderPartExpr, "ASC"];
                 } else {
                     $orderPartSort = [$orderPartExpr, "DESC"];
@@ -3461,7 +3346,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $query = new self();
 
         $query->setDI($this->container);
-        $query->setType(self::PHQL_T_SELECT);
+        $query->setType(Opcode::SELECT->value);
         $query->setIntermediate($selectIr);
 
         return $query->execute($bindParams, $bindTypes);
@@ -3493,7 +3378,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Check for select * (all)
          */
-        if ($columnType == self::PHQL_T_STARALL) {
+        if ($columnType == Opcode::STARALL->value) {
             foreach ($this->models as $modelName => $source) {
                 $sqlColumn = [
                     "type"   => "object",
@@ -3520,7 +3405,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Check if selected column is qualified.*, ex: robots.*
          */
-        if ($columnType == self::PHQL_T_DOMAINALL) {
+        if ($columnType == Opcode::DOMAINALL->value) {
             $sqlAliases = $this->sqlAliases;
 
             /**
@@ -3586,7 +3471,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Check for columns qualified and not qualified
          */
-        if ($columnType == self::PHQL_T_EXPR) {
+        if ($columnType == Opcode::EXPR->value) {
             /**
              * The sql_column is a scalar type returning a simple string
              */
@@ -3660,7 +3545,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     "op"    => "=",
                     "left"  => $this->getQualified(
                         [
-                            "type"   => self::PHQL_T_QUALIFIED,
+                            "type"   => Opcode::QUALIFIED->value,
                             "domain" => $modelAlias,
                             "name"   => $fields,
                         ]
@@ -3706,7 +3591,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     "op"    => "=",
                     "left"  => $this->getQualified(
                         [
-                            "type"   => self::PHQL_T_QUALIFIED,
+                            "type"   => Opcode::QUALIFIED->value,
                             "domain" => $modelAlias,
                             "name"   => $field,
                         ]
@@ -4200,7 +4085,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     }
 
                     $selectColumns[] = [
-                        "type"      => self::PHQL_T_DOMAINALL,
+                        "type"      => Opcode::DOMAINALL->value,
                         "column"    => $joinAlias,
                         "eager"     => $alias,
                         "eagerType" => $eagerType,
@@ -4208,13 +4093,13 @@ class Query implements QueryInterface, InjectionAwareInterface
                     ];
 
                     $automaticJoins[] = [
-                        "type"      => self::PHQL_T_INNERJOIN,
+                        "type"      => Opcode::INNERJOIN->value,
                         "qualified" => [
-                            "type" => self::PHQL_T_QUALIFIED,
+                            "type" => Opcode::QUALIFIED->value,
                             "name" => $relationModel,
                         ],
                         "alias"     => [
-                            "type" => self::PHQL_T_QUALIFIED,
+                            "type" => Opcode::QUALIFIED->value,
                             "name" => $joinAlias,
                         ],
                     ];
