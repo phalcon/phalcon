@@ -142,8 +142,8 @@ class Enum
     public const PHVOLT_T_RAW_FRAGMENT      = 357;
     public const PHVOLT_T_RESOLVED_EXPR     = 364;
     public const PHVOLT_T_RETURN            = 327;
-    public const PHVOLT_T_SBRACKET_CLOSE    = 91; //']';
-    public const PHVOLT_T_SBRACKET_OPEN     = 93; //'[';
+    public const PHVOLT_T_SBRACKET_CLOSE    = 93; //']';
+    public const PHVOLT_T_SBRACKET_OPEN     = 91; //'[';
     public const PHVOLT_T_SCALAR            = 384;
     public const PHVOLT_T_SET               = 306;
     public const PHVOLT_T_SLICE             = 365;
