@@ -228,4 +228,52 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 
         $this->assertStringNotContainsString('DATA_DEBUG_TEST', $actual);
     }
+
+    /**
+     * Tests Phalcon\Debug :: renderHtml() - with blacklist for request key
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-11
+     */
+    public function testSupportDebugRenderHtmlWithRequestBlacklist(): void
+    {
+        $exception = new Exception('exception message', 1234);
+        $debug = new Debug();
+        $request = $_REQUEST;
+        $_REQUEST['DATA_REQUEST_TEST'] = 'test';
+
+        $debug->setShowBackTrace(true);
+        $debug->setBlacklist(
+            [
+                'request' => ['DATA_REQUEST_TEST'],
+            ],
+        );
+
+        $actual = $debug->renderHtml($exception);
+        $_REQUEST = $request;
+
+        $this->assertStringContainsString(self::ERROR_DIV, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Debug :: renderHtml() - with debugVar data (covers printExtraVariables)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-11
+     */
+    public function testSupportDebugRenderHtmlWithDebugVar(): void
+    {
+        $exception = new Exception('exception message', 1234);
+        $debug = new Debug();
+        $debug->setShowBackTrace(true);
+        $debug->debugVar('my debug variable');
+
+        $actual = $debug->renderHtml($exception);
+
+        $this->assertStringContainsString("id='variables'", $actual);
+    }
 }

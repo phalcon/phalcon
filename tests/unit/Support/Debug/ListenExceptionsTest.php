@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
+use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ListenExceptionsTest extends AbstractUnitTestCase
@@ -27,6 +28,9 @@ final class ListenExceptionsTest extends AbstractUnitTestCase
      */
     public function testSupportDebugListenExceptions(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $debug  = new Debug();
+        $result = $debug->listenExceptions();
+
+        $this->assertInstanceOf(Debug::class, $result);
     }
 }

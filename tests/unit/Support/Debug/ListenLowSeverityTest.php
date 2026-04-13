@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
+use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ListenLowSeverityTest extends AbstractUnitTestCase
@@ -27,6 +28,9 @@ final class ListenLowSeverityTest extends AbstractUnitTestCase
      */
     public function testSupportDebugListenLowSeverity(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $debug  = new Debug();
+        $result = $debug->listenLowSeverity();
+
+        $this->assertInstanceOf(Debug::class, $result);
     }
 }
