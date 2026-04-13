@@ -1479,18 +1479,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "2495ae92d5e0ab081d0c2991d66b7f7eb457bc48"
+                "reference": "38c3cea4f3476d70c6c72341ee0690dbb131b315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/2495ae92d5e0ab081d0c2991d66b7f7eb457bc48",
-                "reference": "2495ae92d5e0ab081d0c2991d66b7f7eb457bc48",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/38c3cea4f3476d70c6c72341ee0690dbb131b315",
+                "reference": "38c3cea4f3476d70c6c72341ee0690dbb131b315",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
                 "ext-mbstring": "*",
-                "php": ">=8.1"
+                "php": ">=8.1 <9.0"
             },
             "require-dev": {
                 "pds/skeleton": "^1.0",
@@ -1498,6 +1498,9 @@
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^4.0"
+            },
+            "suggest": {
+                "phalcon/phalcon": "The Phalcon framework this module integrates with"
             },
             "default-branch": true,
             "type": "library",
@@ -1524,7 +1527,8 @@
                     "homepage": "https://github.com/phalcon/volt/graphs/contributors"
                 }
             ],
-            "description": "Phalcon Volt is a HTML template engine for sender-side rendering.",
+            "description": "Phalcon Volt is an HTML template engine for server-side rendering.",
+            "homepage": "https://phalcon.io",
             "keywords": [
                 "engine",
                 "html",
@@ -1550,7 +1554,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-04-06T13:41:00+00:00"
+            "time": "2026-04-13T23:43:50+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1896,11 +1900,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.46",
+            "version": "2.1.47",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a193923fc2d6325ef4e741cf3af8c3e8f54dbf25",
-                "reference": "a193923fc2d6325ef4e741cf3af8c3e8f54dbf25",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/79015445d8bd79e62b29140f12e5bfced1dcca65",
+                "reference": "79015445d8bd79e62b29140f12e5bfced1dcca65",
                 "shasum": ""
             },
             "require": {
@@ -1945,7 +1949,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-01T09:25:14+00:00"
+            "time": "2026-04-13T15:49:08+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
