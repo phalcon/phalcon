@@ -157,6 +157,8 @@ class Compiler implements InjectionAwareInterface
      */
     protected string $prefix = "";
 
+    protected Parser $parser;
+
     /**
      * Phalcon\Mvc\View\Engine\Volt\Compiler
      *
@@ -165,6 +167,7 @@ class Compiler implements InjectionAwareInterface
     public function __construct(
         protected ViewBaseInterface | null $view = null
     ) {
+        $this->parser = new Parser();
     }
 
     /**
@@ -2164,7 +2167,7 @@ class Compiler implements InjectionAwareInterface
      */
     public function parse(string $viewCode): array
     {
-        return (new Parser($viewCode))->parseView("eval code");
+        return $this->parser->parse($viewCode);
     }
 
     /**
@@ -2310,7 +2313,7 @@ class Compiler implements InjectionAwareInterface
             $this->autoescape = $autoescape;
         }
 
-        $intermediate = (new Parser($viewCode))->parseView($this->currentPath);
+        $intermediate = (new Parser())->parse($viewCode, $this->currentPath ?? 'eval code');
         $compilation  = $this->statementList($intermediate, $extendsMode);
 
         /**
