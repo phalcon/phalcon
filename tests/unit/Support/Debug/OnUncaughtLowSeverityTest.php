@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Support\Debug;
 
+use ErrorException;
+use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class OnUncaughtLowSeverityTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Debug :: onUncaughtLowSeverity()
+     * Tests Phalcon\Debug :: onUncaughtLowSeverity() - throws when severity matches
      *
      * @return void
      *
@@ -27,6 +29,10 @@ final class OnUncaughtLowSeverityTest extends AbstractUnitTestCase
      */
     public function testSupportDebugOnUncaughtLowSeverity(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('Test warning message');
+
+        $debug = new Debug();
+        $debug->onUncaughtLowSeverity(E_WARNING, 'Test warning message', __FILE__, __LINE__);
     }
 }

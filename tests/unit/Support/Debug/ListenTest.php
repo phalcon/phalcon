@@ -16,35 +16,37 @@ namespace Phalcon\Tests\Unit\Support\Debug;
 use Phalcon\Support\Debug;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-final class DebugVarTest extends AbstractUnitTestCase
+final class ListenTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Debug :: debugVar()
+     * Tests Phalcon\Debug :: listen() - exceptions only (default)
+     *
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-02-04
+     * @since  2026-04-11
      */
-    public function testSupportDebugDebugVar(): void
+    public function testSupportDebugListenExceptionsOnly(): void
     {
-        $debug = new Debug();
-        $result = $debug->debugVar('test variable');
+        $debug  = new Debug();
+        $result = $debug->listen();
 
         $this->assertInstanceOf(Debug::class, $result);
     }
 
     /**
-     * Tests Phalcon\Debug :: debugVar() + clearVars()
+     * Tests Phalcon\Debug :: listen() - low severity branch
+     *
+     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */
-    public function testSupportDebugDebugVarAndClearVars(): void
+    public function testSupportDebugListenLowSeverityBranch(): void
     {
-        $debug = new Debug();
-        $debug->debugVar('first variable');
-        $debug->debugVar('second variable');
+        $debug  = new Debug();
+        $result = $debug->listen(false, true);
 
-        $result = $debug->clearVars();
         $this->assertInstanceOf(Debug::class, $result);
     }
 }
