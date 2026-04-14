@@ -485,4 +485,62 @@ final class ValidateTest extends AbstractUnitTestCase
             $messages->count()
         );
     }
+
+    /**
+     * Tests Phalcon\Filter\Validation\Validator\StringLength :: processValidator()
+     * using the generic 'message' and 'included' options
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2013-03-09
+     */
+    public function testFilterValidationValidatorStringLengthProcessValidatorOptions(): void
+    {
+        // Test generic 'message' option (covers processValidator L152)
+        $validation = new Validation();
+        $validation->add(
+            'name',
+            new StringLength(
+                [
+                    'max'     => 4,
+                    'message' => 'Too long',
+                ]
+            )
+        );
+
+        $messages = $validation->validate(['name' => 'Toolong']);
+        $this->assertSame(1, $messages->count());
+        $this->assertSame('Too long', $messages[0]->getMessage());
+
+        // Test generic 'included' option (covers processValidator L159)
+        // included=true makes the boundary exclusive (> instead of >=), so max=4
+        // allows exactly 4 chars; need 5 chars to trigger a failure
+        $validation = new Validation();
+        $validation->add(
+            'name',
+            new StringLength(
+                [
+                    'max'      => 4,
+                    'included' => true,
+                ]
+            )
+        );
+
+        $messages = $validation->validate(['name' => 'Tests']);
+        $this->assertSame(1, $messages->count());
+
+        // Test specific 'includedMaximum' option (covers processValidator L161)
+        $validation = new Validation();
+        $validation->add(
+            'name',
+            new StringLength(
+                [
+                    'max'             => 4,
+                    'includedMaximum' => true,
+                ]
+            )
+        );
+
+        $messages = $validation->validate(['name' => 'Tests']);
+        $this->assertSame(1, $messages->count());
+    }
 }

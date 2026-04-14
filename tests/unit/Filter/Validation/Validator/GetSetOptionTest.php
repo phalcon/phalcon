@@ -97,4 +97,20 @@ final class GetSetOptionTest extends AbstractUnitTestCase
         $actual   = $validator->getOption('option');
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Tests Phalcon\Filter\Validation\AbstractValidator :: getOption() - attribute key with nested array
+     * Covers L108: return $value[$key] when key is 'attribute' and value is array with 'attribute' key
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-01-01
+     */
+    public function testFilterValidationValidatorGetOptionAttributeNestedArray(): void
+    {
+        $validator = new Alnum(['attribute' => ['attribute' => 'fieldName', 'other' => 'value']]);
+
+        $actual = $validator->getOption('attribute');
+
+        $this->assertSame('fieldName', $actual);
+    }
 }

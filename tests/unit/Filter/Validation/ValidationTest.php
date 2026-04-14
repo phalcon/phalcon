@@ -24,7 +24,7 @@ use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
-use Phalcon\Tests\Unit\Filter\Validation\Fake\FakeUsersModel;
+use Phalcon\Tests\Unit\Filter\Validation\Fake\FakeUserEntity;
 
 final class ValidationTest extends AbstractUnitTestCase
 {
@@ -34,7 +34,6 @@ final class ValidationTest extends AbstractUnitTestCase
 
     public function setUp(): void
     {
-        $this->markTestSkipped('Need to be fixed - db missing');
         $this->setNewFactoryDefault();
         $this->validation = new Validation();
 
@@ -58,7 +57,7 @@ final class ValidationTest extends AbstractUnitTestCase
      */
     public function testWithEntityAndFilter(): void
     {
-        $users = new FakeUsersModel(
+        $users = new FakeUserEntity(
             [
                 'name' => ' ',
             ]
@@ -98,7 +97,7 @@ final class ValidationTest extends AbstractUnitTestCase
      */
     public function testFilteringEntity(): void
     {
-        $users = new FakeUsersModel();
+        $users = new FakeUserEntity();
 
         $users->assign(
             [

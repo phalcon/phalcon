@@ -357,6 +357,41 @@ final class GetKeysTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * Tests Phalcon\Storage\Adapter\Weak :: getKeys() - with prefix filter
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    public function testStorageAdapterWeakGetKeysWithPrefix(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $obj1 = new stdClass();
+        $obj2 = new stdClass();
+        $obj3 = new stdClass();
+
+        $adapter->set('prefix-one', $obj1);
+        $adapter->set('prefix-two', $obj2);
+        $adapter->set('other-key', $obj3);
+
+        $actual = $adapter->getKeys('prefix-');
+        sort($actual);
+        $expected = ['prefix-one', 'prefix-two'];
+        $this->assertSame($expected, $actual);
+
+        $actual = $adapter->getKeys('other-');
+        $this->assertSame(['other-key'], $actual);
+
+        $actual = $adapter->getKeys('');
+        sort($actual);
+        $expected = ['other-key', 'prefix-one', 'prefix-two'];
+        $this->assertSame($expected, $actual);
+    }
+
     private function runTests(
         AdapterInterface $adapter,
         string $prefix

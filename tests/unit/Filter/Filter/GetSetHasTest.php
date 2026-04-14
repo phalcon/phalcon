@@ -144,4 +144,24 @@ final class GetSetHasTest extends AbstractUnitTestCase
         $actual = $locator->get('helloFilter');
         $this->assertInstanceOf($class, $actual);
     }
+
+    /**
+     * Tests Phalcon\Filter :: __call() - magic method invocation
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFilterFilterCall(): void
+    {
+        $locator = new Filter(
+            [
+                'trim' => \Phalcon\Filter\Sanitize\Trim::class,
+            ]
+        );
+
+        $actual = $locator->trim('  hello world  ');
+        $this->assertSame('hello world', $actual);
+    }
 }

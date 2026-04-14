@@ -320,5 +320,6 @@ final class SerializeUnserializeTest extends AbstractUnitTestCase
         $expected = $data;
         $actual   = $serializer->getData();
         $this->assertEquals($expected, $actual);
+        $this->assertTrue($serializer->isSuccess());
     }
 }
