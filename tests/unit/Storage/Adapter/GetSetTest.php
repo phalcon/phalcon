@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Storage\Adapter;
 
 use ArrayObject;
+use DateInterval;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
 use Phalcon\Storage\Adapter\Memory;
@@ -493,5 +494,96 @@ final class GetSetTest extends AbstractUnitTestCase
 
         $result = $adapter->has($key);
         $this->assertFalse($result);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Stream :: get()/set() - DateInterval TTL
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    public function testStorageAdapterStreamGetSetWithDateInterval(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Stream(
+            $serializer,
+            ['storageDir' => outputDir()]
+        );
+
+        $key = uniqid();
+        $ttl = new DateInterval('PT2H');
+
+        $result = $adapter->set($key, 'test-value', $ttl);
+        $this->assertTrue($result);
+
+        $expected = 'test-value';
+        $actual   = $adapter->get($key);
+        $this->assertSame($expected, $actual);
+
+        $adapter->delete($key);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Weak :: set() - updating an existing key
+     * does not replace the stored WeakReference
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    public function testStorageAdapterWeakSetDuplicateKey(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $key  = uniqid();
+        $obj1 = new stdClass();
+        $obj2 = new stdClass();
+
+        $result = $adapter->set($key, $obj1);
+        $this->assertTrue($result);
+
+        // Second set on existing key returns true but keeps the first reference
+        $result = $adapter->set($key, $obj2);
+        $this->assertTrue($result);
+
+        // Original object is still returned
+        $actual = $adapter->get($key);
+        $this->assertSame($obj1, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Weak :: get() - GC'd object returns null
+     * and key is cleaned up
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    public function testStorageAdapterWeakGetSetGcObject(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new Weak($serializer);
+
+        $key = uniqid();
+        $obj = new stdClass();
+
+        $adapter->set($key, $obj);
+        $this->assertTrue($adapter->has($key));
+
+        // Release the only strong reference so the GC can collect the object
+        unset($obj);
+        gc_collect_cycles();
+
+        // get() finds a dead WeakRef, deletes the key, and returns null
+        $actual = $adapter->get($key);
+        $this->assertNull($actual);
+
+        // Key must have been cleaned up during the get() call
+        $this->assertFalse($adapter->has($key));
     }
 }

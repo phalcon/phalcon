@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Cache\Cache;
 
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -124,5 +125,26 @@ final class GetMultipleTest extends AbstractUnitTestCase
 
         $adapter = new Cache($instance);
         $adapter->getMultiple(1234);
+    }
+
+    /**
+     * Tests Phalcon\Cache :: getMultiple() - invalid key throws exception
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    public function testCacheCacheGetMultipleInvalidKey(): void
+    {
+        $this->checkExtensionIsLoaded('apcu');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The key contains invalid characters');
+
+        $serializer = new SerializerFactory();
+        $factory    = new AdapterFactory($serializer);
+        $instance   = $factory->newInstance('apcu');
+
+        $adapter = new Cache($instance);
+        $adapter->getMultiple(['valid-key', 'invalid key!']);
     }
 }

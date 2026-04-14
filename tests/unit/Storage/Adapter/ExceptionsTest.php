@@ -136,10 +136,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
      */
     public function testStorageAdapterStreamGetErrors(): void
     {
-        if (version_compare(PHP_VERSION, '8.3.0', '>=')) {
-            $this->markTestSkipped('Invalid `unserialize()` will generate warning but still works.');
-        }
-
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
             $serializer,

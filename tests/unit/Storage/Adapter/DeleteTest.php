@@ -22,6 +22,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Storage\Fake\FakeWeakFetching;
 use stdClass;
 
 use function getOptionsLibmemcached;
@@ -165,5 +166,45 @@ final class DeleteTest extends AbstractUnitTestCase
         $key    = uniqid();
         $actual = $adapter->delete($key);
         $this->assertFalse($actual);
+    }
+
+    /**
+     * Tests Phalcon\Storage\Adapter\Weak :: delete() - returns false while
+     * the key is being fetched (guards against destructor side-effects)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    public function testStorageAdapterWeakDeleteWhileFetching(): void
+    {
+        $serializer = new SerializerFactory();
+        $adapter    = new FakeWeakFetching($serializer);
+
+        $key = uniqid();
+        $obj = new stdClass();
+        $adapter->set($key, $obj);
+
+        $this->assertTrue($adapter->has($key));
+
+        // Simulate an in-flight get by freezing the fetching state
+        $adapter->setFetching($key);
+
+        // Delete must be blocked while the key is being fetched
+        $actual = $adapter->delete($key);
+        $this->assertFalse($actual);
+
+        // Key is still present
+        $this->assertTrue($adapter->has($key));
+
+        // Release the fetch lock
+        $adapter->setFetching(null);
+
+        // Delete should now succeed
+        $actual = $adapter->delete($key);
+        $this->assertTrue($actual);
+
+        $this->assertFalse($adapter->has($key));
     }
 }
