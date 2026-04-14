@@ -56,6 +56,8 @@ class Libmemcached extends AbstractAdapter
         }
 
         parent::__construct($factory, $options);
+
+        $this->initSerializer();
     }
 
     /**

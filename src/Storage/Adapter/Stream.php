@@ -420,11 +420,15 @@ class Stream extends AbstractAdapter
             E_NOTICE
         );
 
-        $data = unserialize($payload);
+        try {
+            $data = unserialize($payload);
+        } catch (\ValueError $e) {
+            $data = [];
+        }
 
         restore_error_handler();
 
-        if (true === $warning) {
+        if (true === $warning || false === $data) {
             $data = [];
         }
 

@@ -112,7 +112,7 @@ class MimeType extends AbstractFile
 
             finfo_close($mimeType);
         } else {
-            $mime = $value['type'];
+            $mime = $value['type']; // @codeCoverageIgnore
         }
 
         if (true !== in_array($mime, $types)) {

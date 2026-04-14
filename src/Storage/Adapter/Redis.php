@@ -50,6 +50,8 @@ class Redis extends AbstractAdapter
     ) {
         $options = $this->getDefaultOptions($options);
         parent::__construct($factory, $options);
+
+        $this->initSerializer();
     }
 
     /**

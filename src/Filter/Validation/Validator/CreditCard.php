@@ -115,7 +115,7 @@ class CreditCard extends AbstractValidator
         $warning = false;
         set_error_handler(
             function () use (&$warning) {
-                $warning = true;
+                $warning = true; // @codeCoverageIgnore
             },
             E_WARNING
         );
@@ -125,7 +125,7 @@ class CreditCard extends AbstractValidator
         restore_error_handler();
 
         if ($warning) {
-            return false;
+            return false; // @codeCoverageIgnore
         }
 
         return 0 === $result % 10;
