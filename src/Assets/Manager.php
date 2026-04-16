@@ -524,7 +524,7 @@ class Manager implements InjectionAwareInterface
                          * Filters must be valid objects
                          */
                         if (!is_object($filter)) {
-                            throw new Exception('Filter is invalid');
+                            throw new Exception('The filter is not valid');
                         }
 
                         /**
@@ -659,7 +659,7 @@ class Manager implements InjectionAwareInterface
                      * Filters must be valid objects
                      */
                     if (!is_object($filter)) {
-                        throw new Exception('Filter is invalid');
+                        throw new Exception('The filter is not valid');
                     }
 
                     /**

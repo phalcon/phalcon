@@ -161,9 +161,9 @@ class Uri extends AbstractCommon implements UriInterface
             );
             $this->host     = strtolower($urlParts["host"] ?? "");
             $this->path     = $this->filterPath($urlParts["path"] ?? "");
-            $this->port     = $this->filterPort($urlParts["port"] ?? null);
             $this->query    = $this->filterQuery($urlParts["query"] ?? "");
             $this->scheme   = $this->filterScheme($urlParts["scheme"] ?? "");
+            $this->port     = $this->filterPort($urlParts["port"] ?? null);
             $this->userInfo = $this->filterUserInfo($urlParts["user"] ?? "");
 
             if (isset($urlParts["pass"])) {

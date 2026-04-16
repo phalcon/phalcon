@@ -16,11 +16,11 @@ namespace Phalcon\Mvc\View\Engine\Volt;
 use Closure;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Mvc\View\Engine\Volt\Exception;
 use Phalcon\Mvc\View\ViewBaseInterface;
-use Phalcon\Parsers\Volt\Enum;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
-use Phalcon\Mvc\View\Engine\Volt\Exception;
+use Phalcon\Volt\Compiler\Opcode;
 use Phalcon\Volt\Parser\Parser;
 
 use function addslashes;
@@ -240,7 +240,7 @@ class Compiler implements InjectionAwareInterface
 
         $left = $expr["left"];
 
-        if ($left["type"] == Enum::PHVOLT_T_IDENTIFIER) {
+        if ($left["type"] == Opcode::IDENTIFIER->value) {
             $variable = $left["value"];
 
             /**
@@ -269,8 +269,8 @@ class Compiler implements InjectionAwareInterface
 //             * @todo What?
 //             */
 //            if (
-//                $leftType != Enum::PHVOLT_T_DOT &&
-//                $leftType != Enum::PHVOLT_T_FCALL
+//                $leftType != Opcode::DOT->value &&
+//                $leftType != Opcode::FCALL->value
 //            ) {
 //                $exprCode .= $leftCode;
 //            } else {
@@ -282,7 +282,7 @@ class Compiler implements InjectionAwareInterface
         $exprCode .= "->";
         $right    = $expr["right"];
 
-        if ($right["type"] == Enum::PHVOLT_T_IDENTIFIER) {
+        if ($right["type"] == Opcode::IDENTIFIER->value) {
             $exprCode .= $right["value"];
         } else {
             $exprCode .= $this->expression($right);
@@ -618,7 +618,7 @@ class Compiler implements InjectionAwareInterface
          */
         $exprCode = $this->expression($expr);
 
-        if ($expr["type"] == Enum::PHVOLT_T_FCALL) {
+        if ($expr["type"] == Opcode::FCALL->value) {
             if ($this->isTagFactory($expr) === true) {
                 $exprCode = $this->expression($expr, true);
             }
@@ -629,7 +629,7 @@ class Compiler implements InjectionAwareInterface
              * must be output as it is
              */
             if (
-                $name["type"] == Enum::PHVOLT_T_IDENTIFIER &&
+                $name["type"] == Opcode::IDENTIFIER->value &&
                 $name["value"] == "super"
             ) {
                 return $exprCode;
@@ -814,7 +814,7 @@ class Compiler implements InjectionAwareInterface
 
                 $type = $bstatement["type"];
 
-                if ($type == Enum::PHVOLT_T_ELSEFOR) {
+                if ($type == Opcode::ELSEFOR->value) {
                     $compilation                   .= '<?php $' . $prefixLevel . 'iterated = false; ?>';
                     $forElse                       = $prefixLevel;
                     $this->forElsePointers[$level] = $forElse;
@@ -1254,10 +1254,10 @@ class Compiler implements InjectionAwareInterface
              * Generate the right operator
              */
             $operator = match ($assignment["op"]) {
-                Enum::PHVOLT_T_ADD_ASSIGN => " += ",
-                Enum::PHVOLT_T_SUB_ASSIGN => " -= ",
-                Enum::PHVOLT_T_MUL_ASSIGN => " *= ",
-                Enum::PHVOLT_T_DIV_ASSIGN => " /= ",
+                Opcode::ADD_ASSIGN->value => " += ",
+                Opcode::SUB_ASSIGN->value => " -= ",
+                Opcode::MUL_ASSIGN->value => " *= ",
+                Opcode::DIV_ASSIGN->value => " /= ",
                 default                   => " = ",
             };
 
@@ -1415,7 +1415,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * Attribute reading needs special handling
              */
-            if ($type == Enum::PHVOLT_T_DOT) {
+            if ($type == Opcode::DOT->value) {
                 $exprCode = $this->attributeReader($expr);
 
                 break;
@@ -1431,7 +1431,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * Operator "is" also needs special handling
              */
-            if ($type == Enum::PHVOLT_T_IS) {
+            if ($type == Opcode::IS->value) {
                 $exprCode = $this->resolveTest(
                     $expr["right"],
                     $leftCode
@@ -1443,7 +1443,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * We don't resolve the right expression for filters
              */
-            if ($type == Enum::PHVOLT_T_PIPE) {
+            if ($type == Opcode::PIPE->value) {
                 $exprCode = $this->resolveFilter(
                     $expr["right"],
                     $leftCode
@@ -1462,58 +1462,58 @@ class Compiler implements InjectionAwareInterface
             $exprCode = null;
 
             switch ($type) {
-                case Enum::PHVOLT_T_NOT:
+                case Opcode::NOT->value:
                     $exprCode = "!" . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_MUL:
+                case Opcode::MUL->value:
                     $exprCode = $leftCode . " * " . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_ADD:
+                case Opcode::ADD->value:
                     $exprCode = $leftCode . " + " . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_SUB:
+                case Opcode::SUB->value:
                     $exprCode = $leftCode . " - " . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_DIV:
+                case Opcode::DIV->value:
                     $exprCode = $leftCode . " / " . $rightCode;
                     break;
 
-                case 37:
+                case Opcode::MOD->value:
                     $exprCode = $leftCode . " % " . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_LESS:
+                case Opcode::LESS->value:
                     $exprCode = $leftCode . " < " . $rightCode;
                     break;
 
-                case 61:
-                case 62:
+                case Opcode::ASSIGN->value:
+                case Opcode::GREATER->value:
                     $exprCode = $leftCode . " > " . $rightCode;
                     break;
 
-                case 126:
+                case Opcode::CONCAT->value:
                     $exprCode = $leftCode . " . " . $rightCode;
                     break;
 
-                case 278:
+                case Opcode::POW->value:
                     $exprCode = "pow(" . $leftCode . ", " . $rightCode . ")";
                     break;
 
-                case Enum::PHVOLT_T_ARRAY:
+                case Opcode::ARRAY->value:
                     $exprCode = (isset($expr["left"])) ? "[" . $leftCode . "]" : "[]";
                     break;
 
-                case 258:
-                case 259:
-                case Enum::PHVOLT_T_RESOLVED_EXPR:
+                case Opcode::INTEGER->value:
+                case Opcode::DOUBLE->value:
+                case Opcode::RESOLVED_EXPR->value:
                     $exprCode = $expr["value"];
                     break;
 
-                case Enum::PHVOLT_T_STRING:
+                case Opcode::STRING->value:
                     if ($doubleQuotes === false) {
                         $exprCode = "'" . str_replace(
                             "'",
@@ -1525,71 +1525,71 @@ class Compiler implements InjectionAwareInterface
                     }
                     break;
 
-                case Enum::PHVOLT_T_NULL:
+                case Opcode::NULL->value:
                     $exprCode = "null";
                     break;
 
-                case Enum::PHVOLT_T_FALSE:
+                case Opcode::FALSE->value:
                     $exprCode = "false";
                     break;
 
-                case Enum::PHVOLT_T_TRUE:
+                case Opcode::TRUE->value:
                     $exprCode = "true";
                     break;
 
-                case Enum::PHVOLT_T_IDENTIFIER:
+                case Opcode::IDENTIFIER->value:
                     $exprCode = '$' . $expr["value"];
                     break;
 
-                case Enum::PHVOLT_T_AND:
+                case Opcode::AND->value:
                     $exprCode = $leftCode . " && " . $rightCode;
                     break;
 
-                case 267:
+                case Opcode::OR->value:
                     $exprCode = $leftCode . " || " . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_LESSEQUAL:
+                case Opcode::LESSEQUAL->value:
                     $exprCode = $leftCode . " <= " . $rightCode;
                     break;
 
-                case 271:
+                case Opcode::GREATEREQUAL->value:
                     $exprCode = $leftCode . " >= " . $rightCode;
                     break;
 
-                case 272:
+                case Opcode::EQUALS->value:
                     $exprCode = $leftCode . " == " . $rightCode;
                     break;
 
-                case 273:
+                case Opcode::NOTEQUALS->value:
                     $exprCode = $leftCode . " != " . $rightCode;
                     break;
 
-                case 274:
+                case Opcode::IDENTICAL->value:
                     $exprCode = $leftCode . " === " . $rightCode;
                     break;
 
-                case 275:
+                case Opcode::NOTIDENTICAL->value:
                     $exprCode = $leftCode . " !== " . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_RANGE:
+                case Opcode::RANGE->value:
                     $exprCode = "range(" . $leftCode . ", " . $rightCode . ")";
                     break;
 
-                case Enum::PHVOLT_T_FCALL:
+                case Opcode::FCALL->value:
                     $exprCode = $this->functionCall($expr, $doubleQuotes);
                     break;
 
-                case Enum::PHVOLT_T_ENCLOSED:
+                case Opcode::ENCLOSED->value:
                     $exprCode = "(" . $leftCode . ")";
                     break;
 
-                case Enum::PHVOLT_T_ARRAYACCESS:
+                case Opcode::ARRAYACCESS->value:
                     $exprCode = $leftCode . "[" . $rightCode . "]";
                     break;
 
-                case Enum::PHVOLT_T_SLICE:
+                case Opcode::SLICE->value:
                     /**
                      * Evaluate the start part of the slice
                      */
@@ -1610,79 +1610,79 @@ class Compiler implements InjectionAwareInterface
                         . $endCode . ")";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISSET:
+                case Opcode::NOT_ISSET->value:
                     $exprCode = "!isset("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_ISSET:
+                case Opcode::ISSET->value:
                     $exprCode = "isset("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISEMPTY:
+                case Opcode::NOT_ISEMPTY->value:
                     $exprCode = "!empty("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_ISEMPTY:
+                case Opcode::ISEMPTY->value:
                     $exprCode = "empty("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISEVEN:
+                case Opcode::NOT_ISEVEN->value:
                     $exprCode = "!((("
                         . $leftCode
                         . ") % 2) == 0)";
                     break;
 
-                case Enum::PHVOLT_T_ISEVEN:
+                case Opcode::ISEVEN->value:
                     $exprCode = "((("
                         . $leftCode
                         . ") % 2) == 0)";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISODD:
+                case Opcode::NOT_ISODD->value:
                     $exprCode = "!((("
                         . $leftCode
                         . ") % 2) != 0)";
                     break;
 
-                case Enum::PHVOLT_T_ISODD:
+                case Opcode::ISODD->value:
                     $exprCode = "((("
                         . $leftCode
                         . ") % 2) != 0)";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISNUMERIC:
+                case Opcode::NOT_ISNUMERIC->value:
                     $exprCode = "!is_numeric("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_ISNUMERIC:
+                case Opcode::ISNUMERIC->value:
                     $exprCode = "is_numeric("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISSCALAR:
+                case Opcode::NOT_ISSCALAR->value:
                     $exprCode = "!is_scalar("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_ISSCALAR:
+                case Opcode::ISSCALAR->value:
                     $exprCode = "is_scalar("
                         . $leftCode
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_NOT_ISITERABLE:
+                case Opcode::NOT_ISITERABLE->value:
                     $exprCode = "!(is_array("
                         . $leftCode
                         . ") || ("
@@ -1690,7 +1690,7 @@ class Compiler implements InjectionAwareInterface
                         . ") instanceof Traversable)";
                     break;
 
-                case Enum::PHVOLT_T_ISITERABLE:
+                case Opcode::ISITERABLE->value:
                     $exprCode = "(is_array("
                         . $leftCode
                         . ") || ("
@@ -1698,7 +1698,7 @@ class Compiler implements InjectionAwareInterface
                         . ") instanceof Traversable)";
                     break;
 
-                case Enum::PHVOLT_T_IN:
+                case Opcode::IN->value:
                     $exprCode = '$this->isIncluded('
                         . $leftCode
                         . ", "
@@ -1706,7 +1706,7 @@ class Compiler implements InjectionAwareInterface
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_NOT_IN:
+                case Opcode::NOT_IN->value:
                     $exprCode = '!$this->isIncluded('
                         . $leftCode
                         . ", "
@@ -1714,7 +1714,7 @@ class Compiler implements InjectionAwareInterface
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_TERNARY:
+                case Opcode::TERNARY->value:
                     $exprCode = "("
                         . $this->expression($expr["ternary"], $doubleQuotes)
                         . " ? "
@@ -1724,11 +1724,11 @@ class Compiler implements InjectionAwareInterface
                         . ")";
                     break;
 
-                case Enum::PHVOLT_T_MINUS:
+                case Opcode::MINUS->value:
                     $exprCode = "-" . $rightCode;
                     break;
 
-                case Enum::PHVOLT_T_PLUS:
+                case Opcode::PLUS->value:
                     $exprCode = "+" . $rightCode;
                     break;
 
@@ -1816,7 +1816,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if it's a single function
          */
-        if ($nameType == Enum::PHVOLT_T_IDENTIFIER) {
+        if ($nameType == Opcode::IDENTIFIER->value) {
             $name = $nameExpr["value"];
 
             /**
@@ -2186,7 +2186,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if right part is a single identifier
          */
-        if ($type == Enum::PHVOLT_T_IDENTIFIER) {
+        if ($type == Opcode::IDENTIFIER->value) {
             $name = $test["value"];
 
             switch ($name) {
@@ -2208,7 +2208,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if right part is a function call
          */
-        if ($type == Enum::PHVOLT_T_FCALL) {
+        if ($type == Opcode::FCALL->value) {
             $testName = $test["name"];
 
             if (isset($testName["value"])) {
@@ -2439,10 +2439,10 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if the filter is a single identifier
          */
-        if ($type == Enum::PHVOLT_T_IDENTIFIER) {
+        if ($type == Opcode::IDENTIFIER->value) {
             $name = $filter["value"];
         } else {
-            if ($type != Enum::PHVOLT_T_FCALL) {
+            if ($type != Opcode::FCALL->value) {
                 /**
                  * Unknown filter throw an exception
                  */
@@ -2709,19 +2709,19 @@ class Compiler implements InjectionAwareInterface
              * Compile the statement according to the statement's type
              */
             switch ($type) {
-                case Enum::PHVOLT_T_RAW_FRAGMENT:
+                case Opcode::RAW_FRAGMENT->value:
                     $compilation .= $statement["value"];
                     break;
 
-                case Enum::PHVOLT_T_IF:
+                case Opcode::IF->value:
                     $compilation .= $this->compileIf($statement, $extendsMode);
                     break;
 
-                case Enum::PHVOLT_T_ELSEIF:
+                case Opcode::ELSEIF->value:
                     $compilation .= $this->compileElseIf($statement);
                     break;
 
-                case Enum::PHVOLT_T_SWITCH:
+                case Opcode::SWITCH->value:
                     $compilation .= $this->compileSwitch(
                         $statement,
                         $extendsMode
@@ -2729,15 +2729,15 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case Enum::PHVOLT_T_CASE:
+                case Opcode::CASE->value:
                     $compilation .= $this->compileCase($statement);
                     break;
 
-                case Enum::PHVOLT_T_DEFAULT:
+                case Opcode::DEFAULT->value:
                     $compilation .= $this->compileCase($statement, false);
                     break;
 
-                case Enum::PHVOLT_T_FOR:
+                case Opcode::FOR->value:
                     $compilation .= $this->compileForeach(
                         $statement,
                         $extendsMode
@@ -2745,15 +2745,15 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case Enum::PHVOLT_T_SET:
+                case Opcode::SET->value:
                     $compilation .= $this->compileSet($statement);
                     break;
 
-                case Enum::PHVOLT_T_ECHO:
+                case Opcode::ECHO->value:
                     $compilation .= $this->compileEcho($statement);
                     break;
 
-                case Enum::PHVOLT_T_BLOCK:
+                case Opcode::BLOCK->value:
                     /**
                      * Block statement
                      */
@@ -2791,7 +2791,7 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case Enum::PHVOLT_T_EXTENDS:
+                case Opcode::EXTENDS->value:
                     /**
                      * Extends statement
                      */
@@ -2824,20 +2824,20 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case Enum::PHVOLT_T_INCLUDE:
+                case Opcode::INCLUDE->value:
                     $compilation .= $this->compileInclude($statement);
 
                     break;
 
-                case Enum::PHVOLT_T_DO:
+                case Opcode::DO->value:
                     $compilation .= $this->compileDo($statement);
                     break;
 
-                case Enum::PHVOLT_T_RETURN:
+                case Opcode::RETURN->value:
                     $compilation .= $this->compileReturn($statement);
                     break;
 
-                case Enum::PHVOLT_T_AUTOESCAPE:
+                case Opcode::AUTOESCAPE->value:
                     $compilation .= $this->compileAutoEscape(
                         $statement,
                         $extendsMode
@@ -2845,28 +2845,28 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case Enum::PHVOLT_T_CONTINUE:
+                case Opcode::CONTINUE->value:
                     /**
                      * "Continue" statement
                      */
                     $compilation .= "<?php continue; ?>";
                     break;
 
-                case Enum::PHVOLT_T_BREAK:
+                case Opcode::BREAK->value:
                     /**
                      * "Break" statement
                      */
                     $compilation .= "<?php break; ?>";
                     break;
 
-                case 321:
+                case Opcode::ELSEFOR->value:
                     /**
                      * "Forelse" condition
                      */
                     $compilation .= $this->compileForElse();
                     break;
 
-                case Enum::PHVOLT_T_MACRO:
+                case Opcode::MACRO->value:
                     /**
                      * Define a macro
                      */
@@ -2877,7 +2877,7 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case 325:
+                case Opcode::CALL->value:
                     /**
                      * "Call" statement
                      */
@@ -2888,7 +2888,7 @@ class Compiler implements InjectionAwareInterface
 
                     break;
 
-                case 358:
+                case Opcode::EMPTY_STATEMENT->value:
                     /**
                      * Empty statement
                      */

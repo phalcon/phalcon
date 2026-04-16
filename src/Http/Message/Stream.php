@@ -222,7 +222,7 @@ class Stream implements StreamInterface
             return $metadata;
         }
 
-        return $metadata[$key] ?? [];
+        return $metadata[$key] ?? null;
     }
 
     /**
