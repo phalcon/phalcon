@@ -62,5 +62,4 @@ final class GetSetFiltersTest extends AbstractUnitTestCase
         $actual   = $object->getFilters();
         $this->assertSame($expected, $actual);
     }
-
 }
