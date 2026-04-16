@@ -126,7 +126,9 @@ final class OperationsTest extends AbstractUnitTestCase
         $headers = new Headers();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid header value: must be a string or array of strings; cannot be an empty array');
+        $this->expectExceptionMessage(
+            'Invalid header value: must be a string or array of strings; cannot be an empty array'
+        );
         $headers->getHeaderValue([]);
     }
 
