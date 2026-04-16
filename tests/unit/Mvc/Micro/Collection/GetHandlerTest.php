@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro\Collection;
 
+use Phalcon\Mvc\Micro\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
+use stdClass;
 
 class GetHandlerTest extends AbstractUnitTestCase
 {
@@ -25,6 +27,9 @@ class GetHandlerTest extends AbstractUnitTestCase
      */
     public function testMvcMicroCollectionGetHandler(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $collection = new Collection();
+        $handler    = new stdClass();
+        $collection->setHandler($handler);
+        $this->assertSame($handler, $collection->getHandler());
     }
 }

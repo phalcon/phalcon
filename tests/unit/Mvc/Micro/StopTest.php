@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class StopTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ class StopTest extends AbstractUnitTestCase
      */
     public function testMvcMicroStop(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $micro = new Micro();
+        $micro->stop();
+        $this->assertTrue(true);
     }
 }

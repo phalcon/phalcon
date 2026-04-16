@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class GetParamsTest extends AbstractUnitTestCase
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: getParams()
      *
@@ -25,6 +28,9 @@ final class GetParamsTest extends AbstractUnitTestCase
      */
     public function testMvcRouterGetParams(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $router = $this->getRouter(false);
+        $router->add('/test/{id}', ['controller' => 'test', 'action' => 'index']);
+        $router->handle('/test/42');
+        $this->assertSame(['id' => '42'], $router->getParams());
     }
 }

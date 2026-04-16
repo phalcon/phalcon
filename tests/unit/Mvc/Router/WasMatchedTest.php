@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class WasMatchedTest extends AbstractUnitTestCase
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: wasMatched()
      *
@@ -25,6 +28,10 @@ final class WasMatchedTest extends AbstractUnitTestCase
      */
     public function testMvcRouterWasMatched(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $router = $this->getRouter(false);
+        $this->assertFalse($router->wasMatched());
+        $router->add('/test', ['controller' => 'test', 'action' => 'index']);
+        $router->handle('/test');
+        $this->assertTrue($router->wasMatched());
     }
 }

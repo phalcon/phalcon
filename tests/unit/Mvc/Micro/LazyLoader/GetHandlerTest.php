@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro\LazyLoader;
 
+use Phalcon\Mvc\Micro\LazyLoader;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Controllers\ViewRequestController;
 
 class GetHandlerTest extends AbstractUnitTestCase
 {
@@ -25,6 +27,7 @@ class GetHandlerTest extends AbstractUnitTestCase
      */
     public function testMvcMicroLazyloaderGetHandler(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $loader = new LazyLoader(ViewRequestController::class);
+        $this->assertNull($loader->getHandler());
     }
 }

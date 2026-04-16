@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class GetPreviousNamespaceNameTest extends AbstractUnitTestCase
+class GetPreviousNamespaceNameTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: getPreviousNamespaceName()
@@ -25,6 +25,12 @@ class GetPreviousNamespaceNameTest extends AbstractUnitTestCase
      */
     public function testMvcDispatcherGetPreviousNamespaceName(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->setActionName('forwardExternal');
+        $dispatcher->dispatch();
+        $this->assertSame(
+            'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
+            $dispatcher->getPreviousNamespaceName()
+        );
     }
 }

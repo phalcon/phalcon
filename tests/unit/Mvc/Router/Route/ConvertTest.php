@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
+use Phalcon\Mvc\Router\Route;
+use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ConvertTest extends AbstractUnitTestCase
@@ -25,6 +27,10 @@ final class ConvertTest extends AbstractUnitTestCase
      */
     public function testMvcRouterRouteConvert(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $route  = new Route('/test/{id}');
+        $result = $route->convert('id', function ($id) {
+            return (int) $id;
+        });
+        $this->assertInstanceOf(RouteInterface::class, $result);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetBoundModelsTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class GetBoundModelsTest extends AbstractUnitTestCase
      */
     public function testMvcMicroGetBoundModels(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $micro = new Micro();
+        $this->assertSame([], $micro->getBoundModels());
     }
 }

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class IsFinishedTest extends AbstractUnitTestCase
+class IsFinishedTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: isFinished()
@@ -25,6 +25,9 @@ class IsFinishedTest extends AbstractUnitTestCase
      */
     public function testMvcDispatcherIsFinished(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $dispatcher = $this->getDispatcher();
+        $this->assertFalse($dispatcher->isFinished());
+        $dispatcher->dispatch();
+        $this->assertTrue($dispatcher->isFinished());
     }
 }

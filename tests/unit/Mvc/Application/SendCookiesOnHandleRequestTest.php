@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
+use Phalcon\Mvc\Application;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class SendCookiesOnHandleRequestTest extends AbstractUnitTestCase
@@ -25,6 +26,9 @@ class SendCookiesOnHandleRequestTest extends AbstractUnitTestCase
      */
     public function testMvcApplicationSendCookiesOnHandleRequest(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $application = new Application();
+        $result      = $application->sendCookiesOnHandleRequest(false);
+
+        $this->assertInstanceOf(Application::class, $result);
     }
 }

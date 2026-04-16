@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
+use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ReConfigureTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ final class ReConfigureTest extends AbstractUnitTestCase
      */
     public function testMvcRouterRouteReConfigure(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $route = new Route('/old');
+        $route->reConfigure('/new/{id}');
+        $this->assertSame('/new/{id}', $route->getPattern());
     }
 }

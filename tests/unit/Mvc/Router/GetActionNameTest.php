@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class GetActionNameTest extends AbstractUnitTestCase
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: getActionName()
      *
@@ -25,6 +28,8 @@ final class GetActionNameTest extends AbstractUnitTestCase
      */
     public function testMvcRouterGetActionName(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $router = $this->getRouter(false);
+        $router->handle('/');
+        $this->assertSame('', $router->getActionName());
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class ConstructTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class ConstructTest extends AbstractUnitTestCase
      */
     public function testMvcMicroConstruct(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $micro = new Micro();
+        $this->assertInstanceOf(Micro::class, $micro);
     }
 }

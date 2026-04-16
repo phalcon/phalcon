@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Php;
 
+use Phalcon\Di\Di;
+use Phalcon\Http\Request;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class UnderscoreGetTest extends AbstractUnitTestCase
@@ -25,6 +29,13 @@ class UnderscoreGetTest extends AbstractUnitTestCase
      */
     public function testMvcViewEnginePhpUnderscoreGet(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $di      = new Di();
+        $request = new Request();
+        $di->setShared('request', $request);
+
+        $view   = new View();
+        $engine = new PhpEngine($view, $di);
+
+        $this->assertInstanceOf(Request::class, $engine->request);
     }
 }

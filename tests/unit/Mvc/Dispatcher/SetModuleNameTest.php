@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class SetModuleNameTest extends AbstractUnitTestCase
+class SetModuleNameTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: setModuleName()
@@ -25,6 +25,8 @@ class SetModuleNameTest extends AbstractUnitTestCase
      */
     public function testMvcDispatcherSetModuleName(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->setModuleName('backend');
+        $this->assertSame('backend', $dispatcher->getModuleName());
     }
 }

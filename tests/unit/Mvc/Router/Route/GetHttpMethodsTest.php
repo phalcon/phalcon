@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
+use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class GetHttpMethodsTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ final class GetHttpMethodsTest extends AbstractUnitTestCase
      */
     public function testMvcRouterRouteGetHttpMethods(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $route = new Route('/test');
+        $route->setHttpMethods('GET');
+        $this->assertSame('GET', $route->getHttpMethods());
     }
 }

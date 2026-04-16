@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
+use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class GetReversedPathsTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ final class GetReversedPathsTest extends AbstractUnitTestCase
      */
     public function testMvcRouterRouteGetReversedPaths(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $route    = new Route('/test', ['controller' => 'test', 'action' => 'index']);
+        $reversed = $route->getReversedPaths();
+        $this->assertSame(['test' => 'controller', 'index' => 'action'], $reversed);
     }
 }

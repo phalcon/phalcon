@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
+use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class GetMatchTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ final class GetMatchTest extends AbstractUnitTestCase
      */
     public function testMvcRouterRouteGetMatch(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $route = new Route('/test');
+        $this->assertNull($route->getMatch());
     }
 }

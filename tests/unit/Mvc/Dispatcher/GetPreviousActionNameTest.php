@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class GetPreviousActionNameTest extends AbstractUnitTestCase
+class GetPreviousActionNameTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: getPreviousActionName()
@@ -25,6 +25,9 @@ class GetPreviousActionNameTest extends AbstractUnitTestCase
      */
     public function testMvcDispatcherGetPreviousActionName(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->setActionName('forwardExternal');
+        $dispatcher->dispatch();
+        $this->assertSame('forwardExternal', $dispatcher->getPreviousActionName());
     }
 }

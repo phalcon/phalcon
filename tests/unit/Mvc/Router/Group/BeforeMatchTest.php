@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Group;
 
+use Phalcon\Mvc\Router\Group;
+use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class BeforeMatchTest extends AbstractUnitTestCase
@@ -25,6 +27,11 @@ final class BeforeMatchTest extends AbstractUnitTestCase
      */
     public function testMvcRouterGroupBeforeMatch(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $group    = new Group();
+        $callback = function () {
+            return true;
+        };
+        $result = $group->beforeMatch($callback);
+        $this->assertInstanceOf(GroupInterface::class, $result);
     }
 }

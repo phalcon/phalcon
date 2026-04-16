@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Di\Di;
+use Phalcon\Http\Request;
+use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class UnderscoreGetTest extends AbstractUnitTestCase
@@ -25,6 +28,10 @@ class UnderscoreGetTest extends AbstractUnitTestCase
      */
     public function testMvcMicroUnderscoreGet(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $di      = new Di();
+        $request = new Request();
+        $di->setShared('request', $request);
+        $micro = new Micro($di);
+        $this->assertInstanceOf(Request::class, $micro->request);
     }
 }

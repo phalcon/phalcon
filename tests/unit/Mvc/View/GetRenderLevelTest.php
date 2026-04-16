@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetRenderLevelTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class GetRenderLevelTest extends AbstractUnitTestCase
      */
     public function testMvcViewGetRenderLevel(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view = new View();
+        $this->assertSame(View::LEVEL_MAIN_LAYOUT, $view->getRenderLevel());
     }
 }

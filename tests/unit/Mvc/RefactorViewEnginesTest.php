@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Mvc;
+namespace Phalcon\Tests\Unit\Mvc;
 
-use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RefactorViewEnginesTest extends AbstractDatabaseTestCase
+final class RefactorViewEnginesTest extends AbstractUnitTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -80,22 +80,3 @@ final class RefactorViewEnginesTest extends AbstractDatabaseTestCase
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 }
-
-// Original Cest file content (ViewEnginesCest):
-//
-// <?php
-//
-// /*
-//  +------------------------------------------------------------------------+
-//  | Phalcon Framework                                                      |
-//  +------------------------------------------------------------------------+
-//  | Copyright (c) 2011-present Phalcon Team (https://phalcon.io)       |
-//  +------------------------------------------------------------------------+
-//  | This source file is subject to the New BSD License that is bundled     |
-//  | with this package in the file LICENSE.txt.                             |
-//  |                                                                        |
-//  | If you did not receive a copy of the license and are unable to         |
-//  | obtain it through the world-wide-web, please send an email             |
-//  | to license@phalcon.io so we can send you a copy immediately.       |
-//  +------------------------------------------------------------------------+
-//

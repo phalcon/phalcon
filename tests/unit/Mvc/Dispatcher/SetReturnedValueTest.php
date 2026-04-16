@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
-class SetReturnedValueTest extends AbstractUnitTestCase
+class SetReturnedValueTest extends BaseDispatcher
 {
     /**
      * Tests Phalcon\Mvc\Dispatcher :: setReturnedValue()
@@ -25,6 +25,8 @@ class SetReturnedValueTest extends AbstractUnitTestCase
      */
     public function testMvcDispatcherSetReturnedValue(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->setReturnedValue(42);
+        $this->assertSame(42, $dispatcher->getReturnedValue());
     }
 }

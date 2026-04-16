@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class SetVarsTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ class SetVarsTest extends AbstractUnitTestCase
      */
     public function testMvcViewSetVars(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view = new View();
+        $view->setVars(['foo' => 'bar', 'baz' => 42]);
+        $this->assertSame(['foo' => 'bar', 'baz' => 42], $view->getParamsToView());
     }
 }

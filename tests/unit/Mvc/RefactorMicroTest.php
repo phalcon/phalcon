@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Mvc;
+namespace Phalcon\Tests\Unit\Mvc;
 
-use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RefactorMicroTest extends AbstractDatabaseTestCase
+final class RefactorMicroTest extends AbstractUnitTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -71,16 +71,3 @@ final class RefactorMicroTest extends AbstractDatabaseTestCase
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 }
-
-// Original Cest file content (MicroCest):
-//
-// <?php
-//
-// /**
-//  * This file is part of the Phalcon Framework.
-//  *
-//  * (c) Phalcon Team <team@phalcon.io>
-//  *
-//  * For the full copyright and license information, please view the LICENSE.txt
-//  * file that was distributed with this source code.
-//

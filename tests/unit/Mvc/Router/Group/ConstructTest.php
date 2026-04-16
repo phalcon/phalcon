@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Group;
 
+use Phalcon\Mvc\Router\Group;
+use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ConstructTest extends AbstractUnitTestCase
@@ -25,6 +27,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testMvcRouterGroupConstruct(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $group = new Group();
+        $this->assertInstanceOf(GroupInterface::class, $group);
     }
 }
