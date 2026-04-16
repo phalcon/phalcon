@@ -58,7 +58,7 @@ trait DiExceptionsTrait
         if (true !== class_exists($name)) {
             throw new Exception(
                 "Service '" . $name .
-                "' was not found in the dependency injection container"
+                "' is not registered in the container"
             );
         }
     }
@@ -276,7 +276,7 @@ trait DiExceptionsTrait
     {
         throw new Exception(
             "Service '" . $name .
-            "' was not found in the dependency injection container"
+            "' is not registered in the container"
         );
     }
 

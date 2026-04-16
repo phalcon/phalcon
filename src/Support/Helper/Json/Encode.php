@@ -68,7 +68,7 @@ class Encode
          */
         if (JSON_ERROR_NONE !== $error) {
             json_encode(null);
-            throw new InvalidArgumentException($message, $error);
+            throw new InvalidArgumentException("json_encode error: " . $message, $error);
         }
 
         return (string)$encoded;
