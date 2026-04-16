@@ -21,8 +21,6 @@ final class GetNamespaceNameTest extends AbstractUnitTestCase
     use RouterTrait;
 
     /**
-     * Tests Phalcon\Mvc\Router :: getNamespaceName()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

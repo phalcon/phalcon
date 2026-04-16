@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class SetTemplateBeforeTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View :: setTemplateBefore()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

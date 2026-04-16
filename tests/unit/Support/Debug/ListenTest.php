@@ -19,10 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class ListenTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Debug :: listen() - exceptions only (default)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */
@@ -35,10 +31,6 @@ final class ListenTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: listen() - low severity branch
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */

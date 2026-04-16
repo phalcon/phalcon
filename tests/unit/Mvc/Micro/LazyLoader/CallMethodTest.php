@@ -20,8 +20,6 @@ use Phalcon\Tests\Support\Micro\LazyLoaderHandler;
 class CallMethodTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro\LazyLoader :: callMethod()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

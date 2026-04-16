@@ -28,8 +28,6 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Settings :: default
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -120,8 +118,6 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Settings :: get()/set()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -147,8 +143,6 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Settings :: set() - all known keys
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */
@@ -185,8 +179,6 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Settings :: set() - unknown key is silently ignored
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */
@@ -198,8 +190,6 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Support\Settings :: reset()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-04
      */

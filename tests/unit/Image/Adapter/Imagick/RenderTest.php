@@ -24,8 +24,6 @@ final class RenderTest extends AbstractUnitTestCase
     use ImagickTrait;
 
     /**
-     * Tests Phalcon\Image\Adapter\Imagick :: render()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2016-02-19
      */
@@ -42,8 +40,6 @@ final class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Image\Adapter\Imagick :: render() - default extension
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-08-02
      */

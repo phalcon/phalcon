@@ -23,10 +23,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     private const ERROR_DIV = "<div class='error-info'>";
 
     /**
-     * Tests Phalcon\Debug :: renderHtml()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -64,7 +60,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 <div align='center'>
     <div class='error-main'>
         <h1>Phalcon\Support\Exception: exception message</h1>
-        <span class='error-file'>" . __FILE__ . " (35)</span>
+        <span class='error-file'>" . __FILE__ . " (31)</span>
     </div>
     <script type='application/javascript'
             src='https://assets.phalcon.io/debug/6.0.x/assets/jquery/dist/jquery.min.js'></script>
@@ -85,10 +81,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: renderHtml() - with file fragment
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -110,10 +102,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: renderHtml() - with file fragment
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -135,10 +123,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: renderHtml() - with backtrace
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -180,10 +164,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: renderHtml() - with backtrace
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -230,10 +210,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: renderHtml() - with blacklist for request key
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */
@@ -258,10 +234,6 @@ final class RenderHtmlTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: renderHtml() - with debugVar data (covers printExtraVariables)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */

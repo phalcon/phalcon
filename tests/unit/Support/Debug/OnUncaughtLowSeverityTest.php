@@ -20,10 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class OnUncaughtLowSeverityTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Debug :: onUncaughtLowSeverity() - throws when severity matches
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

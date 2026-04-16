@@ -18,8 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class CompileCallTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileCall()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

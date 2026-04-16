@@ -22,8 +22,6 @@ final class GetMatchedRouteTest extends AbstractUnitTestCase
     use RouterTrait;
 
     /**
-     * Tests Phalcon\Mvc\Router :: getMatchedRoute()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

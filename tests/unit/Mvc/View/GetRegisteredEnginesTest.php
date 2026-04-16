@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class GetRegisteredEnginesTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View :: getRegisteredEngines()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

@@ -21,8 +21,6 @@ final class GetModuleNameTest extends AbstractUnitTestCase
     use RouterTrait;
 
     /**
-     * Tests Phalcon\Mvc\Router :: getModuleName()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

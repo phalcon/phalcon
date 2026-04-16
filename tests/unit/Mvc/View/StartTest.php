@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class StartTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View :: start()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

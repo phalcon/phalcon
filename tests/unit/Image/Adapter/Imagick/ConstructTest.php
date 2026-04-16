@@ -25,8 +25,6 @@ final class ConstructTest extends AbstractUnitTestCase
     use ImagickTrait;
 
     /**
-     * Tests Phalcon\Image\Adapter\Imagick :: __construct() - from file
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-08-02
      */
@@ -40,8 +38,6 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Image\Adapter\Imagick :: __construct() - new image
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-08-02
      */
@@ -61,9 +57,6 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Image\Adapter\Imagick :: __construct() - new image no
-     * dimensions exception
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-08-02
      */

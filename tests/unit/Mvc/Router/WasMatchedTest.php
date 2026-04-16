@@ -21,8 +21,6 @@ final class WasMatchedTest extends AbstractUnitTestCase
     use RouterTrait;
 
     /**
-     * Tests Phalcon\Mvc\Router :: wasMatched()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

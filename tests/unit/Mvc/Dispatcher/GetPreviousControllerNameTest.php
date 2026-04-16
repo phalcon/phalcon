@@ -18,8 +18,6 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 class GetPreviousControllerNameTest extends BaseDispatcher
 {
     /**
-     * Tests Phalcon\Mvc\Dispatcher :: getPreviousControllerName()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

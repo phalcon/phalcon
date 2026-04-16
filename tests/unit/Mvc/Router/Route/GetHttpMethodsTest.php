@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class GetHttpMethodsTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Router\Route :: getHttpMethods()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

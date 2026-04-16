@@ -21,8 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class StopTest extends AbstractUnitTestCase
 {
     /**
-     * Tests using events propagation
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-11-11
      */

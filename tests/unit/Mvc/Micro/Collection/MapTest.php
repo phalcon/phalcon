@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class MapTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro\Collection :: map()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

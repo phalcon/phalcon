@@ -18,8 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class AttributeReaderTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: attributeReader()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

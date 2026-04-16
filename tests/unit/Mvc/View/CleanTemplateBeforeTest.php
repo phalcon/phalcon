@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class CleanTemplateBeforeTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View :: cleanTemplateBefore()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

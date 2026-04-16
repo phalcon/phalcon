@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class GetReversedPathsTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Router\Route :: getReversedPaths()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

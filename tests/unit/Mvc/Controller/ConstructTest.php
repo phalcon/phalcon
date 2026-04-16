@@ -20,8 +20,6 @@ use Phalcon\Tests\Support\Controllers\ViewRequestController;
 class ConstructTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Controller :: __construct()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class EnableTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View :: enable()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

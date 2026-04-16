@@ -26,10 +26,6 @@ use stdClass;
 final class FireTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Events\Manager :: fire()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -60,10 +56,6 @@ final class FireTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Manager :: fire() - exception
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -85,10 +77,6 @@ final class FireTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Manager :: fire() - no events
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

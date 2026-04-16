@@ -20,8 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class GetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Router :: getEventsManager()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

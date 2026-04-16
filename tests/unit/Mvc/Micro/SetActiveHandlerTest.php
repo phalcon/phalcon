@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class SetActiveHandlerTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro :: setActiveHandler()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

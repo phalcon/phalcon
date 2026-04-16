@@ -23,10 +23,6 @@ use stdClass;
 final class AttachTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Events\Manager :: attach() - by name after detatch all
-     *
-     * @return void
-     *
      * @author @author Kamil Skowron <kamil@hedonsoftware.com>
      * @since  2020-09-09
      */
@@ -87,13 +83,6 @@ final class AttachTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Manager :: attach() - array eventType
-     *
-     * When an array is passed as $eventType, it is joined with ':' to form
-     * the event type string (L79).
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */

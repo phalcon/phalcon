@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class GetDefaultModuleTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Application :: getDefaultModule()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

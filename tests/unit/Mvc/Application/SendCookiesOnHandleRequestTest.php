@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class SendCookiesOnHandleRequestTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Application :: sendCookiesOnHandleRequest()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
