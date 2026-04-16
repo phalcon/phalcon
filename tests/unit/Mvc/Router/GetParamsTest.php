@@ -21,8 +21,6 @@ final class GetParamsTest extends AbstractUnitTestCase
     use RouterTrait;
 
     /**
-     * Tests Phalcon\Mvc\Router :: getParams()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

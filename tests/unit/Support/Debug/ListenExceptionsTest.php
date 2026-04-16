@@ -19,10 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class ListenExceptionsTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Debug :: listenExceptions()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

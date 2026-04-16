@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 
 use Phalcon\Mvc\View\Engine\Volt;
-use Phalcon\Volt\Exception;
+use Phalcon\Mvc\View\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Objects\ChildObject;
 use Phalcon\Tests\Support\Objects\ParentObject;
@@ -76,8 +76,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Simple :: render()
-     *
      * @author Kamil Skowron <git@hedonsoftware.com>
      * @since  2014-05-28
      */
@@ -91,8 +89,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Simple :: render() - filename missing engine
-     *
      * @author Kamil Skowron <git@hedonsoftware.com>
      * @since  2014-05-28
      */
@@ -116,8 +112,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Simple :: render() - missing view
-     *
      * @author Kamil Skowron <git@hedonsoftware.com>
      * @since  2014-05-28
      */
@@ -137,8 +131,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Simple :: render() - with mustache
-     *
      * @author Kamil Skowron <git@hedonsoftware.com>
      * @since  2014-05-28
      */
@@ -169,8 +161,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Simple :: render() - standard
-     *
      * @author Kamil Skowron <git@hedonsoftware.com>
      * @since  2014-05-28
      */
@@ -188,8 +178,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Simple :: render() - with partials
-     *
      * @author Kamil Skowron <git@hedonsoftware.com>
      * @since  2014-05-28
      */

@@ -20,8 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class RegisterEnginesTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Simple :: registerEngines()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

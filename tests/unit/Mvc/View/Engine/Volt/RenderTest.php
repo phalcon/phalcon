@@ -23,8 +23,6 @@ class RenderTest extends AbstractUnitTestCase
     use DiTrait;
 
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt :: render()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
@@ -34,8 +32,6 @@ class RenderTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt :: render() - events
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-13
      */

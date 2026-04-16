@@ -18,8 +18,6 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 class GetReturnedValueTest extends BaseDispatcher
 {
     /**
-     * Tests Phalcon\Mvc\Dispatcher :: getReturnedValue()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

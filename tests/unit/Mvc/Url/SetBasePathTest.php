@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class SetBasePathTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Url :: setBasePath()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-04-16
      */

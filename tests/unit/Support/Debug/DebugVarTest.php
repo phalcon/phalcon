@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class DebugVarTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Debug :: debugVar()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-04
      */
@@ -33,8 +31,6 @@ final class DebugVarTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Debug :: debugVar() + clearVars()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-11
      */

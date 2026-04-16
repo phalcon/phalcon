@@ -20,8 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class MatchTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Router\Route :: match()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

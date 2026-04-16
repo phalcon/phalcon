@@ -24,8 +24,6 @@ use function supportDir;
 class GetActiveRenderPathTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Simple :: getActiveRenderPath()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

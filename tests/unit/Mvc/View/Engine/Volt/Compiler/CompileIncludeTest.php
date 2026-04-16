@@ -18,8 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class CompileIncludeTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileInclude()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

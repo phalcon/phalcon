@@ -18,8 +18,6 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 class SetDefaultActionTest extends BaseDispatcher
 {
     /**
-     * Tests Phalcon\Mvc\Dispatcher :: setDefaultAction()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

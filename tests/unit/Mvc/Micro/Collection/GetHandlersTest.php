@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class GetHandlersTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro\Collection :: getHandlers()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

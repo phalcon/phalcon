@@ -20,8 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class PartialTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View :: partial()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

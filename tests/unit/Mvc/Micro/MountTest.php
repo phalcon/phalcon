@@ -20,8 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class MountTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro :: mount()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

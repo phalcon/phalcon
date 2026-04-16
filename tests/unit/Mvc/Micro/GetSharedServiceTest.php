@@ -21,8 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class GetSharedServiceTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro :: getSharedService()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

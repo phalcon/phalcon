@@ -21,8 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class SetServiceTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro :: setService()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

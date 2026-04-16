@@ -24,10 +24,6 @@ use function method_exists;
 final class ComponentManagerTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Events\EventsAwareTrait
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -47,11 +43,6 @@ final class ComponentManagerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Traits\EventsAwareTrait :: setEventsManager() -
-     * registers with container when container is set (L47)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
@@ -102,11 +93,6 @@ final class ComponentManagerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Traits\EventsAwareTrait :: fireManagerEvent() -
-     * without eventsManager returns true (L75)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
@@ -119,11 +105,6 @@ final class ComponentManagerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Traits\EventsAwareTrait :: firePsrEvent() - with
-     * eventsManager set (L80-81)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
@@ -146,11 +127,6 @@ final class ComponentManagerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Traits\EventsAwareTrait :: firePsrEvent() -
-     * without eventsManager returns true (L84)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */

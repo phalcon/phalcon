@@ -20,8 +20,6 @@ use Phalcon\Tests\Support\Controllers\ViewRequestController;
 class SetEventsManagerTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Controller :: setEventsManager()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

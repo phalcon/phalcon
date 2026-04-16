@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class SendHeadersOnHandleRequestTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Application :: sendHeadersOnHandleRequest()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

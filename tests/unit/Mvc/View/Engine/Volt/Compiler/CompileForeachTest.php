@@ -18,8 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class CompileForeachTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt\Compiler :: compileForeach()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

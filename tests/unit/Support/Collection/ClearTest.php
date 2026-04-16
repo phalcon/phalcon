@@ -16,10 +16,6 @@ namespace Phalcon\Tests\Unit\Support\Collection;
 final class ClearTest extends AbstractCollectionTestCase
 {
     /**
-     * Tests Phalcon\Support\Collection :: clear()
-     *
-     * @return void
-     *
      * @dataProvider getClasses
      *
      * @author       Phalcon Team <team@phalcon.io>

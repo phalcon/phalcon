@@ -26,8 +26,6 @@ class RenderTest extends AbstractUnitTestCase
     use DiTrait;
 
     /**
-     * Tests Phalcon\Mvc\View\Engine\Php :: render()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

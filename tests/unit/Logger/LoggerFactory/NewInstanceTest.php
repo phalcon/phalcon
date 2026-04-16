@@ -31,10 +31,6 @@ use function logsDir;
 final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Logger\LoggerFactory :: newInstance() - with timezone
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -50,10 +46,6 @@ final class NewInstanceTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Logger\LoggerFactory :: newInstance()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

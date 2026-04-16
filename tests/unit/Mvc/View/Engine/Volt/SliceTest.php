@@ -18,8 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 class SliceTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\View\Engine\Volt :: slice()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

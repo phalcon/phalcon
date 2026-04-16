@@ -20,8 +20,6 @@ use Phalcon\Tests\Support\Controllers\ViewRequestController;
 class GetDefinitionTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Micro\LazyLoader :: getDefinition()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
