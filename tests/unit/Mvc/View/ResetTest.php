@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class ResetTest extends AbstractUnitTestCase
@@ -25,6 +26,11 @@ class ResetTest extends AbstractUnitTestCase
      */
     public function testMvcViewReset(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view = new View();
+        $view->disable();
+        $result = $view->reset();
+        $this->assertInstanceOf(View::class, $result);
+        $this->assertFalse($view->isDisabled());
+        $this->assertSame(View::LEVEL_MAIN_LAYOUT, $view->getRenderLevel());
     }
 }

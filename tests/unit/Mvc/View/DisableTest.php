@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class DisableTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ class DisableTest extends AbstractUnitTestCase
      */
     public function testMvcViewDisable(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view = new View();
+        $view->disable();
+        $this->assertTrue($view->isDisabled());
     }
 }

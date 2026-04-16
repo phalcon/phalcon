@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class GetNamespaceNameTest extends AbstractUnitTestCase
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: getNamespaceName()
      *
@@ -25,6 +28,8 @@ final class GetNamespaceNameTest extends AbstractUnitTestCase
      */
     public function testMvcRouterGetNamespaceName(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $router = $this->getRouter(false);
+        $router->handle('/');
+        $this->assertSame('', $router->getNamespaceName());
     }
 }

@@ -11,103 +11,99 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Database\Mvc;
+namespace Phalcon\Tests\Unit\Mvc;
 
-use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\AbstractUnitTestCase;
 
-final class RefactorRouterTest extends AbstractDatabaseTestCase
+final class ViewTest extends AbstractUnitTestCase
 {
     /**
+     * Tests using partials with the mix Twig with PHP Engines
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
+     * @since  2013-01-07
      */
-    public function testUsingRouteConverters(): void
+    public function testOverrideLayout(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
+     * Tests render with missing partial
+     *
+     * @author Kamil Skowron <git@hedonsoftware.com>
+     * @since  2014-05-28
      */
-    public function testUsingCallbacksBeforeMatchRoute(): void
+    public function testMissingPartial(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
+     * Tests View::render
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
+     * @since  2012-03-05
      */
-    public function testShouldMatchWithRouter(): void
+    public function testStandardRender(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
+     * Tests rendering with partials
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
+     * @since  2012-05-28
      */
-    public function testShouldMatchWithTheRouterByUsingHttpMethods(): void
+    public function testRenderingWithPartials(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
+     * Tests View setters and getters
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldMatchWithGotRouterParam(): void
+    public function testSettersAndGetters(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
+     * Tests View::disableLevel
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testAddingRouteByUsingShortPaths(): void
+    public function testDisableLevels(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
+     * Tests View options (cache config)
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldMathWithHostnameRegex(): void
+    public function testViewOptions(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 
     /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
+     * Tests params view scope
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/12648
+     * @issue  https://github.com/phalcon/cphalcon/pull/13288
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2017-03-17
      */
-    public function testShouldMatchWithHostnameRegexWithHostPort111(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
-    public function testShouldReturnCorrectController(): void
+    public function testIssue12648(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
 }
-
-// Original Cest file content (RouterCest):
-//
-// <?php
-//
-// /**
-//  * This file is part of the Phalcon Framework.
-//  *
-//  * (c) Phalcon Team <team@phalcon.io>
-//  *
-//  * For the full copyright and license information, please view the LICENSE.txt
-//  * file that was distributed with this source code.
-//

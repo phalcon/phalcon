@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Mvc\Micro;
+use Phalcon\Mvc\Model\Binder;
+use Phalcon\Mvc\Model\BinderInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class SetModelBinderTest extends AbstractUnitTestCase
@@ -25,6 +28,9 @@ class SetModelBinderTest extends AbstractUnitTestCase
      */
     public function testMvcMicroSetModelBinder(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $micro       = new Micro();
+        $modelBinder = new Binder();
+        $micro->setModelBinder($modelBinder);
+        $this->assertInstanceOf(BinderInterface::class, $micro->getModelBinder());
     }
 }

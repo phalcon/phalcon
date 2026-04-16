@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
+use Phalcon\Mvc\Application;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetDefaultModuleTest extends AbstractUnitTestCase
@@ -25,6 +26,8 @@ class GetDefaultModuleTest extends AbstractUnitTestCase
      */
     public function testMvcApplicationGetDefaultModule(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $application = new Application();
+
+        $this->assertSame('', $application->getDefaultModule());
     }
 }

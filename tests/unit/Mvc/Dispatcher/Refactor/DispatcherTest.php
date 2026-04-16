@@ -33,7 +33,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testControllerActionExternalForward(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dummyParams = [
             'param1' => 1,
             'param2' => 2,
@@ -47,27 +46,27 @@ class DispatcherTest extends BaseDispatcher
 
         $handler = $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'index',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $dummyParams,
             $dispatcher->getParams()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultController::class,
             $dispatcher->getControllerClass()
         );
@@ -95,17 +94,17 @@ class DispatcherTest extends BaseDispatcher
             $dispatcher->wasForwarded()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getPreviousNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default-two',
             $dispatcher->getPreviousControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'forwardExternal',
             $dispatcher->getPreviousActionName()
         );
@@ -130,7 +129,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -144,7 +143,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testControllerActionLocalForward(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dummyParams = [
             'param1' => 1,
             'param2' => 2,
@@ -158,27 +156,27 @@ class DispatcherTest extends BaseDispatcher
 
         $handler = $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'index2',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $dummyParams,
             $dispatcher->getParams()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultController::class,
             $dispatcher->getControllerClass()
         );
@@ -206,17 +204,17 @@ class DispatcherTest extends BaseDispatcher
             $dispatcher->wasForwarded()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getPreviousNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getPreviousControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'forwardLocal',
             $dispatcher->getPreviousActionName()
         );
@@ -239,7 +237,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -253,29 +251,28 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testControllerActionReturnValueInt(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dispatcher = $this->getDispatcher();
 
         $dispatcher->setActionName('returnInt');
 
         $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'returnInt',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultController::RETURN_VALUE_INT,
             $dispatcher->getReturnedValue()
         );
@@ -294,7 +291,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -308,29 +305,28 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testControllerActionReturnValueString(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dispatcher = $this->getDispatcher();
 
         $dispatcher->setActionName('returnString');
 
-        $handler = $dispatcher->dispatch();
+        $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'returnString',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultController::RETURN_VALUE_STRING,
             $dispatcher->getReturnedValue()
         );
@@ -349,7 +345,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -363,7 +359,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testCyclicalRouting(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dispatcher = $this->getDispatcher();
 
         $dispatcher->getEventsManager()->attach(
@@ -395,29 +390,28 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testDefaultDispatchLoopEventsWithNoHandlers(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dispatcher = $this->getDispatcher();
 
         $dispatcher->setControllerName('dispatcher-test-default-simple');
 
         $handler = $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default-simple',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'index',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultSimpleController::class,
             $dispatcher->getControllerClass()
         );
@@ -445,7 +439,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -459,8 +453,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testExceptionInBeforeException(): void
     {
-        $this->markTestSkipped('TODO: Check this');
-
         $beforeExceptionHandled = false;
         $caughtException        = false;
 
@@ -473,27 +465,27 @@ class DispatcherTest extends BaseDispatcher
             function ($event, $dispatcher) use (&$beforeExceptionHandled) {
                 $beforeExceptionHandled = true;
 
-                $this->assertEquals(
+                $this->assertSame(
                     'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
                     $dispatcher->getNamespaceName()
                 );
 
-                $this->assertEquals(
+                $this->assertSame(
                     'dispatcher-test-default',
                     $dispatcher->getControllerName()
                 );
 
-                $this->assertEquals(
+                $this->assertSame(
                     'exception',
                     $dispatcher->getActionName()
                 );
 
-                $this->assertEquals(
+                $this->assertSame(
                     DispatcherTestDefaultController::class,
                     $dispatcher->getControllerClass()
                 );
 
-                $this->assertEquals(
+                $this->assertInstanceOf(
                     DispatcherTestDefaultController::class,
                     $dispatcher->getLastController()
                 );
@@ -515,7 +507,7 @@ class DispatcherTest extends BaseDispatcher
         } catch (Exception $exception) {
             $caughtException = true;
 
-            $this->assertEquals(
+            $this->assertSame(
                 'Custom error in before exception',
                 $exception->getMessage()
             );
@@ -525,22 +517,22 @@ class DispatcherTest extends BaseDispatcher
 
             // The string properties get updated
 
-            $this->assertEquals(
+            $this->assertSame(
                 'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
                 $dispatcher->getNamespaceName()
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 'dispatcher-test-default-two',
                 $dispatcher->getControllerName()
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 'index',
                 $dispatcher->getActionName()
             );
 
-            $this->assertEquals(
+            $this->assertSame(
                 DispatcherTestDefaultTwoController::class,
                 $dispatcher->getControllerClass()
             );
@@ -561,7 +553,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testHandlerInvalid(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $dispatcher = $this->getDispatcher();
 
         $dispatcher->setNamespaceName('');
@@ -593,7 +584,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testLastHandlerExceptionForward(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $beforeExceptionHandled = false;
 
         $dispatcher = $this->getDispatcher();
@@ -605,22 +595,22 @@ class DispatcherTest extends BaseDispatcher
             function ($event, $dispatcher) use (&$beforeExceptionHandled) {
                 $beforeExceptionHandled = true;
 
-                $this->assertEquals(
+                $this->assertSame(
                     'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
                     $dispatcher->getNamespaceName()
                 );
 
-                $this->assertEquals(
+                $this->assertSame(
                     'dispatcher-test-default',
                     $dispatcher->getControllerName()
                 );
 
-                $this->assertEquals(
+                $this->assertSame(
                     'exception',
                     $dispatcher->getActionName()
                 );
 
-                $this->assertEquals(
+                $this->assertSame(
                     DispatcherTestDefaultController::class,
                     $dispatcher->getControllerClass()
                 );
@@ -645,22 +635,22 @@ class DispatcherTest extends BaseDispatcher
 
         $this->assertTrue($beforeExceptionHandled);
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default-two',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'index',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultTwoController::class,
             $dispatcher->getControllerClass()
         );
@@ -680,7 +670,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testMixingNamespaceForward(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         // Temporarily load non-namespaced class
         require_once __DIR__ . '/../Helper/DispatcherTestDefaultNoNamespaceController.php';
 
@@ -692,22 +681,22 @@ class DispatcherTest extends BaseDispatcher
 
         $handler = $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'index',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             DispatcherTestDefaultController::class,
             $dispatcher->getControllerClass()
         );
@@ -735,12 +724,12 @@ class DispatcherTest extends BaseDispatcher
             $dispatcher->getPreviousNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default-no-namespace',
             $dispatcher->getPreviousControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'forwardExternal',
             $dispatcher->getPreviousActionName()
         );
@@ -765,7 +754,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -779,7 +768,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testNoNamespaces(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         // Temporarily load non-namespaced class
         require_once __DIR__ . '/../Helper/DispatcherTestDefaultNoNamespaceController.php';
 
@@ -795,17 +783,17 @@ class DispatcherTest extends BaseDispatcher
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default-no-namespace',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'index',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'DispatcherTestDefaultNoNamespaceController',
             $dispatcher->getControllerClass()
         );
@@ -815,7 +803,7 @@ class DispatcherTest extends BaseDispatcher
         );
 
         $this->assertInstanceOf(
-            DispatcherTestDefaultNoNamespaceController::class,
+            DispatcherTestDefaultNoNamespaceController::class, // @phpstan-ignore class.notFound
             $handler
         );
 
@@ -833,7 +821,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );
@@ -847,7 +835,6 @@ class DispatcherTest extends BaseDispatcher
      */
     public function testParamsAndReturnValue(): void
     {
-        $this->markTestSkipped('TODO: Check this');
         $multiply = [4, 6];
 
         $dispatcher = $this->getDispatcher();
@@ -857,27 +844,27 @@ class DispatcherTest extends BaseDispatcher
 
         $dispatcher->dispatch();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Phalcon\Tests\Unit\Mvc\Dispatcher\Helper',
             $dispatcher->getNamespaceName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'dispatcher-test-default',
             $dispatcher->getControllerName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'multiply',
             $dispatcher->getActionName()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             $multiply,
             $dispatcher->getParams()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             24,
             $dispatcher->getReturnedValue()
         );
@@ -896,7 +883,7 @@ class DispatcherTest extends BaseDispatcher
             'afterDispatchLoop',
         ];
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getDispatcherListener()->getTrace()
         );

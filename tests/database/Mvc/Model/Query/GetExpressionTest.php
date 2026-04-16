@@ -11,14 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Mvc\Model\Query;
+namespace Phalcon\Tests\Database\Mvc\Model\Query;
 
 use Phalcon\Mvc\Model\Query;
-use Phalcon\Phql\Parser;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\AbstractDatabaseTestCase;
 use ReflectionClass;
 
-final class GetExpressionTest extends AbstractUnitTestCase
+final class GetExpressionTest extends AbstractDatabaseTestCase
 {
     private int $PHQL_T_AND = 266;
     private int $PHQL_T_OR  = 267;

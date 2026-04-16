@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Di\Di;
+use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class SetEventsManagerTest extends AbstractUnitTestCase
@@ -25,6 +28,10 @@ class SetEventsManagerTest extends AbstractUnitTestCase
      */
     public function testMvcMicroSetEventsManager(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $di      = new Di();
+        $micro   = new Micro($di);
+        $manager = new EventsManager();
+        $micro->setEventsManager($manager);
+        $this->assertSame($manager, $micro->getEventsManager());
     }
 }

@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
+use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
 
 final class GetMatchedRouteTest extends AbstractUnitTestCase
 {
+    use RouterTrait;
+
     /**
      * Tests Phalcon\Mvc\Router :: getMatchedRoute()
      *
@@ -25,6 +29,10 @@ final class GetMatchedRouteTest extends AbstractUnitTestCase
      */
     public function testMvcRouterGetMatchedRoute(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $router = $this->getRouter(false);
+        $this->assertNull($router->getMatchedRoute());
+        $router->add('/test', ['controller' => 'test', 'action' => 'index']);
+        $router->handle('/test');
+        $this->assertInstanceOf(RouteInterface::class, $router->getMatchedRoute());
     }
 }

@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Controller;
 
+use Phalcon\Mvc\ControllerInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Controllers\ViewRequestController;
 
 class ConstructTest extends AbstractUnitTestCase
 {
@@ -25,6 +27,11 @@ class ConstructTest extends AbstractUnitTestCase
      */
     public function testMvcControllerConstruct(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $controller = new ViewRequestController();
+
+        $this->assertInstanceOf(
+            ControllerInterface::class,
+            $controller
+        );
     }
 }

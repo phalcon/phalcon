@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Router\Route;
 
+use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-/**
- * Class GetConvertersTest extends AbstractUnitTestCase
- */
 final class GetConvertersTest extends AbstractUnitTestCase
 {
     /**
@@ -28,6 +26,11 @@ final class GetConvertersTest extends AbstractUnitTestCase
      */
     public function testMvcRouterRouteGetConverters(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $route = new Route('/test/{id}');
+        $this->assertSame([], $route->getConverters());
+        $route->convert('id', function ($id) {
+            return (int) $id;
+        });
+        $this->assertNotEmpty($route->getConverters());
     }
 }

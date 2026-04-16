@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Controller;
 
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Controllers\ViewRequestController;
 
 class SetEventsManagerTest extends AbstractUnitTestCase
 {
@@ -25,6 +27,14 @@ class SetEventsManagerTest extends AbstractUnitTestCase
      */
     public function testMvcControllerSetEventsManager(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $controller = new ViewRequestController();
+
+        $eventsManager = new EventsManager();
+        $controller->setEventsManager($eventsManager);
+
+        $this->assertInstanceOf(
+            EventsManager::class,
+            $controller->getEventsManager()
+        );
     }
 }

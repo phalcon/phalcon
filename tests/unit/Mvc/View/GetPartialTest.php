@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Di\Di;
+use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetPartialTest extends AbstractUnitTestCase
@@ -25,6 +27,20 @@ class GetPartialTest extends AbstractUnitTestCase
      */
     public function testMvcViewGetPartial(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $container = new Di();
+        $view      = new View();
+
+        $view->setViewsDir(
+            $this->getDirSeparator(supportDir('assets/views'))
+        );
+        $view->setPartialsDir('partials/');
+        $view->setDI($container);
+
+        $actual = $view->getPartial(
+            'partial',
+            ['cool_var' => 'abcde']
+        );
+
+        $this->assertSame('Hey, this is a partial, also abcde', $actual);
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\ViewInterface;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class DisableLevelTest extends AbstractUnitTestCase
@@ -25,6 +27,8 @@ class DisableLevelTest extends AbstractUnitTestCase
      */
     public function testMvcViewDisableLevel(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view   = new View();
+        $result = $view->disableLevel(View::LEVEL_LAYOUT);
+        $this->assertInstanceOf(ViewInterface::class, $result);
     }
 }

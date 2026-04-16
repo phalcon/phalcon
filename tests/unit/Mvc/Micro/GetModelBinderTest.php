@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Micro;
 
+use Phalcon\Mvc\Micro;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetModelBinderTest extends AbstractUnitTestCase
@@ -25,6 +26,7 @@ class GetModelBinderTest extends AbstractUnitTestCase
      */
     public function testMvcMicroGetModelBinder(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $micro = new Micro();
+        $this->assertNull($micro->getModelBinder());
     }
 }

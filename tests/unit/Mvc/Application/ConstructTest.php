@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Application;
 
+use Phalcon\Application\AbstractApplication;
+use Phalcon\Mvc\Application;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class ConstructTest extends AbstractUnitTestCase
@@ -25,6 +27,8 @@ class ConstructTest extends AbstractUnitTestCase
      */
     public function testMvcApplicationConstruct(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $application = new Application();
+
+        $this->assertInstanceOf(AbstractApplication::class, $application);
     }
 }

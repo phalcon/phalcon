@@ -13,10 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Controller;
 
+use Phalcon\Http\Request;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Controllers\ViewRequestController;
+use Phalcon\Tests\Support\Traits\DiTrait;
 
 class UnderscoreGetTest extends AbstractUnitTestCase
 {
+    use DiTrait;
+
     /**
      * Tests Phalcon\Mvc\Controller :: __get()
      *
@@ -25,6 +30,11 @@ class UnderscoreGetTest extends AbstractUnitTestCase
      */
     public function testMvcControllerUnderscoreGet(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $di = $this->newService('factoryDefault');
+
+        $controller = new ViewRequestController();
+        $controller->setDI($di);
+
+        $this->assertInstanceOf(Request::class, $controller->request);
     }
 }

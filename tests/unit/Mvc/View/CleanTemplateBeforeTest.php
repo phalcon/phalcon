@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View;
 
+use Phalcon\Mvc\View;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class CleanTemplateBeforeTest extends AbstractUnitTestCase
@@ -25,6 +26,9 @@ class CleanTemplateBeforeTest extends AbstractUnitTestCase
      */
     public function testMvcViewCleanTemplateBefore(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view = new View();
+        $view->setTemplateBefore('layouts/before');
+        $result = $view->cleanTemplateBefore();
+        $this->assertInstanceOf(View::class, $result);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Url;
 
+use Phalcon\Mvc\Url;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class SetBasePathTest extends AbstractUnitTestCase
@@ -25,6 +26,9 @@ final class SetBasePathTest extends AbstractUnitTestCase
      */
     public function testMvcUrlSetBasePath(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $url    = new Url();
+        $result = $url->setBasePath('/app/');
+        $this->assertInstanceOf(Url::class, $result);
+        $this->assertSame('/app/', $url->getBasePath());
     }
 }
