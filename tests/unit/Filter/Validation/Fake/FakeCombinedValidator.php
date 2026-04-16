@@ -22,7 +22,7 @@ use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
  */
 final class FakeCombinedValidator extends AbstractCombinedFieldsValidator
 {
-    public function validate(Validation $validation, array | string $field): bool
+    public function validate(Validation $validation, $field): bool
     {
         return true;
     }

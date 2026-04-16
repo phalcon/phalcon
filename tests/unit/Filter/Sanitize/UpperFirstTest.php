@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class UpperFirstTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Sanitize\UpperFirst :: __invoke()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */

@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class IpTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Sanitize\Ip :: __invoke() - plain IP addresses
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */
@@ -36,8 +34,6 @@ final class IpTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Sanitize\Ip :: __invoke() - CIDR notation
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */

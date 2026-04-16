@@ -83,11 +83,7 @@ final class GetSetDataTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\ :: getData()/setData()
-     *
      * @dataProvider getExamples
-     *
-     * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2022-02-24

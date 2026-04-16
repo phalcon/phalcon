@@ -23,8 +23,6 @@ use PHPUnit\Framework\Attributes\Test;
 final class FailsTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation :: fails()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-08-02
      */
@@ -40,8 +38,6 @@ final class FailsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation :: fails() - returns false when valid
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-08-02
      */

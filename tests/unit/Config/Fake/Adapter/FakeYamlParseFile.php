@@ -20,10 +20,10 @@ final class FakeYamlParseFile extends Yaml
     /**
      * Parse a YAML stream from a file
      *
-     * @param string   $filename
-     * @param int      $pos
-     * @param int|null $ndocs
-     * @param array    $callbacks
+     * @param string $filename
+     * @param int    $pos
+     * @param int    $ndocs
+     * @param array  $callbacks
      *
      * @return mixed
      *
@@ -32,9 +32,9 @@ final class FakeYamlParseFile extends Yaml
     protected function phpYamlParseFile(
         string $filename,
         int $pos = 0,
-        ?int &$ndocs = null,
+        int | null &$ndocs = null,
         array $callbacks = []
-    ) {
+    ): mixed {
         return false;
     }
 }

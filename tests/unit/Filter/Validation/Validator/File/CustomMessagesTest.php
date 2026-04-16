@@ -21,8 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class CustomMessagesTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\File :: customMessages[]
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
@@ -54,8 +52,6 @@ final class CustomMessagesTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\File :: constructor with equalSize
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
@@ -73,8 +69,6 @@ final class CustomMessagesTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\File :: constructor with equalResolution
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

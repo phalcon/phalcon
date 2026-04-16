@@ -74,12 +74,10 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\* :: deleteMultiple()
-     *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2025-01-01
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-01-01
      */
     public function testCacheAdapterDeleteMultiple(
         string $class,
@@ -144,12 +142,8 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Weak :: deleteMultiple()
-     *
-     * @return void
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2025-01-01
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-01-01
      */
     public function testCacheAdapterWeakDeleteMultiple(): void
     {

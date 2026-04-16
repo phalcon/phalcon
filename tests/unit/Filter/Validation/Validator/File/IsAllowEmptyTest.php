@@ -23,8 +23,6 @@ use const UPLOAD_ERR_OK;
 final class IsAllowEmptyTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\File\AbstractFile :: isAllowEmpty()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

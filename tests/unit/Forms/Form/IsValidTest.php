@@ -22,12 +22,13 @@ use Phalcon\Messages\Message;
 use Phalcon\Messages\Messages;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Forms\ValidationForm;
+use Phalcon\Tests\Unit\Forms\Fake\FakeFormAfterValidation;
+use Phalcon\Tests\Unit\Forms\Fake\FakeFormBeforeValidation;
+use stdClass;
 
 final class IsValidTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Form::isValid()
-     *
      * @issue  https://github.com/phalcon/cphalcon/issues/13149
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
@@ -79,10 +80,8 @@ final class IsValidTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Form::isValid()
-     *
-     * @author Mohamad Rostami <rostami@outlook.com>
      * @issue  https://github.com/phalcon/cphalcon/issues/11500
+     * @author Mohamad Rostami <rostami@outlook.com>
      */
     public function testMergeValidators(): void
     {
@@ -171,5 +170,43 @@ final class IsValidTest extends AbstractUnitTestCase
             $expected,
             $form->get('address')->getMessages()
         );
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testFormsFormIsValidNoElementsReturnsTrue(): void
+    {
+        $form   = new Form();
+        $actual = $form->isValid([]);
+        $this->assertTrue($actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testFormsFormIsValidBeforeValidationReturnsFalse(): void
+    {
+        $form = new FakeFormBeforeValidation();
+        $form->add(new Text('name'));
+
+        $actual = $form->isValid(['name' => 'test']);
+        $this->assertFalse($actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testFormsFormIsValidAfterValidationCalled(): void
+    {
+        $form = new FakeFormAfterValidation();
+        $form->add(new Text('name'));
+
+        $form->isValid(['name' => 'test']);
+
+        $this->assertTrue($form->afterCalled);
     }
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Config\Config;
 
 use Phalcon\Config\Config;
-use Phalcon\Config\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 
@@ -145,8 +144,19 @@ final class MergeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\Config :: merge()
-     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testConfigMergeArray(): void
+    {
+        $config = new Config(['a' => 'aaa', 'b' => 'bbb']);
+        $actual = $config->merge(['c' => 'ccc', 'b' => 'xxx'])->toArray();
+
+        $expected = ['a' => 'aaa', 'b' => 'xxx', 'c' => 'ccc'];
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-02-15
      */
@@ -160,15 +170,7 @@ final class MergeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Config\Config :: merge() - cases
-     *
      * @dataProvider getExamples
-     *
-     * @link https://github.com/phalcon/cphalcon/issues/13351
-     * @link https://github.com/phalcon/cphalcon/issues/13201
-     * @link https://github.com/phalcon/cphalcon/issues/13768
-     * @link https://github.com/phalcon/cphalcon/issues/12779
-     * @link https://github.com/phalcon/phalcon/issues/196
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-10-21

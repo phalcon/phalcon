@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Events\Event;
 
 use Phalcon\Events\Event;
+use Phalcon\Events\Exception;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -42,5 +43,19 @@ final class StopTest extends AbstractUnitTestCase
         $eventsManager->fire('some-type:beforeSome', $this);
 
         $this->assertSame(1, $number);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsEventStopNonCancelableThrows(): void
+    {
+        $event = new Event('some-type:beforeSome', $this, null, false);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Trying to cancel a non-cancelable event');
+
+        $event->stop();
     }
 }

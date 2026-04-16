@@ -35,11 +35,6 @@ use function unserialize;
 final class ExceptionsTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Storage\Serializer\AbstractSerializer :: __serialize() -
-     * with array data
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -54,11 +49,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\AbstractSerializer :: __serialize() -
-     * with non-array data returns empty array
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -72,10 +62,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\AbstractSerializer :: __unserialize()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -91,10 +77,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Base64 :: serialize() - exception
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -110,10 +92,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Base64 :: unserialize() - exception
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -129,11 +107,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Base64 :: unserialize() - fail empty
-     * string
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-24
      */
@@ -150,11 +123,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Igbinary :: serialize() - fail empty
-     * string
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-24
      */
@@ -171,12 +139,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Igbinary :: unserialize() - fail empty
-     * string
-     *
-     * @return void
-     *
-     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-24
      */
@@ -193,11 +155,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Igbinary :: unserialize() - fail warning
-     *
-     * @return void
-     *
-     * @throws Exception
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-24
      */
@@ -214,10 +171,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Json :: serialize() - error
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -237,10 +190,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Json :: serialize() - object
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -266,10 +215,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Msgpack :: unserialize() - error
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -284,8 +229,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Php :: unserialize() - error
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -300,8 +243,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Serializer\Php :: unserialize() - error not string
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

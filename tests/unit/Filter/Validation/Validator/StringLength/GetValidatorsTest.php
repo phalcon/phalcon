@@ -21,8 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class GetValidatorsTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: getValidators()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-23
      */
@@ -47,8 +45,6 @@ final class GetValidatorsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests AbstractValidatorComposite :: validate() - throws when no validators
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-23
      */

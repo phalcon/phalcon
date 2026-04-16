@@ -74,8 +74,6 @@ final class GetSetOptionTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\Url :: getOption()/setOption()
-     *
      * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -99,9 +97,6 @@ final class GetSetOptionTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\AbstractValidator :: getOption() - attribute key with nested array
-     * Covers L108: return $value[$key] when key is 'attribute' and value is array with 'attribute' key
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-01
      */

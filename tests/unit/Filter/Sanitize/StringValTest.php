@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class StringValTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Sanitize\StringVal :: __invoke()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */

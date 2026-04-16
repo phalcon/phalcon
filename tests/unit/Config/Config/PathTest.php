@@ -11,20 +11,22 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Config\Adapter;
+namespace Phalcon\Tests\Unit\Config\Config;
 
+use Phalcon\Config\Config;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-final class MergeTest extends AbstractUnitTestCase
+final class PathTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Config\Adapter :: merge()
-     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2019-06-19
+     * @since  2024-01-01
      */
-    public function testConfigAdapterMerge(): void
+    public function testConfigPathEmptyValueReturnsDefault(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $config = new Config(['a' => '']);
+        $actual = $config->path('a.b', 'default');
+
+        $this->assertSame('default', $actual);
     }
 }

@@ -73,12 +73,10 @@ final class GetSerializerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\* :: getSerializer()
-     *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2026-04-14
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
      */
     public function testCacheAdapterGetSerializer(
         string $class,
@@ -96,10 +94,6 @@ final class GetSerializerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Weak :: getSerializer() - returns null
-     * because Weak never initializes a serializer (objects cannot be
-     * serialized).
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */

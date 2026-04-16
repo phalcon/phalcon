@@ -348,12 +348,10 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\* :: get()/set()
-     *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testStorageAdapterGetSet(
         string $extension,
@@ -423,12 +421,10 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\* :: get()/set()
-     *
      * @dataProvider getAdapters
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-09-09
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
      */
     public function testStorageAdapterGetSetWithZeroTtl(
         string $class,
@@ -461,8 +457,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Stream :: set() - file content
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -489,11 +483,9 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Stream :: get() - with prefix
-     *
+     * @issue 16348
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-06-01
-     * @issue  16348
      */
     public function testCacheAdapterStreamGetWithPrefix(): void
     {
@@ -529,8 +521,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Weak :: get()/set()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -558,10 +548,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Stream :: get()/set() - DateInterval TTL
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */
@@ -587,11 +573,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Weak :: set() - updating an existing key
-     * does not replace the stored WeakReference
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */
@@ -617,11 +598,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\Weak :: get() - GC'd object returns null
-     * and key is cleaned up
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */

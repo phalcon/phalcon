@@ -19,10 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class UrlTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Escaper :: escapeUrl()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

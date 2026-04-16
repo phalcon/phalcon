@@ -11,9 +11,13 @@
 
 namespace Phalcon\Tests\Unit\Events;
 
+use Phalcon\Cli\Dispatcher as CliDispatcher;
+use Phalcon\Di\Di;
 use Phalcon\Events\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Events\Fake\ComponentFireManager;
 use Phalcon\Tests\Unit\Events\Fake\ComponentWithEvents;
+use Phalcon\Tests\Unit\Events\Fake\PsrEventObject;
 
 use function method_exists;
 
@@ -40,5 +44,121 @@ final class ComponentManagerTest extends AbstractUnitTestCase
         $component->setEventsManager($manager);
         $actual = $component->getEventsManager();
         $this->assertSame($manager, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Events\Traits\EventsAwareTrait :: setEventsManager() -
+     * registers with container when container is set (L47)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsAwareTraitSetEventsManagerRegistersWithContainer(): void
+    {
+        $di         = new Di();
+        $manager    = new Manager();
+        $dispatcher = new CliDispatcher();
+        $dispatcher->setDI($di);
+
+        $dispatcher->setEventsManager($manager);
+
+        // The manager is stored in the dispatcher
+        $this->assertSame($manager, $dispatcher->getEventsManager());
+
+        // The manager is also registered in the DI container
+        $this->assertSame($manager, $di->get('eventsManager'));
+    }
+
+    /**
+     * Tests Phalcon\Events\Traits\EventsAwareTrait :: fireManagerEvent() - with
+     * eventsManager set (L69-72)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsAwareTraitFireManagerEventWithManager(): void
+    {
+        $called    = false;
+        $manager   = new Manager();
+        $component = new ComponentFireManager();
+        $component->setEventsManager($manager);
+
+        $manager->attach(
+            'test:action',
+            function () use (&$called) {
+                $called = true;
+
+                return 'fired';
+            }
+        );
+
+        $result = $component->callFireManagerEvent('test:action');
+        $this->assertTrue($called);
+        $this->assertSame('fired', $result);
+    }
+
+    /**
+     * Tests Phalcon\Events\Traits\EventsAwareTrait :: fireManagerEvent() -
+     * without eventsManager returns true (L75)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsAwareTraitFireManagerEventNoManagerReturnsTrue(): void
+    {
+        $component = new ComponentFireManager();
+
+        $result = $component->callFireManagerEvent('test:action');
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Tests Phalcon\Events\Traits\EventsAwareTrait :: firePsrEvent() - with
+     * eventsManager set (L80-81)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsAwareTraitFirePsrEventWithManager(): void
+    {
+        $called    = false;
+        $manager   = new Manager();
+        $component = new ComponentFireManager();
+        $component->setEventsManager($manager);
+
+        $manager->attach(
+            PsrEventObject::class,
+            function () use (&$called) {
+                $called = true;
+            }
+        );
+
+        $component->callFirePsrEvent(new PsrEventObject());
+        $this->assertTrue($called);
+    }
+
+    /**
+     * Tests Phalcon\Events\Traits\EventsAwareTrait :: firePsrEvent() -
+     * without eventsManager returns true (L84)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsAwareTraitFirePsrEventNoManagerReturnsTrue(): void
+    {
+        $component = new ComponentFireManager();
+
+        $result = $component->callFirePsrEvent(new PsrEventObject());
+        $this->assertTrue($result);
     }
 }

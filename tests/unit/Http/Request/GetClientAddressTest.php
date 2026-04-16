@@ -22,8 +22,6 @@ use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 final class GetClientAddressTest extends AbstractHttpBase
 {
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
@@ -39,8 +37,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - incorrect
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
@@ -55,8 +51,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - ipv6
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */
@@ -72,8 +66,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - without trusted proxy
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-07-11
      */
@@ -94,8 +86,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: setTrustedProxies()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-07-11
      */
@@ -115,8 +105,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - with valid trusted proxy
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-07-11
      */
@@ -139,8 +127,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - with invalid trusted proxy
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-07-11
      */
@@ -163,8 +149,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader - with non-public proxy IPs
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-07-11
      */
@@ -187,9 +171,6 @@ final class GetClientAddressTest extends AbstractHttpBase
     }
 
     /**
-     * Tests Phalcon\Http\Request :: getClientAddress() - trustForwardedHeader
-     * - client IP
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-03-17
      */

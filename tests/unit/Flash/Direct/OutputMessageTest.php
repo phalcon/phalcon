@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Flash\Direct;
 
 use Phalcon\Flash\Direct;
-use Phalcon\Flash\Exception;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -44,12 +43,8 @@ final class OutputMessageTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Flash\Direct :: outputMessage() - exception
-     *
      * @dataProvider getExamples
      *
-     *
-     * @return void
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */
@@ -70,4 +65,5 @@ final class OutputMessageTest extends AbstractUnitTestCase
         $actual = $flash->$type($source);
         $this->assertSame($expected, $actual);
     }
+
 }

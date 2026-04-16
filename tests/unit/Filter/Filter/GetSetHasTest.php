@@ -21,10 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class GetSetHasTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter :: get()/set()/has() - get() same
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -45,10 +41,6 @@ final class GetSetHasTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter :: get()/set()/has() - has()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -67,10 +59,6 @@ final class GetSetHasTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter :: get()/set()/has() - set()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -92,10 +80,6 @@ final class GetSetHasTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter :: get()/set()/has() - set() closure
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -121,10 +105,6 @@ final class GetSetHasTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter :: get()/set()/has() - get()
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -146,10 +126,6 @@ final class GetSetHasTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter :: __call() - magic method invocation
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

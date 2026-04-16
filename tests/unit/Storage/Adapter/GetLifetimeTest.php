@@ -78,8 +78,6 @@ final class GetLifetimeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\* :: getLifetime()
-     *
      * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -103,8 +101,6 @@ final class GetLifetimeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\* :: getLifetime() - custom value
-     *
      * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
