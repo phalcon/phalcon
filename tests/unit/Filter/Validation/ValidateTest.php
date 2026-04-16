@@ -40,11 +40,9 @@ final class ValidateTest extends AbstractUnitTestCase
         Di::reset();
     }
     /**
-     * Tests Phalcon\Filter\Validation :: validate() - message to non object
-     *
+     * @issue  10405
      * @author Phalcon Team <team@phalcon.io>
      * @since  2016-06-27
-     * @issue  10405
      */
     public function testFilterValidationValidateException(): void
     {
@@ -59,11 +57,9 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation :: validate() - message to non object
-     *
+     * @issue  10405
      * @author Phalcon Team <team@phalcon.io>
      * @since  2016-06-27
-     * @issue  10405
      */
     public function testFilterValidationValidateMessageToNonObject(): void
     {

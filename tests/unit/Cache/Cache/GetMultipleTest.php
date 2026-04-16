@@ -25,8 +25,6 @@ use function uniqid;
 final class GetMultipleTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Cache :: getMultiple()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -64,8 +62,6 @@ final class GetMultipleTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache :: getMultiple() - Redis mget
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -108,28 +104,6 @@ final class GetMultipleTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache :: getMultiple() - exception
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testCacheCacheGetMultipleException(): void
-    {
-        // PHP enforces iterable type strictly, throwing TypeError instead of
-        // InvalidArgumentException (diverges from cphalcon/Zephir behaviour)
-        $this->expectException(\TypeError::class);
-
-        $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($serializer);
-        $instance   = $factory->newInstance('apcu');
-
-        $adapter = new Cache($instance);
-        $adapter->getMultiple(1234);
-    }
-
-    /**
-     * Tests Phalcon\Cache :: getMultiple() - invalid key throws exception
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */

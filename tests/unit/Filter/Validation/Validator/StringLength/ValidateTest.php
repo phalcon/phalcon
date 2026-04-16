@@ -24,8 +24,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class ValidateTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - maximum
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-03-09
      */
@@ -76,9 +74,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - maximum
-     * custom message
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-03-09
      */
@@ -129,8 +124,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - minimum
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-03-09
      */
@@ -181,9 +174,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - minimum
-     * custom message
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-03-09
      */
@@ -235,9 +225,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate()
-     * multiple field and min, max
-     *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2016-06-05
      */
@@ -350,9 +337,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate()
-     * multiple field and single min, max
-     *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2016-06-05
      */
@@ -441,9 +425,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: validate() - single
-     * field
-     *
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2016-06-05
      */
@@ -487,9 +468,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\StringLength :: processValidator()
-     * using the generic 'message' and 'included' options
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-03-09
      */

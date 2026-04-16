@@ -25,9 +25,6 @@ use const UPLOAD_ERR_OK;
 final class ValidateTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation\Validator\File :: validate() — empty file
-     * triggers the "file empty" message without requiring is_uploaded_file().
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
@@ -66,8 +63,6 @@ final class ValidateTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation\Validator\File :: customMessages[]
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */

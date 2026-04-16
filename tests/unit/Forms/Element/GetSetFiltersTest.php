@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Forms\Element;
 
-use Phalcon\Forms\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Forms\Fake\FormsTrait;
 
@@ -25,11 +24,7 @@ final class GetSetFiltersTest extends AbstractUnitTestCase
     use FormsTrait;
 
     /**
-     * Tests Phalcon\Forms\Element\* :: getFilters()/setFilters()/addFilter()
-     *
      * @dataProvider getExamples
-     *
-     * @return void
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-12-05
@@ -67,4 +62,5 @@ final class GetSetFiltersTest extends AbstractUnitTestCase
         $actual   = $object->getFilters();
         $this->assertSame($expected, $actual);
     }
+
 }

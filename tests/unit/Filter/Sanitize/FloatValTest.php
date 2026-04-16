@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class FloatValTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Sanitize\FloatVal :: __invoke()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */

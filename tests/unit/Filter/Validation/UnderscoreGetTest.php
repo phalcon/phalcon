@@ -27,8 +27,6 @@ final class UnderscoreGetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Filter\Validation :: __get()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-04-16
      */

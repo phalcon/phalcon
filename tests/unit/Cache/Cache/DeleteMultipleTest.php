@@ -24,8 +24,6 @@ use function uniqid;
 final class DeleteMultipleTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Cache :: deleteMultiple()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
@@ -89,8 +87,6 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache :: deleteMultiple() - exception
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-01-01
      */

@@ -18,6 +18,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Listener\OneListener;
 use Phalcon\Tests\Support\Listener\TwoListener;
 use Phalcon\Tests\Unit\Events\Fake\ComponentOne;
+use stdClass;
 
 final class AttachTest extends AbstractUnitTestCase
 {
@@ -83,5 +84,30 @@ final class AttachTest extends AbstractUnitTestCase
         $expected = TwoListener::class;
         $actual   = $logListeners[0];
         $this->assertInstanceOf($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Events\Manager :: attach() - array eventType
+     *
+     * When an array is passed as $eventType, it is joined with ':' to form
+     * the event type string (L79).
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsManagerAttachArrayEventType(): void
+    {
+        $manager = new Manager();
+        $called  = false;
+
+        $manager->attach(['ab', 'beforeAction'], function () use (&$called) {
+            $called = true;
+        });
+
+        $manager->fire('ab:beforeAction', new stdClass());
+
+        $this->assertTrue($called);
     }
 }

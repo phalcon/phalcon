@@ -346,8 +346,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\* :: get()/set()
-     *
      * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -426,8 +424,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Weak :: get()/set()
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-17
      */
@@ -459,8 +455,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\* :: get()/set()
-     *
      * @dataProvider getAdapters
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -497,10 +491,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Stream :: get()/set() - DateInterval TTL
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */
@@ -526,11 +516,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Weak :: set() - updating an existing key
-     * does not replace the stored WeakReference
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */
@@ -556,11 +541,6 @@ final class GetSetTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Weak :: get() - GC'd object returns null
-     * and key is cleaned up
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */

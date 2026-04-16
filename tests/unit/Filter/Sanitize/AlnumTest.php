@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class AlnumTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Sanitize\Alnum :: __invoke()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */

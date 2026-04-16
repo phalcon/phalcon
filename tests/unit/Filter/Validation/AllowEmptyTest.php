@@ -21,8 +21,6 @@ use PHPUnit\Framework\Attributes\Test;
 final class AllowEmptyTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Validation :: allowEmpty()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-07
      */

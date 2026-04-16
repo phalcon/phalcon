@@ -19,8 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 final class AbsIntTest extends AbstractUnitTestCase
 {
     /**
-     * Tests Phalcon\Filter\Sanitize\AbsInt :: __invoke()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-01-19
      */

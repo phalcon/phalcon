@@ -75,8 +75,6 @@ final class DeleteTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\* :: delete()
-     *
      * @dataProvider getExamples
      *
      * @author       Phalcon Team <team@phalcon.io>
@@ -120,10 +118,6 @@ final class DeleteTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Weak :: delete()
-     *
-     * @return void
-     *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-17
      */
@@ -169,11 +163,6 @@ final class DeleteTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Storage\Adapter\Weak :: delete() - returns false while
-     * the key is being fetched (guards against destructor side-effects)
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */

@@ -137,6 +137,49 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $this->assertTrue($event->isPropagationStopped(), 'Cancelled event should be stopped');
     }
 
+    /**
+     * Tests Phalcon\Events\Manager :: dispatch() - array name (L258)
+     *
+     * When dispatch() is called with an array $name, it joins the parts
+     * with ':' to form the event type string.
+     *
+     * @return void
+     */
+    public function testDispatchWithArrayName(): void
+    {
+        $called  = false;
+        $manager = new Manager();
+        $manager->attach('group:action', function () use (&$called) {
+            $called = true;
+        });
+
+        $manager->dispatch(new EmptyEventObject(), ['group', 'action']);
+
+        $this->assertTrue($called);
+    }
+
+    /**
+     * Tests Phalcon\Events\Manager :: dispatch() - returns null when no
+     * matching listener (L270)
+     *
+     * When events are registered but none match the dispatched event name
+     * or class, dispatch() falls through to return null.
+     *
+     * @return void
+     */
+    public function testDispatchReturnsNullWhenNoMatch(): void
+    {
+        $manager = new Manager();
+        $manager->attach('known', function () {
+            return 'called';
+        });
+
+        // Dispatch with a name that doesn't match any registered event
+        $result = $manager->dispatch(new EmptyEventObject(), 'unknown');
+
+        $this->assertNull($result);
+    }
+
     public function testNonCancellableEventIsNotAffectedByStoppableCheck(): void
     {
         $manager = new Manager();

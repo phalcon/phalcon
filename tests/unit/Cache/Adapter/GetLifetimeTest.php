@@ -78,12 +78,10 @@ final class GetLifetimeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\* :: getLifetime()
-     *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2026-04-14
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
      */
     public function testCacheAdapterGetLifetime(
         string $class,
@@ -103,12 +101,10 @@ final class GetLifetimeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Cache\Adapter\* :: getLifetime() - custom value
-     *
      * @dataProvider getExamples
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2026-04-14
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
      */
     public function testCacheAdapterGetLifetimeCustom(
         string $class,

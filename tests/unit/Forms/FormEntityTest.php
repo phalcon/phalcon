@@ -32,8 +32,6 @@ final class FormEntityTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Forms\Form :: bind() with disabled strict property check
-     *
      * @author noone-silent <lominum@protonmail.com>
      * @since  2024-05-01
      */
@@ -56,8 +54,6 @@ final class FormEntityTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Forms\Form :: bind() with enabled strict property check
-     *
      * @author noone-silent <lominum@protonmail.com>
      * @since  2024-05-01
      */
@@ -84,8 +80,6 @@ final class FormEntityTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Forms\Form :: isValid()
-     *
      * @author Stijn Leenknegt <stijn@diagro.be>
      * @since  2021-07-10
      */

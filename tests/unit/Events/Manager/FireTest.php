@@ -20,6 +20,7 @@ use Phalcon\Tests\Support\Listener\OneListener;
 use Phalcon\Tests\Support\Listener\ThreeListener;
 use Phalcon\Tests\Support\Listener\TwoListener;
 use Phalcon\Tests\Unit\Events\Fake\ComponentOne;
+use Phalcon\Tests\Unit\Events\Fake\EmptyEventObject;
 use stdClass;
 
 final class FireTest extends AbstractUnitTestCase
@@ -96,6 +97,58 @@ final class FireTest extends AbstractUnitTestCase
         $manager = new Manager();
         $actual  = $manager->fire('someEvent', new stdClass());
         $this->assertNull($actual);
+    }
+
+    /**
+     * Tests Phalcon\Events\Manager :: fire() - no colon, data is object,
+     * delegates to dispatch() (L206-207)
+     *
+     * When the event type has no colon separator AND $data is an object,
+     * fire() delegates to $this->dispatch($data, $eventType, $source).
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsManagerFireNoColonDataIsObjectDispatch(): void
+    {
+        $called  = false;
+        $manager = new Manager();
+        $manager->attach('psr14event', function () use (&$called) {
+            $called = true;
+        });
+
+        $data = new EmptyEventObject();
+        // Fire with no colon and an object $data — delegates to dispatch()
+        $manager->fire('psr14event', new stdClass(), $data);
+
+        $this->assertTrue($called);
+    }
+
+    /**
+     * Tests Phalcon\Events\Manager :: fire() - no colon, data is not object,
+     * throws Invalid event type (L209)
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsManagerFireNoColonNonObjectDataThrows(): void
+    {
+        $manager = new Manager();
+        $manager->attach(
+            'nocolon',
+            function () {
+                return true;
+            }
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid event type nocolon');
+
+        $manager->fire('nocolon', new stdClass(), 'not-an-object');
     }
 
     /**

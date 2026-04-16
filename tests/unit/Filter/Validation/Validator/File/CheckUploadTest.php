@@ -26,9 +26,6 @@ use const UPLOAD_ERR_PARTIAL;
 final class CheckUploadTest extends AbstractUnitTestCase
 {
     /**
-     * Tests AbstractFile::checkUploadIsValid() - returns false when file array is
-     * missing required keys (name, type, or size)
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
@@ -53,9 +50,6 @@ final class CheckUploadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests AbstractFile::checkUploadMaxSize() - returns false when file has
-     * UPLOAD_ERR_INI_SIZE error
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
@@ -81,8 +75,6 @@ final class CheckUploadTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests File\Size\Equal::validate() - returns false when checkUpload fails
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
