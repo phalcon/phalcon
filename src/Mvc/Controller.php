@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use Phalcon\Di\Injectable;
+use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\Traits\EventsAwareTrait;
 
 use function method_exists;
 
@@ -55,8 +57,10 @@ use function method_exists;
  * }
  *```
  */
-abstract class Controller extends Injectable implements ControllerInterface
+abstract class Controller extends Injectable implements ControllerInterface, EventsAwareInterface
 {
+    use EventsAwareTrait;
+
     /**
      * Phalcon\Mvc\Controller constructor
      */
