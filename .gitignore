@@ -1,12 +1,21 @@
+# IDE
 .idea/
+
+# Cache/Composer
 .local/
 .bash_history
 .composer
-tests/_output/
-tests/_support/_generated/
-vendor/
-*.sqlite*
+
+# Project
 .env
+tests/_output/
 .php_cs.cache
 .php-cs-fixer.cache
+vendor/
+*.sqlite*
+
+# Docker
 docker-compose.override.yml
+
+# AI
+.claude
