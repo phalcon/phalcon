@@ -65,5 +65,4 @@ final class OutputMessageTest extends AbstractUnitTestCase
         $actual = $flash->$type($source);
         $this->assertSame($expected, $actual);
     }
-
 }
