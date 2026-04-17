@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class CompileReturnTest extends AbstractUnitTestCase
@@ -23,6 +24,9 @@ class CompileReturnTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerCompileReturn(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+
+        $actual = $compiler->compileString('{% return true %}');
+        $this->assertSame('<?php return true; ?>', $actual);
     }
 }

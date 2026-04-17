@@ -28,7 +28,20 @@ class RenderTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltRender(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $this->setNewFactoryDefault();
+        $this->setDiService('viewSimple');
+
+        $view = $this->getService('viewSimple');
+        $volt = new Volt($view, $this->container);
+
+        $templatePath = supportDir('assets/views/compiler/partial.volt');
+
+        ob_start();
+        $volt->render($templatePath, ['some_var' => 'Label']);
+        $output = ob_get_clean();
+
+        $this->assertSame('Some label: Label', $output);
+        $this->safeDeleteFile($templatePath . '.php');
     }
 
     /**
@@ -52,7 +65,6 @@ class RenderTest extends AbstractUnitTestCase
 
         $view->setEventsManager($eventsManager);
 
-
         $volt = new Volt($view, $this->container);
 
         $volt->setEventsManager($eventsManager);
@@ -67,12 +79,12 @@ class RenderTest extends AbstractUnitTestCase
         );
         ob_end_clean();
 
-        $this->assertEquals(
+        $this->assertSame(
             'Before fired',
             $listener->getBefore()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             'After fired',
             $listener->getAfter()
         );

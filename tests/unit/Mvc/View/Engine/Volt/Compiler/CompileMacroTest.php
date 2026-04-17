@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class CompileMacroTest extends AbstractUnitTestCase
@@ -23,6 +24,13 @@ class CompileMacroTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerCompileMacro(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+
+        $actual = $compiler->compileString(
+            '{% macro myMacro() %}hello{% endmacro %}'
+        );
+
+        $this->assertStringContainsString('function', $actual);
+        $this->assertStringContainsString('myMacro', $actual);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class CompileForeachTest extends AbstractUnitTestCase
@@ -23,6 +24,15 @@ class CompileForeachTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerCompileForeach(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+
+        $actual = $compiler->compileString(
+            '{% for item in items %}{{ item }}{% endfor %}'
+        );
+
+        $this->assertSame(
+            '<?php foreach ($items as $item) { ?><?= $item ?><?php } ?>',
+            $actual
+        );
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class SetUniquePrefixTest extends AbstractUnitTestCase
@@ -23,6 +24,10 @@ class SetUniquePrefixTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerSetUniquePrefix(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+        $result   = $compiler->setUniquePrefix('testprefix');
+
+        $this->assertSame($compiler, $result);
+        $this->assertSame('testprefix', $compiler->getUniquePrefix());
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class CompileForElseTest extends AbstractUnitTestCase
@@ -23,6 +24,14 @@ class CompileForElseTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerCompileForElse(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+
+        $actual = $compiler->compileString(
+            '{% for a in b %}{{ a }}{% else %}empty{% endfor %}'
+        );
+
+        $this->assertStringContainsString('foreach', $actual);
+        $this->assertStringContainsString('iterated', $actual);
+        $this->assertStringContainsString('empty', $actual);
     }
 }
