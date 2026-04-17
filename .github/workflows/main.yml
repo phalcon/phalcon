@@ -473,6 +473,8 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
           fail_ci_if_error: false
