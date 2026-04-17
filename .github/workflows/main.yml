@@ -171,8 +171,8 @@ jobs:
       - name: "Run Unit Tests"
         run: composer test-unit-coverage
 
-      - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v7"
+      - name: Upload coverage file artifact
+        uses: actions/upload-artifact@v7
         with:
           name: "unit-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"

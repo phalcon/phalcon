@@ -10,12 +10,6 @@
             <directory>./tests/unit/</directory>
         </testsuite>
     </testsuites>
-    <coverage>
-        <report>
-            <clover outputFile="./tests/_output/clover.xml"/>
-            <html outputDirectory="./tests/_output/coverage"/>
-        </report>
-    </coverage>
     <source>
         <include>
             <directory suffix=".php">./src</directory>
