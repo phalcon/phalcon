@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
@@ -22,8 +24,10 @@ final class ArrayDataTest extends AbstractUnitTestCase
      */
     public function testGetOptionsReturnsFlatArray(): void
     {
-        $arrayData = new ArrayData(['1' => 'Ferrari', '2' => 'Ford']);
-        $this->assertSame(['1' => 'Ferrari', '2' => 'Ford'], $arrayData->getOptions());
+        $data = new ArrayData(['1' => 'Ferrari', '2' => 'Ford']);
+        $expected = ['1' => 'Ferrari', '2' => 'Ford'];
+        $actual = $data->getOptions();
+        $this->assertSame($expected, $actual);
     }
 
     /**
@@ -34,10 +38,11 @@ final class ArrayDataTest extends AbstractUnitTestCase
     {
         $input = [
             'Group A' => ['1' => 'Ferrari', '2' => 'Ford'],
-            '3' => 'Toyota',
+            '3' => 'Toyota'
         ];
-        $arrayData = new ArrayData($input);
-        $this->assertSame($input, $arrayData->getOptions());
+        $data = new ArrayData($input);
+        $actual = $data->getOptions();
+        $this->assertSame($input, $actual);
     }
 
     /**
@@ -46,7 +51,9 @@ final class ArrayDataTest extends AbstractUnitTestCase
      */
     public function testGetOptionsReturnsEmptyArrayWhenNoData(): void
     {
-        $arrayData = new ArrayData();
-        $this->assertSame([], $arrayData->getOptions());
+        $data = new ArrayData();
+        $expected = [];
+        $actual = $data->getOptions();
+        $this->assertSame($expected, $actual);
     }
 }

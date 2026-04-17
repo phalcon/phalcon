@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Forms\Element;
 
 use Phalcon\Di\Di;
 use Phalcon\Forms\Element\Text;
+use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
@@ -123,22 +124,15 @@ final class GetSetTagFactoryTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testFormsElementGetLocalTagFactoryDiFallbackNoTagService(): void
+    public function testFormsElementGetLocalTagFactoryThrowsWhenNotResolvable(): void
     {
-        $escaper = new Escaper();
-        $di      = new Di();
-        $di->setShared('escaper', $escaper);
-        // Deliberately no 'tag' service
-        Di::setDefault($di);
+        Di::reset();
 
         $name    = uniqid();
         $element = new Text($name);
 
-        // render() calls getLocalTagFactory() which falls through to L603-609
-        $expected = sprintf('<input type="text" id="%s" name="%s">', $name, $name);
-        $actual   = $element->render();
-        $this->assertSame($expected, $actual);
+        $this->expectException(Exception::class);
 
-        Di::reset();
+        $element->render();
     }
 }
