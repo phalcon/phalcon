@@ -22,6 +22,7 @@ use Phalcon\Html\Helper\Close;
 use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\Helper\Element;
 use Phalcon\Html\Helper\Form;
+use Phalcon\Html\Helper\FriendlyTitle;
 use Phalcon\Html\Helper\Img;
 use Phalcon\Html\Helper\Input\Checkbox;
 use Phalcon\Html\Helper\Input\Color;
@@ -51,10 +52,12 @@ use Phalcon\Html\Helper\Label;
 use Phalcon\Html\Helper\Link;
 use Phalcon\Html\Helper\Meta;
 use Phalcon\Html\Helper\Ol;
+use Phalcon\Html\Helper\Preload;
 use Phalcon\Html\Helper\Script;
 use Phalcon\Html\Helper\Style;
 use Phalcon\Html\Helper\Title;
 use Phalcon\Html\Helper\Ul;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 use function call_user_func_array;
@@ -81,6 +84,7 @@ use function str_starts_with;
  * @method Doctype       doctype(int $flag, string $delimiter)
  * @method string        element(string $tag, string $text, array $attributes = [], bool $raw = false)
  * @method string        form(array $attributes = [])
+ * @method string        friendlyTitle(string $text, string $separator = '-', bool $lowercase = true, array|string $replace = [])
  * @method string        img(string $src, array $attributes = [])
  * @method Checkbox      inputCheckbox(string $name, string $value = null, array $attributes = [])
  * @method Color         inputColor(string $name, string $value = null, array $attributes = [])
@@ -110,6 +114,7 @@ use function str_starts_with;
  * @method Link          link(string $indent = '    ', string $delimiter = "\n")
  * @method Meta          meta(string $indent = '    ', string $delimiter = "\n")
  * @method Ol            ol(string $text, array $attributes = [], bool $raw = false)
+ * @method string        preload(string $href, string $type = 'style', array $attributes = [])
  * @method Script        script(string $indent = '    ', string $delimiter = "\n")
  * @method Style         style(string $indent = '    ', string $delimiter = "\n")
  * @method Title         title(string $indent = '    ', string $delimiter = "\n")
@@ -125,14 +130,24 @@ class TagFactory
     private EscaperInterface $escaper;
 
     /**
+     * @var ResponseInterface|null
+     */
+    private ?ResponseInterface $response;
+
+    /**
      * TagFactory constructor.
      *
-     * @param Escaper $escaper
-     * @param array   $services
+     * @param EscaperInterface       $escaper
+     * @param array                  $services
+     * @param ResponseInterface|null $response
      */
-    public function __construct(EscaperInterface $escaper, array $services = [])
-    {
-        $this->escaper = $escaper;
+    public function __construct(
+        EscaperInterface $escaper,
+        array $services = [],
+        ?ResponseInterface $response = null
+    ) {
+        $this->escaper  = $escaper;
+        $this->response = $response;
 
         $this->init($services);
     }
@@ -186,6 +201,10 @@ class TagFactory
             return $this->getCachedInstance($name, $this->escaper, $doctype);
         }
 
+        if ($name === 'preload') {
+            return $this->getCachedInstance($name, $this->escaper, $this->response);
+        }
+
         return $this->getCachedInstance($name, $this->escaper);
     }
 
@@ -224,6 +243,7 @@ class TagFactory
             'doctype'            => Doctype::class,
             'element'            => Element::class,
             'form'               => Form::class,
+            'friendlyTitle'      => FriendlyTitle::class,
             'img'                => Img::class,
             'inputCheckbox'      => Checkbox::class,
             'inputColor'         => Color::class,
@@ -253,6 +273,7 @@ class TagFactory
             'link'               => Link::class,
             'meta'               => Meta::class,
             'ol'                 => Ol::class,
+            'preload'            => Preload::class,
             'script'             => Script::class,
             'style'              => Style::class,
             'title'              => Title::class,
