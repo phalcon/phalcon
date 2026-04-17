@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
-use Phalcon\Tag\Exception as TagException;
-use Phalcon\Tag\Select as SelectTag;
+use Phalcon\Forms\Exception;
+use Phalcon\Html\Helper\Input\Select\ArrayData;
+use Phalcon\Html\Helper\Input\Select\ResultsetData;
+use Phalcon\Mvc\Model\ResultsetInterface;
 
 use function is_array;
 
@@ -81,17 +83,63 @@ class Select extends AbstractElement
      * @param array $attributes
      *
      * @return string
-     * @throws TagException
      */
     public function render(array $attributes = []): string
     {
-        /**
-         * Merged passed attributes with previously defined ones
-         */
-        return SelectTag::selectField(
-            $this->prepareAttributes($attributes),
-            $this->optionsValues
-        );
+        $attrs = $this->prepareAttributes($attributes);
+
+        $name = $attrs[0];
+        unset($attrs[0]);
+
+        $value = $attrs['value'] ?? null;
+        unset($attrs['value']);
+
+        $useEmpty   = $attrs['useEmpty'] ?? false;
+        $emptyValue = $attrs['emptyValue'] ?? '';
+        $emptyText  = $attrs['emptyText'] ?? 'Choose...';
+        $using      = $attrs['using'] ?? null;
+
+        unset($attrs['useEmpty'], $attrs['emptyValue'], $attrs['emptyText'], $attrs['using']);
+
+        if (!isset($attrs['name'])) {
+            $attrs['name'] = $name;
+        }
+
+        if (!str_contains($name, '[') && !isset($attrs['id'])) {
+            $attrs['id'] = $name;
+        }
+
+        $select = $this->getLocalTagFactory()->newInstance('inputSelect');
+        $select('', '', $attrs);
+
+        if (null !== $value) {
+            $select->selected((string) $value);
+        }
+
+        if ($useEmpty) {
+            $select->addPlaceholder($emptyText, $emptyValue, [], true);
+        }
+
+        $options = $this->optionsValues;
+
+        if (is_array($options)) {
+            $select->fromData(new ArrayData($options));
+        } elseif ($options instanceof ResultsetInterface) {
+            if (null === $using || !is_array($using)) {
+                throw Exception::usingParameterRequired();
+            }
+
+            $select->fromData(new ResultsetData($options, $using));
+        }
+
+        $html = (string) $select;
+
+        if ('' === $html) {
+            return $this->getLocalTagFactory()
+                        ->newInstance('element')('select', PHP_EOL, $attrs, true);
+        }
+
+        return $html;
     }
 
     /**
