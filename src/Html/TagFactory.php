@@ -84,7 +84,7 @@ use function str_starts_with;
  * @method Doctype       doctype(int $flag, string $delimiter)
  * @method string        element(string $tag, string $text, array $attributes = [], bool $raw = false)
  * @method string        form(array $attributes = [])
- * @method string        friendlyTitle(string $text, string $separator = '-', bool $lowercase = true, array|string $replace = [])
+ * @method string        friendlyTitle(string $text, string $sep = '-', bool $lower = true, array|string $replace = [])
  * @method string        img(string $src, array $attributes = [])
  * @method Checkbox      inputCheckbox(string $name, string $value = null, array $attributes = [])
  * @method Color         inputColor(string $name, string $value = null, array $attributes = [])
