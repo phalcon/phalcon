@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Engine\Volt;
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetCompilerTest extends AbstractUnitTestCase
@@ -23,6 +26,10 @@ class GetCompilerTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltGetCompiler(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view     = new View();
+        $volt     = new Volt($view);
+        $compiler = $volt->getCompiler();
+        $this->assertInstanceOf(Compiler::class, $compiler);
+        $this->assertSame($compiler, $volt->getCompiler());
     }
 }

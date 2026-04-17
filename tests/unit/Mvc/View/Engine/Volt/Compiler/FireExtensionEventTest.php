@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class FireExtensionEventTest extends AbstractUnitTestCase
@@ -23,6 +24,24 @@ class FireExtensionEventTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerFireExtensionEvent(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $extension = new class {
+            public bool $called = false;
+
+            public function compileFunction(array $expr, bool $extendsMode): mixed
+            {
+                $this->called = true;
+
+                return null;
+            }
+        };
+
+        $compiler = new Compiler();
+        $compiler->addExtension($extension);
+        $compiler->fireExtensionEvent(
+            'compileFunction',
+            [['name' => ['value' => 'dummy']], false]
+        );
+
+        $this->assertTrue($extension->called);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class CompileIncludeTest extends AbstractUnitTestCase
@@ -23,6 +24,13 @@ class CompileIncludeTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerCompileInclude(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+
+        /**
+         * A dynamic (variable) path produces a $this->partial() call
+         * rather than attempting to statically compile the file.
+         */
+        $actual = $compiler->compileString('{% include templatePath %}');
+        $this->assertSame('<?php $this->partial($templatePath); ?>', $actual);
     }
 }

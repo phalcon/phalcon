@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt;
 
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class ConstructTest extends AbstractUnitTestCase
@@ -23,6 +25,8 @@ class ConstructTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltConstruct(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $view = new View();
+        $volt = new Volt($view);
+        $this->assertInstanceOf(Volt::class, $volt);
     }
 }

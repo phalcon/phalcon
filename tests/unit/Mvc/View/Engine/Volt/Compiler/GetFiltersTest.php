@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
+use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 class GetFiltersTest extends AbstractUnitTestCase
@@ -23,6 +24,10 @@ class GetFiltersTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerGetFilters(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $compiler = new Compiler();
+        $this->assertSame([], $compiler->getFilters());
+
+        $compiler->addFilter('myfilter', 'strlen');
+        $this->assertSame(['myfilter' => 'strlen'], $compiler->getFilters());
     }
 }
