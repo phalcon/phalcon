@@ -13,6 +13,7 @@ namespace Phalcon\Html\Helper\Input;
 
 use Phalcon\Html\Helper\AbstractList;
 use Phalcon\Html\Helper\Input\Select\SelectDataInterface;
+
 use function is_array;
 
 /**
