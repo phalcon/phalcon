@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use Exception as BaseException;
 use Phalcon\Html\Escaper\EscaperInterface;
-use Phalcon\Html\Exception;
 use Phalcon\Support\Helper\Str\Friendly;
 
 /**
@@ -39,13 +37,12 @@ class FriendlyTitle extends AbstractHelper
     }
 
     /**
-     * @param string     $text
-     * @param string     $separator
-     * @param bool       $lowercase
-     * @param mixed|null $replace
+     * @param string       $text
+     * @param string       $separator
+     * @param bool         $lowercase
+     * @param array|string $replace
      *
      * @return string
-     * @throws Exception
      */
     public function __invoke(
         string $text,
@@ -53,10 +50,6 @@ class FriendlyTitle extends AbstractHelper
         bool $lowercase = true,
         array|string $replace = []
     ): string {
-        try {
-            return ($this->friendly)($text, $separator, $lowercase, $replace);
-        } catch (BaseException $ex) {
-            throw new Exception($ex->getMessage());
-        }
+        return ($this->friendly)($text, $separator, $lowercase, $replace);
     }
 }
