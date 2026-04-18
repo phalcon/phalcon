@@ -16,9 +16,8 @@ namespace Phalcon\Forms\Element;
 use InvalidArgumentException;
 use Phalcon\Di\Di;
 use Phalcon\Filter\Validation\ValidatorInterface;
+use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
-use Phalcon\Html\Escaper;
-use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
@@ -591,22 +590,13 @@ abstract class AbstractElement implements ElementInterface
             if (null === $tagFactory) {
                 $container = Di::getDefault();
 
-                if (true === $container->has("tag")) {
+                if (null !== $container && true === $container->has("tag")) {
                     $tagFactory = $container->getShared("tag");
                 }
             }
 
-            /**
-             * All failed, create a new TagFactory
-             */
             if (null === $tagFactory) {
-                $container = Di::getDefault();
-                $escaper   = $container->getShared("escaper");
-                if (!($escaper instanceof EscaperInterface)) {
-                    $escaper = new Escaper();
-                }
-
-                $tagFactory = new TagFactory($escaper);
+                throw Exception::tagFactoryNotFound();
             }
 
             $this->tagFactory = $tagFactory;
