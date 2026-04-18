@@ -31,27 +31,44 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Tests\Unit\Container\Fake;
 
-class NotFound extends Invalid
+use Phalcon\Container\Resolver\Resolver;
+use stdClass;
+
+class FakeContainer
 {
-    public static function envNotDefined(string $varname): static
-    {
-        return new static("Environment variable '{$varname}' is not defined");
+    public function __construct(
+        private bool $autowire = false
+    ) {
     }
 
-    public static function instanceNotFound(string $name): static
+    public function get(string $name): mixed
     {
-        return new static("Instance '{$name}' not found");
+        return new stdClass();
     }
 
-    public static function parameterNotFound(string $name): static
+    public function getResolver(): Resolver
     {
-        return new static("Parameter '{$name}' not found");
+        return new Resolver();
     }
 
-    public static function serviceNotFound(string $name): static
+    public function has(string $name): bool
     {
-        return new static("Service '{$name}' not found");
+        return false;
+    }
+
+    public function isAutowireEnabled(): bool
+    {
+        return $this->autowire;
+    }
+
+    public function new(string $name): mixed
+    {
+        return new stdClass();
+    }
+
+    public function registerTag(string $tag, string $serviceName): void
+    {
     }
 }

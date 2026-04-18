@@ -31,27 +31,37 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Resolver\Lazy;
 
-class NotFound extends Invalid
+use Phalcon\Container\Exception\NotFound;
+
+class Env extends Lazy
 {
-    public static function envNotDefined(string $varname): static
-    {
-        return new static("Environment variable '{$varname}' is not defined");
+    public function __construct(
+        protected string $varname,
+        protected string|null $vartype = null
+    ) {
     }
 
-    public static function instanceNotFound(string $name): static
+    public function resolve(object $container): mixed
     {
-        return new static("Instance '{$name}' not found");
+        $value = $this->getEnv();
+
+        if ($this->vartype !== null) {
+            settype($value, $this->vartype);
+        }
+
+        return $value;
     }
 
-    public static function parameterNotFound(string $name): static
+    protected function getEnv(): string
     {
-        return new static("Parameter '{$name}' not found");
-    }
+        $envs = array_merge($_ENV, getenv());
 
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
+        if (!array_key_exists($this->varname, $envs)) {
+            throw NotFound::envNotDefined($this->varname);
+        }
+
+        return $envs[$this->varname];
     }
 }

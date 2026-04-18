@@ -31,27 +31,22 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Resolver\Lazy;
 
-class NotFound extends Invalid
+class StaticCall extends Lazy
 {
-    public static function envNotDefined(string $varname): static
-    {
-        return new static("Environment variable '{$varname}' is not defined");
+    public function __construct(
+        protected string|Lazy $class,
+        protected string $method,
+        protected array $arguments
+    ) {
     }
 
-    public static function instanceNotFound(string $name): static
+    public function resolve(object $container): mixed
     {
-        return new static("Instance '{$name}' not found");
-    }
+        $class     = $this->resolveArgument($container, $this->class);
+        $arguments = $this->resolveArguments($container, $this->arguments);
 
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
-
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
+        return call_user_func_array([$class, $this->method], $arguments);
     }
 }

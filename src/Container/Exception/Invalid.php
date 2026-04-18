@@ -33,25 +33,49 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Exception;
 
-class NotFound extends Invalid
+use Exception;
+
+class Invalid extends Exception implements ContainerThrowable
 {
-    public static function envNotDefined(string $varname): static
+    public static function cannotExtendResolved(string $name): static
     {
-        return new static("Environment variable '{$varname}' is not defined");
+        return new static("Cannot extend already-resolved service '{$name}'");
     }
 
-    public static function instanceNotFound(string $name): static
+    public static function cannotResolveParameter(string $param, string $class): static
     {
-        return new static("Instance '{$name}' not found");
+        return new static(
+            "Cannot resolve parameter '\${$param}' for '{$class}'"
+        );
     }
 
-    public static function parameterNotFound(string $name): static
+    public static function circularAlias(string $name): static
     {
-        return new static("Parameter '{$name}' not found");
+        return new static("Circular alias detected: '{$name}'");
+    }
+
+    public static function frozenDefinition(string $name): static
+    {
+        return new static("Cannot modify frozen definition '{$name}'");
+    }
+
+    public static function noClassSet(string $name): static
+    {
+        return new static("No class set for service '{$name}'");
+    }
+
+    public static function noFactorySet(string $name): static
+    {
+        return new static("No factory set for service '{$name}'");
+    }
+
+    public static function noProcessorFound(): static
+    {
+        return new static('No processor found for the given definition');
     }
 
     public static function serviceNotFound(string $name): static
     {
-        return new static("Service '{$name}' not found");
+        return new static("Service '{$name}' not registered");
     }
 }

@@ -31,27 +31,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Service;
 
-class NotFound extends Invalid
+use Phalcon\Container\Service\Collection;
+
+// Copied from service-interop/interface. Source: https://github.com/service-interop/interface
+interface Provider
 {
-    public static function envNotDefined(string $varname): static
-    {
-        return new static("Environment variable '{$varname}' is not defined");
-    }
-
-    public static function instanceNotFound(string $name): static
-    {
-        return new static("Instance '{$name}' not found");
-    }
-
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
-
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
-    }
+    public function provide(Collection $services): void;
 }

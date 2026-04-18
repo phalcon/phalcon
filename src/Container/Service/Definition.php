@@ -31,27 +31,28 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Service;
 
-class NotFound extends Invalid
+use IocInterop\Interface\IocContainer;
+
+// Copied from service-interop/interface. Source: https://github.com/service-interop/interface
+interface Definition
 {
-    public static function envNotDefined(string $varname): static
-    {
-        return new static("Environment variable '{$varname}' is not defined");
-    }
-
-    public static function instanceNotFound(string $name): static
-    {
-        return new static("Instance '{$name}' not found");
-    }
-
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
-
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
-    }
+    public function addExtender(callable $extender): static;
+    public function buildService(IocContainer $ioc): object;
+    public function getClass(): string;
+    public function getExtenders(): array;
+    public function getFactory(): callable;
+    public function getLifetime(): string;
+    public function getServiceName(): string;
+    public function hasClass(): bool;
+    public function hasExtenders(): bool;
+    public function hasFactory(): bool;
+    public function setClass(string $class): static;
+    public function setExtenders(array $extenders): static;
+    public function setFactory(callable $factory): static;
+    public function setLifetime(string $lifetime): static;
+    public function unsetClass(): static;
+    public function unsetExtenders(): static;
+    public function unsetFactory(): static;
 }
