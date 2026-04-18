@@ -36,8 +36,7 @@ namespace Phalcon\Bucket\Exception;
 use IocInterop\Interface\IocThrowable;
 use Phalcon\Bucket\Resolver\ResolverThrowable;
 use Phalcon\Bucket\Service\Throwable as ServiceThrowable;
-use Throwable;
 
-interface BucketThrowable extends IocThrowable, ResolverThrowable, ServiceThrowable, Throwable
+interface BucketThrowable extends IocThrowable, ResolverThrowable, ServiceThrowable
 {
 }
