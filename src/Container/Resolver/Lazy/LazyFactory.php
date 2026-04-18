@@ -55,12 +55,12 @@ class LazyFactory
         return new CallableNew($id);
     }
 
-    public static function csEnv(string $name, string $type = null): CsEnv
+    public static function csEnv(string $name, ?string $type = null): CsEnv
     {
         return new CsEnv($name, $type);
     }
 
-    public static function env(string $name, string $type = null): Env
+    public static function env(string $name, ?string $type = null): Env
     {
         return new Env($name, $type);
     }
