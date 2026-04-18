@@ -4,8 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f4ae364d43e33ddd35b2a0f9196d658a",
+    "content-hash": "ef009921d1fcfca30f413b11208764e4",
     "packages": [
+        {
+            "name": "ioc-interop/interface",
+            "version": "1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ioc-interop/interface.git",
+                "reference": "7ff58e2647f2a274d3dd2a43dc0f93022d25b1d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ioc-interop/interface/zipball/7ff58e2647f2a274d3dd2a43dc0f93022d25b1d1",
+                "reference": "7ff58e2647f2a274d3dd2a43dc0f93022d25b1d1",
+                "shasum": ""
+            },
+            "require-dev": {
+                "pds/composer-script-names": "^1.0",
+                "pds/skeleton": "^1.0",
+                "phpstan/phpstan": "^2.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "IocInterop\\Interface\\": "./src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul M. Jones",
+                    "email": "pmjones@pmjones.io"
+                }
+            ],
+            "description": "Interoperable IOC container interfaces for PHP.",
+            "support": {
+                "issues": "https://github.com/ioc-interop/interface/issues",
+                "source": "https://github.com/ioc-interop/interface/tree/1.x"
+            },
+            "time": "2026-02-03T13:54:55+00:00"
+        },
         {
             "name": "matthiasmullie/minify",
             "version": "1.3.75",
@@ -1900,11 +1943,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.48",
+            "version": "2.1.50",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/231397213efb7c0a066ee024b5c3c87f2d3adfa0",
-                "reference": "231397213efb7c0a066ee024b5c3c87f2d3adfa0",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d452086fb4cf648c6b2d8cf3b639351f79e4f3e2",
+                "reference": "d452086fb4cf648c6b2d8cf3b639351f79e4f3e2",
                 "shasum": ""
             },
             "require": {
@@ -1949,7 +1992,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-15T20:24:19+00:00"
+            "time": "2026-04-17T13:10:32+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -5775,6 +5818,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ioc-interop/interface": 20,
         "phalcon/phql": 20,
         "phalcon/volt": 20
     },
