@@ -31,27 +31,29 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container;
 
-class NotFound extends Invalid
+use IocInterop\Interface\IocContainerFactory;
+use Phalcon\Container\Service\Provider;
+
+class ContainerFactory implements IocContainerFactory
 {
-    public static function envNotDefined(string $varname): static
+    protected array $providers = [];
+
+    public function addProvider(Provider $provider): static
     {
-        return new static("Environment variable '{$varname}' is not defined");
+        $this->providers[] = $provider;
+        return $this;
     }
 
-    public static function instanceNotFound(string $name): static
+    public function newContainer(): Container
     {
-        return new static("Instance '{$name}' not found");
-    }
+        $container = new Container();
 
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
+        foreach ($this->providers as $provider) {
+            $provider->provide($container);
+        }
 
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
+        return $container;
     }
 }

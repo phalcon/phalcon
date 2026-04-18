@@ -31,27 +31,25 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Resolver\Lazy;
 
-class NotFound extends Invalid
+class CsEnv extends Env
 {
-    public static function envNotDefined(string $varname): static
+    public function resolve(object $container): array
     {
-        return new static("Environment variable '{$varname}' is not defined");
-    }
+        $values = str_getcsv($this->getEnv(), ',', '"', '\\');
 
-    public static function instanceNotFound(string $name): static
-    {
-        return new static("Instance '{$name}' not found");
-    }
+        if ($this->vartype !== null) {
+            $return = [];
 
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
+            foreach ($values as $key => $value) {
+                settype($value, $this->vartype);
+                $return[$key] = $value;
+            }
 
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
+            $values = $return;
+        }
+
+        return $values;
     }
 }

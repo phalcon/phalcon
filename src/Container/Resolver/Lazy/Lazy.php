@@ -31,27 +31,36 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Resolver\Lazy;
 
-class NotFound extends Invalid
+use Phalcon\Container\Resolver\Resolvable;
+
+abstract class Lazy implements Resolvable
 {
-    public static function envNotDefined(string $varname): static
+    public function __invoke(object $container): mixed
     {
-        return new static("Environment variable '{$varname}' is not defined");
+        return $this->resolve($container);
     }
 
-    public static function instanceNotFound(string $name): static
+    abstract public function resolve(object $container): mixed;
+
+    protected function resolveArgument(object $container, mixed $argument): mixed
     {
-        return new static("Instance '{$name}' not found");
+        if ($argument instanceof self) {
+            return $argument->resolve($container);
+        }
+
+        return $argument;
     }
 
-    public static function parameterNotFound(string $name): static
+    protected function resolveArguments(object $container, array $arguments): array
     {
-        return new static("Parameter '{$name}' not found");
-    }
+        $resolved = [];
 
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
+        foreach ($arguments as $key => $argument) {
+            $resolved[$key] = $this->resolveArgument($container, $argument);
+        }
+
+        return $resolved;
     }
 }

@@ -31,27 +31,31 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Definition\Processor;
 
-class NotFound extends Invalid
+use Closure;
+use Phalcon\Container\Definition\DefinitionType;
+use Phalcon\Container\Definition\ServiceDefinition;
+
+use function is_object;
+
+class ObjectProcessor implements Processor
 {
-    public static function envNotDefined(string $varname): static
+    public function canProcess(mixed $definition): bool
     {
-        return new static("Environment variable '{$varname}' is not defined");
+        return is_object($definition) && !($definition instanceof Closure);
     }
 
-    public static function instanceNotFound(string $name): static
-    {
-        return new static("Instance '{$name}' not found");
-    }
+    public function process(
+        string $name,
+        mixed $definition,
+        object $container
+    ): ServiceDefinition {
+        $def = new ServiceDefinition($name, DefinitionType::OBJECT, $definition);
+        $def->setFactory(static function () use ($definition) {
+            return $definition;
+        });
 
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
-
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
+        return $def;
     }
 }

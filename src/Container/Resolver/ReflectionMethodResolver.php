@@ -31,27 +31,13 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Container\Resolver;
 
-class NotFound extends Invalid
+use IocInterop\Interface\IocContainer;
+use ReflectionMethod;
+
+// Copied from resolver-interop/interface. Source: https://github.com/resolver-interop/interface
+interface ReflectionMethodResolver
 {
-    public static function envNotDefined(string $varname): static
-    {
-        return new static("Environment variable '{$varname}' is not defined");
-    }
-
-    public static function instanceNotFound(string $name): static
-    {
-        return new static("Instance '{$name}' not found");
-    }
-
-    public static function parameterNotFound(string $name): static
-    {
-        return new static("Parameter '{$name}' not found");
-    }
-
-    public static function serviceNotFound(string $name): static
-    {
-        return new static("Service '{$name}' not found");
-    }
+    public function resolveMethod(IocContainer $ioc, ReflectionMethod $method, object $object): void;
 }
