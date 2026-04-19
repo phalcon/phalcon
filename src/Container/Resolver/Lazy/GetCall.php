@@ -35,6 +35,11 @@ namespace Phalcon\Container\Resolver\Lazy;
 
 class GetCall extends Lazy
 {
+    /**
+     * @param string|Lazy             $id
+     * @param string                  $method
+     * @param array<array-key, mixed> $arguments
+     */
     public function __construct(
         protected string|Lazy $id,
         protected string $method,
@@ -42,6 +47,13 @@ class GetCall extends Lazy
     ) {
     }
 
+    /**
+     * Resolve a shared instance method call
+     *
+     * @param object $container
+     *
+     * @return mixed
+     */
     public function resolve(object $container): mixed
     {
         $id        = $this->resolveArgument($container, $this->id);

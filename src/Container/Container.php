@@ -49,6 +49,8 @@ use Phalcon\Container\Resolver\Resolver;
 use Phalcon\Container\Service\Collection;
 use Phalcon\Di\InjectionAwareInterface;
 
+use ReflectionException;
+
 use function array_key_exists;
 use function class_exists;
 use function in_array;
@@ -56,15 +58,36 @@ use function is_object;
 
 class Container implements Collection
 {
-    protected array $aliases           = [];
-    protected bool $autowire           = true;
+    /**
+     * @var array<string, string>
+     */
+    protected array $aliases = [];
+    protected bool $autowire = true;
+    /**
+     * @var array<string, string>
+     */
     protected array $instanceLifetimes = [];
-    protected array $instances         = [];
-    protected array $parameters        = [];
-    protected array $processors        = [];
+    /**
+     * @var array<string, object>
+     */
+    protected array $instances = [];
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $parameters = [];
+    /**
+     * @var array<string, Processor>
+     */
+    protected array $processors = [];
     protected Resolver $resolver;
-    protected array $services          = [];
-    protected array $tags              = [];
+    /**
+     * @var array<string, ServiceDefinition>
+     */
+    protected array $services = [];
+    /**
+     * @var array<string, list<string>>
+     */
+    protected array $tags = [];
 
     public function __construct()
     {
@@ -76,11 +99,26 @@ class Container implements Collection
         ];
     }
 
+    /**
+     * Bind an interface to a concrete class
+     *
+     * @param string $interface
+     * @param string $concrete
+     *
+     * @return ServiceDefinition
+     */
     public function bind(string $interface, string $concrete): ServiceDefinition
     {
         return $this->set($interface, $concrete);
     }
 
+    /**
+     * Resolve to a closure on a get()
+     *
+     * @param string $name
+     *
+     * @return Closure
+     */
     public function callableGet(string $name): Closure
     {
         return function () use ($name) {
@@ -88,6 +126,12 @@ class Container implements Collection
         };
     }
 
+    /**
+     * Resolve to a closure on a new()
+     * @param string $name
+     *
+     * @return Closure
+     */
     public function callableNew(string $name): Closure
     {
         return function () use ($name) {
@@ -95,6 +139,16 @@ class Container implements Collection
         };
     }
 
+    /**
+     * Extends the definition
+     *
+     * @param string   $name
+     * @param callable $callable
+     *
+     * @return void
+     * @throws Invalid
+     * @throws NotFound
+     */
     public function extend(string $name, callable $callable): void
     {
         $name = $this->resolveAlias($name);
@@ -110,6 +164,15 @@ class Container implements Collection
         $this->services[$name]->addExtender($callable);
     }
 
+    /**
+     * Resolve and return an element registerd in the container
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws Invalid
+     * @throws NotFound
+     */
     public function get(string $name): mixed
     {
         $name = $this->resolveAlias($name);
@@ -125,11 +188,25 @@ class Container implements Collection
         return $this->resolve($name, true);
     }
 
+    /**
+     * Return an alias
+     *
+     * @param string $name
+     *
+     * @return string
+     */
     public function getAlias(string $name): string
     {
         return $this->aliases[$name] ?? '';
     }
 
+    /**
+     * Return services by tag
+     *
+     * @param string $tag
+     *
+     * @return list<mixed>
+     */
     public function getByTag(string $tag): array
     {
         $names  = $this->tags[$tag] ?? [];
@@ -142,6 +219,14 @@ class Container implements Collection
         return $result;
     }
 
+    /**
+     * Return the service definition
+     *
+     * @param string $name
+     *
+     * @return ServiceDefinition
+     * @throws NotFound
+     */
     public function getDefinition(string $name): ServiceDefinition
     {
         if (!array_key_exists($name, $this->services)) {
@@ -151,6 +236,14 @@ class Container implements Collection
         return $this->services[$name];
     }
 
+    /**
+     * Return a stored instance
+     *
+     * @param string $name
+     *
+     * @return object
+     * @throws NotFound
+     */
     public function getInstance(string $name): object
     {
         if (!array_key_exists($name, $this->instances)) {
@@ -160,6 +253,14 @@ class Container implements Collection
         return $this->instances[$name];
     }
 
+    /**
+     * Return a parameter
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws NotFound
+     */
     public function getParameter(string $name): mixed
     {
         if (!array_key_exists($name, $this->parameters)) {
@@ -169,11 +270,25 @@ class Container implements Collection
         return $this->resolveParameter($name);
     }
 
+    /**
+     * Return the resolver
+     *
+     * @return Resolver
+     */
     public function getResolver(): Resolver
     {
         return $this->resolver;
     }
 
+    /**
+     * Resolve an return a service
+     *
+     * @param string $serviceName
+     *
+     * @return object
+     * @throws Invalid
+     * @throws NotFound
+     */
     public function getService(string $serviceName): object
     {
         $result = $this->get($serviceName);
@@ -185,6 +300,14 @@ class Container implements Collection
         return $result;
     }
 
+    /**
+     * Does the container have a particular service
+     *
+     * @param string $name
+     *
+     * @return bool
+     * @throws Invalid
+     */
     public function has(string $name): bool
     {
         $name = $this->resolveAlias($name);
@@ -200,36 +323,86 @@ class Container implements Collection
         return $this->autowire && $this->resolver->isResolvableClass($name);
     }
 
+    /**
+     * Does the service have an alias
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
     public function hasAlias(string $name): bool
     {
         return array_key_exists($name, $this->aliases);
     }
 
+    /**
+     * Does the service have a definition
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
     public function hasDefinition(string $name): bool
     {
         return array_key_exists($name, $this->services);
     }
 
+    /**
+     * Does the service have an instance
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
     public function hasInstance(string $name): bool
     {
         return array_key_exists($name, $this->instances);
     }
 
+    /**
+     * Does the service have a parameter
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
     public function hasParameter(string $name): bool
     {
         return array_key_exists($name, $this->parameters);
     }
 
+    /**
+     * Does the container have a particular service
+     *
+     * @param string $serviceName
+     *
+     * @return bool
+     * @throws Invalid
+     */
     public function hasService(string $serviceName): bool
     {
         return $this->has($serviceName);
     }
 
+    /**
+     * Is AutoWiring enabled
+     *
+     * @return bool
+     */
     public function isAutowireEnabled(): bool
     {
         return $this->autowire;
     }
 
+    /**
+     * Resolve and return a new service
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws Invalid
+     * @throws NotFound
+     */
     public function new(string $name): mixed
     {
         $name = $this->resolveAlias($name);
@@ -237,12 +410,27 @@ class Container implements Collection
         return $this->resolve($name, false);
     }
 
+    /**
+     * Return a new service definition
+     *
+     * @param string $name
+     *
+     * @return ServiceDefinition
+     */
     public function newDefinition(string $name): ServiceDefinition
     {
         return new ServiceDefinition($name, 'string');
     }
 
-    public function registerTag(string $tag, string $serviceName): void
+    /**
+     * Register a tag with a service
+     *
+     * @param string $tag
+     * @param string $serviceName
+     *
+     * @return void
+     */
+    public function addTag(string $tag, string $serviceName): void
     {
         if (!array_key_exists($tag, $this->tags)) {
             $this->tags[$tag] = [];
@@ -253,6 +441,15 @@ class Container implements Collection
         }
     }
 
+    /**
+     * Set a service
+     *
+     * @param string $name
+     * @param mixed  $definition
+     *
+     * @return ServiceDefinition
+     * @throws Invalid
+     */
     public function set(string $name, mixed $definition): ServiceDefinition
     {
         $processor = $this->findProcessor($definition);
@@ -264,6 +461,16 @@ class Container implements Collection
         return $def;
     }
 
+    /**
+     * Set an alias
+     *
+     * @param string $name
+     * @param string $alias
+     *
+     * @return $this
+     * @throws Invalid
+     */
+
     public function setAlias(string $name, string $alias): static
     {
         $this->detectCircularAlias($alias, $name);
@@ -272,6 +479,13 @@ class Container implements Collection
         return $this;
     }
 
+    /**
+     * Set AutoWire
+     *
+     * @param bool $enabled
+     *
+     * @return $this
+     */
     public function setAutowire(bool $enabled): static
     {
         $this->autowire = $enabled;
@@ -279,6 +493,14 @@ class Container implements Collection
         return $this;
     }
 
+    /**
+     * Set a definition
+     *
+     * @param string            $name
+     * @param ServiceDefinition $definition
+     *
+     * @return $this
+     */
     public function setDefinition(string $name, ServiceDefinition $definition): static
     {
         $this->services[$name] = $definition;
@@ -286,6 +508,15 @@ class Container implements Collection
         return $this;
     }
 
+    /**
+     * Set an instance
+     *
+     * @param string $name
+     * @param object $instance
+     * @param string $lifetime
+     *
+     * @return $this
+     */
     public function setInstance(string $name, object $instance, string $lifetime): static
     {
         $this->instances[$name]         = $instance;
@@ -294,6 +525,14 @@ class Container implements Collection
         return $this;
     }
 
+    /**
+     * Set a parameter
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return $this
+     */
     public function setParameter(string $name, mixed $value): static
     {
         $this->parameters[$name] = $value;
@@ -301,21 +540,49 @@ class Container implements Collection
         return $this;
     }
 
+    /**
+     * Remove an alias
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public function unsetAlias(string $name): void
     {
         unset($this->aliases[$name]);
     }
 
+    /**
+     * Remove a definition
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public function unsetDefinition(string $name): void
     {
         unset($this->services[$name]);
     }
 
+    /**
+     * Remove an instance
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public function unsetInstance(string $name): void
     {
         unset($this->instances[$name], $this->instanceLifetimes[$name]);
     }
 
+    /**
+     * Remove instances based on lifetime
+     *
+     * @param string $lifetime
+     *
+     * @return void
+     */
     public function unsetInstances(string $lifetime): void
     {
         foreach ($this->instanceLifetimes as $name => $lt) {
@@ -325,11 +592,27 @@ class Container implements Collection
         }
     }
 
+    /**
+     * Remove a parameter
+     *
+     * @param string $name
+     *
+     * @return void
+     */
     public function unsetParameter(string $name): void
     {
         unset($this->parameters[$name]);
     }
 
+    /**
+     * Detect circular aliases
+     *
+     * @param string $alias
+     * @param string $target
+     *
+     * @return void
+     * @throws Invalid
+     */
     private function detectCircularAlias(string $alias, string $target): void
     {
         $current = $target;
@@ -353,6 +636,14 @@ class Container implements Collection
         }
     }
 
+    /**
+     * Locate a processor
+     *
+     * @param mixed $definition
+     *
+     * @return Processor
+     * @throws Invalid
+     */
     private function findProcessor(mixed $definition): Processor
     {
         foreach ($this->processors as $processor) {
@@ -364,6 +655,17 @@ class Container implements Collection
         throw Invalid::noProcessorFound();
     }
 
+    /**
+     * Resolve the service
+     *
+     * @param string $name
+     * @param bool   $cache
+     *
+     * @return mixed
+     * @throws Invalid
+     * @throws NotFound
+     * @throws ReflectionException
+     */
     private function resolve(string $name, bool $cache): mixed
     {
         if (!array_key_exists($name, $this->services)) {
@@ -393,6 +695,14 @@ class Container implements Collection
         return $instance;
     }
 
+    /**
+     * Resolve an alias
+     *
+     * @param string $name
+     *
+     * @return string
+     * @throws Invalid
+     */
     private function resolveAlias(string $name): string
     {
         $seen    = [];
@@ -410,6 +720,13 @@ class Container implements Collection
         return $current;
     }
 
+    /**
+     * Resolve a paramater
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
     private function resolveParameter(string $name): mixed
     {
         $value = $this->parameters[$name];

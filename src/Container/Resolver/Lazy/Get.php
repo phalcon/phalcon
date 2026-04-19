@@ -40,9 +40,17 @@ class Get extends Lazy
     ) {
     }
 
+    /**
+     * Resolve a shared instance
+     *
+     * @param object $container
+     *
+     * @return mixed
+     */
     public function resolve(object $container): mixed
     {
         $id = $this->resolveArgument($container, $this->id);
+
         return $container->get($id);
     }
 }

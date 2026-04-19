@@ -43,6 +43,14 @@ class Env extends Lazy
     ) {
     }
 
+    /**
+     * Resolve an environment variable
+     *
+     * @param object $container
+     *
+     * @return mixed
+     * @throws NotFound
+     */
     public function resolve(object $container): mixed
     {
         $value = $this->getEnv();

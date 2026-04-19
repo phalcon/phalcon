@@ -40,10 +40,18 @@ class CallableNew extends Lazy
     ) {
     }
 
+    /**
+     * Resolve to a closure on a new()
+     *
+     * @param object $container
+     *
+     * @return mixed
+     */
     public function resolve(object $container): mixed
     {
         return function () use ($container) {
             $id = $this->resolveArgument($container, $this->id);
+
             return $container->new($id);
         };
     }

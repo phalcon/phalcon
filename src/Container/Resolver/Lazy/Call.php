@@ -40,6 +40,13 @@ class Call extends Lazy
     ) {
     }
 
+    /**
+     * Resolve the callable
+     *
+     * @param object $container
+     *
+     * @return mixed
+     */
     public function resolve(object $container): mixed
     {
         return ($this->callable)($container);

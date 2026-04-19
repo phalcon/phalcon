@@ -53,6 +53,12 @@ abstract class Lazy implements Resolvable
         return $argument;
     }
 
+    /**
+     * @param object                  $container
+     * @param array<array-key, mixed> $arguments
+     *
+     * @return array<array-key, mixed>
+     */
     protected function resolveArguments(object $container, array $arguments): array
     {
         $resolved = [];
