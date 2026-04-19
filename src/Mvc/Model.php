@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use JsonSerializable;
+use Phalcon\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
@@ -197,15 +198,15 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Phalcon\Mvc\Model constructor
      *
-     * @param array|null            $data
-     * @param DiInterface|null      $container
-     * @param ManagerInterface|null $modelsManager
+     * @param array|null                     $data
+     * @param DiInterface|ServiceCollection|null $container
+     * @param ManagerInterface|null          $modelsManager
      *
      * @throws Exception
      */
     final public function __construct(
         array | null $data = null,
-        DiInterface | null $container = null,
+        DiInterface | ServiceCollection | null $container = null,
         ManagerInterface | null $modelsManager = null
     ) {
         /**
@@ -2835,11 +2836,11 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Create a criteria for a specific model
      *
-     * @param DiInterface|null $container
+     * @param DiInterface|ServiceCollection|null $container
      *
      * @return CriteriaInterface
      */
-    public static function query(DiInterface | null $container = null): CriteriaInterface
+    public static function query(DiInterface | ServiceCollection | null $container = null): CriteriaInterface
     {
         /**
          * Use the global dependency injector if there is no one defined
@@ -2855,10 +2856,11 @@ abstract class Model extends AbstractInjectionAware implements
             $criteria = $container->get(
                 "Phalcon\\Mvc\\Model\\Criteria"
             );
+        } elseif (null !== $container) {
+            $criteria = new Criteria();
+            $criteria->setDI($container);
         } else {
             $criteria = new Criteria();
-
-            $criteria->setDI($container);
         }
 
         $criteria->setModelName(get_called_class());

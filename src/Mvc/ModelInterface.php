@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Messages\MessageInterface;
@@ -293,12 +294,12 @@ interface ModelInterface
     /**
      * Create a criteria for a specific model
      *
-     * @param DiInterface|null $container
+     * @param DiInterface|Collection|null $container
      *
      * @return CriteriaInterface
      */
     public static function query(
-        DiInterface | null $container = null
+        DiInterface | Collection | null $container = null
     ): CriteriaInterface;
 
     /**
