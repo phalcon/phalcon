@@ -51,13 +51,13 @@ use function method_exists;
 
 class Resolver implements ResolverService
 {
-    public function isResolvableClass(string $class): bool
+    public function isResolvableClass(string $className): bool
     {
-        if (!class_exists($class)) {
+        if (!class_exists($className)) {
             return false;
         }
 
-        return (new ReflectionClass($class))->isInstantiable();
+        return (new ReflectionClass($className))->isInstantiable();
     }
 
     public function resolveCall(
@@ -77,10 +77,10 @@ class Resolver implements ResolverService
 
     public function resolveClass(
         object $container,
-        string $class,
+        string $className,
         array $arguments
     ): object {
-        $reflection  = new ReflectionClass($class);
+        $reflection  = new ReflectionClass($className);
         $constructor = $reflection->getConstructor();
 
         if ($constructor === null) {

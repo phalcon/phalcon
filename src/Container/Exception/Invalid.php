@@ -53,14 +53,14 @@ class Invalid extends Exception implements ContainerThrowable
      * Cannot resolve a parameter
      *
      * @param string $param
-     * @param string $class
+     * @param string $className
      *
      * @return static
      */
-    public static function cannotResolveParameter(string $param, string $class): static
+    public static function cannotResolveParameter(string $param, string $className): static
     {
         return new static(
-            "Cannot resolve parameter '\${$param}' for '{$class}'"
+            "Cannot resolve parameter '\${$param}' for '{$className}'"
         );
     }
 

@@ -48,7 +48,7 @@ interface Definition
     public function hasClass(): bool;
     public function hasExtenders(): bool;
     public function hasFactory(): bool;
-    public function setClass(string $class): static;
+    public function setClass(string $className): static;
     public function setExtenders(array $extenders): static;
     public function setFactory(callable $factory): static;
     public function setLifetime(string $lifetime): static;

@@ -364,15 +364,15 @@ class ServiceDefinition
     /**
      * Set a class
      *
-     * @param string $class
+     * @param string $className
      *
      * @return $this
      * @throws Invalid
      */
-    public function setClass(string $class): static
+    public function setClass(string $className): static
     {
         $this->checkFrozen();
-        $this->class = $class;
+        $this->class = $className;
 
         return $this;
     }

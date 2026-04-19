@@ -36,7 +36,7 @@ namespace Phalcon\Container\Resolver\Lazy;
 class StaticCall extends Lazy
 {
     public function __construct(
-        protected string|Lazy $class,
+        protected string|Lazy $className,
         protected string $method,
         protected array $arguments
     ) {
@@ -44,9 +44,9 @@ class StaticCall extends Lazy
 
     public function resolve(object $container): mixed
     {
-        $class     = $this->resolveArgument($container, $this->class);
+        $className = $this->resolveArgument($container, $this->className);
         $arguments = $this->resolveArguments($container, $this->arguments);
 
-        return call_user_func_array([$class, $this->method], $arguments);
+        return call_user_func_array([$className, $this->method], $arguments);
     }
 }
