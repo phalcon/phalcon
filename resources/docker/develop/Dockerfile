@@ -96,13 +96,7 @@ RUN set -eux \
     && rm -rf /tmp/* /var/tmp/* \
     && find /var/cache/apt/archives /var/lib/apt/lists -not -name lock -type f -delete \
     && find /var/cache -type f -delete \
-    && find /var/log -type f -delete \
-# Setup the phalcon-module \
-    && cd /tmp \
-    && git clone https://github.com/niden/phalcon-module \
-    && cd phalcon-module/ext \
-    && ./install \
-    && echo "extension=phalcon" > /usr/local/etc/php/conf.d/phalcon.ini
+    && find /var/log -type f -delete
 
 # hadolint ignore=DL3022
 COPY --from=composer/composer:2 --chown=${USER}:${GROUP} --chmod=0770 /usr/bin/composer /usr/bin/composer
