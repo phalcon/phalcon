@@ -220,7 +220,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             if (!empty($filters)) {
                 if (null === $filter) {
                     $container = $this->getDI();
-                    $filter    = $container->getShared("filter");
+                    $filter    = $container->get("filter");
                 }
 
                 /**

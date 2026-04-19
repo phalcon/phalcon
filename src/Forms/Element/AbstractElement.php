@@ -591,7 +591,7 @@ abstract class AbstractElement implements ElementInterface
                 $container = Di::getDefault();
 
                 if (null !== $container && true === $container->has("tag")) {
-                    $tagFactory = $container->getShared("tag");
+                    $tagFactory = $container->get("tag");
                 }
             }
 

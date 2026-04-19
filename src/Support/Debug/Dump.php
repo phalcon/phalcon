@@ -15,6 +15,7 @@ namespace Phalcon\Support\Debug;
 
 use InvalidArgumentException;
 use JsonException;
+use Phalcon\Container\Container;
 use Phalcon\Di\DiInterface;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Traits\Helper\Str\InterpolateTrait;
@@ -364,8 +365,8 @@ class Dump
 
             $output .= " (\n";
 
-            if ($variable instanceof DiInterface) {
-                // Skip debugging di
+            if ($variable instanceof DiInterface || $variable instanceof Container) {
+                // Skip debugging di and container
                 $output .= str_repeat($space, $tab) . "[skipped]\n";
             } elseif (true !== $this->detailed || $variable instanceof stdClass) {
                 // Debug only public properties
