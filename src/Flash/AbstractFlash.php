@@ -106,7 +106,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
         }
 
         if (null === $this->escaperService) {
-            $this->escaperService = $this->container->getShared('escaper');
+            $this->escaperService = $this->container->get('escaper');
         }
 
 

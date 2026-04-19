@@ -17,6 +17,7 @@ use Exception as BaseException;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cli\Dispatcher\Exception as CliDispatcherException;
 use Phalcon\Cli\TaskInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\EventsAwareInterface;
@@ -352,7 +353,11 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
                 break;
             }
 
-            $handler = $this->container->getShared($handlerClass);
+            if ($this->container instanceof DiInterface) {
+                $handler = $this->container->getShared($handlerClass);
+            } else {
+                $handler = $this->container->get($handlerClass);
+            }
 
             // Handlers must be only objects
             if (!is_object($handler)) {
@@ -948,7 +953,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         }
 
         /** @var FilterInterface $filter */
-        $filter = $this->container->getShared("filter");
+        $filter = $this->container->get("filter");
 
         return $filter->sanitize($paramValue, $filters);
     }

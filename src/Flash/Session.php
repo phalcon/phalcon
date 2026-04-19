@@ -78,7 +78,7 @@ class Session extends AbstractFlash
         }
 
         if (null === $this->sessionService) {
-            $this->sessionService = $this->container->getShared('session');
+            $this->sessionService = $this->container->get('session');
         }
 
 
