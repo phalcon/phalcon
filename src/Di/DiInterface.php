@@ -51,7 +51,7 @@ interface DiInterface extends ArrayAccess
     /**
      * Return the last DI created
      */
-    public static function getDefault(): DiInterface | null;
+    public static function getDefault(): object | null;
 
     /**
      * Returns a service definition without resolving
@@ -128,9 +128,9 @@ interface DiInterface extends ArrayAccess
      * Set a default dependency injection container to be obtained into static
      * methods
      *
-     * @param DiInterface $container
+     * @param object $container
      */
-    public static function setDefault(DiInterface $container): void;
+    public static function setDefault(object $container): void;
 
     /**
      * Sets a service using a raw Phalcon\Di\Service definition
