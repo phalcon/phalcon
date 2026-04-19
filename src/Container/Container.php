@@ -47,6 +47,7 @@ use Phalcon\Container\Exception\NotFound;
 use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Container\Resolver\Resolver;
 use Phalcon\Container\Service\Collection;
+use Phalcon\Di\InjectionAwareInterface;
 
 use function array_key_exists;
 use function class_exists;
@@ -367,6 +368,10 @@ class Container implements Collection
         $definition->freeze($this);
 
         $instance = $definition->buildService($this);
+
+        if ($instance instanceof InjectionAwareInterface) {
+            $instance->setDI($this);
+        }
 
         $lifetime = $definition->getLifetime();
 
