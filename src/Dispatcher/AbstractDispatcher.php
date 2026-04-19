@@ -953,7 +953,11 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         }
 
         /** @var FilterInterface $filter */
-        $filter = $this->container->get("filter");
+        if ($this->container instanceof DiInterface) {
+            $filter = $this->container->getShared("filter");
+        } else {
+            $filter = $this->container->get("filter");
+        }
 
         return $filter->sanitize($paramValue, $filters);
     }
@@ -1114,7 +1118,11 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         AdapterInterface | string | null $cache = null
     ): DispatcherInterface {
         if (is_string($cache)) {
-            $cache = $this->container->get($cache);
+            if ($this->container instanceof DiInterface) {
+                $cache = $this->container->getShared($cache);
+            } else {
+                $cache = $this->container->get($cache);
+            }
         }
 
         if ($cache instanceof AdapterInterface) {

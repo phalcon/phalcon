@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
 
@@ -157,7 +158,11 @@ class Url extends AbstractInjectionAware implements UrlInterface
                     );
                 }
 
-                $this->router = $this->container->get("router");
+                if ($this->container instanceof DiInterface) {
+                    $this->router = $this->container->getShared("router");
+                } else {
+                    $this->router = $this->container->get("router");
+                }
             }
 
             /**

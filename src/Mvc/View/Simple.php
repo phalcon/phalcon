@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\View;
 
 use Closure;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
@@ -537,12 +538,21 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                         /**
                          * Engine can be a string representing a service in the DI
                          */
-                        $engineObject = $this->container->get(
-                            $engineService,
-                            [
-                                $this,
-                            ]
-                        );
+                        if ($this->container instanceof DiInterface) {
+                            $engineObject = $this->container->getShared(
+                                $engineService,
+                                [
+                                    $this,
+                                ]
+                            );
+                        } else {
+                            $engineObject = $this->container->get(
+                                $engineService,
+                                [
+                                    $this,
+                                ]
+                            );
+                        }
                     } else {
                         throw new Exception(
                             "Invalid template engine registration for extension: "

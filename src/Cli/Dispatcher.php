@@ -15,6 +15,7 @@ namespace Phalcon\Cli;
 
 use Exception;
 use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
+use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
 use Phalcon\Filter\Exception as FilterException;
 use Phalcon\Filter\Filter;
@@ -142,7 +143,11 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         );
 
         /** @var Filter $filter */
-        $filter = $this->container->get("filter");
+        if ($this->container instanceof DiInterface) {
+            $filter = $this->container->getShared("filter");
+        } else {
+            $filter = $this->container->get("filter");
+        }
 
         return $filter->sanitize($optionValue, $filters);
     }

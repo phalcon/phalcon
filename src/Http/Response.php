@@ -294,12 +294,20 @@ class Response extends Injectable implements
 
         if (empty($header)) {
             /** @var UrlInterface $url */
-            $url    = $container->get('url');
+            if ($container instanceof DiInterface) {
+                $url = $container->getShared('url');
+            } else {
+                $url = $container->get('url');
+            }
             $header = $url->get($location);
         }
 
         if (true === $container->has('view')) {
-            $view = $container->get('view');
+            if ($container instanceof DiInterface) {
+                $view = $container->getShared('view');
+            } else {
+                $view = $container->get('view');
+            }
 
             if ($view instanceof ViewInterface) {
                 $view->disable();

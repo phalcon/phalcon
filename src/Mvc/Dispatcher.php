@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use Exception as BaseException;
+use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as BaseDispatcher;
 use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\Exception as EventsException;
@@ -275,7 +276,11 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
             Exception::EXCEPTION_NO_DI
         );
 
-        $response = $this->container->get("response");
+        if ($this->container instanceof DiInterface) {
+            $response = $this->container->getShared("response");
+        } else {
+            $response = $this->container->get("response");
+        }
 
         /**
          * Dispatcher exceptions automatically sends a 404 status

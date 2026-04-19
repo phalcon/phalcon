@@ -333,6 +333,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         $this->checkDiContainer();
 
+        if ($this->container instanceof DiInterface) {
+            return $this->container->getShared($serviceName);
+        }
+
         return $this->container->get($serviceName);
     }
 
@@ -369,7 +373,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
              * Handling routing information
              */
             /** @var Router $router */
-            $router = $this->container->get("router");
+            if ($this->container instanceof DiInterface) {
+                $router = $this->container->getShared("router");
+            } else {
+                $router = $this->container->get("router");
+            }
 
             /**
              * Handle the URI as normal
@@ -700,7 +708,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
              * body
              */
             if (is_string($returnedValue)) {
-                $response = $this->container->get("response");
+                if ($this->container instanceof DiInterface) {
+                    $response = $this->container->getShared("response");
+                } else {
+                    $response = $this->container->get("response");
+                }
 
                 if (true !== $response->isSent()) {
                     $response->setContent($returnedValue);

@@ -805,7 +805,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Get the models metadata service to obtain the column names,
              * column map and primary key
              */
-            $metaData      = $this->container->get("modelsMetadata");
+            if ($this->container instanceof DiInterface) {
+                $metaData = $this->container->getShared("modelsMetadata");
+            } else {
+                $metaData = $this->container->get("modelsMetadata");
+            }
             $modelInstance = new $model(null, $this->container);
             $noPrimary     = true;
             $primaryKeys   = $metaData->getPrimaryKeyAttributes($modelInstance);

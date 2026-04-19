@@ -276,7 +276,11 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             $this->setDI($container);
         }
 
-        $manager = $container->get("modelsManager");
+        if ($container instanceof DiInterface) {
+            $manager = $container->getShared("modelsManager");
+        } else {
+            $manager = $container->get("modelsManager");
+        }
 
         /**
          * Builds a query with the passed parameters
@@ -353,7 +357,11 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $bind       = [];
 
         if (count($data)) {
-            $metaData  = $container->get("modelsMetadata");
+            if ($container instanceof DiInterface) {
+                $metaData = $container->getShared("modelsMetadata");
+            } else {
+                $metaData = $container->get("modelsMetadata");
+            }
             $model     = new $modelName(null, $container);
             $dataTypes = $metaData->getDataTypes($model);
             $columnMap = $metaData->getReverseColumnMap($model);

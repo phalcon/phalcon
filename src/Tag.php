@@ -441,7 +441,11 @@ class Tag
         if (null === self::$escaperService) {
             $container = self::getDI();
 
-            self::$escaperService = $container->get("escaper");
+            if ($container instanceof DiInterface) {
+                self::$escaperService = $container->getShared("escaper");
+            } else {
+                self::$escaperService = $container->get("escaper");
+            }
         }
 
         return self::$escaperService;
@@ -523,7 +527,11 @@ class Tag
         if (null === self::$urlService) {
             $container = self::getDI();
 
-            self::$urlService = $container->get("url");
+            if ($container instanceof DiInterface) {
+                self::$urlService = $container->getShared("url");
+            } else {
+                self::$urlService = $container->get("url");
+            }
         }
 
         return self::$urlService;

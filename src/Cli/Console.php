@@ -16,6 +16,7 @@ namespace Phalcon\Cli;
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Cli\Console\Exception;
 use Phalcon\Cli\Router\Route;
+use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
 
 use function array_merge;
@@ -67,7 +68,11 @@ class Console extends AbstractApplication
         }
 
         /** @var Router $router */
-        $router = $this->container->get("router");
+        if ($this->container instanceof DiInterface) {
+            $router = $this->container->getShared("router");
+        } else {
+            $router = $this->container->get("router");
+        }
 
         if (empty($arguments) && !empty($this->arguments)) {
             $router->handle($this->arguments);
@@ -127,7 +132,11 @@ class Console extends AbstractApplication
         }
 
         /** @var Dispatcher $dispatcher */
-        $dispatcher = $this->container->get("dispatcher");
+        if ($this->container instanceof DiInterface) {
+            $dispatcher = $this->container->getShared("dispatcher");
+        } else {
+            $dispatcher = $this->container->get("dispatcher");
+        }
 
         $dispatcher->setModuleName($router->getModuleName());
         $dispatcher->setTaskName($router->getTaskName());

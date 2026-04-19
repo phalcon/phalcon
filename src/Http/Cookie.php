@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Http;
 
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\DiInterface;
 use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Cookie\CookieInterface;
@@ -107,7 +108,11 @@ class Cookie extends AbstractInjectionAware implements
             true === $this->container->has('session')
         ) {
             /** @var SessionManagerInterface $session */
-            $session = $this->container->get('session');
+            if ($this->container instanceof DiInterface) {
+                $session = $this->container->getShared('session');
+            } else {
+                $session = $this->container->get('session');
+            }
 
             if (true === $session->exists()) {
                 $session->remove(self::COOKIE_PREFIX . $this->name);
@@ -234,7 +239,11 @@ class Cookie extends AbstractInjectionAware implements
                 }
 
                 /** @var CryptInterface $crypt */
-                $crypt = $this->container->get('crypt');
+                if ($this->container instanceof DiInterface) {
+                    $crypt = $this->container->getShared('crypt');
+                } else {
+                    $crypt = $this->container->get('crypt');
+                }
 
                 if (!is_object($crypt)) {
                     throw new Exception(
@@ -277,7 +286,11 @@ class Cookie extends AbstractInjectionAware implements
                     }
 
                     /** @var FilterInterface $filter */
-                    $filter       = $this->container->get('filter');
+                    if ($this->container instanceof DiInterface) {
+                        $filter = $this->container->getShared('filter');
+                    } else {
+                        $filter = $this->container->get('filter');
+                    }
                     $this->filter = $filter;
                 }
 
@@ -320,7 +333,11 @@ class Cookie extends AbstractInjectionAware implements
                 true === $this->container->has('session')
             ) {
                 /** @var SessionManagerInterface $session */
-                $session = $this->container->get('session');
+                if ($this->container instanceof DiInterface) {
+                    $session = $this->container->getShared('session');
+                } else {
+                    $session = $this->container->get('session');
+                }
 
                 if (true === $session->exists()) {
                     $definition = $session->get(
@@ -374,7 +391,11 @@ class Cookie extends AbstractInjectionAware implements
             true === $this->container->has('session')
         ) {
             /** @var SessionManagerInterface $session */
-            $session = $this->container->get('session');
+            if ($this->container instanceof DiInterface) {
+                $session = $this->container->getShared('session');
+            } else {
+                $session = $this->container->get('session');
+            }
 
             if (true === $session->exists()) {
                 $session->set(self::COOKIE_PREFIX . $this->name, $definition);
@@ -391,7 +412,11 @@ class Cookie extends AbstractInjectionAware implements
             }
 
             /** @var CryptInterface $crypt */
-            $crypt = $this->container->get('crypt');
+            if ($this->container instanceof DiInterface) {
+                $crypt = $this->container->getShared('crypt');
+            } else {
+                $crypt = $this->container->get('crypt');
+            }
 
             if (!is_object($crypt)) {
                 throw new Exception(

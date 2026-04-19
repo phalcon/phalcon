@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Http;
 
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\DiInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
@@ -1902,7 +1903,11 @@ class Request extends AbstractInjectionAware implements
             null !== $this->container &&
             null === $this->eventsManager
         ) {
-            $this->eventsManager = $this->container->get('eventsManager');
+            if ($this->container instanceof DiInterface) {
+                $this->eventsManager = $this->container->getShared('eventsManager');
+            } else {
+                $this->eventsManager = $this->container->get('eventsManager');
+            }
         }
 
         if (null !== $this->eventsManager) {
@@ -2056,7 +2061,11 @@ class Request extends AbstractInjectionAware implements
                 );
             }
 
-            $this->filterService = $this->container->get("filter");
+            if ($this->container instanceof DiInterface) {
+                $this->filterService = $this->container->getShared("filter");
+            } else {
+                $this->filterService = $this->container->get("filter");
+            }
         }
 
         return $this->filterService;

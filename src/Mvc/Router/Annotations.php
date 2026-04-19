@@ -16,6 +16,7 @@ namespace Phalcon\Mvc\Router;
 use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Annotations\Parser\Annotation;
 use Phalcon\Annotations\Parser\Exception;
+use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
@@ -159,7 +160,11 @@ class Annotations extends Router
         }
 
         /** @var Memory $annotationsService */
-        $annotationsService = $this->container->get("annotations");
+        if ($this->container instanceof DiInterface) {
+            $annotationsService = $this->container->getShared("annotations");
+        } else {
+            $annotationsService = $this->container->get("annotations");
+        }
 
         foreach ($this->handlers as $scope) {
             if (!is_array($scope)) {

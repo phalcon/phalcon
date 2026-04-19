@@ -311,7 +311,11 @@ class Query implements QueryInterface, InjectionAwareInterface
             $cacheService = $cacheOptions["service"] ?? "modelsCache";
 
             /** @var CacheInterface $cache */
-            $cache = $this->container->get($cacheService);
+            if ($this->container instanceof DiInterface) {
+                $cache = $this->container->getShared($cacheService);
+            } else {
+                $cache = $this->container->get($cacheService);
+            }
 
             if (!$cache instanceof CacheInterface) {
                 throw new Exception(
@@ -704,13 +708,21 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     public function setDI(object $container): void
     {
-        $manager = $container->get("modelsManager");
+        if ($container instanceof DiInterface) {
+            $manager = $container->getShared("modelsManager");
+        } else {
+            $manager = $container->get("modelsManager");
+        }
 
         if (!is_object($manager)) {
             throw new Exception("Injected service 'modelsManager' is invalid");
         }
 
-        $metaData = $container->get("modelsMetadata");
+        if ($container instanceof DiInterface) {
+            $metaData = $container->getShared("modelsMetadata");
+        } else {
+            $metaData = $container->get("modelsMetadata");
+        }
 
         if (!is_object($metaData)) {
             throw new Exception("Injected service 'modelsMetaData' is invalid");
