@@ -13,19 +13,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Support\Modules\Frontend;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Mvc\View;
 
 class Module implements ModuleDefinitionInterface
 {
-    public function registerAutoloaders(?DiInterface $di = null)
+    public function registerAutoloaders(DiInterface | Collection | null $container = null): void
     {
     }
 
-    public function registerServices(DiInterface $di)
+    public function registerServices(DiInterface | Collection $container): void
     {
-        $di->set(
+        $container->set(
             'view',
             function () {
                 $view = new View();
