@@ -38,14 +38,29 @@ use Phalcon\Container\Service\Provider;
 
 class ContainerFactory implements IocContainerFactory
 {
+    /**
+     * @var array<array-key, Provider>
+     */
     protected array $providers = [];
 
+    /**
+     * Adds a provider
+     *
+     * @param Provider $provider
+     *
+     * @return $this
+     */
     public function addProvider(Provider $provider): static
     {
         $this->providers[] = $provider;
         return $this;
     }
 
+    /**
+     * Returns a new container
+     *
+     * @return Container
+     */
     public function newContainer(): Container
     {
         $container = new Container();

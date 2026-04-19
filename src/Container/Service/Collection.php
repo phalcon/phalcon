@@ -43,27 +43,27 @@ interface Collection extends IocContainer
     // From service-interop/ServiceCollection — alias management
     public function getAlias(string $name): string;
     public function hasAlias(string $name): bool;
-    public function setAlias(string $name, string $alias): void;
+    public function setAlias(string $name, string $alias): static;
     public function unsetAlias(string $name): void;
 
     // From service-interop/ServiceCollection — definition management
     public function getDefinition(string $name): ServiceDefinition;
     public function hasDefinition(string $name): bool;
     public function newDefinition(string $name): ServiceDefinition;
-    public function setDefinition(string $name, ServiceDefinition $definition): void;
+    public function setDefinition(string $name, ServiceDefinition $definition): static;
     public function unsetDefinition(string $name): void;
 
     // From service-interop/ServiceCollection — instance management
     public function getInstance(string $name): object;
     public function hasInstance(string $name): bool;
-    public function setInstance(string $name, object $instance, string $lifetime): void;
+    public function setInstance(string $name, object $instance, string $lifetime): static;
     public function unsetInstance(string $name): void;
     public function unsetInstances(string $lifetime): void;
 
     // Our additions — scalar parameters
     public function getParameter(string $name): mixed;
     public function hasParameter(string $name): bool;
-    public function setParameter(string $name, mixed $value): void;
+    public function setParameter(string $name, mixed $value): static;
     public function unsetParameter(string $name): void;
 
     // Our additions — Container-specific
@@ -78,5 +78,5 @@ interface Collection extends IocContainer
     public function isAutowireEnabled(): bool;
     public function new(string $name): mixed;
     public function set(string $name, mixed $definition): ServiceDefinition;
-    public function setAutowire(bool $enabled): void;
+    public function setAutowire(bool $enabled): static;
 }
