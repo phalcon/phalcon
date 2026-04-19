@@ -423,25 +423,6 @@ class Container implements Collection
     }
 
     /**
-     * Register a tag with a service
-     *
-     * @param string $tag
-     * @param string $serviceName
-     *
-     * @return void
-     */
-    public function addTag(string $tag, string $serviceName): void
-    {
-        if (!array_key_exists($tag, $this->tags)) {
-            $this->tags[$tag] = [];
-        }
-
-        if (!in_array($serviceName, $this->tags[$tag], true)) {
-            $this->tags[$tag][] = $serviceName;
-        }
-    }
-
-    /**
      * Set a service
      *
      * @param string $name
@@ -538,6 +519,25 @@ class Container implements Collection
         $this->parameters[$name] = $value;
 
         return $this;
+    }
+
+    /**
+     * Register a tag with a service
+     *
+     * @param string $tag
+     * @param string $serviceName
+     *
+     * @return void
+     */
+    public function setTag(string $tag, string $serviceName): void
+    {
+        if (!array_key_exists($tag, $this->tags)) {
+            $this->tags[$tag] = [];
+        }
+
+        if (!in_array($serviceName, $this->tags[$tag], true)) {
+            $this->tags[$tag][] = $serviceName;
+        }
     }
 
     /**
