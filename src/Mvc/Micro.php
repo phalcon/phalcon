@@ -16,6 +16,7 @@ namespace Phalcon\Mvc;
 use ArrayAccess;
 use Closure;
 use Phalcon\Cache\Adapter\AdapterInterface;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Injectable;
@@ -126,8 +127,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 
     /**
      * Phalcon\Mvc\Micro constructor
+     *
+     * @param DiInterface|Collection|null $container
      */
-    public function __construct(DiInterface | null $container = null)
+    public function __construct(DiInterface | Collection | null $container = null)
     {
         if (null !== $container) {
             $this->setDi($container);
@@ -330,7 +333,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         $this->checkDiContainer();
 
-        return $this->container->getShared($serviceName);
+        return $this->container->get($serviceName);
     }
 
     /**
@@ -366,7 +369,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
              * Handling routing information
              */
             /** @var Router $router */
-            $router = $this->container->getShared("router");
+            $router = $this->container->get("router");
 
             /**
              * Handle the URI as normal
@@ -697,7 +700,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
              * body
              */
             if (is_string($returnedValue)) {
-                $response = $this->container->getShared("response");
+                $response = $this->container->get("response");
 
                 if (true !== $response->isSent()) {
                     $response->setContent($returnedValue);
