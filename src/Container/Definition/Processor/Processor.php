@@ -37,8 +37,24 @@ use Phalcon\Container\Definition\ServiceDefinition;
 
 interface Processor
 {
+    /**
+     * Can this definition be processed?
+     *
+     * @param mixed $definition
+     *
+     * @return bool
+     */
     public function canProcess(mixed $definition): bool;
 
+    /**
+     * Process the definition
+     *
+     * @param string $name
+     * @param mixed  $definition
+     * @param object $container
+     *
+     * @return ServiceDefinition
+     */
     public function process(
         string $name,
         mixed $definition,
