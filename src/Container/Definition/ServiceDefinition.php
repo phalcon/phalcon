@@ -108,9 +108,9 @@ class ServiceDefinition
 
         if (
             $this->container !== null
-            && method_exists($this->container, 'registerTag')
+            && method_exists($this->container, 'addTag')
         ) {
-            $this->container->registerTag($tag, $this->serviceName);
+            $this->container->addTag($tag, $this->serviceName);
         }
 
         return $this;

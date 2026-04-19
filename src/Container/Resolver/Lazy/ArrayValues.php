@@ -40,6 +40,9 @@ use IteratorAggregate;
 
 class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggregate
 {
+    /**
+     * @param array<array-key, mixed> $values
+     */
     public function __construct(
         protected array $values = []
     ) {
@@ -90,6 +93,13 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
         unset($this->values[$offset]);
     }
 
+    /**
+     * Resolve to an array, where each element has itself been lazy-resolved.
+     *
+     * @param object $container
+     *
+     * @return array<array-key, mixed>
+     */
     public function resolve(object $container): array
     {
         return $this->resolveValues($container, $this->values);
@@ -108,6 +118,12 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
         return $value;
     }
 
+    /**
+     * @param object                  $container
+     * @param array<array-key, mixed> $values
+     *
+     * @return array
+     */
     protected function resolveValues(object $container, array $values): array
     {
         $return = [];

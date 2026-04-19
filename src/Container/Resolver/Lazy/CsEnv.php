@@ -33,8 +33,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Container\Exception\NotFound;
+
 class CsEnv extends Env
 {
+    /**
+     * Resolve the getEnv() from keys as a comma separated list
+     *
+     * @param object $container
+     *
+     * @return array
+     * @throws NotFound
+     */
     public function resolve(object $container): array
     {
         $values = str_getcsv($this->getEnv(), ',', '"', '\\');

@@ -35,6 +35,11 @@ namespace Phalcon\Container\Resolver\Lazy;
 
 class LazyFactory
 {
+    /**
+     * @param array<array-key, mixed> $values
+     *
+     * @return ArrayValues
+     */
     public static function arrayValues(array $values): ArrayValues
     {
         return new ArrayValues($values);
@@ -65,6 +70,12 @@ class LazyFactory
         return new Env($name, $type);
     }
 
+    /**
+     * @param string                  $function
+     * @param array<array-key, mixed> $args
+     *
+     * @return FunctionCall
+     */
     public static function functionCall(string $function, array $args): FunctionCall
     {
         return new FunctionCall($function, $args);
@@ -75,11 +86,25 @@ class LazyFactory
         return new Get($id);
     }
 
+    /**
+     * @param string                  $id
+     * @param string                  $method
+     * @param array<array-key, mixed> $args
+     *
+     * @return GetCall
+     */
     public static function getCall(string $id, string $method, array $args): GetCall
     {
         return new GetCall($id, $method, $args);
     }
 
+    /**
+     * @param string                  $id
+     * @param string                  $method
+     * @param array<array-key, mixed> $args
+     *
+     * @return NewCall
+     */
     public static function newCall(string $id, string $method, array $args): NewCall
     {
         return new NewCall($id, $method, $args);
@@ -90,6 +115,13 @@ class LazyFactory
         return new NewInstance($id);
     }
 
+    /**
+     * @param string                  $className
+     * @param string                  $method
+     * @param array<array-key, mixed> $args
+     *
+     * @return StaticCall
+     */
     public static function staticCall(string $className, string $method, array $args): StaticCall
     {
         return new StaticCall($className, $method, $args);

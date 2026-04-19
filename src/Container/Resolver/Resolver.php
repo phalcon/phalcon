@@ -38,6 +38,7 @@ use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Container\Resolver\ResolverService;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -51,6 +52,13 @@ use function method_exists;
 
 class Resolver implements ResolverService
 {
+    /**
+     * Is this a resolvable class?
+     *
+     * @param string $className
+     *
+     * @return bool
+     */
     public function isResolvableClass(string $className): bool
     {
         if (!class_exists($className)) {
@@ -60,6 +68,16 @@ class Resolver implements ResolverService
         return (new ReflectionClass($className))->isInstantiable();
     }
 
+    /**
+     * Resolve a call
+     *
+     * @param object   $container
+     * @param callable $callable
+     * @param array    $arguments
+     *
+     * @return mixed
+     * @throws ReflectionException
+     */
     public function resolveCall(
         object $container,
         callable $callable,
@@ -75,6 +93,16 @@ class Resolver implements ResolverService
         return call_user_func_array($callable, $resolved);
     }
 
+    /**
+     * Resolve a class
+     *
+     * @param object $container
+     * @param string $className
+     * @param array  $arguments
+     *
+     * @return object
+     * @throws ReflectionException
+     */
     public function resolveClass(
         object $container,
         string $className,
@@ -93,6 +121,16 @@ class Resolver implements ResolverService
         return $reflection->newInstanceArgs($resolved);
     }
 
+    /**
+     * Resolve a method
+     *
+     * @param object           $container
+     * @param ReflectionMethod $method
+     * @param object           $object
+     *
+     * @return void
+     * @throws ReflectionException
+     */
     public function resolveMethod(
         object $container,
         ReflectionMethod $method,
@@ -104,6 +142,16 @@ class Resolver implements ResolverService
         $method->invokeArgs($object, $resolved);
     }
 
+    /**
+     * Resolve parameters
+     *
+     * @param object              $container
+     * @param ReflectionParameter $parameter
+     *
+     * @return mixed
+     * @throws Invalid
+     * @throws ReflectionException
+     */
     public function resolveParameter(
         object $container,
         ReflectionParameter $parameter
