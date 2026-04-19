@@ -112,7 +112,7 @@ class Application extends AbstractApplication
             return false;
         }
 
-        $router = $this->container->getShared("router");
+        $router = $this->container->get("router");
 
         /**
          * Handle the URI pattern (if any)
@@ -145,7 +145,7 @@ class Application extends AbstractApplication
                  * If the returned value is a string return it as body
                  */
                 if (is_string($possibleResponse)) {
-                    $response = $this->container->getShared("response");
+                    $response = $this->container->get("response");
 
                     $response->setContent($possibleResponse);
 
@@ -257,14 +257,14 @@ class Application extends AbstractApplication
          */
         $view = null;
         if (true === $this->implicitView) {
-            $view = $this->container->getShared("view");
+            $view = $this->container->get("view");
         }
 
         /**
          * We get the parameters from the router and assign them to the dispatcher
          * Assign the values passed from the router
          */
-        $dispatcher = $this->container->getShared("dispatcher");
+        $dispatcher = $this->container->get("dispatcher");
 
         $dispatcher->setModuleName($router->getModuleName());
         $dispatcher->setNamespaceName($router->getNamespaceName());
@@ -300,13 +300,13 @@ class Application extends AbstractApplication
          * Returning false from an action cancels the view
          */
         if (false === $possibleResponse) {
-            $response = $this->container->getShared("response");
+            $response = $this->container->get("response");
         } else {
             /**
              * Returning a string makes use it as the body of the response
              */
             if (is_string($possibleResponse)) {
-                $response = $this->container->getShared("response");
+                $response = $this->container->get("response");
 
                 $response->setContent($possibleResponse);
             } else {
@@ -364,7 +364,7 @@ class Application extends AbstractApplication
                      */
                     $response = $possibleResponse;
                 } else {
-                    $response = $this->container->getShared("response");
+                    $response = $this->container->get("response");
 
                     if (true === $this->implicitView) {
                         /**
@@ -415,7 +415,6 @@ class Application extends AbstractApplication
 
         return $this;
     }
-
 
     /**
      * Enables or disables sending headers by each request handling

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
@@ -28,7 +29,7 @@ class Introspection implements StrategyInterface
     /**
      * Read the model's column map, this can't be inferred
      */
-    final public function getColumnMaps(ModelInterface $model, DiInterface $container): array
+    final public function getColumnMaps(ModelInterface $model, DiInterface | Collection $container): array
     {
         $orderedColumnMap  = null;
         $reversedColumnMap = null;
@@ -60,7 +61,7 @@ class Introspection implements StrategyInterface
     /**
      * The meta-data is obtained by reading the column descriptions from the database information schema
      */
-    final public function getMetaData(ModelInterface $model, DiInterface $container): array
+    final public function getMetaData(ModelInterface $model, DiInterface | Collection $container): array
     {
         $schema = $model->getSchema();
         $table  = $model->getSource();

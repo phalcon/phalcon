@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Transaction\Failed as TxFailed;
@@ -103,12 +104,12 @@ class Transaction implements TransactionInterface
     /**
      * Phalcon\Mvc\Model\Transaction constructor
      *
-     * @param DiInterface $container
-     * @param bool        $autoBegin
-     * @param string      $service
+     * @param DiInterface|Collection $container
+     * @param bool                   $autoBegin
+     * @param string                 $service
      */
     public function __construct(
-        DiInterface $container,
+        DiInterface | Collection $container,
         bool $autoBegin = false,
         string $service = "db"
     ) {
