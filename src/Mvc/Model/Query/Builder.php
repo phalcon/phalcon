@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
@@ -149,12 +150,12 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Phalcon\Mvc\Model\Query\Builder constructor
      *
-     * @param array|string|null $params
-     * @param DiInterface|null  $container
+     * @param array|string|null            $params
+     * @param DiInterface|Collection|null  $container
      */
     public function __construct(
         array | string | null $params = null,
-        DiInterface | null $container = null
+        DiInterface | Collection | null $container = null
     ) {
         if (is_array($params)) {
             /**
@@ -653,9 +654,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface
+     * @return DiInterface|Collection
      */
-    public function getDI(): DiInterface
+    public function getDI(): DiInterface | Collection
     {
         return $this->container;
     }
@@ -804,7 +805,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Get the models metadata service to obtain the column names,
              * column map and primary key
              */
-            $metaData      = $this->container->getShared("modelsMetadata");
+            $metaData      = $this->container->get("modelsMetadata");
             $modelInstance = new $model(null, $this->container);
             $noPrimary     = true;
             $primaryKeys   = $metaData->getPrimaryKeyAttributes($modelInstance);

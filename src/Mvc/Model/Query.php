@@ -19,6 +19,7 @@ use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\ResultInterface;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
@@ -226,15 +227,15 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Phalcon\Mvc\Model\Query constructor
      *
-     * @param string|null      $phql
-     * @param DiInterface|null $container
-     * @param array            $options
+     * @param string|null                  $phql
+     * @param DiInterface|Collection|null  $container
+     * @param array                        $options
      *
      * @throws Exception
      */
     public function __construct(
         protected string | null $phql = null,
-        DiInterface | null $container = null,
+        DiInterface | Collection | null $container = null,
         array $options = []
     ) {
         if (null !== $container) {
@@ -310,7 +311,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $cacheService = $cacheOptions["service"] ?? "modelsCache";
 
             /** @var CacheInterface $cache */
-            $cache = $this->container->getShared($cacheService);
+            $cache = $this->container->get($cacheService);
 
             if (!$cache instanceof CacheInterface) {
                 throw new Exception(
@@ -703,13 +704,13 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     public function setDI(object $container): void
     {
-        $manager = $container->getShared("modelsManager");
+        $manager = $container->get("modelsManager");
 
         if (!is_object($manager)) {
             throw new Exception("Injected service 'modelsManager' is invalid");
         }
 
-        $metaData = $container->getShared("modelsMetadata");
+        $metaData = $container->get("modelsMetadata");
 
         if (!is_object($metaData)) {
             throw new Exception("Injected service 'modelsMetaData' is invalid");
