@@ -696,12 +696,12 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Sets the dependency injection container
      *
-     * @param DiInterface $container
+     * @param object $container
      *
      * @return void
      * @throws Exception
      */
-    public function setDI(DiInterface $container): void
+    public function setDI(object $container): void
     {
         $manager = $container->getShared("modelsManager");
 

@@ -78,9 +78,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     protected array $columnMap = [];
 
     /**
-     * @var DiInterface|null
+     * @var object|null
      */
-    protected DiInterface | null $container = null;
+    protected object | null $container = null;
 
     /**
      * @var array

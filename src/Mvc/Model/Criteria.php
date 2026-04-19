@@ -901,11 +901,11 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Sets the DependencyInjector container
      *
-     * @param DiInterface $container
+     * @param object $container
      *
      * @return void
      */
-    public function setDI(DiInterface $container): void
+    public function setDI(object $container): void
     {
         $this->params["di"] = $container;
     }
