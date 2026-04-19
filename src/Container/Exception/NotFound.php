@@ -33,25 +33,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Exception;
 
-class NotFound extends Invalid
+final class NotFound extends Invalid
 {
     public static function envNotDefined(string $varname): static
     {
-        return new static("Environment variable '{$varname}' is not defined");
+        return new self("Environment variable '{$varname}' is not defined");
     }
 
     public static function instanceNotFound(string $name): static
     {
-        return new static("Instance '{$name}' not found");
+        return new self("Instance '{$name}' not found");
     }
 
     public static function parameterNotFound(string $name): static
     {
-        return new static("Parameter '{$name}' not found");
+        return new self("Parameter '{$name}' not found");
     }
 
     public static function serviceNotFound(string $name): static
     {
-        return new static("Service '{$name}' not found");
+        return new self("Service '{$name}' not found");
     }
 }

@@ -46,7 +46,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function cannotExtendResolved(string $name): static
     {
-        return new static("Cannot extend already-resolved service '{$name}'");
+        return new self("Cannot extend already-resolved service '{$name}'");
     }
 
     /**
@@ -59,7 +59,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function cannotResolveParameter(string $param, string $className): static
     {
-        return new static(
+        return new self(
             "Cannot resolve parameter '\${$param}' for '{$className}'"
         );
     }
@@ -73,7 +73,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function circularAlias(string $name): static
     {
-        return new static("Circular alias detected: '{$name}'");
+        return new self("Circular alias detected: '{$name}'");
     }
 
     /**
@@ -85,7 +85,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function frozenDefinition(string $name): static
     {
-        return new static("Cannot modify frozen definition '{$name}'");
+        return new self("Cannot modify frozen definition '{$name}'");
     }
 
     /**
@@ -98,7 +98,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function invalidExtender(string $service, int|string $key): static
     {
-        return new static(
+        return new self(
             "Extender at key '{$key}' for service '{$service}' is not callable"
         );
     }
@@ -112,7 +112,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function noClassSet(string $name): static
     {
-        return new static("No class set for service '{$name}'");
+        return new self("No class set for service '{$name}'");
     }
 
     /**
@@ -124,7 +124,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function noFactorySet(string $name): static
     {
-        return new static("No factory set for service '{$name}'");
+        return new self("No factory set for service '{$name}'");
     }
 
     /**
@@ -134,7 +134,7 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function noProcessorFound(): static
     {
-        return new static('No processor found for the given definition');
+        return new self('No processor found for the given definition');
     }
 
     /**
@@ -146,6 +146,6 @@ class Invalid extends Exception implements ContainerThrowable
      */
     public static function serviceNotFound(string $name): static
     {
-        return new static("Service '{$name}' not registered");
+        return new self("Service '{$name}' not registered");
     }
 }
