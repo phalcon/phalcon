@@ -1902,7 +1902,7 @@ class Request extends AbstractInjectionAware implements
             null !== $this->container &&
             null === $this->eventsManager
         ) {
-            $this->eventsManager = $this->container->getShared('eventsManager');
+            $this->eventsManager = $this->container->get('eventsManager');
         }
 
         if (null !== $this->eventsManager) {
@@ -2056,7 +2056,7 @@ class Request extends AbstractInjectionAware implements
                 );
             }
 
-            $this->filterService = $this->container->getShared("filter");
+            $this->filterService = $this->container->get("filter");
         }
 
         return $this->filterService;

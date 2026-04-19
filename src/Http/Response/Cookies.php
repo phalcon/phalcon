@@ -326,7 +326,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
             }
 
             /** @var ResponseInterface $response */
-            $response = $this->container->getShared('response');
+            $response = $this->container->get('response');
 
             /**
              * Pass the cookies bag to the response so it can send the headers
