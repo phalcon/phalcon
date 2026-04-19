@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
@@ -275,7 +276,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             $this->setDI($container);
         }
 
-        $manager = $container->getShared("modelsManager");
+        $manager = $container->get("modelsManager");
 
         /**
          * Builds a query with the passed parameters
@@ -335,15 +336,15 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Builds a Phalcon\Mvc\Model\Criteria based on an input array like $_POST
      *
-     * @param DiInterface $container
-     * @param string      $modelName
-     * @param array       $data
-     * @param string      $operator
+     * @param DiInterface|Collection $container
+     * @param string                 $modelName
+     * @param array                  $data
+     * @param string                 $operator
      *
      * @return CriteriaInterface
      */
     public static function fromInput(
-        DiInterface $container,
+        DiInterface | Collection $container,
         string $modelName,
         array $data,
         string $operator = "AND"
@@ -352,7 +353,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $bind       = [];
 
         if (count($data)) {
-            $metaData  = $container->getShared("modelsMetadata");
+            $metaData  = $container->get("modelsMetadata");
             $model     = new $modelName(null, $container);
             $dataTypes = $metaData->getDataTypes($model);
             $columnMap = $metaData->getReverseColumnMap($model);
@@ -433,9 +434,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface
+     * @return DiInterface|Collection
      */
-    public function getDI(): DiInterface
+    public function getDI(): DiInterface | Collection
     {
         return $this->params["di"];
     }
