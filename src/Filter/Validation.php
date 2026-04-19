@@ -198,7 +198,7 @@ class Validation extends Injectable implements ValidationInterface
             return $this;
         }
 
-        $filterService = $this->getDI()->getShared('filter');
+        $filterService = $this->getDI()->get('filter');
 
         if (empty($whitelist)) {
             $whitelist = $this->whitelist;
@@ -343,7 +343,7 @@ class Validation extends Injectable implements ValidationInterface
             /**
              * This will throw an exception if the service is not there
              */
-            $filterService = $this->getDI()->getShared('filter');
+            $filterService = $this->getDI()->get('filter');
 
             $value = $filterService->sanitize($value, $fieldFilters);
 
