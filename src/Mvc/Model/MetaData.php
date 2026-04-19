@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
@@ -255,10 +256,10 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface
+     * @return DiInterface|Collection
      * @throws Exception
      */
-    public function getDI(): DiInterface
+    public function getDI(): DiInterface | Collection
     {
         $this->checkContainer(
             Exception::class,

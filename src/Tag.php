@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Html\Escaper\EscaperInterface;
@@ -63,9 +64,9 @@ class Tag
     /**
      * DI Container
      *
-     * @var DiInterface|null
+     * @var DiInterface|Collection|null
      */
-    protected static DiInterface | null $container = null;
+    protected static DiInterface | Collection | null $container = null;
 
     /**
      * Pre-assigned values for components
@@ -352,9 +353,9 @@ class Tag
     /**
      * Internally gets the request dispatcher
      *
-     * @return DiInterface
+     * @return DiInterface|Collection
      */
-    public static function getDI(): DiInterface
+    public static function getDI(): DiInterface | Collection
     {
         if (null === self::$container) {
             self::$container = Di::getDefault();
@@ -440,7 +441,7 @@ class Tag
         if (null === self::$escaperService) {
             $container = self::getDI();
 
-            self::$escaperService = $container->getShared("escaper");
+            self::$escaperService = $container->get("escaper");
         }
 
         return self::$escaperService;
@@ -522,7 +523,7 @@ class Tag
         if (null === self::$urlService) {
             $container = self::getDI();
 
-            self::$urlService = $container->getShared("url");
+            self::$urlService = $container->get("url");
         }
 
         return self::$urlService;
@@ -1111,11 +1112,11 @@ class Tag
     /**
      * Sets the dependency injector container.
      *
-     * @param DiInterface $container
+     * @param DiInterface|Collection $container
      *
      * @return void
      */
-    public static function setDI(DiInterface $container): void
+    public static function setDI(DiInterface | Collection $container): void
     {
         self::$container = $container;
     }

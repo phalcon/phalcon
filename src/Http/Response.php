@@ -16,6 +16,7 @@ namespace Phalcon\Http;
 use DateTime;
 use DateTimeZone;
 use InvalidArgumentException;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
@@ -153,10 +154,10 @@ class Response extends Injectable implements
     /**
      * Returns the internal dependency injector
      *
-     * @return DiInterface
+     * @return DiInterface|Collection
      * @throws Exception
      */
-    public function getDI(): DiInterface
+    public function getDI(): DiInterface | Collection
     {
         if (null === $this->container) {
             $container = Di::getDefault();
@@ -293,12 +294,12 @@ class Response extends Injectable implements
 
         if (empty($header)) {
             /** @var UrlInterface $url */
-            $url    = $container->getShared('url');
+            $url    = $container->get('url');
             $header = $url->get($location);
         }
 
         if (true === $container->has('view')) {
-            $view = $container->getShared('view');
+            $view = $container->get('view');
 
             if ($view instanceof ViewInterface) {
                 $view->disable();

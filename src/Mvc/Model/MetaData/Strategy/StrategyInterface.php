@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\ModelInterface;
 
@@ -21,8 +22,8 @@ interface StrategyInterface
     /**
      * Read the model's column map, this can't be inferred
      *
-     * @param ModelInterface $model
-     * @param DiInterface    $container
+     * @param ModelInterface      $model
+     * @param DiInterface|Collection $container
      *
      * @return array
      * @todo Not implemented
@@ -30,20 +31,20 @@ interface StrategyInterface
      */
     public function getColumnMaps(
         ModelInterface $model,
-        DiInterface $container
+        DiInterface | Collection $container
     ): array;
 
     /**
      * The meta-data is obtained by reading the column descriptions from the
      * database information schema
      *
-     * @param ModelInterface $model
-     * @param DiInterface    $container
+     * @param ModelInterface         $model
+     * @param DiInterface|Collection $container
      *
      * @return array
      */
     public function getMetaData(
         ModelInterface $model,
-        DiInterface $container
+        DiInterface | Collection $container
     ): array;
 }

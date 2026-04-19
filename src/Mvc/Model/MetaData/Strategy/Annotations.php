@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
 use Phalcon\Annotations\Parser\Collection;
+use Phalcon\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
@@ -23,14 +24,14 @@ use Phalcon\Mvc\ModelInterface;
 class Annotations implements StrategyInterface
 {
     /**
-     * @param ModelInterface $model
-     * @param DiInterface    $container
+     * @param ModelInterface                  $model
+     * @param DiInterface|ServiceCollection   $container
      *
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
      * @throws Exception
      */
-    public function getColumnMaps(ModelInterface $model, DiInterface $container): array
+    public function getColumnMaps(ModelInterface $model, DiInterface | ServiceCollection $container): array
     {
         $propertiesAnnotations = $this->getProperties($model, $container);
 
@@ -78,14 +79,14 @@ class Annotations implements StrategyInterface
     }
 
     /**
-     * @param ModelInterface $model
-     * @param DiInterface    $container
+     * @param ModelInterface                  $model
+     * @param DiInterface|ServiceCollection   $container
      *
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
      * @throws Exception
      */
-    public function getMetaData(ModelInterface $model, DiInterface $container): array
+    public function getMetaData(ModelInterface $model, DiInterface | ServiceCollection $container): array
     {
         $propertiesAnnotations = $this->getProperties($model, $container);
 
@@ -272,13 +273,13 @@ class Annotations implements StrategyInterface
     }
 
     /**
-     * @param ModelInterface $model
-     * @param DiInterface    $container
+     * @param ModelInterface                  $model
+     * @param DiInterface|ServiceCollection   $container
      *
      * @return Collection[]
      * @throws Exception
      */
-    private function getProperties(ModelInterface $model, DiInterface $container): array
+    private function getProperties(ModelInterface $model, DiInterface | ServiceCollection $container): array
     {
         if (false === is_object($container)) {
             throw new Exception("The dependency injector is invalid in MetaData Strategy Annotations");
