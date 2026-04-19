@@ -41,11 +41,27 @@ use function is_string;
 
 class StringProcessor implements Processor
 {
+    /**
+     * Whether the definition is a class string
+     *
+     * @param mixed $definition
+     *
+     * @return bool
+     */
     public function canProcess(mixed $definition): bool
     {
         return is_string($definition) && class_exists($definition);
     }
 
+    /**
+     * Process the class string
+     *
+     * @param string $name
+     * @param mixed  $definition
+     * @param object $container
+     *
+     * @return ServiceDefinition
+     */
     public function process(
         string $name,
         mixed $definition,

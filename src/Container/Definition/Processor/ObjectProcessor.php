@@ -41,11 +41,27 @@ use function is_object;
 
 class ObjectProcessor implements Processor
 {
+    /**
+     * Whether the definition is an Object (not Closure)
+     *
+     * @param mixed $definition
+     *
+     * @return bool
+     */
     public function canProcess(mixed $definition): bool
     {
         return is_object($definition) && !($definition instanceof Closure);
     }
 
+    /**
+     * Process the Object
+     *
+     * @param string $name
+     * @param mixed  $definition
+     * @param object $container
+     *
+     * @return ServiceDefinition
+     */
     public function process(
         string $name,
         mixed $definition,

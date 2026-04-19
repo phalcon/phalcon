@@ -39,11 +39,27 @@ use Phalcon\Container\Definition\ServiceDefinition;
 
 class ClosureProcessor implements Processor
 {
+    /**
+     * Wheteher the definition is a Closure
+     *
+     * @param mixed $definition
+     *
+     * @return bool
+     */
     public function canProcess(mixed $definition): bool
     {
         return $definition instanceof Closure;
     }
 
+    /**
+     * Process the Closure
+     *
+     * @param string $name
+     * @param mixed  $definition
+     * @param object $container
+     *
+     * @return ServiceDefinition
+     */
     public function process(
         string $name,
         mixed $definition,
