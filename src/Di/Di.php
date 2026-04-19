@@ -81,9 +81,9 @@ class Di extends stdClass implements DiInterface
     /**
      * Latest DI build
      *
-     * @var DiInterface|null
+     * @var object|null
      */
-    protected static DiInterface | null $defaultContainer = null;
+    protected static object | null $defaultContainer = null;
     /**
      * List of registered services
      *
@@ -271,9 +271,9 @@ class Di extends stdClass implements DiInterface
     /**
      * Return the latest DI created
      *
-     * @return DiInterface|null
+     * @return object|null
      */
-    public static function getDefault(): DiInterface | null
+    public static function getDefault(): object | null
     {
         return self::$defaultContainer;
     }
@@ -499,11 +499,11 @@ class Di extends stdClass implements DiInterface
      * Set a default dependency injection container to be obtained into static
      * methods
      *
-     * @param DiInterface $container
+     * @param object $container
      *
      * @return void
      */
-    public static function setDefault(DiInterface $container): void
+    public static function setDefault(object $container): void
     {
         self::$defaultContainer = $container;
     }
