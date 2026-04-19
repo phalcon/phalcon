@@ -275,7 +275,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
             Exception::EXCEPTION_NO_DI
         );
 
-        $response = $this->container->getShared("response");
+        $response = $this->container->get("response");
 
         /**
          * Dispatcher exceptions automatically sends a 404 status

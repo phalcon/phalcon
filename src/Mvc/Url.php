@@ -157,7 +157,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
                     );
                 }
 
-                $this->router = $this->container->getShared("router");
+                $this->router = $this->container->get("router");
             }
 
             /**

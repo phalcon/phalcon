@@ -299,7 +299,7 @@ class Complex extends Resultset implements ResultsetInterface
         ];
 
         if ($container->has("serializer")) {
-            $serializer = $container->getShared("serializer");
+            $serializer = $container->get("serializer");
             $serializer->setData($data);
 
             return $serializer->serialize();
@@ -354,7 +354,7 @@ class Complex extends Resultset implements ResultsetInterface
         }
 
         if ($container->has("serializer")) {
-            $serializer = $container->getShared("serializer");
+            $serializer = $container->get("serializer");
 
             $serializer->unserialize($data);
             $resultset = $serializer->getData();
