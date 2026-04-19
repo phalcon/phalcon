@@ -67,7 +67,7 @@ class Console extends AbstractApplication
         }
 
         /** @var Router $router */
-        $router = $this->container->getShared("router");
+        $router = $this->container->get("router");
 
         if (empty($arguments) && !empty($this->arguments)) {
             $router->handle($this->arguments);
@@ -127,7 +127,7 @@ class Console extends AbstractApplication
         }
 
         /** @var Dispatcher $dispatcher */
-        $dispatcher = $this->container->getShared("dispatcher");
+        $dispatcher = $this->container->get("dispatcher");
 
         $dispatcher->setModuleName($router->getModuleName());
         $dispatcher->setTaskName($router->getTaskName());

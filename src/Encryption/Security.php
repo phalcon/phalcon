@@ -577,7 +577,7 @@ class Security implements InjectionAwareInterface
             null !== $this->container &&
             true === $this->container->has($name)
         ) {
-            $this->$property = $this->container->getShared($name);
+            $this->$property = $this->container->get($name);
         }
 
         return $this->$property;

@@ -142,7 +142,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         );
 
         /** @var Filter $filter */
-        $filter = $this->container->getShared("filter");
+        $filter = $this->container->get("filter");
 
         return $filter->sanitize($optionValue, $filters);
     }
