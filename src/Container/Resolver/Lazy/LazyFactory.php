@@ -90,8 +90,8 @@ class LazyFactory
         return new NewInstance($id);
     }
 
-    public static function staticCall(string $class, string $method, array $args): StaticCall
+    public static function staticCall(string $className, string $method, array $args): StaticCall
     {
-        return new StaticCall($class, $method, $args);
+        return new StaticCall($className, $method, $args);
     }
 }
