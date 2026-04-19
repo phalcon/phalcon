@@ -34,10 +34,8 @@ declare(strict_types=1);
 namespace Phalcon\Container;
 
 use Closure;
-use IocInterop\Interface\IocContainer;
 use Phalcon\Container\Definition\Processor\ClosureProcessor;
 use Phalcon\Container\Definition\Processor\ObjectProcessor;
-use Phalcon\Container\Definition\Processor\ParameterProcessor;
 use Phalcon\Container\Definition\Processor\Processor;
 use Phalcon\Container\Definition\Processor\StringProcessor;
 use Phalcon\Container\Definition\ServiceDefinition;
@@ -48,7 +46,6 @@ use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Container\Resolver\Resolver;
 use Phalcon\Container\Service\Collection;
 use Phalcon\Di\InjectionAwareInterface;
-
 use ReflectionException;
 
 use function array_key_exists;

@@ -35,7 +35,6 @@ namespace Phalcon\Container\Definition;
 
 use Phalcon\Container\Exception\Invalid;
 use ReflectionClass;
-
 use ReflectionException;
 
 use function in_array;
