@@ -159,7 +159,7 @@ class Annotations extends Router
         }
 
         /** @var Memory $annotationsService */
-        $annotationsService = $this->container->getShared("annotations");
+        $annotationsService = $this->container->get("annotations");
 
         foreach ($this->handlers as $scope) {
             if (!is_array($scope)) {

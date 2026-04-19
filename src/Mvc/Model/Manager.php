@@ -2119,7 +2119,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Request the connection service from the DI
          */
-        $connection = $this->container->getShared($service);
+        $connection = $this->container->get($service);
 
         if (!is_object($connection)) {
             throw new Exception("Invalid injected connection service");

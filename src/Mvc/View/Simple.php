@@ -537,7 +537,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                         /**
                          * Engine can be a string representing a service in the DI
                          */
-                        $engineObject = $this->container->getShared(
+                        $engineObject = $this->container->get(
                             $engineService,
                             [
                                 $this,

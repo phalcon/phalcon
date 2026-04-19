@@ -197,7 +197,7 @@ class Simple extends Resultset
         ];
 
         if ($container->has("serializer")) {
-            $serializer = $container->getShared("serializer");
+            $serializer = $container->get("serializer");
             $serializer->setData($data);
 
             return $serializer->serialize();
@@ -305,7 +305,7 @@ class Simple extends Resultset
         }
 
         if ($container->has("serializer")) {
-            $serializer = $container->getShared("serializer");
+            $serializer = $container->get("serializer");
 
             $serializer->unserialize($data);
             $resultset = $serializer->getData();
