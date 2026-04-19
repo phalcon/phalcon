@@ -37,11 +37,26 @@ use Exception;
 
 class Invalid extends Exception implements ContainerThrowable
 {
+    /**
+     * Cannot extend a resolved service
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     public static function cannotExtendResolved(string $name): static
     {
         return new static("Cannot extend already-resolved service '{$name}'");
     }
 
+    /**
+     * Cannot resolve a parameter
+     *
+     * @param string $param
+     * @param string $class
+     *
+     * @return static
+     */
     public static function cannotResolveParameter(string $param, string $class): static
     {
         return new static(
@@ -49,31 +64,86 @@ class Invalid extends Exception implements ContainerThrowable
         );
     }
 
+    /**
+     * Circular Alias found
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     public static function circularAlias(string $name): static
     {
         return new static("Circular alias detected: '{$name}'");
     }
 
+    /**
+     * Definition is frozen
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     public static function frozenDefinition(string $name): static
     {
         return new static("Cannot modify frozen definition '{$name}'");
     }
 
+    /**
+     * Invalid extender (not callable)
+     *
+     * @param string     $service
+     * @param int|string $key
+     *
+     * @return static
+     */
+    public static function invalidExtender(string $service, int|string $key): static
+    {
+        return new static(
+            "Extender at key '{$key}' for service '{$service}' is not callable"
+        );
+    }
+
+    /**
+     * No set for service
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     public static function noClassSet(string $name): static
     {
         return new static("No class set for service '{$name}'");
     }
 
+    /**
+     * No factory for service
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     public static function noFactorySet(string $name): static
     {
         return new static("No factory set for service '{$name}'");
     }
 
+    /**
+     * No processor found
+     *
+     * @return static
+     */
     public static function noProcessorFound(): static
     {
         return new static('No processor found for the given definition');
     }
 
+    /**
+     * Service not registered
+     *
+     * @param string $name
+     *
+     * @return static
+     */
     public static function serviceNotFound(string $name): static
     {
         return new static("Service '{$name}' not registered");

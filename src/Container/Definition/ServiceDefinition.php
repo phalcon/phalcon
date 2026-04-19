@@ -36,32 +36,52 @@ namespace Phalcon\Container\Definition;
 use Phalcon\Container\Exception\Invalid;
 use ReflectionClass;
 
+use ReflectionException;
+
 use function in_array;
 use function method_exists;
 
 class ServiceDefinition
 {
-    protected array $arguments       = [];
-    protected object|null $container    = null;
-    protected string|null $class     = null;
-    protected array $constructorArgs = [];
-    protected array $extenders       = [];
-    protected mixed $factory         = null;
-    protected bool $frozen           = false;
-    protected bool $isCacheable      = false;
-    protected string $lifetime       = ServiceLifetime::SCOPED;
-    protected mixed $raw             = null;
-    protected string $serviceName;
-    protected array $tags            = [];
-    protected string $type;
+    /**
+     * @var array<array-key, mixed>
+     */
+    protected array $arguments = [];
 
-    public function __construct(string $serviceName, string $type, mixed $raw = null)
-    {
-        $this->raw         = $raw;
-        $this->serviceName = $serviceName;
-        $this->type        = $type;
+    protected object|null $container = null;
+    protected string|null $class     = null;
+    /**
+     * @var array
+     */
+    protected array $constructorArgs = [];
+    /**
+     * @var array<array-key, callable>
+     */
+    protected array $extenders  = [];
+    protected mixed $factory    = null;
+    protected bool $frozen      = false;
+    protected bool $isCacheable = false;
+    protected string $lifetime  = ServiceLifetime::SCOPED;
+    /**
+     * @var array<array-key, string>
+     */
+    protected array $tags = [];
+
+    public function __construct(
+        protected string $serviceName,
+        protected string $type,
+        protected mixed $raw = null
+    ) {
     }
 
+    /**
+     * Adds an extender
+     *
+     * @param callable $extender
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function addExtender(callable $extender): static
     {
         $this->checkFrozen();
@@ -70,6 +90,14 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Adds a tag
+     *
+     * @param string $tag
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function addTag(string $tag): static
     {
         $this->checkFrozen();
@@ -78,13 +106,24 @@ class ServiceDefinition
             $this->tags[] = $tag;
         }
 
-        if ($this->container !== null && method_exists($this->container, 'registerTag')) {
+        if (
+            $this->container !== null
+            && method_exists($this->container, 'registerTag')
+        ) {
             $this->container->registerTag($tag, $this->serviceName);
         }
 
         return $this;
     }
 
+    /**
+     * Builds a service and returns the instance back
+     *
+     * @param object $container
+     *
+     * @return object
+     * @throws ReflectionException
+     */
     public function buildService(object $container): object
     {
         if ($this->hasFactory()) {
@@ -103,6 +142,14 @@ class ServiceDefinition
         return $instance;
     }
 
+    /**
+     * Freezes the container
+     *
+     * @param object $container
+     *
+     * @return void
+     * @throws ReflectionException
+     */
     public function freeze(object $container): void
     {
         if ($this->frozen) {
@@ -133,11 +180,22 @@ class ServiceDefinition
         $this->frozen = true;
     }
 
+    /**
+     * Returns the arguments
+     *
+     * @return array
+     */
     public function getArguments(): array
     {
         return $this->arguments;
     }
 
+    /**
+     * Returns the class
+     *
+     * @return string
+     * @throws Invalid
+     */
     public function getClass(): string
     {
         if ($this->class === null) {
@@ -147,16 +205,32 @@ class ServiceDefinition
         return $this->class;
     }
 
+    /**
+     * Returns the constructor arguments
+     *
+     * @return array
+     */
     public function getConstructorArgs(): array
     {
         return $this->constructorArgs;
     }
 
+    /**
+     * Returns the extenders
+     *
+     * @return array<array-key, callable>
+     */
     public function getExtenders(): array
     {
         return $this->extenders;
     }
 
+    /**
+     * Returns the factory
+     *
+     * @return callable
+     * @throws Invalid
+     */
     public function getFactory(): callable
     {
         if ($this->factory === null) {
@@ -166,51 +240,105 @@ class ServiceDefinition
         return $this->factory;
     }
 
+    /**
+     * Returns the lifetime
+     *
+     * @return string
+     */
     public function getLifetime(): string
     {
         return $this->lifetime;
     }
 
+    /**
+     * Returns the name of the service
+     *
+     * @return string
+     */
     public function getServiceName(): string
     {
         return $this->serviceName;
     }
 
+    /**
+     * Returns the tags
+     *
+     * @return array<array-key, string>
+     */
     public function getTags(): array
     {
         return $this->tags;
     }
 
+    /**
+     * Returns the type
+     *
+     * @return string
+     */
     public function getType(): string
     {
         return $this->type;
     }
 
+    /**
+     * Does it have a class
+     *
+     * @return bool
+     */
     public function hasClass(): bool
     {
         return $this->class !== null;
     }
 
+    /**
+     * Do we have extenders
+     *
+     * @return bool
+     */
     public function hasExtenders(): bool
     {
         return !empty($this->extenders);
     }
 
+    /**
+     * Does it have a factory
+     *
+     * @return bool
+     */
     public function hasFactory(): bool
     {
         return $this->factory !== null;
     }
 
+    /**
+     * Is it cacheable
+     *
+     * @return bool
+     */
     public function isCacheable(): bool
     {
         return $this->isCacheable && $this->frozen;
     }
 
+    /**
+     * Is it frozen
+     *
+     * @return bool
+     */
     public function isFrozen(): bool
     {
         return $this->frozen;
     }
 
+    /**
+     * Set an argument
+     *
+     * @param int|string $param
+     * @param mixed      $value
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function setArgument(int|string $param, mixed $value): static
     {
         $this->checkFrozen();
@@ -219,6 +347,13 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Set the container
+     *
+     * @param object $container
+     *
+     * @return $this
+     */
     public function setContainer(object $container): static
     {
         $this->container = $container;
@@ -226,6 +361,14 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Set a class
+     *
+     * @param string $class
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function setClass(string $class): static
     {
         $this->checkFrozen();
@@ -234,14 +377,37 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Set extenders
+     *
+     * @param array<array-key, callable> $extenders
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function setExtenders(array $extenders): static
     {
         $this->checkFrozen();
+
+        foreach ($extenders as $key => $extender) {
+            if (!is_callable($extender)) {
+                throw Invalid::invalidExtender($this->serviceName, $key);
+            }
+        }
+
         $this->extenders = $extenders;
 
         return $this;
     }
 
+    /**
+     * Set a factory
+     *
+     * @param callable $factory
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function setFactory(callable $factory): static
     {
         $this->checkFrozen();
@@ -250,6 +416,13 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Set cachable
+     * @param bool $isCacheable
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function setIsCacheable(bool $isCacheable): static
     {
         $this->checkFrozen();
@@ -258,6 +431,14 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Set lifetime
+     *
+     * @param string $lifetime
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function setLifetime(string $lifetime): static
     {
         $this->checkFrozen();
@@ -266,6 +447,12 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Unset class
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function unsetClass(): static
     {
         $this->checkFrozen();
@@ -274,6 +461,12 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Unset extenders
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function unsetExtenders(): static
     {
         $this->checkFrozen();
@@ -282,6 +475,12 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Unset the factory
+     *
+     * @return $this
+     * @throws Invalid
+     */
     public function unsetFactory(): static
     {
         $this->checkFrozen();
@@ -290,6 +489,12 @@ class ServiceDefinition
         return $this;
     }
 
+    /**
+     * Check if frozen
+     *
+     * @return void
+     * @throws Invalid
+     */
     protected function checkFrozen(): void
     {
         if ($this->frozen) {
@@ -297,6 +502,14 @@ class ServiceDefinition
         }
     }
 
+    /**
+     * Resolve arguments
+     *
+     * @param object $container
+     * @param array  $args
+     *
+     * @return array
+     */
     private function resolveArgs(object $container, array $args): array
     {
         $resolved = [];
