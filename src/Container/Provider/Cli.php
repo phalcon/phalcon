@@ -35,6 +35,7 @@ namespace Phalcon\Container\Provider;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Annotations\Annotations;
+use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Resolver\Lazy\LazyFactory;
 use Phalcon\Container\Service\Collection;
 use Phalcon\Container\Service\Provider;
@@ -63,6 +64,14 @@ use Phalcon\Support\Settings;
 
 class Cli implements Provider
 {
+    /**
+     * Provider for commonly used CLI applications
+     *
+     * @param Collection $services
+     *
+     * @return void
+     * @throws Invalid
+     */
     public function provide(Collection $services): void
     {
         // --- Interface bindings (bind + alias) ---
