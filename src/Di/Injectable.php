@@ -63,9 +63,9 @@ use stdClass;
  *
  * @property AnnotationsMemory|AnnotationsAdapterInterface $annotations
  * @property AssetsManager                                 $assets
- * @property DiInterface|null                              $container
+ * @property object|null                                   $container
  * @property DbAdapterInterface                            $db
- * @property DiInterface|null                              $di
+ * @property object|null                                   $di
  * @property Cookies|CookiesInterface                      $cookies
  * @property Crypt|CryptInterface                          $crypt
  * @property EventsManager|EventsManagerInterface          $eventsManager
@@ -97,7 +97,7 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
      *
      * @param string $propertyName
      *
-     * @return mixed|DiInterface|void
+     * @return mixed|object|void
      */
     public function __get(string $propertyName)
     {
@@ -152,7 +152,7 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): DiInterface
+    public function getDI(): object
     {
         if (null === $this->container) {
             $this->container = Di::getDefault();

@@ -97,12 +97,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Phalcon\Mvc\Model\Transaction\Manager constructor
      *
-     * @param DiInterface|null $container
+     * @param object|null $container
      *
      * @throws Exception
      */
     public function __construct(
-        protected DiInterface | null $container = null
+        protected object | null $container = null
     ) {
         if (null === $container) {
             $container = Di::getDefault();
@@ -320,11 +320,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Sets the dependency injection container
      *
-     * @param DiInterface $container
+     * @param object $container
      *
      * @return void
      */
-    public function setDI(DiInterface $container): void
+    public function setDI(object $container): void
     {
         $this->container = $container;
     }

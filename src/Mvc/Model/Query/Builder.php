@@ -87,9 +87,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array | int | string | null $conditions = null;
 
     /**
-     * @var DiInterface|null
+     * @var object|null
      */
-    protected DiInterface | null $container;
+    protected object | null $container;
 
     /**
      * @var mixed
@@ -1717,11 +1717,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Sets the DependencyInjector container
      *
-     * @param DiInterface $container
+     * @param object $container
      *
      * @return void
      */
-    public function setDI(DiInterface $container): void
+    public function setDI(object $container): void
     {
         $this->container = $container;
     }

@@ -22,12 +22,12 @@ interface InjectionAwareInterface
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): DiInterface | null;
+    public function getDI(): object | null;
 
     /**
      * Sets the dependency injector
      *
-     * @param DiInterface $container
+     * @param object $container
      */
-    public function setDI(DiInterface $container): void;
+    public function setDI(object $container): void;
 }
