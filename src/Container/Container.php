@@ -264,31 +264,41 @@ class Container implements Collection
         return $def;
     }
 
-    public function setAlias(string $name, string $alias): void
+    public function setAlias(string $name, string $alias): static
     {
         $this->detectCircularAlias($alias, $name);
         $this->aliases[$alias] = $name;
+
+        return $this;
     }
 
-    public function setAutowire(bool $enabled): void
+    public function setAutowire(bool $enabled): static
     {
         $this->autowire = $enabled;
+
+        return $this;
     }
 
-    public function setDefinition(string $name, ServiceDefinition $definition): void
+    public function setDefinition(string $name, ServiceDefinition $definition): static
     {
         $this->services[$name] = $definition;
+
+        return $this;
     }
 
-    public function setInstance(string $name, object $instance, string $lifetime): void
+    public function setInstance(string $name, object $instance, string $lifetime): static
     {
         $this->instances[$name]         = $instance;
         $this->instanceLifetimes[$name] = $lifetime;
+
+        return $this;
     }
 
-    public function setParameter(string $name, mixed $value): void
+    public function setParameter(string $name, mixed $value): static
     {
         $this->parameters[$name] = $value;
+
+        return $this;
     }
 
     public function unsetAlias(string $name): void
