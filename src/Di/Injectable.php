@@ -48,15 +48,6 @@ use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
 use stdClass;
 
-//use Phalcon\Annotations\Adapter;
-//use Phalcon\Mvc\Dispatcher;
-//use Phalcon\Mvc\DispatcherInterface;
-//use Phalcon\Mvc\Model\MetaData\Memory;
-//use Phalcon\Mvc\Model\MetadataInterface;
-//use Phalcon\Mvc\Model\Transaction\ManagerInterface;
-//use Phalcon\Mvc\View;
-//use Phalcon\Mvc\ViewInterface;
-
 /**
  * This class allows to access services in the services container by just only
  * accessing a public property with the same name of a registered service
@@ -101,33 +92,39 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
      */
     public function __get(string $propertyName)
     {
-        $bucket = $this->getDI();
+        $container = $this->getDI();
 
         if ('di' === $propertyName) {
-            $this->di = $bucket;
+            $this->di = $container;
 
-            return $bucket;
+            return $container;
         }
 
         /**
-         * Accessing the persistent property will create a session bag on any class
+         * Accessing the persistent property will create a session bag on any class.
+         * Di supports passing constructor args; Container does not — class name omitted.
          */
         if ('persistent' === $propertyName) {
-            $this->persistent = $bucket->get(
-                'sessionBag',
-                [
-                    get_class($this),
-                ]
-            );
+            if ($container instanceof DiInterface) {
+                $this->persistent = $container->get('sessionBag', [get_class($this)]);
+            } else {
+                $this->persistent = $container->get('sessionBag');
+            }
 
             return $this->persistent;
         }
 
         /**
-         * Fallback to the PHP userland if the cache is not available
+         * Fallback to the PHP userland if the cache is not available.
+         * Di uses getShared() for property caching; Container::get() is always shared.
          */
-        if (true === $bucket->has($propertyName)) {
-            $service = $bucket->getShared($propertyName);
+        if (true === $container->has($propertyName)) {
+            if ($container instanceof DiInterface) {
+                $service = $container->getShared($propertyName);
+            } else {
+                $service = $container->get($propertyName);
+            }
+
             $this->$propertyName = $service;
 
             return $service;
@@ -144,15 +141,13 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
      */
     public function __isset(string $name): bool
     {
-        return $this->getDI()
-                    ->has($name)
-        ;
+        return $this->getDI()->has($name);
     }
 
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): object
+    public function getDI(): object | null
     {
         if (null === $this->container) {
             $this->container = Di::getDefault();
