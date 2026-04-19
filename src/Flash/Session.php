@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
+use Phalcon\Di\DiInterface;
 use Phalcon\Session\ManagerInterface;
 
 /**
@@ -78,7 +79,11 @@ class Session extends AbstractFlash
         }
 
         if (null === $this->sessionService) {
-            $this->sessionService = $this->container->get('session');
+            if ($this->container instanceof DiInterface) {
+                $this->sessionService = $this->container->getShared('session');
+            } else {
+                $this->sessionService = $this->container->get('session');
+            }
         }
 
 

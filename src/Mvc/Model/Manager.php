@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\EventsAwareInterface;
@@ -2119,7 +2120,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Request the connection service from the DI
          */
-        $connection = $this->container->get($service);
+        if ($this->container instanceof DiInterface) {
+            $connection = $this->container->getShared($service);
+        } else {
+            $connection = $this->container->get($service);
+        }
 
         if (!is_object($connection)) {
             throw new Exception("Invalid injected connection service");

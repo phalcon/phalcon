@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Encryption;
 
 use Exception as BaseException;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Security\Exception;
@@ -577,7 +578,11 @@ class Security implements InjectionAwareInterface
             null !== $this->container &&
             true === $this->container->has($name)
         ) {
-            $this->$property = $this->container->get($name);
+            if ($this->container instanceof DiInterface) {
+                $this->$property = $this->container->getShared($name);
+            } else {
+                $this->$property = $this->container->get($name);
+            }
         }
 
         return $this->$property;

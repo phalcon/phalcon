@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Flash\Traits\FlashGettersTrait;
@@ -106,7 +107,11 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
         }
 
         if (null === $this->escaperService) {
-            $this->escaperService = $this->container->get('escaper');
+            if ($this->container instanceof DiInterface) {
+                $this->escaperService = $this->container->getShared('escaper');
+            } else {
+                $this->escaperService = $this->container->get('escaper');
+            }
         }
 
 

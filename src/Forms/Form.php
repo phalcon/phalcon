@@ -15,6 +15,7 @@ namespace Phalcon\Forms;
 
 use Countable;
 use Iterator;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception as ValidationException;
@@ -220,7 +221,11 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             if (!empty($filters)) {
                 if (null === $filter) {
                     $container = $this->getDI();
-                    $filter    = $container->get("filter");
+                    if ($container instanceof DiInterface) {
+                        $filter = $container->getShared("filter");
+                    } else {
+                        $filter = $container->get("filter");
+                    }
                 }
 
                 /**

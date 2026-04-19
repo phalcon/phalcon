@@ -16,6 +16,7 @@ namespace Phalcon\Mvc;
 use Closure;
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Application\Exception as ApplicationException;
+use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Application\Exception;
@@ -112,7 +113,11 @@ class Application extends AbstractApplication
             return false;
         }
 
-        $router = $this->container->get("router");
+        if ($this->container instanceof DiInterface) {
+            $router = $this->container->getShared("router");
+        } else {
+            $router = $this->container->get("router");
+        }
 
         /**
          * Handle the URI pattern (if any)
@@ -145,7 +150,11 @@ class Application extends AbstractApplication
                  * If the returned value is a string return it as body
                  */
                 if (is_string($possibleResponse)) {
-                    $response = $this->container->get("response");
+                    if ($this->container instanceof DiInterface) {
+                        $response = $this->container->getShared("response");
+                    } else {
+                        $response = $this->container->get("response");
+                    }
 
                     $response->setContent($possibleResponse);
 
@@ -257,14 +266,22 @@ class Application extends AbstractApplication
          */
         $view = null;
         if (true === $this->implicitView) {
-            $view = $this->container->get("view");
+            if ($this->container instanceof DiInterface) {
+                $view = $this->container->getShared("view");
+            } else {
+                $view = $this->container->get("view");
+            }
         }
 
         /**
          * We get the parameters from the router and assign them to the dispatcher
          * Assign the values passed from the router
          */
-        $dispatcher = $this->container->get("dispatcher");
+        if ($this->container instanceof DiInterface) {
+            $dispatcher = $this->container->getShared("dispatcher");
+        } else {
+            $dispatcher = $this->container->get("dispatcher");
+        }
 
         $dispatcher->setModuleName($router->getModuleName());
         $dispatcher->setNamespaceName($router->getNamespaceName());
@@ -300,13 +317,21 @@ class Application extends AbstractApplication
          * Returning false from an action cancels the view
          */
         if (false === $possibleResponse) {
-            $response = $this->container->get("response");
+            if ($this->container instanceof DiInterface) {
+                $response = $this->container->getShared("response");
+            } else {
+                $response = $this->container->get("response");
+            }
         } else {
             /**
              * Returning a string makes use it as the body of the response
              */
             if (is_string($possibleResponse)) {
-                $response = $this->container->get("response");
+                if ($this->container instanceof DiInterface) {
+                    $response = $this->container->getShared("response");
+                } else {
+                    $response = $this->container->get("response");
+                }
 
                 $response->setContent($possibleResponse);
             } else {
@@ -364,7 +389,11 @@ class Application extends AbstractApplication
                      */
                     $response = $possibleResponse;
                 } else {
-                    $response = $this->container->get("response");
+                    if ($this->container instanceof DiInterface) {
+                        $response = $this->container->getShared("response");
+                    } else {
+                        $response = $this->container->get("response");
+                    }
 
                     if (true === $this->implicitView) {
                         /**

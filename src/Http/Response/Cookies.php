@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Http\Response;
 
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\DiInterface;
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Http\Cookie\Exception;
@@ -326,7 +327,11 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
             }
 
             /** @var ResponseInterface $response */
-            $response = $this->container->get('response');
+            if ($this->container instanceof DiInterface) {
+                $response = $this->container->getShared('response');
+            } else {
+                $response = $this->container->get('response');
+            }
 
             /**
              * Pass the cookies bag to the response so it can send the headers

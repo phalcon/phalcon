@@ -15,6 +15,7 @@ namespace Phalcon\Forms\Element;
 
 use InvalidArgumentException;
 use Phalcon\Di\Di;
+use Phalcon\Di\DiInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
@@ -591,7 +592,11 @@ abstract class AbstractElement implements ElementInterface
                 $container = Di::getDefault();
 
                 if (null !== $container && true === $container->has("tag")) {
-                    $tagFactory = $container->get("tag");
+                    if ($container instanceof DiInterface) {
+                        $tagFactory = $container->getShared("tag");
+                    } else {
+                        $tagFactory = $container->get("tag");
+                    }
                 }
             }
 

@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\Model\Resultset;
 
 use Phalcon\Db\Enum;
 use Phalcon\Di\Di;
+use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\ResultInterface;
@@ -197,7 +198,11 @@ class Simple extends Resultset
         ];
 
         if ($container->has("serializer")) {
-            $serializer = $container->get("serializer");
+            if ($container instanceof DiInterface) {
+                $serializer = $container->getShared("serializer");
+            } else {
+                $serializer = $container->get("serializer");
+            }
             $serializer->setData($data);
 
             return $serializer->serialize();
@@ -305,7 +310,11 @@ class Simple extends Resultset
         }
 
         if ($container->has("serializer")) {
-            $serializer = $container->get("serializer");
+            if ($container instanceof DiInterface) {
+                $serializer = $container->getShared("serializer");
+            } else {
+                $serializer = $container->get("serializer");
+            }
 
             $serializer->unserialize($data);
             $resultset = $serializer->getData();
