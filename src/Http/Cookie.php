@@ -107,7 +107,7 @@ class Cookie extends AbstractInjectionAware implements
             true === $this->container->has('session')
         ) {
             /** @var SessionManagerInterface $session */
-            $session = $this->container->getShared('session');
+            $session = $this->container->get('session');
 
             if (true === $session->exists()) {
                 $session->remove(self::COOKIE_PREFIX . $this->name);
@@ -234,7 +234,7 @@ class Cookie extends AbstractInjectionAware implements
                 }
 
                 /** @var CryptInterface $crypt */
-                $crypt = $this->container->getShared('crypt');
+                $crypt = $this->container->get('crypt');
 
                 if (!is_object($crypt)) {
                     throw new Exception(
@@ -277,7 +277,7 @@ class Cookie extends AbstractInjectionAware implements
                     }
 
                     /** @var FilterInterface $filter */
-                    $filter       = $this->container->getShared('filter');
+                    $filter       = $this->container->get('filter');
                     $this->filter = $filter;
                 }
 
@@ -320,7 +320,7 @@ class Cookie extends AbstractInjectionAware implements
                 true === $this->container->has('session')
             ) {
                 /** @var SessionManagerInterface $session */
-                $session = $this->container->getShared('session');
+                $session = $this->container->get('session');
 
                 if (true === $session->exists()) {
                     $definition = $session->get(
@@ -374,7 +374,7 @@ class Cookie extends AbstractInjectionAware implements
             true === $this->container->has('session')
         ) {
             /** @var SessionManagerInterface $session */
-            $session = $this->container->getShared('session');
+            $session = $this->container->get('session');
 
             if (true === $session->exists()) {
                 $session->set(self::COOKIE_PREFIX . $this->name, $definition);
@@ -391,7 +391,7 @@ class Cookie extends AbstractInjectionAware implements
             }
 
             /** @var CryptInterface $crypt */
-            $crypt = $this->container->getShared('crypt');
+            $crypt = $this->container->get('crypt');
 
             if (!is_object($crypt)) {
                 throw new Exception(
