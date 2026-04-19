@@ -228,7 +228,7 @@ abstract class Model extends AbstractInjectionAware implements
          * Inject the manager service from the DI
          */
         if ($modelsManager === null) {
-            $modelsManager = $container->getShared("modelsManager");
+            $modelsManager = $container->get("modelsManager");
             if ($modelsManager === null) {
                 throw new Exception(
                     "The injected service 'modelsManager' is not valid in '"
@@ -620,7 +620,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Gets the default modelsManager service
          */
-        $manager = $container->getShared("modelsManager");
+        $manager = $container->get("modelsManager");
         if ($manager === null) {
             throw new Exception(
                 "The injected service 'modelsManager' is not valid in '"
@@ -2071,7 +2071,7 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
         ) {
-            $logger = $container?->getShared('logger') ?? $container?->getShared(LoggerInterface::class);
+            $logger = $container?->get('logger') ?? $container?->get(LoggerInterface::class);
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
@@ -2135,7 +2135,7 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
         ) {
-            $logger = $container?->getShared('logger') ?? $container?->getShared(LoggerInterface::class);
+            $logger = $container?->get('logger') ?? $container?->get(LoggerInterface::class);
 
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
@@ -2362,7 +2362,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Obtain the models-metadata service from the DI
              */
-            $metaData = $this->container->getShared("modelsMetadata");
+            $metaData = $this->container->get("modelsMetadata");
 
             if (!is_object($metaData)) {
                 throw new Exception(
@@ -3533,7 +3533,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Gets the default modelsManager service
              */
-            $manager = $container->getShared("modelsManager");
+            $manager = $container->get("modelsManager");
 
             if (!is_object($manager)) {
                 throw new Exception(
@@ -4871,7 +4871,7 @@ abstract class Model extends AbstractInjectionAware implements
         $bindTypes  = [];
 
         $container = Di::getDefault();
-        $manager   = $container->getShared("modelsManager");
+        $manager   = $container->get("modelsManager");
 
         if (!is_array($parameters)) {
             $params = [];
@@ -6462,7 +6462,7 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $limit = null
     ): QueryInterface {
         $container = Di::getDefault();
-        $manager   = $container->getShared("modelsManager");
+        $manager   = $container->get("modelsManager");
 
         /**
          * Builds a query with the passed parameters

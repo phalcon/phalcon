@@ -144,7 +144,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         if (Settings::get("orm.column_renaming") && empty($this->columnMap)) {
             $this->columnMap = $record
                 ->getDI()
-                ->getShared("modelsMetadata")
+                ->get("modelsMetadata")
                 ->getColumnMap($record) ?? []
             ;
         }
@@ -437,7 +437,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         // if ($record->getDirtyState() == Model::DIRTY_STATE_PERSISTENT) {
         if (0 === $record->getDirtyState()) {
             $metaData   = $record->getDI()
-                                 ->getShared("modelsMetadata")
+                                 ->get("modelsMetadata")
             ;
             $attributes = $metaData->getPrimaryKeyAttributes($record);
             foreach ($attributes as $primaryField) {
