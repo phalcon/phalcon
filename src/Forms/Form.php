@@ -679,7 +679,12 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         foreach ($this->elements as $element) {
             $validators = $element->getValidators();
 
-            if (0 === count($validators)) {
+            /**
+             * Get filters in the element
+             */
+            $filters = $element->getFilters();
+
+            if (count($validators) === 0 && empty($filters)) {
                 continue;
             }
 
@@ -694,11 +699,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             foreach ($validators as $validator) {
                 $validation->add($name, $validator);
             }
-
-            /**
-             * Get filters in the element
-             */
-            $filters = $element->getFilters();
 
             /**
              * Assign the filters to the validation
