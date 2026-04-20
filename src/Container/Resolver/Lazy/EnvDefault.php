@@ -35,57 +35,29 @@ namespace Phalcon\Container\Resolver\Lazy;
 
 use Phalcon\Container\Exception\NotFound;
 
-class Env extends Lazy
+class EnvDefault extends Env
 {
     public function __construct(
-        protected string $varname,
-        protected string|null $vartype = null
+        string $varname,
+        private mixed $defaultValue,
+        string|null $vartype = null
     ) {
+        parent::__construct($varname, $vartype);
     }
 
     /**
-     * Resolve an environment variable
+     * Resolve an environment variable, returning the default if not defined
      *
      * @param object $container
      *
      * @return mixed
-     * @throws NotFound
      */
     public function resolve(object $container): mixed
     {
-        return $this->cast($this->getEnv());
-    }
-
-    /**
-     * Cast a value to the defined type (if any)
-     *
-     * @param string $value
-     *
-     * @return mixed
-     */
-    protected function cast(string $value): mixed
-    {
-        if ($this->vartype !== null) {
-            settype($value, $this->vartype);
+        try {
+            return parent::resolve($container);
+        } catch (NotFound) {
+            return $this->defaultValue;
         }
-
-        return $value;
-    }
-
-    /**
-     * Return the env value
-     *
-     * @return string
-     * @throws NotFound
-     */
-    protected function getEnv(): string
-    {
-        $envs = array_merge($_ENV, getenv());
-
-        if (!array_key_exists($this->varname, $envs)) {
-            throw NotFound::envNotDefined($this->varname);
-        }
-
-        return $envs[$this->varname];
     }
 }
