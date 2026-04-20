@@ -70,6 +70,11 @@ class LazyFactory
         return new Env($name, $type);
     }
 
+    public static function envDefault(string $name, mixed $default, ?string $type = null): EnvDefault
+    {
+        return new EnvDefault($name, $default, $type);
+    }
+
     /**
      * @param string                  $function
      * @param array<array-key, mixed> $args
