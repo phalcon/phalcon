@@ -33,41 +33,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container\Resolver;
 
+use Countable;
 use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Resolver\Lazy\Get;
 use Phalcon\Container\Resolver\Resolver;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeContainerResolver;
 use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceNoConstructor;
 use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithArgs;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithInjected;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithMethod;
 use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithOptional;
 use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithTypedArg;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithVoidMethod;
 use ReflectionClass;
 use ReflectionNamedType;
-use ReflectionParameter;
 use ReflectionUnionType;
-use stdClass;
 
 final class ResolverTest extends AbstractUnitTestCase
 {
-    private function makeContainer(bool $hasService = false): object
-    {
-        return new class ($hasService) {
-            public function __construct(private readonly bool $hasService)
-            {
-            }
-
-            public function has(string $id): bool
-            {
-                return $this->hasService;
-            }
-
-            public function get(string $id): mixed
-            {
-                return new FakeServiceNoConstructor();
-            }
-        };
-    }
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-18
@@ -75,26 +59,11 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolveCallWithNonClosureCallable(): void
     {
         $resolver  = new Resolver();
-        $container = new class () {
-            public function has(string $id): bool
-            {
-                return false;
-            }
-            public function get(string $id): mixed
-            {
-                return new \stdClass();
-            }
-        };
-
-        $target = new class () {
-            public function greet(string $name): string
-            {
-                return 'Hello ' . $name;
-            }
-        };
+        $target    = new FakeServiceWithMethod();
+        $container = new FakeContainerResolver();
 
         $result = $resolver->resolveCall($container, [$target, 'greet'], ['name' => 'World']);
-        $this->assertSame('Hello World', $result);
+        $this->assertSame('Hello, World', $result);
     }
 
     /**
@@ -104,7 +73,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverIsResolvableClassReturnsFalseForInterface(): void
     {
         $resolver = new Resolver();
-        $this->assertFalse($resolver->isResolvableClass(\Countable::class));
+        $this->assertFalse($resolver->isResolvableClass(Countable::class));
     }
 
     /**
@@ -134,7 +103,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveCallWithClosure(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
 
         $callable = static function (string $name, int $count): string {
             return $name . ':' . $count;
@@ -151,7 +120,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveCallWithNamedArgs(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
 
         $callable = static function (string $greeting, int $times): string {
             return str_repeat($greeting, $times);
@@ -172,7 +141,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveClassNoConstructor(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
         $result    = $resolver->resolveClass($container, FakeServiceNoConstructor::class, []);
         $this->assertInstanceOf(FakeServiceNoConstructor::class, $result);
         $this->assertSame('default', $result->value);
@@ -185,7 +154,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveClassThrowsWhenRequiredParamUnresolvable(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer(false);
+        $container = new FakeContainerResolver();
 
         $this->expectException(Invalid::class);
         $this->expectExceptionMessage("Cannot resolve parameter '\$host' for");
@@ -200,7 +169,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveClassWithExplicitNamedArgs(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
         $result    = $resolver->resolveClass(
             $container,
             FakeServiceWithArgs::class,
@@ -218,7 +187,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveClassWithExplicitPositionalArgs(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
         $result    = $resolver->resolveClass(
             $container,
             FakeServiceWithArgs::class,
@@ -236,7 +205,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveClassWithOptionalDefaultsToDefault(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
         $result    = $resolver->resolveClass(
             $container,
             FakeServiceWithOptional::class,
@@ -254,7 +223,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveClassWithTypedArgFromContainer(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer(true);
+        $container = new FakeContainerResolver(true);
         $result    = $resolver->resolveClass(
             $container,
             FakeServiceWithTypedArg::class,
@@ -271,16 +240,8 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveMethodInvokesWithResolvedParams(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer(true);
-
-        $target = new class () {
-            public string $injected = '';
-
-            public function setup(FakeServiceNoConstructor $svc): void
-            {
-                $this->injected = $svc->value;
-            }
-        };
+        $container = new FakeContainerResolver(true);
+        $target    = new FakeServiceWithInjected();
 
         $method = (new ReflectionClass($target))->getMethod('setup');
         $resolver->resolveMethod($container, $method, $target);
@@ -294,7 +255,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveParametersResolvesLazyValues(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer(true);
+        $container = new FakeContainerResolver(true);
         $params    = (new ReflectionClass(FakeServiceWithArgs::class))
             ->getConstructor()
             ->getParameters();
@@ -312,7 +273,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveParametersWithPositionalArgs(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
         $params    = (new ReflectionClass(FakeServiceWithArgs::class))
             ->getConstructor()
             ->getParameters();
@@ -329,7 +290,7 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveTypeReturnsNameForNamedType(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
+        $container = new FakeContainerResolver();
         $param     = (new ReflectionClass(FakeServiceWithTypedArg::class))
             ->getConstructor()
             ->getParameters()[0];
@@ -347,13 +308,8 @@ final class ResolverTest extends AbstractUnitTestCase
     public function testContainerResolverResolverResolveTypeReturnsNullForUnionType(): void
     {
         $resolver  = new Resolver();
-        $container = $this->makeContainer();
-
-        $target = new class () {
-            public function method(int|string $value): void
-            {
-            }
-        };
+        $container = new FakeContainerResolver();
+        $target    = new FakeServiceWithVoidMethod();
 
         $param = (new ReflectionClass($target))->getMethod('method')->getParameters()[0];
         $type  = $param->getType();

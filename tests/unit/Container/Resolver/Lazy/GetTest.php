@@ -7,35 +7,20 @@ namespace Phalcon\Tests\Unit\Container\Resolver\Lazy;
 use Phalcon\Container\Resolver\Lazy\FunctionCall;
 use Phalcon\Container\Resolver\Lazy\Get;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Fake\FakeContainer;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeContainerWithServiceResolution;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeNameContainer;
 use stdClass;
 
 final class GetTest extends AbstractUnitTestCase
 {
-    private function makeContainer(): object
-    {
-        return new class () {
-            public string $lastId = '';
-
-            public function get(string $id): mixed
-            {
-                $this->lastId = $id;
-                return new stdClass();
-            }
-
-            public function new(string $id): mixed
-            {
-                return new stdClass();
-            }
-        };
-    }
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-18
      */
     public function testContainerResolverLazyGetInvokeDelegatesToResolve(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new Get('SomeService');
         $result    = $lazy($container);
         $this->assertInstanceOf(stdClass::class, $result);
@@ -47,7 +32,7 @@ final class GetTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyGetResolvePassesCorrectIdToContainer(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new Get('MyService');
         $lazy->resolve($container);
         $this->assertSame('MyService', $container->lastId);
@@ -59,7 +44,7 @@ final class GetTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyGetResolveReturnsServiceFromContainer(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new Get('SomeService');
         $result    = $lazy->resolve($container);
         $this->assertInstanceOf(stdClass::class, $result);
@@ -71,29 +56,13 @@ final class GetTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyGetResolveWithNestedLazyId(): void
     {
-        $obj       = new \stdClass();
-        $container = new class ($obj) {
-            public string $lastId = '';
-            public function __construct(private \stdClass $obj)
-            {
-            }
-            public function get(string $id): mixed
-            {
-                $this->lastId = $id;
-                return $this->obj;
-            }
-            public function new(string $id): mixed
-            {
-                return new \stdClass();
-            }
-        };
-
-        // Inner lazy resolves to the service name string
+        $service = new stdClass();
+        $container = new FakeContainerWithServiceResolution($service);
         $inner = new FunctionCall('strtolower', ['TARGET']);
         $outer = new Get($inner);
         $result = $outer->resolve($container);
 
-        $this->assertSame($obj, $result);
+        $this->assertSame($service, $result);
         $this->assertSame('target', $container->lastId);
     }
 }

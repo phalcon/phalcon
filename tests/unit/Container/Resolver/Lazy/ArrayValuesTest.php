@@ -8,25 +8,11 @@ use ArrayIterator;
 use Phalcon\Container\Resolver\Lazy\ArrayValues;
 use Phalcon\Container\Resolver\Lazy\Get;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeNameContainer;
 use stdClass;
 
 final class ArrayValuesTest extends AbstractUnitTestCase
 {
-    private function makeContainer(): object
-    {
-        return new class () {
-            public function get(string $id): mixed
-            {
-                return new stdClass();
-            }
-
-            public function new(string $id): mixed
-            {
-                return new stdClass();
-            }
-        };
-    }
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-18
@@ -156,11 +142,13 @@ final class ArrayValuesTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyArrayValuesResolveLazyValues(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new ArrayValues(['service' => new Get('SomeService')]);
         $result    = $lazy->resolve($container);
         $this->assertArrayHasKey('service', $result);
         $this->assertInstanceOf(stdClass::class, $result['service']);
+        $this->assertSame('SomeService', $result['service']->name);
+        $this->assertSame('get', $result['service']->type);
     }
 
     /**
@@ -169,7 +157,7 @@ final class ArrayValuesTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyArrayValuesResolveNestedArrayValues(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new ArrayValues(['nested' => ['a' => 1, 'b' => 2]]);
         $result    = $lazy->resolve($container);
         $this->assertSame(['nested' => ['a' => 1, 'b' => 2]], $result);
@@ -181,7 +169,7 @@ final class ArrayValuesTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyArrayValuesResolvePlainValues(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new ArrayValues(['x' => 42, 'y' => 'hello']);
         $result    = $lazy->resolve($container);
         $this->assertSame(['x' => 42, 'y' => 'hello'], $result);

@@ -7,25 +7,11 @@ namespace Phalcon\Tests\Unit\Container\Resolver\Lazy;
 use Phalcon\Container\Exception\NotFound;
 use Phalcon\Container\Resolver\Lazy\CsEnv;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeNameContainer;
 use stdClass;
 
 final class CsEnvTest extends AbstractUnitTestCase
 {
-    private function makeContainer(): object
-    {
-        return new class () {
-            public function get(string $id): mixed
-            {
-                return new stdClass();
-            }
-
-            public function new(string $id): mixed
-            {
-                return new stdClass();
-            }
-        };
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,9 +31,11 @@ final class CsEnvTest extends AbstractUnitTestCase
     public function testContainerResolverLazyCsEnvResolveCastsToFloat(): void
     {
         $_ENV['PHALCON_TEST_CSV_VAR'] = '1.1,2.2,3.3';
-        $container                    = $this->makeContainer();
-        $lazy                         = new CsEnv('PHALCON_TEST_CSV_VAR', 'float');
-        $result                       = $lazy->resolve($container);
+
+        $container = new FakeNameContainer();
+        $lazy      = new CsEnv('PHALCON_TEST_CSV_VAR', 'float');
+        $result    = $lazy->resolve($container);
+
         $this->assertSame([1.1, 2.2, 3.3], $result);
     }
 
@@ -58,9 +46,11 @@ final class CsEnvTest extends AbstractUnitTestCase
     public function testContainerResolverLazyCsEnvResolveCastsToInt(): void
     {
         $_ENV['PHALCON_TEST_CSV_VAR'] = '1,2,3';
-        $container                    = $this->makeContainer();
-        $lazy                         = new CsEnv('PHALCON_TEST_CSV_VAR', 'int');
-        $result                       = $lazy->resolve($container);
+
+        $container = new FakeNameContainer();
+        $lazy      = new CsEnv('PHALCON_TEST_CSV_VAR', 'int');
+        $result    = $lazy->resolve($container);
+
         $this->assertSame([1, 2, 3], $result);
     }
 
@@ -71,9 +61,10 @@ final class CsEnvTest extends AbstractUnitTestCase
     public function testContainerResolverLazyCsEnvResolveHandlesQuotedValues(): void
     {
         $_ENV['PHALCON_TEST_CSV_VAR'] = '"hello world",foo,"bar"';
-        $container                    = $this->makeContainer();
-        $lazy                         = new CsEnv('PHALCON_TEST_CSV_VAR');
-        $result                       = $lazy->resolve($container);
+
+        $container = new FakeNameContainer();
+        $lazy      = new CsEnv('PHALCON_TEST_CSV_VAR');
+        $result    = $lazy->resolve($container);
         $this->assertSame(['hello world', 'foo', 'bar'], $result);
     }
 
@@ -84,9 +75,11 @@ final class CsEnvTest extends AbstractUnitTestCase
     public function testContainerResolverLazyCsEnvResolveParsesCSV(): void
     {
         $_ENV['PHALCON_TEST_CSV_VAR'] = 'a,b,c';
-        $container                    = $this->makeContainer();
-        $lazy                         = new CsEnv('PHALCON_TEST_CSV_VAR');
-        $result                       = $lazy->resolve($container);
+
+        $container = new FakeNameContainer();
+        $lazy      = new CsEnv('PHALCON_TEST_CSV_VAR');
+        $result    = $lazy->resolve($container);
+
         $this->assertSame(['a', 'b', 'c'], $result);
     }
 
@@ -97,9 +90,11 @@ final class CsEnvTest extends AbstractUnitTestCase
     public function testContainerResolverLazyCsEnvResolveReturnsSingleElement(): void
     {
         $_ENV['PHALCON_TEST_CSV_VAR'] = 'onlyone';
-        $container                    = $this->makeContainer();
-        $lazy                         = new CsEnv('PHALCON_TEST_CSV_VAR');
-        $result                       = $lazy->resolve($container);
+
+        $container = new FakeNameContainer();
+        $lazy      = new CsEnv('PHALCON_TEST_CSV_VAR');
+        $result    = $lazy->resolve($container);
+
         $this->assertSame(['onlyone'], $result);
     }
 
@@ -109,7 +104,7 @@ final class CsEnvTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyCsEnvResolveThrowsNotFoundForMissingVar(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new CsEnv('PHALCON_UNDEFINED_CSV_ENV_VAR_XYZ');
 
         $this->expectException(NotFound::class);

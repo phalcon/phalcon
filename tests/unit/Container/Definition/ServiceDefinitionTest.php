@@ -39,6 +39,7 @@ use Phalcon\Container\Definition\ServiceDefinition;
 use Phalcon\Container\Definition\ServiceLifetime;
 use Phalcon\Container\Exception\Invalid;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Definition\Fake\FakeServiceWithResolve;
 use Phalcon\Tests\Unit\Container\Fake\FakeContainer;
 use stdClass;
 
@@ -91,13 +92,7 @@ final class ServiceDefinitionTest extends AbstractUnitTestCase
      */
     public function testContainerDefinitionServiceDefinitionBuildServiceResolvesLazyArg(): void
     {
-        $lazy = new class () {
-            public function resolve(object $container): mixed
-            {
-                return 'lazy message';
-            }
-        };
-
+        $lazy      = new FakeServiceWithResolve();
         $container = new FakeContainer();
         $def       = new ServiceDefinition(Exception::class, DefinitionType::STRING);
         $def->setClass(Exception::class);
