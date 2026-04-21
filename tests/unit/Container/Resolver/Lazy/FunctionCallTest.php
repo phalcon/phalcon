@@ -6,32 +6,18 @@ namespace Phalcon\Tests\Unit\Container\Resolver\Lazy;
 
 use Phalcon\Container\Resolver\Lazy\FunctionCall;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeNameContainer;
 use stdClass;
 
 final class FunctionCallTest extends AbstractUnitTestCase
 {
-    private function makeContainer(): object
-    {
-        return new class () {
-            public function get(string $id): mixed
-            {
-                return new stdClass();
-            }
-
-            public function new(string $id): mixed
-            {
-                return new stdClass();
-            }
-        };
-    }
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-18
      */
     public function testContainerResolverLazyFunctionCallInvokeDelegatesToResolve(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new FunctionCall('strtolower', ['WORLD']);
         $result    = $lazy($container);
         $this->assertSame('world', $result);
@@ -43,7 +29,7 @@ final class FunctionCallTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyFunctionCallResolveCallsFunction(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new FunctionCall('strtoupper', ['hello']);
         $result    = $lazy->resolve($container);
         $this->assertSame('HELLO', $result);
@@ -55,7 +41,7 @@ final class FunctionCallTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyFunctionCallResolveWithMultipleArguments(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new FunctionCall('implode', [',', ['a', 'b', 'c']]);
         $result    = $lazy->resolve($container);
         $this->assertSame('a,b,c', $result);
@@ -67,9 +53,11 @@ final class FunctionCallTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyFunctionCallResolveWithNoArguments(): void
     {
-        $container = $this->makeContainer();
+        $version = PHP_VERSION;
+        $container = new FakeNameContainer();
         $lazy      = new FunctionCall('phpversion', []);
         $result    = $lazy->resolve($container);
         $this->assertIsString($result);
+        $this->assertSame($version, $result);
     }
 }

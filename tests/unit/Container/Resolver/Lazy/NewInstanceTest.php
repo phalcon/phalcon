@@ -6,38 +6,23 @@ namespace Phalcon\Tests\Unit\Container\Resolver\Lazy;
 
 use Phalcon\Container\Resolver\Lazy\NewInstance;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeNameContainer;
 use stdClass;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
-    private function makeContainer(): object
-    {
-        return new class () {
-            public string $lastId = '';
-
-            public function get(string $id): mixed
-            {
-                return new stdClass();
-            }
-
-            public function new(string $id): mixed
-            {
-                $this->lastId = $id;
-                return new stdClass();
-            }
-        };
-    }
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-18
      */
     public function testContainerResolverLazyNewInstanceInvokeDelegatesToResolve(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new NewInstance('SomeService');
         $result    = $lazy($container);
         $this->assertInstanceOf(stdClass::class, $result);
+        $this->assertSame('SomeService', $result->name);
+        $this->assertSame('new', $result->type);
     }
 
     /**
@@ -46,21 +31,11 @@ final class NewInstanceTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyNewInstanceResolveReturnsNewInstanceFromContainer(): void
     {
-        $container = $this->makeContainer();
+        $container = new FakeNameContainer();
         $lazy      = new NewInstance('SomeService');
         $result    = $lazy->resolve($container);
         $this->assertInstanceOf(stdClass::class, $result);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-18
-     */
-    public function testContainerResolverLazyNewInstanceResolveUsesCorrectId(): void
-    {
-        $container = $this->makeContainer();
-        $lazy      = new NewInstance('MyService');
-        $lazy->resolve($container);
-        $this->assertSame('MyService', $container->lastId);
+        $this->assertSame('SomeService', $result->name);
+        $this->assertSame('new', $result->type);
     }
 }

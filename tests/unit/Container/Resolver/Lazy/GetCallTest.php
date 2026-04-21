@@ -6,6 +6,8 @@ namespace Phalcon\Tests\Unit\Container\Resolver\Lazy;
 
 use Phalcon\Container\Resolver\Lazy\GetCall;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeContainerWithService;
+use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeServiceWithMethod;
 
 final class GetCallTest extends AbstractUnitTestCase
 {
@@ -15,32 +17,10 @@ final class GetCallTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyGetCallInvokeDelegatesToResolve(): void
     {
-        $service = new class () {
-            public function ping(): string
-            {
-                return 'pong';
-            }
-        };
-
-        $container = new class ($service) {
-            public function __construct(
-                private mixed $service
-            ) {
-            }
-
-            public function get(string $id): mixed
-            {
-                return $this->service;
-            }
-
-            public function new(string $id): mixed
-            {
-                return $this->service;
-            }
-        };
-
-        $lazy   = new GetCall('SomeService', 'ping', []);
-        $result = $lazy($container);
+        $service   = new FakeServiceWithMethod();
+        $container = new FakeContainerWithService($service);
+        $lazy      = new GetCall('SomeService', 'ping', []);
+        $result    = $lazy($container);
         $this->assertSame('pong', $result);
     }
 
@@ -50,32 +30,10 @@ final class GetCallTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyGetCallResolveCallsMethodOnService(): void
     {
-        $service = new class () {
-            public function greet(string $name): string
-            {
-                return 'Hello, ' . $name;
-            }
-        };
-
-        $container = new class ($service) {
-            public function __construct(
-                private mixed $service
-            ) {
-            }
-
-            public function get(string $id): mixed
-            {
-                return $this->service;
-            }
-
-            public function new(string $id): mixed
-            {
-                return $this->service;
-            }
-        };
-
-        $lazy   = new GetCall('SomeService', 'greet', ['World']);
-        $result = $lazy->resolve($container);
+        $service   = new FakeServiceWithMethod();
+        $container = new FakeContainerWithService($service);
+        $lazy      = new GetCall('SomeService', 'greet', ['World']);
+        $result    = $lazy->resolve($container);
         $this->assertSame('Hello, World', $result);
     }
 
@@ -85,32 +43,10 @@ final class GetCallTest extends AbstractUnitTestCase
      */
     public function testContainerResolverLazyGetCallResolveWithNoArguments(): void
     {
-        $service = new class () {
-            public function value(): int
-            {
-                return 42;
-            }
-        };
-
-        $container = new class ($service) {
-            public function __construct(
-                private mixed $service
-            ) {
-            }
-
-            public function get(string $id): mixed
-            {
-                return $this->service;
-            }
-
-            public function new(string $id): mixed
-            {
-                return $this->service;
-            }
-        };
-
-        $lazy   = new GetCall('SomeService', 'value', []);
-        $result = $lazy->resolve($container);
-        $this->assertSame(42, $result);
+        $service   = new FakeServiceWithMethod();
+        $container = new FakeContainerWithService($service);
+        $lazy      = new GetCall('SomeService', 'value', []);
+        $result    = $lazy->resolve($container);
+        $this->assertSame(99, $result);
     }
 }
