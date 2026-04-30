@@ -24,11 +24,6 @@ final class LoadTest extends AbstractDatabaseTestCase
 {
     use FactoryTrait;
 
-    /**
-     * Executed before each test
-     *
-     * @return void
-     */
     public function setUp(): void
     {
         $this->init();

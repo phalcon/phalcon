@@ -36,10 +36,6 @@ final class ModelTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model - modelsCacheSnapshot
-     *
-     * Saving snapshot using simple resultset while using modelsCache.
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
@@ -68,12 +64,12 @@ final class ModelTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model - executeCamelCaseRelation
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testExecuteCamelCaseRelation(): void
     {

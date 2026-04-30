@@ -69,6 +69,7 @@ final class ConstantsTest extends AbstractDatabaseTestCase
             [Column::TYPE_TINYBLOB, 10],
             [Column::TYPE_TINYINTEGER, 26],
             [Column::TYPE_TINYTEXT, 25],
+            [Column::TYPE_UUID, 29],
             [Column::TYPE_VARBINARY, 28],
             [Column::TYPE_VARCHAR, 2],
         ];

@@ -1116,10 +1116,14 @@ class Manager implements InjectionAwareInterface
         unset($params[$name]);
 
         /**
-         * URLs are generated through the "url" service
+         * URLs are generated through the "url" service when available
          */
         if (true === $local) {
-            $tag = "/" . ltrim($tag, "/");
+            if (null !== $this->container && $this->container->has("url")) {
+                $tag = $this->container->get("url")->getStatic($tag);
+            } else {
+                $tag = "/" . ltrim($tag, "/");
+            }
         }
 
         /** @var Link|Script $helper */

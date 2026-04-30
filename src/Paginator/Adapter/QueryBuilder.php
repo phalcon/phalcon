@@ -23,6 +23,11 @@ use function ceil;
 use function implode;
 use function intval;
 use function is_array;
+use function is_string;
+use function stripos;
+use function strpos;
+use function substr;
+use function trim;
 
 /**
  * Pagination using a PHQL query builder as source of data
@@ -162,10 +167,11 @@ class QueryBuilder extends AbstractAdapter
         /**
          * Execute the query an return the requested slice of data
          */
-        $items     = $query->execute();
-        $hasHaving = !empty($totalBuilder->getHaving());
-        $groups    = $totalBuilder->getGroupBy();
-        $hasGroup  = !empty($groups);
+        $items        = $query->execute();
+        $hasHaving    = !empty($totalBuilder->getHaving());
+        $groups       = $totalBuilder->getGroupBy();
+        $hasGroup     = !empty($groups);
+        $useSubquery  = false;
 
         /**
          * Change the queried columns by a COUNT(*)
@@ -181,7 +187,22 @@ class QueryBuilder extends AbstractAdapter
 
             $totalBuilder->columns($columns);
         } else {
-            $totalBuilder->columns("COUNT(*) [rowcount]");
+            $builderColumns = $builder->getColumns();
+
+            if (is_string($builderColumns) && stripos(trim($builderColumns), 'DISTINCT ') === 0) {
+                $distinctColumn = trim(substr(trim($builderColumns), 9));
+
+                if (strpos($distinctColumn, ',') !== false) {
+                    $totalBuilder->columns(['DISTINCT ' . $distinctColumn]);
+                    $useSubquery = true;
+                } else {
+                    $totalBuilder->columns(
+                        ['COUNT(DISTINCT ' . $distinctColumn . ') AS [rowcount]']
+                    );
+                }
+            } else {
+                $totalBuilder->columns('COUNT(*) [rowcount]');
+            }
         }
 
         /**
@@ -223,7 +244,7 @@ class QueryBuilder extends AbstractAdapter
          * Obtain the result of the total query
          * If we have having perform native count on temp table
          */
-        if ($hasHaving) {
+        if ($hasHaving || $useSubquery) {
             $sql        = $totalQuery->getSql();
             $modelClass = $builder->getModels();
 

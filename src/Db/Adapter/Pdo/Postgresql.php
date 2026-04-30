@@ -468,8 +468,7 @@ class Postgresql extends PdoAdapter
                  * UUID
                  */
                 case str_contains($columnType, "uuid"):
-                    $definition["type"] = Column::TYPE_CHAR;
-                    $definition["size"] = 36;
+                    $definition["type"] = Column::TYPE_UUID;
 
                     break;
 

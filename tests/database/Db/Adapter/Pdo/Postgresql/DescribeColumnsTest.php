@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Database\Db\Adapter\Pdo\Postgresql;
 
 use Phalcon\Db\Column;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\Support\Migrations\FractalDatesMigration;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function env;
@@ -54,6 +55,33 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
 
         $actual = $db->describeColumns('co_invoices', env('DATA_POSTGRES_SCHEMA'));
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Db\Adapter\Pdo\Postgresql :: describeColumns() - uuid type
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-04-29
+     * @group  pgsql
+     */
+    public function testDbAdapterPdoPostgresqlDescribeColumnsUuid(): void
+    {
+        $connection = self::getConnection();
+        (new FractalDatesMigration($connection, false))->create();
+
+        $db      = $this->container->get('db');
+        $columns = $db->describeColumns('fractal_dates');
+
+        $uuidColumn = null;
+        foreach ($columns as $column) {
+            if ($column->getName() === 'cuuid') {
+                $uuidColumn = $column;
+                break;
+            }
+        }
+
+        $this->assertNotNull($uuidColumn);
+        $this->assertSame(Column::TYPE_UUID, $uuidColumn->getType());
     }
 
     /**

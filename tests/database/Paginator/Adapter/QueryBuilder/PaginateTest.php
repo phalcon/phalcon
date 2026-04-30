@@ -165,6 +165,51 @@ final class PaginateTest extends AbstractDatabaseTestCase
     }
 
     /**
+     * Tests Phalcon\Paginator\Adapter\QueryBuilder :: paginate() - distinct
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-04-29
+     *
+     * @issue  16581
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testPaginatorAdapterQuerybuilderPaginateDistinct(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+        $migration  = new InvoicesMigration($connection);
+        $invId      = ('sqlite' === self::getDriver()) ? 'null' : 'default';
+
+        // Insert 5 invoices for customer 1 and 5 for customer 2 (10 total rows,
+        // but only 2 distinct inv_cst_id values)
+        $this->insertDataInvoices($migration, 5, $invId, 1, 'aaa');
+        $this->insertDataInvoices($migration, 5, $invId, 2, 'bbb');
+
+        $manager = $this->getService('modelsManager');
+        $builder = $manager
+            ->createBuilder()
+            ->columns('DISTINCT inv_cst_id')
+            ->from(Invoices::class)
+        ;
+
+        $paginator = new QueryBuilder(
+            [
+                'builder' => $builder,
+                'limit'   => 5,
+                'page'    => 1,
+            ]
+        );
+
+        $page = $paginator->paginate();
+
+        $this->assertInstanceOf(Repository::class, $page);
+        $this->assertSame(2, $page->getTotalItems());
+        $this->assertSame(1, $page->getLast());
+    }
+
+    /**
      * Tests Phalcon\Paginator\Adapter\QueryBuilder :: paginate()
      *
      * @issue  14639

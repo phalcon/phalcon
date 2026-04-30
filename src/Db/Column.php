@@ -207,6 +207,11 @@ class Column implements ColumnInterface
     public const TYPE_TINYTEXT = 25;
 
     /**
+     * UUID abstract data type
+     */
+    public const TYPE_UUID = 29;
+
+    /**
      * Varbinary abstract data type
      */
     public const TYPE_VARBINARY = 28;
@@ -605,6 +610,7 @@ class Column implements ColumnInterface
             self::TYPE_TINYBLOB,
             self::TYPE_TINYINTEGER,
             self::TYPE_TINYTEXT,
+            self::TYPE_UUID,
             self::TYPE_VARBINARY,
             self::TYPE_VARCHAR => $type,
             default            => throw new Exception(

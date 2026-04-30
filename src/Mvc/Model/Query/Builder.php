@@ -440,6 +440,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         if (
             str_contains($identifier, "[") ||
             str_contains($identifier, ".") ||
+            str_contains($identifier, "(") ||
             is_numeric($identifier)
         ) {
             return $identifier;
@@ -646,7 +647,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return array|string
      */
-    public function getColumns(): array | string
+    public function getColumns(): array | string | null
     {
         return $this->columns;
     }

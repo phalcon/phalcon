@@ -171,9 +171,9 @@ interface BuilderInterface
     /**
      * Return the columns to be queried
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getColumns(): array | string;
+    public function getColumns(): array | string | null;
 
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag

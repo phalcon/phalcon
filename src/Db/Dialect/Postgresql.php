@@ -724,6 +724,13 @@ class Postgresql extends Dialect
 
                 break;
 
+            case Column::TYPE_UUID:
+                if (empty($columnSql)) {
+                    $columnSql .= "UUID";
+                }
+
+                break;
+
             case Column::TYPE_VARCHAR:
                 if (empty($columnSql)) {
                     $columnSql .= "CHARACTER VARYING";
