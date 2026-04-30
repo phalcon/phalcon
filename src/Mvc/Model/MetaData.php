@@ -89,6 +89,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     protected array $metaData = [];
 
     /**
+     * @var array
+     */
+    protected array $pendingMetaDataWrites = [];
+
+    /**
      * @var StrategyInterface|null
      */
     protected StrategyInterface | null $strategy = null;
@@ -748,8 +753,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function reset(): void
     {
-        $this->metaData  = [];
-        $this->columnMap = [];
+        $this->metaData              = [];
+        $this->columnMap             = [];
+        $this->pendingMetaDataWrites = [];
     }
 
     /**
@@ -888,10 +894,15 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         int $index,
         mixed $data
     ): void {
-        $key = $this->getMetaDataUniqueKey($model);
+        $key = mb_strtolower(get_class($model));
 
-        if ($key !== null) {
+        if (isset($this->metaData[$key])) {
             $this->metaData[$key][$index] = $data;
+        } else {
+            if (!isset($this->pendingMetaDataWrites[$key])) {
+                $this->pendingMetaDataWrites[$key] = [];
+            }
+            $this->pendingMetaDataWrites[$key][$index] = $data;
         }
     }
 
@@ -1024,6 +1035,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                      * Store the meta-data in the adapter
                      */
                     $this->write($prefixKey, $modelMetadata);
+
+                    if (isset($this->pendingMetaDataWrites[$key])) {
+                        foreach ($this->pendingMetaDataWrites[$key] as $pendingIndex => $pendingData) {
+                            $this->metaData[$key][$pendingIndex] = $pendingData;
+                        }
+                        unset($this->pendingMetaDataWrites[$key]);
+                    }
                 }
             }
 
