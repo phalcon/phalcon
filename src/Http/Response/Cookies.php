@@ -144,20 +144,21 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
          * It's value come from $_COOKIE with request, so it shouldn't be saved
          * to _cookies property, otherwise it will always be resent after get.
          */
-        $cookie = new Cookie($name);
-        if (null !== $this->container) {
-            /**
-             * Pass the DI to created cookies
-             */
-            $cookie->setDi($this->container);
+        $this->checkContainer(Exception::class, "the 'response' service");
 
-            /**
-             * Enable encryption in the cookie
-             */
-            if (true === $this->useEncryption) {
-                $cookie->useEncryption($this->useEncryption);
-                $cookie->setSignKey($this->signKey);
-            }
+        $cookie = new Cookie($name);
+
+        /**
+         * Pass the DI to created cookies
+         */
+        $cookie->setDi($this->container);
+
+        /**
+         * Enable encryption in the cookie
+         */
+        if (true === $this->useEncryption) {
+            $cookie->useEncryption($this->useEncryption);
+            $cookie->setSignKey($this->signKey);
         }
 
         return $cookie;
@@ -319,12 +320,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
          * Register the cookies bag in the response
          */
         if (true !== $this->isRegistered) {
-            if (null === $this->container) {
-                throw new Exception(
-                    "A dependency injection container is required to "
-                    . "access the 'response' service"
-                );
-            }
+            $this->checkContainer(Exception::class, "the 'response' service");
 
             /** @var ResponseInterface $response */
             if ($this->container instanceof DiInterface) {
