@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\CustomersDefaultsMigration;
@@ -637,6 +638,44 @@ final class SaveTest extends AbstractDatabaseTestCase
         $expected = $value;
         $actual   = $storedModel->cst_status_flag;
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: save() clears the reusable-records cache
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/16566
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-30
+     *
+     * @group  mysql
+     * @group  pgsql
+     * @group  sqlite
+     */
+    public function testMvcModelSaveClearsReusableObjects(): void
+    {
+        $connection        = self::getConnection();
+        $invoicesMigration = new InvoicesMigration($connection);
+        $invoicesMigration->insert('default', 1, 0, uniqid('inv-', true));
+
+        /** @var Manager $manager */
+        $manager = $this->container->getShared('modelsManager');
+        $manager->setReusableRecords('SomeModel', 'key-abc', ['record1', 'record2']);
+
+        $actual = $manager->getReusableRecords('SomeModel', 'key-abc');
+        $this->assertNotNull($actual);
+
+        $invoice                 = new Invoices();
+        $invoice->inv_cst_id     = 1;
+        $invoice->inv_status_flag = 0;
+        $invoice->inv_title      = uniqid('inv-', true);
+        $invoice->inv_total      = 100.0;
+        $invoice->inv_created_at = date('Y-m-d H:i:s');
+
+        $actual = $invoice->save();
+        $this->assertTrue($actual);
+
+        $actual = $manager->getReusableRecords('SomeModel', 'key-abc');
+        $this->assertNull($actual);
     }
 
     /**

@@ -1700,6 +1700,7 @@ abstract class Model extends AbstractInjectionAware implements
                 $this->dirtyRelated = [];
             }
 
+            $this->modelsManager->clearReusableObjects();
             $this->fireEvent("afterSave");
         }
 

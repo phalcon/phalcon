@@ -295,9 +295,9 @@ interface ManagerInterface
     /**
      * Get last initialized model
      *
-     * @return ModelInterface
+     * @return ModelInterface|null
      */
-    public function getLastInitialized(): ModelInterface;
+    public function getLastInitialized(): ModelInterface | null;
 
     /**
      * Returns the last query created or executed in the models manager

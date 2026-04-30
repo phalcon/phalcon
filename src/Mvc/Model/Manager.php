@@ -1124,9 +1124,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Get last initialized model
      *
-     * @return ModelInterface
+     * @return ModelInterface|null
      */
-    public function getLastInitialized(): ModelInterface
+    public function getLastInitialized(): ModelInterface | null
     {
         return $this->lastInitialized;
     }
@@ -1699,6 +1699,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * model
          */
         $this->fireManagerEvent("modelsManager:afterInitialize", $model);
+
+        /**
+         * Release the reference so the model instance is not permanently
+         * retained in memory (prevents a reference cycle in long-running
+         * processes). The event above already received the model directly.
+         */
+        $this->lastInitialized = null;
 
         return true;
     }
