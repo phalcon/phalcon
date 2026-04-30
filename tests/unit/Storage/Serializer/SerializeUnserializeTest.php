@@ -127,6 +127,11 @@ final class SerializeUnserializeTest extends AbstractUnitTestCase
                 json_encode([self::TEXT]),
             ],
             [
+                Json::class,
+                $stdClass,
+                json_encode($stdClass),
+            ],
+            [
                 MemcachedIgbinary::class,
                 null,
                 null,

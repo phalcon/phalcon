@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Storage\Serializer;
 
-use Exception;
 use InvalidArgumentException;
 use Phalcon\Storage\Serializer\Base64;
 use Phalcon\Storage\Serializer\Json;
@@ -29,8 +28,6 @@ use Phalcon\Tests\Unit\Storage\Fake\FakeIgbinaryUnserializeWarning;
 use stdClass;
 
 use function json_encode;
-use function serialize;
-use function unserialize;
 
 final class ExceptionsTest extends AbstractUnitTestCase
 {
@@ -168,25 +165,6 @@ final class ExceptionsTest extends AbstractUnitTestCase
 
         $actual = $serializer->isSuccess();
         $this->assertFalse($actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testStorageSerializerJsonSerializeError(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            "Data for the JSON serializer cannot be of type 'object' " .
-            "without implementing 'JsonSerializable'"
-        );
-
-        $example      = new stdClass();
-        $example->one = 'two';
-
-        $serializer = new Json($example);
-        $serializer->serialize();
     }
 
     /**
