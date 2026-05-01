@@ -558,6 +558,32 @@ abstract class Model extends AbstractInjectionAware implements
                         return $value;
                 }
             }
+        } elseif ($value === null) {
+            /**
+             * Null assigned to a relationship alias must clear the cached
+             * related records so that preSaveRelatedRecords() does not
+             * overwrite the FK back to its old value during save().
+             *
+             * Pre-assigning $this->$property = null before calling
+             * possibleSetter prevents infinite recursion: once the property
+             * exists as a real (dynamic) property, any subsequent
+             * `$this->property = null` inside the user-defined setter will
+             * not re-enter __set.
+             */
+            $lowerProperty = strtolower($property);
+            $modelName     = get_class($this);
+            $manager       = $this->getModelsManager();
+            $relation      = $manager->getRelationByAlias(
+                $modelName,
+                $lowerProperty
+            );
+
+            if (is_object($relation)) {
+                unset($this->related[$lowerProperty]);
+                unset($this->dirtyRelated[$lowerProperty]);
+
+                $this->$property = null;
+            }
         }
 
         // Use possible setter.
@@ -4614,6 +4640,19 @@ abstract class Model extends AbstractInjectionAware implements
                         $newSnapshot[$attributeField] = $value;
                     } else {
                         $newSnapshot[$attributeField] = null;
+                        /**
+                         * PHP's isset() returns false for null properties, so
+                         * a declared property set to null lands here. Treat it
+                         * as changed when the snapshot held a non-null value.
+                         */
+                        if (
+                            !array_key_exists($attributeField, $snapshot) ||
+                            $snapshot[$attributeField] !== null
+                        ) {
+                            $fields[]    = $field;
+                            $values[]    = null;
+                            $bindTypes[] = $bindType;
+                        }
                     }
                 }
             }
@@ -5598,7 +5637,11 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         if (!isset($localMethods[$possibleSetter])) {
-            $this->$possibleSetter($value);
+            try {
+                $this->$possibleSetter($value);
+            } catch (\TypeError) {
+                $this->$property = $value;
+            }
         }
 
         return true;

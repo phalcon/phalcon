@@ -140,6 +140,21 @@ final class CheckboxUnderscoreInvokeTest extends AbstractUnitTestCase
                 . $type
                 . '" id="x_id" name="x_name" value="yes" />some text</label>',
             ],
+            [
+                'x_name',
+                '',
+                [
+                    'id'      => 'x_id',
+                    'checked' => '',
+                ],
+                null,
+                '<input type="'
+                . $type
+                . '" id="x_id" name="x_name" value="" checked="checked">',
+                '<input type="'
+                . $type
+                . '" id="x_id" name="x_name" value="" checked="checked" />',
+            ],
         ];
     }
 

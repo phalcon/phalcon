@@ -188,7 +188,7 @@ abstract class Select
         $escaper = BaseTag::getEscaperService();
 
         foreach ($data as $optionValue => $optionText) {
-            $escaped = $escaper->html((string)$optionValue);
+            $escaped = $escaper->htmlAttr((string)$optionValue);
 
             if (is_array($optionText)) {
                 $code .= "\t<optgroup label=\""
@@ -199,13 +199,15 @@ abstract class Select
                 continue;
             }
 
+            $escapedText = $escaper->html($optionText);
+
             if (is_array($value)) {
                 if (true === in_array($optionValue, $value)) {
                     $code .= self::echoOption($escaped, true)
-                        . $optionText . $closeOption;
+                        . $escapedText . $closeOption;
                 } else {
                     $code .= self::echoOption($escaped)
-                        . $optionText . $closeOption;
+                        . $escapedText . $closeOption;
                 }
             } else {
                 $strOptionValue = (string)$optionValue;
@@ -213,10 +215,10 @@ abstract class Select
 
                 if ($strOptionValue === $strValue) {
                     $code .= self::echoOption($escaped, true)
-                        . $optionText . $closeOption;
+                        . $escapedText . $closeOption;
                 } else {
                     $code .= self::echoOption($escaped)
-                        . $optionText . $closeOption;
+                        . $escapedText . $closeOption;
                 }
             }
         }

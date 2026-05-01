@@ -14,6 +14,7 @@ namespace Phalcon\Html\Helper\Input;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\Helper\Doctype;
 
+use function array_key_exists;
 use function array_merge;
 
 /**
@@ -111,14 +112,16 @@ class Checkbox extends AbstractInput
      */
     private function processChecked(): void
     {
-        $checked = $this->attributes['checked'] ?? '';
+        if (!array_key_exists('checked', $this->attributes)) {
+            return;
+        }
+
+        $checked = $this->attributes['checked'];
         unset($this->attributes['checked']);
 
-        if (!empty($checked)) {
-            $value = $this->attributes['value'] ?? '';
-            if ($checked === $value) {
-                $this->attributes['checked'] = 'checked';
-            }
+        $value = $this->attributes['value'] ?? null;
+        if ($checked === $value) {
+            $this->attributes['checked'] = 'checked';
         }
     }
 

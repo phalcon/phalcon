@@ -2640,7 +2640,7 @@ class Compiler implements InjectionAwareInterface
     final protected function statementList(
         array $statements,
         bool $extendsMode = false
-    ): string | null {
+    ): string {
         /**
          * Nothing to compile
          */
@@ -2921,7 +2921,7 @@ class Compiler implements InjectionAwareInterface
 
         $this->level--;
 
-        return $compilation;
+        return (string) $compilation;
     }
 
     /**
