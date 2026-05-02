@@ -80,17 +80,17 @@ class Volt extends AbstractEngine
     public function convertEncoding(string $text, string $from, string $to): string
     {
         /**
-         * Try to use utf8_encode if conversion is 'latin1' to 'utf8'
+         * latin1 -> utf8 (replaces deprecated utf8_encode())
          */
         if ($from === "latin1" || $to === "utf8") {
-            return utf8_encode($text);
+            return mb_convert_encoding($text, "UTF-8", "ISO-8859-1");
         }
 
         /**
-         * Try to use utf8_decode if conversion is 'utf8' to 'latin1'
+         * utf8 -> latin1 (replaces deprecated utf8_decode())
          */
         if ($to === "latin1" || $from === "utf8") {
-            return utf8_decode($text);
+            return mb_convert_encoding($text, "ISO-8859-1", "UTF-8");
         }
 
         /**
