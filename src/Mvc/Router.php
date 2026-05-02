@@ -953,22 +953,18 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                             /**
                              * Apply the converters anyway
                              */
-                            if (is_array($converters)) {
-                                if (isset($converters[$part])) {
-                                    $converter    = $converters[$part];
-                                    $parts[$part] = call_user_func_array(
-                                        $converter,
-                                        [$position]
-                                    );
-                                }
-                            } else {
+                            if (is_array($converters) && isset($converters[$part])) {
+                                $converter    = $converters[$part];
+                                $parts[$part] = call_user_func_array(
+                                    $converter,
+                                    [$position]
+                                );
+                            } elseif (is_int($position)) {
                                 /**
                                  * Remove the path if the parameter was not
                                  * matched
                                  */
-                                if (is_int($position)) {
-                                    unset($parts[$part]);
-                                }
+                                unset($parts[$part]);
                             }
                         }
                     }
