@@ -20,7 +20,7 @@ use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\Dispatcher\Exception;
-use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Phalcon\Support\Helper\Str\Uncamelize;
 
 /**
  * Dispatching is the process of taking the request object, extracting the
@@ -159,7 +159,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getControllerName(): string
     {
-        return UncamelizeTrait::staticToUncamelize($this->handlerName);
+        return Uncamelize::staticToUncamelize($this->handlerName);
     }
 
     /**
@@ -189,7 +189,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getPreviousControllerName(): string
     {
-        return UncamelizeTrait::staticToUncamelize($this->previousHandlerName);
+        return Uncamelize::staticToUncamelize($this->previousHandlerName);
     }
 
     /**

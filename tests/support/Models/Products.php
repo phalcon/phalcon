@@ -21,6 +21,7 @@ use Phalcon\Mvc\Model;
  * @property int    $prd_id;
  * @property string $prd_name;
  */
+#[\AllowDynamicProperties]
 class Products extends Model
 {
     public $prd_id;
