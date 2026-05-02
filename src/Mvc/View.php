@@ -370,19 +370,14 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      */
     public function getActiveRenderPath(): array | string
     {
-        $viewsDirsCount   = count($this->getViewsDirs());
         $activeRenderPath = $this->activeRenderPaths;
 
-        if (
-            $viewsDirsCount === 1 &&
-            is_array($activeRenderPath) &&
-            !empty($activeRenderPath)
-        ) {
-            $activeRenderPath = $activeRenderPath[0];
-        }
-
-        if (empty($activeRenderPath)) {
-            $activeRenderPath = "";
+        if (is_array($activeRenderPath)) {
+            if (count($activeRenderPath) === 1) {
+                $activeRenderPath = $activeRenderPath[0];
+            } elseif (count($activeRenderPath) === 0) {
+                $activeRenderPath = "";
+            }
         }
 
         return $activeRenderPath;

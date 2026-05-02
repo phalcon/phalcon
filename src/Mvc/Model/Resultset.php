@@ -154,11 +154,6 @@ abstract class Resultset implements
         }
 
         /**
-         * Valid resultsets are Phalcon\Db\ResultInterface instances
-         */
-        $this->result = $result;
-
-        /**
          * Update the related cache if any
          */
         if ($cache !== null) {
