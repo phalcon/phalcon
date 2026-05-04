@@ -4623,27 +4623,38 @@ abstract class Model extends AbstractInjectionAware implements
                                         $snapshotValue = $snapshotValue->getValue();
                                     }
 
-                                    $updateValue = $value;
+                                    /**
+                                     * A RawValue holds a SQL expression (e.g.
+                                     * "col + 2"). It cannot be meaningfully
+                                     * compared to a stored scalar, so always
+                                     * treat the field as changed. This fixes
+                                     * the case where the current DB value is 0
+                                     * and the expression evaluates (via
+                                     * floatval) to 0.0, incorrectly suppressing
+                                     * the UPDATE.
+                                     */
                                     if (
                                         is_object($value) &&
                                         $value instanceof RawValue
                                     ) {
-                                        $updateValue = $value->getValue();
-                                    }
+                                        $changed = true;
+                                    } else {
+                                        $updateValue = $value;
 
-                                    $changed = match ($dataType) {
-                                        Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
-                                        Column::TYPE_DECIMAL,
-                                        Column::TYPE_FLOAT      => floatval($snapshotValue) !== floatval($updateValue),
-                                        Column::TYPE_INTEGER,
-                                        Column::TYPE_DATE,
-                                        Column::TYPE_DATETIME,
-                                        Column::TYPE_CHAR,
-                                        Column::TYPE_TEXT,
-                                        Column::TYPE_VARCHAR,
-                                        Column::TYPE_BIGINTEGER => (string)$snapshotValue !== (string)$updateValue,
-                                        default                 => $updateValue != $snapshotValue,
-                                    };
+                                        $changed = match ($dataType) {
+                                            Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
+                                            Column::TYPE_DECIMAL,
+                                            Column::TYPE_FLOAT      => floatval($snapshotValue) !== floatval($updateValue),
+                                            Column::TYPE_INTEGER,
+                                            Column::TYPE_DATE,
+                                            Column::TYPE_DATETIME,
+                                            Column::TYPE_CHAR,
+                                            Column::TYPE_TEXT,
+                                            Column::TYPE_VARCHAR,
+                                            Column::TYPE_BIGINTEGER => (string)$snapshotValue !== (string)$updateValue,
+                                            default                 => $updateValue != $snapshotValue,
+                                        };
+                                    }
                                 }
                             }
                         }

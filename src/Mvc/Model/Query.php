@@ -1528,9 +1528,57 @@ class Query implements QueryInterface, InjectionAwareInterface
 //                    throw new Exception("Not supported");
 
                 default:
-                    $updateValue = new RawValue(
-                        $dialect->getSqlExpression($exprValue)
-                    );
+                    $sqlExpr = $dialect->getSqlExpression($exprValue);
+
+                    /**
+                     * If the expression contains named placeholders (e.g.
+                     * "col + :param"), resolve them from bindParams so the
+                     * RawValue is free of named params. This prevents a PDO
+                     * "mixed named and positional parameters" error when the
+                     * WHERE clause uses positional "?" markers.
+                     */
+                    $namedParams = [];
+
+                    if (preg_match_all("/:([a-zA-Z0-9_]+)/", $sqlExpr, $namedParams)) {
+                        /**
+                         * Sort by length descending so a key like "id" does
+                         * not partially match a longer placeholder like
+                         * ":idx" when running preg_replace.
+                         */
+                        $paramKeys = array_unique($namedParams[1]);
+
+                        usort(
+                            $paramKeys,
+                            function ($a, $b) {
+                                return strlen($b) - strlen($a);
+                            }
+                        );
+
+                        foreach ($paramKeys as $paramKey) {
+                            if (isset($bindParams[$paramKey])) {
+                                $paramValue = $bindParams[$paramKey];
+
+                                if (is_int($paramValue) || is_float($paramValue)) {
+                                    $sqlExpr = preg_replace(
+                                        "/:" . preg_quote($paramKey, "/") . "\b/",
+                                        (string) $paramValue,
+                                        $sqlExpr
+                                    );
+                                } else {
+                                    $sqlExpr = preg_replace(
+                                        "/:" . preg_quote($paramKey, "/") . "\b/",
+                                        $connection->escapeString((string) $paramValue),
+                                        $sqlExpr
+                                    );
+                                }
+
+                                unset($selectBindParams[$paramKey]);
+                                unset($selectBindTypes[$paramKey]);
+                            }
+                        }
+                    }
+
+                    $updateValue = new RawValue($sqlExpr);
 
                     break;
             }
