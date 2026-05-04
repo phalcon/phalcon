@@ -49,6 +49,7 @@ final class ListTablesTest extends AbstractDatabaseTestCase
             'co_customers_defaults',
             'co_invoices',
             'co_manufacturers',
+            'co_only_identity',
             'co_setters',
             'co_sources',
             'objects',

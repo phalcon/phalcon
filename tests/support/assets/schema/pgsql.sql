@@ -120,6 +120,20 @@ create index co_customers_cst_name_first_index
             
 
 
+drop table if exists fractal_dates;
+            
+
+
+CREATE TABLE fractal_dates (
+    id           serial       constraint fractal_dates_pk primary key,
+    ftime        TIME(2),
+    fdatetime    TIMESTAMP(2),
+    ftimestamp   TIMESTAMP(2),
+    cuuid        uuid         not null default gen_random_uuid()
+);
+            
+
+
 drop table if exists co_invoices;
             
 
@@ -175,6 +189,17 @@ create table objects
     obj_id serial not null constraint objects_pk primary key,
     obj_name varchar(100) not null,
     obj_type smallint not null
+);
+            
+
+
+drop table if exists co_only_identity;
+            
+
+
+create table co_only_identity
+(
+    oid_id serial not null constraint co_only_identity_pk primary key
 );
             
 
