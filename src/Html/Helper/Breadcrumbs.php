@@ -26,13 +26,13 @@ use const PHP_EOL;
  * The resulting HTML when calling `render()` will have each breadcrumb enclosed
  * in `<li>` tags, while the whole string is enclosed in `<nav>` and `<ol>` tags.
  *
- * @phpstan-type TTemplate = array{
+ * @phpstan-type TTemplate array{
  *      main: string,
  *      line: string,
  *      last: string,
  * }
  *
- * @phpstan-type TElement = array{
+ * @phpstan-type TElement array{
  *      attributes: array<string, string>,
  *      icon: string,
  *      link: string,
