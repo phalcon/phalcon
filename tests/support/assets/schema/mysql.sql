@@ -280,6 +280,17 @@ create table objects
             
 
 
+drop table if exists `co_only_identity`;
+            
+
+
+create table co_only_identity
+(
+    `oid_id` int(10) auto_increment primary key
+);
+            
+
+
 drop table if exists `co_orders`;
             
 

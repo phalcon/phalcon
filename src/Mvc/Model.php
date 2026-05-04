@@ -4376,6 +4376,15 @@ abstract class Model extends AbstractInjectionAware implements
                     if ($useExplicitIdentity) {
                         $values[]    = $defaultValue;
                         $bindTypes[] = $bindSkip;
+                    } elseif (!count($values)) {
+                        /**
+                         * Model has only the identity column; force an
+                         * explicit default so the underlying adapter does not
+                         * reject the insert because of an empty values array.
+                         */
+                        $fields[]    = $identityField;
+                        $values[]    = $defaultValue;
+                        $bindTypes[] = $bindSkip;
                     }
                 } else {
                     /**
@@ -4404,6 +4413,15 @@ abstract class Model extends AbstractInjectionAware implements
                 }
             } else {
                 if ($useExplicitIdentity) {
+                    $values[]    = $defaultValue;
+                    $bindTypes[] = $bindSkip;
+                } elseif (!count($values)) {
+                    /**
+                     * Model has only the identity column; force an explicit
+                     * default so the underlying adapter does not reject the
+                     * insert because of an empty values array.
+                     */
+                    $fields[]    = $identityField;
                     $values[]    = $defaultValue;
                     $bindTypes[] = $bindSkip;
                 }
