@@ -13,8 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Encryption\Security;
 
-use Phalcon\Encryption\Security\CryptoUtilsInterface;
+use Phalcon\Encryption\Security\Random;
 
-interface CryptoUtils extends CryptoUtilsInterface
+interface CryptoUtils
 {
+    public function computeHmac(
+        string $data,
+        string $key,
+        string $algorithm,
+        bool $raw = false
+    ): string;
+
+    public function getRandom(): Random;
+
+    public function getRandomBytes(): int;
+
+    public function setRandomBytes(int $randomBytes): Security;
+
+    public function getSaltBytes(int $numberBytes = 0): string;
 }

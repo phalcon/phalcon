@@ -13,8 +13,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Encryption\Security;
 
-use Phalcon\Encryption\Security\PasswordSecurityInterface;
-
-interface PasswordSecurity extends PasswordSecurityInterface
+interface PasswordSecurity
 {
+    public function checkHash(
+        string $password,
+        string $passwordHash,
+        int $maxPassLength = 0
+    ): bool;
+
+    public function hash(string $password, array $options = []): string;
+
+    public function isLegacyHash(string $passwordHash): bool;
+
+    public function getHashInformation(string $hash): array;
+
+    public function getDefaultHash(): int;
+
+    public function setDefaultHash(int $defaultHash): Security;
+
+    public function getWorkFactor(): int;
+
+    public function setWorkFactor(int $workFactor): Security;
 }
