@@ -126,6 +126,7 @@ class Model extends AbstractAdapter implements RememberAdapter
             return null;
         }
 
+        /** @var AuthUser&AuthRemember $user */
         $tokenRow = $user->getRememberToken($token);
 
         if ($tokenRow === null) {
