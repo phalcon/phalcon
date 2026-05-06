@@ -190,7 +190,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      */
     public function checkToken(
         string | null $tokenKey = null,
-        mixed $tokenValue = null,
+        string | null $tokenValue = null,
         bool $destroyIfValid = true
     ): bool {
         $tokenKey = $this->processTokenKey($tokenKey);

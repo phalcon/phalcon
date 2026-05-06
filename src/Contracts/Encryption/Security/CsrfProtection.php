@@ -13,8 +13,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Encryption\Security;
 
-use Phalcon\Encryption\Security\CryptoUtilsInterface;
-
-interface CsrfProtection extends CryptoUtilsInterface
+interface CsrfProtection
 {
+    public function getToken(): string | null;
+
+    public function getTokenKey(): string | null;
+
+    public function checkToken(
+        string | null $tokenKey = null,
+        string | null $tokenValue = null,
+        bool $destroyIfValid = true
+    ): bool;
+
+    public function destroyToken(): Security;
+
+    public function getRequestToken(): string | null;
+
+    public function getSessionToken(): string | null;
 }

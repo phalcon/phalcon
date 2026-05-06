@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Encryption\Security;
 
-use Phalcon\Encryption\Security\SecurityInterface;
-
-interface Security extends SecurityInterface
+interface Security extends CryptoUtils, CsrfProtection, PasswordSecurity
 {
 }
