@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Encryption;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Encryption\Security\Exception;
 use Phalcon\Encryption\Security\Random;
+use Phalcon\Encryption\Security\SecurityInterface;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
@@ -65,7 +67,7 @@ use const PASSWORD_BCRYPT;
  *     threads: int
  * }
  */
-class Security implements InjectionAwareInterface
+class Security implements InjectionAwareInterface, SecurityContract
 {
     use InjectionAwareTrait;
     use StartsWithTrait;
