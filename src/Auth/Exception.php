@@ -32,6 +32,13 @@ class Exception extends \Exception
         );
     }
 
+    public static function dataMustContainIdKey(): self
+    {
+        return new Exception(
+            "AuthUser data must contain a scalar 'id' key (int|string)"
+        );
+    }
+
     public static function configRequiresNonEmptyValue(
         string $configName,
         string $configKey,
@@ -59,19 +66,19 @@ class Exception extends \Exception
         return new Exception('Stream adapter cannot read file: ' . $path);
     }
 
+    public static function streamFileDoesNotContainJson(string $path): self
+    {
+        return new Exception(
+            'Stream adapter file does not contain a JSON array: ' . $path
+        );
+    }
+
     public static function streamFileNotValidJson(string $path, Throwable $ex): self
     {
         return new Exception(
             'Stream adapter file is not valid JSON: ' . $path,
             0,
             $ex
-        );
-    }
-
-    public static function streamFileDoesNotContainJson(string $path): self
-    {
-        return new Exception(
-            'Stream adapter file does not contain a JSON array: ' . $path
         );
     }
 }
