@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Contracts\Auth\Adapter;
 
 use Phalcon\Contracts\Auth\AuthUser;
+use Phalcon\Contracts\Encryption\Security\Security;
 
 /**
  * Authentication adapter contract.
@@ -31,6 +32,15 @@ use Phalcon\Contracts\Auth\AuthUser;
  */
 interface Adapter
 {
+    /**
+     * Build an adapter from a flat options map. Used by ManagerFactory to
+     * wire adapters from the application config; each implementation is
+     * free to interpret the option keys it cares about.
+     *
+     * @param array<string, mixed> $options
+     */
+    public static function fromOptions(Security $hasher, array $options): static;
+
     /**
      * Find a user matching the given credentials (e.g. ['email' => 'a@b']).
      * The 'password' key, if present, is ignored during the lookup.

@@ -18,6 +18,7 @@ namespace Phalcon\Auth\Adapter;
 
 use Phalcon\Auth\Adapter\Config\ModelAdapterConfig;
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
 use Phalcon\Contracts\Auth\AuthRemember;
 use Phalcon\Contracts\Auth\AuthUser;
@@ -37,6 +38,17 @@ class Model extends AbstractAdapter implements RememberAdapter
     public function __construct(Security $hasher, ModelAdapterConfig $config)
     {
         parent::__construct($hasher, $config);
+    }
+
+    public static function fromOptions(Security $hasher, array $options): static
+    {
+        return new static(
+            $hasher,
+            new ModelAdapterConfig(
+                Options::requireString($options, 'model', 'model adapter'),
+                Options::stringOrNull($options, 'idColumn') ?? 'id'
+            )
+        );
     }
 
     /**
@@ -97,9 +109,10 @@ class Model extends AbstractAdapter implements RememberAdapter
     {
         /** @var class-string<ModelInterface> $modelClass */
         $modelClass = $this->config->getModel();
+        $idColumn   = $this->config->getIdColumn();
         $found      = $modelClass::findFirst(
             [
-                'conditions' => '[id] = :id:',
+                'conditions' => '[' . $idColumn . '] = :id:',
                 'bind'       => ['id' => $id],
             ]
         );

@@ -19,6 +19,7 @@ namespace Phalcon\Auth\Adapter;
 use InvalidArgumentException;
 use Phalcon\Auth\Adapter\Config\StreamAdapterConfig;
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Encryption\Security\Security;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Traits\Php\FileTrait;
@@ -43,6 +44,17 @@ class Stream extends AbstractArrayAdapter
     public function __construct(Security $hasher, StreamAdapterConfig $config)
     {
         parent::__construct($hasher, $config);
+    }
+
+    public static function fromOptions(Security $hasher, array $options): static
+    {
+        return new static(
+            $hasher,
+            new StreamAdapterConfig(
+                Options::requireString($options, 'file', 'stream adapter'),
+                Options::stringOrNull($options, 'model')
+            )
+        );
     }
 
     /**

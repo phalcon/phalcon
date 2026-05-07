@@ -18,6 +18,8 @@ namespace Phalcon\Auth\Guard;
 
 use Phalcon\Auth\Exception;
 use Phalcon\Auth\Guard\Config\SessionGuardConfig;
+use Phalcon\Auth\Internal\Options;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
 use Phalcon\Contracts\Auth\AuthRemember;
@@ -47,6 +49,26 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         SessionGuardConfig $config = new SessionGuardConfig(),
     ) {
         parent::__construct($adapter, $config);
+    }
+
+    public static function fromOptions(
+        Adapter $adapter,
+        Collection $container,
+        array $options
+    ): static {
+        $config = new SessionGuardConfig(
+            Options::stringOrNull($options, 'suffix'),
+            Options::stringOrNull($options, 'name'),
+            Options::stringOrNull($options, 'rememberName'),
+        );
+
+        return new static(
+            $adapter,
+            Options::resolveService($container, RequestInterface::class, 'Session guard'),
+            Options::resolveService($container, CookiesInterface::class, 'Session guard'),
+            Options::resolveService($container, SessionManagerInterface::class, 'Session guard'),
+            $config,
+        );
     }
 
     /**
@@ -84,12 +106,12 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
     public function getName(): string
     {
-        return sprintf('auth_%s', sha1(static::class . get_class($this->adapter)));
+        return $this->config->getName();
     }
 
     public function getRememberName(): string
     {
-        return sprintf('remember_%s', sha1(static::class . get_class($this->adapter)));
+        return $this->config->getRememberName();
     }
 
     /**

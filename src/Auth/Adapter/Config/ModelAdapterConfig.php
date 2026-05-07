@@ -23,8 +23,10 @@ class ModelAdapterConfig extends AbstractAdapterConfig
     /**
      * @throws Exception
      */
-    public function __construct(string $model)
-    {
+    public function __construct(
+        string $model,
+        protected readonly string $idColumn = 'id',
+    ) {
         if ($model === '') {
             throw Exception::configRequiresNonEmptyValue(
                 'Model adapter',
@@ -33,7 +35,19 @@ class ModelAdapterConfig extends AbstractAdapterConfig
             );
         }
 
+        if ($idColumn === '') {
+            throw Exception::configRequiresNonEmptyValue(
+                'Model adapter',
+                'idColumn'
+            );
+        }
+
         parent::__construct($model);
+    }
+
+    public function getIdColumn(): string
+    {
+        return $this->idColumn;
     }
 
     public function getModel(): string

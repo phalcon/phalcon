@@ -16,36 +16,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth\Cli;
 
+use Phalcon\Auth\AbstractAuthDispatcherListener;
 use Phalcon\Auth\Exception;
-use Phalcon\Contracts\Auth\Manager;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Events\Event;
 
-class AuthDispatcherListener
+class AuthDispatcherListener extends AbstractAuthDispatcherListener
 {
-    public function __construct(protected Manager $manager)
-    {
-    }
-
     /**
-     * @param Event      $event
-     * @param Dispatcher $dispatcher
-     *
-     * @return bool
      * @throws Exception
      */
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher): bool
     {
-        $access = $this->manager->getAccess();
-        if ($access === null) {
-            return true;
-        }
+        return $this->enforce((string) $dispatcher->getActionName());
+    }
 
-        $task = (string) $dispatcher->getActionName();
-        if ($access->isAllowed($task)) {
-            return true;
-        }
-
-        throw Exception::accessDenied('task', $task);
+    protected function getActionKind(): string
+    {
+        return 'task';
     }
 }

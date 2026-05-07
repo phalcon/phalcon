@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Auth\Guard;
 
+use Phalcon\Container\Service\Collection;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthUser;
 
@@ -25,14 +26,39 @@ use Phalcon\Contracts\Auth\AuthUser;
 interface Guard
 {
     /**
+     * Build a guard from an adapter, the application container, and a flat
+     * options map. Used by ManagerFactory to wire guards from the
+     * application config; each implementation resolves the framework
+     * services it needs from the container.
+     *
+     * @param array<string, mixed> $options
+     */
+    public static function fromOptions(
+        Adapter $adapter,
+        Collection $container,
+        array $options
+    ): static;
+
+    /**
      * Whether the current request is authenticated.
      */
     public function check(): bool;
 
     /**
+     * Returns the last user the guard tried to authenticate during this
+     * request, regardless of success.
+     */
+    public function getLastUserAttempted(): ?AuthUser;
+
+    /**
      * Whether the current request is unauthenticated.
      */
     public function guest(): bool;
+
+    /**
+     * Whether the guard currently holds a resolved user.
+     */
+    public function hasUser(): bool;
 
     /**
      * Returns the authenticated user's identifier, or null when no

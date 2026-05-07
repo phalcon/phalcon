@@ -16,10 +16,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Auth\Access;
 
-use Phalcon\Auth\Access\AbstractAccess;
-
 /**
- * @phpstan-import-type ForwardTarget from AbstractAccess
+ * @phpstan-type ForwardTarget array{
+ *     controller?: string,
+ *     action?: string,
+ *     params?: array<int|string, mixed>,
+ *     namespace?: string,
+ *     task?: string,
+ * }&array<string, mixed>
  */
 interface Access
 {

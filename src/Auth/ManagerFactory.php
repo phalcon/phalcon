@@ -17,24 +17,14 @@ declare(strict_types=1);
 namespace Phalcon\Auth;
 
 use Phalcon\Auth\Access\AccessLocator;
-use Phalcon\Auth\Adapter\Config\MemoryAdapterConfig;
-use Phalcon\Auth\Adapter\Config\ModelAdapterConfig;
-use Phalcon\Auth\Adapter\Config\StreamAdapterConfig;
-use Phalcon\Auth\Adapter\Memory;
-use Phalcon\Auth\Adapter\Model;
-use Phalcon\Auth\Adapter\Stream;
-use Phalcon\Auth\Guard\Config\TokenGuardConfig;
-use Phalcon\Auth\Guard\Session;
-use Phalcon\Auth\Guard\Token;
+use Phalcon\Auth\Adapter\AdapterLocator;
+use Phalcon\Auth\Guard\GuardLocator;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Container\Service\Collection;
 use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\Guard\Guard;
 use Phalcon\Encryption\Security;
-use Phalcon\Http\RequestInterface;
-use Phalcon\Http\Response\CookiesInterface;
-use Phalcon\Session\ManagerInterface as SessionManagerInterface;
 
 /**
  * Single entry-point factory that builds a fully wired Phalcon\Auth\Manager
@@ -90,10 +80,22 @@ use Phalcon\Session\ManagerInterface as SessionManagerInterface;
  */
 class ManagerFactory
 {
+    protected readonly AccessLocator $accessLocator;
+
+    protected readonly AdapterLocator $adapterLocator;
+
+    protected readonly GuardLocator $guardLocator;
+
     public function __construct(
         protected readonly Security $hasher,
         protected readonly Collection $container,
+        ?AdapterLocator $adapterLocator = null,
+        ?GuardLocator $guardLocator = null,
+        ?AccessLocator $accessLocator = null,
     ) {
+        $this->adapterLocator = $adapterLocator ?? new AdapterLocator($container);
+        $this->guardLocator   = $guardLocator   ?? new GuardLocator($container);
+        $this->accessLocator  = $accessLocator  ?? new AccessLocator($container);
     }
 
     /**
@@ -108,14 +110,15 @@ class ManagerFactory
             $config = $config->toArray();
         }
 
-        $manager = new Manager(new AccessLocator($this->container));
+        $manager = new Manager($this->accessLocator);
 
         /** @var array<string, GuardConfig> $guards */
         $guards = $config['guards'] ?? [];
 
         foreach ($guards as $name => $gconf) {
-            $adapter = $this->buildAdapter($gconf['adapter']);
+            $adapter = $this->buildAdapter($this->adapterLocator, $gconf['adapter']);
             $guard   = $this->buildGuard(
+                $this->guardLocator,
                 $gconf['type'],
                 $adapter,
                 $gconf['options'] ?? []
@@ -130,7 +133,7 @@ class ManagerFactory
 
         $accessList = $config['access'] ?? [];
         if (!empty($accessList)) {
-            $manager->setAccessList($accessList);
+            $manager->addAccessList($accessList);
         }
 
         return $manager;
@@ -141,63 +144,17 @@ class ManagerFactory
      *
      * @throws Exception
      */
-    protected function buildAdapter(array $cfg): Adapter
+    protected function buildAdapter(AdapterLocator $locator, array $cfg): Adapter
     {
-        $options = $cfg['options'] ?? [];
+        $name = $cfg['name'];
 
-        return match ($cfg['name']) {
-            'memory' => new Memory(
-                $this->hasher,
-                new MemoryAdapterConfig(
-                    $this->arrayOption($options, 'users', []),
-                    $this->stringOrNull($options, 'model')
-                )
-            ),
-            'model'  => new Model(
-                $this->hasher,
-                new ModelAdapterConfig(
-                    $this->requireString($options, 'model', 'model adapter')
-                )
-            ),
-            'stream' => new Stream(
-                $this->hasher,
-                new StreamAdapterConfig(
-                    $this->requireString($options, 'file', 'stream adapter'),
-                    $this->stringOrNull($options, 'model')
-                )
-            ),
-            default  => throw new Exception(
-                sprintf("Unknown auth adapter '%s'", $cfg['name'])
-            ),
-        };
-    }
+        if (!$locator->has($name)) {
+            throw new Exception(sprintf("Unknown auth adapter '%s'", $name));
+        }
 
-    /**
-     * @param array<string, mixed> $options
-     *
-     * @throws Exception
-     */
-    protected function buildGuard(string $type, Adapter $adapter, array $options): Guard
-    {
-        return match ($type) {
-            'session' => $this->buildSession($adapter),
-            'token'   => $this->buildToken($adapter, $options),
-            default   => throw new Exception(
-                sprintf("Unknown auth guard '%s'", $type)
-            ),
-        };
-    }
-
-    /**
-     * @throws Exception
-     */
-    protected function buildSession(Adapter $adapter): Session
-    {
-        return new Session(
-            $adapter,
-            $this->getService(RequestInterface::class, 'Session guard'),
-            $this->getService(CookiesInterface::class, 'Session guard'),
-            $this->getService(SessionManagerInterface::class, 'Session guard'),
+        return $locator->getClass($name)::fromOptions(
+            $this->hasher,
+            $cfg['options'] ?? []
         );
     }
 
@@ -206,86 +163,20 @@ class ManagerFactory
      *
      * @throws Exception
      */
-    protected function buildToken(Adapter $adapter, array $options): Token
-    {
-        return new Token(
+    protected function buildGuard(
+        GuardLocator $locator,
+        string $type,
+        Adapter $adapter,
+        array $options
+    ): Guard {
+        if (!$locator->has($type)) {
+            throw new Exception(sprintf("Unknown auth guard '%s'", $type));
+        }
+
+        return $locator->getClass($type)::fromOptions(
             $adapter,
-            $this->getService(RequestInterface::class, 'Token guard'),
-            new TokenGuardConfig(
-                $this->requireString($options, 'inputKey', 'token guard'),
-                $this->requireString($options, 'storageKey', 'token guard')
-            )
+            $this->container,
+            $options
         );
-    }
-
-    /**
-     * @param array<string, mixed>                              $options
-     * @param list<array{id?: int|string}&array<string, mixed>> $default
-     *
-     * @return list<array{id?: int|string}&array<string, mixed>>
-     */
-    private function arrayOption(array $options, string $key, array $default): array
-    {
-        $value = $options[$key] ?? $default;
-
-        if (!is_array($value)) {
-            return $default;
-        }
-
-        /** @var list<array{id?: int|string}&array<string, mixed>> */
-        return array_values($value);
-    }
-
-    /**
-     * @template T of object
-     *
-     * @phpstan-param class-string<T> $serviceId
-     *
-     * @phpstan-return T
-     *
-     * @throws Exception
-     */
-    private function getService(string $serviceId, string $context): object
-    {
-        if (!$this->container->has($serviceId)) {
-            throw new Exception(
-                sprintf(
-                    "Auth %s requires service '%s' to be bound in the container",
-                    $context,
-                    $serviceId
-                )
-            );
-        }
-
-        /** @var T */
-        return $this->container->get($serviceId);
-    }
-
-    /**
-     * @param array<string, mixed> $options
-     *
-     * @throws Exception
-     */
-    private function requireString(array $options, string $key, string $context): string
-    {
-        $value = $options[$key] ?? null;
-
-        if (!is_string($value) || $value === '') {
-            throw new Exception(
-                sprintf("Auth %s requires '%s' to be a non-empty string", $context, $key)
-            );
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param array<string, mixed> $options
-     */
-    private function stringOrNull(array $options, string $key): ?string
-    {
-        $value = $options[$key] ?? null;
-
-        return is_string($value) ? $value : null;
     }
 }

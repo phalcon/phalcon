@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Adapter;
 
 use Phalcon\Auth\Adapter\Config\MemoryAdapterConfig;
+use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Encryption\Security\Security;
 
@@ -45,6 +46,17 @@ class Memory extends AbstractArrayAdapter
                 $this->idStore[$row['id']] = $row;
             }
         }
+    }
+
+    public static function fromOptions(Security $hasher, array $options): static
+    {
+        return new static(
+            $hasher,
+            new MemoryAdapterConfig(
+                Options::arrayOption($options, 'users', []),
+                Options::stringOrNull($options, 'model')
+            )
+        );
     }
 
     /**

@@ -20,13 +20,7 @@ use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Manager;
 
 /**
- * @phpstan-type ForwardTarget array{
- *     controller?: string,
- *     action?: string,
- *     params?: array<int|string, mixed>,
- *     namespace?: string,
- *     task?: string,
- * }&array<string, mixed>
+ * @phpstan-import-type ForwardTarget from Access
  */
 abstract class AbstractAccess implements Access
 {

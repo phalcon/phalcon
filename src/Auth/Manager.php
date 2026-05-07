@@ -21,35 +21,19 @@ use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Auth\Guard\Guard;
+use Phalcon\Contracts\Auth\Guard\GuardStateful;
 use Phalcon\Contracts\Auth\Manager as ManagerContract;
 
 /**
  * Composes guards (authentication) and access gates (authorization)
- * behind a single facade. Calls to undefined methods are forwarded to
- * the default guard via __call; the methods listed below cover the
- * Session/Token guard surface so callers and static analyzers can rely
- * on them.
+ * behind a single facade. Guard-specific behavior is reached through
+ * Manager::guard(); callers narrow with instanceof against the
+ * relevant capability interface (GuardStateful, BasicAuth, etc.).
  *
  * @phpstan-import-type AuthCredentials from Adapter
- *
- * @method bool           basic(string $field = 'email', array<string, mixed> $extraConditions = [])
- * @method string         getName()
- * @method string         getRememberName()
- * @method ?string        getTokenForRequest()
- * @method bool           hasUser()
- * @method ?AuthUser      getLastUserAttempted()
- * @method false|AuthUser loginById(int|string $id, bool $remember = false)
- * @method bool           once(array<string, mixed> $credentials = [])
- * @method false|AuthUser onceBasic(string $field = 'email', array<string, mixed> $extraConditions = [])
- * @method bool           viaRemember()
  */
 class Manager implements ManagerContract
 {
-    /**
-     * @var array<string, class-string<Access>>
-     */
-    protected array $accessList = [];
-
     protected ?Access $activeAccess = null;
 
     protected ?Guard $defaultGuard = null;
@@ -65,30 +49,18 @@ class Manager implements ManagerContract
     }
 
     /**
-     * @param list<mixed> $params
-     */
-    public function __call(string $method, array $params): mixed
-    {
-        $guard = $this->guard();
-
-        /** @var callable $callable */
-        $callable = [$guard, $method];
-
-        return call_user_func_array($callable, $params);
-    }
-
-    /**
      * @throws Exception
      */
     public function access(string $accessName): self
     {
-        if (!isset($this->accessList[$accessName])) {
+        if (!$this->accessFactory->has($accessName)) {
             throw new Exception(
                 sprintf("Access '%s' is not registered", $accessName)
             );
         }
 
-        $this->activeAccess = $this->accessFactory->newInstance($accessName, [$this]);
+        $class              = $this->accessFactory->getClass($accessName);
+        $this->activeAccess = new $class($this);
 
         return $this;
     }
@@ -98,8 +70,9 @@ class Manager implements ManagerContract
      */
     public function addAccessList(array $accessList): self
     {
-        $this->accessList = array_merge($this->accessList, $accessList);
-        $this->registerAccessList($accessList);
+        foreach ($accessList as $name => $className) {
+            $this->accessFactory->register($name, $className);
+        }
 
         return $this;
     }
@@ -127,11 +100,11 @@ class Manager implements ManagerContract
     {
         $guard = $this->guard();
 
-        if (!method_exists($guard, 'attempt')) {
-            throw new Exception('Default guard does not support attempt()');
+        if (!$guard instanceof GuardStateful) {
+            throw new Exception('Default guard does not implement GuardStateful');
         }
 
-        return (bool) $guard->attempt($credentials, $remember);
+        return $guard->attempt($credentials, $remember);
     }
 
     public function check(): bool
@@ -163,7 +136,7 @@ class Manager implements ManagerContract
      */
     public function getAccessList(): array
     {
-        return $this->accessList;
+        return $this->accessFactory->getAll();
     }
 
     public function getDefaultGuard(): ?Guard
@@ -210,9 +183,11 @@ class Manager implements ManagerContract
     {
         $guard = $this->guard();
 
-        if (method_exists($guard, 'logout')) {
-            $guard->logout();
+        if (!$guard instanceof GuardStateful) {
+            throw new Exception('Default guard does not implement GuardStateful');
         }
+
+        $guard->logout();
     }
 
     /**
@@ -236,17 +211,6 @@ class Manager implements ManagerContract
         return $this;
     }
 
-    /**
-     * @param array<string, class-string<Access>> $accessList
-     */
-    public function setAccessList(array $accessList): self
-    {
-        $this->accessList = $accessList;
-        $this->registerAccessList($accessList);
-
-        return $this;
-    }
-
     public function setDefaultGuard(Guard $guard): self
     {
         $this->defaultGuard = $guard;
@@ -265,18 +229,5 @@ class Manager implements ManagerContract
     public function validate(array $credentials = []): bool
     {
         return $this->guard()->validate($credentials);
-    }
-
-    /**
-     * Mirrors the access list into the locator so a single name → class
-     * lookup applies in both places.
-     *
-     * @param array<string, class-string<Access>> $accessList
-     */
-    protected function registerAccessList(array $accessList): void
-    {
-        foreach ($accessList as $name => $className) {
-            $this->accessFactory->register($name, $className);
-        }
     }
 }

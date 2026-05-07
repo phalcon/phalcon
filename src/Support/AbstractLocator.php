@@ -52,15 +52,43 @@ abstract class AbstractLocator
     }
 
     /**
-     * Retrieve a service instance from the container.
+     * Returns the full registered service map (defaults plus any added via
+     * register()).
      *
-     * @param array<int|string, mixed> $arguments
+     * @return array<string, class-string<T>>
+     */
+    public function getAll(): array
+    {
+        return $this->services;
+    }
+
+    /**
+     * Returns the class-string registered under the given name.
+     *
+     * @return class-string<T>
+     *
+     * @throws Exception
+     */
+    public function getClass(string $name): string
+    {
+        return $this->getService($name);
+    }
+
+    /**
+     * Whether a service with the given name is registered.
+     */
+    public function has(string $name): bool
+    {
+        return isset($this->services[$name]);
+    }
+
+    /**
+     * Retrieve a shared service instance from the container.
      *
      * @return T
      */
-    public function newInstance(string $name, array $arguments = []): object
+    public function newInstance(string $name): object
     {
-
         $definition = $this->getService($name);
 
         if (true !== $this->container->has($definition)) {
@@ -70,10 +98,9 @@ abstract class AbstractLocator
             );
         }
 
-        // Handle legacy Di (shared) vs new Container (get)
         if ($this->container instanceof DiInterface) {
             /** @var T */
-            return $this->container->getShared($definition, $arguments);
+            return $this->container->getShared($definition);
         }
 
         /** @var T */
@@ -122,6 +149,8 @@ abstract class AbstractLocator
 
     /**
      * Get the service class name for a given name.
+     *
+     * @return class-string<T>
      *
      * @throws Exception
      */

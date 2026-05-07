@@ -16,9 +16,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Auth;
 
+use Phalcon\Auth\Exception;
 use Phalcon\Contracts\Auth\Access\Access;
+use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\Guard\Guard;
 
+/**
+ * @phpstan-import-type AuthCredentials from Adapter
+ */
 interface Manager
 {
     public function access(string $accessName): self;
@@ -29,6 +34,18 @@ interface Manager
     public function addAccessList(array $accessList): self;
 
     public function addGuard(string $nameGuard, Guard $guard, bool $isDefault = false): self;
+
+    /**
+     * @phpstan-param AuthCredentials $credentials
+     *
+     * @throws Exception
+     */
+    public function attempt(array $credentials = [], bool $remember = false): bool;
+
+    /**
+     * Whether the default guard reports the current request as authenticated.
+     */
+    public function check(): bool;
 
     /**
      * Restricts the active access gate to skip the listed action names.
@@ -55,16 +72,37 @@ interface Manager
     public function guard(?string $name = null): Guard;
 
     /**
+     * Returns the authenticated user's identifier from the default guard,
+     * or null when no authenticated user is present.
+     */
+    public function id(): int | string | null;
+
+    /**
+     * Logs the current user out via the default guard.
+     *
+     * @throws Exception
+     */
+    public function logout(): void;
+
+    /**
      * Restricts the active access gate to apply only to the listed action names.
      */
     public function only(string ...$actions): self;
 
     public function setAccess(Access $access): self;
 
-    /**
-     * @param array<string, class-string<Access>> $accessList
-     */
-    public function setAccessList(array $accessList): self;
-
     public function setDefaultGuard(Guard $guard): self;
+
+    /**
+     * Returns the resolved user from the default guard, or null.
+     */
+    public function user(): ?AuthUser;
+
+    /**
+     * Validates the given credentials against the default guard without
+     * logging in.
+     *
+     * @phpstan-param AuthCredentials $credentials
+     */
+    public function validate(array $credentials = []): bool;
 }
