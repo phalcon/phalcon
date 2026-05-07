@@ -151,4 +151,61 @@ final class TokenTest extends AbstractUnitTestCase
 
         $this->assertFalse($guard->validate(['api_token' => 'invalid-token']));
     }
+
+    public function testValidateReturnsFalseWhenInputKeyMissing(): void
+    {
+        $guard = new Token(
+            $this->adapter,
+            $this->request,
+            new TokenGuardConfig('api_token', 'api_token')
+        );
+
+        $this->assertFalse($guard->validate(['other' => 'something']));
+    }
+
+    public function testSetRequestReplacesRequest(): void
+    {
+        $guard = new Token(
+            $this->adapter,
+            $this->request,
+            new TokenGuardConfig('api_token', 'api_token')
+        );
+
+        $other = new FakeRequest();
+        $other->setQueryFake('api_token', 'abcdef123');
+
+        $guard->setRequest($other);
+
+        $this->assertSame('abcdef123', $guard->getTokenForRequest());
+    }
+
+    public function testGetTokenForRequestReturnsNullForEmptyBearerHeader(): void
+    {
+        $this->request->setHeaderFake('Authorization', 'Bearer ');
+
+        $guard = new Token(
+            $this->adapter,
+            $this->request,
+            new TokenGuardConfig('api_token', 'api_token')
+        );
+
+        $this->assertNull($guard->getTokenForRequest());
+    }
+
+    public function testUserCachesAfterFirstResolution(): void
+    {
+        $this->request->setQueryFake('api_token', 'abcdef123');
+
+        $guard = new Token(
+            $this->adapter,
+            $this->request,
+            new TokenGuardConfig('api_token', 'api_token')
+        );
+
+        $first  = $guard->user();
+        $second = $guard->user();
+
+        $this->assertNotNull($first);
+        $this->assertSame($first, $second);
+    }
 }

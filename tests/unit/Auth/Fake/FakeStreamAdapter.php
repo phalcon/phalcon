@@ -20,25 +20,52 @@ use Phalcon\Auth\Adapter\Config\StreamAdapterConfig;
 use Phalcon\Auth\Adapter\Stream;
 use Phalcon\Contracts\Encryption\Security\Security;
 
+/**
+ * Fakes the disk side of Phalcon\Auth\Adapter\Stream by overriding the
+ * FileTrait helpers. This lets the real Stream::loadUsers logic execute
+ * (including the JSON decode + shape checks) under test, while the test
+ * controls what bytes are "read" from disk.
+ */
 final class FakeStreamAdapter extends Stream
 {
-    /**
-     * @var array<int, array<string, mixed>>
-     */
-    private array $injectedUsers = [];
+    private bool $fileExists = true;
+
+    private false | string $rawContents = '';
 
     public function __construct(Security $hasher)
     {
         parent::__construct($hasher, new StreamAdapterConfig('unused.json'));
     }
 
-    public function setUsers(array $users): void
+    public function setFileExists(bool $exists): void
     {
-        $this->injectedUsers = $users;
+        $this->fileExists = $exists;
     }
 
-    protected function loadUsers(): array
+    public function setRawContents(false | string $contents): void
     {
-        return $this->injectedUsers;
+        $this->rawContents = $contents;
+    }
+
+    /**
+     * Convenience: encode a list of user rows as the JSON payload Stream
+     * expects on disk.
+     *
+     * @param array<int, array<string, mixed>> $users
+     */
+    public function setUsers(array $users): void
+    {
+        $this->rawContents = (string) json_encode($users);
+        $this->fileExists  = true;
+    }
+
+    protected function phpFileExists(string $filename): bool
+    {
+        return $this->fileExists;
+    }
+
+    protected function phpFileGetContents(string $filename): false | string
+    {
+        return $this->rawContents;
     }
 }

@@ -17,22 +17,29 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Auth\Adapter;
 
 use Phalcon\Auth\Adapter\Config\StreamAdapterConfig;
-use Phalcon\Auth\Adapter\Stream;
-use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Auth\Exception;
+use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Encryption\Security;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Auth\Fake\FakeStreamAdapter;
 
 final class StreamTest extends AbstractUnitTestCase
 {
-    private Security $security;
     private string $hashedPassword;
+    private Security $security;
 
     protected function setUp(): void
     {
         $this->security       = new Security();
         $this->hashedPassword = $this->security->hash('mypassword');
+    }
+
+    public function testConfigThrowsWhenFileEmpty(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/file/');
+
+        new StreamAdapterConfig('');
     }
 
     public function testRetrieveByCredentialsMatchesUserFromInjectedArray(): void
@@ -91,6 +98,22 @@ final class StreamTest extends AbstractUnitTestCase
         $this->assertSame(7, $user->getAuthIdentifier());
     }
 
+    public function testRetrieveByIdReturnsNullOnMiss(): void
+    {
+        $adapter = new FakeStreamAdapter($this->security);
+        $adapter->setUsers(
+            [
+                [
+                    'id'       => 1,
+                    'email'    => 'carol@example.com',
+                    'password' => $this->hashedPassword,
+                ],
+            ]
+        );
+
+        $this->assertNull($adapter->retrieveById(999));
+    }
+
     public function testValidateCredentialsAcceptsCorrectPassword(): void
     {
         $adapter = new FakeStreamAdapter($this->security);
@@ -135,35 +158,47 @@ final class StreamTest extends AbstractUnitTestCase
         $this->assertFalse($result);
     }
 
-    public function testConfigThrowsWhenFileEmpty(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessageMatches('/file/');
-
-        new StreamAdapterConfig('');
-    }
-
     public function testThrowsWhenFileDoesNotExist(): void
     {
         $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/does not exist/');
 
-        $adapter = new Stream(
-            $this->security,
-            new StreamAdapterConfig(__DIR__ . '/this-does-not-exist.json')
-        );
+        $adapter = new FakeStreamAdapter($this->security);
+        $adapter->setFileExists(false);
+
         $adapter->retrieveById(1);
     }
 
-    public function testThrowsWhenFileNotJsonArray(): void
+    public function testThrowsWhenFileCannotBeRead(): void
     {
         $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/cannot read/');
 
-        $notArrayJson = dirname(__DIR__, 3) . '/support/assets/auth/not-array.json';
+        $adapter = new FakeStreamAdapter($this->security);
+        $adapter->setRawContents(false);
 
-        $adapter = new Stream(
-            $this->security,
-            new StreamAdapterConfig($notArrayJson)
-        );
+        $adapter->retrieveById(1);
+    }
+
+    public function testThrowsWhenFileNotValidJson(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/not valid JSON/');
+
+        $adapter = new FakeStreamAdapter($this->security);
+        $adapter->setRawContents('{not really json');
+
+        $adapter->retrieveById(1);
+    }
+
+    public function testThrowsWhenFileDoesNotContainJsonArray(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/does not contain a JSON array/');
+
+        $adapter = new FakeStreamAdapter($this->security);
+        $adapter->setRawContents('"a string, not an array"');
+
         $adapter->retrieveById(1);
     }
 }

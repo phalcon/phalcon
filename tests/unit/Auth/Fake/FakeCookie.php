@@ -38,9 +38,9 @@ final class FakeCookie implements CookieInterface
         return '';
     }
 
-    public function getExpiration(): string
+    public function getExpiration(): int
     {
-        return '0';
+        return 0;
     }
 
     public function getHttpOnly(): bool

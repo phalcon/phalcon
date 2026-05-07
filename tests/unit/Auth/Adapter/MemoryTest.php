@@ -21,6 +21,7 @@ use Phalcon\Auth\Adapter\Memory;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Encryption\Security;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Auth\Fake\FakeAuthUserModel;
 
 final class MemoryTest extends AbstractUnitTestCase
 {
@@ -195,5 +196,94 @@ final class MemoryTest extends AbstractUnitTestCase
         $result = $adapter->validateCredentials($user, ['email' => 'alice@example.com']);
 
         $this->assertFalse($result);
+    }
+
+    public function testRetrieveByCredentialsReturnsNullWhenOnlyPasswordKey(): void
+    {
+        $adapter = new Memory(
+            $this->security,
+            new MemoryAdapterConfig([
+                [
+                    'id'       => 1,
+                    'email'    => 'alice@example.com',
+                    'password' => $this->hashedPassword,
+                ],
+            ])
+        );
+
+        $user = $adapter->retrieveByCredentials(['password' => 'whatever']);
+
+        $this->assertNull($user);
+    }
+
+    public function testRetrieveByCredentialsReturnsNullWhenEmptyCredentials(): void
+    {
+        $adapter = new Memory(
+            $this->security,
+            new MemoryAdapterConfig([
+                [
+                    'id'       => 1,
+                    'email'    => 'alice@example.com',
+                    'password' => $this->hashedPassword,
+                ],
+            ])
+        );
+
+        $this->assertNull($adapter->retrieveByCredentials([]));
+    }
+
+    public function testRetrieveByCredentialsSkipsRowMissingLookupKey(): void
+    {
+        $adapter = new Memory(
+            $this->security,
+            new MemoryAdapterConfig([
+                ['id' => 1, 'password' => 'x'],
+                ['id' => 2, 'email' => 'alice@example.com', 'password' => 'y'],
+            ])
+        );
+
+        $user = $adapter->retrieveByCredentials(['email' => 'alice@example.com']);
+
+        $this->assertNotNull($user);
+        $this->assertSame(2, $user->getAuthIdentifier());
+    }
+
+    public function testGetConfigReturnsConfigObject(): void
+    {
+        $config  = new MemoryAdapterConfig();
+        $adapter = new Memory($this->security, $config);
+
+        $this->assertSame($config, $adapter->getConfig());
+    }
+
+    public function testGetModelReflectsConfig(): void
+    {
+        $adapter = new Memory(
+            $this->security,
+            new MemoryAdapterConfig([], 'App\\Models\\User')
+        );
+
+        $this->assertSame('App\\Models\\User', $adapter->getModel());
+    }
+
+    public function testHydrateUsesConfiguredModel(): void
+    {
+        $adapter = new Memory(
+            $this->security,
+            new MemoryAdapterConfig(
+                [
+                    [
+                        'id'    => 1,
+                        'email' => 'alice@example.com',
+                    ],
+                ],
+                FakeAuthUserModel::class
+            )
+        );
+
+        $user = $adapter->retrieveByCredentials(['email' => 'alice@example.com']);
+
+        $this->assertInstanceOf(FakeAuthUserModel::class, $user);
+        $this->assertSame(1, $user->getAuthIdentifier());
     }
 }

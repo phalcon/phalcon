@@ -35,7 +35,7 @@ final class FakeRedirectAccess extends AbstractAccess
         return $this->allowed;
     }
 
-    public function redirectTo(): mixed
+    public function redirectTo(): ?array
     {
         return $this->target;
     }
