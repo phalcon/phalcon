@@ -36,10 +36,12 @@ namespace Phalcon\Container\Provider;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as AssetsManager;
+use Phalcon\Auth\Access\AccessLocator;
 use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Resolver\Lazy\LazyFactory;
 use Phalcon\Container\Service\Collection;
 use Phalcon\Container\Service\Provider;
+use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
 use Phalcon\Db\Event\Factory as DbEventFactory;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
@@ -133,8 +135,11 @@ class Web implements Provider
 
         // --- FQCN bindings (set + alias) — no unique interface available ---
 
-        $services->set(Annotations::class, Annotations::class)
-                 ->setArgument(0, LazyFactory::get(AnnotationsMemory::class));
+        $services->set(AccessLocator::class, static function (Collection $c): AccessLocator {
+            return new AccessLocator($c);
+        });
+
+        $services->set(Annotations::class, Annotations::class);
         $services->setAlias(Annotations::class, 'annotations');
 
         $services->set(AnnotationsMemory::class, AnnotationsMemory::class)
@@ -154,8 +159,8 @@ class Web implements Provider
         $services->set(HelperFactory::class, HelperFactory::class);
         $services->setAlias(HelperFactory::class, 'helper');
 
-        $services->set(Security::class, Security::class);
-        $services->setAlias(Security::class, 'security');
+        $services->bind(SecurityContract::class, Security::class);
+        $services->setAlias(SecurityContract::class, 'security');
 
         $services->set(SerializerFactory::class, SerializerFactory::class);
         $services->setAlias(SerializerFactory::class, 'storageSerializer');
@@ -166,8 +171,7 @@ class Web implements Provider
         $services->set(Settings::class, Settings::class);
         $services->setAlias(Settings::class, 'settings');
 
-        $services->set(TagFactory::class, TagFactory::class)
-                 ->setArgument(0, LazyFactory::get(EscaperInterface::class));
+        $services->set(TagFactory::class, TagFactory::class);
         $services->setAlias(TagFactory::class, 'tag');
     }
 }
