@@ -27,7 +27,7 @@ use Phalcon\Auth\Guard\Config\TokenGuardConfig;
 use Phalcon\Auth\Guard\Session;
 use Phalcon\Auth\Guard\Token;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Container\Container;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\Guard\Guard;
@@ -38,39 +38,49 @@ use Phalcon\Session\ManagerInterface as SessionManagerInterface;
 
 /**
  * Single entry-point factory that builds a fully wired Phalcon\Auth\Manager
- * from a config tree.
+ * from a config tree. Framework-shared services (RequestInterface,
+ * CookiesInterface, SessionManagerInterface) are resolved from the injected
+ * container so the manager wires against the real application singletons,
+ * not separately constructed copies.
  *
- *   [
- *       'guards' => [
- *           'web' => [
- *               'type'    => 'session',
- *               'default' => true,
- *               'adapter' => [
- *                   'name'    => 'model',
- *                   'options' => ['model' => User::class],
- *               ],
- *               'options' => [],
- *               'extra'   => [<RequestInterface>, <CookiesInterface>, <SessionManagerInterface>],
- *           ],
- *           'api' => [
- *               'type'    => 'token',
- *               'adapter' => ['name' => 'model', 'options' => ['model' => User::class]],
- *               'options' => ['inputKey' => 'api_token', 'storageKey' => 'api_token'],
- *               'extra'   => [<RequestInterface>],
- *           ],
- *       ],
- *       'access' => [
- *           'auth'  => \Phalcon\Auth\Access\Auth::class,
- *           'guest' => \Phalcon\Auth\Access\Guest::class,
- *       ],
- *   ]
+ *  [
+ *      'guards' => [
+ *          'web' => [
+ *              'type'    => 'session',
+ *              'default' => true,
+ *              'adapter' => [
+ *                  'name'    => 'model',
+ *                  'options' => [
+ *                      'model' => User::class
+ *                  ],
+ *              ],
+ *              'options' => [],
+ *          ],
+ *          'api' => [
+ *              'type'    => 'token',
+ *              'adapter' => [
+ *                  'name'    => 'model',
+ *                  'options' => [
+ *                      'model' => User::class
+ *                  ]
+ *              ],
+ *              'options' => [
+ *                  'inputKey'   => 'api_token',
+ *                  'storageKey' => 'api_token'
+ *              ],
+ *          ],
+ *      ],
+ *      'access' => [
+ *          'auth'  => \Phalcon\Auth\Access\Auth::class,
+ *          'guest' => \Phalcon\Auth\Access\Guest::class,
+ *      ],
+ *  ]
  *
  * @phpstan-type GuardConfig array{
  *     type: string,
  *     default?: bool,
  *     adapter: array{name: string, options?: array<string, mixed>},
  *     options?: array<string, mixed>,
- *     extra?: list<mixed>,
  * }
  *
  * @phpstan-type AuthConfig array{
@@ -82,6 +92,7 @@ class ManagerFactory
 {
     public function __construct(
         protected readonly Security $hasher,
+        protected readonly Collection $container,
     ) {
     }
 
@@ -97,7 +108,7 @@ class ManagerFactory
             $config = $config->toArray();
         }
 
-        $manager = new Manager(new AccessLocator(new Container()));
+        $manager = new Manager(new AccessLocator($this->container));
 
         /** @var array<string, GuardConfig> $guards */
         $guards = $config['guards'] ?? [];
@@ -107,8 +118,7 @@ class ManagerFactory
             $guard   = $this->buildGuard(
                 $gconf['type'],
                 $adapter,
-                $gconf['options'] ?? [],
-                $gconf['extra'] ?? []
+                $gconf['options'] ?? []
             );
 
             $manager->addGuard(
@@ -164,19 +174,14 @@ class ManagerFactory
 
     /**
      * @param array<string, mixed> $options
-     * @param list<mixed>          $extra
      *
      * @throws Exception
      */
-    protected function buildGuard(
-        string $type,
-        Adapter $adapter,
-        array $options,
-        array $extra
-    ): Guard {
+    protected function buildGuard(string $type, Adapter $adapter, array $options): Guard
+    {
         return match ($type) {
-            'session' => $this->buildSession($adapter, $extra),
-            'token'   => $this->buildToken($adapter, $options, $extra),
+            'session' => $this->buildSession($adapter),
+            'token'   => $this->buildToken($adapter, $options),
             default   => throw new Exception(
                 sprintf("Unknown auth guard '%s'", $type)
             ),
@@ -184,47 +189,28 @@ class ManagerFactory
     }
 
     /**
-     * @param list<mixed> $extra
-     *
      * @throws Exception
      */
-    protected function buildSession(Adapter $adapter, array $extra): Session
+    protected function buildSession(Adapter $adapter): Session
     {
-        if (
-            !isset($extra[0], $extra[1], $extra[2])
-            || !($extra[0] instanceof RequestInterface)
-            || !($extra[1] instanceof CookiesInterface)
-            || !($extra[2] instanceof SessionManagerInterface)
-        ) {
-            throw new Exception(
-                "Session guard requires extra[0]=RequestInterface, "
-                . "extra[1]=CookiesInterface, extra[2]=SessionManagerInterface"
-            );
-        }
-
-        return new Session($adapter, $extra[0], $extra[1], $extra[2]);
+        return new Session(
+            $adapter,
+            $this->getService(RequestInterface::class, 'Session guard'),
+            $this->getService(CookiesInterface::class, 'Session guard'),
+            $this->getService(SessionManagerInterface::class, 'Session guard'),
+        );
     }
 
     /**
      * @param array<string, mixed> $options
-     * @param list<mixed>          $extra
      *
      * @throws Exception
      */
-    protected function buildToken(
-        Adapter $adapter,
-        array $options,
-        array $extra
-    ): Token {
-        if (!isset($extra[0]) || !($extra[0] instanceof RequestInterface)) {
-            throw new Exception(
-                'Token guard requires extra[0]=RequestInterface'
-            );
-        }
-
+    protected function buildToken(Adapter $adapter, array $options): Token
+    {
         return new Token(
             $adapter,
-            $extra[0],
+            $this->getService(RequestInterface::class, 'Token guard'),
             new TokenGuardConfig(
                 $this->requireString($options, 'inputKey', 'token guard'),
                 $this->requireString($options, 'storageKey', 'token guard')
@@ -248,6 +234,31 @@ class ManagerFactory
 
         /** @var list<array{id?: int|string}&array<string, mixed>> */
         return array_values($value);
+    }
+
+    /**
+     * @template T of object
+     *
+     * @phpstan-param class-string<T> $serviceId
+     *
+     * @phpstan-return T
+     *
+     * @throws Exception
+     */
+    private function getService(string $serviceId, string $context): object
+    {
+        if (!$this->container->has($serviceId)) {
+            throw new Exception(
+                sprintf(
+                    "Auth %s requires service '%s' to be bound in the container",
+                    $context,
+                    $serviceId
+                )
+            );
+        }
+
+        /** @var T */
+        return $this->container->get($serviceId);
     }
 
     /**
