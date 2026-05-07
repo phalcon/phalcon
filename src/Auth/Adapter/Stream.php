@@ -19,6 +19,7 @@ namespace Phalcon\Auth\Adapter;
 use InvalidArgumentException;
 use Phalcon\Auth\Adapter\Config\StreamAdapterConfig;
 use Phalcon\Auth\Exception;
+use Phalcon\Contracts\Encryption\Security\Security;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Traits\Php\FileTrait;
 
@@ -38,6 +39,11 @@ use function is_array;
 class Stream extends AbstractArrayAdapter
 {
     use FileTrait;
+
+    public function __construct(Security $hasher, StreamAdapterConfig $config)
+    {
+        parent::__construct($hasher, $config);
+    }
 
     /**
      * Loads and decodes the JSON users file. Re-read on every call — if you
