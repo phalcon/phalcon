@@ -58,7 +58,8 @@ abstract class AbstractLocator
      *
      * @return T
      */
-    public function newInstance(string $name, array $arguments = []): object {
+    public function newInstance(string $name, array $arguments = []): object
+    {
 
         $definition = $this->getService($name);
 
@@ -86,7 +87,8 @@ abstract class AbstractLocator
      *
      * @throws Exception
      */
-    public function register(string $name, string $definition): static {
+    public function register(string $name, string $definition): static
+    {
 
         $interfaceClass = $this->getInterfaceClass();
 
@@ -123,7 +125,8 @@ abstract class AbstractLocator
      *
      * @throws Exception
      */
-    protected function getService(string $name): string {
+    protected function getService(string $name): string
+    {
 
         if (! isset($this->services[$name])) {
             $exceptionClass = $this->getExceptionClass();
