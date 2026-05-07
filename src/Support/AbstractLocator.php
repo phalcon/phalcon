@@ -16,8 +16,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Support;
 
-use Phalcon\Container\ContainerInterface;
+use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
+use Throwable;
+
 use function is_subclass_of;
 
 /**
@@ -39,7 +41,7 @@ abstract class AbstractLocator
      * @param array<string, class-string<T>> $services
      */
     public function __construct(
-        protected readonly ContainerInterface|DiInterface $container,
+        protected readonly Collection|DiInterface $container,
         array $services = []
     ) {
         $this->services = $this->getServices();
@@ -52,9 +54,11 @@ abstract class AbstractLocator
     /**
      * Retrieve a service instance from the container.
      *
+     * @param array<int|string, mixed> $arguments
+     *
      * @return T
      */
-    public function new(string $name): object {
+    public function newInstance(string $name, array $arguments = []): object {
 
         $definition = $this->getService($name);
 
@@ -67,9 +71,11 @@ abstract class AbstractLocator
 
         // Handle legacy Di (shared) vs new Container (get)
         if ($this->container instanceof DiInterface) {
-            return $this->container->getShared($definition);
+            /** @var T */
+            return $this->container->getShared($definition, $arguments);
         }
 
+        /** @var T */
         return $this->container->get($definition);
     }
 
@@ -99,6 +105,8 @@ abstract class AbstractLocator
 
     /**
      * Get the exception class to throw on errors.
+     *
+     * @return class-string<Throwable>
      */
     abstract protected function getExceptionClass(): string;
 
