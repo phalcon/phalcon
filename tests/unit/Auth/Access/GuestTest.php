@@ -16,13 +16,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Auth\Access;
 
+use Phalcon\Auth\Access\AccessLocator;
 use Phalcon\Auth\Access\Guest;
 use Phalcon\Auth\Adapter\Config\MemoryAdapterConfig;
 use Phalcon\Auth\Adapter\Memory;
 use Phalcon\Auth\Guard\Session;
 use Phalcon\Auth\Manager;
+use Phalcon\Container\Container;
 use Phalcon\Encryption\Security;
 use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Auth\Fake\FakeCookies;
+use Phalcon\Tests\Unit\Auth\Fake\FakeRequest;
 use Phalcon\Tests\Unit\Auth\Fake\FakeSessionManager;
 
 final class GuestTest extends AbstractUnitTestCase
@@ -48,17 +52,28 @@ final class GuestTest extends AbstractUnitTestCase
 
     private function buildGuard(): Session
     {
-        $session = new FakeSessionManager();
-        $guard   = new Session($this->adapter);
-        $guard->setSession($session);
+        return new Session(
+            $this->adapter,
+            new FakeRequest(),
+            new FakeCookies(),
+            new FakeSessionManager()
+        );
+    }
 
-        return $guard;
+    private function buildManager(): Manager
+    {
+        $container = new Container();
+        $manager   = new Manager(new AccessLocator($container));
+
+        $container->set(Guest::class, fn () => new Guest($manager));
+
+        return $manager;
     }
 
     public function testAllowedIfWhenNotAuthenticated(): void
     {
         $guard   = $this->buildGuard();
-        $manager = new Manager();
+        $manager = $this->buildManager();
         $manager->addGuard('web', $guard, true);
 
         $access = new Guest($manager);
@@ -69,7 +84,7 @@ final class GuestTest extends AbstractUnitTestCase
     public function testAllowedIfWhenAuthenticated(): void
     {
         $guard   = $this->buildGuard();
-        $manager = new Manager();
+        $manager = $this->buildManager();
         $manager->addGuard('web', $guard, true);
 
         $user = $this->adapter->retrieveById(1);
