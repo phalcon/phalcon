@@ -28,14 +28,16 @@ class TokenGuardConfig extends AbstractGuardConfig
         protected readonly string $storageKey,
     ) {
         if ($inputKey === '') {
-            throw new Exception(
-                "Token guard requires a non-empty 'inputKey'"
+            throw Exception::configRequiresNonEmptyValue(
+                'Token guard',
+                'inputKey'
             );
         }
 
         if ($storageKey === '') {
-            throw new Exception(
-                "Token guard requires a non-empty 'storageKey'"
+            throw Exception::configRequiresNonEmptyValue(
+                'Token guard',
+                'storageKey'
             );
         }
     }

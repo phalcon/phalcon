@@ -106,9 +106,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
         if ($remember) {
             if (!($this->adapter instanceof RememberAdapter)) {
-                throw new Exception(
-                    'Adapter does not implement RememberAdapter'
-                );
+                throw Exception::doesNotImplement('Adapter', 'RememberAdapter');
             }
             $this->rememberUser($user);
         }

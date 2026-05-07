@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth;
 
+use Throwable;
+
 /**
  * Phalcon\Auth\Exception
  *
@@ -23,4 +25,53 @@ namespace Phalcon\Auth;
  */
 class Exception extends \Exception
 {
+    public static function accessDenied(string $type, string $name): self
+    {
+        return new Exception(
+            "Access denied for " . $type . " '" . $name . "'"
+        );
+    }
+
+    public static function configRequiresNonEmptyValue(
+        string $configName,
+        string $configKey,
+        string $suffix = ''
+    ): self {
+        return new Exception(
+            $configName . " requires a non-empty '"
+            . $configKey . "'" . $suffix
+        );
+    }
+    public static function doesNotImplement(string $type, string $name): self
+    {
+        return new Exception(
+            $type . " does not implement '" . $name . "'"
+        );
+    }
+
+    public static function streamFileDoesNotExist(string $path): self
+    {
+        return new Exception('Stream adapter file does not exist: ' . $path);
+    }
+
+    public static function streamFileCannotRead(string $path): self
+    {
+        return new Exception('Stream adapter cannot read file: ' . $path);
+    }
+
+    public static function streamFileNotValidJson(string $path, Throwable $ex): self
+    {
+        return new Exception(
+            'Stream adapter file is not valid JSON: ' . $path,
+            0,
+            $ex
+        );
+    }
+
+    public static function streamFileDoesNotContainJson(string $path): self
+    {
+        return new Exception(
+            'Stream adapter file does not contain a JSON array: ' . $path
+        );
+    }
 }
