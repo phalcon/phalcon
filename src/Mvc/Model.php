@@ -4644,7 +4644,8 @@ abstract class Model extends AbstractInjectionAware implements
                                         $changed = match ($dataType) {
                                             Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
                                             Column::TYPE_DECIMAL,
-                                            Column::TYPE_FLOAT      => floatval($snapshotValue) !== floatval($updateValue),
+                                            Column::TYPE_FLOAT      =>
+                                                floatval($snapshotValue) !== floatval($updateValue),
                                             Column::TYPE_INTEGER,
                                             Column::TYPE_DATE,
                                             Column::TYPE_DATETIME,
