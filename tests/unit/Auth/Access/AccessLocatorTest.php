@@ -27,7 +27,7 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Auth\Fake\FakeAccess;
 use stdClass;
 
-final class AccessFactoryTest extends AbstractUnitTestCase
+final class AccessLocatorTest extends AbstractUnitTestCase
 {
     private Container $container;
     private Manager $manager;
