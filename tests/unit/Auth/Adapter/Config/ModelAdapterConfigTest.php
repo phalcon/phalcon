@@ -22,12 +22,18 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ModelAdapterConfigTest extends AbstractUnitTestCase
 {
-    public function testThrowsWhenModelEmpty(): void
+    public function testIdColumnDefaultsToId(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessageMatches('/model/');
+        $config = new ModelAdapterConfig('App\\Models\\User');
 
-        new ModelAdapterConfig('');
+        $this->assertSame('id', $config->getIdColumn());
+    }
+
+    public function testStoresAndReturnsCustomIdColumn(): void
+    {
+        $config = new ModelAdapterConfig('App\\Models\\User', 'user_id');
+
+        $this->assertSame('user_id', $config->getIdColumn());
     }
 
     public function testStoresAndReturnsModelClass(): void
@@ -35,5 +41,21 @@ final class ModelAdapterConfigTest extends AbstractUnitTestCase
         $config = new ModelAdapterConfig('App\\Models\\User');
 
         $this->assertSame('App\\Models\\User', $config->getModel());
+    }
+
+    public function testThrowsWhenIdColumnEmpty(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/idColumn/');
+
+        new ModelAdapterConfig('App\\Models\\User', '');
+    }
+
+    public function testThrowsWhenModelEmpty(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/model/');
+
+        new ModelAdapterConfig('');
     }
 }

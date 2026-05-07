@@ -17,7 +17,11 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Auth;
 
 use Phalcon\Auth\Access\Auth;
+use Phalcon\Auth\Access\Guest;
+use Phalcon\Auth\Adapter\AdapterLocator;
+use Phalcon\Auth\Adapter\Memory;
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Guard\GuardLocator;
 use Phalcon\Auth\Guard\Session;
 use Phalcon\Auth\Guard\Token;
 use Phalcon\Auth\ManagerFactory;
@@ -90,7 +94,13 @@ final class ManagerFactoryTest extends AbstractUnitTestCase
         $factory = new ManagerFactory($this->security, $this->container);
         $manager = $factory->load($this->singleSessionConfig());
 
-        $this->assertSame([], $manager->getAccessList());
+        $this->assertSame(
+            [
+                'auth'  => Auth::class,
+                'guest' => Guest::class,
+            ],
+            $manager->getAccessList()
+        );
     }
 
     public function testLoadSetsAccessListWhenProvided(): void
@@ -360,5 +370,45 @@ final class ManagerFactoryTest extends AbstractUnitTestCase
                 ],
             ],
         ]);
+    }
+
+    public function testLoadUsesCallerProvidedAdapterLocator(): void
+    {
+        $adapterLocator = new AdapterLocator($this->container);
+        $adapterLocator->register('aliased_memory', Memory::class);
+
+        $factory = new ManagerFactory(
+            $this->security,
+            $this->container,
+            adapterLocator: $adapterLocator,
+        );
+
+        $config = $this->singleSessionConfig();
+        $config['guards']['web']['adapter']['name'] = 'aliased_memory';
+
+        $manager = $factory->load($config);
+
+        $guard = $manager->getDefaultGuard();
+        $this->assertInstanceOf(Session::class, $guard);
+        $this->assertInstanceOf(Memory::class, $guard->getAdapter());
+    }
+
+    public function testLoadUsesCallerProvidedGuardLocator(): void
+    {
+        $guardLocator = new GuardLocator($this->container);
+        $guardLocator->register('aliased_session', Session::class);
+
+        $factory = new ManagerFactory(
+            $this->security,
+            $this->container,
+            guardLocator: $guardLocator,
+        );
+
+        $config = $this->singleSessionConfig();
+        $config['guards']['web']['type'] = 'aliased_session';
+
+        $manager = $factory->load($config);
+
+        $this->assertInstanceOf(Session::class, $manager->getDefaultGuard());
     }
 }

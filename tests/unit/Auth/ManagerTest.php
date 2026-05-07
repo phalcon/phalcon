@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Auth;
 
+use Phalcon\Auth\Access\AbstractAccess;
 use Phalcon\Auth\Access\AccessLocator;
 use Phalcon\Auth\Access\Auth;
 use Phalcon\Auth\Adapter\Config\MemoryAdapterConfig;
@@ -73,12 +74,23 @@ final class ManagerTest extends AbstractUnitTestCase
         return $manager;
     }
 
+    public function testAccessGateReceivesTheCallingManagerInstance(): void
+    {
+        $manager = $this->buildManager();
+        $manager->addAccessList(['auth' => Auth::class]);
+        $manager->access('auth');
+
+        $reflection = new \ReflectionProperty(AbstractAccess::class, 'manager');
+
+        $this->assertSame($manager, $reflection->getValue($manager->getAccess()));
+    }
+
     public function testAccessInstantiatesAuthGate(): void
     {
         $manager = $this->buildManager();
         $guard   = $this->buildGuard();
         $manager->addGuard('web', $guard, true);
-        $manager->setAccessList(['auth' => Auth::class]);
+        $manager->addAccessList(['auth' => Auth::class]);
         $manager->access('auth');
 
         $this->assertInstanceOf(Auth::class, $manager->getAccess());
@@ -87,10 +99,18 @@ final class ManagerTest extends AbstractUnitTestCase
     public function testAccessInstantiatesCustomGate(): void
     {
         $manager = $this->buildManager();
-        $manager->setAccessList(['admin' => FakeAccess::class]);
+        $manager->addAccessList(['admin' => FakeAccess::class]);
         $manager->access('admin');
 
         $this->assertInstanceOf(FakeAccess::class, $manager->getAccess());
+    }
+
+    public function testAccessResolvesDefaultWithoutExplicitRegistration(): void
+    {
+        $manager = $this->buildManager();
+        $manager->access('auth');
+
+        $this->assertInstanceOf(Auth::class, $manager->getAccess());
     }
 
     public function testAccessThrowsForUnknownName(): void
@@ -106,14 +126,14 @@ final class ManagerTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
 
         $manager = $this->buildManager();
-        $manager->setAccessList(['x' => 'NoSuchClass\\DoesNotExist']);
+        $manager->addAccessList(['x' => 'NoSuchClass\\DoesNotExist']);
         $manager->access('x');
     }
 
     public function testAddAccessListMerges(): void
     {
         $manager = $this->buildManager();
-        $manager->setAccessList(['auth' => Auth::class]);
+        $manager->addAccessList(['auth' => Auth::class]);
         $manager->addAccessList(['admin' => FakeAccess::class]);
 
         $list = $manager->getAccessList();
@@ -157,7 +177,7 @@ final class ManagerTest extends AbstractUnitTestCase
         $guard   = $this->buildGuard();
         $manager = $this->buildManager();
         $manager->addGuard('web', $guard, true);
-        $manager->setAccessList(['auth' => Auth::class]);
+        $manager->addAccessList(['auth' => Auth::class]);
         $manager->access('auth');
         $manager->except('a', 'b');
 
@@ -215,21 +235,12 @@ final class ManagerTest extends AbstractUnitTestCase
         $this->assertNull($manager->id());
     }
 
-    public function testMagicCallForwards(): void
-    {
-        $guard   = $this->buildGuard();
-        $manager = $this->buildManager();
-        $manager->addGuard('web', $guard, true);
-
-        $this->assertSame($guard->getName(), $manager->getName());
-    }
-
     public function testOnlySetsOnActiveAccess(): void
     {
         $guard   = $this->buildGuard();
         $manager = $this->buildManager();
         $manager->addGuard('web', $guard, true);
-        $manager->setAccessList(['auth' => Auth::class]);
+        $manager->addAccessList(['auth' => Auth::class]);
         $manager->access('auth');
         $manager->only('admin', 'dashboard');
 
@@ -242,14 +253,6 @@ final class ManagerTest extends AbstractUnitTestCase
 
         $manager = $this->buildManager();
         $manager->only('admin');
-    }
-
-    public function testSetAccessListReplaces(): void
-    {
-        $manager = $this->buildManager();
-        $manager->setAccessList(['auth' => Auth::class]);
-
-        $this->assertSame(['auth' => Auth::class], $manager->getAccessList());
     }
 
     public function testUserForwardsToDefaultGuard(): void
@@ -282,7 +285,7 @@ final class ManagerTest extends AbstractUnitTestCase
         ]));
     }
 
-    public function testAttemptThrowsWhenGuardLacksAttemptMethod(): void
+    public function testAttemptThrowsWhenGuardNotStateful(): void
     {
         $this->expectException(Exception::class);
 
@@ -327,8 +330,10 @@ final class ManagerTest extends AbstractUnitTestCase
         $this->assertFalse($manager->check());
     }
 
-    public function testLogoutSilentlySkipsGuardWithoutLogout(): void
+    public function testLogoutThrowsWhenGuardNotStateful(): void
     {
+        $this->expectException(Exception::class);
+
         $manager = $this->buildManager();
         $guard   = new \Phalcon\Auth\Guard\Token(
             $this->adapter,
@@ -338,8 +343,6 @@ final class ManagerTest extends AbstractUnitTestCase
         $manager->addGuard('api', $guard, true);
 
         $manager->logout();
-
-        $this->assertFalse($manager->check());
     }
 
     public function testSetAccessAssigns(): void
