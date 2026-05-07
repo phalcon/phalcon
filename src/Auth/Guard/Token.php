@@ -40,18 +40,19 @@ class Token extends AbstractGuard
     {
         $token = $this->request->get($this->config->getInputKey(), null, null);
 
-        if (empty($token)) {
-            $header = (string) $this->request->getHeader('Authorization');
-            if ($header !== '' && str_starts_with($header, 'Bearer ')) {
-                $token = mb_substr($header, 7, null, 'UTF-8');
+        if (is_string($token) && $token !== '') {
+            return $token;
+        }
+
+        $header = (string) $this->request->getHeader('Authorization');
+        if ($header !== '' && str_starts_with($header, 'Bearer ')) {
+            $bearer = mb_substr($header, 7, null, 'UTF-8');
+            if ($bearer !== '') {
+                return $bearer;
             }
         }
 
-        if (empty($token)) {
-            return null;
-        }
-
-        return (string) $token;
+        return null;
     }
 
     public function setRequest(RequestInterface $request): static
