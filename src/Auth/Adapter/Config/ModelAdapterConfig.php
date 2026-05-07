@@ -26,8 +26,10 @@ class ModelAdapterConfig extends AbstractAdapterConfig
     public function __construct(string $model)
     {
         if ($model === '') {
-            throw new Exception(
-                "Model adapter requires a non-empty 'model' class name"
+            throw Exception::configRequiresNonEmptyValue(
+                'Model adapter',
+                'model',
+                ' class name'
             );
         }
 

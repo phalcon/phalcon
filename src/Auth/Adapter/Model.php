@@ -41,9 +41,7 @@ class Model extends AbstractAdapter implements RememberAdapter
     public function createRememberToken(AuthUser $user): RememberToken
     {
         if (!($user instanceof AuthRemember)) {
-            throw new Exception(
-                'User model does not implement AuthRemember'
-            );
+            throw Exception::doesNotImplement('User model', 'AuthRemember');
         }
 
         return $user->createRememberToken(bin2hex(random_bytes(30)));

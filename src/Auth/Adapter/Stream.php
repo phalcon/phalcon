@@ -52,33 +52,23 @@ class Stream extends AbstractArrayAdapter
         $path = $this->config->getFile();
 
         if (!$this->phpFileExists($path)) {
-            throw new Exception(
-                'Stream adapter file does not exist: ' . $path
-            );
+            throw Exception::streamFileDoesNotExist($path);
         }
 
         $contents = $this->phpFileGetContents($path);
 
         if ($contents === false) {
-            throw new Exception(
-                'Stream adapter cannot read file: ' . $path
-            );
+            throw Exception::streamFileCannotRead($path);
         }
 
         try {
             $data = (new Decode())($contents, true);
         } catch (InvalidArgumentException $e) {
-            throw new Exception(
-                'Stream adapter file is not valid JSON: ' . $path,
-                0,
-                $e
-            );
+            throw Exception::streamFileNotValidJson($path, $ex);
         }
 
         if (!is_array($data)) {
-            throw new Exception(
-                'Stream adapter file does not contain a JSON array'
-            );
+            throw Exception::streamFileDoesNotContainJson($path);
         }
 
         /** @var list<AuthUserRow> $rows */

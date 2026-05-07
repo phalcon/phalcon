@@ -28,8 +28,10 @@ class StreamAdapterConfig extends AbstractAdapterConfig
         ?string $model = null,
     ) {
         if ($file === '') {
-            throw new Exception(
-                "Stream adapter requires a non-empty 'file' path"
+            throw Exception::configRequiresNonEmptyValue(
+                'Stream adapter',
+                'file',
+                ' path'
             );
         }
 
