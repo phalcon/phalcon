@@ -53,11 +53,9 @@ class AuthUser implements AuthUserContract
 
     public function getAuthPassword(): string
     {
-        if (!isset($this->data['password'])) {
-            return '';
-        }
+        $password = $this->data['password'] ?? null;
 
-        return (string) $this->data['password'];
+        return is_string($password) ? $password : '';
     }
 
     /**

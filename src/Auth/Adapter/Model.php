@@ -22,6 +22,7 @@ use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
 use Phalcon\Contracts\Auth\AuthRemember;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Auth\RememberToken;
+use Phalcon\Contracts\Encryption\Security\Security;
 use Phalcon\Mvc\ModelInterface;
 
 /**
@@ -33,6 +34,11 @@ use Phalcon\Mvc\ModelInterface;
  */
 class Model extends AbstractAdapter implements RememberAdapter
 {
+    public function __construct(Security $hasher, ModelAdapterConfig $config)
+    {
+        parent::__construct($hasher, $config);
+    }
+
     /**
      * Create and persist a new remember token for the user.
      *
