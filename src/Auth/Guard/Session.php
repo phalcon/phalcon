@@ -28,6 +28,7 @@ use Phalcon\Contracts\Auth\RememberToken;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\Response\CookiesInterface;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
+use Phalcon\Support\Helper\Json\Encode;
 
 /**
  * @phpstan-import-type AuthCredentials from Adapter
@@ -36,16 +37,13 @@ use Phalcon\Session\ManagerInterface as SessionManagerInterface;
  */
 class Session extends AbstractGuard implements GuardStateful, BasicAuth
 {
-    protected ?CookiesInterface $cookies = null;
-
-    protected ?RequestInterface $request = null;
-
-    protected ?SessionManagerInterface $session = null;
-
     protected bool $viaRemember = false;
 
     public function __construct(
         Adapter $adapter,
+        protected RequestInterface $request,
+        protected CookiesInterface $cookies,
+        protected SessionManagerInterface $session,
         SessionGuardConfig $config = new SessionGuardConfig(),
     ) {
         parent::__construct($adapter, $config);
@@ -101,7 +99,6 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
     {
         $this->fireManagerEvent('auth:beforeLogin');
 
-        $this->requireSession();
         $this->session->set($this->getName(), $user->getAuthIdentifier());
 
         if ($remember) {
@@ -141,17 +138,14 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         if ($recaller !== null && $current instanceof AuthRemember) {
             $token    = $recaller->getToken();
             $tokenRow = $current->getRememberToken($token);
-            if ($tokenRow !== null) {
-                $tokenRow->delete();
-            }
-            if ($this->cookies !== null && $this->cookies->has($this->getRememberName())) {
+            $tokenRow?->delete();
+
+            if ($this->cookies->has($this->getRememberName())) {
                 $this->cookies->delete($this->getRememberName());
             }
         }
 
-        if ($this->session !== null) {
-            $this->session->remove($this->getName());
-        }
+        $this->session->remove($this->getName());
 
         $this->fireManagerEvent('auth:afterLogout', ['user' => $current]);
 
@@ -178,8 +172,10 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
     /**
      * @param array<string, mixed> $extraConditions
      */
-    public function onceBasic(string $field = 'email', array $extraConditions = []): false | AuthUser
-    {
+    public function onceBasic(
+        string $field = 'email',
+        array $extraConditions = []
+    ): false | AuthUser {
         $credentials = $this->basicCredentials($field);
         if ($credentials === null) {
             return false;
@@ -195,39 +191,14 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         return false;
     }
 
-    public function setCookies(CookiesInterface $cookies): static
-    {
-        $this->cookies = $cookies;
-
-        return $this;
-    }
-
-    public function setRequest(RequestInterface $request): static
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    public function setSession(SessionManagerInterface $session): static
-    {
-        $this->session = $session;
-
-        return $this;
-    }
-
     public function user(): ?AuthUser
     {
         if ($this->user !== null) {
             return $this->user;
         }
 
-        if ($this->session === null) {
-            return null;
-        }
-
         $id = $this->session->get($this->getName());
-        if ($id !== null && (is_int($id) || is_string($id))) {
+        if (is_int($id) || is_string($id)) {
             $this->user = $this->adapter->retrieveById($id);
         }
 
@@ -281,10 +252,6 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
      */
     protected function basicCredentials(string $field): ?array
     {
-        if ($this->request === null) {
-            return null;
-        }
-
         $basic = $this->request->getBasicAuth();
         if ($basic === null) {
             return null;
@@ -306,9 +273,6 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
     protected function recaller(): ?UserRemember
     {
-        if ($this->cookies === null) {
-            return null;
-        }
         if (!$this->cookies->has($this->getRememberName())) {
             return null;
         }
@@ -332,14 +296,10 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
     protected function rememberUser(AuthUser $user): void
     {
-        if ($this->cookies === null || $this->request === null) {
-            return;
-        }
-
         $token = $this->createRememberToken($user);
 
         $agent   = (string) $this->request->getUserAgent();
-        $payload = json_encode(
+        $payload = (new Encode())->__invoke(
             [
                 'id'         => $user->getAuthIdentifier(),
                 'token'      => $token->getToken(),
@@ -353,20 +313,6 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
             $payload,
             time() + 360 * 24 * 60 * 60
         );
-    }
-
-    /**
-     * @phpstan-assert !null $this->session
-     *
-     * @throws Exception
-     */
-    protected function requireSession(): void
-    {
-        if ($this->session === null) {
-            throw new Exception(
-                'Session guard requires a session manager (call setSession())'
-            );
-        }
     }
 
     protected function userFromRecaller(UserRemember $recaller): ?AuthUser

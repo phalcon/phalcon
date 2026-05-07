@@ -63,7 +63,7 @@ class Stream extends AbstractArrayAdapter
 
         try {
             $data = (new Decode())($contents, true);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $ex) {
             throw Exception::streamFileNotValidJson($path, $ex);
         }
 
