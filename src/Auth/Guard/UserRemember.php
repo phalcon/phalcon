@@ -16,6 +16,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth\Guard;
 
+use Phalcon\Support\Helper\Json\Decode;
+
 /**
  * Value object representing the contents of a remember-me cookie.
  *
@@ -38,7 +40,7 @@ final class UserRemember
      */
     public function __construct(string | array $payload)
     {
-        $data = is_string($payload) ? json_decode($payload, true) : $payload;
+        $data = is_string($payload) ? (new Decode())->__invoke($payload, true) : $payload;
 
         if (!is_array($data)) {
             $data = [];
