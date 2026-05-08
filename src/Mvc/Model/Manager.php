@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\Model\Relation\CacheKeyProvider;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
@@ -21,6 +22,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
@@ -1410,7 +1412,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $reusable = $relation->isReusable();
 
         if ($reusable) {
-            $uniqueKey = $this->getUniqueKey($referencedModel, [$findParams, $retrieveMethod]);
+            $uniqueKey = $this->getUniqueKey($record, $referencedModel, [$findParams, $retrieveMethod]);
             $records   = $this->getReusableRecords($referencedModel, $uniqueKey);
 
             if (is_array($records) || is_object($records)) {
@@ -2245,8 +2247,15 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return string|null
      */
-    private function getUniqueKey(mixed $prefix, mixed $value): string | null
-    {
+    private function getUniqueKey(
+        ModelInterface|CacheKeyProvider $model,
+        mixed $prefix,
+        mixed $value
+    ): string | null {
+        if ($model instanceof CacheKeyProvider) {
+            return $model->getUniqueKey();
+        }
+
         $result = '';
 
         if (is_string($prefix)) {
