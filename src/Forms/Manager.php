@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms;
 
+use Phalcon\Contracts\Forms\Schema;
+
 /**
  * Forms Manager
  */
@@ -73,6 +75,27 @@ class Manager
     }
 
     /**
+     * Creates a form from a Schema source, registers it and returns it.
+     *
+     * @param string      $name
+     * @param Schema      $schema
+     * @param object|null $entity
+     *
+     * @return Form
+     * @throws Exception
+     */
+    public function loadForm(
+        string $name,
+        Schema $schema,
+        object | null $entity = null
+    ): Form {
+        $form               = (new Form($entity))->load($schema);
+        $this->forms[$name] = $form;
+
+        return $form;
+    }
+
+    /**
      * Registers a form in the Forms Manager
      *
      * @param string $name
@@ -87,3 +110,4 @@ class Manager
         return $this;
     }
 }
+
