@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Html\Helper\Input\Select;
+namespace Phalcon\Contracts\Html\Helper\Input;
 
 /**
  * Interface for SELECT option data providers.
@@ -17,7 +17,9 @@ namespace Phalcon\Html\Helper\Input\Select;
  * Return format: [value => label] for flat options;
  * [groupLabel => [value => label, ...]] for optgroups.
  */
-interface SelectDataInterface
+interface SelectData
 {
+    public function getAttributes(): array;
+
     public function getOptions(): array;
 }
