@@ -34,6 +34,29 @@ class FakeAuthUserNoRemember implements AuthUser
     public string $password = '';
 
     /**
+     * Absorbs arbitrary row columns (e.g. email) without triggering
+     * dynamic-property deprecation warnings.
+     *
+     * @var array<string, mixed>
+     */
+    private array $extra = [];
+
+    public function __get(string $name): mixed
+    {
+        return $this->extra[$name] ?? null;
+    }
+
+    public function __isset(string $name): bool
+    {
+        return isset($this->extra[$name]);
+    }
+
+    public function __set(string $name, mixed $value): void
+    {
+        $this->extra[$name] = $value;
+    }
+
+    /**
      * @param array<string, mixed> $row
      */
     public function __construct(array $row = [])

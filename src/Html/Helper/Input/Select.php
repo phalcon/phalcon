@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
-use Phalcon\Contracts\Html\Helper\Input\SelectDataInterface;
+use Phalcon\Contracts\Html\Helper\Input\SelectData;
 use Phalcon\Html\Helper\AbstractList;
 
 use function is_array;
@@ -119,11 +119,11 @@ class Select extends AbstractList
      * Flat entries: key = option value, value = label string.
      * Optgroup entries: key = group label, value = [value => label] array.
      *
-     * @param SelectDataInterface $data
+     * @param SelectData $data
      *
      * @return Select
      */
-    public function fromData(SelectDataInterface $data): Select
+    public function fromData(SelectData $data): Select
     {
         $attributes = $data->getAttributes();
 

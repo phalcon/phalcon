@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth\Guard;
 
+use InvalidArgumentException;
 use Phalcon\Support\Helper\Json\Decode;
 
 /**
@@ -40,7 +41,11 @@ final class UserRemember
      */
     public function __construct(string | array $payload)
     {
-        $data = is_string($payload) ? (new Decode())->__invoke($payload, true) : $payload;
+        try {
+            $data = is_string($payload) ? (new Decode())->__invoke($payload, true) : $payload;
+        } catch (InvalidArgumentException) {
+            $data = [];
+        }
 
         if (!is_array($data)) {
             $data = [];
