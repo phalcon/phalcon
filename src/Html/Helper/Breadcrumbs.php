@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Html\Escaper\EscaperInterface;
+use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Traits\Helper\Str\InterpolateTrait;
 
 use function array_key_last;
@@ -46,7 +48,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * @var string
      */
-    protected string $delimiter = '';
+    protected string $delimiter = PHP_EOL;
     /**
      * @var string
      */
@@ -61,6 +63,13 @@ class Breadcrumbs extends AbstractHelper
      * @var array<int, TElement>
      */
     private array $data = [];
+    /**
+     * Link prefix prepended to every non-empty link during rendering.
+     * Auto-populated from the Url service when one is injected.
+     *
+     * @var string
+     */
+    private string $prefix = '';
     /**
      * Crumb separator
      *
@@ -84,18 +93,29 @@ class Breadcrumbs extends AbstractHelper
     ];
 
     /**
+     * @param EscaperInterface  $escaper
+     * @param UrlInterface|null $url
+     */
+    public function __construct(
+        EscaperInterface $escaper,
+        private ?UrlInterface $url = null
+    ) {
+        parent::__construct($escaper);
+    }
+
+    /**
      * Sets the indent and delimiter and returns the object back
      *
-     * @param string $indent
-     * @param string $delimiter
+     * @param string      $indent
+     * @param string|null $delimiter
      *
      * @return static
      */
     public function __invoke(
         string $indent = '    ',
-        string $delimiter = PHP_EOL
+        ?string $delimiter = null
     ): static {
-        $this->delimiter = $delimiter;
+        $this->delimiter = null === $delimiter ? PHP_EOL : $delimiter;
         $this->indent    = $indent;
 
         return $this;
@@ -172,6 +192,16 @@ class Breadcrumbs extends AbstractHelper
     public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * Returns the link prefix.
+     *
+     * @return string
+     */
+    public function getPrefix(): string
+    {
+        return $this->prefix;
     }
 
     /**
@@ -273,6 +303,22 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
+     * Set the link prefix prepended to every non-empty link during rendering.
+     * When a Url service was injected, calling this method replaces it.
+     *
+     * @param string $prefix
+     *
+     * @return static
+     */
+    public function setPrefix(string $prefix): static
+    {
+        $this->prefix = $prefix;
+        $this->url    = null;
+
+        return $this;
+    }
+
+    /**
      * Set the separator
      *
      * @param string $separator
@@ -329,6 +375,14 @@ class Breadcrumbs extends AbstractHelper
         string $template,
         array $element
     ): string {
+        if (!empty($element['link']) && null !== $this->url) {
+            $link = $this->url->get($element['link']);
+        } elseif (!empty($element['link']) && !empty($this->prefix)) {
+            $link = $this->prefix . $element['link'];
+        } else {
+            $link = $element['link'];
+        }
+
         return $this->indent
             . $this->toInterpolate(
                 $template,
@@ -336,7 +390,7 @@ class Breadcrumbs extends AbstractHelper
                     'attributes' => $this->processAttributes($element['attributes']),
                     'icon'       => $element['icon'],
                     'text'       => $this->escaper->html($element['text']),
-                    'link'       => $element['link'],
+                    'link'       => $link,
                 ]
             )
             . $this->delimiter;

@@ -11,15 +11,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-use function array_merge;
+use Phalcon\Html\Escaper\EscaperInterface;
 
 /**
- * Class Anchor
- *
- * @package Phalcon\Html\Helper
+ * Anchor class producing "a" elements
  */
 class Anchor extends AbstractHelper
 {
+    /**
+     * @param EscaperInterface $escaper
+     * @param Doctype|null     $doctype
+     * @param bool             $forceRaw
+     */
+    public function __construct(
+        EscaperInterface $escaper,
+        ?Doctype $doctype = null,
+        protected bool $forceRaw = false
+    ) {
+        parent::__construct($escaper, $doctype);
+    }
+
     /**
      * Produce a <a> tag
      *
@@ -36,26 +47,11 @@ class Anchor extends AbstractHelper
         array $attributes = [],
         bool $raw = false
     ): string {
-        $overrides = $this->processAttributes($href, $attributes);
-
-        return $this->renderFullElement('a', $text, $overrides, $raw);
-    }
-
-    /**
-     * @param string $href
-     * @param array  $attributes
-     *
-     * @return array
-     */
-    protected function processAttributes(string $href, array $attributes): array
-    {
-        $overrides = ['href' => $href];
-
-        /**
-         * Avoid duplicate 'href' and ignore it if it is passed in the attributes
-         */
-        unset($attributes['href']);
-
-        return array_merge($overrides, $attributes);
+        return $this->renderFullElement(
+            'a',
+            $text,
+            $this->injectAttribute('href', $href, $attributes),
+            $raw || $this->forceRaw
+        );
     }
 }

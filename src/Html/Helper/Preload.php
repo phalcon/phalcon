@@ -27,21 +27,14 @@ use function array_merge;
 class Preload extends AbstractHelper
 {
     /**
-     * @var ResponseInterface|null
-     */
-    protected ?ResponseInterface $response;
-
-    /**
      * @param EscaperInterface       $escaper
      * @param ResponseInterface|null $response
      */
     public function __construct(
         EscaperInterface $escaper,
-        ?ResponseInterface $response = null
+        protected ?ResponseInterface $response = null
     ) {
         parent::__construct($escaper);
-
-        $this->response = $response;
     }
 
     /**

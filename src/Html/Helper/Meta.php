@@ -12,9 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 /**
- * Class Meta
- *
- * @package Phalcon\Html\Helper
+ * Meta class producing "meta" elements
  */
 class Meta extends AbstractSeries
 {
@@ -22,19 +20,23 @@ class Meta extends AbstractSeries
      * Add an element to the list
      *
      * @param array $attributes
+     * @param int   $pos
      *
      * @return Meta
      */
-    public function add(array $attributes = []): Meta
+    public function add(array $attributes = [], int $pos = -1): Meta
     {
-        $this->store[] = [
-            'renderTag',
+        $this->pushOrPlace(
             [
-                $this->getTag(),
-                $attributes,
+                'renderTag',
+                [
+                    $this->getTag(),
+                    $attributes,
+                ],
+                $this->indent(),
             ],
-            $this->indent(),
-        ];
+            $pos
+        );
 
         return $this;
     }
@@ -42,23 +44,25 @@ class Meta extends AbstractSeries
     /**
      * @param string $httpEquiv
      * @param string $content
+     * @param int    $pos
      *
      * @return Meta
      */
-    public function addHttp(string $httpEquiv, string $content): Meta
+    public function addHttp(string $httpEquiv, string $content, int $pos = -1): Meta
     {
-        return $this->addElement('http-equiv', $httpEquiv, $content);
+        return $this->addElement('http-equiv', $httpEquiv, $content, $pos);
     }
 
     /**
      * @param string $name
      * @param string $content
+     * @param int    $pos
      *
      * @return Meta
      */
-    public function addName(string $name, string $content): Meta
+    public function addName(string $name, string $content, int $pos = -1): Meta
     {
-        $this->addElement('name', $name, $content);
+        $this->addElement('name', $name, $content, $pos);
 
         return $this;
     }
@@ -66,12 +70,13 @@ class Meta extends AbstractSeries
     /**
      * @param string $name
      * @param string $content
+     * @param int    $pos
      *
      * @return Meta
      */
-    public function addProperty(string $name, string $content): Meta
+    public function addProperty(string $name, string $content, int $pos = -1): Meta
     {
-        $this->addElement('property', $name, $content);
+        $this->addElement('property', $name, $content, $pos);
 
         return $this;
     }
@@ -88,19 +93,21 @@ class Meta extends AbstractSeries
      * @param string $element
      * @param string $value
      * @param string $content
+     * @param int    $pos
      *
      * @return Meta
      */
     private function addElement(
         string $element,
         string $value,
-        string $content
+        string $content,
+        int $pos = -1
     ): Meta {
         $attributes = [
             $element  => $value,
             'content' => $content,
         ];
 
-        return $this->add($attributes);
+        return $this->add($attributes, $pos);
     }
 }

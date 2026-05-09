@@ -14,9 +14,7 @@ namespace Phalcon\Html\Helper;
 use function array_merge;
 
 /**
- * Class Link
- *
- * @package Phalcon\Html\Helper
+ * Link class producing "link" elements
  */
 class Link extends Style
 {
@@ -25,20 +23,24 @@ class Link extends Style
      *
      * @param string $href
      * @param array  $attributes
+     * @param int    $position
      *
      * @return static
      */
-    public function add(string $href, array $attributes = []): static
+    public function add(string $href, array $attributes = [], int $position = -1): static
     {
-        $this->store[] = [
-            'renderTag',
+        $this->pushOrPlace(
             [
-                $this->getTag(),
-                $this->getAttributes($href, $attributes),
-                '/',
+                'renderTag',
+                [
+                    $this->getTag(),
+                    $this->getAttributes($href, $attributes),
+                    '/',
+                ],
+                $this->indent(),
             ],
-            $this->indent(),
-        ];
+            $position
+        );
 
         return $this;
     }

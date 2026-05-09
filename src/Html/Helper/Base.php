@@ -14,9 +14,7 @@ namespace Phalcon\Html\Helper;
 use function array_merge;
 
 /**
- * Class Base
- *
- * @package Phalcon\Html\Helper
+ * Base class producing "base" elements
  */
 class Base extends AbstractHelper
 {

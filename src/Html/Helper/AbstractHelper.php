@@ -26,10 +26,8 @@ use function trim;
 use const PHP_EOL;
 
 /**
- * @property string           $delimiter
- * @property EscaperInterface $escaper
- * @property string           $indent
- * @property int              $indentLevel
+ * Abstract helper class to facilitate common functionality, such as attributes
+ * delimiters etc.
  */
 abstract class AbstractHelper
 {
@@ -57,6 +55,27 @@ abstract class AbstractHelper
         protected EscaperInterface $escaper,
         protected ?Doctype $doctype = null
     ) {
+    }
+
+    /**
+     * Forces `$key => $value` to the front of the attributes array,
+     * removing any existing entry for that key. This guarantees the
+     * attribute is always present and appears first in the rendered output.
+     *
+     * @param string $key
+     * @param string $value
+     * @param array  $attributes
+     *
+     * @return array
+     */
+    protected function injectAttribute(
+        string $key,
+        string $value,
+        array $attributes
+    ): array {
+        unset($attributes[$key]);
+
+        return array_merge([$key => $value], $attributes);
     }
 
     /**

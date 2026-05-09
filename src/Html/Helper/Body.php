@@ -12,9 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 /**
- * Class Body
- *
- * @package Phalcon\Html\Helper
+ * Body class producing "body" elements
  */
 class Body extends AbstractHelper
 {

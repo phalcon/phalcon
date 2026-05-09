@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Html\Helper\Input;
+
+use Phalcon\Html\Escaper\EscaperInterface;
+use Phalcon\Html\Helper\Doctype;
+
+/**
+ * Generic input helper. The HTML5 `type` attribute is supplied via the
+ * constructor, which means the `TagFactory` can register a single class
+ * for all type-string-only inputs (color, date, email, hidden, number, ...)
+ * and differentiate them through the recipe map. The type can also be
+ * changed after construction via `setType()`.
+ */
+class Generic extends AbstractInput
+{
+    /**
+     * @param EscaperInterface $escaper
+     * @param Doctype|null     $doctype
+     * @param string           $type
+     */
+    public function __construct(
+        EscaperInterface $escaper,
+        ?Doctype $doctype = null,
+        string $type = 'text'
+    ) {
+        parent::__construct($escaper, $doctype);
+
+        $this->type = $type;
+    }
+
+    /**
+     * Sets the type of the input.
+     *
+     * @param string $type
+     *
+     * @return AbstractInput
+     */
+    public function setType(string $type): AbstractInput
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+}

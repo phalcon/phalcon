@@ -11,13 +11,35 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Html\Escaper\EscaperInterface;
+
 /**
  * Class Label
  *
- * @package Phalcon\Html\Helper
+ * @property bool $forceRaw
  */
 class Label extends AbstractHelper
 {
+    /**
+     * @var bool
+     */
+    protected bool $forceRaw = false;
+
+    /**
+     * @param EscaperInterface $escaper
+     * @param Doctype|null     $doctype
+     * @param bool             $forceRaw
+     */
+    public function __construct(
+        EscaperInterface $escaper,
+        ?Doctype $doctype = null,
+        bool $forceRaw = false
+    ) {
+        parent::__construct($escaper, $doctype);
+
+        $this->forceRaw = $forceRaw;
+    }
+
     /**
      * Produce a `<label>` tag.
      *
@@ -32,6 +54,6 @@ class Label extends AbstractHelper
         array $attributes = [],
         bool $raw = false
     ): string {
-        return $this->renderFullElement('label', $label, $attributes, $raw);
+        return $this->renderFullElement('label', $label, $attributes, $raw || $this->forceRaw);
     }
 }

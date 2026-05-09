@@ -12,13 +12,9 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 /**
- * Class Radio
- *
- * @package Phalcon\Html\Helper\Input
- *
- * @property string $type
+ * Radio class producing "radio" html elements
  */
-class Radio extends Checkbox
+class Radio extends AbstractChecked
 {
     /**
      * @var string

@@ -14,9 +14,7 @@ namespace Phalcon\Html\Helper;
 use function array_merge;
 
 /**
- * Class Script
- *
- * @package Phalcon\Html\Helper
+ * Script class producing "script" elements
  */
 class Script extends AbstractSeries
 {
@@ -25,20 +23,66 @@ class Script extends AbstractSeries
      *
      * @param string $href
      * @param array  $attributes
+     * @param int    $position
      *
      * @return static
      */
-    public function add(string $href, array $attributes = []): static
+    public function add(string $href, array $attributes = [], int $position = -1): static
     {
-        $this->store[] = [
-            'renderFullElement',
+        $this->pushOrPlace(
             [
-                $this->getTag(),
-                '',
-                $this->getAttributes($href, $attributes),
+                'renderFullElement',
+                [
+                    $this->getTag(),
+                    '',
+                    $this->getAttributes($href, $attributes),
+                ],
+                $this->indent(),
             ],
-            $this->indent(),
-        ];
+            $position
+        );
+
+        return $this;
+    }
+
+    /**
+     * Begins capturing inline script content via output buffering. Pair
+     * with `endInternal()` to close the buffer and append the captured
+     * markup as a `<script>...</script>` block in the asset stack.
+     */
+    public function beginInternal(): void
+    {
+        ob_start();
+    }
+
+    /**
+     * Closes an inline-script buffer opened by `beginInternal()` and adds
+     * the captured content as a `<script>...</script>` entry. Any
+     * attributes supplied are placed on the wrapping tag. The script body
+     * is treated as raw HTML (it is JavaScript, not user-supplied text).
+     *
+     * @param array $attributes
+     * @param int   $position
+     *
+     * @return static
+     */
+    public function endInternal(array $attributes = [], int $position = -1): static
+    {
+        $content = (string) ob_get_clean();
+
+        $this->pushOrPlace(
+            [
+                'renderFullElement',
+                [
+                    $this->getTag(),
+                    $content,
+                    $attributes,
+                    true,
+                ],
+                $this->indent(),
+            ],
+            $position
+        );
 
         return $this;
     }
@@ -68,6 +112,6 @@ class Script extends AbstractSeries
      */
     protected function getTag(): string
     {
-        return "script";
+        return 'script';
     }
 }

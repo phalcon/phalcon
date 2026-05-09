@@ -12,9 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 /**
- * Class Close
- *
- * @package Phalcon\Html\Helper
+ * Close class producing "close" elements
  */
 class Close extends AbstractHelper
 {

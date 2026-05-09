@@ -12,8 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 /**
- * @property array $attributes
- * @property array $store
+ * Abstract class for series elements
  */
 abstract class AbstractSeries extends AbstractHelper
 {
@@ -28,16 +27,16 @@ abstract class AbstractSeries extends AbstractHelper
     protected array $store = [];
 
     /**
-     * @param string $indent
-     * @param string $delimiter
+     * @param string      $indent
+     * @param string|null $delimiter
      *
      * @return static
      */
     public function __invoke(
         string $indent = '    ',
-        string $delimiter = PHP_EOL
+        ?string $delimiter = null
     ): static {
-        $this->delimiter = $delimiter;
+        $this->delimiter = null === $delimiter ? PHP_EOL : $delimiter;
         $this->indent    = $indent;
         $this->store     = [];
 
@@ -45,14 +44,20 @@ abstract class AbstractSeries extends AbstractHelper
     }
 
     /**
-     * Generates and returns the HTML for the list.
+     * Generates and returns the HTML for the list. Entries are sorted by
+     * their integer key first, so an asset registered with a lower position
+     * renders before one registered with a higher position regardless of
+     * registration order.
      *
      * @return string
      */
     public function __toString()
     {
+        $sorted = $this->store;
+        ksort($sorted);
+
         return $this->renderArrayElements(
-            $this->store,
+            $sorted,
             $this->delimiter
         );
     }
@@ -67,6 +72,33 @@ abstract class AbstractSeries extends AbstractHelper
         $this->store = [];
 
         return $this;
+    }
+
+    /**
+     * Appends an entry to the store, optionally at a specific integer
+     * position. When `$pos` is negative the entry is pushed onto the next
+     * available auto-increment slot. When `$pos` is non-negative the entry
+     * is placed at that key, advancing past any already-occupied slots so
+     * existing entries are not overwritten. The store is ksort()ed in
+     * `__toString`, so positions act as a sort key, not a strict address.
+     *
+     * @param array $entry
+     * @param int   $pos
+     */
+    protected function pushOrPlace(array $entry, int $pos = -1): void
+    {
+        if ($pos < 0) {
+            $this->store[] = $entry;
+
+            return;
+        }
+
+        $key = $pos;
+        while (isset($this->store[$key])) {
+            $key++;
+        }
+
+        $this->store[$key] = $entry;
     }
 
     /**

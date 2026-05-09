@@ -11,13 +11,23 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
-/**
- * Class Element
- *
- * @package Phalcon\Html\Helper
- */
+use Phalcon\Html\Escaper\EscaperInterface;
+
 class Element extends AbstractHelper
 {
+    /**
+     * @param EscaperInterface $escaper
+     * @param Doctype|null     $doctype
+     * @param bool             $forceRaw
+     */
+    public function __construct(
+        EscaperInterface $escaper,
+        ?Doctype $doctype = null,
+        protected bool $forceRaw = false
+    ) {
+        parent::__construct($escaper, $doctype);
+    }
+
     /**
      * Produce a tag.
      *
@@ -34,6 +44,6 @@ class Element extends AbstractHelper
         array $attributes = [],
         bool $raw = false
     ): string {
-        return $this->renderFullElement($tag, $text, $attributes, $raw);
+        return $this->renderFullElement($tag, $text, $attributes, $raw || $this->forceRaw);
     }
 }

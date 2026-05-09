@@ -12,11 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 /**
- * Class Textarea
- *
- * @package Phalcon\Html\Helper\Input
- *
- * @property string $type
+ * Textarea class producing "textarea" elements
  */
 class Textarea extends AbstractInput
 {

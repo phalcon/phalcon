@@ -14,13 +14,7 @@ namespace Phalcon\Html\Helper;
 use const PHP_EOL;
 
 /**
- * Class AbstractList
- *
- * @package Phalcon\Html\Helper
- *
- * @property array  $attributes
- * @property string $elementTag
- * @property array  $store
+ * Abstract class for list elements
  */
 abstract class AbstractList extends AbstractHelper
 {
@@ -40,19 +34,19 @@ abstract class AbstractList extends AbstractHelper
     protected array $store = [];
 
     /**
-     * @param string $indent
-     * @param string $delimiter
-     * @param array  $attributes
+     * @param string      $indent
+     * @param string|null $delimiter
+     * @param array       $attributes
      *
      * @return static
      */
     public function __invoke(
         string $indent = '    ',
-        string $delimiter = PHP_EOL,
+        ?string $delimiter = null,
         array $attributes = []
     ): static {
         $this->attributes = $attributes;
-        $this->delimiter  = $delimiter;
+        $this->delimiter  = null === $delimiter ? PHP_EOL : $delimiter;
         $this->indent     = $indent;
         $this->store      = [];
 

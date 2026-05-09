@@ -17,13 +17,7 @@ use Phalcon\Html\Helper\Doctype;
 use function array_merge;
 
 /**
- * Class AbstractInput
- *
- * @package Phalcon\Html\Helper\Input
- *
- * @property array  $attributes
- * @property string $type
- * @property string $value
+ * Abstract class for input elements
  */
 abstract class AbstractInput extends AbstractHelper
 {

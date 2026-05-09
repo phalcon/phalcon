@@ -11,10 +11,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
+use Phalcon\Contracts\Html\Helper\Input\SelectDataInterface;
 use Phalcon\Html\Helper\AbstractList;
-use Phalcon\Html\Helper\Input\Select\SelectDataInterface;
 
 use function is_array;
+use function is_numeric;
 
 /**
  * Class Select
@@ -22,6 +23,7 @@ use function is_array;
  * @property string $elementTag
  * @property bool   $inOptGroup
  * @property string $selected
+ * @property bool   $strict
  */
 class Select extends AbstractList
 {
@@ -39,6 +41,11 @@ class Select extends AbstractList
      * @var string
      */
     protected string $selected = '';
+
+    /**
+     * @var bool
+     */
+    protected bool $strict = false;
 
     /**
      * Add an element to the list
@@ -118,15 +125,21 @@ class Select extends AbstractList
      */
     public function fromData(SelectDataInterface $data): Select
     {
+        $attributes = $data->getAttributes();
+
         foreach ($data->getOptions() as $key => $value) {
             if (is_array($value)) {
                 $this->optGroup((string) $key);
+
                 foreach ($value as $subKey => $subValue) {
-                    $this->add((string) $subValue, (string) $subKey);
+                    $subAttrs = $attributes[$subKey] ?? [];
+                    $this->add((string) $subValue, (string) $subKey, $subAttrs);
                 }
+
                 $this->optGroup((string) $key);
             } else {
-                $this->add((string) $value, (string) $key);
+                $optionAttrs = $attributes[$key] ?? [];
+                $this->add((string) $value, (string) $key, $optionAttrs);
             }
         }
 
@@ -170,6 +183,35 @@ class Select extends AbstractList
     }
 
     /**
+     * Adds a non-selectable placeholder option as the first entry. Renders
+     * as `<option value="" disabled selected>$text</option>`, matching the
+     * common HTML idiom for "Choose..."-style prompts.
+     *
+     * @param string $text
+     *
+     * @return Select
+     */
+    public function placeholder(string $text): Select
+    {
+        $this->store[] = [
+            'renderFullElement',
+            [
+                $this->elementTag,
+                $text,
+                [
+                    'value'    => '',
+                    'disabled' => 'disabled',
+                    'selected' => 'selected',
+                ],
+                false,
+            ],
+            $this->indent(),
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param string $selected
      *
      * @return Select
@@ -177,6 +219,23 @@ class Select extends AbstractList
     public function selected(string $selected): Select
     {
         $this->selected = $selected;
+
+        return $this;
+    }
+
+    /**
+     * Toggles strict (`===`) comparison between an option's `value` and
+     * the previously stored `selected` value. Defaults to loose (`==`),
+     * matching the round-tripping fix in `AbstractChecked` so mixed
+     * int/string form data marks the right option as selected.
+     *
+     * @param bool $flag
+     *
+     * @return Select
+     */
+    public function strict(bool $flag = true): Select
+    {
+        $this->strict = $flag;
 
         return $this;
     }
@@ -220,10 +279,17 @@ class Select extends AbstractList
         array $attributes,
         string | null $value = null
     ): array {
-        if (null !== $value) {
+        if (is_numeric($value) || !empty($value)) {
             $attributes['value'] = $value;
-            if (!empty($this->selected) && $value === $this->selected) {
-                $attributes['selected'] = 'selected';
+
+            if ('' !== $this->selected) {
+                $matched = $this->strict
+                    ? $value === $this->selected
+                    : $value == $this->selected;
+
+                if ($matched) {
+                    $attributes['selected'] = 'selected';
+                }
             }
         }
 

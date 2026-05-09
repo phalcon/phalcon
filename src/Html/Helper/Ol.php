@@ -11,13 +11,26 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Html\Escaper\EscaperInterface;
+
 /**
- * Class Ol
- *
- * @package Phalcon\Html\Helper
+ * Ol class producing "ol" elements
  */
 class Ol extends AbstractList
 {
+    /**
+     * @param EscaperInterface $escaper
+     * @param Doctype|null     $doctype
+     * @param bool             $forceRaw
+     */
+    public function __construct(
+        EscaperInterface $escaper,
+        ?Doctype $doctype = null,
+        protected bool $forceRaw = false
+    ) {
+        parent::__construct($escaper, $doctype);
+    }
+
     /**
      * Add an element to the list
      *
@@ -38,7 +51,7 @@ class Ol extends AbstractList
                 $this->elementTag,
                 $text,
                 $attributes,
-                $raw,
+                $raw || $this->forceRaw,
             ],
             $this->indent(),
         ];

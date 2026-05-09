@@ -14,9 +14,7 @@ namespace Phalcon\Html\Helper;
 use function array_merge;
 
 /**
- * Class Style
- *
- * @package Phalcon\Html\Helper
+ * Style class producing "style" elements
  */
 class Style extends AbstractSeries
 {
@@ -30,20 +28,24 @@ class Style extends AbstractSeries
      *
      * @param string $url
      * @param array  $attributes
+     * @param int    $position
      *
      * @return static
      */
-    public function add(string $url, array $attributes = []): static
+    public function add(string $url, array $attributes = [], int $position = -1): static
     {
-        $this->store[] = [
-            "renderTag",
+        $this->pushOrPlace(
             [
-                $this->getTag(),
-                $this->getAttributes($url, $attributes),
-                "/",
+                "renderTag",
+                [
+                    $this->getTag(),
+                    $this->getAttributes($url, $attributes),
+                    "/",
+                ],
+                $this->indent(),
             ],
-            $this->indent(),
-        ];
+            $position
+        );
 
         return $this;
     }

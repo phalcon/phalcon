@@ -11,20 +11,32 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input\Select;
 
+use Phalcon\Contracts\Html\Helper\Input\SelectData;
+
 /**
  * Wraps a plain PHP array as a SELECT data provider.
  *
  * Keys are option values; string values are labels;
  * array values define optgroups.
  */
-class ArrayData implements SelectDataInterface
+class ArrayData implements SelectData
 {
     /**
      * @param array $data
+     * @param array $attributes
      */
     public function __construct(
-        protected array $data = []
+        protected array $data = [],
+        protected array $attributes = []
     ) {
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
     /**
