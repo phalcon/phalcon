@@ -15,12 +15,27 @@ namespace Phalcon\Forms;
 
 use Countable;
 use Iterator;
+use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception as ValidationException;
 use Phalcon\Filter\Validation\ValidationInterface;
+use Phalcon\Forms\Element\Check;
+use Phalcon\Forms\Element\CheckGroup;
+use Phalcon\Forms\Element\Date;
+use Phalcon\Forms\Element\Email;
 use Phalcon\Forms\Element\ElementInterface;
+use Phalcon\Forms\Element\File;
+use Phalcon\Forms\Element\Hidden;
+use Phalcon\Forms\Element\Numeric;
+use Phalcon\Forms\Element\Password;
+use Phalcon\Forms\Element\Radio;
+use Phalcon\Forms\Element\RadioGroup;
+use Phalcon\Forms\Element\Select;
+use Phalcon\Forms\Element\Submit;
+use Phalcon\Forms\Element\Text;
+use Phalcon\Forms\Element\TextArea;
 use Phalcon\Html\Attributes;
 use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Html\TagFactory;
@@ -28,7 +43,9 @@ use Phalcon\Messages\Messages;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 
+use function array_key_exists;
 use function is_string;
+use function strtolower;
 
 /**
  * This component allows to build forms using an object-oriented interface
@@ -754,6 +771,74 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     public function key(): int
     {
         return $this->position;
+    }
+
+    /**
+     * Loads elements into the form from a Schema source.
+     *
+     * Each definition in the schema must have at least 'type' and 'name'.
+     * Supported types: check, checkgroup, date, email, file, hidden, numeric,
+     * password, radio, radiogroup, select, submit, text, textarea.
+     *
+     * @param Schema $schema
+     *
+     * @return $this
+     * @throws Exception
+     */
+    public function load(Schema $schema): Form
+    {
+        $map = [
+            'check'      => fn(string $n, array $o, array $a) => new Check($n, $a),
+            'checkgroup' => fn(string $n, array $o, array $a) => new CheckGroup($n, $o, $a),
+            'date'       => fn(string $n, array $o, array $a) => new Date($n, $a),
+            'email'      => fn(string $n, array $o, array $a) => new Email($n, $a),
+            'file'       => fn(string $n, array $o, array $a) => new File($n, $a),
+            'hidden'     => fn(string $n, array $o, array $a) => new Hidden($n, $a),
+            'numeric'    => fn(string $n, array $o, array $a) => new Numeric($n, $a),
+            'password'   => fn(string $n, array $o, array $a) => new Password($n, $a),
+            'radio'      => fn(string $n, array $o, array $a) => new Radio($n, $a),
+            'radiogroup' => fn(string $n, array $o, array $a) => new RadioGroup($n, $o, $a),
+            'select'     => fn(string $n, array $o, array $a) => new Select($n, $o, $a),
+            'submit'     => fn(string $n, array $o, array $a) => new Submit($n, $a),
+            'text'       => fn(string $n, array $o, array $a) => new Text($n, $a),
+            'textarea'   => fn(string $n, array $o, array $a) => new TextArea($n, $a),
+        ];
+
+        foreach ($schema->load() as $definition) {
+            $type = strtolower($definition['type']);
+
+            if (!isset($map[$type])) {
+                throw new Exception(
+                    'Unknown form element type "' . $type . '"'
+                );
+            }
+
+            $name       = $definition['name'];
+            $attributes = $definition['attributes'] ?? [];
+            $options    = $definition['options'] ?? [];
+
+            $element = ($map[$type])($name, $options, $attributes);
+
+            if (!empty($definition['label'])) {
+                $element->setLabel($definition['label']);
+            }
+
+            if (array_key_exists('default', $definition)) {
+                $element->setDefault($definition['default']);
+            }
+
+            if (!empty($definition['filters'])) {
+                $element->setFilters($definition['filters']);
+            }
+
+            if (!empty($definition['validators'])) {
+                $element->addValidators($definition['validators']);
+            }
+
+            $this->add($element);
+        }
+
+        return $this;
     }
 
     /**
