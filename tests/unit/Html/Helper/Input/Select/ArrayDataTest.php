@@ -51,9 +51,38 @@ final class ArrayDataTest extends AbstractUnitTestCase
      */
     public function testGetOptionsReturnsEmptyArrayWhenNoData(): void
     {
-        $data = new ArrayData();
+        $data     = new ArrayData();
         $expected = [];
-        $actual = $data->getOptions();
+        $actual   = $data->getOptions();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetAttributesDefaultsToEmptyArray(): void
+    {
+        $data = new ArrayData(['1' => 'Ferrari']);
+        $this->assertSame([], $data->getAttributes());
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetAttributesReturnsProvidedMapVerbatim(): void
+    {
+        $attributes = [
+            '1' => ['class' => 'favorite', 'dir' => 'rtl'],
+            '2' => ['disabled' => 'disabled'],
+        ];
+
+        $data = new ArrayData(
+            ['1' => 'Ferrari', '2' => 'Ford'],
+            $attributes
+        );
+
+        $this->assertSame($attributes, $data->getAttributes());
     }
 }
