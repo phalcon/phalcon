@@ -24,8 +24,10 @@ use Phalcon\Html\Helper\Form;
 use Phalcon\Html\Helper\FriendlyTitle;
 use Phalcon\Html\Helper\Img;
 use Phalcon\Html\Helper\Input\Checkbox;
+use Phalcon\Html\Helper\Input\CheckboxGroup;
 use Phalcon\Html\Helper\Input\Generic;
 use Phalcon\Html\Helper\Input\Radio;
+use Phalcon\Html\Helper\Input\RadioGroup;
 use Phalcon\Html\Helper\Input\Select;
 use Phalcon\Html\Helper\Input\Textarea;
 use Phalcon\Html\Helper\Label;
@@ -76,8 +78,9 @@ use function call_user_func_array;
  * @method string      form(array $attributes = [])
  * @method string      friendlyTitle(string $text, string $separator = '-', bool $lowercase = true, mixed $replace = null)
  * @method string      img(string $src, array $attributes = [])
- * @method Checkbox    inputCheckbox(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputColor(string $name, string $value = null, array $attributes = [])
+ * @method Checkbox      inputCheckbox(string $name, string $value = null, array $attributes = [])
+ * @method CheckboxGroup inputCheckboxGroup(string $name, array $options, mixed $checked = null, array $attributes = [])
+ * @method Generic       inputColor(string $name, string $value = null, array $attributes = [])
  * @method Generic     inputDate(string $name, string $value = null, array $attributes = [])
  * @method Generic     inputDateTime(string $name, string $value = null, array $attributes = [])
  * @method Generic     inputDateTimeLocal(string $name, string $value = null, array $attributes = [])
@@ -89,7 +92,8 @@ use function call_user_func_array;
  * @method Generic     inputMonth(string $name, string $value = null, array $attributes = [])
  * @method Generic     inputNumeric(string $name, string $value = null, array $attributes = [])
  * @method Generic     inputPassword(string $name, string $value = null, array $attributes = [])
- * @method Radio       inputRadio(string $name, string $value = null, array $attributes = [])
+ * @method Radio         inputRadio(string $name, string $value = null, array $attributes = [])
+ * @method RadioGroup    inputRadioGroup(string $name, array $options, mixed $checked = null, array $attributes = [])
  * @method Generic     inputRange(string $name, string $value = null, array $attributes = [])
  * @method Generic     inputSearch(string $name, string $value = null, array $attributes = [])
  * @method Select      inputSelect(string $name, string $value = null, array $attributes = [])
@@ -243,6 +247,7 @@ class TagFactory
             'friendlyTitle'      => fn() => new FriendlyTitle($escaper),
             'img'                => fn() => new Img($escaper, $doctype),
             'inputCheckbox'      => fn() => new Checkbox($escaper, $doctype),
+            'inputCheckboxGroup' => fn() => new CheckboxGroup($escaper, $doctype),
             'inputColor'         => fn() => new Generic($escaper, $doctype, 'color'),
             'inputDate'          => fn() => new Generic($escaper, $doctype, 'date'),
             'inputDateTime'      => fn() => new Generic($escaper, $doctype, 'datetime'),
@@ -256,6 +261,7 @@ class TagFactory
             'inputNumeric'       => fn() => new Generic($escaper, $doctype, 'number'),
             'inputPassword'      => fn() => new Generic($escaper, $doctype, 'password'),
             'inputRadio'         => fn() => new Radio($escaper, $doctype),
+            'inputRadioGroup'    => fn() => new RadioGroup($escaper, $doctype),
             'inputRange'         => fn() => new Generic($escaper, $doctype, 'range'),
             'inputSearch'        => fn() => new Generic($escaper, $doctype, 'search'),
             'inputSelect'        => fn() => new Select($escaper, $doctype),
