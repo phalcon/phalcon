@@ -47,7 +47,7 @@ abstract class AbstractInput extends AbstractHelper
             'name' => $name,
         ];
 
-        if (!isset($attributes['id'])) {
+        if (!isset($attributes['id']) && !str_contains($name, '[')) {
             $this->attributes['id'] = $name;
         }
 
