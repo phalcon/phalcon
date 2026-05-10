@@ -14,11 +14,19 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Auth;
+namespace Phalcon\Auth\Exceptions;
+
+use Phalcon\Auth\Exception;
 
 /**
- * Exceptions thrown in Phalcon\Auth will use this class
+ * Cannot read file
  */
-class Exception extends \Exception
+class FileCannotRead extends Exception
 {
+    public function __construct(string $path)
+    {
+        parent::__construct(
+            'Stream adapter cannot read file: ' . $path
+        );
+    }
 }

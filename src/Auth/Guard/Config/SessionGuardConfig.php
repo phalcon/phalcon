@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Guard\Config;
 
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\ConfigRequiresNonEmptyValue;
 
 /**
  * Configuration for the Session guard. Holds the names under which the
@@ -78,7 +79,7 @@ class SessionGuardConfig extends AbstractGuardConfig
         }
 
         if ($value === '') {
-            throw Exception::configRequiresNonEmptyValue('Session guard', $param);
+            throw new ConfigRequiresNonEmptyValue('Session guard', $param);
         }
     }
 }

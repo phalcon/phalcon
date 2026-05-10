@@ -42,7 +42,7 @@ class AuthDispatcherListener extends AbstractAuthDispatcherListener
         );
     }
 
-    protected function getActionKind(): string
+    protected function getActionType(): string
     {
         return 'action';
     }

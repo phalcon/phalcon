@@ -19,6 +19,10 @@ namespace Phalcon\Auth\Adapter;
 use InvalidArgumentException;
 use Phalcon\Auth\Adapter\Config\StreamAdapterConfig;
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\FileCannotRead;
+use Phalcon\Auth\Exceptions\FileDoesNotContainJson;
+use Phalcon\Auth\Exceptions\FileDoesNotExist;
+use Phalcon\Auth\Exceptions\FileNotValidJson;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Encryption\Security\Security;
 use Phalcon\Support\Helper\Json\Decode;
@@ -70,23 +74,23 @@ class Stream extends AbstractArrayAdapter
         $path = $this->config->getFile();
 
         if (!$this->phpFileExists($path)) {
-            throw Exception::streamFileDoesNotExist($path);
+            throw new FileDoesNotExist($path);
         }
 
         $contents = $this->phpFileGetContents($path);
 
         if ($contents === false) {
-            throw Exception::streamFileCannotRead($path);
+            throw new FileCannotRead($path);
         }
 
         try {
             $data = (new Decode())($contents, true);
         } catch (InvalidArgumentException $ex) {
-            throw Exception::streamFileNotValidJson($path, $ex);
+            throw new FileNotValidJson($path, $ex);
         }
 
         if (!is_array($data)) {
-            throw Exception::streamFileDoesNotContainJson($path);
+            throw new FileDoesNotContainJson($path);
         }
 
         /** @var list<AuthUserRow> $rows */

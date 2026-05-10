@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth;
 
+use Phalcon\Auth\Exceptions\DataMustContainIdKey;
 use Phalcon\Contracts\Auth\AuthUser as AuthUserContract;
 
 /**
@@ -37,7 +38,7 @@ class AuthUser implements AuthUserContract
     public function __construct(array $data)
     {
         if (!isset($data['id']) || (!is_int($data['id']) && !is_string($data['id']))) {
-            throw Exception::dataMustContainIdKey();
+            throw new DataMustContainIdKey();
         }
 
         $this->data = $data;

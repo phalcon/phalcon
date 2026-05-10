@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Adapter\Config;
 
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\ConfigRequiresNonEmptyValue;
 
 class StreamAdapterConfig extends AbstractAdapterConfig
 {
@@ -28,7 +29,7 @@ class StreamAdapterConfig extends AbstractAdapterConfig
         ?string $model = null,
     ) {
         if ($file === '') {
-            throw Exception::configRequiresNonEmptyValue(
+            throw new ConfigRequiresNonEmptyValue(
                 'Stream adapter',
                 'file',
                 ' path'

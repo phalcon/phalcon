@@ -18,6 +18,7 @@ namespace Phalcon\Auth\Adapter;
 
 use Phalcon\Auth\Adapter\Config\ModelAdapterConfig;
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\DoesNotImplement;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
 use Phalcon\Contracts\Auth\AuthRemember;
@@ -59,7 +60,7 @@ class Model extends AbstractAdapter implements RememberAdapter
     public function createRememberToken(AuthUser $user): RememberToken
     {
         if (!($user instanceof AuthRemember)) {
-            throw Exception::doesNotImplement('User model', 'AuthRemember');
+            throw new DoesNotImplement('User model', 'AuthRemember');
         }
 
         return $user->createRememberToken(bin2hex(random_bytes(30)));

@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Guard\Config;
 
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\ConfigRequiresNonEmptyValue;
 
 class TokenGuardConfig extends AbstractGuardConfig
 {
@@ -28,14 +29,14 @@ class TokenGuardConfig extends AbstractGuardConfig
         protected readonly string $storageKey,
     ) {
         if ($inputKey === '') {
-            throw Exception::configRequiresNonEmptyValue(
+            throw new ConfigRequiresNonEmptyValue(
                 'Token guard',
                 'inputKey'
             );
         }
 
         if ($storageKey === '') {
-            throw Exception::configRequiresNonEmptyValue(
+            throw new ConfigRequiresNonEmptyValue(
                 'Token guard',
                 'storageKey'
             );

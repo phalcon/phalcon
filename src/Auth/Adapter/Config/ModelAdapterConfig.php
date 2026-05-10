@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Adapter\Config;
 
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\ConfigRequiresNonEmptyValue;
 
 class ModelAdapterConfig extends AbstractAdapterConfig
 {
@@ -28,7 +29,7 @@ class ModelAdapterConfig extends AbstractAdapterConfig
         protected readonly string $idColumn = 'id',
     ) {
         if ($model === '') {
-            throw Exception::configRequiresNonEmptyValue(
+            throw new ConfigRequiresNonEmptyValue(
                 'Model adapter',
                 'model',
                 ' class name'
@@ -36,7 +37,7 @@ class ModelAdapterConfig extends AbstractAdapterConfig
         }
 
         if ($idColumn === '') {
-            throw Exception::configRequiresNonEmptyValue(
+            throw new ConfigRequiresNonEmptyValue(
                 'Model adapter',
                 'idColumn'
             );

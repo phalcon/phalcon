@@ -14,11 +14,22 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Auth;
+namespace Phalcon\Auth\Exceptions;
+
+use Phalcon\Auth\Exception;
+use Throwable;
 
 /**
- * Exceptions thrown in Phalcon\Auth will use this class
+ * Not a valid JSON
  */
-class Exception extends \Exception
+class FileNotValidJson extends Exception
 {
+    public function __construct(string $path, Throwable $ex)
+    {
+        parent::__construct(
+            'Stream adapter file is not valid JSON: ' . $path,
+            0,
+            $ex
+        );
+    }
 }

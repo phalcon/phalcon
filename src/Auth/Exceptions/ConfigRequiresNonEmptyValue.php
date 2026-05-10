@@ -14,11 +14,23 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Auth;
+namespace Phalcon\Auth\Exceptions;
+
+use Phalcon\Auth\Exception;
 
 /**
- * Exceptions thrown in Phalcon\Auth will use this class
+ * Config requires non-empty value
  */
-class Exception extends \Exception
+class ConfigRequiresNonEmptyValue extends Exception
 {
+    public function __construct(
+        string $configName,
+        string $configKey,
+        string $suffix = ''
+    ) {
+        parent::__construct(
+            $configName . " requires a non-empty '"
+            . $configKey . "'" . $suffix
+        );
+    }
 }

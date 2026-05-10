@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth;
 
+use Phalcon\Auth\Exceptions\AccessDenied;
 use Phalcon\Contracts\Auth\Manager;
 
 /**
@@ -32,10 +33,10 @@ abstract class AbstractAuthDispatcherListener
     }
 
     /**
-     * Returns the kind label used by Exception::accessDenied (e.g. 'task',
+     * Returns the kind label used by AccessDenied (e.g. 'task',
      * 'action').
      */
-    abstract protected function getActionKind(): string;
+    abstract protected function getActionType(): string;
 
     /**
      * Runs the access check for the given action name. Returns true when
@@ -66,6 +67,6 @@ abstract class AbstractAuthDispatcherListener
             }
         }
 
-        throw Exception::accessDenied($this->getActionKind(), $actionName);
+        throw new AccessDenied($this->getActionType(), $actionName);
     }
 }

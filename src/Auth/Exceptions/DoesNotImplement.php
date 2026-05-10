@@ -14,11 +14,19 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Auth;
+namespace Phalcon\Auth\Exceptions;
+
+use Phalcon\Auth\Exception;
 
 /**
- * Exceptions thrown in Phalcon\Auth will use this class
+ * Does not implement interface
  */
-class Exception extends \Exception
+class DoesNotImplement extends Exception
 {
+    public function __construct(string $type, string $name)
+    {
+        parent::__construct(
+            $type . " does not implement '" . $name . "'"
+        );
+    }
 }

@@ -14,11 +14,19 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Auth;
+namespace Phalcon\Auth\Exceptions;
+
+use Phalcon\Auth\Exception;
 
 /**
- * Exceptions thrown in Phalcon\Auth will use this class
+ * AuthUser data must contain "id"
  */
-class Exception extends \Exception
+class DataMustContainIdKey extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct(
+            "AuthUser data must contain a scalar 'id' key (int|string)"
+        );
+    }
 }

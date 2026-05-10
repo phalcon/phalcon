@@ -31,7 +31,7 @@ class AuthDispatcherListener extends AbstractAuthDispatcherListener
         return $this->enforce((string) $dispatcher->getActionName());
     }
 
-    protected function getActionKind(): string
+    protected function getActionType(): string
     {
         return 'task';
     }

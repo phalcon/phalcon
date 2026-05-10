@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Guard;
 
 use Phalcon\Auth\Exception;
+use Phalcon\Auth\Exceptions\DoesNotImplement;
 use Phalcon\Auth\Guard\Config\SessionGuardConfig;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Container\Service\Collection;
@@ -125,7 +126,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
         if ($remember) {
             if (!($this->adapter instanceof RememberAdapter)) {
-                throw Exception::doesNotImplement('Adapter', 'RememberAdapter');
+                throw new DoesNotImplement('Adapter', 'RememberAdapter');
             }
             $this->rememberUser($user);
         }
