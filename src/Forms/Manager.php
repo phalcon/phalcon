@@ -21,9 +21,17 @@ use Phalcon\Contracts\Forms\Schema;
 class Manager
 {
     /**
-     * @var array
+     * @var array<string, Form>
      */
     protected array $forms = [];
+
+    /**
+     * @param FormsLocator $locator
+     */
+    public function __construct(
+        private FormsLocator $locator
+    ) {
+    }
 
     /**
      * Creates a form registering it in the forms manager
@@ -63,6 +71,16 @@ class Manager
     }
 
     /**
+     * Returns the FormsLocator instance.
+     *
+     * @return FormsLocator
+     */
+    public function getLocator(): FormsLocator
+    {
+        return $this->locator;
+    }
+
+    /**
      * Checks if a form is registered in the forms manager
      *
      * @param string $name
@@ -75,7 +93,8 @@ class Manager
     }
 
     /**
-     * Creates a form from a Schema source, registers it and returns it.
+     * Creates a form from a Schema source, registers it in the manager,
+     * and registers a factory in the locator for entity-aware retrieval.
      *
      * @param string      $name
      * @param Schema      $schema
@@ -89,8 +108,14 @@ class Manager
         Schema $schema,
         object | null $entity = null
     ): Form {
-        $form               = (new Form($entity))->load($schema);
+        $locator            = $this->locator;
+        $form               = (new Form($entity))->load($schema, $locator);
         $this->forms[$name] = $form;
+
+        $this->locator->set(
+            $name,
+            fn(object | null $e) => (new Form($e))->load($schema, $locator)
+        );
 
         return $form;
     }
