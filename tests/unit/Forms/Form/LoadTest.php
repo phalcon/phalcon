@@ -28,11 +28,20 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
+use Phalcon\Forms\FormsLocator;
 use Phalcon\Forms\Loader\ArrayLoader;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class LoadTest extends AbstractUnitTestCase
 {
+    private FormsLocator $locator;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->locator = new FormsLocator();
+    }
+
     // -----------------------------------------------------------------------
     // Method return type
     // -----------------------------------------------------------------------
@@ -44,7 +53,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'text', 'name' => 'username'],
         ]);
 
-        $returned = $form->load($schema);
+        $returned = $form->load($schema, $this->locator);
 
         $this->assertSame($form, $returned);
     }
@@ -89,7 +98,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => $type, 'name' => 'field'],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertTrue($form->has('field'));
         $this->assertInstanceOf($expectedClass, $form->get('field'));
@@ -105,7 +114,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'checkgroup', 'name' => 'field'],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertTrue($form->has('field[]'));
         $this->assertInstanceOf(CheckGroup::class, $form->get('field[]'));
@@ -118,7 +127,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'TEXT', 'name' => 'username'],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertInstanceOf(Text::class, $form->get('username'));
     }
@@ -137,7 +146,7 @@ final class LoadTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessageMatches('/Unknown form element type.*unknowntype/i');
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
     }
 
     // -----------------------------------------------------------------------
@@ -151,7 +160,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'text', 'name' => 'email', 'label' => 'Email Address'],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertSame('Email Address', $form->get('email')->getLabel());
     }
@@ -163,7 +172,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'text', 'name' => 'country', 'default' => 'GB'],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertSame('GB', $form->get('country')->getDefault());
     }
@@ -175,7 +184,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'numeric', 'name' => 'quantity', 'default' => 0],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertSame(0, $form->get('quantity')->getDefault());
     }
@@ -187,7 +196,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'text', 'name' => 'prefix', 'default' => ''],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         // array_key_exists check: '' is still set
         $this->assertSame('', $form->get('prefix')->getDefault());
@@ -200,20 +209,20 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'text', 'name' => 'name', 'filters' => ['trim', 'lower']],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertSame(['trim', 'lower'], $form->get('name')->getFilters());
     }
 
     public function testLoadSetsValidators(): void
     {
-        $form   = new Form();
+        $form      = new Form();
         $validator = new PresenceOf();
-        $schema = new ArrayLoader([
+        $schema    = new ArrayLoader([
             ['type' => 'text', 'name' => 'name', 'validators' => [$validator]],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $validators = $form->get('name')->getValidators();
         $this->assertCount(1, $validators);
@@ -227,7 +236,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'text', 'name' => 'name', 'attributes' => ['class' => 'field', 'required' => true]],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $element = $form->get('name');
         $this->assertSame('field', $element->getAttributes()['class']);
@@ -248,7 +257,7 @@ final class LoadTest extends AbstractUnitTestCase
             ],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         /** @var CheckGroup $element */
         $element = $form->get('colors[]');
@@ -267,7 +276,7 @@ final class LoadTest extends AbstractUnitTestCase
             ],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         /** @var RadioGroup $element */
         $element = $form->get('gender');
@@ -289,7 +298,7 @@ final class LoadTest extends AbstractUnitTestCase
             ['type' => 'submit',   'name' => 'submit'],
         ]);
 
-        $form->load($schema);
+        $form->load($schema, $this->locator);
 
         $this->assertCount(4, $form->getElements());
     }
@@ -303,10 +312,10 @@ final class LoadTest extends AbstractUnitTestCase
         $form = new Form();
         $form->load(new ArrayLoader([
             ['type' => 'text', 'name' => 'first_name'],
-        ]));
+        ]), $this->locator);
         $form->load(new ArrayLoader([
             ['type' => 'text', 'name' => 'last_name'],
-        ]));
+        ]), $this->locator);
 
         $this->assertCount(2, $form->getElements());
         $this->assertTrue($form->has('first_name'));
@@ -320,7 +329,7 @@ final class LoadTest extends AbstractUnitTestCase
     public function testLoadWithEmptySchemaDoesNothing(): void
     {
         $form = new Form();
-        $form->load(new ArrayLoader([]));
+        $form->load(new ArrayLoader([]), $this->locator);
 
         $this->assertCount(0, $form->getElements());
     }

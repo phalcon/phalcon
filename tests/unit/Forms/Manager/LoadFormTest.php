@@ -15,6 +15,7 @@ use Phalcon\Forms\Element\Email;
 use Phalcon\Forms\Element\Password;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
+use Phalcon\Forms\FormsLocator;
 use Phalcon\Forms\Loader\ArrayLoader;
 use Phalcon\Forms\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
@@ -22,43 +23,50 @@ use stdClass;
 
 final class LoadFormTest extends AbstractUnitTestCase
 {
+    private Manager $manager;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->manager = new Manager(new FormsLocator());
+    }
     // -----------------------------------------------------------------------
     // Registration
     // -----------------------------------------------------------------------
 
     public function testLoadFormRegistersFormByName(): void
     {
-        $manager = new Manager();
+
         $schema  = new ArrayLoader([
             ['type' => 'text', 'name' => 'username'],
         ]);
 
-        $manager->loadForm('login', $schema);
+        $this->manager->loadForm('login', $schema);
 
-        $this->assertTrue($manager->has('login'));
+        $this->assertTrue($this->manager->has('login'));
     }
 
     public function testLoadFormReturnsForm(): void
     {
-        $manager = new Manager();
+
         $schema  = new ArrayLoader([
             ['type' => 'text', 'name' => 'username'],
         ]);
 
-        $form = $manager->loadForm('login', $schema);
+        $form = $this->manager->loadForm('login', $schema);
 
         $this->assertInstanceOf(Form::class, $form);
     }
 
     public function testLoadFormReturnedFormMatchesStoredForm(): void
     {
-        $manager = new Manager();
+
         $schema  = new ArrayLoader([
             ['type' => 'text', 'name' => 'username'],
         ]);
 
-        $returned = $manager->loadForm('login', $schema);
-        $stored   = $manager->get('login');
+        $returned = $this->manager->loadForm('login', $schema);
+        $stored   = $this->manager->get('login');
 
         $this->assertSame($returned, $stored);
     }
@@ -69,14 +77,14 @@ final class LoadFormTest extends AbstractUnitTestCase
 
     public function testLoadFormAddsElements(): void
     {
-        $manager = new Manager();
+
         $schema  = new ArrayLoader([
             ['type' => 'text',     'name' => 'username'],
             ['type' => 'email',    'name' => 'email'],
             ['type' => 'password', 'name' => 'password'],
         ]);
 
-        $form = $manager->loadForm('register', $schema);
+        $form = $this->manager->loadForm('register', $schema);
 
         $this->assertCount(3, $form->getElements());
         $this->assertInstanceOf(Text::class,     $form->get('username'));
@@ -90,25 +98,25 @@ final class LoadFormTest extends AbstractUnitTestCase
 
     public function testLoadFormWithNullEntity(): void
     {
-        $manager = new Manager();
+
         $schema  = new ArrayLoader([
             ['type' => 'text', 'name' => 'username'],
         ]);
 
-        $form = $manager->loadForm('login', $schema, null);
+        $form = $this->manager->loadForm('login', $schema, null);
 
         $this->assertNull($form->getEntity());
     }
 
     public function testLoadFormPassesEntityToForm(): void
     {
-        $manager = new Manager();
+
         $entity  = new stdClass();
         $schema  = new ArrayLoader([
             ['type' => 'text', 'name' => 'username'],
         ]);
 
-        $form = $manager->loadForm('login', $schema, $entity);
+        $form = $this->manager->loadForm('login', $schema, $entity);
 
         $this->assertSame($entity, $form->getEntity());
     }
@@ -119,17 +127,17 @@ final class LoadFormTest extends AbstractUnitTestCase
 
     public function testLoadFormOverwritesPreviousForm(): void
     {
-        $manager = new Manager();
 
-        $manager->loadForm('profile', new ArrayLoader([
+
+        $this->manager->loadForm('profile', new ArrayLoader([
             ['type' => 'text', 'name' => 'first_name'],
         ]));
 
-        $manager->loadForm('profile', new ArrayLoader([
+        $this->manager->loadForm('profile', new ArrayLoader([
             ['type' => 'email', 'name' => 'contact_email'],
         ]));
 
-        $stored = $manager->get('profile');
+        $stored = $this->manager->get('profile');
         $this->assertFalse($stored->has('first_name'));
         $this->assertTrue($stored->has('contact_email'));
     }
@@ -140,12 +148,12 @@ final class LoadFormTest extends AbstractUnitTestCase
 
     public function testLoadFormWithEmptySchema(): void
     {
-        $manager = new Manager();
+
         $schema  = new ArrayLoader([]);
 
-        $form = $manager->loadForm('empty', $schema);
+        $form = $this->manager->loadForm('empty', $schema);
 
-        $this->assertTrue($manager->has('empty'));
+        $this->assertTrue($this->manager->has('empty'));
         $this->assertCount(0, $form->getElements());
     }
 }

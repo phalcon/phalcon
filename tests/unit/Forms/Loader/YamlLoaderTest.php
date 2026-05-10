@@ -146,13 +146,31 @@ final class YamlLoaderTest extends AbstractUnitTestCase
     }
 
     // -----------------------------------------------------------------------
+    // Invalid YAML
+    // -----------------------------------------------------------------------
+
+    public function testLoadThrowsWhenYamlParsesToNonArray(): void
+    {
+        // A scalar YAML string parses to a string, not an array.
+        $schema = new YamlLoader('"just a string"');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessageMatches('/YAML form schema must parse to an array/i');
+
+        $schema->load();
+    }
+
+    // -----------------------------------------------------------------------
     // Helpers
     // -----------------------------------------------------------------------
 
     private function writeYamlFile(string $yaml): string
     {
-        $dir  = sys_get_temp_dir();
-        $path = $dir . '/phalcon_forms_test_' . uniqid() . '.yaml';
+        $dir  = outputDir('tests/forms/');
+        if (!is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+        $path = $dir . 'phalcon_forms_test_' . uniqid() . '.yaml';
         file_put_contents($path, $yaml);
 
         return $path;
