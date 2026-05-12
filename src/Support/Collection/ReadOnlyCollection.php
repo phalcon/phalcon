@@ -20,6 +20,56 @@ use Phalcon\Support\Collection;
  */
 class ReadOnlyCollection extends Collection
 {
+    protected bool $constructed = false;
+
+    public function __construct(
+        array $data = [],
+        bool $insensitive = true,
+        bool $strictNull = false,
+    ) {
+        parent::__construct($data, $insensitive, $strictNull);
+        $this->constructed = true;
+    }
+
+    /**
+     * Restores the collection state during unserialization.
+     *
+     * Temporarily disables the read-only guard so the parent class can restore
+     * the collection state. The guard is re-enabled before the method returns.
+     *
+     * @param array $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->constructed = false;
+
+        try {
+            parent::__unserialize($data);
+        } finally {
+            $this->constructed = true;
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function clear(): void
+    {
+        throw new Exception('The object is read only');
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function init(array $data = []): void
+    {
+        if ($this->constructed) {
+            throw new Exception('The object is read only');
+        }
+
+        parent::init($data);
+    }
+
     /**
      * Delete the element from the collection
      *
@@ -28,6 +78,18 @@ class ReadOnlyCollection extends Collection
      * @throws Exception
      */
     public function remove(string $element): void
+    {
+        throw new Exception('The object is read only');
+    }
+
+    /**
+     * Replaces the collection data with a new array
+     *
+     * @param array<int|string, mixed> $data
+     *
+     * @throws Exception
+     */
+    public function replace(array $data): void
     {
         throw new Exception('The object is read only');
     }
