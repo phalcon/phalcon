@@ -22,12 +22,21 @@ class ReadOnlyCollection extends Collection
 {
     protected bool $constructed = false;
 
+    /**
+     * ReadOnlyCollection constructor.
+     *
+     * @param array<int|string, mixed> $data
+     * @param bool                     $insensitive
+     * @param bool                     $strictNull
+     * @param string|null              $type
+     */
     public function __construct(
         array $data = [],
         bool $insensitive = true,
         bool $strictNull = false,
+        string | null $type = null,
     ) {
-        parent::__construct($data, $insensitive, $strictNull);
+        parent::__construct($data, $insensitive, $strictNull, $type);
         $this->constructed = true;
     }
 
