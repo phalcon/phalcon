@@ -136,6 +136,15 @@ class Collection implements
         return count($this->data);
     }
 
+    public function first(): mixed
+    {
+        if (empty($this->data)) {
+            return null;
+        }
+
+        return $this->data[array_key_first($this->data)];
+    }
+
     /**
      * Get the element from the collection
      *
@@ -266,6 +275,15 @@ class Collection implements
             },
             $this->data
         );
+    }
+
+    public function last(): mixed
+    {
+        if (empty($this->data)) {
+            return null;
+        }
+
+        return $this->data[array_key_last($this->data)];
     }
 
     /**
