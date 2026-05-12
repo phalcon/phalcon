@@ -19,15 +19,17 @@ use JsonSerializable;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
-use Phalcon\Support\Collection\Traits\SerializableTrait;
 use Phalcon\Support\Traits\JsonTrait as BaseJsonTrait;
 use Phalcon\Traits\Php\JsonTrait;
-use Serializable;
 
+use function array_key_first;
+use function array_key_last;
 use function array_keys;
 use function array_values;
 use function mb_strtolower;
+use function serialize;
 use function settype;
+use function unserialize;
 
 /**
  * `Phalcon\Collection` is a supercharged object-oriented array. It implements:
@@ -35,7 +37,6 @@ use function settype;
  * - [Countable](https://www.php.net/manual/en/class.countable.php)
  * - [IteratorAggregate](https://www.php.net/manual/en/class.iteratoraggregate.php)
  * - [JsonSerializable](https://www.php.net/manual/en/class.jsonserializable.php)
- * - [Serializable](https://www.php.net/manual/en/class.serializable.php)
  *
  * It can be used in any part of the application that needs collection of data
  * Such implementations are for instance accessing globals `$_GET`, `$_POST`
@@ -44,18 +45,17 @@ use function settype;
  * @property array $data
  * @property bool  $insensitive
  * @property array $lowerKeys
+ * @property bool  $strictNull
  */
 class Collection implements
     CollectionInterface,
     Countable,
-    JsonSerializable,
-    Serializable
+    JsonSerializable
 {
     use ArrayAccessTrait;
     use BaseJsonTrait;
     use GetSetHasTrait;
     use JsonTrait;
-    use SerializableTrait;
 
     /**
      * @var array<int|string, mixed>
@@ -71,30 +71,49 @@ class Collection implements
      * Collection constructor.
      *
      * @param array<int|string, mixed> $data
-     * @param bool                     $insensitive
      */
     public function __construct(
         array $data = [],
-        protected bool $insensitive = true
+        protected bool $insensitive = true,
+        protected bool $strictNull = false
     ) {
         $this->init($data);
     }
 
     /**
+     * Returns the state of the collection for serialization, including
+     * configuration flags so the round-trip restores full state.
+     *
      * @return array
      */
     public function __serialize(): array
     {
-        return $this->data;
+        return [
+            'data'        => $this->data,
+            'insensitive' => $this->insensitive,
+            'strictNull'  => $this->strictNull,
+        ];
     }
 
     /**
+     * Restores the collection state. Accepts both the structured format
+     * emitted by __serialize() and the legacy flat-array format for BC
+     * with previously serialized data.
+     *
      * @param array $data
      *
      * @return void
      */
     public function __unserialize(array $data): void
     {
+        if (isset($data['data']) && is_array($data['data'])) {
+            $this->insensitive = (bool) ($data['insensitive'] ?? true);
+            $this->strictNull  = (bool) ($data['strictNull'] ?? false);
+            $this->init($data['data']);
+
+            return;
+        }
+
         $this->init($data);
     }
 
@@ -257,6 +276,16 @@ class Collection implements
     }
 
     /**
+     * BC - delegate to __serialize()
+     *
+     * @return string|null
+     */
+    public function serialize(): string | null
+    {
+        return serialize($this->__serialize());
+    }
+
+    /**
      * Set an element in the collection
      *
      * @param string $element Name of the element
@@ -306,6 +335,18 @@ class Collection implements
         }
 
         return $return;
+    }
+
+    /**
+     * BC - delegate to __unserialize()
+     *
+     * @param string $data
+     *
+     * @return void
+     */
+    public function unserialize(string $data): void
+    {
+        $this->__unserialize(unserialize($data));
     }
 
     /**
