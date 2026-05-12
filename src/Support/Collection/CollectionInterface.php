@@ -110,11 +110,25 @@ interface CollectionInterface extends ArrayAccess, IteratorAggregate
     public function init(array $data = []): void;
 
     /**
+     * Return if the collection is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool;
+
+    /**
      * Delete the element from the collection
      *
      * @param string $element Name of the element
      */
     public function remove(string $element): void;
+
+    /**
+     * Replaces the collection data with a new array, clearing existing data first
+     *
+     * @param array<int|string, mixed> $data Array to replace the collection with
+     */
+    public function replace(array $data): void;
 
     /**
      * Set an element in the collection
