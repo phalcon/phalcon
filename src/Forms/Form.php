@@ -21,6 +21,7 @@ use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception as ValidationException;
 use Phalcon\Filter\Validation\ValidationInterface;
+use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\ElementInterface;
 use Phalcon\Forms\FormsLocator;
 use Phalcon\Html\Attributes;
@@ -195,6 +196,24 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             $whitelist = $this->whitelist;
         }
 
+        /**
+         * Unchecked checkboxes are absent from POST data. For any Check
+         * element that opted in via setUncheckedValue(), inject the
+         * registered value so the existing bind loop applies it to the
+         * entity. See cphalcon issue #16982.
+         */
+        foreach ($this->elements as $elementName => $element) {
+            if (
+                $element instanceof Check &&
+                $element->hasUncheckedValue()
+            ) {
+                $dataKey = $element->getAttribute('name') ?? $elementName;
+                if (!array_key_exists($dataKey, $data)) {
+                    $data[$dataKey] = $element->getUncheckedValue();
+                }
+            }
+        }
+
         $filter       = null;
         $assignData   = [];
         $filteredData = [];
@@ -202,8 +221,18 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             /**
              * Get the element
              */
-            if (!isset($this->elements[$key])) {
-                continue;
+            $element = $this->elements[$key] ?? null;
+            if (null === $element) {
+                foreach ($this->elements as $candidate) {
+                    if ($candidate->getAttribute('name') === $key) {
+                        $element = $candidate;
+                        break;
+                    }
+                }
+
+                if (null === $element) {
+                    continue;
+                }
             }
 
             /**
@@ -219,7 +248,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             /**
              * Check if the method has filters
              */
-            $element       = $this->elements[$key];
             $filters       = $element->getFilters();
             $filteredValue = $value;
             if (!empty($filters)) {

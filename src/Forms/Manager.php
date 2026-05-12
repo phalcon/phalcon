@@ -26,11 +26,16 @@ class Manager
     protected array $forms = [];
 
     /**
-     * @param FormsLocator $locator
+     * @var FormsLocator
      */
-    public function __construct(
-        private FormsLocator $locator
-    ) {
+    private FormsLocator $locator;
+
+    /**
+     * @param FormsLocator|null $locator
+     */
+    public function __construct(FormsLocator | null $locator = null)
+    {
+        $this->locator = $locator ?? new FormsLocator();
     }
 
     /**
