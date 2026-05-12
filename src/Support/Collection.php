@@ -276,6 +276,17 @@ class Collection implements
     }
 
     /**
+     * Replaces the collection data with a new array, clearing existing data first
+     *
+     * @phpstan-param array<int|string, mixed> $data
+     */
+    public function replace(array $data): void
+    {
+        $this->clear();
+        $this->init($data);
+    }
+
+    /**
      * BC - delegate to __serialize()
      *
      * @return string|null
