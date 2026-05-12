@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
+use Closure;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
@@ -50,7 +51,7 @@ use function call_user_func_array;
  * ServiceLocator implementation for Tag helpers.
  *
  * Built-in services are seeded by the constructor. Users may add or override
- * services via `set()`, passing a callable that returns the helper instance.
+ * services via `set()`, passing a Closure that returns the helper instance.
  *
  * Helpers are cached per name after first construction.
  *
@@ -58,73 +59,67 @@ use function call_user_func_array;
  * so each entry in the @method block below describes the result of calling
  * `$factory->serviceName(...)` rather than `newInstance("serviceName")`.
  *
- * @property EscaperInterface       $escaper
- * @property ResponseInterface|null $response
- * @property UrlInterface|null      $url
- * @property array                  $factories
- * @property array                  $instances
- *
- * @method string      a(string $href, string $text, array $attributes = [], bool $raw = false)
- * @method string      aRaw(string $href, string $text, array $attributes = [])
- * @method string      base(string $href, array $attributes = [])
- * @method string      body(array $attributes = [])
- * @method Breadcrumbs breadcrumbs(string $indent = '    ', string $delimiter = "\n")
- * @method string      button(string $text, array $attributes = [], bool $raw = false)
- * @method string      buttonRaw(string $text, array $attributes = [])
- * @method string      close(string $tag, bool $raw = false)
- * @method Doctype     doctype(int $type = Doctype::HTML5, string $delimiter = "\n")
- * @method string      element(string $tag, string $text, array $attributes = [], bool $raw = false)
- * @method string      elementRaw(string $tag, string $text, array $attributes = [])
- * @method string      form(array $attributes = [])
- * @method string      friendlyTitle(string $text, string $separator = '-', bool $lowercase = true, mixed $replace = null)
- * @method string      img(string $src, array $attributes = [])
+ * @method string        a(string $href, string $text, array $attributes = [], bool $raw = false)
+ * @method string        aRaw(string $href, string $text, array $attributes = [])
+ * @method string        base(string $href, array $attributes = [])
+ * @method string        body(array $attributes = [])
+ * @method Breadcrumbs   breadcrumbs(string $indent = '    ', string $delimiter = "\n")
+ * @method string        button(string $text, array $attributes = [], bool $raw = false)
+ * @method string        buttonRaw(string $text, array $attributes = [])
+ * @method string        close(string $tag, bool $raw = false)
+ * @method Doctype       doctype(int $type = Doctype::HTML5, string $delimiter = "\n")
+ * @method string        element(string $tag, string $text, array $attributes = [], bool $raw = false)
+ * @method string        elementRaw(string $tag, string $text, array $attributes = [])
+ * @method string        form(array $attributes = [])
+ * @method string        friendlyTitle(string $text, string $separator = '-', bool $lowercase = true, mixed $replace = null)
+ * @method string        img(string $src, array $attributes = [])
  * @method Checkbox      inputCheckbox(string $name, string $value = null, array $attributes = [])
  * @method CheckboxGroup inputCheckboxGroup(string $name, array $options, mixed $checked = null, array $attributes = [])
  * @method Generic       inputColor(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputDate(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputDateTime(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputDateTimeLocal(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputEmail(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputFile(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputHidden(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputImage(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputInput(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputMonth(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputNumeric(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputPassword(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputDate(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputDateTime(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputDateTimeLocal(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputEmail(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputFile(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputHidden(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputImage(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputInput(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputMonth(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputNumeric(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputPassword(string $name, string $value = null, array $attributes = [])
  * @method Radio         inputRadio(string $name, string $value = null, array $attributes = [])
  * @method RadioGroup    inputRadioGroup(string $name, array $options, mixed $checked = null, array $attributes = [])
- * @method Generic     inputRange(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputSearch(string $name, string $value = null, array $attributes = [])
- * @method Select      inputSelect(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputSubmit(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputTel(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputText(string $name, string $value = null, array $attributes = [])
- * @method Textarea    inputTextarea(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputTime(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputUrl(string $name, string $value = null, array $attributes = [])
- * @method Generic     inputWeek(string $name, string $value = null, array $attributes = [])
- * @method string      label(string $label, array $attributes = [], bool $raw = false)
- * @method string      labelRaw(string $label, array $attributes = [])
- * @method Link        link(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method Meta        meta(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method Ol          ol(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method Ol          olRaw(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method string      preload(string $href, string $type = 'style', array $attributes = [])
- * @method Script      script(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method Style       style(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method string      tag(string $name, array $attributes = [])
- * @method Title       title(string $indent = '    ', string $delimiter = PHP_EOL)
- * @method Ul          ul(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method Ul          ulRaw(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method string      voidTag(string $name, array $attributes = [])
+ * @method Generic       inputRange(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputSearch(string $name, string $value = null, array $attributes = [])
+ * @method Select        inputSelect(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputSubmit(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputTel(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputText(string $name, string $value = null, array $attributes = [])
+ * @method Textarea      inputTextarea(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputTime(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputUrl(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputWeek(string $name, string $value = null, array $attributes = [])
+ * @method string        label(string $label, array $attributes = [], bool $raw = false)
+ * @method string        labelRaw(string $label, array $attributes = [])
+ * @method Link          link(string $indent = '    ', string $delimiter = "\n")
+ * @method Meta          meta(string $indent = '    ', string $delimiter = "\n")
+ * @method Ol            ol(string $indent = '    ', string $delimiter = null, array $attributes = [])
+ * @method Ol            olRaw(string $indent = '    ', string $delimiter = null, array $attributes = [])
+ * @method string        preload(string $href, string $type = 'style', array $attributes = [])
+ * @method Script        script(string $indent = '    ', string $delimiter = "\n")
+ * @method Style         style(string $indent = '    ', string $delimiter = "\n")
+ * @method string        tag(string $name, array $attributes = [])
+ * @method Title         title(string $indent = '    ', string $delimiter = "\n")
+ * @method Ul            ul(string $indent = '    ', string $delimiter = null, array $attributes = [])
+ * @method Ul            ulRaw(string $indent = '    ', string $delimiter = null, array $attributes = [])
+ * @method string        voidTag(string $name, array $attributes = [])
  */
 class TagFactory
 {
     /**
      * @var Doctype
      */
-    private Doctype $doctype;
+    private readonly Doctype $doctype;
 
     /**
      * @var array
@@ -139,10 +134,12 @@ class TagFactory
     /**
      * TagFactory constructor.
      *
-     * @param EscaperInterface       $escaper
-     * @param array                  $services
-     * @param ResponseInterface|null $response
-     * @param UrlInterface|null      $url
+     * @param EscaperInterface         $escaper
+     * @param array<string, Closure>   $services  Map of service name to a
+     *                                            zero-arg Closure that
+     *                                            returns the helper instance.
+     * @param ResponseInterface|null   $response
+     * @param UrlInterface|null        $url
      */
     public function __construct(
         private readonly EscaperInterface $escaper,
@@ -165,7 +162,7 @@ class TagFactory
      * @param array  $arguments
      *
      * @return mixed
-     * @throws Exception
+     * @throws \Phalcon\Html\Exception
      */
     public function __call(string $name, array $arguments): mixed
     {
@@ -189,10 +186,10 @@ class TagFactory
      *
      * @param string $name
      *
-     * @return mixed
-     * @throws Exception
+     * @return object
+     * @throws \Phalcon\Html\Exception
      */
-    public function newInstance(string $name): mixed
+    public function newInstance(string $name): object
     {
         if (!isset($this->factories[$name])) {
             throw new Exception('Service ' . $name . ' is not registered');
@@ -206,13 +203,15 @@ class TagFactory
     }
 
     /**
-     * Register a helper via a callable. Passing a new definition clears any
-     * cached instance so the next call to newInstance() rebuilds it.
+     * Register a helper via a zero-argument Closure. The Closure is invoked on
+     * the first matching `newInstance()` call and its return value is cached.
+     * Passing a new definition clears any cached instance so the next call to
+     * `newInstance()` rebuilds it.
      *
-     * @param string   $name
-     * @param callable $definition
+     * @param string  $name
+     * @param Closure $definition
      */
-    public function set(string $name, callable $definition): void
+    public function set(string $name, Closure $definition): void
     {
         $this->factories[$name] = $definition;
         unset($this->instances[$name]);
@@ -226,66 +225,66 @@ class TagFactory
      */
     protected function getDefaultServices(): array
     {
+        $self     = $this;
         $escaper  = $this->escaper;
-        $doctype  = $this->doctype;
         $response = $this->response;
         $url      = $this->url;
 
         return [
-            'a'                  => fn() => new Anchor($escaper, $doctype),
-            'aRaw'               => fn() => new Anchor($escaper, $doctype, true),
-            'base'               => fn() => new Base($escaper, $doctype),
-            'body'               => fn() => new Body($escaper, $doctype),
+            'a'                  => fn() => new Anchor($escaper, $self->newInstance('doctype')),
+            'aRaw'               => fn() => new Anchor($escaper, $self->newInstance('doctype'), true),
+            'base'               => fn() => new Base($escaper, $self->newInstance('doctype')),
+            'body'               => fn() => new Body($escaper, $self->newInstance('doctype')),
             'breadcrumbs'        => fn() => new Breadcrumbs($escaper, $url),
-            'button'             => fn() => new Button($escaper, $doctype),
-            'buttonRaw'          => fn() => new Button($escaper, $doctype, true),
-            'close'              => fn() => new Close($escaper, $doctype),
-            'doctype'            => fn() => $doctype,
-            'element'            => fn() => new Element($escaper, $doctype),
-            'elementRaw'         => fn() => new Element($escaper, $doctype, true),
-            'form'               => fn() => new Form($escaper, $doctype),
+            'button'             => fn() => new Button($escaper, $self->newInstance('doctype')),
+            'buttonRaw'          => fn() => new Button($escaper, $self->newInstance('doctype'), true),
+            'close'              => fn() => new Close($escaper, $self->newInstance('doctype')),
+            'doctype'            => fn() => $self->doctype,
+            'element'            => fn() => new Element($escaper, $self->newInstance('doctype')),
+            'elementRaw'         => fn() => new Element($escaper, $self->newInstance('doctype'), true),
+            'form'               => fn() => new Form($escaper, $self->newInstance('doctype')),
             'friendlyTitle'      => fn() => new FriendlyTitle($escaper),
-            'img'                => fn() => new Img($escaper, $doctype),
-            'inputCheckbox'      => fn() => new Checkbox($escaper, $doctype),
-            'inputCheckboxGroup' => fn() => new CheckboxGroup($escaper, $doctype),
-            'inputColor'         => fn() => new Generic($escaper, $doctype, 'color'),
-            'inputDate'          => fn() => new Generic($escaper, $doctype, 'date'),
-            'inputDateTime'      => fn() => new Generic($escaper, $doctype, 'datetime'),
-            'inputDateTimeLocal' => fn() => new Generic($escaper, $doctype, 'datetime-local'),
-            'inputEmail'         => fn() => new Generic($escaper, $doctype, 'email'),
-            'inputFile'          => fn() => new Generic($escaper, $doctype, 'file'),
-            'inputHidden'        => fn() => new Generic($escaper, $doctype, 'hidden'),
-            'inputImage'         => fn() => new Generic($escaper, $doctype, 'image'),
-            'inputInput'         => fn() => new Generic($escaper, $doctype),
-            'inputMonth'         => fn() => new Generic($escaper, $doctype, 'month'),
-            'inputNumeric'       => fn() => new Generic($escaper, $doctype, 'number'),
-            'inputPassword'      => fn() => new Generic($escaper, $doctype, 'password'),
-            'inputRadio'         => fn() => new Radio($escaper, $doctype),
-            'inputRadioGroup'    => fn() => new RadioGroup($escaper, $doctype),
-            'inputRange'         => fn() => new Generic($escaper, $doctype, 'range'),
-            'inputSearch'        => fn() => new Generic($escaper, $doctype, 'search'),
-            'inputSelect'        => fn() => new Select($escaper, $doctype),
-            'inputSubmit'        => fn() => new Generic($escaper, $doctype, 'submit'),
-            'inputTel'           => fn() => new Generic($escaper, $doctype, 'tel'),
-            'inputText'          => fn() => new Generic($escaper, $doctype, 'text'),
-            'inputTextarea'      => fn() => new Textarea($escaper, $doctype),
-            'inputTime'          => fn() => new Generic($escaper, $doctype, 'time'),
-            'inputUrl'           => fn() => new Generic($escaper, $doctype, 'url'),
-            'inputWeek'          => fn() => new Generic($escaper, $doctype, 'week'),
-            'label'              => fn() => new Label($escaper, $doctype),
-            'labelRaw'           => fn() => new Label($escaper, $doctype, true),
-            'link'               => fn() => new Link($escaper, $doctype),
-            'meta'               => fn() => new Meta($escaper, $doctype),
-            'ol'                 => fn() => new Ol($escaper, $doctype),
-            'olRaw'              => fn() => new Ol($escaper, $doctype, true),
+            'img'                => fn() => new Img($escaper, $self->newInstance('doctype')),
+            'inputCheckbox'      => fn() => new Checkbox($escaper, $self->newInstance('doctype')),
+            'inputCheckboxGroup' => fn() => new CheckboxGroup($escaper, $self->newInstance('doctype')),
+            'inputColor'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'color'),
+            'inputDate'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'date'),
+            'inputDateTime'      => fn() => new Generic($escaper, $self->newInstance('doctype'), 'datetime'),
+            'inputDateTimeLocal' => fn() => new Generic($escaper, $self->newInstance('doctype'), 'datetime-local'),
+            'inputEmail'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'email'),
+            'inputFile'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'file'),
+            'inputHidden'        => fn() => new Generic($escaper, $self->newInstance('doctype'), 'hidden'),
+            'inputImage'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'image'),
+            'inputInput'         => fn() => new Generic($escaper, $self->newInstance('doctype')),
+            'inputMonth'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'month'),
+            'inputNumeric'       => fn() => new Generic($escaper, $self->newInstance('doctype'), 'number'),
+            'inputPassword'      => fn() => new Generic($escaper, $self->newInstance('doctype'), 'password'),
+            'inputRadio'         => fn() => new Radio($escaper, $self->newInstance('doctype')),
+            'inputRadioGroup'    => fn() => new RadioGroup($escaper, $self->newInstance('doctype')),
+            'inputRange'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'range'),
+            'inputSearch'        => fn() => new Generic($escaper, $self->newInstance('doctype'), 'search'),
+            'inputSelect'        => fn() => new Select($escaper, $self->newInstance('doctype')),
+            'inputSubmit'        => fn() => new Generic($escaper, $self->newInstance('doctype'), 'submit'),
+            'inputTel'           => fn() => new Generic($escaper, $self->newInstance('doctype'), 'tel'),
+            'inputText'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'text'),
+            'inputTextarea'      => fn() => new Textarea($escaper, $self->newInstance('doctype')),
+            'inputTime'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'time'),
+            'inputUrl'           => fn() => new Generic($escaper, $self->newInstance('doctype'), 'url'),
+            'inputWeek'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'week'),
+            'label'              => fn() => new Label($escaper, $self->newInstance('doctype')),
+            'labelRaw'           => fn() => new Label($escaper, $self->newInstance('doctype'), true),
+            'link'               => fn() => new Link($escaper, $self->newInstance('doctype')),
+            'meta'               => fn() => new Meta($escaper, $self->newInstance('doctype')),
+            'ol'                 => fn() => new Ol($escaper, $self->newInstance('doctype')),
+            'olRaw'              => fn() => new Ol($escaper, $self->newInstance('doctype'), true),
             'preload'            => fn() => new Preload($escaper, $response),
-            'script'             => fn() => new Script($escaper, $doctype),
-            'style'              => fn() => new Style($escaper, $doctype),
-            'tag'                => fn() => new Tag($escaper, $doctype),
-            'title'              => fn() => new Title($escaper, $doctype),
-            'ul'                 => fn() => new Ul($escaper, $doctype),
-            'ulRaw'              => fn() => new Ul($escaper, $doctype, true),
-            'voidTag'            => fn() => new VoidTag($escaper, $doctype),
+            'script'             => fn() => new Script($escaper, $self->newInstance('doctype')),
+            'style'              => fn() => new Style($escaper, $self->newInstance('doctype')),
+            'tag'                => fn() => new Tag($escaper, $self->newInstance('doctype')),
+            'title'              => fn() => new Title($escaper, $self->newInstance('doctype')),
+            'ul'                 => fn() => new Ul($escaper, $self->newInstance('doctype')),
+            'ulRaw'              => fn() => new Ul($escaper, $self->newInstance('doctype'), true),
+            'voidTag'            => fn() => new VoidTag($escaper, $self->newInstance('doctype')),
         ];
     }
 }
