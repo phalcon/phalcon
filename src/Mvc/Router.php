@@ -127,6 +127,16 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected array $matches = [];
 
     /**
+     * @var array
+     */
+    protected array $methodRoutes = [];
+
+    /**
+     * @var bool
+     */
+    protected bool $methodRoutesDirty = true;
+
+    /**
      * @var string
      */
     protected string $module = "";
@@ -180,20 +190,24 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * Two routes are added by default to match /:controller/:action and
              * /:controller/:action/:params
              */
-            $this->routes[] = new Route(
-                "#^/([\\w0-9\\_\\-]+)[/]{0,1}$#u",
-                [
-                    "controller" => 1,
-                ]
+            $this->attach(
+                new Route(
+                    "#^/([\\w0-9\\_\\-]+)[/]{0,1}$#u",
+                    [
+                        "controller" => 1,
+                    ]
+                )
             );
 
-            $this->routes[] = new Route(
-                "#^/([\\w0-9\\_\\-]+)/([\\w0-9\\.\\_]+)(/.*)*$#u",
-                [
-                    "controller" => 1,
-                    "action"     => 2,
-                    "params"     => 3,
-                ]
+            $this->attach(
+                new Route(
+                    "#^/([\\w0-9\\_\\-]+)/([\\w0-9\\.\\_]+)(/.*)*$#u",
+                    [
+                        "controller" => 1,
+                        "action"     => 2,
+                        "params"     => 3,
+                    ]
+                )
             );
         }
     }
@@ -520,6 +534,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 throw new Exception("Invalid route position");
         }
 
+        $this->methodRoutesDirty = true;
+
         return $this;
     }
 
@@ -530,7 +546,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function clear(): void
     {
-        $this->routes = [];
+        $this->routes            = [];
+        $this->methodRoutes      = [];
+        $this->methodRoutesDirty = true;
     }
 
     /**
@@ -603,6 +621,21 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function getMatches(): array
     {
         return $this->matches;
+    }
+
+    /**
+     * Returns routes indexed by HTTP method, building the index if needed.
+     * Unconstrained routes are stored under the "*" key.
+     *
+     * @return array
+     */
+    public function getMethodRoutes(): array
+    {
+        if ($this->methodRoutesDirty) {
+            $this->rebuildMethodIndex();
+        }
+
+        return $this->methodRoutes;
     }
 
     /**
@@ -788,30 +821,26 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $request = $this->container->get("request");
 
         /**
-         * Routes are traversed in reversed order
+         * Rebuild the method index if routes were added/changed since last handle
          */
-        $reverseRoutes = array_reverse($this->routes);
+        if ($this->methodRoutesDirty) {
+            $this->rebuildMethodIndex();
+        }
 
-        foreach ($reverseRoutes as $route) {
+        /**
+         * Build candidate list: routes matching the request method + unconstrained routes.
+         * Routes are traversed in reversed order (last registered wins).
+         */
+        $requestMethod  = $request->getMethod();
+        $methodBucket   = $this->methodRoutes[$requestMethod] ?? [];
+        $wildcardBucket = $this->methodRoutes["*"] ?? [];
+        $candidateRoutes = array_reverse(
+            array_merge($methodBucket, $wildcardBucket)
+        );
+
+        foreach ($candidateRoutes as $route) {
             $params  = [];
             $matches = null;
-
-            /**
-             * Look for HTTP method constraints
-             */
-            $methods = $route->getHttpMethods();
-            if (
-                null !== $methods &&
-                (
-                    $request instanceof RequestInterface &&
-                    false === $request->isMethod($methods, true)
-                )
-            ) {
-                /**
-                 * Check if the current method is allowed by the route
-                 */
-                continue;
-            }
 
             /**
              * Look for hostname constraints
@@ -1117,7 +1146,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             }
         }
 
-        $this->routes = array_merge($this->routes, $groupRoutes);
+        foreach ($groupRoutes as $groupRoute) {
+            $this->attach($groupRoute);
+        }
 
         return $this;
     }
@@ -1315,5 +1346,33 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $urlParts = explode("?", $uri, 2);
 
         return $urlParts[0];
+    }
+
+    /**
+     * Rebuilds the HTTP-method index from the current routes array.
+     * Routes with no HTTP method constraint are filed under "*".
+     */
+    protected function rebuildMethodIndex(): void
+    {
+        $index = [];
+
+        foreach ($this->routes as $route) {
+            $methods = $route->getHttpMethods();
+
+            if (null === $methods) {
+                $index["*"][] = $route;
+            } else {
+                if (is_string($methods)) {
+                    $methods = [$methods];
+                }
+
+                foreach ($methods as $method) {
+                    $index[$method][] = $route;
+                }
+            }
+        }
+
+        $this->methodRoutes      = $index;
+        $this->methodRoutesDirty = false;
     }
 }
