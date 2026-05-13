@@ -134,12 +134,10 @@ abstract class AbstractDatabaseTestCase extends AbstractUnitTestCase
      */
     public static function getDatabaseNow(string $driver): string
     {
-        switch ($driver) {
-            case "sqlite":
-                return date("'Y-m-d H:i:s'");
-            default:
-                return "NOW()";
-        }
+        return match ($driver) {
+            "sqlite" => date("'Y-m-d H:i:s'"),
+            default  => "NOW()",
+        };
     }
 
     /**

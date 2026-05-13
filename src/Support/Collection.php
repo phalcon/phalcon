@@ -276,7 +276,15 @@ class Collection implements
         }
 
         if (null !== $cast) {
-            settype($value, $cast);
+            if (
+                'array' === $cast
+                && is_object($value)
+                && method_exists($value, 'toArray')
+            ) {
+                $value = $value->toArray();
+            } else {
+                settype($value, $cast);
+            }
         }
 
         return $value;
