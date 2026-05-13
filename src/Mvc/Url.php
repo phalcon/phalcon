@@ -184,6 +184,19 @@ class Url extends AbstractInjectionAware implements UrlInterface
                 $route->getReversedPaths(),
                 $uri
             );
+
+            /**
+             * If the route has a hostname restriction, prepend it as a
+             * protocol-relative URL so the generated link works under
+             * both HTTP and HTTPS. The baseUri is not prepended in this
+             * case because the hostname already provides the authority.
+             */
+            $hostname = $route->getHostname();
+
+            if (!empty($hostname)) {
+                $uri   = '//' . $hostname . (substr($uri, 0, 1) !== '/' ? '/' . $uri : $uri);
+                $local = false;
+            }
         }
 
         if (true === $local) {
