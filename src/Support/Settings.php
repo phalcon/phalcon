@@ -58,6 +58,7 @@ class Settings
         'orm.ignore_unknown_columns'            => false,
         'orm.late_state_binding'                => false,
         'orm.not_null_validations'              => true,
+        'orm.resultset_empty_left_join_model'   => true,
         'orm.resultset_prefetch_records'        => 0,
         'orm.update_snapshot_on_save'           => true,
         'orm.virtual_foreign_keys'              => true,
@@ -135,6 +136,7 @@ class Settings
             case 'orm.ignore_unknown_columns':
             case 'orm.late_state_binding':
             case 'orm.not_null_validations':
+            case 'orm.resultset_empty_left_join_model':
             case 'orm.resultset_prefetch_records':
             case 'orm.update_snapshot_on_save':
             case 'orm.virtual_foreign_keys':

@@ -10,6 +10,7 @@
 ### Changed
 
 - Changed `Phalcon\Forms\Manager::__construct(FormsLocator $locator)` to accept a nullable locator (`FormsLocator | null $locator = null`); when omitted, a default `FormsLocator` is instantiated internally. Restores backwards compatibility for existing `new Manager()` calls broken by the locator-injection change
+- Changed `Phalcon\Mvc\Model\Resultset\Complex::current()` LEFT-JOIN hydration to be controlled by the new `orm.resultset_empty_left_join_model` ini setting (default `true`). When the flag is `true` (default) a LEFT JOIN that matches no row hydrates an empty Model instance whose every column is `null` — preserving the pre-cphalcon-5.12 behavior so applications upgrading from earlier versions do not need code changes. Setting the flag to `false` (via `php.ini`, `.htaccess`, or `Phalcon\Support\Settings::set('orm.resultset_empty_left_join_model', false)`) restores the cphalcon 5.12.0 contract introduced by [#CP-16239](https://github.com/phalcon/cphalcon/issues/16239), where the unmatched slot is plainly `null`. The new key is wired into `Phalcon\Support\Settings::get()` / `set()` alongside the other `orm.*` toggles [#CP-16960](https://github.com/phalcon/cphalcon/issues/16960)
 
 ### Fixed
 

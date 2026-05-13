@@ -1081,7 +1081,7 @@ abstract class Dialect implements DialectInterface
             }
 
             if (isset($join["type"]) && $join["type"]) {
-                $joinType .= " ";
+                $joinType = $join["type"] . " ";
             }
 
             $joinTable = $this->getSqlTable($join["source"], $escapeChar);

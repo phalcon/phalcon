@@ -3453,7 +3453,12 @@ class Query implements QueryInterface, InjectionAwareInterface
                     "type"   => "object",
                     "model"  => $modelName,
                     "column" => $source,
-                    "balias" => lcfirst($modelName),
+                    // Namespaced model names are kept verbatim so callers
+                    // can readAttribute(Model::class). Only single-word
+                    // model names get lcfirst'd (legacy behavior).
+                    "balias" => (strpos($modelName, '\\') !== false)
+                        ? $modelName
+                        : lcfirst($modelName),
                 ];
 
                 if ($eager !== null) {
@@ -3505,13 +3510,16 @@ class Query implements QueryInterface, InjectionAwareInterface
             $sqlAliasesModels = $this->sqlAliasesModels;
             $modelName        = $sqlAliasesModels[$columnDomain];
 
-            if ($preparedAlias != "string") {
+            if (!is_string($preparedAlias)) {
                 /**
-                 * If the best alias is the model name, we lowercase the first
-                 * letter
+                 * If the best alias is the model name, lowercase the first
+                 * letter — but keep fully-qualified namespaced names verbatim
+                 * so `readAttribute(Model::class)` matches downstream.
                  */
                 if ($columnDomain == $modelName) {
-                    $preparedAlias = lcfirst($modelName);
+                    $preparedAlias = (strpos($modelName, '\\') !== false)
+                        ? $modelName
+                        : lcfirst($modelName);
                 } else {
                     $preparedAlias = $columnDomain;
                 }

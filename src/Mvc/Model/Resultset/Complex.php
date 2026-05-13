@@ -190,9 +190,27 @@ class Complex extends Resultset implements ResultsetInterface
                 }
 
                 /**
-                 * Generate the column value according to the hydration type
+                 * If all values are null, the LEFT JOIN returned no matching
+                 * row. `orm.resultset_empty_left_join_model` defaults to
+                 * `true`, preserving the pre-5.12 behavior of hydrating an
+                 * empty Model instance (all properties null) so existing
+                 * applications keep working without changes. New code that
+                 * prefers the cleaner "explicit null on no match" semantics
+                 * introduced in cphalcon#16239 can opt in by setting the
+                 * flag to `false` (via php.ini, .htaccess, or
+                 * `Settings::set()`).
                  */
-                if ($hydrateMode == Resultset::HYDRATE_RECORDS) {
+                $allNull = true;
+                foreach ($rowModel as $columnValue) {
+                    if ($columnValue !== null) {
+                        $allNull = false;
+                        break;
+                    }
+                }
+
+                if ($allNull && !Settings::get("orm.resultset_empty_left_join_model")) {
+                    $value = null;
+                } elseif ($hydrateMode == Resultset::HYDRATE_RECORDS) {
                     // Check if the resultset must keep snapshots
                     $keepSnapshots = $column["keepSnapshots"] ?? false;
 

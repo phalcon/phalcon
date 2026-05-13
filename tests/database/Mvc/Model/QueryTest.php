@@ -187,7 +187,10 @@ final class QueryTest extends AbstractDatabaseTestCase
      */
     private function transform(Row $row): CustomersKeepSnapshots
     {
-        $invoice           = $row->readAttribute(lcfirst(CustomersKeepSnapshots::class));
+        // Namespaced model names are now preserved verbatim as the row
+        // attribute, matching cphalcon's behavior (previously the alias
+        // was lcfirst'd, producing `phalcon\Tests\...\CustomersKeepSnapshots`).
+        $invoice           = $row->readAttribute(CustomersKeepSnapshots::class);
         $customer          = $row->readAttribute('join_1');
         $invoice->customer = $customer;
 
