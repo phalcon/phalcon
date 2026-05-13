@@ -43,7 +43,6 @@ use function method_exists;
 use function preg_replace;
 use function realpath;
 use function serialize;
-use function str_replace;
 use function strlen;
 use function unserialize;
 
@@ -1515,11 +1514,7 @@ class Compiler implements InjectionAwareInterface
 
                 case Opcode::STRING->value:
                     if ($doubleQuotes === false) {
-                        $exprCode = "'" . str_replace(
-                            "'",
-                            "\\'",
-                            $expr["value"]
-                        ) . "'";
+                        $exprCode = "'" . $expr["value"] . "'";
                     } else {
                         $exprCode = "\"" . $expr["value"] . "\"";
                     }
