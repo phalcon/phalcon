@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl;
 
+use Phalcon\Acl\Exceptions\ForbiddenWildcard;
 use Phalcon\Acl\Traits\ItemTrait;
 
 /**
@@ -28,12 +29,12 @@ class Role implements RoleInterface
      * @param string $name
      * @param string $description
      *
-     * @throws Exception
+     * @throws ForbiddenWildcard
      */
     public function __construct(string $name, string $description = '')
     {
         if ('*' === $name) {
-            throw new Exception("Role name cannot be '*'");
+            throw new ForbiddenWildcard('role');
         }
 
         $this->name        = $name;
