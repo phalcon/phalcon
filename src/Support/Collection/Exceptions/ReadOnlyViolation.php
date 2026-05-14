@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Collection;
+namespace Phalcon\Support\Collection\Exceptions;
 
-use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\Collection\Exception;
 
-/**
- * Exceptions for the Collection object
- */
-class Exception extends SupportException
+class ReadOnlyViolation extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct("The object is read only");
+    }
 }

@@ -11,13 +11,8 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Collection;
+namespace Phalcon\Support\Debug\Exceptions;
 
-use Phalcon\Support\Exception as SupportException;
-
-/**
- * Exceptions for the Collection object
- */
-class Exception extends SupportException
+class RuntimeWarning extends \ErrorException
 {
 }

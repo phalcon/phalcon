@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Support\Collection;
+namespace Phalcon\Support\Helper\Str\Exceptions;
 
-use Phalcon\Support\Exception as SupportException;
+use RuntimeException;
 
-/**
- * Exceptions for the Collection object
- */
-class Exception extends SupportException
+class SyntaxError extends RuntimeException
 {
+    public function __construct(string $text)
+    {
+        parent::__construct("Syntax error in string '" . $text . "'");
+    }
 }

@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper;
 
+use Phalcon\Support\Exception as SupportException;
+
 /**
- * Exceptions thrown in Phalcon\Helper will use this class
+ * Exceptions thrown in Phalcon\Support\Helper will use this class
  */
-class Exception extends \Exception
+class Exception extends SupportException
 {
 }

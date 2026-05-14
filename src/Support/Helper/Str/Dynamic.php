@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use RuntimeException;
+use Phalcon\Support\Helper\Str\Exceptions\SyntaxError;
 
 use function explode;
 use function is_array;
@@ -41,9 +41,7 @@ class Dynamic
         string $separator = '|'
     ): string {
         if (mb_substr_count($text, $leftDelimiter) !== mb_substr_count($text, $rightDelimiter)) {
-            throw new RuntimeException(
-                "Syntax error in string '" . $text . "'"
-            );
+            throw new SyntaxError($text);
         }
 
         $left    = preg_quote($leftDelimiter);

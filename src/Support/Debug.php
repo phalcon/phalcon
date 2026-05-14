@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support;
 
-use ErrorException;
-use Phalcon\Support\Debug\Exception;
+use Phalcon\Support\Debug\Exceptions\RequestHalted;
+use Phalcon\Support\Debug\Exceptions\RuntimeWarning;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -166,11 +166,11 @@ class Debug
     /**
      * Halts the request showing a backtrace
      *
-     * @throws Exception
+     * @throws RequestHalted
      */
     public function halt(): void
     {
-        throw new Exception('Halted request');
+        throw new RequestHalted();
     }
 
     /**
@@ -275,7 +275,7 @@ class Debug
      * @param string $file
      * @param int    $line
      *
-     * @throws ErrorException
+     * @throws RuntimeWarning
      */
     public function onUncaughtLowSeverity(
         int $severity,
@@ -284,7 +284,7 @@ class Debug
         int $line
     ): void {
         if (error_reporting() & $severity) {
-            throw new ErrorException($message, 0, $severity, $file, $line);
+            throw new RuntimeWarning($message, 0, $severity, $file, $line);
         }
     }
 

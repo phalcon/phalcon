@@ -15,9 +15,10 @@ namespace Phalcon\Support;
 
 use Countable;
 use Generator;
-use InvalidArgumentException;
 use JsonSerializable;
+
 use Phalcon\Support\Collection\CollectionInterface;
+use Phalcon\Support\Collection\Exceptions\InvalidValueType;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
 use Phalcon\Support\Helper\Json\Encode;
@@ -30,7 +31,6 @@ use function array_keys;
 use function array_values;
 use function arsort;
 use function asort;
-use function get_debug_type;
 use function is_array;
 use function is_bool;
 use function is_float;
@@ -49,7 +49,7 @@ use const SORT_ASC;
 use const SORT_DESC;
 
 /**
- * `Phalcon\Collection` is a supercharged object-oriented array. It implements:
+ * `Phalcon\Support\Collection` is a supercharged object-oriented array. It implements:
  * - [ArrayAccess](https://www.php.net/manual/en/class.arrayaccess.php)
  * - [Countable](https://www.php.net/manual/en/class.countable.php)
  * - [IteratorAggregate](https://www.php.net/manual/en/class.iteratoraggregate.php)
@@ -579,11 +579,7 @@ class Collection implements
         JSON_UNESCAPED_SLASHES |
         JSON_THROW_ON_ERROR
     ): string {
-        try {
-            $result = (new Encode())->__invoke($this->jsonSerialize(), $options);
-        } catch (InvalidArgumentException) {
-            return '';
-        }
+        $result = (new Encode())->__invoke($this->jsonSerialize(), $options);
 
         return $result;
     }
@@ -714,7 +710,7 @@ class Collection implements
      *
      * @param mixed $value
      *
-     * @throws InvalidArgumentException
+     * @throws InvalidValueType
      */
     protected function validateType(mixed $value): void
     {
@@ -733,10 +729,7 @@ class Collection implements
         };
 
         if (!$ok) {
-            throw new InvalidArgumentException(
-                "Value must be of type '" . $this->type
-                . "', '" . get_debug_type($value) . "' given"
-            );
+            throw new InvalidValueType($this->type, $value);
         }
     }
 }
