@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
-use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\Exceptions\ClusterConnectionFailed;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 use Redis as RedisConsts;
@@ -84,7 +84,7 @@ class RedisCluster extends Redis
      * Flushes/clears the cache
      *
      * @return bool
-     * @throws StorageException|SupportException
+     * @throws ClusterConnectionFailed|SupportException
      */
     public function clear(): bool
     {
@@ -101,7 +101,7 @@ class RedisCluster extends Redis
      * server(s)
      *
      * @return RedisService
-     * @throws StorageException|SupportException
+     * @throws ClusterConnectionFailed|SupportException
      */
     public function getAdapter(): mixed
     {
@@ -119,7 +119,7 @@ class RedisCluster extends Redis
                     $options["context"]
                 );
             } catch (Throwable $e) {
-                throw new StorageException(
+                throw new ClusterConnectionFailed(
                     sprintf(
                         "Could not connect to the Redis Cluster server due to: %s",
                         $e->getMessage()

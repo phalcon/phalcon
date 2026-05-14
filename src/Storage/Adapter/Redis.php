@@ -16,6 +16,9 @@ namespace Phalcon\Storage\Adapter;
 use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\Exceptions\AuthenticationFailed;
+use Phalcon\Storage\Exceptions\ConnectionFailed;
+use Phalcon\Storage\Exceptions\DatabaseSelectionFailed;
 use Phalcon\Storage\SerializerFactory;
 use Redis as RedisService;
 use RedisException;
@@ -280,7 +283,7 @@ class Redis extends AbstractAdapter
      * @param RedisService $connection
      *
      * @return Redis
-     * @throws StorageException
+     * @throws AuthenticationFailed
      */
     private function checkAuth(RedisService $connection): Redis
     {
@@ -293,9 +296,7 @@ class Redis extends AbstractAdapter
         }
 
         if (true === $error) {
-            throw new StorageException(
-                'Failed to authenticate with the Redis server'
-            );
+            throw new AuthenticationFailed();
         }
 
         return $this;
@@ -305,37 +306,37 @@ class Redis extends AbstractAdapter
      * @param RedisService $connection
      *
      * @return Redis
-     * @throws StorageException
+     * @throws ConnectionFailed
      */
     private function checkConnect(RedisService $connection): Redis
     {
+        $options       = $this->options;
+        $host          = $options["host"];
+        $port          = $options["port"];
+        $timeout       = $options["timeout"];
+        $retryInterval = $options["retryInterval"];
+        $readTimeout   = $options["readTimeout"];
+        $auth          = $options["auth"];
+        $ssl           = $options["ssl"];
+
+        $connectionOptions = [];
+        if (true !== empty($auth)) {
+            $connectionOptions['auth'] = $auth;
+        }
+        if (true !== empty($ssl)) {
+            $connectionOptions['stream'] = $ssl;
+        }
+
+        if (true !== $options["persistent"]) {
+            $method    = "connect";
+            $parameter = null;
+        } else {
+            $method       = "pconnect";
+            $persistentId = $options["persistentId"];
+            $parameter    = !empty($persistentId) ? $persistentId : "persistentId" . $options["index"];
+        }
+
         try {
-            $options       = $this->options;
-            $host          = $options["host"];
-            $port          = $options["port"];
-            $timeout       = $options["timeout"];
-            $retryInterval = $options["retryInterval"];
-            $readTimeout   = $options["readTimeout"];
-            $auth          = $options["auth"];
-            $ssl           = $options["ssl"];
-
-            $connectionOptions = [];
-            if (true !== empty($auth)) {
-                $connectionOptions['auth'] = $auth;
-            }
-            if (true !== empty($ssl)) {
-                $connectionOptions['stream'] = $ssl;
-            }
-
-            if (true !== $options["persistent"]) {
-                $method    = "connect";
-                $parameter = null;
-            } else {
-                $method       = "pconnect";
-                $persistentId = $options["persistentId"];
-                $parameter    = !empty($persistentId) ? $persistentId : "persistentId" . $options["index"];
-            }
-
             $result = $connection->$method(
                 $host,
                 $port,
@@ -345,18 +346,18 @@ class Redis extends AbstractAdapter
                 $readTimeout,
                 $connectionOptions
             );
-
-            if (true !== $result) {
-                throw new StorageException(
-                    sprintf(
-                        "Could not connect to the Redis server [%s:%s]",
-                        $host,
-                        $port
-                    )
-                );
-            }
         } catch (BaseException $ex) {
-            throw new StorageException($ex->getMessage());
+            throw new ConnectionFailed($ex->getMessage());
+        }
+
+        if (true !== $result) {
+            throw new ConnectionFailed(
+                sprintf(
+                    "Could not connect to the Redis server [%s:%s]",
+                    $host,
+                    $port
+                )
+            );
         }
 
         return $this;
@@ -366,16 +367,14 @@ class Redis extends AbstractAdapter
      * @param RedisService $connection
      *
      * @return Redis
-     * @throws StorageException
+     * @throws DatabaseSelectionFailed
      */
     private function checkIndex(RedisService $connection): Redis
     {
         $index = $this->options['index'];
 
         if ($index > 0 && true !== $connection->select($index)) {
-            throw new StorageException(
-                'Redis server selected database failed'
-            );
+            throw new DatabaseSelectionFailed();
         }
 
         return $this;

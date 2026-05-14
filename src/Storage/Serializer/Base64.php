@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use InvalidArgumentException;
+use Phalcon\Storage\Serializer\Exceptions\InvalidSerializationInput;
+use Phalcon\Storage\Serializer\Exceptions\InvalidUnserializationInput;
 
 use function base64_decode;
 use function base64_encode;
@@ -29,9 +30,7 @@ class Base64 extends AbstractSerializer
     public function serialize(): mixed
     {
         if (!is_string($this->data)) {
-            throw new InvalidArgumentException(
-                'Data for the serializer must of type string'
-            );
+            throw new InvalidSerializationInput();
         }
 
         return base64_encode($this->data);
@@ -47,9 +46,7 @@ class Base64 extends AbstractSerializer
     public function unserialize(mixed $data): void
     {
         if (!is_string($data)) {
-            throw new InvalidArgumentException(
-                'Data for the unserializer must of type string'
-            );
+            throw new InvalidUnserializationInput();
         }
 
         $result = $this->phpBase64Decode($data, true);

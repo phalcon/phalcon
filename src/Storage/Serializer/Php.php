@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use InvalidArgumentException;
+use Phalcon\Storage\Serializer\Exceptions\InvalidUnserializationInput;
 
 use function is_string;
 use function restore_error_handler;
@@ -50,9 +50,7 @@ class Php extends AbstractSerializer
             $this->data = $data;
         } else {
             if (!is_string($data)) {
-                throw new InvalidArgumentException(
-                    'Data for the unserializer must of type string'
-                );
+                throw new InvalidUnserializationInput();
             }
 
             $warning = false;

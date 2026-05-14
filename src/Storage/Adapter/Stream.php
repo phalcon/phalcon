@@ -17,7 +17,7 @@ use DateInterval;
 use Exception as BaseException;
 use FilesystemIterator;
 use Iterator;
-use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Traits\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
@@ -74,7 +74,7 @@ class Stream extends AbstractAdapter
      * @param SerializerFactory $factory
      * @param TOptions          $options
      *
-     * @throws StorageException
+     * @throws InvalidConfiguration
      */
     public function __construct(
         SerializerFactory $factory,
@@ -82,7 +82,7 @@ class Stream extends AbstractAdapter
     ) {
         $storageDir = $options['storageDir'] ?? '';
         if (empty($storageDir)) {
-            throw new StorageException(
+            throw new InvalidConfiguration(
                 "The 'storageDir' must be specified in the options"
             );
         }

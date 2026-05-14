@@ -17,6 +17,8 @@ use DateInterval;
 use Exception as BaseException;
 use Memcached;
 use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\Exceptions\ConnectionFailed;
+use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
 
@@ -279,12 +281,12 @@ class Libmemcached extends AbstractAdapter
      * @param array     $client
      *
      * @return Libmemcached
-     * @throws StorageException
+     * @throws InvalidConfiguration
      */
     private function setOptions(Memcached $connection, array $client): Libmemcached
     {
         if (true !== $connection->setOptions($client)) {
-            throw new StorageException(
+            throw new InvalidConfiguration(
                 'Cannot set Memcached client options'
             );
         }
@@ -340,12 +342,12 @@ class Libmemcached extends AbstractAdapter
      * @param array     $servers
      *
      * @return Libmemcached
-     * @throws StorageException
+     * @throws ConnectionFailed
      */
     private function setServers(Memcached $connection, array $servers): Libmemcached
     {
         if (true !== $connection->addServers($servers)) {
-            throw new StorageException(
+            throw new ConnectionFailed(
                 'Cannot connect to the Memcached server(s)'
             );
         }
