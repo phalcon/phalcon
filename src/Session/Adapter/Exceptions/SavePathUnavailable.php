@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter\Exceptions;
 
-class SavePathUnavailable extends \Phalcon\Session\Exception
+use Phalcon\Session\Exception;
+
+class SavePathUnavailable extends Exception
 {
     public function __construct(string $path)
     {

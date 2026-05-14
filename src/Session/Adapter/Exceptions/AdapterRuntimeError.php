@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter\Exceptions;
 
-class AdapterRuntimeError extends \Phalcon\Session\Exception
+use Phalcon\Session\Exception;
+
+class AdapterRuntimeError extends Exception
 {
 }
