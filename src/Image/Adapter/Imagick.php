@@ -22,6 +22,11 @@ use ImagickPixel;
 use ImagickPixelException;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
+use Phalcon\Image\Exceptions\CompositeFailed;
+use Phalcon\Image\Exceptions\ExtensionNotLoaded;
+use Phalcon\Image\Exceptions\ImageLoadFailed;
+use Phalcon\Image\Exceptions\ResizeFailed;
+use Phalcon\Image\Exceptions\ResourceTypeError;
 
 use function is_bool;
 use function is_float;
@@ -93,9 +98,7 @@ class Imagick extends AbstractAdapter
             $this->realpath = realpath($this->file);
 
             if (true !== $this->image->readImage($this->realpath)) {
-                throw new Exception(
-                    "Imagick::readImage " . $this->file . " failed"
-                );
+                throw new ImageLoadFailed($this->file);
             }
 
             if (!$this->image->getImageAlphaChannel()) {
@@ -116,9 +119,7 @@ class Imagick extends AbstractAdapter
             }
         } else {
             if (null === $width || null === $height) {
-                throw new Exception(
-                    "Failed to create image from file " . $this->file
-                );
+                throw new ImageLoadFailed($this->file);
             }
 
             $this->image->newImage(
@@ -184,7 +185,7 @@ class Imagick extends AbstractAdapter
             );
 
             if ($return !== true) {
-                throw new Exception("Imagick::liquidRescale failed");
+                throw new ResizeFailed();
             }
 
             if ($image->nextImage() === false) {
@@ -216,9 +217,7 @@ class Imagick extends AbstractAdapter
         if ($type >= 0 && $type <= 6) {
             $this->image->setResourceLimit($type, $limit);
         } else {
-            throw new Exception(
-                "Cannot set the Resource Type for this image"
-            );
+            throw new ResourceTypeError();
         }
     }
 
@@ -282,7 +281,7 @@ class Imagick extends AbstractAdapter
             );
 
             if (true !== $result) {
-                throw new Exception("Imagick::compositeImage failed");
+                throw new CompositeFailed();
             }
 
             if (true !== $this->image->nextImage()) {
@@ -401,7 +400,7 @@ class Imagick extends AbstractAdapter
             );
 
             if ($return !== true) {
-                throw new Exception("Imagick::compositeImage failed");
+                throw new CompositeFailed();
             }
 
             if (true !== $this->image->nextImage()) {
@@ -505,7 +504,7 @@ class Imagick extends AbstractAdapter
             );
 
             if ($return !== true) {
-                throw new Exception("Imagick::compositeImage failed");
+                throw new CompositeFailed();
             }
 
             $reflection->evaluateImage(
@@ -541,7 +540,7 @@ class Imagick extends AbstractAdapter
             );
 
             if ($return !== true) {
-                throw new Exception("Imagick::compositeImage failed");
+                throw new CompositeFailed();
             }
 
             if (true !== $this->image->nextImage()) {
@@ -561,7 +560,7 @@ class Imagick extends AbstractAdapter
             );
 
             if ($return !== true) {
-                throw new Exception("Imagick::compositeImage failed");
+                throw new CompositeFailed();
             }
 
             if (true !== $image->nextImage() || true !== $reflection->nextImage()) {
@@ -884,7 +883,7 @@ class Imagick extends AbstractAdapter
             );
 
             if ($return !== true) {
-                throw new Exception("Imagick::compositeImage failed");
+                throw new CompositeFailed();
             }
 
             if (true !== $this->image->nextImage()) {
@@ -905,9 +904,7 @@ class Imagick extends AbstractAdapter
     private function check(): void
     {
         if (true !== class_exists("imagick")) {
-            throw new Exception(
-                "Imagick is not installed, or the extension is not loaded"
-            );
+            throw new ExtensionNotLoaded("Imagick");
         }
 
         if (defined("Imagick::IMAGICK_EXTNUM")) {

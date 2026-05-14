@@ -16,6 +16,9 @@ namespace Phalcon\Image\Adapter;
 use GdImage;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
+use Phalcon\Image\Exceptions\MissingDimensions;
+use Phalcon\Image\Exceptions\MissingHeight;
+use Phalcon\Image\Exceptions\MissingWidth;
 use ValueError;
 
 use function array_map;
@@ -681,17 +684,17 @@ abstract class AbstractAdapter implements AdapterInterface
             case Enum::INVERSE:
             case Enum::PRECISE:
                 if (null === $width || null === $height) {
-                    throw new Exception("width and height must be specified");
+                    throw new MissingDimensions();
                 }
                 break;
             case Enum::WIDTH:
                 if (null === $width) {
-                    throw new Exception("width must be specified");
+                    throw new MissingWidth();
                 }
                 break;
             case Enum::HEIGHT:
                 if (null === $height) {
-                    throw new Exception("height must be specified");
+                    throw new MissingHeight();
                 }
                 break;
             default:
