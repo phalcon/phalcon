@@ -20,6 +20,7 @@ use JsonSerializable;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
+use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Support\Traits\JsonTrait as BaseJsonTrait;
 use Phalcon\Traits\Php\JsonTrait;
 
@@ -578,13 +579,13 @@ class Collection implements
         JSON_UNESCAPED_SLASHES |
         JSON_THROW_ON_ERROR
     ): string {
-        $return = $this->phpJsonEncode($this->jsonSerialize(), $options);
-
-        if (false === $return) {
-            $return = '';
+        try {
+            $result = (new Encode())->__invoke($this->jsonSerialize(), $options);
+        } catch (InvalidArgumentException) {
+            return '';
         }
 
-        return $return;
+        return $result;
     }
 
     /**

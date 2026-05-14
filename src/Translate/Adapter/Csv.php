@@ -16,12 +16,14 @@ namespace Phalcon\Translate\Adapter;
 use Exception as BaseException;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Translate\Exception;
+use Phalcon\Translate\Exceptions\MissingRequiredParameter;
+use Phalcon\Translate\Exceptions\FileOpenError;
 use Phalcon\Translate\InterpolatorFactory;
 
 use function is_resource;
 
 /**
- * @phpstan-type TOptions = array{
+ * @phpstan-type TOptions array{
  *      content?: string,
  *      delimiter?: string,
  *      enclosure?: string,
@@ -40,8 +42,7 @@ class Csv extends AbstractAdapter
     /**
      * Csv constructor.
      *
-     * @param InterpolatorFactory $interpolator
-     * @param TOptions            $options
+     * @phpstan-param TOptions            $options
      *
      * @throws Exception
      */
@@ -52,7 +53,7 @@ class Csv extends AbstractAdapter
         parent::__construct($interpolator, $options);
 
         if (!isset($options['content'])) {
-            throw new Exception("Parameter 'content' is required");
+            throw new MissingRequiredParameter('content');
         }
 
         $delimiter = $options['delimiter'] ?? ';';
@@ -77,8 +78,7 @@ class Csv extends AbstractAdapter
     /**
      * Returns the translation related to the given key
      *
-     * @param string                $translateKey
-     * @param array<string, string> $placeholders
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      * @throws BaseException
@@ -109,7 +109,8 @@ class Csv extends AbstractAdapter
      * @param string $enclosure
      * @param string $escape
      *
-     * @throws Exception
+     * @return void
+     * @throws FileOpenError
      */
     private function load(
         string $file,
@@ -121,9 +122,7 @@ class Csv extends AbstractAdapter
         $pointer = $this->phpFopen($file, 'rb');
 
         if (true !== is_resource($pointer)) {
-            throw new Exception(
-                "Error opening translation file '" . $file . "'"
-            );
+            throw new FileOpenError($file);
         }
 
         while (true) {

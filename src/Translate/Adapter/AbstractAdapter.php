@@ -15,11 +15,11 @@ namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
 use Exception as BaseException;
-use Phalcon\Translate\Exception;
+use Phalcon\Translate\Exceptions\ImmutableObject;
 use Phalcon\Translate\InterpolatorFactory;
 
 /**
- * @psalm-type TOptions = array{
+ * @psalm-type TOptions array{
  *     defaultInterpolator?: string
  * }
  *
@@ -37,7 +37,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * AbstractAdapter constructor.
      *
-     * @param InterpolatorFactory $interpolatorFactory
      * @param TOptions            $options
      */
     public function __construct(
@@ -50,8 +49,7 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * Returns the translation string of the given key (alias of method 't')
      *
-     * @param string                $translateKey
-     * @param array<string, string> $placeholders
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      */
@@ -92,11 +90,12 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      * @param mixed $offset
      * @param mixed $value
      *
-     * @throws Exception
+     * @return void
+     * @throws ImmutableObject
      */
     public function offsetSet($offset, $value): void
     {
-        throw new Exception('Translate is an immutable ArrayAccess object');
+        throw new ImmutableObject();
     }
 
     /**
@@ -104,18 +103,18 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      *
      * @param mixed $offset
      *
-     * @throws Exception
+     * @return void
+     * @throws ImmutableObject
      */
     public function offsetUnset($offset): void
     {
-        throw new Exception('Translate is an immutable ArrayAccess object');
+        throw new ImmutableObject();
     }
 
     /**
      * Returns the translation string of the given key
      *
-     * @param string                $translateKey
-     * @param array<string, string> $placeholders
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      */
@@ -127,8 +126,7 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * Replaces placeholders by the values passed
      *
-     * @param string                $translation
-     * @param array<string, string> $placeholders
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      * @throws BaseException

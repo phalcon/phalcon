@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Translate;
 
 /**
- * Phalcon\Translate\Exception
- *
  * Class for exceptions thrown by Phalcon\Translate
  */
 class Exception extends \Exception

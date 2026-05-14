@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use Phalcon\Translate\Exception;
+use Phalcon\Translate\Exceptions\InvalidDataType;
+use Phalcon\Translate\Exceptions\MissingContent;
+use Phalcon\Translate\Exceptions\KeyNotFound;
 use Phalcon\Translate\InterpolatorFactory;
 
 use function is_array;
@@ -21,7 +24,7 @@ use function is_array;
 /**
  * Defines translation lists using PHP arrays
  *
- * @phpstan-type TOptions = array{
+ * @phpstan-type TOptions array{
  *      content?: array<string, string>,
  *      triggerError?: bool
  * }
@@ -44,7 +47,8 @@ class NativeArray extends AbstractAdapter
      * @param InterpolatorFactory $interpolator
      * @param TOptions            $options
      *
-     * @throws Exception
+     * @throws InvalidDataType
+     * @throws MissingContent
      */
     public function __construct(
         InterpolatorFactory $interpolator,
@@ -53,11 +57,11 @@ class NativeArray extends AbstractAdapter
         parent::__construct($interpolator, $options);
 
         if (!isset($options['content'])) {
-            throw new Exception('Translation content was not provided');
+            throw new MissingContent();
         }
 
         if (!is_array($options['content'])) {
-            throw new Exception('Translation data must be an array');
+            throw new InvalidDataType();
         }
 
         $this->triggerError = (bool)($options['triggerError'] ?? false);
@@ -82,12 +86,12 @@ class NativeArray extends AbstractAdapter
      * @param string $index
      *
      * @return string
-     * @throws Exception
+     * @throws KeyNotFound
      */
     public function notFound(string $index): string
     {
         if (true === $this->triggerError) {
-            throw new Exception('Cannot find translation key: ' . $index);
+            throw new KeyNotFound($index);
         }
 
         return $index;
@@ -96,8 +100,7 @@ class NativeArray extends AbstractAdapter
     /**
      * Returns the translation related to the given key
      *
-     * @param string                $translateKey
-     * @param array<string, string> $placeholders
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      * @throws Exception
@@ -117,7 +120,7 @@ class NativeArray extends AbstractAdapter
     /**
      * Returns the internal array
      *
-     * @return array<string, string>
+     * @phpstan-return array<string, string>
      */
     public function toArray(): array
     {

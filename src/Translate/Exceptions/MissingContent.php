@@ -7,17 +7,18 @@
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
- *
- * Implementation of this file has been influenced by lcobucci/clock
- *
- * @link    https://github.com/lcobucci/clock
- * @license https://github.com/lcobucci/clock/blob/3.7.x/LICENSE
  */
 
 declare(strict_types=1);
 
-namespace Phalcon\Time\Clock;
+namespace Phalcon\Translate\Exceptions;
 
-class Exception extends \Exception
+use Phalcon\Translate\Exception;
+
+class MissingContent extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct('Translation content was not provided');
+    }
 }

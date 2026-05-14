@@ -13,20 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
-use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Exception as SupportException;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Adapter\NativeArray;
+use Phalcon\Translate\Exceptions\TranslatorNotRegistered;
 
 /**
  * @property InterpolatorFactory $interpolator
  *
- * @psalm-type TConfig = array{
+ * @psalm-type TConfig array{
  *      adapter: string,
  *      options?: array{
  *          content: string,
@@ -46,10 +45,7 @@ class TranslateFactory
     use FactoryTrait;
 
     /**
-     * AdapterFactory constructor.
-     *
-     * @param InterpolatorFactory   $interpolator
-     * @param array<string, string> $services
+     * @phpstan-param array<string, string> $services
      */
     public function __construct(
         private InterpolatorFactory $interpolator,
@@ -64,8 +60,7 @@ class TranslateFactory
      * @param ConfigInterface|TConfig $config
      *
      * @return AdapterInterface
-     * @throws SupportException
-     * @throws BaseException
+     * @throws Exception
      */
     public function load(array | ConfigInterface $config): AdapterInterface
     {
@@ -80,11 +75,9 @@ class TranslateFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string               $name
-     * @param array<string, mixed> $options
+     * @phpstan-param array<string, mixed> $options
      *
      * @return AdapterInterface
-     * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
@@ -96,7 +89,7 @@ class TranslateFactory
      */
     protected function getExceptionClass(): string
     {
-        return Exception::class;
+        return TranslatorNotRegistered::class;
     }
 
     /**

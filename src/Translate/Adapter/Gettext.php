@@ -15,6 +15,8 @@ namespace Phalcon\Translate\Adapter;
 
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Translate\Exception;
+use Phalcon\Translate\Exceptions\MissingGettextExtension;
+use Phalcon\Translate\Exceptions\MissingRequiredParameter;
 use Phalcon\Translate\InterpolatorFactory;
 
 use function array_merge;
@@ -47,7 +49,7 @@ use const LC_ALL;
  *
  * Allows translations using gettext
  *
- * @phpstan-type TOptions = array{
+ * @phpstan-type TOptions array{
  *      locale?: string,
  *      defaultDomain?: string,
  *      directory?: string,
@@ -85,15 +87,15 @@ class Gettext extends AbstractAdapter
      * @param TOptions            $options
      *
      * @throws Exception
+     * @throws MissingGettextExtension
+     * @throws MissingRequiredParameter
      */
     public function __construct(
         InterpolatorFactory $interpolator,
         array $options
     ) {
         if (true !== $this->phpFunctionExists('gettext')) {
-            throw new Exception(
-                'This class requires the gettext extension for PHP'
-            );
+            throw new MissingGettextExtension();
         }
 
         parent::__construct($interpolator, $options);
@@ -118,7 +120,7 @@ class Gettext extends AbstractAdapter
     }
 
     /**
-     * @return array<string, string>|string
+     * @phpstan-return array<string, string>|string
      */
     public function getDirectory()
     {
@@ -152,11 +154,7 @@ class Gettext extends AbstractAdapter
      * Some languages have more than one form for plural messages dependent on
      * the count.
      *
-     * @param string                $msgid1
-     * @param string                $msgid2
-     * @param int                   $count
-     * @param array<string, string> $placeholders
-     * @param string|null           $domain
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      */
@@ -183,8 +181,7 @@ class Gettext extends AbstractAdapter
      * $translator->query("你好 %name%！", ["name" => "Phalcon"]);
      * ```
      *
-     * @param string                $translateKey
-     * @param array<string, string> $placeholders
+     * @phpstan-param array<string, string> $placeholders
      *
      * @return string
      */
@@ -274,8 +271,7 @@ class Gettext extends AbstractAdapter
      * $gettext->setLocale(LC_ALL, "de_DE@euro", "de_DE", "de", "ge");
      * ```
      *
-     * @param int                  $category
-     * @param array<string, mixed> $localeArray
+     * @phpstan-param array<string, mixed> $localeArray
      *
      * @return false|string
      */
@@ -297,7 +293,7 @@ class Gettext extends AbstractAdapter
     /**
      * Gets default options
      *
-     * @return array<string, mixed>
+     * @phpstan-return array<string, mixed>
      */
     protected function getOptionsDefault(): array
     {
@@ -310,18 +306,19 @@ class Gettext extends AbstractAdapter
     /**
      * Validator for constructor
      *
-     * @param TOptions $options
+     * @phpstan-param TOptions $options
      *
-     * @throws Exception
+     * @return void
+     * @throws MissingRequiredParameter
      */
     protected function prepareOptions(array $options): void
     {
         if (!isset($options['locale'])) {
-            throw new Exception("Parameter 'locale' is required");
+            throw new MissingRequiredParameter('locale');
         }
 
         if (!isset($options['directory'])) {
-            throw new Exception("Parameter 'directory' is required");
+            throw new MissingRequiredParameter('directory');
         }
 
         $options = array_merge($this->getOptionsDefault(), $options);

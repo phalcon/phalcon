@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
-use Exception as BaseException;
 use Phalcon\Traits\Factory\FactoryTrait;
+use Phalcon\Translate\Exceptions\InterpolatorNotRegistered;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\Interpolator\InterpolatorInterface;
@@ -24,9 +24,7 @@ class InterpolatorFactory
     use FactoryTrait;
 
     /**
-     * InterpolatorFactor constructor.
-     *
-     * @param array<string, string> $services
+     * @phpstan-param array<string, string> $services
      */
     public function __construct(array $services = [])
     {
@@ -39,7 +37,6 @@ class InterpolatorFactory
      * @param string $name
      *
      * @return InterpolatorInterface
-     * @throws BaseException
      */
     public function newInstance(string $name): InterpolatorInterface
     {
@@ -51,7 +48,7 @@ class InterpolatorFactory
      */
     protected function getExceptionClass(): string
     {
-        return Exception::class;
+        return InterpolatorNotRegistered::class;
     }
 
     /**

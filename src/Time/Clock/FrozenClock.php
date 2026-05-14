@@ -20,6 +20,7 @@ namespace Phalcon\Time\Clock;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use Phalcon\Time\Clock\Exceptions\InvalidModifier;
 use Throwable;
 
 use function date_default_timezone_get;
@@ -44,7 +45,7 @@ final class FrozenClock implements ClockInterface
     /**
      * Mutates the clock to a new value. All consumers receive the same modification
      *
-     * @throws Exception When the modifier string cannot be parsed
+     * @throws InvalidModifier
      */
     public function adjust(string $modifier): FrozenClock
     {
@@ -52,7 +53,7 @@ final class FrozenClock implements ClockInterface
             try {
                 $modified = $this->now->modify($modifier);
             } catch (Throwable $ex) {
-                throw Exception::invalidModifier($modifier, $ex);
+                throw new InvalidModifier($modifier, $ex);
             }
         } else {
             $failed = false;
@@ -72,12 +73,12 @@ final class FrozenClock implements ClockInterface
             }
 
             if ($failed) {
-                throw Exception::invalidModifier($modifier);
+                throw new InvalidModifier($modifier);
             }
         }
 
         if (false === $modified) {
-            throw Exception::invalidModifier($modifier);
+            throw new InvalidModifier($modifier);
         }
 
         $this->now = $modified;

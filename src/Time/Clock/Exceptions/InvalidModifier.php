@@ -16,8 +16,18 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Time\Clock;
+namespace Phalcon\Time\Clock\Exceptions;
 
-class Exception extends \Exception
+use Phalcon\Time\Clock\Exception;
+use Throwable;
+
+class InvalidModifier extends Exception
 {
+    public function __construct(string $message, ?Throwable $ex = null)
+    {
+        parent::__construct(
+            message: 'Invalid modifier: "' . $message . '"',
+            previous: $ex
+        );
+    }
 }
