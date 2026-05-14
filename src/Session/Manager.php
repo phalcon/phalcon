@@ -14,6 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Session;
 
 use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Session\Exceptions\InvalidSessionAdapter;
+use Phalcon\Session\Exceptions\InvalidSessionName;
+use Phalcon\Session\Exceptions\SessionAlreadyStarted;
+use Phalcon\Session\Exceptions\SessionModificationDenied;
 use SessionHandlerInterface;
 
 use function headers_sent;
@@ -296,15 +300,12 @@ class Manager implements ManagerInterface
      * @param string $sessionId
      *
      * @return ManagerInterface
-     * @throws Exception
+     * @throws SessionAlreadyStarted
      */
     public function setId(string $sessionId): ManagerInterface
     {
         if (true === $this->exists()) {
-            throw new Exception(
-                'The session has already been started. ' .
-                'To change the id, use regenerateId()'
-            );
+            throw new SessionAlreadyStarted();
         }
 
         session_id($sessionId);
@@ -319,20 +320,17 @@ class Manager implements ManagerInterface
      * @param string $name
      *
      * @return ManagerInterface
-     * @throws Exception
+     * @throws InvalidSessionName
+     * @throws SessionModificationDenied
      */
     public function setName(string $name): ManagerInterface
     {
         if (true === $this->exists()) {
-            throw new Exception(
-                'Cannot set session name after a session has started'
-            );
+            throw new SessionModificationDenied();
         }
 
         if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $name)) {
-            throw new Exception(
-                'The name contains non alphanum characters'
-            );
+            throw new InvalidSessionName();
         }
 
         $this->name = $name;
@@ -388,7 +386,7 @@ class Manager implements ManagerInterface
         }
 
         if (!($this->adapter instanceof SessionHandlerInterface)) {
-            throw new Exception('The session adapter is not valid');
+            throw new InvalidSessionAdapter();
         }
 
         /**

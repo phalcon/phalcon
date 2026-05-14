@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter;
 
-use Phalcon\Session\Exception;
+use Phalcon\Session\Adapter\Exceptions\AdapterRuntimeError;
+use Phalcon\Session\Adapter\Exceptions\InvalidSavePath;
+use Phalcon\Session\Adapter\Exceptions\SavePathUnavailable;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\IniTrait;
@@ -85,7 +87,8 @@ class Stream extends Noop
      *                       'savePath' => ''
      *                       ]
      *
-     * @throws Exception
+     * @throws InvalidSavePath
+     * @throws SavePathUnavailable
      */
     public function __construct(array $options = [])
     {
@@ -99,13 +102,11 @@ class Stream extends Noop
         $path = $options['savePath'] ?? $this->phpIniGet('session.save_path');
 
         if (empty($path)) {
-            throw new Exception('The session save path cannot be empty');
+            throw new InvalidSavePath();
         }
 
         if (true !== $this->phpIsWritable($path)) {
-            throw new Exception(
-                'The session save path [' . $path . '] is not writable'
-            );
+            throw new SavePathUnavailable($path);
         }
 
         $this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
@@ -131,7 +132,7 @@ class Stream extends Noop
      * @param int $max_lifetime
      *
      * @return false|int
-     * @throws Exception
+     * @throws AdapterRuntimeError
      */
     public function gc(int $max_lifetime): false | int
     {
@@ -141,7 +142,7 @@ class Stream extends Noop
 
         if (false === $glob) {
             $last = error_get_last();
-            throw new Exception($last['message'] ?? 'Unexpected gc error');
+            throw new AdapterRuntimeError($last['message'] ?? 'Unexpected gc error');
         }
 
         if (!empty($glob)) {
