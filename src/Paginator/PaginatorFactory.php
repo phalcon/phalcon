@@ -19,6 +19,7 @@ use Phalcon\Paginator\Adapter\AdapterInterface;
 use Phalcon\Paginator\Adapter\Model;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder;
+use Phalcon\Paginator\Adapter\QueryBuilderCursor;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
 
@@ -108,9 +109,10 @@ class PaginatorFactory
     protected function getServices(): array
     {
         return [
-            "model"        => Model::class,
-            "nativeArray"  => NativeArray::class,
-            "queryBuilder" => QueryBuilder::class,
+            "model"               => Model::class,
+            "nativeArray"         => NativeArray::class,
+            "queryBuilder"        => QueryBuilder::class,
+            "queryBuilderCursor"  => QueryBuilderCursor::class,
         ];
     }
 }
