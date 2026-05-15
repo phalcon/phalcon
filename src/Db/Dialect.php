@@ -388,9 +388,20 @@ abstract class Dialect implements DialectInterface
 
             /**
              * Resolve SELECT
+             *
+             * Propagate the outer bindCounts into the nested SELECT
+             * definition so that array placeholders inside a sub-select
+             * are re-expanded against the current bind values instead of
+             * the parse-time `times` baked into the cached irPhql. The
+             * local copy avoids mutating the cached intermediate. See
+             * issue #17004.
              */
             case "select":
-                return "(" . $this->select($expression["value"]) . ")";
+                $nestedDefinition = $expression["value"];
+                if (count($bindCounts)) {
+                    $nestedDefinition["bindCounts"] = $bindCounts;
+                }
+                return "(" . $this->select($nestedDefinition) . ")";
 
             /**
              * Resolve CAST of values
