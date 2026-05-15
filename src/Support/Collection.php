@@ -16,7 +16,6 @@ namespace Phalcon\Support;
 use Countable;
 use Generator;
 use JsonSerializable;
-
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Collection\Exceptions\InvalidValueType;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;

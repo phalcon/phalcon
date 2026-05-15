@@ -140,4 +140,3 @@ class Manager
         return $this;
     }
 }
-

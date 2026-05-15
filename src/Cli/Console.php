@@ -138,7 +138,7 @@ class Console extends AbstractApplication
             $dispatcher = $this->container->get("dispatcher");
         }
 
-        $dispatcher->setModuleName($router->getModuleName());
+        $dispatcher->setModuleName($moduleName);
         $dispatcher->setTaskName($router->getTaskName());
         $dispatcher->setActionName($router->getActionName());
         $dispatcher->setParams($router->getParams());

@@ -24,6 +24,6 @@ class MissingGettextExtension extends Exception
         );
     }
 }
-//Translation data not an array	InvalidDataType	Specific type error.
-//Translation key missing	KeyNotFound	Specific lookup error.
-//No translation content provided	MissingContent	(Optional: Can also use MissingRequiredParameter('content') if preferred)
+//Translation data not an array InvalidDataType Specific type error.
+//Translation key missing   KeyNotFound Specific lookup error.
+//No translation content provided   MissingContent  (Optional: Can also use MissingRequiredParameter('content') if preferred)

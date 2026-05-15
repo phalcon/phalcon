@@ -283,7 +283,7 @@ class Application extends AbstractApplication
             $dispatcher = $this->container->get("dispatcher");
         }
 
-        $dispatcher->setModuleName($router->getModuleName());
+        $dispatcher->setModuleName($moduleName);
         $dispatcher->setNamespaceName($router->getNamespaceName());
         $dispatcher->setControllerName($router->getControllerName());
         $dispatcher->setActionName($router->getActionName());
