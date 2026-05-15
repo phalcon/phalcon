@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Adapter;
 
-use LogicException;
+use Phalcon\Logger\Adapter\Exceptions\FileOpenFailed;
+use Phalcon\Logger\Adapter\Exceptions\InvalidStreamMode;
 use Phalcon\Logger\Exception;
 use Phalcon\Logger\Item;
 use Phalcon\Traits\Php\FileTrait;
@@ -82,7 +83,7 @@ class Stream extends AbstractAdapter
     ) {
         $mode = $options['mode'] ?? 'ab';
         if (false !== mb_strpos($mode, 'r')) {
-            throw new Exception('Adapter cannot be opened in read mode');
+            throw new InvalidStreamMode();
         }
 
         $this->mode = $mode;
@@ -125,13 +126,7 @@ class Stream extends AbstractAdapter
             if (true !== is_resource($fileHandler)) {
                 $this->handler = null;
 
-                throw new LogicException(
-                    "The file '" .
-                    $this->name .
-                    "' cannot be opened with mode '" .
-                    $this->mode .
-                    "'",
-                );
+                throw new FileOpenFailed($this->name, $this->mode);
             }
 
             $this->handler = $fileHandler;

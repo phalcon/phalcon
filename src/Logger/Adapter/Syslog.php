@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Adapter;
 
-use LogicException;
+use Phalcon\Logger\Adapter\Exceptions\SyslogOpenFailed;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 
@@ -89,7 +89,7 @@ class Syslog extends AbstractAdapter
      *
      * @param Item $item
      *
-     * @throws LogicException
+     * @throws SyslogOpenFailed
      */
     public function process(Item $item): void
     {
@@ -97,13 +97,7 @@ class Syslog extends AbstractAdapter
         $result  = $this->openlog($this->name, $this->option, $this->facility);
 
         if (!$result) {
-            throw new LogicException(
-                sprintf(
-                    "Cannot open syslog for name [%s] and facility [%s]",
-                    $this->name,
-                    $this->facility
-                )
-            );
+            throw new SyslogOpenFailed($this->name, $this->facility);
         }
 
         $this->opened = true;

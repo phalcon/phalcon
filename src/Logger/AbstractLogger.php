@@ -17,7 +17,8 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
-use Phalcon\Logger\Exception as LoggerException;
+use Phalcon\Logger\Exceptions\AdapterNotFound;
+use Phalcon\Logger\Exceptions\NoAdaptersConfigured;
 use Psr\Log\LogLevel;
 
 use function array_diff_key;
@@ -152,14 +153,12 @@ abstract class AbstractLogger
      * @param string $name The name of the adapter
      *
      * @return AdapterInterface
-     * @throws LoggerException
+     * @throws AdapterNotFound
      */
     public function getAdapter(string $name): AdapterInterface
     {
         if (!isset($this->adapters[$name])) {
-            throw new LoggerException(
-                'Adapter does not exist for this logger'
-            );
+            throw new AdapterNotFound($name);
         }
 
         return $this->adapters[$name];
@@ -197,14 +196,12 @@ abstract class AbstractLogger
      * @param string $name The name of the adapter
      *
      * @return AbstractLogger
-     * @throws LoggerException
+     * @throws AdapterNotFound
      */
     public function removeAdapter(string $name): AbstractLogger
     {
         if (!isset($this->adapters[$name])) {
-            throw new LoggerException(
-                'Adapter does not exist for this logger'
-            );
+            throw new AdapterNotFound($name);
         }
 
         unset($this->adapters[$name]);
@@ -251,7 +248,7 @@ abstract class AbstractLogger
      *
      * @return bool
      * @throws Exception
-     * @throws LoggerException
+     * @throws NoAdaptersConfigured
      */
     protected function addMessage(
         int $level,
@@ -260,7 +257,7 @@ abstract class AbstractLogger
     ): bool {
         if ($this->logLevel >= $level) {
             if (count($this->adapters) === 0) {
-                throw new LoggerException('No adapters specified');
+                throw new NoAdaptersConfigured();
             }
 
             $levels    = $this->getLevels();
