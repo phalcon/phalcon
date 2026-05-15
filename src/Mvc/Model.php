@@ -2047,7 +2047,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @option ?bool  "hydration"
      * }
      *
-     * @return T|ModelInterface|Row|null
+     * @return T|Row|null
      * @throws Exception
      */
     public static function findFirst(
