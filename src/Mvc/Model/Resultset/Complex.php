@@ -33,6 +33,9 @@ use function unserialize;
 /**
  * Complex resultsets may include complete objects and scalar values.
  * This class builds every complex row as it is required
+ *
+ * @template TKey of int
+ * @template TValue of mixed
  */
 class Complex extends Resultset implements ResultsetInterface
 {

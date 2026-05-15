@@ -112,6 +112,8 @@ use function unserialize;
  *     echo "Great, a new robot was saved successfully!";
  * }
  * ```
+ *
+ * @template T of static
  */
 abstract class Model extends AbstractInjectionAware implements
     EntityInterface,
@@ -1928,7 +1930,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @option ?bool  "hydration"
      * }
      *
-     * @return ResultsetInterface
+     * @return \Phalcon\Mvc\Model\Resultset<int, T>
      */
     public static function find(
         mixed $parameters = null
@@ -2045,7 +2047,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @option ?bool  "hydration"
      * }
      *
-     * @return ModelInterface|Row|null
+     * @return T|ModelInterface|Row|null
      * @throws Exception
      */
     public static function findFirst(

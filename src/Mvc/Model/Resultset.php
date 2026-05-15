@@ -70,6 +70,10 @@ use function method_exists;
  *     $robots->next();
  * }
  * ```
+ *
+ * @template TKey
+ * @template TValue
+ * @implements Iterator<TKey, TValue>
  */
 abstract class Resultset implements
     ResultsetInterface,
@@ -482,7 +486,7 @@ abstract class Resultset implements
     /**
      * Gets pointer number of active row in the resultset
      *
-     * @return int|null
+     * @return TKey|null
      */
     public function key(): int | null
     {
