@@ -610,11 +610,20 @@ class Query implements QueryInterface, InjectionAwareInterface
             if (isset($ast["id"])) {
                 $uniqueId = $ast['id'];
                 if (isset(self::$internalPhqlCache[$uniqueId])) {
+                    $irPhql = self::$internalPhqlCache[$uniqueId];
                     if (is_array($irPhql)) {
                         // Assign the type to the query
                         $this->type = $ast["type"];
 
-                        return $irPhql;
+                        /**
+                         * Refresh schema/source for every model referenced
+                         * in the cached intermediate representation. The
+                         * cache is keyed by the PHQL string only, so models
+                         * that change their schema/source at runtime would
+                         * otherwise keep producing SQL with the stale value
+                         * baked in at first parse. See issue #17020.
+                         */
+                        return $this->refreshSchemasInIntermediate($irPhql);
                     }
                 }
             }
@@ -4469,6 +4478,73 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         return $sqlUpdate;
+    }
+
+    /**
+     * Refreshes the schema/source of every model referenced in a cached
+     * intermediate representation. The PHQL cache is keyed by the PHQL
+     * string only, so a model that switches its schema or source at
+     * runtime (for instance via setSchema()/setSource() in initialize())
+     * would otherwise see the value frozen at first parse. See #17020.
+     *
+     * @param array $irPhql
+     *
+     * @return array
+     */
+    final protected function refreshSchemasInIntermediate(array $irPhql): array
+    {
+        $manager = $this->manager;
+
+        if (!is_object($manager)) {
+            return $irPhql;
+        }
+
+        if (!isset($irPhql["models"]) || !isset($irPhql["tables"])) {
+            return $irPhql;
+        }
+
+        $models = $irPhql["models"];
+        $tables = $irPhql["tables"];
+
+        foreach ($models as $index => $modelName) {
+            if (!isset($tables[$index])) {
+                continue;
+            }
+
+            $model        = $manager->load($modelName);
+            $schema       = $model->getSchema();
+            $source       = $model->getSource();
+            $currentTable = $tables[$index];
+            $alias        = null;
+
+            /**
+             * Extract the alias from the cached entry (when present) so it
+             * survives the rebuild. The cached shape is either a plain
+             * source string, [source, schema], [source, null, alias] or
+             * [source, schema, alias].
+             */
+            if (is_array($currentTable) && isset($currentTable[2])) {
+                $alias = $currentTable[2];
+            }
+
+            if ($schema) {
+                if ($alias !== null) {
+                    $tables[$index] = [$source, $schema, $alias];
+                } else {
+                    $tables[$index] = [$source, $schema];
+                }
+            } else {
+                if ($alias !== null) {
+                    $tables[$index] = [$source, null, $alias];
+                } else {
+                    $tables[$index] = $source;
+                }
+            }
+        }
+
+        $irPhql["tables"] = $tables;
+
+        return $irPhql;
     }
 
     /**
