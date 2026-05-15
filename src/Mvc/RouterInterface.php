@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Phalcon\Config\ConfigInterface;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\RouteInterface;
 
@@ -291,6 +292,15 @@ interface RouterInterface
      * @return void
      */
     public function handle(string $uri): void;
+
+    /**
+     * Loads routes from an array or Phalcon\Config\Config instance.
+     *
+     * @param array|ConfigInterface $config
+     *
+     * @return RouterInterface
+     */
+    public function loadFromConfig(array | ConfigInterface $config): RouterInterface;
 
     /**
      * Mounts a group of routes in the router

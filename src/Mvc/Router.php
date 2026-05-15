@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\Router\Exception;
+use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Mvc\Router\RouteInterface;
@@ -33,7 +35,9 @@ use function is_int;
 use function is_string;
 use function preg_match;
 use function rtrim;
+use function strtolower;
 use function trim;
+use function ucfirst;
 
 /**
  * Phalcon\Mvc\Router is the standard framework router. Routing is the
@@ -1106,6 +1110,70 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
+     * Loads routes from an array or Phalcon\Config\Config instance.
+     *
+     * ```php
+     * $router->loadFromConfig(
+     *     [
+     *         'routes' => [
+     *             [
+     *                 'method'  => 'get',
+     *                 'pattern' => '/users',
+     *                 'paths'   => 'Users::index',
+     *             ],
+     *         ],
+     *     ]
+     * );
+     * ```
+     *
+     * @param array|ConfigInterface $config
+     *
+     * @return RouterInterface
+     * @throws Exception
+     */
+    public function loadFromConfig(array | ConfigInterface $config): RouterInterface
+    {
+        if ($config instanceof ConfigInterface) {
+            $config = $config->toArray();
+        }
+
+        if (isset($config['removeExtraSlashes'])) {
+            $this->removeExtraSlashes((bool) $config['removeExtraSlashes']);
+        }
+
+        if (isset($config['defaults'])) {
+            if (!is_array($config['defaults'])) {
+                throw new Exception("'defaults' must be an array");
+            }
+            $this->setDefaults($config['defaults']);
+        }
+
+        if (isset($config['routes'])) {
+            if (!is_array($config['routes'])) {
+                throw new Exception("'routes' must be an array");
+            }
+            foreach ($config['routes'] as $routeData) {
+                $this->addRouteFromConfig($routeData);
+            }
+        }
+
+        if (isset($config['groups'])) {
+            if (!is_array($config['groups'])) {
+                throw new Exception("'groups' must be an array");
+            }
+            foreach ($config['groups'] as $groupData) {
+                $this->mountGroupFromConfig($groupData);
+            }
+        }
+
+        if (isset($config['notFound'])) {
+            $this->notFound($config['notFound']);
+        }
+
+        return $this;
+    }
+
+    /**
      * Mounts a group of routes in the router
      *
      * @param GroupInterface $group
@@ -1337,6 +1405,61 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
+     * Adds a single route from a config array entry. Used by loadFromConfig.
+     *
+     * @param array $routeData
+     *
+     * @return void
+     * @throws Exception
+     */
+    protected function addRouteFromConfig(array $routeData): void
+    {
+        if (!isset($routeData['pattern'])) {
+            throw new Exception("Route config entry is missing 'pattern'");
+        }
+
+        if (!isset($routeData['paths'])) {
+            throw new Exception("Route config entry is missing 'paths'");
+        }
+
+        $pattern = $routeData['pattern'];
+        $paths   = $routeData['paths'];
+        $method  = '';
+
+        if (isset($routeData['method'])) {
+            $method = strtolower((string) $routeData['method']);
+        }
+
+        switch ($method) {
+            case '':
+            case 'connect':
+            case 'delete':
+            case 'get':
+            case 'head':
+            case 'options':
+            case 'patch':
+            case 'post':
+            case 'purge':
+            case 'put':
+            case 'trace':
+                $methodCall = 'add' . ucfirst($method);
+                $route      = $this->{$methodCall}($pattern, $paths);
+                break;
+            default:
+                throw new Exception(
+                    "Unknown HTTP method '" . $method . "' in route config"
+                );
+        }
+
+        if (isset($routeData['name'])) {
+            $route->setName((string) $routeData['name']);
+        }
+        if (isset($routeData['hostname'])) {
+            $route->setHostname((string) $routeData['hostname']);
+        }
+    }
+
+    /**
      * @param string $uri
      *
      * @return string
@@ -1346,6 +1469,79 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $urlParts = explode("?", $uri, 2);
 
         return $urlParts[0];
+    }
+
+    /**
+     * Builds a Group from a config entry and mounts it. Used by loadFromConfig.
+     *
+     * @param array $groupData
+     *
+     * @return void
+     * @throws EventsException
+     * @throws Exception
+     */
+    protected function mountGroupFromConfig(array $groupData): void
+    {
+        $paths = $groupData['paths'] ?? null;
+        $group = new Group($paths);
+
+        if (isset($groupData['prefix'])) {
+            $group->setPrefix((string) $groupData['prefix']);
+        }
+
+        if (isset($groupData['hostname'])) {
+            $group->setHostname((string) $groupData['hostname']);
+        }
+
+        $routes = $groupData['routes'] ?? [];
+
+        if (!is_array($routes)) {
+            throw new Exception("Group 'routes' must be an array");
+        }
+
+        foreach ($routes as $routeData) {
+            if (!isset($routeData['pattern'])) {
+                throw new Exception("Group route entry is missing 'pattern'");
+            }
+            if (!isset($routeData['paths'])) {
+                throw new Exception("Group route entry is missing 'paths'");
+            }
+
+            $pattern    = $routeData['pattern'];
+            $routePaths = $routeData['paths'];
+            $method     = '';
+
+            if (isset($routeData['method'])) {
+                $method = strtolower((string) $routeData['method']);
+            }
+
+            switch ($method) {
+                case '':
+                case 'connect':
+                case 'delete':
+                case 'get':
+                case 'head':
+                case 'options':
+                case 'patch':
+                case 'post':
+                case 'purge':
+                case 'put':
+                case 'trace':
+                    $methodCall = 'add' . ucfirst($method);
+                    $route      = $group->{$methodCall}($pattern, $routePaths);
+                    break;
+                default:
+                    throw new Exception(
+                        "Unknown HTTP method '" . $method . "' in group route config"
+                    );
+            }
+
+            if (isset($routeData['name'])) {
+                $route->setName((string) $routeData['name']);
+            }
+        }
+
+        $this->mount($group);
     }
 
     /**
