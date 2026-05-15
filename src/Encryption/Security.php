@@ -87,6 +87,11 @@ class Security implements InjectionAwareInterface, SecurityContract
     public const CRYPT_STD_DES    = 1;
 
     /**
+     * @var bool
+     */
+    protected bool $autoRefresh = true;
+
+    /**
      * @var int
      */
     protected int $defaultHash = Security::CRYPT_DEFAULT;
@@ -383,11 +388,28 @@ class Security implements InjectionAwareInterface, SecurityContract
     public function getToken(): string
     {
         if (null === $this->token) {
+            /** @var SessionInterface|null $session */
+            $session = $this->getLocalService('session', 'localSession');
+
+            /**
+             * When auto-refresh is disabled, reuse any existing session
+             * token instead of generating a new one. This avoids the
+             * per-request session write that backend stores (DynamoDB,
+             * Redis with billing per write, etc.) would otherwise incur.
+             */
+            if (false === $this->autoRefresh && null !== $session) {
+                $sessionToken = $session->get($this->tokenValueSessionId);
+                if (null !== $sessionToken) {
+                    $this->token        = $sessionToken;
+                    $this->requestToken = $sessionToken;
+
+                    return $this->token;
+                }
+            }
+
             $this->requestToken = $this->getSessionToken();
             $this->token        = $this->random->base64Safe($this->numberBytes);
 
-            /** @var SessionInterface|null $session */
-            $session = $this->getLocalService('session', 'localSession');
             if (null !== $session) {
                 $session->set(
                     $this->tokenValueSessionId,
@@ -412,6 +434,19 @@ class Security implements InjectionAwareInterface, SecurityContract
             /** @var SessionInterface|null $session */
             $session = $this->getLocalService('session', 'localSession');
             if (null !== $session) {
+                /**
+                 * Auto-refresh disabled: reuse the existing session value
+                 * if present, so no write occurs on read-only requests.
+                 */
+                if (false === $this->autoRefresh) {
+                    $sessionTokenKey = $session->get($this->tokenKeySessionId);
+                    if (null !== $sessionTokenKey) {
+                        $this->tokenKey = $sessionTokenKey;
+
+                        return $this->tokenKey;
+                    }
+                }
+
                 $this->tokenKey = $this->random->base64Safe($this->numberBytes);
                 $session->set(
                     $this->tokenKeySessionId,
@@ -520,6 +555,48 @@ class Security implements InjectionAwareInterface, SecurityContract
     public function isLegacyHash(string $passwordHash): bool
     {
         return $this->toStartsWith($passwordHash, '$2a$');
+    }
+
+    /**
+     * Forces the regeneration of the CSRF token and key, writing the new
+     * values to the session even when auto-refresh has been disabled. Useful
+     * after a successful login or any other state change where rotating the
+     * token is appropriate.
+     *
+     * @return Security
+     * @throws BaseException
+     */
+    public function refreshToken(): Security
+    {
+        $this->token        = $this->random->base64Safe($this->numberBytes);
+        $this->tokenKey     = $this->random->base64Safe($this->numberBytes);
+        $this->requestToken = null;
+
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService('session', 'localSession');
+        if (null !== $session) {
+            $session->set($this->tokenValueSessionId, $this->token);
+            $session->set($this->tokenKeySessionId, $this->tokenKey);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Toggles automatic regeneration of the CSRF token on every call to
+     * `getToken()` / `getTokenKey()`. When set to `false`, existing session
+     * values are reused (no session write), and a new token is only minted
+     * when none is present or `refreshToken()` is called explicitly.
+     *
+     * @param bool $autoRefresh
+     *
+     * @return Security
+     */
+    public function setAutoRefresh(bool $autoRefresh): Security
+    {
+        $this->autoRefresh = $autoRefresh;
+
+        return $this;
     }
 
     /**
