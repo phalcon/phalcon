@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect;
 
+use Phalcon\Db\CheckInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
 use Phalcon\Db\IndexInterface;
+use Phalcon\Db\RawValue;
 use Phalcon\Db\ReferenceInterface;
 
 use function addcslashes;
@@ -50,7 +52,8 @@ class Postgresql extends Dialect
         string $schemaName,
         ColumnInterface $column
     ): string {
-        $columnDefinition = $this->getColumnDefinition($column);
+        $columnDefinition = $this->getColumnDefinition($column)
+            . $this->getGeneratedClause($column, true);
 
         $sql = "ALTER TABLE "
             . $this->prepareTable($tableName, $schemaName)
@@ -59,7 +62,7 @@ class Postgresql extends Dialect
             . $column->getName()
             . "\" " . $columnDefinition;
 
-        if ($column->hasDefault()) {
+        if (!$column->isGenerated() && $column->hasDefault()) {
             $sql .= " DEFAULT " . $this->castDefault($column);
         }
 
@@ -70,6 +73,25 @@ class Postgresql extends Dialect
         $sql .= " NULL";
 
         return $sql;
+    }
+
+    /**
+     * Generates SQL to add a CHECK constraint to an existing table.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return string
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): string {
+        return "ALTER TABLE "
+            . $this->prepareTable($tableName, $schemaName)
+            . ' ADD ' . $this->getCheckClause($check, '"');
     }
 
     /**
@@ -141,13 +163,23 @@ class Postgresql extends Dialect
         if (!empty($indexType)) {
             $sql .= " " . $indexType;
         }
-        $sql .= " INDEX \""
+        $sql .= " INDEX";
+
+        if ($index->isConcurrent()) {
+            $sql .= " CONCURRENTLY";
+        }
+
+        $sql .= " \""
             . $index->getName()
             . "\" ON "
             . $this->prepareTable($tableName, $schemaName)
             . " ("
-            . $this->getColumnList($index->getColumns())
+            . $this->getIndexColumnList($index)
             . ")";
+
+        if ($index->getWhere() !== '') {
+            $sql .= ' WHERE ' . $index->getWhere();
+        }
 
         return $sql;
     }
@@ -215,15 +247,16 @@ class Postgresql extends Dialect
 
         $columns = $definition["columns"];
         foreach ($columns as $column) {
-            $columnDefinition = $this->getColumnDefinition($column);
+            $columnDefinition = $this->getColumnDefinition($column)
+                . $this->getGeneratedClause($column, true);
             $columnLine       = "\""
                 . $column->getName() . "\" "
                 . $columnDefinition;
 
             /**
-             * Add a Default clause
+             * Add a Default clause (skipped for generated columns)
              */
-            if ($column->hasDefault()) {
+            if (!$column->isGenerated() && $column->hasDefault()) {
                 $columnLine .= " DEFAULT " . $this->castDefault($column);
             }
 
@@ -276,14 +309,14 @@ class Postgresql extends Dialect
              */
             if ($indexName === "PRIMARY") {
                 $indexSql = "CONSTRAINT \"PRIMARY\" PRIMARY KEY ("
-                    . $this->getColumnList($index->getColumns())
+                    . $this->getIndexColumnList($index)
                     . ")";
             } elseif (!empty($indexType)) {
                 $indexSql = "CONSTRAINT \""
                     . $indexName
                     . "\" "
                     . $indexType
-                    . " (" . $this->getColumnList($index->getColumns())
+                    . " (" . $this->getIndexColumnList($index)
                     . ")";
             } else {
                 $indexSqlAfterCreate .= "CREATE INDEX \""
@@ -291,7 +324,7 @@ class Postgresql extends Dialect
                     . "\" ON "
                     . $this->prepareTable($tableName, $schemaName)
                     . " ("
-                    . $this->getColumnList($index->getColumns())
+                    . $this->getIndexColumnList($index)
                     . ");";
             }
 
@@ -326,6 +359,14 @@ class Postgresql extends Dialect
             }
 
             $createLines[] = $referenceSql;
+        }
+
+        /**
+         * Create CHECK constraints
+         */
+        $checks = $definition["checks"] ?? [];
+        foreach ($checks as $check) {
+            $createLines[] = $this->getCheckClause($check, '"');
         }
 
         $sql .= implode(",\n\t", $createLines) . "\n)";
@@ -399,7 +440,9 @@ class Postgresql extends Dialect
             . "LIKE '%nextval%' THEN 'auto_increment' ELSE '' END AS Extra, "
             . "c.ordinal_position AS Position, "
             . "c.column_default, "
-            . "des.description "
+            . "des.description, "
+            . "c.is_generated AS IsGenerated, "
+            . "c.generation_expression AS GenerationExpression "
             . "FROM information_schema.columns c "
             . "LEFT JOIN ( "
             . "SELECT kcu.column_name, kcu.table_name, kcu.table_schema "
@@ -529,6 +572,27 @@ class Postgresql extends Dialect
             . $this->prepareTable($tableName, $schemaName)
             . " DROP CONSTRAINT \""
             . $referenceName
+            . "\"";
+    }
+
+    /**
+     * Generates SQL to delete a CHECK constraint from a table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return string
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): string {
+        return "ALTER TABLE "
+            . $this->prepareTable($tableName, $schemaName)
+            . " DROP CONSTRAINT \""
+            . $checkName
             . "\"";
     }
 
@@ -931,9 +995,110 @@ class Postgresql extends Dialect
      *
      * @return string
      */
-    public function sharedLock(string $sqlQuery): string
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
-        return $sqlQuery;
+        if ($modifier !== '') {
+            return $sqlQuery . ' FOR SHARE ' . $modifier;
+        }
+
+        return $sqlQuery . ' FOR SHARE';
+    }
+
+    /**
+     * Appends a `RETURNING` clause to the supplied INSERT/UPDATE/DELETE
+     * statement.
+     *
+     * @param string $sqlQuery
+     * @param array  $columns
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function returning(string $sqlQuery, array $columns): string
+    {
+        if (empty($columns)) {
+            throw new Exception(
+                "RETURNING requires at least one column or '*'"
+            );
+        }
+
+        if (count($columns) === 1 && (string) $columns[0] === '*') {
+            return $sqlQuery . ' RETURNING *';
+        }
+
+        return $sqlQuery . ' RETURNING ' . $this->getColumnList($columns);
+    }
+
+    /**
+     * Generates SQL to create a materialized view.
+     *
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function createMaterializedView(
+        string $viewName,
+        array $definition,
+        ?string $schemaName = null
+    ): string {
+        if (!isset($definition['sql'])) {
+            throw new Exception(
+                "The index 'sql' is required in the definition array"
+            );
+        }
+
+        return 'CREATE MATERIALIZED VIEW '
+            . $this->prepareTable($viewName, $schemaName)
+            . ' AS ' . $definition['sql'];
+    }
+
+    /**
+     * Generates SQL to drop a materialized view.
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return string
+     */
+    public function dropMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $ifExists = true
+    ): string {
+        $view = $this->prepareTable($viewName, $schemaName);
+
+        if ($ifExists) {
+            return 'DROP MATERIALIZED VIEW IF EXISTS ' . $view;
+        }
+
+        return 'DROP MATERIALIZED VIEW ' . $view;
+    }
+
+    /**
+     * Generates SQL to refresh a materialized view.
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $concurrent
+     *
+     * @return string
+     */
+    public function refreshMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $concurrent = false
+    ): string {
+        $view = $this->prepareTable($viewName, $schemaName);
+
+        if ($concurrent) {
+            return 'REFRESH MATERIALIZED VIEW CONCURRENTLY ' . $view;
+        }
+
+        return 'REFRESH MATERIALIZED VIEW ' . $view;
     }
 
     /**
@@ -1026,7 +1191,17 @@ class Postgresql extends Dialect
      */
     protected function castDefault(ColumnInterface $column): string
     {
-        $defaultValue     = $column->getDefault();
+        $defaultValue = $column->getDefault();
+
+        /**
+         * RawValue defaults are emitted verbatim — this is how the caller
+         * signals an SQL expression (e.g. `gen_random_uuid()`, a function
+         * call, or any other dialect-specific expression).
+         */
+        if ($defaultValue instanceof RawValue) {
+            return $defaultValue->getValue();
+        }
+
         $columnDefinition = $this->getColumnDefinition($column);
         $columnType       = $column->getType();
 

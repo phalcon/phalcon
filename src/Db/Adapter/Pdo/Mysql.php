@@ -480,22 +480,48 @@ class Mysql extends PdoAdapter
             }
 
             /**
-             * Check if the column is auto increment
+             * Detect an INVISIBLE column from the EXTRA flag (MySQL 8.0.23+).
              */
-            if ($field[6] === "auto_increment") {
-                $definition["autoIncrement"] = true;
+            $extraValue = $field[6] ?? null;
+            if ($extraValue !== null && str_contains($extraValue, 'INVISIBLE')) {
+                $definition['invisible'] = true;
             }
 
             /**
-             * Check if the column has default value
+             * Detect a generated/computed column. `EXTRA` contains
+             * `VIRTUAL GENERATED` or `STORED GENERATED`; a non-generated
+             * column with `DEFAULT CURRENT_TIMESTAMP` reports
+             * `DEFAULT_GENERATED` — match the specific tokens to avoid
+             * the false positive.
              */
-            if (null !== $field[5]) {
-                $definition["default"] = $field[5];
-                if (str_contains(strtolower($field[6]), "on update")) {
-                    $definition["default"] .= " " . $field[6];
+            if (
+                $extraValue !== null &&
+                (
+                    str_contains($extraValue, 'VIRTUAL GENERATED') ||
+                    str_contains($extraValue, 'STORED GENERATED')
+                )
+            ) {
+                $definition['generated']        = $field[9] ?? '';
+                $definition['generationStored'] = str_contains($extraValue, 'STORED');
+            } else {
+                /**
+                 * Check if the column is auto increment
+                 */
+                if ($extraValue === "auto_increment") {
+                    $definition["autoIncrement"] = true;
                 }
-            } elseif (str_contains(strtolower($field[6]), "on update")) {
-                $definition["default"] = "NULL " . $field[6];
+
+                /**
+                 * Check if the column has default value
+                 */
+                if (null !== $field[5]) {
+                    $definition["default"] = $field[5];
+                    if (str_contains(strtolower((string) $extraValue), "on update")) {
+                        $definition["default"] .= " " . $extraValue;
+                    }
+                } elseif (str_contains(strtolower((string) $extraValue), "on update")) {
+                    $definition["default"] = "NULL " . $extraValue;
+                }
             }
 
             /**

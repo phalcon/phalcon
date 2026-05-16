@@ -505,24 +505,35 @@ class Postgresql extends PdoAdapter
             }
 
             /**
-             * Check if the column is auto increment
+             * Detect a generated/computed column. PostgreSQL only supports
+             * STORED. `is_generated` is 'ALWAYS' for generated columns.
              */
-            if ($field[7] == "auto_increment") {
-                $definition["autoIncrement"] = true;
-            }
+            $isGenerated = isset($field[11]) && $field[11] === 'ALWAYS';
 
-            /**
-             * Check if the column has default values
-             */
-            if (null !== $field[9]) {
-                $definition["default"] = preg_replace(
-                    "/^('|'?::[[:alnum:][:space:]]+)$/",
-                    "",
-                    $field[9]
-                );
+            if ($isGenerated) {
+                $definition['generated']        = $field[12] ?? '';
+                $definition['generationStored'] = true;
+            } else {
+                /**
+                 * Check if the column is auto increment
+                 */
+                if ($field[7] == "auto_increment") {
+                    $definition["autoIncrement"] = true;
+                }
 
-                if (0 === strcasecmp($definition["default"], "null")) {
-                    $definition["default"] = null;
+                /**
+                 * Check if the column has default values
+                 */
+                if (null !== $field[9]) {
+                    $definition["default"] = preg_replace(
+                        "/^('|'?::[[:alnum:][:space:]]+)$/",
+                        "",
+                        $field[9]
+                    );
+
+                    if (0 === strcasecmp($definition["default"], "null")) {
+                        $definition["default"] = null;
+                    }
                 }
             }
 

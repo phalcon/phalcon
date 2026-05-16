@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect;
 
+use Phalcon\Db\CheckInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
@@ -55,8 +56,10 @@ class Mysql extends Dialect
             . $this->delimit($column->getName())
             . " "
             . $this->getColumnDefinition($column)
+            . $this->checkColumnIsGenerated($column)
             . $this->checkColumnIsNull($column)
             . $this->getNullString()
+            . $this->checkColumnIsInvisible($column)
             . $this->checkColumnHasDefault($column)
             . $this->checkColumnIsAutoIncrement($column)
             . $this->checkColumnFirstAfterPositions($column);
@@ -106,10 +109,35 @@ class Mysql extends Dialect
     ): string {
         $indexType = $index->getType() ? $index->getType() . ' ' : '';
 
-        return $this->alter($tableName, $schemaName)
+        $sql = $this->alter($tableName, $schemaName)
             . ' ADD ' . $indexType . 'INDEX '
             . $this->delimit($index->getName()) . ' '
-            . $this->wrap($this->getColumnList($index->getColumns()));
+            . $this->wrap($this->getIndexColumnList($index));
+
+        if ($index->isInvisible()) {
+            $sql .= ' INVISIBLE';
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Generates SQL to add a CHECK constraint to an existing table.
+     * Enforced by MySQL 8.0.16+.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return string
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): string {
+        return $this->alter($tableName, $schemaName)
+            . ' ADD ' . $this->getCheckClause($check, '`');
     }
 
     /**
@@ -166,7 +194,8 @@ class Mysql extends Dialect
         $createLines = array_merge(
             $this->getTableColumns($definition),
             $this->getTableIndexes($definition),
-            $this->getTableReferences($definition)
+            $this->getTableReferences($definition),
+            $this->getTableChecks($definition)
         );
 
         /**
@@ -227,8 +256,28 @@ class Mysql extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        return "SHOW FULL COLUMNS FROM "
-            . $this->prepareTable($tableName, $schemaName);
+        $schemaClause = $schemaName
+            ? "'" . $schemaName . "'"
+            : 'DATABASE()';
+
+        /**
+         * The result-set shape mirrors `SHOW FULL COLUMNS FROM ...` so the
+         * adapter loop continues to read by ordinal index:
+         *   0:Field, 1:Type, 2:Collation, 3:Null, 4:Key, 5:Default, 6:Extra,
+         *   7:Privileges, 8:Comment
+         * Position 9 — GenerationExpression — is appended for the generated
+         * column round-trip.
+         */
+        return "SELECT COLUMN_NAME AS `Field`, COLUMN_TYPE AS `Type`, "
+            . "COLLATION_NAME AS `Collation`, IS_NULLABLE AS `Null`, "
+            . "COLUMN_KEY AS `Key`, COLUMN_DEFAULT AS `Default`, "
+            . "EXTRA AS `Extra`, PRIVILEGES AS `Privileges`, "
+            . "COLUMN_COMMENT AS `Comment`, "
+            . "GENERATION_EXPRESSION AS `GenerationExpression` "
+            . "FROM `INFORMATION_SCHEMA`.`COLUMNS` "
+            . "WHERE `TABLE_SCHEMA` = " . $schemaClause . " "
+            . "AND `TABLE_NAME` = '" . $tableName . "' "
+            . "ORDER BY `ORDINAL_POSITION`";
     }
 
     /**
@@ -281,6 +330,25 @@ class Mysql extends Dialect
         }
 
         return $sql;
+    }
+
+    /**
+     * Generates SQL to delete a CHECK constraint from a table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return string
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): string {
+        return $this->alter($tableName, $schemaName)
+            . ' DROP CHECK '
+            . $this->delimit($checkName);
     }
 
     /**
@@ -445,6 +513,14 @@ class Mysql extends Dialect
             Column::TYPE_TINYBLOB      => "TINYBLOB",
             Column::TYPE_TINYINTEGER   => "TINYINT",
             Column::TYPE_TINYTEXT      => "TINYTEXT",
+            Column::TYPE_GEOMETRY      => "GEOMETRY",
+            Column::TYPE_POINT         => "POINT",
+            Column::TYPE_LINESTRING    => "LINESTRING",
+            Column::TYPE_POLYGON       => "POLYGON",
+            Column::TYPE_MULTIPOINT    => "MULTIPOINT",
+            Column::TYPE_MULTILINESTRING    => "MULTILINESTRING",
+            Column::TYPE_MULTIPOLYGON       => "MULTIPOLYGON",
+            Column::TYPE_GEOMETRYCOLLECTION => "GEOMETRYCOLLECTION",
             default                    => "VARCHAR",
         };
 
@@ -551,8 +627,10 @@ class Mysql extends Dialect
             . $this->delimit($column->getName())
             . ' '
             . $columnDefinition
+            . $this->checkColumnIsGenerated($column)
             . $this->checkColumnIsNull($column)
             . $this->getNullString()
+            . $this->checkColumnIsInvisible($column)
             . $this->checkColumnHasDefault($column)
             . $this->checkColumnIsAutoIncrement($column)
             . $this->checkColumnComment($column)
@@ -572,9 +650,31 @@ class Mysql extends Dialect
      *
      * @return string
      */
-    public function sharedLock(string $sqlQuery): string
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
         return $sqlQuery . " LOCK IN SHARE MODE";
+    }
+
+    /**
+     * MySQL does not support the SQL-standard `ON CONFLICT DO UPDATE`
+     * upsert syntax — it has its own `INSERT ... ON DUPLICATE KEY UPDATE`.
+     *
+     * @param string $sqlQuery
+     * @param array  $conflictColumns
+     * @param array  $updateColumns
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function onConflictUpdate(
+        string $sqlQuery,
+        array $conflictColumns,
+        array $updateColumns
+    ): string {
+        throw new Exception(
+            'ON CONFLICT upserts are not supported by MySQL; use '
+            . 'INSERT ... ON DUPLICATE KEY UPDATE via raw SQL instead'
+        );
     }
 
     /**

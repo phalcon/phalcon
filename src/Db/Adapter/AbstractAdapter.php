@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter;
 
+use Phalcon\Db\CheckInterface;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\DialectInterface;
 use Phalcon\Db\Enum;
@@ -760,9 +761,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function forUpdate(string $sqlQuery): string
+    public function forUpdate(string $sqlQuery, string $modifier = ''): string
     {
-        return $this->dialect->forUpdate($sqlQuery);
+        return $this->dialect->forUpdate($sqlQuery, $modifier);
     }
 
     /**
@@ -1282,9 +1283,151 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function sharedLock(string $sqlQuery): string
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
-        return $this->dialect->sharedLock($sqlQuery);
+        return $this->dialect->sharedLock($sqlQuery, $modifier);
+    }
+
+    /**
+     * Adds a CHECK constraint to a table.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return bool
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): bool {
+        return $this->execute(
+            $this->dialect->addCheck($tableName, $schemaName, $check)
+        );
+    }
+
+    /**
+     * Drops a CHECK constraint from a table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return bool
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): bool {
+        return $this->execute(
+            $this->dialect->dropCheck($tableName, $schemaName, $checkName)
+        );
+    }
+
+    /**
+     * Appends an ON CONFLICT (...) DO UPDATE SET col = excluded.col upsert
+     * clause to the supplied INSERT statement.
+     *
+     * @param string $sqlQuery
+     * @param array  $conflictColumns
+     * @param array  $updateColumns
+     *
+     * @return string
+     */
+    public function onConflictUpdate(
+        string $sqlQuery,
+        array $conflictColumns,
+        array $updateColumns
+    ): string {
+        return $this->dialect->onConflictUpdate(
+            $sqlQuery,
+            $conflictColumns,
+            $updateColumns
+        );
+    }
+
+    /**
+     * Appends a RETURNING clause to an INSERT/UPDATE/DELETE statement.
+     *
+     * @param string $sqlQuery
+     * @param array  $columns
+     *
+     * @return string
+     */
+    public function returning(string $sqlQuery, array $columns): string
+    {
+        return $this->dialect->returning($sqlQuery, $columns);
+    }
+
+    /**
+     * Creates a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
+     *
+     * @return bool
+     */
+    public function createMaterializedView(
+        string $viewName,
+        array $definition,
+        ?string $schemaName = null
+    ): bool {
+        return $this->execute(
+            $this->dialect->createMaterializedView(
+                $viewName,
+                $definition,
+                $schemaName
+            )
+        );
+    }
+
+    /**
+     * Drops a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return bool
+     */
+    public function dropMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $ifExists = true
+    ): bool {
+        return $this->execute(
+            $this->dialect->dropMaterializedView(
+                $viewName,
+                $schemaName,
+                $ifExists
+            )
+        );
+    }
+
+    /**
+     * Refreshes a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $concurrent
+     *
+     * @return bool
+     */
+    public function refreshMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $concurrent = false
+    ): bool {
+        return $this->execute(
+            $this->dialect->refreshMaterializedView(
+                $viewName,
+                $schemaName,
+                $concurrent
+            )
+        );
     }
 
     /**

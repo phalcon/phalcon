@@ -16,6 +16,7 @@ namespace Phalcon\Db\Dialect\Traits;
 use Phalcon\Db\Column;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Index;
+use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 
 use function addcslashes;
@@ -100,8 +101,17 @@ trait TextTrait
     protected function checkColumnHasDefault(Column $column): string
     {
         $sql = '';
+
+        if ($column->isGenerated()) {
+            return $sql;
+        }
+
         if (true === $column->hasDefault()) {
             $defaultValue = $column->getDefault();
+
+            if ($defaultValue instanceof RawValue) {
+                return ' DEFAULT ' . $defaultValue->getValue();
+            }
 
             if (
                 (
@@ -126,12 +136,42 @@ trait TextTrait
     }
 
     /**
+     * Emits the GENERATED ALWAYS AS (...) VIRTUAL|STORED clause. Wraps the
+     * shared dialect helper for trait users.
+     *
+     * @param Column $column
+     *
+     * @return string
+     */
+    protected function checkColumnIsGenerated(Column $column): string
+    {
+        return $this->getGeneratedClause($column);
+    }
+
+    /**
+     * Emits the INVISIBLE keyword for MySQL 8.0.23+ invisible columns.
+     * Other dialects override this trait helper to return an empty string.
+     *
+     * @param Column $column
+     *
+     * @return string
+     */
+    protected function checkColumnIsInvisible(Column $column): string
+    {
+        return $column->isInvisible() ? ' INVISIBLE' : '';
+    }
+
+    /**
      * @param Column $column
      *
      * @return string
      */
     protected function checkColumnIsAutoIncrement(Column $column): string
     {
+        if ($column->isGenerated()) {
+            return '';
+        }
+
         return $column->isAutoIncrement() ? ' AUTO_INCREMENT' : '';
     }
 
@@ -317,8 +357,10 @@ trait TextTrait
             $result[] = $this->delimit($column->getName())
                 . ' '
                 . $this->getColumnDefinition($column)
+                . $this->checkColumnIsGenerated($column)
                 . $this->checkColumnIsNull($column)
                 . $this->getNullString()
+                . $this->checkColumnIsInvisible($column)
                 . $this->checkColumnHasDefault($column)
                 . $this->checkColumnIsAutoIncrement($column)
                 . $this->checkColumnIsPrimary($column)
@@ -341,10 +383,7 @@ trait TextTrait
                 $indexName = $index->getName();
                 $indexType = $index->getType() ? $index->getType() . ' ' : '';
 
-                /**
-                 * If the index name is primary we add a primary key
-                 */
-                $columnList = $this->wrap($this->getColumnList($index->getColumns()));
+                $columnList = $this->wrap($this->getIndexColumnList($index));
                 if ($indexName === 'PRIMARY') {
                     $indexSql = 'PRIMARY KEY ' . $columnList;
                 } else {
@@ -353,10 +392,36 @@ trait TextTrait
                         . $this->delimit($indexName)
                         . ' '
                         . $columnList;
+                    if ($index->isInvisible()) {
+                        $indexSql .= ' INVISIBLE';
+                    }
                 }
 
                 $result[] = $indexSql;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the list of CONSTRAINT ... CHECK (...) lines for createTable.
+     * Uses the dialect's escape character via the shared getCheckClause()
+     * helper.
+     *
+     * @param array $definition
+     *
+     * @return array
+     */
+    protected function getTableChecks(array $definition): array
+    {
+        if (!isset($definition['checks'])) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($definition['checks'] as $check) {
+            $result[] = $this->getCheckClause($check, $this->escapeChar ?? '`');
         }
 
         return $result;

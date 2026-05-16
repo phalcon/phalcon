@@ -22,6 +22,7 @@ use function is_string;
 use function range;
 use function str_replace;
 use function strlen;
+use function strtoupper;
 use function trim;
 
 /**
@@ -116,21 +117,255 @@ abstract class Dialect implements DialectInterface
     }
 
     /**
-     * Returns a SQL modified with a FOR UPDATE clause
+     * Returns a SQL modified with a FOR UPDATE clause. The optional
+     * `modifier` appends a row-lock disposition keyword.
      *
      *```php
      * $sql = $dialect->forUpdate("SELECT * FROM robots");
-     *
      * echo $sql; // SELECT * FROM robots FOR UPDATE
+     *
+     * $sql = $dialect->forUpdate(
+     *     "SELECT * FROM robots",
+     *     Dialect::LOCK_NOWAIT
+     * );
+     * echo $sql; // SELECT * FROM robots FOR UPDATE NOWAIT
      *```
      *
      * @param string $sqlQuery
+     * @param string $modifier
      *
      * @return string
      */
-    public function forUpdate(string $sqlQuery): string
+    public function forUpdate(string $sqlQuery, string $modifier = ''): string
     {
-        return $sqlQuery . " FOR UPDATE";
+        if ($modifier !== '') {
+            return $sqlQuery . ' FOR UPDATE ' . $modifier;
+        }
+
+        return $sqlQuery . ' FOR UPDATE';
+    }
+
+    /**
+     * Builds a CHECK constraint clause from a `CheckInterface`, using the
+     * provided escape character for the constraint name.
+     *
+     * @param CheckInterface $check
+     * @param string         $escapeChar
+     *
+     * @return string
+     */
+    protected function getCheckClause(
+        CheckInterface $check,
+        string $escapeChar = '`'
+    ): string {
+        $name   = $check->getName();
+        $clause = '';
+
+        if ($name !== '') {
+            $clause = 'CONSTRAINT ' . $escapeChar . $name . $escapeChar . ' ';
+        }
+
+        return $clause . 'CHECK (' . $check->getExpression() . ')';
+    }
+
+    /**
+     * Builds the `GENERATED ALWAYS AS (<expr>) VIRTUAL|STORED` clause for a
+     * generated/computed column. Returns an empty string when the column is
+     * not generated. When `forceStored` is `true` the clause is always
+     * emitted as `STORED` (PostgreSQL uses this).
+     *
+     * @param ColumnInterface $column
+     * @param bool            $forceStored
+     *
+     * @return string
+     */
+    protected function getGeneratedClause(
+        ColumnInterface $column,
+        bool $forceStored = false
+    ): string {
+        if (!$column->isGenerated()) {
+            return '';
+        }
+
+        $storage = ($forceStored || $column->isGenerationStored())
+            ? 'STORED'
+            : 'VIRTUAL';
+
+        return ' GENERATED ALWAYS AS (' . $column->getGenerationExpression()
+            . ') ' . $storage;
+    }
+
+    /**
+     * Builds the per-index parenthesized column list, honoring per-column
+     * sort directions and `RawValue` expression entries.
+     *
+     * @param IndexInterface $index
+     * @param bool           $wrapExpressions
+     *
+     * @return string
+     */
+    protected function getIndexColumnList(
+        IndexInterface $index,
+        bool $wrapExpressions = true
+    ): string {
+        $columns       = $index->getColumns();
+        $directions    = $index->getDirections();
+        $hasExpression = false;
+
+        foreach ($columns as $column) {
+            if ($column instanceof RawValue) {
+                $hasExpression = true;
+                break;
+            }
+        }
+
+        if (!$hasExpression && empty($directions)) {
+            return $this->getColumnList($columns);
+        }
+
+        $parts = [];
+        $i     = 0;
+
+        foreach ($columns as $column) {
+            if ($column instanceof RawValue) {
+                $rendered = $wrapExpressions
+                    ? '(' . $column->getValue() . ')'
+                    : $column->getValue();
+            } else {
+                $rendered = $this->escape($column);
+            }
+
+            if (!empty($directions)) {
+                $direction = isset($directions[$i])
+                    ? strtoupper((string) $directions[$i])
+                    : 'ASC';
+                $rendered .= ($direction === 'DESC') ? ' DESC' : ' ASC';
+            }
+
+            $parts[] = $rendered;
+            $i++;
+        }
+
+        return implode(', ', $parts);
+    }
+
+    /**
+     * Appends an `ON CONFLICT (col, ...) DO UPDATE SET col = excluded.col`
+     * upsert clause to the supplied INSERT statement. Supported by
+     * PostgreSQL 9.5+ and SQLite 3.24+. MySQL overrides this method to
+     * throw.
+     *
+     * @param string $sqlQuery
+     * @param array  $conflictColumns
+     * @param array  $updateColumns
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function onConflictUpdate(
+        string $sqlQuery,
+        array $conflictColumns,
+        array $updateColumns
+    ): string {
+        if (empty($conflictColumns)) {
+            throw new Exception(
+                'ON CONFLICT requires at least one conflict-target column'
+            );
+        }
+
+        if (empty($updateColumns)) {
+            throw new Exception(
+                'ON CONFLICT DO UPDATE requires at least one update column'
+            );
+        }
+
+        $assignments = [];
+        foreach ($updateColumns as $col) {
+            $escaped       = $this->escape((string) $col);
+            $assignments[] = $escaped . ' = excluded.' . $escaped;
+        }
+
+        return $sqlQuery
+            . ' ON CONFLICT (' . $this->getColumnList($conflictColumns) . ')'
+            . ' DO UPDATE SET ' . implode(', ', $assignments);
+    }
+
+    /**
+     * Generates SQL to create a materialized view. Supported by PostgreSQL;
+     * MySQL and SQLite inherit this throw.
+     *
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function createMaterializedView(
+        string $viewName,
+        array $definition,
+        ?string $schemaName = null
+    ): string {
+        throw new Exception(
+            'Materialized views are not supported by this dialect'
+        );
+    }
+
+    /**
+     * Generates SQL to drop a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function dropMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $ifExists = true
+    ): string {
+        throw new Exception(
+            'Materialized views are not supported by this dialect'
+        );
+    }
+
+    /**
+     * Generates SQL to refresh a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $concurrent
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function refreshMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $concurrent = false
+    ): string {
+        throw new Exception(
+            'Materialized views are not supported by this dialect'
+        );
+    }
+
+    /**
+     * Returns a SQL statement extended with a `RETURNING` clause.
+     * Supported by PostgreSQL and SQLite 3.35+; MySQL inherits the throw.
+     *
+     * @param string $sqlQuery
+     * @param array  $columns
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function returning(string $sqlQuery, array $columns): string
+    {
+        throw new Exception(
+            'RETURNING clauses are not supported by this dialect'
+        );
     }
 
     /**

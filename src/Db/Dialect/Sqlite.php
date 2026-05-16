@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect;
 
+use Phalcon\Db\CheckInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
@@ -58,12 +59,15 @@ class Sqlite extends Dialect
             . " ADD COLUMN "
             . $this->delimit($column->getName(), '"')
             . ' '
-            . $this->getColumnDefinition($column);
+            . $this->getColumnDefinition($column)
+            . $this->getGeneratedClause($column);
 
-        if (true === $column->hasDefault()) {
+        if (!$column->isGenerated() && true === $column->hasDefault()) {
             $defaultValue = $column->getDefault();
 
-            if (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
+            if ($defaultValue instanceof \Phalcon\Db\RawValue) {
+                $sql .= ' DEFAULT ' . $defaultValue->getValue();
+            } elseif (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
                 $sql .= " DEFAULT CURRENT_TIMESTAMP";
             } else {
                 $sql .= ' DEFAULT "' . addcslashes((string)$defaultValue, '"') . '"';
@@ -74,7 +78,7 @@ class Sqlite extends Dialect
             . $this->getNullString();
 
 
-        if (true === $column->isAutoincrement()) {
+        if (!$column->isGenerated() && true === $column->isAutoincrement()) {
             $sql .= " PRIMARY KEY AUTOINCREMENT";
         }
 
@@ -98,6 +102,26 @@ class Sqlite extends Dialect
     ): string {
         throw new Exception(
             "Adding a foreign key constraint to an existing table is not supported by SQLite"
+        );
+    }
+
+    /**
+     * SQLite cannot ALTER an existing table to add a CHECK constraint.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): string {
+        throw new Exception(
+            'Adding a CHECK constraint to an existing table is not supported by SQLite'
         );
     }
 
@@ -132,7 +156,11 @@ class Sqlite extends Dialect
             . $index->getName()
             . "\" ON \""
             . $tableName
-            . "\" (" . $this->getColumnList($index->getColumns()) . ")";
+            . "\" (" . $this->getIndexColumnList($index, false) . ")";
+
+        if ($index->getWhere() !== '') {
+            $sql .= ' WHERE ' . $index->getWhere();
+        }
 
         return $sql;
     }
@@ -200,35 +228,40 @@ class Sqlite extends Dialect
         foreach ($columns as $column) {
             $columnLine = $this->delimit($column->getName())
                 . ' '
-                . $this->getColumnDefinition($column);
+                . $this->getColumnDefinition($column)
+                . $this->getGeneratedClause($column);
 
-            /**
-             * Mark the column as primary key
-             */
-            if (true === $column->isPrimary() && true !== $hasPrimary) {
-                $columnLine .= " PRIMARY KEY";
-                $hasPrimary = true;
-            }
+            if (!$column->isGenerated()) {
+                /**
+                 * Mark the column as primary key
+                 */
+                if (true === $column->isPrimary() && true !== $hasPrimary) {
+                    $columnLine .= " PRIMARY KEY";
+                    $hasPrimary = true;
+                }
 
-            /**
-             * Add an AUTOINCREMENT clause
-             */
-            if (true === $column->isAutoIncrement() && true === $hasPrimary) {
-                $columnLine .= " AUTOINCREMENT";
-            }
+                /**
+                 * Add an AUTOINCREMENT clause
+                 */
+                if (true === $column->isAutoIncrement() && true === $hasPrimary) {
+                    $columnLine .= " AUTOINCREMENT";
+                }
 
-            /**
-             * Add a Default clause
-             */
-            if (true === $column->hasDefault()) {
-                $defaultValue = $column->getDefault();
+                /**
+                 * Add a Default clause
+                 */
+                if (true === $column->hasDefault()) {
+                    $defaultValue = $column->getDefault();
 
-                if (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
-                    $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
-                } else {
-                    $columnLine .= " DEFAULT \""
-                        . addcslashes((string)$defaultValue, "\"")
-                        . "\"";
+                    if ($defaultValue instanceof \Phalcon\Db\RawValue) {
+                        $columnLine .= ' DEFAULT ' . $defaultValue->getValue();
+                    } elseif (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
+                        $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
+                    } else {
+                        $columnLine .= " DEFAULT \""
+                            . addcslashes((string)$defaultValue, "\"")
+                            . "\"";
+                    }
                 }
             }
 
@@ -256,13 +289,13 @@ class Sqlite extends Dialect
              */
             if ("PRIMARY" === $indexName && true !== $hasPrimary) {
                 $createLines[] = "PRIMARY KEY ("
-                    . $this->getColumnList($index->getColumns()) . ")";
+                    . $this->getIndexColumnList($index, false) . ")";
             } elseif (
                 !empty($indexType) &&
                 str_contains(strtoupper($indexType), "UNIQUE")
             ) {
                 $createLines[] = "UNIQUE ("
-                    . $this->getColumnList($index->getColumns()) . ")";
+                    . $this->getIndexColumnList($index, false) . ")";
             }
         }
 
@@ -292,6 +325,14 @@ class Sqlite extends Dialect
             }
 
             $createLines[] = $referenceSql;
+        }
+
+        /**
+         * Create CHECK constraints
+         */
+        $checks = $definition["checks"] ?? [];
+        foreach ($checks as $check) {
+            $createLines[] = $this->getCheckClause($check, '`');
         }
 
         $sql .= implode(",\n\t", $createLines) . "\n)";
@@ -344,7 +385,12 @@ class Sqlite extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        return "PRAGMA table_info('" . $tableName . "')";
+        /**
+         * `table_xinfo` mirrors `table_info` but exposes the `hidden` column:
+         *   0 = ordinary, 1 = hidden (virtual table internal),
+         *   2 = VIRTUAL generated, 3 = STORED generated.
+         */
+        return "PRAGMA table_xinfo('" . $tableName . "')";
     }
 
     /**
@@ -404,7 +450,30 @@ class Sqlite extends Dialect
         string $schemaName,
         string $columnName
     ): string {
-        throw new Exception("Dropping DB column is not supported by SQLite");
+        return 'ALTER TABLE '
+            . $this->prepareTable($tableName, $schemaName)
+            . ' DROP COLUMN "'
+            . $columnName . '"';
+    }
+
+    /**
+     * SQLite cannot DROP a CHECK constraint from an existing table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): string {
+        throw new Exception(
+            'Dropping a CHECK constraint is not supported by SQLite'
+        );
     }
 
     /**
@@ -520,7 +589,7 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function forUpdate(string $sqlQuery): string
+    public function forUpdate(string $sqlQuery, string $modifier = ''): string
     {
         return $sqlQuery;
     }
@@ -795,9 +864,34 @@ class Sqlite extends Dialect
      *
      * @return string
      */
-    public function sharedLock(string $sqlQuery): string
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
         return $sqlQuery;
+    }
+
+    /**
+     * Appends a `RETURNING` clause to the supplied INSERT/UPDATE/DELETE
+     * statement. SQLite 3.35+.
+     *
+     * @param string $sqlQuery
+     * @param array  $columns
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function returning(string $sqlQuery, array $columns): string
+    {
+        if (empty($columns)) {
+            throw new Exception(
+                "RETURNING requires at least one column or '*'"
+            );
+        }
+
+        if (count($columns) === 1 && (string) $columns[0] === '*') {
+            return $sqlQuery . ' RETURNING *';
+        }
+
+        return $sqlQuery . ' RETURNING ' . $this->getColumnList($columns);
     }
 
     /**

@@ -330,14 +330,27 @@ class Sqlite extends PdoAdapter
             }
 
             /**
-             * Check if the column is default values
-             * When field is empty default value is null
+             * Detect a generated/computed column from the `table_xinfo`
+             * `hidden` flag (field index 6). 2 = VIRTUAL, 3 = STORED.
+             * SQLite does not expose the expression through any pragma, so
+             * `getGenerationExpression()` round-trips as an empty string.
              */
-            if (
-                !empty($field[4]) &&
-                0 !== strcasecmp($field[4], "null")
-            ) {
-                $definition["default"] = trim($field[4], "'");
+            $hiddenFlag = isset($field[6]) ? (int) $field[6] : 0;
+
+            if ($hiddenFlag === 2 || $hiddenFlag === 3) {
+                $definition['generated']        = '';
+                $definition['generationStored'] = ($hiddenFlag === 3);
+            } else {
+                /**
+                 * Check if the column is default values
+                 * When field is empty default value is null
+                 */
+                if (
+                    !empty($field[4]) &&
+                    0 !== strcasecmp($field[4], "null")
+                ) {
+                    $definition["default"] = trim($field[4], "'");
+                }
             }
 
             /**

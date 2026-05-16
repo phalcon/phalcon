@@ -13,14 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
-use Phalcon\Contracts\Db\Column as ColumnContract;
+use Phalcon\Contracts\Db\Check as CheckContract;
 
 /**
- * Phalcon\Db\ColumnInterface
+ * Phalcon\Db\CheckInterface
  *
  * @deprecated Will be removed in a future major release.
- *             Use {@see \Phalcon\Contracts\Db\Column} instead.
+ *             Use {@see \Phalcon\Contracts\Db\Check} instead.
  */
-interface ColumnInterface extends ColumnContract
+interface CheckInterface extends CheckContract
 {
 }

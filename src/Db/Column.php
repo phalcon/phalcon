@@ -222,6 +222,96 @@ class Column implements ColumnInterface
     public const TYPE_VARCHAR = 2;
 
     /**
+     * PostgreSQL `BYTEA` binary type
+     */
+    public const TYPE_BYTEA = 30;
+
+    /**
+     * PostgreSQL `INET` IPv4/IPv6 address type
+     */
+    public const TYPE_INET = 31;
+
+    /**
+     * PostgreSQL `CIDR` network-address type
+     */
+    public const TYPE_CIDR = 32;
+
+    /**
+     * PostgreSQL `MACADDR` MAC-address type
+     */
+    public const TYPE_MACADDR = 33;
+
+    /**
+     * PostgreSQL `INT4RANGE` range-of-integer type
+     */
+    public const TYPE_INT4RANGE = 34;
+
+    /**
+     * PostgreSQL `INT8RANGE` range-of-bigint type
+     */
+    public const TYPE_INT8RANGE = 35;
+
+    /**
+     * PostgreSQL `NUMRANGE` range-of-numeric type
+     */
+    public const TYPE_NUMRANGE = 36;
+
+    /**
+     * PostgreSQL `TSRANGE` range-of-timestamp (without time zone) type
+     */
+    public const TYPE_TSRANGE = 37;
+
+    /**
+     * PostgreSQL `TSTZRANGE` range-of-timestamp (with time zone) type
+     */
+    public const TYPE_TSTZRANGE = 38;
+
+    /**
+     * PostgreSQL `DATERANGE` range-of-date type
+     */
+    public const TYPE_DATERANGE = 39;
+
+    /**
+     * Spatial `GEOMETRY` base type (MySQL 5.7+; PostgreSQL + PostGIS)
+     */
+    public const TYPE_GEOMETRY = 40;
+
+    /**
+     * Spatial `POINT` type
+     */
+    public const TYPE_POINT = 41;
+
+    /**
+     * Spatial `LINESTRING` type
+     */
+    public const TYPE_LINESTRING = 42;
+
+    /**
+     * Spatial `POLYGON` type
+     */
+    public const TYPE_POLYGON = 43;
+
+    /**
+     * Spatial `MULTIPOINT` type
+     */
+    public const TYPE_MULTIPOINT = 44;
+
+    /**
+     * Spatial `MULTILINESTRING` type
+     */
+    public const TYPE_MULTILINESTRING = 45;
+
+    /**
+     * Spatial `MULTIPOLYGON` type
+     */
+    public const TYPE_MULTIPOLYGON = 46;
+
+    /**
+     * Spatial `GEOMETRYCOLLECTION` type
+     */
+    public const TYPE_GEOMETRYCOLLECTION = 47;
+
+    /**
      * Column Position
      *
      * @var string|null
@@ -250,6 +340,30 @@ class Column implements ColumnInterface
     protected mixed $defaultValue = null;
 
     /**
+     * Generation expression for `GENERATED ALWAYS AS (...)`. Null when the
+     * column is not generated.
+     *
+     * @var string|null
+     */
+    protected ?string $generated = null;
+
+    /**
+     * Whether a generated column is `STORED` (true) or `VIRTUAL` (false).
+     * PostgreSQL only supports `STORED` and emits it regardless of this
+     * flag.
+     *
+     * @var bool
+     */
+    protected bool $generationStored = false;
+
+    /**
+     * Whether the column is an array of its base type (PostgreSQL).
+     *
+     * @var bool
+     */
+    protected bool $isArray = false;
+
+    /**
      * Column is autoIncrement?
      *
      * @var bool
@@ -262,6 +376,13 @@ class Column implements ColumnInterface
      * @var bool
      */
     protected bool $isFirst = false;
+
+    /**
+     * Whether the column is declared `INVISIBLE` (MySQL 8.0.23+).
+     *
+     * @var bool
+     */
+    protected bool $isInvisible = false;
 
     /**
      * Column not nullable?
@@ -398,6 +519,56 @@ class Column implements ColumnInterface
                 };
             }
         }
+
+        /**
+         * Generated/computed column expression. When a non-null string is
+         * provided the column is marked as generated and DEFAULT /
+         * AUTO_INCREMENT are no longer compatible at the dialect level.
+         */
+        if (array_key_exists("generated", $definition) && $definition["generated"] !== null) {
+            $generated = $definition["generated"];
+
+            if (!is_string($generated)) {
+                throw new Exception(
+                    "Column generation expression must be a string"
+                );
+            }
+
+            if ($this->isAutoIncrement) {
+                throw new Exception(
+                    "Generated column cannot also be auto-increment"
+                );
+            }
+
+            if ($this->defaultValue !== null) {
+                throw new Exception(
+                    "Generated column cannot have a default value"
+                );
+            }
+
+            $this->generated = $generated;
+        }
+
+        /**
+         * Storage flag for generated columns. true = STORED, false = VIRTUAL.
+         */
+        if (isset($definition["generationStored"])) {
+            $this->generationStored = (bool) $definition["generationStored"];
+        }
+
+        /**
+         * Whether the column is INVISIBLE (MySQL 8.0.23+).
+         */
+        if (isset($definition["invisible"])) {
+            $this->isInvisible = (bool) $definition["invisible"];
+        }
+
+        /**
+         * Whether the column is an array of its base type (PostgreSQL).
+         */
+        if (isset($definition["array"])) {
+            $this->isArray = (bool) $definition["array"];
+        }
     }
 
     /**
@@ -438,6 +609,17 @@ class Column implements ColumnInterface
     public function getDefault(): mixed
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * Returns the generation expression for a generated/computed column.
+     * Returns null when the column is not generated.
+     *
+     * @return string|null
+     */
+    public function getGenerationExpression(): ?string
+    {
+        return $this->generated;
     }
 
     /**
@@ -515,6 +697,18 @@ class Column implements ColumnInterface
     }
 
     /**
+     * Whether the column is an array of its base type. Recognized by the
+     * PostgreSQL dialect (e.g. `INTEGER[]`, `TEXT[]`); MySQL and SQLite
+     * ignore the flag.
+     *
+     * @return bool
+     */
+    public function isArray(): bool
+    {
+        return $this->isArray;
+    }
+
+    /**
      * Auto-Increment
      *
      * @return bool
@@ -532,6 +726,36 @@ class Column implements ColumnInterface
     public function isFirst(): bool
     {
         return $this->isFirst;
+    }
+
+    /**
+     * Whether the column is a generated/computed column.
+     *
+     * @return bool
+     */
+    public function isGenerated(): bool
+    {
+        return $this->generated !== null;
+    }
+
+    /**
+     * Whether a generated column is `STORED`. `false` means `VIRTUAL`.
+     *
+     * @return bool
+     */
+    public function isGenerationStored(): bool
+    {
+        return $this->generationStored;
+    }
+
+    /**
+     * Whether the column is declared `INVISIBLE` (MySQL 8.0.23+).
+     *
+     * @return bool
+     */
+    public function isInvisible(): bool
+    {
+        return $this->isInvisible;
     }
 
     /**
@@ -588,21 +812,37 @@ class Column implements ColumnInterface
             self::TYPE_BIT,
             self::TYPE_BLOB,
             self::TYPE_BOOLEAN,
+            self::TYPE_BYTEA,
             self::TYPE_CHAR,
+            self::TYPE_CIDR,
             self::TYPE_DATE,
+            self::TYPE_DATERANGE,
             self::TYPE_DATETIME,
             self::TYPE_DECIMAL,
             self::TYPE_DOUBLE,
             self::TYPE_ENUM,
             self::TYPE_FLOAT,
+            self::TYPE_GEOMETRY,
+            self::TYPE_GEOMETRYCOLLECTION,
+            self::TYPE_INET,
+            self::TYPE_INT4RANGE,
+            self::TYPE_INT8RANGE,
             self::TYPE_INTEGER,
             self::TYPE_JSON,
             self::TYPE_JSONB,
+            self::TYPE_LINESTRING,
             self::TYPE_LONGBLOB,
             self::TYPE_LONGTEXT,
+            self::TYPE_MACADDR,
             self::TYPE_MEDIUMBLOB,
             self::TYPE_MEDIUMINTEGER,
             self::TYPE_MEDIUMTEXT,
+            self::TYPE_MULTILINESTRING,
+            self::TYPE_MULTIPOINT,
+            self::TYPE_MULTIPOLYGON,
+            self::TYPE_NUMRANGE,
+            self::TYPE_POINT,
+            self::TYPE_POLYGON,
             self::TYPE_SMALLINTEGER,
             self::TYPE_TEXT,
             self::TYPE_TIME,
@@ -610,6 +850,8 @@ class Column implements ColumnInterface
             self::TYPE_TINYBLOB,
             self::TYPE_TINYINTEGER,
             self::TYPE_TINYTEXT,
+            self::TYPE_TSRANGE,
+            self::TYPE_TSTZRANGE,
             self::TYPE_UUID,
             self::TYPE_VARBINARY,
             self::TYPE_VARCHAR => $type,

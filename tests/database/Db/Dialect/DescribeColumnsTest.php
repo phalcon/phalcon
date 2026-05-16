@@ -25,18 +25,35 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      */
     public static function getMysqlData(): array
     {
+        $base = "SELECT COLUMN_NAME AS `Field`, COLUMN_TYPE AS `Type`, "
+            . "COLLATION_NAME AS `Collation`, IS_NULLABLE AS `Null`, "
+            . "COLUMN_KEY AS `Key`, COLUMN_DEFAULT AS `Default`, "
+            . "EXTRA AS `Extra`, PRIVILEGES AS `Privileges`, "
+            . "COLUMN_COMMENT AS `Comment`, "
+            . "GENERATION_EXPRESSION AS `GenerationExpression` "
+            . "FROM `INFORMATION_SCHEMA`.`COLUMNS` ";
+
         return [
             [
                 'schema.name.with.dots',
-                'SHOW FULL COLUMNS FROM `schema.name.with.dots`.`table`',
+                $base
+                . "WHERE `TABLE_SCHEMA` = 'schema.name.with.dots' "
+                . "AND `TABLE_NAME` = 'table' "
+                . "ORDER BY `ORDINAL_POSITION`",
             ],
             [
                 null,
-                'SHOW FULL COLUMNS FROM `table`',
+                $base
+                . "WHERE `TABLE_SCHEMA` = DATABASE() "
+                . "AND `TABLE_NAME` = 'table' "
+                . "ORDER BY `ORDINAL_POSITION`",
             ],
             [
                 'schema',
-                'SHOW FULL COLUMNS FROM `schema`.`table`',
+                $base
+                . "WHERE `TABLE_SCHEMA` = 'schema' "
+                . "AND `TABLE_NAME` = 'table' "
+                . "ORDER BY `ORDINAL_POSITION`",
             ],
         ];
     }
@@ -47,12 +64,19 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
     public static function getPostgresqlData(): array
     {
         $base = 'SELECT DISTINCT c.column_name AS Field, c.data_type AS Type, '
-            . 'c.character_maximum_length AS Size, c.numeric_precision AS NumericSize, '
-            . 'c.numeric_scale AS NumericScale, c.is_nullable AS Null, '
+            . 'c.character_maximum_length AS Size, '
+            . 'c.numeric_precision AS NumericSize, '
+            . 'c.numeric_scale AS NumericScale, '
+            . 'c.is_nullable AS Null, '
             . "CASE WHEN pkc.column_name NOTNULL THEN 'PRI' ELSE '' END AS Key, "
-            . "CASE WHEN c.data_type LIKE '%int%' AND c.column_default LIKE '%nextval%' "
-            . "THEN 'auto_increment' ELSE '' END AS Extra, c.ordinal_position AS Position, "
-            . 'c.column_default, des.description FROM information_schema.columns c '
+            . "CASE WHEN c.data_type LIKE '%int%' AND c.column_default "
+            . "LIKE '%nextval%' THEN 'auto_increment' ELSE '' END AS Extra, "
+            . 'c.ordinal_position AS Position, '
+            . 'c.column_default, '
+            . 'des.description, '
+            . 'c.is_generated AS IsGenerated, '
+            . 'c.generation_expression AS GenerationExpression '
+            . 'FROM information_schema.columns c '
             . 'LEFT JOIN ( SELECT kcu.column_name, kcu.table_name, kcu.table_schema '
             . 'FROM information_schema.table_constraints tc '
             . 'INNER JOIN information_schema.key_column_usage kcu on '
@@ -89,15 +113,15 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
         return [
             [
                 'schema.name.with.dots',
-                "PRAGMA table_info('table')",
+                "PRAGMA table_xinfo('table')",
             ],
             [
                 '',
-                "PRAGMA table_info('table')",
+                "PRAGMA table_xinfo('table')",
             ],
             [
                 'schema',
-                "PRAGMA table_info('table')",
+                "PRAGMA table_xinfo('table')",
             ],
         ];
     }
@@ -106,9 +130,6 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      * Tests Phalcon\Db\Dialect\Mysql :: describeColumns
      *
      * @dataProvider getMysqlData
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
      *
      * @group mysql
      */
@@ -126,9 +147,6 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      *
      * @dataProvider getPostgresqlData
      *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
-     *
      * @group pgsql
      */
     public function testDbDialectPostgresqlDescribeColumns(
@@ -144,9 +162,6 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
      * Tests Phalcon\Db\Dialect\Sqlite :: describeColumns
      *
      * @dataProvider getSqliteData
-     *
-     * @author       Phalcon Team <team@phalcon.io>
-     * @since        2020-01-20
      *
      * @group sqlite
      */
