@@ -534,7 +534,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @return $this
      */
-    public function setTagFactory(TagFactory $tagFactory): AbstractElement
+    public function setTagFactory(TagFactory $tagFactory): static
     {
         $this->tagFactory = $tagFactory;
 

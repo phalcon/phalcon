@@ -526,7 +526,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public function attach(
         RouteInterface $route,
         int $position = Router::POSITION_LAST
-    ): RouterInterface {
+    ): static {
         switch ($position) {
             case self::POSITION_LAST:
                 $this->routes[] = $route;
@@ -1131,7 +1131,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @return RouterInterface
      * @throws Exception
      */
-    public function loadFromConfig(array | ConfigInterface $config): RouterInterface
+    public function loadFromConfig(array | ConfigInterface $config): static
     {
         if ($config instanceof ConfigInterface) {
             $config = $config->toArray();
@@ -1182,7 +1182,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @throws EventsException
      * @throws Exception
      */
-    public function mount(GroupInterface $group): RouterInterface
+    public function mount(GroupInterface $group): static
     {
         $this->fireManagerEvent('router:beforeMount', $group);
 
@@ -1229,7 +1229,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function notFound(array | string $paths): RouterInterface
+    public function notFound(array | string $paths): static
     {
         $this->notFoundPaths = $paths;
 
@@ -1243,7 +1243,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function removeExtraSlashes(bool $remove): RouterInterface
+    public function removeExtraSlashes(bool $remove): static
     {
         $this->removeExtraSlashes = $remove;
 
@@ -1257,7 +1257,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function setDefaultAction(string $actionName): RouterInterface
+    public function setDefaultAction(string $actionName): static
     {
         $this->defaultAction = $actionName;
 
@@ -1271,7 +1271,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function setDefaultController(string $controllerName): RouterInterface
+    public function setDefaultController(string $controllerName): static
     {
         $this->defaultController = $controllerName;
 
@@ -1285,7 +1285,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function setDefaultModule(string $moduleName): RouterInterface
+    public function setDefaultModule(string $moduleName): static
     {
         $this->defaultModule = $moduleName;
 
@@ -1299,7 +1299,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function setDefaultNamespace(string $namespaceName): RouterInterface
+    public function setDefaultNamespace(string $namespaceName): static
     {
         $this->defaultNamespace = $namespaceName;
 
@@ -1324,7 +1324,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return RouterInterface
      */
-    public function setDefaults(array $defaults): RouterInterface
+    public function setDefaults(array $defaults): static
     {
         // Set a default namespace
         if (isset($defaults['namespace'])) {
@@ -1359,7 +1359,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return Router
      */
-    public function setKeyRouteIds(array $routeIds): Router
+    public function setKeyRouteIds(array $routeIds): static
     {
         $this->keyRouteIds = $routeIds;
 
@@ -1371,7 +1371,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @return Router
      */
-    public function setKeyRouteNames(array $routeNames): Router
+    public function setKeyRouteNames(array $routeNames): static
     {
         $this->keyRouteNames = $routeNames;
 
@@ -1387,7 +1387,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * );
      * ```
      */
-    public function setUriSource(int $uriSource): Router
+    public function setUriSource(int $uriSource): static
     {
         $this->uriSource = $uriSource;
 

@@ -86,7 +86,7 @@ class Debug
      *
      * @return $this
      */
-    public function clearVars(): Debug
+    public function clearVars(): static
     {
         $this->data = [];
 
@@ -100,7 +100,7 @@ class Debug
      *
      * @return $this
      */
-    public function debugVar(mixed $variable): Debug
+    public function debugVar(mixed $variable): static
     {
         $this->data[] = [
             $variable,
@@ -184,7 +184,7 @@ class Debug
     public function listen(
         bool $exceptions = true,
         bool $lowSeverity = false
-    ): Debug {
+    ): static {
         if (true === $exceptions) {
             $this->listenExceptions();
         }
@@ -201,7 +201,7 @@ class Debug
      *
      * @return Debug
      */
-    public function listenExceptions(): Debug
+    public function listenExceptions(): static
     {
         set_exception_handler([$this, 'onUncaughtException']);
 
@@ -213,7 +213,7 @@ class Debug
      *
      * @return Debug
      */
-    public function listenLowSeverity(): Debug
+    public function listenLowSeverity(): static
     {
         set_error_handler([$this, 'onUncaughtLowSeverity']);
         set_exception_handler([$this, 'onUncaughtException']);
@@ -408,7 +408,7 @@ class Debug
      *
      * @return $this
      */
-    public function setBlacklist(array $blacklist): Debug
+    public function setBlacklist(array $blacklist): static
     {
         $area     = $blacklist['request'] ?? [];
         $subArray = [];
@@ -439,7 +439,7 @@ class Debug
      *
      * @return $this
      */
-    public function setShowBackTrace(bool $showBackTrace): Debug
+    public function setShowBackTrace(bool $showBackTrace): static
     {
         $this->showBackTrace = $showBackTrace;
 
@@ -454,7 +454,7 @@ class Debug
      *
      * @return Debug
      */
-    public function setShowFileFragment(bool $showFileFragment): Debug
+    public function setShowFileFragment(bool $showFileFragment): static
     {
         $this->showFileFragment = $showFileFragment;
 
@@ -468,7 +468,7 @@ class Debug
      *
      * @return Debug
      */
-    public function setShowFiles(bool $showFiles): Debug
+    public function setShowFiles(bool $showFiles): static
     {
         $this->showFiles = $showFiles;
 
@@ -482,7 +482,7 @@ class Debug
      *
      * @return $this
      */
-    public function setUri(string $uri): Debug
+    public function setUri(string $uri): static
     {
         $this->uri = $uri;
 

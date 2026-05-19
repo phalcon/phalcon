@@ -123,7 +123,7 @@ class Loader
      *
      * @return Loader
      */
-    public function addClass(string $name, string $file): Loader
+    public function addClass(string $name, string $file): static
     {
         $this->classes[$name] = $file;
 
@@ -137,7 +137,7 @@ class Loader
      *
      * @return Loader
      */
-    public function addDirectory(string $directory): Loader
+    public function addDirectory(string $directory): static
     {
         $this->directories[$this->getHash($directory)] = $directory;
 
@@ -151,7 +151,7 @@ class Loader
      *
      * @return Loader
      */
-    public function addExtension(string $extension): Loader
+    public function addExtension(string $extension): static
     {
         $this->extensions[$this->getHash($extension)] = $extension;
 
@@ -165,7 +165,7 @@ class Loader
      *
      * @return Loader
      */
-    public function addFile(string $file): Loader
+    public function addFile(string $file): static
     {
         $this->files[$this->getHash($file)] = $file;
 
@@ -183,7 +183,7 @@ class Loader
         string $namespace,
         array | string $directories,
         bool $prepend = false
-    ): Loader {
+    ): static {
         $nsSeparator  = '\\';
         $dirSeparator = DIRECTORY_SEPARATOR;
         $namespace    = trim($namespace, $nsSeparator) . $nsSeparator;
@@ -356,7 +356,7 @@ class Loader
      * @return $this
      * @throws EventsException
      */
-    public function register(bool $prepend = false): Loader
+    public function register(bool $prepend = false): static
     {
         if (true !== $this->isRegistered) {
             $this->loadFiles();
@@ -376,7 +376,7 @@ class Loader
      *
      * @return Loader
      */
-    public function setClasses(array $classes, bool $merge = false): Loader
+    public function setClasses(array $classes, bool $merge = false): static
     {
         if (true !== $merge) {
             $this->classes = [];
@@ -397,7 +397,7 @@ class Loader
      *
      * @return Loader
      */
-    public function setDirectories(array $directories, bool $merge = false): Loader
+    public function setDirectories(array $directories, bool $merge = false): static
     {
         return $this->addToCollection(
             $directories,
@@ -416,7 +416,7 @@ class Loader
      *
      * @return Loader
      */
-    public function setExtensions(array $extensions, bool $merge = false): Loader
+    public function setExtensions(array $extensions, bool $merge = false): static
     {
         if (true !== $merge) {
             $this->extensions = [$this->getHash('php') => 'php'];
@@ -449,7 +449,7 @@ class Loader
      * @return Loader
      * @throws Exception
      */
-    public function setFileCheckingCallback(string | callable | null $method = null): Loader
+    public function setFileCheckingCallback(string | callable | null $method = null): static
     {
         if (is_callable($method) || is_string($method)) {
             $this->fileCheckingCallback = $method;
@@ -471,7 +471,7 @@ class Loader
      *
      * @return Loader
      */
-    public function setFiles(array $files, bool $merge = false): Loader
+    public function setFiles(array $files, bool $merge = false): static
     {
         return $this->addToCollection(
             $files,
@@ -489,7 +489,7 @@ class Loader
      *
      * @return Loader
      */
-    public function setNamespaces(array $namespaces, bool $merge = false): Loader
+    public function setNamespaces(array $namespaces, bool $merge = false): static
     {
         $dirSeparator = DIRECTORY_SEPARATOR;
 
@@ -520,7 +520,7 @@ class Loader
      *
      * @return Loader
      */
-    public function unregister(): Loader
+    public function unregister(): static
     {
         if (true === $this->isRegistered) {
             spl_autoload_unregister(
@@ -597,7 +597,7 @@ class Loader
         string $collectionName,
         string $method,
         bool $merge = false
-    ): Loader {
+    ): static {
         if (true !== $merge) {
             $this->$collectionName = [];
         }

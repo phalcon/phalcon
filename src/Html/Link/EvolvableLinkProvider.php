@@ -30,7 +30,7 @@ class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProvide
      *
      * @return EvolvableLinkProvider
      */
-    public function withLink(LinkInterface $link): EvolvableLinkProvider
+    public function withLink(LinkInterface $link): static
     {
         return $this->doWithLink($link);
     }
@@ -46,7 +46,7 @@ class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProvide
      *
      * @return EvolvableLinkProvider
      */
-    public function withoutLink(LinkInterface $link): EvolvableLinkProvider
+    public function withoutLink(LinkInterface $link): static
     {
         return $this->doWithoutLink($link);
     }

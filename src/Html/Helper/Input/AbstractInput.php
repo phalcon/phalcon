@@ -88,7 +88,7 @@ abstract class AbstractInput extends AbstractHelper
      *
      * @return AbstractInput
      */
-    public function setValue(string | null $value = null): AbstractInput
+    public function setValue(string | null $value = null): static
     {
         if (null !== $value) {
             $this->attributes['value'] = $value;

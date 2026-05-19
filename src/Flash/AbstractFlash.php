@@ -184,7 +184,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setAutoescape(bool $autoescape): AbstractFlash
+    public function setAutoescape(bool $autoescape): static
     {
         $this->autoescape = $autoescape;
 
@@ -198,7 +198,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setAutomaticHtml(bool $automaticHtml): AbstractFlash
+    public function setAutomaticHtml(bool $automaticHtml): static
     {
         $this->automaticHtml = $automaticHtml;
 
@@ -212,7 +212,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setCssClasses(array $cssClasses): AbstractFlash
+    public function setCssClasses(array $cssClasses): static
     {
         $this->cssClasses = $cssClasses;
 
@@ -226,7 +226,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setCssIconClasses(array $cssIconClasses): AbstractFlash
+    public function setCssIconClasses(array $cssIconClasses): static
     {
         $this->cssIconClasses = $cssIconClasses;
 
@@ -240,7 +240,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setCustomTemplate(string $customTemplate): AbstractFlash
+    public function setCustomTemplate(string $customTemplate): static
     {
         $this->customTemplate = $customTemplate;
 
@@ -254,7 +254,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setEscaperService(EscaperInterface $escaperService): AbstractFlash
+    public function setEscaperService(EscaperInterface $escaperService): static
     {
         $this->escaperService = $escaperService;
 
@@ -269,7 +269,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *
      * @return $this
      */
-    public function setImplicitFlush(bool $implicitFlush): AbstractFlash
+    public function setImplicitFlush(bool $implicitFlush): static
     {
         $this->implicitFlush = $implicitFlush;
 

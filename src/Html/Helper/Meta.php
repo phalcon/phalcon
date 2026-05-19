@@ -24,7 +24,7 @@ class Meta extends AbstractSeries
      *
      * @return Meta
      */
-    public function add(array $attributes = [], int $pos = -1): Meta
+    public function add(array $attributes = [], int $pos = -1): static
     {
         $this->pushOrPlace(
             [
@@ -48,7 +48,7 @@ class Meta extends AbstractSeries
      *
      * @return Meta
      */
-    public function addHttp(string $httpEquiv, string $content, int $pos = -1): Meta
+    public function addHttp(string $httpEquiv, string $content, int $pos = -1): static
     {
         return $this->addElement('http-equiv', $httpEquiv, $content, $pos);
     }
@@ -60,7 +60,7 @@ class Meta extends AbstractSeries
      *
      * @return Meta
      */
-    public function addName(string $name, string $content, int $pos = -1): Meta
+    public function addName(string $name, string $content, int $pos = -1): static
     {
         $this->addElement('name', $name, $content, $pos);
 
@@ -74,7 +74,7 @@ class Meta extends AbstractSeries
      *
      * @return Meta
      */
-    public function addProperty(string $name, string $content, int $pos = -1): Meta
+    public function addProperty(string $name, string $content, int $pos = -1): static
     {
         $this->addElement('property', $name, $content, $pos);
 
@@ -102,7 +102,7 @@ class Meta extends AbstractSeries
         string $value,
         string $content,
         int $pos = -1
-    ): Meta {
+    ): static {
         $attributes = [
             $element  => $value,
             'content' => $content,

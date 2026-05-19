@@ -57,7 +57,7 @@ class Style extends AbstractSeries
      *
      * @return $this
      */
-    public function setStyle(bool $flag): Style
+    public function setStyle(bool $flag): static
     {
         $this->isStyle = $flag;
 

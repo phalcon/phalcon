@@ -462,7 +462,7 @@ class Crypt implements CryptInterface
      *
      * @return CryptInterface
      */
-    public function setAuthData(string $data): CryptInterface
+    public function setAuthData(string $data): static
     {
         $this->authData = $data;
 
@@ -474,7 +474,7 @@ class Crypt implements CryptInterface
      *
      * @return CryptInterface
      */
-    public function setAuthTag(string $tag): CryptInterface
+    public function setAuthTag(string $tag): static
     {
         $this->authTag = $tag;
 
@@ -486,7 +486,7 @@ class Crypt implements CryptInterface
      *
      * @return CryptInterface
      */
-    public function setAuthTagLength(int $length): CryptInterface
+    public function setAuthTagLength(int $length): static
     {
         $this->authTagLength = $length;
 
@@ -501,7 +501,7 @@ class Crypt implements CryptInterface
      * @return CryptInterface
      * @throws Exception
      */
-    public function setCipher(string $cipher): CryptInterface
+    public function setCipher(string $cipher): static
     {
         $this->checkCipherHashIsAvailable($cipher, "cipher");
 
@@ -519,7 +519,7 @@ class Crypt implements CryptInterface
      * @return CryptInterface
      * @throws Exception
      */
-    public function setHashAlgorithm(string $hashAlgorithm): CryptInterface
+    public function setHashAlgorithm(string $hashAlgorithm): static
     {
         $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
 
@@ -547,7 +547,7 @@ class Crypt implements CryptInterface
      *
      * @return CryptInterface
      */
-    public function setKey(string $key): CryptInterface
+    public function setKey(string $key): static
     {
         $this->key = $key;
 
@@ -561,7 +561,7 @@ class Crypt implements CryptInterface
      *
      * @return CryptInterface
      */
-    public function setPadding(int $scheme): CryptInterface
+    public function setPadding(int $scheme): static
     {
         $this->padding = $scheme;
 
@@ -575,7 +575,7 @@ class Crypt implements CryptInterface
      *
      * @return CryptInterface
      */
-    public function useSigning(bool $useSigning): CryptInterface
+    public function useSigning(bool $useSigning): static
     {
         $this->useSigning = $useSigning;
 
@@ -868,7 +868,7 @@ class Crypt implements CryptInterface
      * @return Crypt
      * @throws Exception
      */
-    protected function initializeAvailableCiphers(): Crypt
+    protected function initializeAvailableCiphers(): static
     {
         if (true !== $this->phpFunctionExists("openssl_get_cipher_methods")) {
             throw new Exception("This class requires the openssl extension for PHP");

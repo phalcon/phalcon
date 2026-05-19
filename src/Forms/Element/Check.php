@@ -56,7 +56,7 @@ class Check extends AbstractElement
      * this opt-in, an unchecked checkbox leaves the entity property
      * untouched. See cphalcon issue #16982.
      */
-    public function setUncheckedValue(mixed $value): Check
+    public function setUncheckedValue(mixed $value): static
     {
         $this->uncheckedValue    = $value;
         $this->uncheckedValueSet = true;

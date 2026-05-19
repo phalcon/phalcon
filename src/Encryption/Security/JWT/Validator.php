@@ -84,7 +84,7 @@ class Validator
      *
      * @return Validator
      */
-    public function set(string $claim, mixed $value): Validator
+    public function set(string $claim, mixed $value): static
     {
         $this->claims[$claim] = $value;
 
@@ -98,7 +98,7 @@ class Validator
      *
      * @return Validator
      */
-    public function setToken(Token $token): Validator
+    public function setToken(Token $token): static
     {
         $this->token = $token;
 
@@ -112,7 +112,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateAudience(array | string $audience): Validator
+    public function validateAudience(array | string $audience): static
     {
         if (is_string($audience)) {
             $audience = [$audience];
@@ -140,7 +140,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateClaim(string $name, bool|int|string $value): Validator
+    public function validateClaim(string $name, bool|int|string $value): static
     {
         /** @var array $tokenAudience */
         $claimValue = $this->token->getClaims()->get($name);
@@ -159,7 +159,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateExpiration(int $timestamp): Validator
+    public function validateExpiration(int $timestamp): static
     {
         $tokenExpirationTime = $this
             ->token
@@ -184,7 +184,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateId(string $jwtId): Validator
+    public function validateId(string $jwtId): static
     {
         $tokenId = (string)$this->token->getClaims()->get(Enum::ID);
 
@@ -202,7 +202,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateIssuedAt(int $timestamp): Validator
+    public function validateIssuedAt(int $timestamp): static
     {
         $tokenIssuedAt = (int)$this->token->getClaims()
                                           ->get(Enum::ISSUED_AT)
@@ -222,7 +222,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateIssuer(string $issuer): Validator
+    public function validateIssuer(string $issuer): static
     {
         $tokenIssuer = (string)$this->token->getClaims()
                                            ->get(Enum::ISSUER)
@@ -242,7 +242,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateNotBefore(int $timestamp): Validator
+    public function validateNotBefore(int $timestamp): static
     {
         $tokenNotBefore = (int)$this->token->getClaims()
                                            ->get(Enum::NOT_BEFORE)
@@ -266,7 +266,7 @@ class Validator
     public function validateSignature(
         SignerInterface $signer,
         string $passphrase
-    ): Validator {
+    ): static {
         if (
             true !== $signer->verify(
                 $this->token->getSignature()

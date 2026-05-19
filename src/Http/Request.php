@@ -1502,7 +1502,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return Request
      */
-    public function setHttpMethodParameterOverride(bool $override): Request
+    public function setHttpMethodParameterOverride(bool $override): static
     {
         $this->methodOverride = $override;
 
@@ -1524,7 +1524,7 @@ class Request extends AbstractInjectionAware implements
         string $name,
         array $filters = [],
         array $scope = []
-    ): RequestInterface {
+    ): static {
         if (empty($filters)) {
             throw new Exception(
                 "Filters have not been defined for '" . $name . "'"
@@ -1565,7 +1565,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return RequestInterface
      */
-    public function setStrictHostCheck(bool $flag = true): RequestInterface
+    public function setStrictHostCheck(bool $flag = true): static
     {
         $this->strictHostCheck = $flag;
 
@@ -1579,7 +1579,7 @@ class Request extends AbstractInjectionAware implements
      * @return RequestInterface
      * @throws Exception
      */
-    public function setTrustedProxies(array $trustedProxies): RequestInterface
+    public function setTrustedProxies(array $trustedProxies): static
     {
         $filterService = $this->getFilterService();
 
@@ -1601,7 +1601,7 @@ class Request extends AbstractInjectionAware implements
      * @param  string $trustedProxyHeader
      * @return RequestInterface
      */
-    public function setTrustedProxyHeader(string $trustedProxyHeader): RequestInterface
+    public function setTrustedProxyHeader(string $trustedProxyHeader): static
     {
         $trustedHeader = strtoupper(str_replace("-", "_", $trustedProxyHeader));
         if (!str_starts_with($trustedHeader, "HTTP_")) {

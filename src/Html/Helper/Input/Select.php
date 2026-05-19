@@ -62,7 +62,7 @@ class Select extends AbstractList
         string | null $value = null,
         array $attributes = [],
         bool $raw = false
-    ): Select {
+    ): static {
         $attributes = $this->processValue($attributes, $value);
 
         $this->store[] = [
@@ -94,7 +94,7 @@ class Select extends AbstractList
         string | null $value = null,
         array $attributes = [],
         bool $raw = false
-    ): Select {
+    ): static {
         if (null !== $value) {
             $attributes['value'] = $value;
         }
@@ -123,7 +123,7 @@ class Select extends AbstractList
      *
      * @return Select
      */
-    public function fromData(SelectData $data): Select
+    public function fromData(SelectData $data): static
     {
         $attributes = $data->getAttributes();
 
@@ -157,7 +157,7 @@ class Select extends AbstractList
     public function optGroup(
         string | null $label = null,
         array $attributes = []
-    ): Select {
+    ): static {
         if (!$this->inOptGroup) {
             $this->store[]     = [
                 'optGroupStart',
@@ -191,7 +191,7 @@ class Select extends AbstractList
      *
      * @return Select
      */
-    public function placeholder(string $text): Select
+    public function placeholder(string $text): static
     {
         $this->store[] = [
             'renderFullElement',
@@ -216,7 +216,7 @@ class Select extends AbstractList
      *
      * @return Select
      */
-    public function selected(string $selected): Select
+    public function selected(string $selected): static
     {
         $this->selected = $selected;
 
@@ -233,7 +233,7 @@ class Select extends AbstractList
      *
      * @return Select
      */
-    public function strict(bool $flag = true): Select
+    public function strict(bool $flag = true): static
     {
         $this->strict = $flag;
 

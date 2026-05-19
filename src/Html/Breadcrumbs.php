@@ -68,7 +68,7 @@ class Breadcrumbs
      *
      * @return Breadcrumbs
      */
-    public function add(string $label, string $link = ''): Breadcrumbs
+    public function add(string $label, string $link = ''): static
     {
         $this->data[$link] = $label;
 
@@ -158,7 +158,7 @@ class Breadcrumbs
      *
      * @return Breadcrumbs
      */
-    public function setSeparator(string $separator): Breadcrumbs
+    public function setSeparator(string $separator): static
     {
         $this->separator = $separator;
 

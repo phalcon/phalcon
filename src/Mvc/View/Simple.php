@@ -323,7 +323,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return $this
      */
-    public function setContent(string $content): Simple
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
@@ -342,7 +342,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return Simple
      */
-    public function setParamToView(string $key, mixed $value): Simple
+    public function setParamToView(string $key, mixed $value): static
     {
         return $this->setVar($key, $value);
     }
@@ -359,7 +359,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return $this
      */
-    public function setVar(string $key, mixed $value): Simple
+    public function setVar(string $key, mixed $value): static
     {
         $this->viewParams[$key] = $value;
 
@@ -382,7 +382,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return $this
      */
-    public function setVars(array $params, bool $merge = true): Simple
+    public function setVars(array $params, bool $merge = true): static
     {
         if (true === $merge) {
             $params = array_merge($this->viewParams, $params);

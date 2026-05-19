@@ -133,7 +133,7 @@ class Manager
      *
      * @return $this
      */
-    public function set(string $name, Form $form): Manager
+    public function set(string $name, Form $form): static
     {
         $this->forms[$name] = $form;
 

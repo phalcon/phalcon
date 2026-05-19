@@ -102,7 +102,7 @@ class Collection implements Countable, IteratorAggregate
      *
      * @return $this
      */
-    public function add(AssetInterface $asset): Collection
+    public function add(AssetInterface $asset): static
     {
         $this->addAsset($asset);
 

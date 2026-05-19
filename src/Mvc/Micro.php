@@ -144,7 +144,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function after(callable | MiddlewareInterface $handler): Micro
+    public function after(callable | MiddlewareInterface $handler): static
     {
         $this->afterHandlers[] = $handler;
 
@@ -158,7 +158,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function afterBinding(callable | MiddlewareInterface $handler): Micro
+    public function afterBinding(callable | MiddlewareInterface $handler): static
     {
         $this->afterBindingHandlers[] = $handler;
 
@@ -172,7 +172,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function before(callable | MiddlewareInterface $handler): Micro
+    public function before(callable | MiddlewareInterface $handler): static
     {
         $this->beforeHandlers[] = $handler;
 
@@ -200,7 +200,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function error(callable $handler): Micro
+    public function error(callable $handler): static
     {
         $this->errorHandler = $handler;
 
@@ -214,7 +214,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function finish(callable | MiddlewareInterface $handler): Micro
+    public function finish(callable | MiddlewareInterface $handler): static
     {
         $this->finishHandlers[] = $handler;
 
@@ -782,7 +782,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * @return $this
      * @throws Exception
      */
-    public function mount(CollectionInterface $collection): Micro
+    public function mount(CollectionInterface $collection): static
     {
         /**
          * Get the main handler
@@ -866,7 +866,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function notFound(callable $handler): Micro
+    public function notFound(callable $handler): static
     {
         $this->notFoundHandler = $handler;
 
@@ -997,7 +997,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return Micro
      */
-    public function setActiveHandler(callable $activeHandler): Micro
+    public function setActiveHandler(callable $activeHandler): static
     {
         $this->activeHandler = $activeHandler;
 
@@ -1024,7 +1024,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     public function setModelBinder(
         BinderInterface $modelBinder,
         AdapterInterface | string | null $cache = null
-    ): Micro {
+    ): static {
         if (is_string($cache)) {
             $cache = $this->getService($cache);
         }
@@ -1046,7 +1046,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return $this
      */
-    public function setResponseHandler(callable $handler): Micro
+    public function setResponseHandler(callable $handler): static
     {
         $this->responseHandler = $handler;
 

@@ -177,7 +177,7 @@ class Compiler implements InjectionAwareInterface
      * @return $this
      * @throws Exception
      */
-    public function addExtension(mixed $extension): Compiler
+    public function addExtension(mixed $extension): static
     {
         if (!is_object($extension)) {
             throw new Exception("The extension is not valid");
@@ -203,7 +203,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return $this
      */
-    public function addFilter(string $name, mixed $definition): Compiler
+    public function addFilter(string $name, mixed $definition): static
     {
         $this->filters[$name] = $definition;
 
@@ -218,7 +218,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return $this
      */
-    public function addFunction(string $name, mixed $definition): Compiler
+    public function addFunction(string $name, mixed $definition): static
     {
         $this->functions[$name] = $definition;
 

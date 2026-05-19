@@ -156,7 +156,7 @@ class Profiler
      *
      * @return $this
      */
-    public function reset(): Profiler
+    public function reset(): static
     {
         $this->allProfiles = [];
 
@@ -176,7 +176,7 @@ class Profiler
         string $sqlStatement,
         array $sqlVariables = [],
         array $sqlBindTypes = []
-    ): Profiler {
+    ): static {
         $activeProfile = new Item();
 
         $activeProfile
@@ -200,7 +200,7 @@ class Profiler
      *
      * @return $this
      */
-    public function stopProfile(): Profiler
+    public function stopProfile(): static
     {
         $activeProfile = $this->activeProfile;
 

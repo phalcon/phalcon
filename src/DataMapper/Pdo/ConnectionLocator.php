@@ -145,7 +145,7 @@ class ConnectionLocator
      *
      * @return ConnectionLocator
      */
-    public function setMaster(callable $callableObject): ConnectionLocator
+    public function setMaster(callable $callableObject): static
     {
         $this->master = $callableObject;
         unset($this->instances["master"]);
@@ -164,7 +164,7 @@ class ConnectionLocator
     public function setRead(
         string $name,
         callable $callableObject
-    ): ConnectionLocator {
+    ): static {
         $this->read[$name] = $callableObject;
 
         return $this;
@@ -181,7 +181,7 @@ class ConnectionLocator
     public function setWrite(
         string $name,
         callable $callableObject
-    ): ConnectionLocator {
+    ): static {
         $this->write[$name] = $callableObject;
 
         return $this;

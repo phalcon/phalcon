@@ -260,7 +260,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function cleanTemplateAfter(): View
+    public function cleanTemplateAfter(): static
     {
         $this->templatesAfter = [];
 
@@ -272,7 +272,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function cleanTemplateBefore(): View
+    public function cleanTemplateBefore(): static
     {
         $this->templatesBefore = [];
 
@@ -284,7 +284,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function disable(): View
+    public function disable(): static
     {
         $this->disabled = true;
 
@@ -305,7 +305,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return ViewInterface
      */
-    public function disableLevel(mixed $level): ViewInterface
+    public function disableLevel(mixed $level): static
     {
         if (is_array($level)) {
             $this->disabledLevels = $level;
@@ -321,7 +321,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function enable(): View
+    public function enable(): static
     {
         $this->disabled = false;
 
@@ -346,7 +346,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function finish(): View
+    public function finish(): static
     {
         ob_end_clean();
 
@@ -750,7 +750,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function pick(mixed $renderView): View
+    public function pick(mixed $renderView): static
     {
         if (is_array($renderView)) {
             $pickView = $renderView;
@@ -1006,7 +1006,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function registerEngines(array $engines): View
+    public function registerEngines(array $engines): static
     {
         $this->registeredEngines = $engines;
 
@@ -1033,7 +1033,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         string $controllerName,
         string $actionName,
         array $params = []
-    ): View | bool {
+    ): static | bool {
         $result = $this->processRender($controllerName, $actionName, $params);
 
         if (!$result) {
@@ -1046,7 +1046,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Resets the view component to its factory default values
      */
-    public function reset(): View
+    public function reset(): static
     {
         $this->disabled        = false;
         $this->engines         = false;
@@ -1070,7 +1070,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setBasePath(string $basePath): View
+    public function setBasePath(string $basePath): static
     {
         $this->basePath = $basePath;
 
@@ -1088,7 +1088,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setContent(string $content): View
+    public function setContent(string $content): static
     {
         $this->content = $content;
 
@@ -1107,7 +1107,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setLayout(string $layout): View
+    public function setLayout(string $layout): static
     {
         $this->layout = $layout;
 
@@ -1127,7 +1127,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setLayoutsDir(string $layoutsDir): View
+    public function setLayoutsDir(string $layoutsDir): static
     {
         $this->layoutsDir = $layoutsDir;
 
@@ -1147,7 +1147,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setMainView(string $viewPath): View
+    public function setMainView(string $viewPath): static
     {
         $this->mainView = $viewPath;
 
@@ -1166,7 +1166,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setParamToView(string $key, mixed $value): View
+    public function setParamToView(string $key, mixed $value): static
     {
         return $this->setVar($key, $value);
     }
@@ -1184,7 +1184,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setPartialsDir(string $partialsDir): View
+    public function setPartialsDir(string $partialsDir): static
     {
         $this->partialsDir = $partialsDir;
 
@@ -1201,7 +1201,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * );
      * ```
      */
-    public function setRenderLevel(int $level): ViewInterface
+    public function setRenderLevel(int $level): static
     {
         $this->renderLevel = $level;
 
@@ -1215,7 +1215,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setTemplateAfter(array | string $templateAfter): View
+    public function setTemplateAfter(array | string $templateAfter): static
     {
         if (!is_array($templateAfter)) {
             $this->templatesAfter = [$templateAfter];
@@ -1233,7 +1233,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setTemplateBefore(array | string $templateBefore): View
+    public function setTemplateBefore(array | string $templateBefore): static
     {
         if (!is_array($templateBefore)) {
             $this->templatesBefore = [$templateBefore];
@@ -1251,7 +1251,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * $this->view->setVar("products", $products);
      *```
      */
-    public function setVar(string $key, mixed $value): View
+    public function setVar(string $key, mixed $value): static
     {
         $this->viewParams[$key] = $value;
 
@@ -1274,7 +1274,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function setVars(array $params, bool $merge = true): View
+    public function setVars(array $params, bool $merge = true): static
     {
         if ($merge) {
             $this->viewParams = array_merge($this->viewParams, $params);
@@ -1294,7 +1294,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @return $this
      * @throws Exception
      */
-    public function setViewsDir(array | string $viewsDir): View
+    public function setViewsDir(array | string $viewsDir): static
     {
         if (is_string($viewsDir)) {
             $this->viewsDirs = $this->toDirSeparator($viewsDir);
@@ -1322,7 +1322,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return $this
      */
-    public function start(): View
+    public function start(): static
     {
         ob_start();
 

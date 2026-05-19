@@ -247,7 +247,7 @@ class QueryBuilderCursor extends AbstractAdapter
      *
      * @return QueryBuilderCursor
      */
-    public function setCursor(int | null $cursor): QueryBuilderCursor
+    public function setCursor(int | null $cursor): static
     {
         $this->cursor = $cursor;
 
@@ -261,7 +261,7 @@ class QueryBuilderCursor extends AbstractAdapter
      *
      * @return QueryBuilderCursor
      */
-    public function setQueryBuilder(Builder $builder): QueryBuilderCursor
+    public function setQueryBuilder(Builder $builder): static
     {
         $this->builder = $builder;
 

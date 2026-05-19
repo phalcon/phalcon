@@ -285,7 +285,7 @@ class Redis extends AbstractAdapter
      * @return Redis
      * @throws AuthenticationFailed
      */
-    private function checkAuth(RedisService $connection): Redis
+    private function checkAuth(RedisService $connection): static
     {
         $auth = $this->options['auth'];
 
@@ -308,7 +308,7 @@ class Redis extends AbstractAdapter
      * @return Redis
      * @throws ConnectionFailed
      */
-    private function checkConnect(RedisService $connection): Redis
+    private function checkConnect(RedisService $connection): static
     {
         $options       = $this->options;
         $host          = $options["host"];
@@ -369,7 +369,7 @@ class Redis extends AbstractAdapter
      * @return Redis
      * @throws DatabaseSelectionFailed
      */
-    private function checkIndex(RedisService $connection): Redis
+    private function checkIndex(RedisService $connection): static
     {
         $index = $this->options['index'];
 

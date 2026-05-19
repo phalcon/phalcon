@@ -751,7 +751,7 @@ abstract class Dialect implements DialectInterface
     public function registerCustomFunction(
         string $name,
         callable $customFunction
-    ): Dialect {
+    ): static {
         $this->customFunctions[$name] = $customFunction;
 
         return $this;

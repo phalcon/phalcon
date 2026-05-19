@@ -99,7 +99,7 @@ class Annotations extends Router
         string $module,
         string $handler,
         string | null $prefix = null
-    ): Annotations {
+    ): static {
         $this->handlers[] = [$prefix, $handler, $module];
 
         return $this;
@@ -117,7 +117,7 @@ class Annotations extends Router
     public function addResource(
         string $handler,
         string | null $prefix = null
-    ): Annotations {
+    ): static {
         $this->handlers[] = [$prefix, $handler];
 
         return $this;
@@ -513,7 +513,7 @@ class Annotations extends Router
      * @return Annotations
      * @throws Exception
      */
-    public function setActionPreformatCallback(callable | string | null $callback = null): Annotations
+    public function setActionPreformatCallback(callable | string | null $callback = null): static
     {
         if (is_callable($callback)) {
             $this->actionPreformatCallback = $callback;
@@ -537,7 +537,7 @@ class Annotations extends Router
      *
      * @return Annotations
      */
-    public function setActionSuffix(string $actionSuffix): Annotations
+    public function setActionSuffix(string $actionSuffix): static
     {
         $this->actionSuffix = $actionSuffix;
 
@@ -551,7 +551,7 @@ class Annotations extends Router
      *
      * @return Annotations
      */
-    public function setControllerSuffix(string $controllerSuffix): Annotations
+    public function setControllerSuffix(string $controllerSuffix): static
     {
         $this->controllerSuffix = $controllerSuffix;
 

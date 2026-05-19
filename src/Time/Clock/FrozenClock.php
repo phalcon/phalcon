@@ -47,7 +47,7 @@ final class FrozenClock implements ClockInterface
      *
      * @throws InvalidModifier
      */
-    public function adjust(string $modifier): FrozenClock
+    public function adjust(string $modifier): static
     {
         if (PHP_VERSION_ID >= 80300) {
             try {
@@ -120,7 +120,7 @@ final class FrozenClock implements ClockInterface
     /**
      * Sets the clock to a new value. All consumers receive the same modification
      */
-    public function set(DateTimeImmutable $now): FrozenClock
+    public function set(DateTimeImmutable $now): static
     {
         $this->now = $now;
 

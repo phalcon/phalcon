@@ -96,7 +96,7 @@ abstract class AbstractLinkProvider
      *
      * @return $this
      */
-    protected function doWithLink(mixed $link): AbstractLinkProvider
+    protected function doWithLink(mixed $link): static
     {
         $key         = $this->getKey($link);
         $newInstance = clone $this;
@@ -117,7 +117,7 @@ abstract class AbstractLinkProvider
      *
      * @return $this
      */
-    protected function doWithoutLink(mixed $link): AbstractLinkProvider
+    protected function doWithoutLink(mixed $link): static
     {
         $key         = $this->getKey($link);
         $newInstance = clone $this;

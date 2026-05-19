@@ -110,7 +110,7 @@ abstract class AbstractLogger
      *
      * @return AbstractLogger
      */
-    public function addAdapter(string $name, AdapterInterface $adapter): AbstractLogger
+    public function addAdapter(string $name, AdapterInterface $adapter): static
     {
         $this->adapters[$name] = $adapter;
 
@@ -124,7 +124,7 @@ abstract class AbstractLogger
      *
      * @return AbstractLogger
      */
-    public function excludeAdapters(array $adapters = []): AbstractLogger
+    public function excludeAdapters(array $adapters = []): static
     {
         /**
          * Loop through what has been passed. Check these names with
@@ -198,7 +198,7 @@ abstract class AbstractLogger
      * @return AbstractLogger
      * @throws AdapterNotFound
      */
-    public function removeAdapter(string $name): AbstractLogger
+    public function removeAdapter(string $name): static
     {
         if (!isset($this->adapters[$name])) {
             throw new AdapterNotFound($name);
@@ -216,7 +216,7 @@ abstract class AbstractLogger
      *
      * @return AbstractLogger
      */
-    public function setAdapters(array $adapters): AbstractLogger
+    public function setAdapters(array $adapters): static
     {
         $this->adapters = $adapters;
 
@@ -230,7 +230,7 @@ abstract class AbstractLogger
      *
      * @return AbstractLogger
      */
-    public function setLogLevel(int $level): AbstractLogger
+    public function setLogLevel(int $level): static
     {
         $levels         = $this->getLevels();
         $this->logLevel = isset($levels[$level]) ? $level : Enum::CUSTOM;

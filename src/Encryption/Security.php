@@ -266,7 +266,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @return $this
      */
-    public function destroyToken(): Security
+    public function destroyToken(): static
     {
         /** @var SessionInterface|null $session */
         $session = $this->getLocalService('session', 'localSession');
@@ -566,7 +566,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      * @return Security
      * @throws BaseException
      */
-    public function refreshToken(): Security
+    public function refreshToken(): static
     {
         $this->token        = $this->random->base64Safe($this->numberBytes);
         $this->tokenKey     = $this->random->base64Safe($this->numberBytes);
@@ -592,7 +592,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @return Security
      */
-    public function setAutoRefresh(bool $autoRefresh): Security
+    public function setAutoRefresh(bool $autoRefresh): static
     {
         $this->autoRefresh = $autoRefresh;
 
@@ -606,7 +606,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @return Security
      */
-    public function setDefaultHash(int $defaultHash): Security
+    public function setDefaultHash(int $defaultHash): static
     {
         $this->defaultHash = $defaultHash;
 
@@ -621,7 +621,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @return Security
      */
-    public function setRandomBytes(int $randomBytes): Security
+    public function setRandomBytes(int $randomBytes): static
     {
         $this->numberBytes = $randomBytes;
 
@@ -635,7 +635,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @return $this
      */
-    public function setWorkFactor(int $workFactor): Security
+    public function setWorkFactor(int $workFactor): static
     {
         $this->workFactor = $workFactor;
 

@@ -120,7 +120,7 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     public function registerModules(
         array $modules,
         bool $merge = false
-    ): AbstractApplication {
+    ): static {
         if (true === $merge) {
             $this->modules = array_merge($this->modules, $modules);
         } else {
@@ -149,7 +149,7 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      *
      * @return $this
      */
-    public function setDefaultModule(string $defaultModule): AbstractApplication
+    public function setDefaultModule(string $defaultModule): static
     {
         $this->defaultModule = $defaultModule;
 

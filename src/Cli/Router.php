@@ -476,7 +476,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouterInterface
      */
-    public function setDefaultAction(string $actionName): RouterInterface
+    public function setDefaultAction(string $actionName): static
     {
         $this->defaultAction = $actionName;
 
@@ -490,7 +490,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouterInterface
      */
-    public function setDefaultModule(string $moduleName): RouterInterface
+    public function setDefaultModule(string $moduleName): static
     {
         $this->defaultModule = $moduleName;
 
@@ -504,7 +504,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouterInterface
      */
-    public function setDefaultTask(string $taskName): RouterInterface
+    public function setDefaultTask(string $taskName): static
     {
         $this->defaultTask = $taskName;
 
@@ -529,7 +529,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @return RouterInterface
      */
-    public function setDefaults(array $defaults): RouterInterface
+    public function setDefaults(array $defaults): static
     {
         $this->defaultModule = $defaults["module"] ?? $this->defaultModule;
         $this->defaultTask   = $defaults["task"] ?? $this->defaultTask;

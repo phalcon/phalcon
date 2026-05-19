@@ -127,7 +127,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         ElementInterface $element,
         string | null $position = null,
         bool | null $type = null
-    ): Form {
+    ): static {
         /**
          * Gets the element's name
          */
@@ -187,7 +187,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         array $data,
         ?object $entity = null,
         array $whitelist = []
-    ): Form {
+    ): static {
         if (empty($this->elements)) {
             throw new Exception("There are no elements in the form");
         }
@@ -308,7 +308,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function clear(array | string | null $fields = null): Form
+    public function clear(array | string | null $fields = null): static
     {
         $data = $this->data;
 
@@ -801,7 +801,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @return $this
      * @throws Exception
      */
-    public function load(Schema $schema, FormsLocator $locator): Form
+    public function load(Schema $schema, FormsLocator $locator): static
     {
         foreach ($schema->load() as $definition) {
             $type = strtolower((string) $definition['type']);
@@ -920,7 +920,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setAction(string $action): Form
+    public function setAction(string $action): static
     {
         $this->getAttributes()->set("action", $action);
 
@@ -934,7 +934,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setAttributes(Attributes $attributes): Form
+    public function setAttributes(Attributes $attributes): static
     {
         $this->attributes = $attributes;
 
@@ -948,7 +948,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setEntity(object $entity): Form
+    public function setEntity(object $entity): static
     {
         $this->entity = $entity;
 
@@ -962,7 +962,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setTagFactory(TagFactory $tagFactory): Form
+    public function setTagFactory(TagFactory $tagFactory): static
     {
         $this->tagFactory = $tagFactory;
 
@@ -977,7 +977,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setUserOption(string $option, mixed $value): Form
+    public function setUserOption(string $option, mixed $value): static
     {
         $this->options[$option] = $value;
 
@@ -991,7 +991,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setUserOptions(array $options): Form
+    public function setUserOptions(array $options): static
     {
         $this->options = $options;
 
@@ -1005,7 +1005,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setValidation(ValidationInterface $validation): Form
+    public function setValidation(ValidationInterface $validation): static
     {
         $this->validation = $validation;
 
@@ -1019,7 +1019,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @return $this
      */
-    public function setWhitelist(array $whitelist): Form
+    public function setWhitelist(array $whitelist): static
     {
         $this->whitelist = $whitelist;
 

@@ -140,7 +140,7 @@ class Item
      *
      * @return $this
      */
-    public function setFinalTime(float $finalTime): Item
+    public function setFinalTime(float $finalTime): static
     {
         $this->finalTime = $finalTime;
 
@@ -154,7 +154,7 @@ class Item
      *
      * @return $this
      */
-    public function setInitialTime(float $initialTime): Item
+    public function setInitialTime(float $initialTime): static
     {
         $this->initialTime = $initialTime;
 
@@ -168,7 +168,7 @@ class Item
      *
      * @return $this
      */
-    public function setSqlBindTypes(array $sqlBindTypes): Item
+    public function setSqlBindTypes(array $sqlBindTypes): static
     {
         $this->sqlBindTypes = $sqlBindTypes;
 
@@ -182,7 +182,7 @@ class Item
      *
      * @return $this
      */
-    public function setSqlStatement(string $sqlStatement): Item
+    public function setSqlStatement(string $sqlStatement): static
     {
         $this->sqlStatement = $sqlStatement;
 
@@ -196,7 +196,7 @@ class Item
      *
      * @return $this
      */
-    public function setSqlVariables(array $sqlVariables): Item
+    public function setSqlVariables(array $sqlVariables): static
     {
         $this->sqlVariables = $sqlVariables;
 

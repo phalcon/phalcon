@@ -28,7 +28,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withAttribute(string $attribute, mixed $value): EvolvableLink
+    public function withAttribute(string $attribute, mixed $value): static
     {
         return $this->doWithAttribute($attribute, $value);
     }
@@ -50,7 +50,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withHref(string $href): EvolvableLink
+    public function withHref(string $href): static
     {
         return $this->doWithHref($href);
     }
@@ -65,7 +65,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withRel(string $rel): EvolvableLink
+    public function withRel(string $rel): static
     {
         return $this->doWithRel($rel);
     }
@@ -80,7 +80,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withoutAttribute(string $attribute): EvolvableLink
+    public function withoutAttribute(string $attribute): static
     {
         return $this->doWithoutAttribute($attribute);
     }
@@ -95,7 +95,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @return $this
      */
-    public function withoutRel(string $rel): EvolvableLink
+    public function withoutRel(string $rel): static
     {
         return $this->doWithoutRel($rel);
     }

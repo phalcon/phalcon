@@ -94,7 +94,7 @@ class Title extends AbstractHelper
      *
      * @return Title
      */
-    public function append(string $text, bool $raw = false): Title
+    public function append(string $text, bool $raw = false): static
     {
         $text = $raw ? $text : $this->escaper->html($text);
 
@@ -121,7 +121,7 @@ class Title extends AbstractHelper
      *
      * @return Title
      */
-    public function prepend(string $text, bool $raw = false): Title
+    public function prepend(string $text, bool $raw = false): static
     {
         $text = $raw ? $text : $this->escaper->html($text);
 
@@ -138,7 +138,7 @@ class Title extends AbstractHelper
      *
      * @return Title
      */
-    public function set(string $text, bool $raw = false): Title
+    public function set(string $text, bool $raw = false): static
     {
         $this->title = $raw ? $text : $this->escaper->html($text);
 
@@ -153,7 +153,7 @@ class Title extends AbstractHelper
      *
      * @return Title
      */
-    public function setSeparator(string $separator, bool $raw = false): Title
+    public function setSeparator(string $separator, bool $raw = false): static
     {
         $this->separator = $raw ? $separator : $this->escaper->html($separator);
 

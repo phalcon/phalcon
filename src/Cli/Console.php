@@ -168,7 +168,7 @@ class Console extends AbstractApplication
         array $arguments = [],
         bool $str = true,
         bool $shift = true
-    ): Console {
+    ): static {
         $args       = [];
         $opts       = [];
         $handleArgs = [];

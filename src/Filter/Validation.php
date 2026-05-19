@@ -130,7 +130,7 @@ class Validation extends Injectable implements ValidationInterface
     public function add(
         array | string $field,
         ValidatorInterface $validator
-    ): ValidationInterface {
+    ): static {
         if (is_array($field)) {
             // Uniqueness validator for combination of fields is
             // handled differently
@@ -157,7 +157,7 @@ class Validation extends Injectable implements ValidationInterface
      */
     public function appendMessage(
         MessageInterface $message
-    ): ValidationInterface {
+    ): static {
         $this->messages->appendMessage($message);
 
         return $this;
@@ -184,7 +184,7 @@ class Validation extends Injectable implements ValidationInterface
         object|null $entity,
         array|object|null $data,
         array $whitelist = []
-    ): ValidationInterface {
+    ): static {
         $this->setEntity($entity);
 
         $this->data = $data;
@@ -434,7 +434,7 @@ class Validation extends Injectable implements ValidationInterface
     public function rule(
         array | string $field,
         ValidatorInterface $validator
-    ): ValidationInterface {
+    ): static {
         return $this->add($field, $validator);
     }
 
@@ -450,7 +450,7 @@ class Validation extends Injectable implements ValidationInterface
     public function rules(
         array | string $field,
         array $validators
-    ): ValidationInterface {
+    ): static {
         foreach ($validators as $validator) {
             if ($validator instanceof ValidatorInterface) {
                 $this->add($field, $validator);
@@ -483,7 +483,7 @@ class Validation extends Injectable implements ValidationInterface
     public function setFilters(
         array | string $field,
         array | string $filters
-    ): ValidationInterface {
+    ): static {
         $fields = $field;
         if (!is_array($field)) {
             $fields = [$field];
@@ -503,7 +503,7 @@ class Validation extends Injectable implements ValidationInterface
      *
      * @return ValidationInterface
      */
-    public function setLabels(array $labels): ValidationInterface
+    public function setLabels(array $labels): static
     {
         $this->labels = $labels;
 
@@ -517,7 +517,7 @@ class Validation extends Injectable implements ValidationInterface
      *
      * @return $this
      */
-    public function setValidators(array $validators): Validation
+    public function setValidators(array $validators): static
     {
         $this->validators = $validators;
 

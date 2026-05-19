@@ -438,7 +438,7 @@ class Application extends AbstractApplication
      *
      * @return $this
      */
-    public function sendCookiesOnHandleRequest(bool $sendCookies): Application
+    public function sendCookiesOnHandleRequest(bool $sendCookies): static
     {
         $this->sendCookies = $sendCookies;
 
@@ -452,7 +452,7 @@ class Application extends AbstractApplication
      *
      * @return Application
      */
-    public function sendHeadersOnHandleRequest(bool $sendHeaders): Application
+    public function sendHeadersOnHandleRequest(bool $sendHeaders): static
     {
         $this->sendHeaders = $sendHeaders;
 
@@ -467,7 +467,7 @@ class Application extends AbstractApplication
      *
      * @return Application
      */
-    public function useImplicitView(bool $implicitView): Application
+    public function useImplicitView(bool $implicitView): static
     {
         $this->implicitView = $implicitView;
 
