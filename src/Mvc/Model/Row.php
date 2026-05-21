@@ -44,7 +44,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      */
     public function offsetExists(mixed $offset): bool
     {
-        return isset($this->$offset);
+        return property_exists($this, (string) $offset);
     }
 
     /**
@@ -57,11 +57,13 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      */
     public function offsetGet(mixed $offset): mixed
     {
-        if (!$this->offsetExists($offset)) {
+        $key = (string) $offset;
+
+        if (!property_exists($this, $key)) {
             throw new Exception("The index does not exist in the row");
         }
 
-        return $this->$offset;
+        return $this->$key;
     }
 
     /**
