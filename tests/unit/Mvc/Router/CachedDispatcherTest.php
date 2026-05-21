@@ -108,7 +108,7 @@ final class CachedDispatcherTest extends AbstractUnitTestCase
             ->beforeMatch(static fn(): bool => false);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageMatches('/beforeMatch.*Closure/i');
+        $this->expectExceptionMessageMatches('/Closure beforeMatch/i');
 
         $router->buildDispatcherDump();
     }
@@ -124,7 +124,7 @@ final class CachedDispatcherTest extends AbstractUnitTestCase
             ->convert('id', static fn(string $v): int => (int) $v);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageMatches('/converter.*Closure/i');
+        $this->expectExceptionMessageMatches('/Closure converter/i');
 
         $router->buildDispatcherDump();
     }
