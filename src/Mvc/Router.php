@@ -97,9 +97,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected array $candidatesByMethod = [];
 
     /**
-     * Parallel to candidatesByMethod. Each entry mirrors the corresponding
-     * route as an array of cached scalars:
-     *   [
+     * Single-source per-route metadata cache. One entry per route, keyed
+     * by the route's intrinsic id. Replaces the previous per-method-bucket
+     * replication of metadata arrays. Built once in rebuildMethodIndex().
+     *
+     * Shape: routeMeta[routeId] = [
      *     "pattern":     string,
      *     "isRegex":     bool,
      *     "hostname":    string|null,
@@ -109,7 +111,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @var array
      */
-    protected array $candidatesMetaByMethod = [];
+    protected array $routeMeta = [];
 
     /**
      * Combined PCRE pattern per method bucket (chunked list of strings).
@@ -648,7 +650,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $this->routes                 = [];
         $this->methodRoutes           = [];
         $this->candidatesByMethod     = [];
-        $this->candidatesMetaByMethod = [];
+        $this->routeMeta              = [];
         $this->staticByMethod         = [];
         $this->staticShadowedByMethod = [];
         $this->hostnameByMethod       = [];
@@ -944,9 +946,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $candidateRoutes = $this->candidatesByMethod[$requestMethod]
             ?? $this->candidatesByMethod["*"]
             ?? [];
-        $candidatesMeta  = $this->candidatesMetaByMethod[$requestMethod]
-            ?? $this->candidatesMetaByMethod["*"]
-            ?? [];
 
         /**
          * Resolve the current hostname once if any hostname-constrained
@@ -1061,7 +1060,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                 $combinedRouteIdx  = $combinedMarkMaps[$combinedChunkIdx][$combinedMarkLabel];
                 $combinedRoute     = $candidateRoutes[$combinedRouteIdx];
-                $combinedRouteMeta = $candidatesMeta[$combinedRouteIdx];
+                $combinedRouteMeta = $this->routeMeta[$combinedRoute->getRouteId()];
 
                 $combinedBeforeMatch = $combinedRouteMeta["beforeMatch"];
 
@@ -1120,7 +1119,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         if (!$routeFound) {
             foreach (array_reverse($candidateRoutes, true) as $routeIdx => $route) {
-            $routeMeta = $candidatesMeta[$routeIdx];
+            $routeMeta = $this->routeMeta[$route->getRouteId()];
             $params    = [];
             $matches   = null;
 
@@ -1823,7 +1822,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         $this->methodRoutes           = $index;
         $this->candidatesByMethod     = [];
-        $this->candidatesMetaByMethod = [];
+        $this->routeMeta              = [];
         $this->staticByMethod         = [];
         $this->staticShadowedByMethod = [];
 
@@ -1838,20 +1837,20 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             $this->candidatesByMethod[$method] = array_merge($methodSpecific, $starRoutes);
         }
 
-        foreach ($this->candidatesByMethod as $method => $candidates) {
-            $this->candidatesMetaByMethod[$method] = [];
+        /**
+         * Single-source per-route metadata cache: one entry per route,
+         * keyed by intrinsic id.
+         */
+        foreach ($this->routes as $candidateRoute) {
+            $candidatePattern = $candidateRoute->getCompiledPattern();
 
-            foreach ($candidates as $idx => $candidateRoute) {
-                $candidatePattern = $candidateRoute->getCompiledPattern();
-
-                $this->candidatesMetaByMethod[$method][$idx] = [
-                    "pattern"     => $candidatePattern,
-                    "isRegex"     => str_contains($candidatePattern, "^"),
-                    "hostname"    => $candidateRoute->getHostname(),
-                    "hostRegex"   => $candidateRoute->getCompiledHostName(),
-                    "beforeMatch" => $candidateRoute->getBeforeMatch(),
-                ];
-            }
+            $this->routeMeta[$candidateRoute->getRouteId()] = [
+                "pattern"     => $candidatePattern,
+                "isRegex"     => str_contains($candidatePattern, "^"),
+                "hostname"    => $candidateRoute->getHostname(),
+                "hostRegex"   => $candidateRoute->getCompiledHostName(),
+                "beforeMatch" => $candidateRoute->getBeforeMatch(),
+            ];
         }
 
         /**
