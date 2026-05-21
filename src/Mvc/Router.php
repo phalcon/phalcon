@@ -71,6 +71,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public const POSITION_FIRST = 0;
     public const POSITION_LAST  = 1;
 
+    /**
+     * Number of alternatives per combined-regex chunk. Empirically derived
+     * (FastRoute uses ~10) — keeps each chunk below PCRE's optimizer cliff.
+     */
+    public const REGEX_CHUNK_SIZE = 10;
+
     public const URI_SOURCE_GET_URL            = 0;
     public const URI_SOURCE_SERVER_REQUEST_URI = 1;
 
@@ -106,6 +112,34 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected array $candidatesMetaByMethod = [];
 
     /**
+     * Combined PCRE pattern per method bucket (chunked list of strings).
+     * Each chunk uses (?|...) branch reset and (*:N) mark labels. Built
+     * only when the bucket has no hostname routes and all patterns are
+     * the standard `#^...$#u` shape.
+     *
+     * @var array
+     */
+    protected array $combinedRegexByMethod = [];
+
+    /**
+     * Boolean per method bucket: true when the combined regex cannot be
+     * built.
+     *
+     * @var array
+     */
+    protected array $combinedRegexDisabled = [];
+
+    /**
+     * Map from MARK label back to the route index in
+     * candidatesByMethod[method]. One per chunk.
+     *
+     *   combinedRegexMarkMap[method][chunkIdx][markLabel] = routeIdx
+     *
+     * @var array
+     */
+    protected array $combinedRegexMarkMap = [];
+
+    /**
      * @var string
      */
     protected string $controller = "";
@@ -134,6 +168,23 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $defaultParams = [];
+
+    /**
+     * Per-method buckets of routes with hostname constraints, grouped by
+     * raw hostname string. Routes are referenced by their integer index
+     * into candidatesByMethod[method].
+     *
+     * @var array
+     */
+    protected array $hostnameByMethod = [];
+
+    /**
+     * Per-method indices of routes without a hostname constraint, in
+     * attach order.
+     *
+     * @var array
+     */
+    protected array $hostnameLessByMethod = [];
 
     /**
      * @var array
@@ -600,6 +651,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $this->candidatesMetaByMethod = [];
         $this->staticByMethod         = [];
         $this->staticShadowedByMethod = [];
+        $this->hostnameByMethod       = [];
+        $this->hostnameLessByMethod   = [];
+        $this->combinedRegexByMethod  = [];
+        $this->combinedRegexDisabled  = [];
+        $this->combinedRegexMarkMap   = [];
         $this->methodRoutesDirty      = true;
     }
 
@@ -893,6 +949,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             ?? [];
 
         /**
+         * Resolve the current hostname once if any hostname-constrained
+         * route exists in the candidate bucket.
+         */
+        if (
+            (isset($this->hostnameByMethod[$requestMethod]) && count($this->hostnameByMethod[$requestMethod]) > 0)
+            || (isset($this->hostnameByMethod["*"]) && count($this->hostnameByMethod["*"]) > 0)
+        ) {
+            $currentHostName = $request->getHttpHost();
+        }
+
+        /**
          * Static-route fast path: O(1) lookup for literal URIs that are not
          * shadowed by a later-attached regex in the same bucket. Disabled
          * when an events manager is attached so per-route events keep firing
@@ -962,6 +1029,92 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                     break;
                 }
+            }
+        }
+
+        /**
+         * Combined-regex fast path: one preg_match per chunk replaces N
+         * per-route preg_matches. Disabled when events are attached or the
+         * bucket has hostname constraints.
+         */
+        if (
+            !$routeFound
+            && $this->eventsManager === null
+            && !isset($this->combinedRegexDisabled[$requestMethod])
+            && isset($this->combinedRegexByMethod[$requestMethod])
+        ) {
+            $combinedChunks   = $this->combinedRegexByMethod[$requestMethod];
+            $combinedMarkMaps = $this->combinedRegexMarkMap[$requestMethod];
+
+            foreach ($combinedChunks as $combinedChunkIdx => $combinedChunk) {
+                $combinedMatchesLocal = [];
+
+                if (!preg_match($combinedChunk, $handledUri, $combinedMatchesLocal)) {
+                    continue;
+                }
+
+                $combinedMarkLabel = $combinedMatchesLocal["MARK"];
+
+                if (!isset($combinedMarkMaps[$combinedChunkIdx][$combinedMarkLabel])) {
+                    continue;
+                }
+
+                $combinedRouteIdx  = $combinedMarkMaps[$combinedChunkIdx][$combinedMarkLabel];
+                $combinedRoute     = $candidateRoutes[$combinedRouteIdx];
+                $combinedRouteMeta = $candidatesMeta[$combinedRouteIdx];
+
+                $combinedBeforeMatch = $combinedRouteMeta["beforeMatch"];
+
+                if ($combinedBeforeMatch !== null) {
+                    if (!is_callable($combinedBeforeMatch)) {
+                        throw new Exception(
+                            "Before-Match callback is not callable in matched route"
+                        );
+                    }
+
+                    if (!$combinedBeforeMatch($handledUri, $combinedRoute, $this)) {
+                        continue;
+                    }
+                }
+
+                $combinedPaths      = $combinedRoute->getPaths();
+                $parts              = $combinedPaths;
+                $matches            = $combinedMatchesLocal;
+                $combinedConverters = $combinedRoute->getConverters();
+                $this->matches      = $combinedMatchesLocal;
+                $this->matchedRoute = $combinedRoute;
+                $routeFound         = true;
+
+                foreach ($combinedPaths as $combinedPart => $combinedPosition) {
+                    if (!is_string($combinedPart)) {
+                        throw new Exception("Wrong key in paths: " . $combinedPart);
+                    }
+
+                    if (!is_string($combinedPosition) && !is_int($combinedPosition)) {
+                        continue;
+                    }
+
+                    if (isset($combinedMatchesLocal[$combinedPosition])) {
+                        $combinedMatchPosition = $combinedMatchesLocal[$combinedPosition];
+
+                        if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
+                            $combinedConverter      = $combinedConverters[$combinedPart];
+                            $parts[$combinedPart]   = $combinedConverter($combinedMatchPosition);
+                            continue;
+                        }
+
+                        $parts[$combinedPart] = $combinedMatchPosition;
+                    } else {
+                        if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
+                            $combinedConverter    = $combinedConverters[$combinedPart];
+                            $parts[$combinedPart] = $combinedConverter($combinedPosition);
+                        } elseif (is_int($combinedPosition)) {
+                            unset($parts[$combinedPart]);
+                        }
+                    }
+                }
+
+                break;
             }
         }
 
@@ -1718,6 +1871,102 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     }
                 }
             }
+        }
+
+        /**
+         * Hostname bucketing: split each method bucket into hostname-keyed
+         * sub-buckets and a hostname-less list.
+         */
+        $this->hostnameByMethod     = [];
+        $this->hostnameLessByMethod = [];
+
+        foreach ($this->candidatesByMethod as $method => $candidates) {
+            $this->hostnameByMethod[$method]     = [];
+            $this->hostnameLessByMethod[$method] = [];
+
+            foreach ($candidates as $bucketIdx => $bucketRoute) {
+                $bucketHostname = $bucketRoute->getHostname();
+
+                if ($bucketHostname === null) {
+                    $this->hostnameLessByMethod[$method][] = $bucketIdx;
+                } else {
+                    $this->hostnameByMethod[$method][$bucketHostname][] = $bucketIdx;
+                }
+            }
+        }
+
+        /**
+         * Combined-regex builder: for each method bucket without hostname
+         * constraints, combine all regex routes into a chunked PCRE pattern
+         * list with (?|...) branch reset and (*:N) mark labels.
+         */
+        $this->combinedRegexByMethod = [];
+        $this->combinedRegexMarkMap  = [];
+        $this->combinedRegexDisabled = [];
+
+        foreach ($this->candidatesByMethod as $method => $candidates) {
+            if (!empty($this->hostnameByMethod[$method])) {
+                $this->combinedRegexDisabled[$method] = true;
+                continue;
+            }
+
+            $combinedAlternatives = [];
+            $combinedMark         = [];
+
+            foreach ($candidates as $bucketIdx => $bucketRoute) {
+                $bucketPattern = $bucketRoute->getCompiledPattern();
+
+                if (!str_contains($bucketPattern, '^')) {
+                    continue;
+                }
+
+                $combinedBodyMatch = [];
+                if (!preg_match('/^#\\^(.+)\\$#u$/', $bucketPattern, $combinedBodyMatch)) {
+                    $this->combinedRegexDisabled[$method] = true;
+                    $combinedAlternatives = [];
+                    break;
+                }
+
+                $combinedBody                       = $combinedBodyMatch[1];
+                $combinedAlternatives[]             = $combinedBody . '(*:' . $bucketIdx . ')';
+                $combinedMark[(string) $bucketIdx]  = $bucketIdx;
+            }
+
+            if (isset($this->combinedRegexDisabled[$method])) {
+                continue;
+            }
+
+            if (empty($combinedAlternatives)) {
+                continue;
+            }
+
+            /**
+             * Reverse so first-match-wins gives reverse-attach. Chunk into
+             * groups of REGEX_CHUNK_SIZE. chunks[0] holds LATEST-attached.
+             */
+            $combinedAlternatives = array_reverse($combinedAlternatives);
+            $reversedMarkIds      = array_reverse(array_keys($combinedMark));
+
+            $chunkedPatterns = [];
+            $chunkedMarkMaps = [];
+            $chunkOffset     = 0;
+
+            while ($chunkOffset < count($combinedAlternatives)) {
+                $chunkSlice      = array_slice($combinedAlternatives, $chunkOffset, self::REGEX_CHUNK_SIZE);
+                $chunkMarkSubset = array_slice($reversedMarkIds,      $chunkOffset, self::REGEX_CHUNK_SIZE);
+                $chunkSliceMap   = [];
+
+                foreach ($chunkMarkSubset as $chunkMarkId) {
+                    $chunkSliceMap[$chunkMarkId] = $combinedMark[$chunkMarkId];
+                }
+
+                $chunkedPatterns[] = '#^(?|' . implode('|', $chunkSlice) . ')$#u';
+                $chunkedMarkMaps[] = $chunkSliceMap;
+                $chunkOffset      += self::REGEX_CHUNK_SIZE;
+            }
+
+            $this->combinedRegexByMethod[$method] = $chunkedPatterns;
+            $this->combinedRegexMarkMap[$method]  = $chunkedMarkMaps;
         }
 
         $this->methodRoutesDirty = false;
