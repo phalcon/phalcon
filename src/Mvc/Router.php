@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Closure;
+use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
@@ -237,6 +239,21 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $params = [];
+
+    /**
+     * Lazy-write cache target set by useCache(). When non-null, handle()
+     * writes buildDispatcherDump() to this cache after a successful
+     * rebuild on cache miss, then clears the property to skip subsequent
+     * writes.
+     *
+     * @var CacheAdapterInterface|null
+     */
+    protected CacheAdapterInterface | null $pendingCache = null;
+
+    /**
+     * @var string
+     */
+    protected string $pendingCacheKey = "";
 
     /**
      * @var bool
@@ -659,6 +676,313 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $this->combinedRegexDisabled  = [];
         $this->combinedRegexMarkMap   = [];
         $this->methodRoutesDirty      = true;
+    }
+
+    /**
+     * Produces a pure-data array describing every piece of state needed
+     * to reconstruct this router. The returned array is var_export-able
+     * (no objects, no closures). Used by dumpDispatcher() and by
+     * Phalcon\Cache integration via useCache().
+     *
+     * Throws when a route has a Closure beforeMatch or converter - those
+     * cannot be cached.
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public function buildDispatcherDump(): array
+    {
+        if ($this->methodRoutesDirty) {
+            $this->rebuildMethodIndex();
+        }
+
+        $dumpedRoutes = [];
+        $routeToIdx   = [];
+
+        foreach ($this->routes as $scalarIdx => $route) {
+            $routeToIdx[spl_object_id($route)] = $scalarIdx;
+
+            $cb = $route->getBeforeMatch();
+            if ($cb !== null && $cb instanceof Closure) {
+                throw new Exception(
+                    "Cannot cache router: route id '" . $route->getRouteId()
+                    . "' has a Closure beforeMatch - only string/array callables are cacheable"
+                );
+            }
+
+            $converters = $route->getConverters();
+            if (is_array($converters)) {
+                foreach ($converters as $convName => $converter) {
+                    if ($converter instanceof Closure) {
+                        throw new Exception(
+                            "Cannot cache router: route id '" . $route->getRouteId()
+                            . "' has a Closure converter for '" . $convName
+                            . "' - only string/array callables are cacheable"
+                        );
+                    }
+                }
+            }
+
+            $dumpedRoutes[] = [
+                "class"       => get_class($route),
+                "pattern"     => $route->getPattern(),
+                "paths"       => $route->getPaths(),
+                "methods"     => $route->getHttpMethods(),
+                "hostname"    => $route->getHostname(),
+                "name"        => $route->getName(),
+                "id"          => $route->getRouteId(),
+                "beforeMatch" => $cb,
+                "converters"  => $converters,
+            ];
+        }
+
+        $methodRoutesScalar = [];
+        foreach ($this->methodRoutes as $innerKey => $innerVal) {
+            $mostInnerArr = [];
+            foreach ($innerVal as $scalarVal) {
+                $mostInnerArr[] = $routeToIdx[spl_object_id($scalarVal)];
+            }
+            $methodRoutesScalar[$innerKey] = $mostInnerArr;
+        }
+
+        $candidatesScalar = [];
+        foreach ($this->candidatesByMethod as $innerKey => $innerVal) {
+            $mostInnerArr = [];
+            foreach ($innerVal as $scalarVal) {
+                $mostInnerArr[] = $routeToIdx[spl_object_id($scalarVal)];
+            }
+            $candidatesScalar[$innerKey] = $mostInnerArr;
+        }
+
+        $staticScalar = [];
+        foreach ($this->staticByMethod as $innerKey => $innerVal) {
+            $staticScalar[$innerKey] = [];
+            foreach ($innerVal as $scalarSubKey => $mostInnerVal) {
+                $mostInnerArr = [];
+                foreach ($mostInnerVal as $scalarVal) {
+                    $mostInnerArr[] = $routeToIdx[spl_object_id($scalarVal)];
+                }
+                $staticScalar[$innerKey][$scalarSubKey] = $mostInnerArr;
+            }
+        }
+
+        return [
+            "version"                => 1,
+            "routes"                 => $dumpedRoutes,
+            "methodRoutes"           => $methodRoutesScalar,
+            "candidatesByMethod"     => $candidatesScalar,
+            "staticByMethod"         => $staticScalar,
+            "staticShadowedByMethod" => $this->staticShadowedByMethod,
+            "hostnameByMethod"       => $this->hostnameByMethod,
+            "hostnameLessByMethod"   => $this->hostnameLessByMethod,
+            "combinedRegexByMethod"  => $this->combinedRegexByMethod,
+            "combinedRegexDisabled"  => $this->combinedRegexDisabled,
+            "combinedRegexMarkMap"   => $this->combinedRegexMarkMap,
+            "routeMeta"              => $this->routeMeta,
+        ];
+    }
+
+    /**
+     * Inverse of buildDispatcherDump(). Reconstructs every Route from the
+     * scalar `routes` entries (preserving subclass and routeId), restores
+     * every index, and marks the indexes clean so handle() skips rebuild.
+     *
+     * @param array $dump
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function loadDispatcherFromArray(array $dump): void
+    {
+        if (!isset($dump["version"])) {
+            throw new Exception("Router cache is missing 'version' field");
+        }
+
+        $dumpVersion = (int) $dump["version"];
+
+        if ($dumpVersion !== 1) {
+            throw new Exception(
+                "Router cache version " . $dumpVersion
+                . " is not supported (this build supports version 1)"
+            );
+        }
+
+        if (!isset($dump["routes"])) {
+            throw new Exception("Router cache is missing 'routes' field");
+        }
+
+        $rebuiltRoutes = [];
+
+        foreach ($dump["routes"] as $routeData) {
+            $routeClass = $routeData["class"];
+            $route      = new $routeClass(
+                $routeData["pattern"],
+                $routeData["paths"],
+                $routeData["methods"]
+            );
+
+            if ($routeData["hostname"] !== null) {
+                $route->setHostname($routeData["hostname"]);
+            }
+
+            if ($routeData["name"] !== null) {
+                $route->setName($routeData["name"]);
+            }
+
+            $route->setRouteId($routeData["id"]);
+
+            $beforeMatch = $routeData["beforeMatch"];
+            if ($beforeMatch !== null) {
+                $route->beforeMatch($beforeMatch);
+            }
+
+            $converters = $routeData["converters"];
+            if (is_array($converters)) {
+                foreach ($converters as $convName => $converter) {
+                    $route->convert($convName, $converter);
+                }
+            }
+
+            $rebuiltRoutes[] = $route;
+        }
+
+        $this->routes = $rebuiltRoutes;
+
+        $methodRoutesRehydrated = [];
+        foreach ($dump["methodRoutes"] as $innerKey => $innerVal) {
+            $mostInnerArr = [];
+            foreach ($innerVal as $scalarIdx) {
+                $mostInnerArr[] = $this->routes[$scalarIdx];
+            }
+            $methodRoutesRehydrated[$innerKey] = $mostInnerArr;
+        }
+
+        $candidatesRehydrated = [];
+        foreach ($dump["candidatesByMethod"] as $innerKey => $innerVal) {
+            $mostInnerArr = [];
+            foreach ($innerVal as $scalarIdx) {
+                $mostInnerArr[] = $this->routes[$scalarIdx];
+            }
+            $candidatesRehydrated[$innerKey] = $mostInnerArr;
+        }
+
+        $staticRehydrated = [];
+        foreach ($dump["staticByMethod"] as $innerKey => $innerVal) {
+            $staticRehydrated[$innerKey] = [];
+            foreach ($innerVal as $scalarSubKey => $mostInnerVal) {
+                $mostInnerArr = [];
+                foreach ($mostInnerVal as $scalarIdx) {
+                    $mostInnerArr[] = $this->routes[$scalarIdx];
+                }
+                $staticRehydrated[$innerKey][$scalarSubKey] = $mostInnerArr;
+            }
+        }
+
+        $this->methodRoutes           = $methodRoutesRehydrated;
+        $this->candidatesByMethod     = $candidatesRehydrated;
+        $this->staticByMethod         = $staticRehydrated;
+        $this->staticShadowedByMethod = $dump["staticShadowedByMethod"];
+        $this->hostnameByMethod       = $dump["hostnameByMethod"];
+        $this->hostnameLessByMethod   = $dump["hostnameLessByMethod"];
+        $this->combinedRegexByMethod  = $dump["combinedRegexByMethod"];
+        $this->combinedRegexDisabled  = $dump["combinedRegexDisabled"];
+        $this->combinedRegexMarkMap   = $dump["combinedRegexMarkMap"];
+        $this->routeMeta              = $dump["routeMeta"];
+        $this->keyRouteIds            = [];
+        $this->keyRouteNames          = [];
+        $this->methodRoutesDirty      = false;
+    }
+
+    /**
+     * File-shaped helper around buildDispatcherDump(). Writes the dump as
+     * a `<?php return [...];` file, atomically (temp + rename) so concurrent
+     * dumps don't corrupt the result.
+     *
+     * @param string $path
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function dumpDispatcher(string $path): void
+    {
+        $dump    = $this->buildDispatcherDump();
+        $php     = "<?php\nreturn " . var_export($dump, true) . ";\n";
+        $tmpPath = $path . ".tmp." . (string) getmypid();
+
+        if (file_put_contents($tmpPath, $php) === false) {
+            throw new Exception("Failed to write router cache temp file: " . $tmpPath);
+        }
+
+        if (!rename($tmpPath, $path)) {
+            unlink($tmpPath);
+            throw new Exception("Failed to commit router cache: " . $path);
+        }
+    }
+
+    /**
+     * File-shaped helper around loadDispatcherFromArray(). Includes the
+     * file (opcache-friendly) and forwards the return value.
+     *
+     * @param string $path
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function loadDispatcher(string $path): void
+    {
+        if (!file_exists($path)) {
+            throw new Exception("Router cache not found: " . $path);
+        }
+
+        $dump = require $path;
+
+        if (!is_array($dump)) {
+            throw new Exception(
+                "Router cache is corrupt or invalid (expected array, got "
+                . gettype($dump) . "): " . $path
+            );
+        }
+
+        $this->loadDispatcherFromArray($dump);
+    }
+
+    /**
+     * Cache-instance convenience wrapper. On cache hit, restores the
+     * dispatcher immediately. On miss, defers cache population until the
+     * next handle() completes - at which point buildDispatcherDump() is
+     * written to the cache key.
+     *
+     * @param CacheAdapterInterface $cache
+     * @param string                $key
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function useCache(
+        CacheAdapterInterface $cache,
+        string $key = "phalcon.router.dispatcher"
+    ): void {
+        if ($cache->has($key)) {
+            $stored = $cache->get($key);
+
+            if (!is_array($stored)) {
+                throw new Exception(
+                    "Router cache value at key '" . $key . "' is not an array"
+                );
+            }
+
+            $this->loadDispatcherFromArray($stored);
+
+            return;
+        }
+
+        $this->pendingCache    = $cache;
+        $this->pendingCacheKey = $key;
     }
 
     /**
@@ -1349,6 +1673,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         }
 
         $this->fireManagerEvent('router:afterCheckRoutes');
+
+        if ($this->pendingCache !== null) {
+            $this->pendingCache->set($this->pendingCacheKey, $this->buildDispatcherDump());
+            $this->pendingCache    = null;
+            $this->pendingCacheKey = "";
+        }
     }
 
     /**

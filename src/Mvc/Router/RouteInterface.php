@@ -141,6 +141,15 @@ interface RouteInterface
     public function setName(string $name): RouteInterface;
 
     /**
+     * Sets the route's id (intended for restoring cached routes)
+     *
+     * @param string $routeId
+     *
+     * @return RouteInterface
+     */
+    public function setRouteId(string $routeId): RouteInterface;
+
+    /**
      * Set one or more HTTP methods that constraint the matching of the route
      *
      * @param array|string $httpMethods

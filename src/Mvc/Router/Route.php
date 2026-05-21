@@ -774,6 +774,22 @@ class Route implements RouteInterface
     }
 
     /**
+     * Sets the route's id. Intended for restoring cached routes - most
+     * applications should rely on the auto-incrementing id assigned by
+     * the constructor.
+     *
+     * @param string $routeId
+     *
+     * @return RouteInterface
+     */
+    public function setRouteId(string $routeId): RouteInterface
+    {
+        $this->routeId = $routeId;
+
+        return $this;
+    }
+
+    /**
      * Set one or more HTTP methods that constraint the matching of the route
      *
      *```php
