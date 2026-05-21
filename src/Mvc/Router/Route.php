@@ -36,6 +36,15 @@ class Route implements RouteInterface
     protected mixed $beforeMatch = null;
 
     /**
+     * Cached compiled hostname regex. `false` means "not yet computed";
+     * `null` means "hostname is literal — use string equality"; any string
+     * means "use this as the PCRE pattern."
+     *
+     * @mixed string|null|false
+     */
+    protected string | null | false $compiledHostName = false;
+
+    /**
      * @mixed string|null
      */
     protected string | null $compiledPattern = null;
@@ -362,6 +371,50 @@ class Route implements RouteInterface
     }
 
     /**
+     * Returns the compiled hostname regex, or null when the hostname is
+     * literal and a string-equality comparison should be used.
+     *
+     * The result is cached after first computation; setHostname() clears
+     * the cache.
+     *
+     * @return string|null
+     */
+    public function getCompiledHostName(): ?string
+    {
+        if ($this->compiledHostName !== false) {
+            return $this->compiledHostName;
+        }
+
+        $hostname = $this->hostname;
+
+        if ($hostname === null) {
+            $this->compiledHostName = null;
+            return null;
+        }
+
+        if (!str_contains($hostname, '(')) {
+            $this->compiledHostName = null;
+            return null;
+        }
+
+        if (!str_contains($hostname, '#')) {
+            $regexHostName = '#^' . $hostname;
+
+            if (!str_contains($hostname, ':')) {
+                $regexHostName .= '(:[[:digit:]]+)?';
+            }
+
+            $regexHostName .= '$#i';
+        } else {
+            $regexHostName = $hostname;
+        }
+
+        $this->compiledHostName = $regexHostName;
+
+        return $regexHostName;
+    }
+
+    /**
      * Returns the route's compiled pattern
      *
      * @return string
@@ -668,7 +721,8 @@ class Route implements RouteInterface
      */
     public function setHostname(string $hostname): RouteInterface
     {
-        $this->hostname = $hostname;
+        $this->hostname        = $hostname;
+        $this->compiledHostName = false;
 
         return $this;
     }

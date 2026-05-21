@@ -27,7 +27,6 @@ use Phalcon\Mvc\Router\RouteInterface;
 
 use function array_merge;
 use function array_reverse;
-use function call_user_func_array;
 use function explode;
 use function is_array;
 use function is_callable;
@@ -79,6 +78,32 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var string
      */
     protected string $action = "";
+
+    /**
+     * Pre-merged per-method candidate buckets in attach order. For each HTTP
+     * method seen on any registered route, the bucket contains the
+     * method-specific routes followed by the "*" (no-constraint) routes.
+     * The "*" key itself holds only the no-constraint routes — used when the
+     * request method has no specific bucket.
+     *
+     * @var array
+     */
+    protected array $candidatesByMethod = [];
+
+    /**
+     * Parallel to candidatesByMethod. Each entry mirrors the corresponding
+     * route as an array of cached scalars:
+     *   [
+     *     "pattern":     string,
+     *     "isRegex":     bool,
+     *     "hostname":    string|null,
+     *     "hostRegex":   string|null,
+     *     "beforeMatch": callable|null
+     *   ]
+     *
+     * @var array
+     */
+    protected array $candidatesMetaByMethod = [];
 
     /**
      * @var string
@@ -169,6 +194,25 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var array
      */
     protected array $routes = [];
+
+    /**
+     * Static-route hash, populated by rebuildMethodIndex(). For each method
+     * bucket (including "*"), maps URI => list of routes whose compiled
+     * pattern is a literal string equal to that URI.
+     *
+     * @var array
+     */
+    protected array $staticByMethod = [];
+
+    /**
+     * Shadow-detection map. If staticShadowedByMethod[method][uri] is set,
+     * the static URI in that bucket is shadowed by a later-attached regex
+     * route — the fast path MUST NOT be used; fall through to the dynamic
+     * loop so the regex wins (reverse-iteration semantics).
+     *
+     * @var array
+     */
+    protected array $staticShadowedByMethod = [];
 
     /**
      * @var int
@@ -550,9 +594,13 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function clear(): void
     {
-        $this->routes            = [];
-        $this->methodRoutes      = [];
-        $this->methodRoutesDirty = true;
+        $this->routes                 = [];
+        $this->methodRoutes           = [];
+        $this->candidatesByMethod     = [];
+        $this->candidatesMetaByMethod = [];
+        $this->staticByMethod         = [];
+        $this->staticShadowedByMethod = [];
+        $this->methodRoutesDirty      = true;
     }
 
     /**
@@ -832,24 +880,101 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         }
 
         /**
-         * Build candidate list: routes matching the request method + unconstrained routes.
-         * Routes are traversed in reversed order (last registered wins).
+         * Build candidate list: routes matching the request method (pre-merged
+         * with "*" routes at rebuild time). Routes are traversed in reversed
+         * order (last registered wins).
          */
-        $requestMethod  = $request->getMethod();
-        $methodBucket   = $this->methodRoutes[$requestMethod] ?? [];
-        $wildcardBucket = $this->methodRoutes["*"] ?? [];
-        $candidateRoutes = array_reverse(
-            array_merge($methodBucket, $wildcardBucket)
-        );
+        $requestMethod   = $request->getMethod();
+        $candidateRoutes = $this->candidatesByMethod[$requestMethod]
+            ?? $this->candidatesByMethod["*"]
+            ?? [];
+        $candidatesMeta  = $this->candidatesMetaByMethod[$requestMethod]
+            ?? $this->candidatesMetaByMethod["*"]
+            ?? [];
 
-        foreach ($candidateRoutes as $route) {
-            $params  = [];
-            $matches = null;
+        /**
+         * Static-route fast path: O(1) lookup for literal URIs that are not
+         * shadowed by a later-attached regex in the same bucket. Disabled
+         * when an events manager is attached so per-route events keep firing
+         * from the regular loop with their existing semantics.
+         */
+        if ($this->eventsManager === null) {
+            $staticBucketMethod = null;
+
+            if (isset($this->staticByMethod[$requestMethod][$handledUri])
+                && !isset($this->staticShadowedByMethod[$requestMethod][$handledUri])
+            ) {
+                $staticBucketMethod = $requestMethod;
+            } elseif (isset($this->staticByMethod["*"][$handledUri])
+                && !isset($this->staticShadowedByMethod["*"][$handledUri])
+            ) {
+                $staticBucketMethod = "*";
+            }
+
+            if ($staticBucketMethod !== null) {
+                $staticBucket = $this->staticByMethod[$staticBucketMethod][$handledUri];
+
+                foreach (array_reverse($staticBucket) as $staticRoute) {
+                    $staticHostname = $staticRoute->getHostName();
+
+                    if (null !== $staticHostname) {
+                        if (null === $currentHostName) {
+                            $currentHostName = $request->getHttpHost();
+                        }
+
+                        if (!$currentHostName) {
+                            continue;
+                        }
+
+                        $staticHostRegex = $staticRoute->getCompiledHostName();
+
+                        if ($staticHostRegex !== null) {
+                            $staticMatched = preg_match($staticHostRegex, $currentHostName);
+                        } else {
+                            $staticMatched = $currentHostName == $staticHostname;
+                        }
+
+                        if (!$staticMatched) {
+                            continue;
+                        }
+                    }
+
+                    $staticBeforeMatch = $staticRoute->getBeforeMatch();
+
+                    if ($staticBeforeMatch !== null) {
+                        if (!is_callable($staticBeforeMatch)) {
+                            throw new Exception(
+                                "Before-Match callback is not callable in matched route"
+                            );
+                        }
+
+                        $routeFound = $staticBeforeMatch($handledUri, $staticRoute, $this);
+
+                        if (!$routeFound) {
+                            continue;
+                        }
+                    }
+
+                    $routeFound         = true;
+                    $matches            = null;
+                    $parts              = $staticRoute->getPaths();
+                    $this->matchedRoute = $staticRoute;
+
+                    break;
+                }
+            }
+        }
+
+        if (!$routeFound) {
+            foreach (array_reverse($candidateRoutes, true) as $routeIdx => $route) {
+            $routeMeta = $candidatesMeta[$routeIdx];
+            $params    = [];
+            $matches   = null;
 
             /**
              * Look for hostname constraints
              */
-            $hostname = $route->getHostName();
+            $hostname = $routeMeta["hostname"];
             if (null !== $hostname) {
                 /**
                  * Check if the current hostname is the same as the route
@@ -869,19 +994,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                  * Check if the hostname restriction is the same as the current
                  * in the route
                  */
-                if (str_contains($hostname, "(")) {
-                    if (!str_contains($hostname, "#")) {
-                        $regexHostName = "#^" . $hostname;
+                $regexHostName = $routeMeta["hostRegex"];
 
-                        if (!str_contains($hostname, ":")) {
-                            $regexHostName .= "(:[[:digit:]]+)?";
-                        }
-
-                        $regexHostName .= "$#i";
-                    } else {
-                        $regexHostName = $hostname;
-                    }
-
+                if ($regexHostName !== null) {
                     $matched = preg_match($regexHostName, $currentHostName);
                 } else {
                     $matched = $currentHostName == $hostname;
@@ -897,9 +1012,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             /**
              * If the route has parentheses use preg_match
              */
-            $pattern = $route->getCompiledPattern();
+            $pattern = $routeMeta["pattern"];
 
-            if (str_contains($pattern, "^")) {
+            if ($routeMeta["isRegex"]) {
                 $routeFound = preg_match($pattern, $handledUri, $matches);
             } else {
                 $routeFound = $pattern === $handledUri;
@@ -911,7 +1026,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             if ($routeFound) {
                 $this->fireManagerEvent('router:matchedRoute', $route);
 
-                $beforeMatch = $route->getBeforeMatch();
+                $beforeMatch = $routeMeta["beforeMatch"];
                 if ($beforeMatch !== null) {
                     /**
                      * Check first if the callback is callable
@@ -922,17 +1037,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                         );
                     }
 
-                    /**
-                     * Check first if the callback is callable
-                     */
-                    $routeFound = call_user_func_array(
-                        $beforeMatch,
-                        [
-                            $handledUri,
-                            $route,
-                            $this,
-                        ]
-                    );
+                    $routeFound = $beforeMatch($handledUri, $route, $this);
                 }
             } else {
                 $this->fireManagerEvent('router:notMatchedRoute', $route);
@@ -970,10 +1075,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                              */
                             if (is_array($converters) && isset($converters[$part])) {
                                 $converter    = $converters[$part];
-                                $parts[$part] = call_user_func_array(
-                                    $converter,
-                                    [$matchPosition]
-                                );
+                                $parts[$part] = $converter($matchPosition);
 
                                 continue;
                             }
@@ -988,10 +1090,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                              */
                             if (is_array($converters) && isset($converters[$part])) {
                                 $converter    = $converters[$part];
-                                $parts[$part] = call_user_func_array(
-                                    $converter,
-                                    [$position]
-                                );
+                                $parts[$part] = $converter($position);
                             } elseif (is_int($position)) {
                                 /**
                                  * Remove the path if the parameter was not
@@ -1011,6 +1110,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 $this->matchedRoute = $route;
 
                 break;
+            }
             }
         }
 
@@ -1568,7 +1668,58 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             }
         }
 
-        $this->methodRoutes      = $index;
+        $this->methodRoutes           = $index;
+        $this->candidatesByMethod     = [];
+        $this->candidatesMetaByMethod = [];
+        $this->staticByMethod         = [];
+        $this->staticShadowedByMethod = [];
+
+        $starRoutes = $this->methodRoutes["*"] ?? [];
+
+        foreach ($this->methodRoutes as $method => $methodSpecific) {
+            if ($method === "*") {
+                $this->candidatesByMethod["*"] = $starRoutes;
+                continue;
+            }
+
+            $this->candidatesByMethod[$method] = array_merge($methodSpecific, $starRoutes);
+        }
+
+        foreach ($this->candidatesByMethod as $method => $candidates) {
+            $this->candidatesMetaByMethod[$method] = [];
+
+            foreach ($candidates as $idx => $candidateRoute) {
+                $candidatePattern = $candidateRoute->getCompiledPattern();
+
+                $this->candidatesMetaByMethod[$method][$idx] = [
+                    "pattern"     => $candidatePattern,
+                    "isRegex"     => str_contains($candidatePattern, "^"),
+                    "hostname"    => $candidateRoute->getHostname(),
+                    "hostRegex"   => $candidateRoute->getCompiledHostName(),
+                    "beforeMatch" => $candidateRoute->getBeforeMatch(),
+                ];
+            }
+        }
+
+        /**
+         * Build the static-route hash + shadow flags.
+         */
+        foreach ($this->candidatesByMethod as $method => $candidates) {
+            foreach ($candidates as $bucketRoute) {
+                $bucketPattern = $bucketRoute->getCompiledPattern();
+
+                if (!str_contains($bucketPattern, "^")) {
+                    $this->staticByMethod[$method][$bucketPattern][] = $bucketRoute;
+                } elseif (isset($this->staticByMethod[$method])) {
+                    foreach ($this->staticByMethod[$method] as $staticUri => $_unusedList) {
+                        if (preg_match($bucketPattern, $staticUri)) {
+                            $this->staticShadowedByMethod[$method][$staticUri] = true;
+                        }
+                    }
+                }
+            }
+        }
+
         $this->methodRoutesDirty = false;
     }
 }
