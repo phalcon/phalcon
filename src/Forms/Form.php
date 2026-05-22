@@ -329,7 +329,12 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             }
 
             foreach ($fields as $field) {
-                if (isset($data[$field])) {
+                /**
+                 * array_key_exists() is used so a stored `null` is still
+                 * recognized as present and unset before the default is
+                 * assigned. [#CP-17042]
+                 */
+                if (array_key_exists($field, $data)) {
                     unset($data[$field]);
                 }
 

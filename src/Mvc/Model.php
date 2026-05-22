@@ -2272,9 +2272,12 @@ abstract class Model extends AbstractInjectionAware implements
         foreach ($allAttributes as $name => $item) {
             /**
              * If some attribute is not present in the snapshot, we assume the
-             * record as changed
+             * record as changed. array_key_exists() / property_exists() are
+             * used so a snapshot or model property that legitimately holds
+             * `null` (e.g. a nullable DB column loaded from a fresh row) is
+             * not mistaken for absent. [#CP-17042]
              */
-            if (!isset($snapshot[$name])) {
+            if (!array_key_exists($name, $snapshot)) {
                 $changed[] = $name;
 
                 continue;
@@ -2284,7 +2287,7 @@ abstract class Model extends AbstractInjectionAware implements
              * If some attribute is not present in the model, we assume the
              * record as changed
              */
-            if (!isset($this->$name)) {
+            if (!property_exists($this, $name)) {
                 $changed[] = $name;
 
                 continue;
@@ -2619,9 +2622,10 @@ abstract class Model extends AbstractInjectionAware implements
         foreach ($snapshot as $name => $value) {
             /**
              * If some attribute is not present in the oldSnapshot, we assume
-             * the record as changed
+             * the record as changed. array_key_exists() is used so a stored
+             * `null` is not mistaken for an absent key. [#CP-17042]
              */
-            if (!isset($oldSnapshot[$name]) || $value !== $oldSnapshot[$name]) {
+            if (!array_key_exists($name, $oldSnapshot) || $value !== $oldSnapshot[$name]) {
                 $updated[] = $name;
             }
         }
