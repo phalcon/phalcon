@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Config\Adapter;
 
+use Phalcon\Config\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 
-final class GetTest extends AbstractUnitTestCase
+final class MergeTest extends AbstractUnitTestCase
 {
     use ConfigTrait;
 
@@ -24,16 +25,14 @@ final class GetTest extends AbstractUnitTestCase
      * @dataProvider providerConfigAdapters
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
+     * @since  2019-06-19
      */
-    public function testConfigAdapterGet(string $adapter): void
+    public function testConfigAdapterMergeException(string $adapter): void
     {
         $config = $this->getConfig($adapter);
 
-        $expected = 'memory';
-        $actual   = $config->get('models')
-                           ->get('metadata')
-        ;
-        $this->assertEquals($expected, $actual);
+        $this->expectException(\TypeError::class);
+
+        $config->merge(false);
     }
 }

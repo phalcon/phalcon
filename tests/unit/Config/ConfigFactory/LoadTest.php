@@ -126,6 +126,17 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-06-19
+     */
+    public function testConfigFactoryLoadExceptionInvalidType(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        (new ConfigFactory())->load(false);
+    }
+
+    /**
      * @author Wojciech Ślawski <jurigag@gmail.com>
      * @since  2017-11-24
      */
@@ -140,7 +151,7 @@ final class LoadTest extends AbstractUnitTestCase
     }
 
     /**
-     * @issue 14584
+     * @issue https://github.com/phalcon/cphalcon/issues/14584
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-07
      */

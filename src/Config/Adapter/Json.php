@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
+use Phalcon\Support\Helper\Json\Decode;
 
 use function file_get_contents;
 
@@ -47,7 +48,7 @@ class Json extends Config
     public function __construct(string $filePath)
     {
         parent::__construct(
-            json_decode(
+            (new Decode())->__invoke(
                 file_get_contents($filePath),
                 true
             )

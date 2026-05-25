@@ -19,6 +19,8 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
+use Phalcon\Config\Exceptions\MissingConfigOption;
+use Phalcon\Config\Exceptions\MissingFileExtension;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 use function is_string;
@@ -126,10 +128,8 @@ class ConfigFactory
 
         switch ($definition) {
             case Grouped::class:
-                /** @var string|null $params */
-                $adapter = null === $params ? 'php' : $params;
                 /** @var Grouped $config */
-                $config = new $definition($fileName, $adapter);
+                $config = new $definition($fileName, $params ?? 'php');
                 break;
             case Ini::class:
                 /** @var string|null $params */
@@ -186,9 +186,7 @@ class ConfigFactory
             $extension = pathinfo($config, PATHINFO_EXTENSION);
 
             if (empty($extension)) {
-                throw new Exception(
-                    'You need to provide the extension in the file path'
-                );
+                throw new MissingFileExtension();
             }
 
             $config = [
@@ -214,15 +212,11 @@ class ConfigFactory
     private function checkConfigArray(array $config): void
     {
         if (!isset($config['filePath'])) {
-            throw new Exception(
-                "You must provide 'filePath' option in factory config parameter."
-            );
+            throw new MissingConfigOption('filePath');
         }
 
         if (!isset($config['adapter'])) {
-            throw new Exception(
-                "You must provide 'adapter' option in factory config parameter."
-            );
+            throw new MissingConfigOption('adapter');
         }
     }
 }

@@ -34,7 +34,7 @@ final class FakeYamlParseFile extends Yaml
         int $pos = 0,
         int | null &$ndocs = null,
         array $callbacks = []
-    ): mixed {
+    ) {
         return false;
     }
 }

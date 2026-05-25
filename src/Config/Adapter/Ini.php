@@ -15,6 +15,7 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
+use Phalcon\Config\Exceptions\CannotLoadConfigFile;
 use Phalcon\Traits\Php\IniTrait;
 
 use function basename;
@@ -87,9 +88,7 @@ class Ini extends Config
         $iniConfig = $this->phpParseIniFile($filePath, true, $mode);
 
         if (false === $iniConfig) {
-            throw new Exception(
-                'Configuration file ' . basename($filePath) . ' cannot be loaded'
-            );
+            throw new CannotLoadConfigFile(basename($filePath));
         }
 
         $config = [];

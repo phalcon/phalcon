@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Config\Config;
 
 use Phalcon\Config\Config;
+use Phalcon\Config\Exception;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 
@@ -194,6 +195,19 @@ final class MergeTest extends AbstractUnitTestCase
          */
         $actual = $source->merge($target)->toArray();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-10-26
+     */
+    public function testConfigMergeConfigException(): void
+    {
+        $config = new Config(['my' => 'config']);
+
+        $this->expectException(\TypeError::class);
+
+        $config->merge('invalid-config');
     }
 
     /**
