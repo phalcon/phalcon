@@ -31,7 +31,7 @@ class Role implements RoleInterface
      *
      * @throws ForbiddenWildcard
      */
-    public function __construct(string $name, string $description = '')
+    public function __construct(string $name, string | null $description = null)
     {
         if ('*' === $name) {
             throw new ForbiddenWildcard('role');

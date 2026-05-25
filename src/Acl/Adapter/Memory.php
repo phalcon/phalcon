@@ -618,7 +618,7 @@ class Memory extends AbstractAdapter
         mixed $roleName,
         mixed $componentName,
         string $access,
-        array $parameters = []
+        array $parameters = null
     ): bool {
         $componentObject = null;
         $haveAccess      = null;
@@ -657,7 +657,7 @@ class Memory extends AbstractAdapter
 
         $this->activeFunctionCustomArgumentsCount = 0;
 
-        if (false === $this->fireManagerEvent('acl:beforeCheckAccess')) {
+        if (false === $this->fireManagerEvent('acl:beforeCheckAccess', $this)) {
             return false;
         }
 
@@ -680,10 +680,10 @@ class Memory extends AbstractAdapter
         /**
          * Check in the inherits roles
          */
-        $this->accessGranted = (null === $haveAccess) ? false : $haveAccess;
-        $this->fireManagerEvent('acl:afterCheckAccess');
+        $this->accessGranted = $haveAccess;
+        $this->fireManagerEvent('acl:afterCheckAccess', $this);
 
-        $this->activeKey      = (false !== $accessKey) ? $accessKey : null;
+        $this->activeKey      = $accessKey;
         $this->activeFunction = $funcAccess;
 
         if (null === $haveAccess) {
@@ -722,7 +722,7 @@ class Memory extends AbstractAdapter
                 $reflectionType   = $reflectionParameter->getType();
                 $parameterToCheck = $reflectionParameter->getName();
 
-                if (null != $reflectionType) {
+                if (null !== $reflectionType && $reflectionType instanceof ReflectionNamedType) {
                     /** @var class-string $className */
                     $className       = $reflectionType->getName();
                     $reflectionClass = new ReflectionClass($className);
@@ -902,7 +902,7 @@ class Memory extends AbstractAdapter
 
             foreach ($access as $accessName) {
                 $accessKey                = $roleName . '!' . $componentName . '!' . $accessName;
-                $this->access[$accessKey] = ($action === Enum::ALLOW);
+                $this->access[$accessKey] = $action;
                 if (null !== $function) {
                     $this->functions[$accessKey] = $function;
                 }
@@ -913,7 +913,7 @@ class Memory extends AbstractAdapter
             }
 
             $accessKey                = $roleName . '!' . $componentName . '!' . $access;
-            $this->access[$accessKey] = ($action === Enum::ALLOW);
+            $this->access[$accessKey] = $action;
             if (null !== $function) {
                 $this->functions[$accessKey] = $function;
             }

@@ -217,7 +217,7 @@ interface AdapterInterface
         mixed $roleName,
         mixed $componentName,
         string $access,
-        array $parameters = []
+        array $parameters = null
     ): bool;
 
     /**
