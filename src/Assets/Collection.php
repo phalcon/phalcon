@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
+use ArrayIterator;
 use Countable;
-use Generator;
 use IteratorAggregate;
 use Phalcon\Traits\Php\FileTrait;
+use Traversable;
 
 use function realpath;
 
@@ -286,15 +287,13 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * Returns the generator of the class
+     * Returns the iterator of the class
      *
-     * @return Generator<string, AssetInterface>
+     * @return Traversable
      */
-    public function getIterator(): Generator
+    public function getIterator(): Traversable
     {
-        foreach ($this->assets as $key => $value) {
-            yield $key => $value;
-        }
+        return new ArrayIterator($this->assets);
     }
 
     /**

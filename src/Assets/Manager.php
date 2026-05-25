@@ -16,6 +16,13 @@ namespace Phalcon\Assets;
 use Exception as BaseException;
 use Phalcon\Assets\Asset\Css as AssetCss;
 use Phalcon\Assets\Asset\Js as AssetJs;
+use Phalcon\Assets\Exceptions\AssetSourceTargetCollision;
+use Phalcon\Assets\Exceptions\CollectionNotFound;
+use Phalcon\Assets\Exceptions\InvalidAssetSourcePath;
+use Phalcon\Assets\Exceptions\InvalidAssetTargetPath;
+use Phalcon\Assets\Exceptions\InvalidFilter;
+use Phalcon\Assets\Exceptions\InvalidTargetPath;
+use Phalcon\Assets\Exceptions\TargetPathIsDirectory;
 use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
 use Phalcon\Di\InjectionAwareInterface;
@@ -298,7 +305,7 @@ class Manager implements InjectionAwareInterface
     public function get(string $name): Collection
     {
         if (!isset($this->collections[$name])) {
-            throw new Exception('The collection does not exist in the manager');
+            throw new CollectionNotFound();
         }
 
         return $this->collections[$name];
@@ -346,13 +353,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Returns true or false if collection exists.
-     *
-     * ```php
-     * if ($manager->exists("jsHeader")) {
-     *     // \Phalcon\Assets\Collection
-     *     $collection = $manager->get("jsHeader");
-     * }
-     * ```
      *
      * @param string $name
      *
@@ -466,9 +466,7 @@ class Manager implements InjectionAwareInterface
                  * We need a valid final target path
                  */
                 if (empty($targetPath)) {
-                    throw new Exception(
-                        "Asset '" . $sourcePath . "' does not have a valid target path"
-                    );
+                    throw new InvalidAssetTargetPath($sourcePath);
                 }
 
                 $filterNeeded = $this->isFilterNeeded($asset, $targetPath, $sourcePath, $filterNeeded);
@@ -524,7 +522,7 @@ class Manager implements InjectionAwareInterface
                          * Filters must be valid objects
                          */
                         if (!is_object($filter)) {
-                            throw new Exception('The filter is not valid');
+                            throw new InvalidFilter();
                         }
 
                         /**
@@ -659,7 +657,7 @@ class Manager implements InjectionAwareInterface
                      * Filters must be valid objects
                      */
                     if (!is_object($filter)) {
-                        throw new Exception('The filter is not valid');
+                        throw new InvalidFilter();
                     }
 
                     /**
@@ -920,15 +918,11 @@ class Manager implements InjectionAwareInterface
              * We need a valid final target path
              */
             if (empty($completeTargetPath)) {
-                throw new Exception(
-                    "Path '" . $completeTargetPath . "' is not a valid target path (1)"
-                );
+                throw new InvalidTargetPath($completeTargetPath);
             }
 
             if (is_dir($completeTargetPath)) {
-                throw new Exception(
-                    "Path '" . $completeTargetPath . "' is not a valid target path (2), it is a directory."
-                );
+                throw new TargetPathIsDirectory($completeTargetPath);
             }
         }
 
@@ -994,9 +988,7 @@ class Manager implements InjectionAwareInterface
         if (empty($sourcePath)) {
             $sourcePath = $asset->getPath();
 
-            throw new Exception(
-                "Asset '" . $sourcePath . "' does not have a valid source path"
-            );
+            throw new InvalidAssetSourcePath($sourcePath);
         }
         return $sourcePath;
     }
@@ -1021,9 +1013,7 @@ class Manager implements InjectionAwareInterface
              * Make sure the target path is not the same source path
              */
             if ($targetPath === $sourcePath) {
-                throw new Exception(
-                    "Asset '" . $targetPath . "' have the same source and target paths"
-                );
+                throw new AssetSourceTargetCollision($targetPath);
             }
 
             if (true === file_exists($targetPath)) {
@@ -1132,6 +1122,10 @@ class Manager implements InjectionAwareInterface
         $helper->__invoke(""); // no indentation
         $helper->add($tag, $params);
 
-        return (string)$helper;
+        $output = (string)$helper;
+
+        $helper->reset();
+
+        return $output;
     }
 }

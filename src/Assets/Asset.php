@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
+use Phalcon\Assets\Exceptions\CannotReadAsset;
 use Phalcon\Traits\Php\FileTrait;
 
 use function hash;
@@ -445,8 +446,6 @@ class Asset implements AssetInterface
      */
     private function throwException(string $completePath): void
     {
-        throw new Exception(
-            "Asset's content for '" . $completePath . "' cannot be read"
-        );
+        throw new CannotReadAsset($completePath);
     }
 }
