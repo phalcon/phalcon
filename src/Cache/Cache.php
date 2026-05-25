@@ -15,7 +15,8 @@ namespace Phalcon\Cache;
 
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
-use Psr\SimpleCache\InvalidArgumentException;
+use Phalcon\Cache\Exception\InvalidArgumentException;
+use Psr\SimpleCache\InvalidArgumentException as PsrInvalidArgumentException;
 
 /**
  * This component offers caching capabilities for your application.
@@ -101,10 +102,8 @@ class Cache extends AbstractCache
      *   MUST be thrown if $keys is neither an array nor a Traversable,
      *   or if any of the $keys are not a legal value.
      */
-    public function getMultiple(
-        iterable $keys,
-        mixed $default = null
-    ): iterable {
+    public function getMultiple(iterable $keys, mixed $default = null): iterable
+    {
         return $this->doGetMultiple($keys, $default);
     }
 
@@ -178,5 +177,10 @@ class Cache extends AbstractCache
         null | int | DateInterval $ttl = null
     ): bool {
         return $this->doSetMultiple($values, $ttl);
+    }
+
+    protected function getExceptionClass(): string
+    {
+        return InvalidArgumentException::class;
     }
 }

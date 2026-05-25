@@ -83,6 +83,23 @@ final class SetMultipleTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
+    public function testCacheCacheSetMultipleExceptionNotTraversable(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        $serializer = new SerializerFactory();
+        $factory    = new AdapterFactory($serializer);
+        $instance   = $factory->newInstance('apcu');
+
+        $adapter = new Cache($instance);
+
+        $actual = $adapter->setMultiple(1234);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
     public function testCacheCacheSetMultipleFalse(): void
     {
         $serializer = new SerializerFactory();

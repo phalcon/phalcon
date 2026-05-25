@@ -11,14 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Tests\Unit\Cache\Fake\Adapter;
+namespace Phalcon\Cache\Exception;
 
-use Phalcon\Cache\Adapter\Weak;
-
-class FakeWeakFetching extends Weak
+class InvalidCacheKey extends InvalidArgumentException
 {
-    public function setFetching(string | null $key): void
+    public function __construct()
     {
-        $this->fetching = $key;
+        parent::__construct("The key contains invalid characters");
     }
 }

@@ -16,11 +16,15 @@ namespace Phalcon\Cache;
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Redis;
+use Phalcon\Cache\Exception\CacheKeysNotIterable;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Cache\Exception\InvalidArgumentException;
+use Phalcon\Cache\Exception\InvalidCacheKey;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Traversable;
 
 /**
  * This component offers caching capabilities for your application.
@@ -60,9 +64,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     protected function checkKey(string $key): void
     {
         if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
-            throw new InvalidArgumentException(
-                "The key contains invalid characters"
-            );
+            throw new InvalidCacheKey();
         }
     }
 
@@ -90,13 +92,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doDelete(string $key): bool
     {
-        $this->fireManagerEvent("cache:beforeDelete", $key);
+        $this->fire("cache:beforeDelete", $key);
 
         $this->checkKey($key);
 
         $result = $this->adapter->delete($key);
 
-        $this->fireManagerEvent("cache:afterDelete", $key);
+        $this->fire("cache:afterDelete", $key);
 
         return $result;
     }
@@ -116,7 +118,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doDeleteMultiple(iterable $keys): bool
     {
-        $this->fireManagerEvent("cache:beforeDeleteMultiple", $keys);
+        $this->fire("cache:beforeDeleteMultiple", $keys);
 
         $keysArray = [];
         /** @var string $key */
@@ -127,7 +129,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
         $result = $this->adapter->deleteMultiple($keysArray);
 
-        $this->fireManagerEvent("cache:afterDeleteMultiple", $keys);
+        $this->fire("cache:afterDeleteMultiple", $keys);
 
         return $result;
     }
@@ -147,13 +149,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doGet(string $key, mixed $default = null)
     {
-        $this->fireManagerEvent('cache:beforeGet', $key);
-
         $this->checkKey($key);
+
+        $this->fire("cache:beforeGet", $key);
 
         $result = $this->adapter->get($key, $default);
 
-        $this->fireManagerEvent('cache:afterGet', $key);
+        $this->fire("cache:afterGet", $key);
 
         return $result;
     }
@@ -173,14 +175,11 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * array nor a Traversable, or if any of the $keys are not a legal value.
      * @throws EventsException
      */
-    protected function doGetMultiple(
-        iterable $keys,
-        mixed $default = null
-    ): iterable {
-        $this->fireManagerEvent('cache:beforeGetMultiple', $keys);
+    protected function doGetMultiple(iterable $keys, mixed $default = null): iterable
+    {
+        $this->fire("cache:beforeGetMultiple", $keys);
 
-        $adapterClass = get_class($this->adapter);
-        if ($adapterClass === Redis::class) {
+        if ($this->adapter instanceof Redis) {
             $results    = $this->adapter->getAdapter()->mget($keys);
             $serializer = $this->adapter->getSerializer();
             $results    = array_map(
@@ -201,7 +200,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
             }
         }
 
-        $this->fireManagerEvent('cache:afterGetMultiple', $keys);
+        $this->fire("cache:afterGetMultiple", $keys);
 
         return $results;
     }
@@ -219,13 +218,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doHas(string $key): bool
     {
-        $this->fireManagerEvent('cache:beforeHas', $key);
-
         $this->checkKey($key);
+
+        $this->fire("cache:beforeHas", $key);
 
         $result = $this->adapter->has($key);
 
-        $this->fireManagerEvent('cache:afterHas', $key);
+        $this->fire("cache:afterHas", $key);
 
         return $result;
     }
@@ -254,13 +253,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
         mixed $value,
         null | int | DateInterval $ttl = null
     ): bool {
-        $this->fireManagerEvent('cache:beforeSet', $key);
-
         $this->checkKey($key);
+
+        $this->fire("cache:beforeSet", $key);
 
         $result = $this->adapter->set($key, $value, $ttl);
 
-        $this->fireManagerEvent('cache:afterSet', $key);
+        $this->fire("cache:afterSet", $key);
 
         return $result;
     }
@@ -283,11 +282,9 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * array nor a Traversable, or if any of the $values are not a legal value.
      * @throws EventsException
      */
-    protected function doSetMultiple(
-        iterable $values,
-        null | int | DateInterval $ttl = null
-    ): bool {
-        $this->fireManagerEvent('cache:beforeSetMultiple', array_keys((array)$values));
+    protected function doSetMultiple(iterable $values, mixed $ttl = null): bool
+    {
+        $this->fire("cache:beforeSetMultiple", array_keys((array)$values));
 
         $result = true;
         /**
@@ -300,8 +297,30 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
             }
         }
 
-        $this->fireManagerEvent('cache:afterSetMultiple', array_keys((array)$values));
+        $this->fire("cache:afterSetMultiple", array_keys((array)$values));
 
         return $result;
     }
+
+    /**
+     * Trigger an event for the eventsManager.
+     *
+     * @param string $eventName
+     * @param mixed  $keys
+     */
+    protected function fire(string $eventName, mixed $keys): void
+    {
+        if (null === $this->eventsManager) {
+            return;
+        }
+
+        $this->eventsManager->fire($eventName, $this, $keys, false);
+    }
+
+    /**
+     * Returns the exception class that will be used for exceptions thrown
+     *
+     * @return string
+     */
+    abstract protected function getExceptionClass(): string;
 }
