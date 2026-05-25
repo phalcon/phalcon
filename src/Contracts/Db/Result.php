@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Contracts\Db;
 
 use PDOStatement;
-use Phalcon\Db\Enum;
 
 /**
  * Canonical contract for Phalcon\Db result objects.
@@ -54,26 +53,18 @@ interface Result
      * method is affected by the active fetch flag set using
      * `Phalcon\Db\Result\Pdo::setFetchMode()`
      *
-     * @param int        $mode
-     * @param mixed      $fetchArgument
-     * @param array|null $constructorArgs
-     *
      * @return array
      */
-    public function fetchAll(
-        int $mode = Enum::FETCH_DEFAULT,
-        mixed $fetchArgument = Enum::FETCH_ORI_NEXT,
-        array | null $constructorArgs = null
-    ): array;
+    public function fetchAll(): array;
 
     /**
      * Returns an array of strings that corresponds to the fetched row, or FALSE
      * if there are no more rows. This method is affected by the active fetch
      * flag set using `Phalcon\Db\Result\Pdo::setFetchMode()`
      *
-     * @return array
+     * @return mixed
      */
-    public function fetchArray(): array;
+    public function fetchArray(): mixed;
 
     /**
      * Gets the internal PDO result object

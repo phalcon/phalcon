@@ -42,13 +42,6 @@ interface Column
     public function getBindType(): int;
 
     /**
-     * Column's comment
-     *
-     * @return string|null
-     */
-    public function getComment(): ?string;
-
-    /**
      * Returns default value of column
      *
      * @return mixed
@@ -95,7 +88,7 @@ interface Column
      *
      * @return array|string|int
      */
-    public function getTypeValues(): array | string | int;
+    public function getTypeValues(): array | string;
 
 
     /**

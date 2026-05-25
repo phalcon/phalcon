@@ -252,7 +252,7 @@ interface Dialect
      */
     public function dropTable(
         string $tableName,
-        string | null $schemaName = null,
+        string $schemaName,
         bool $ifExists = true
     ): string;
 
@@ -339,15 +339,6 @@ interface Dialect
      * @return string
      */
     public function listTables(string | null $schemaName = null): string;
-
-    /**
-     * Generates the SQL to list all views of a schema or user
-     *
-     * @param string|null $schemaName
-     *
-     * @return string
-     */
-    public function listViews(string | null $schemaName = null): string;
 
     /**
      * Generates SQL to modify a column in a table
