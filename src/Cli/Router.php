@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Cli;
 
 use Phalcon\Cli\Router\Exception;
+use Phalcon\Cli\Router\Exceptions\BeforeMatchNotCallable;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
 use Phalcon\Di\AbstractInjectionAware;
@@ -317,9 +318,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                          * Check first if the callback is callable
                          */
                         if (!is_callable($beforeMatch)) {
-                            throw new Exception(
-                                "Before-Match callback is not callable in matched route"
-                            );
+                            throw new BeforeMatchNotCallable();
                         }
 
                         /**

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Cli\Router;
 
+use Phalcon\Cli\Router\Exceptions\InvalidRoutePaths;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 
 use function array_flip;
@@ -505,9 +506,7 @@ class Route implements RouteInterface
                     $namespaceName = implode("\\", $taskNameArray);
 
                     if (empty($realClassName)) {
-                        throw new Exception(
-                            "The route contains invalid paths"
-                        );
+                        throw new InvalidRoutePaths();
                     }
 
                     // Update the namespace
@@ -531,7 +530,7 @@ class Route implements RouteInterface
         }
 
         if (!is_array($routePaths)) {
-            throw new Exception("The route contains invalid paths");
+            throw new InvalidRoutePaths();
         }
 
         /**
