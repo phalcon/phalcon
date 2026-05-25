@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Autoload;
 
+use Phalcon\Autoload\Exceptions\LoaderMethodNotCallable;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Traits\Helper\Str\StartsWithTrait;
@@ -20,7 +21,6 @@ use Phalcon\Traits\Helper\Str\StartsWithTrait;
 use function array_merge;
 use function array_unique;
 use function call_user_func;
-use function hash;
 use function is_callable;
 use function is_string;
 use function rtrim;
@@ -111,7 +111,7 @@ class Loader
      */
     public function __construct(bool $isDebug = false)
     {
-        $this->extensions = [$this->getHash('php') => 'php'];
+        $this->extensions = ['php' => 'php'];
         $this->isDebug    = $isDebug;
     }
 
@@ -139,7 +139,7 @@ class Loader
      */
     public function addDirectory(string $directory): static
     {
-        $this->directories[$this->getHash($directory)] = $directory;
+        $this->directories[$directory] = $directory;
 
         return $this;
     }
@@ -153,7 +153,7 @@ class Loader
      */
     public function addExtension(string $extension): static
     {
-        $this->extensions[$this->getHash($extension)] = $extension;
+        $this->extensions[$extension] = $extension;
 
         return $this;
     }
@@ -167,7 +167,7 @@ class Loader
      */
     public function addFile(string $file): static
     {
-        $this->files[$this->getHash($file)] = $file;
+        $this->files[$file] = $file;
 
         return $this;
     }
@@ -181,7 +181,7 @@ class Loader
      */
     public function addNamespace(
         string $namespace,
-        array | string $directories,
+        mixed $directories,
         bool $prepend = false
     ): static {
         $nsSeparator  = '\\';
@@ -419,7 +419,7 @@ class Loader
     public function setExtensions(array $extensions, bool $merge = false): static
     {
         if (true !== $merge) {
-            $this->extensions = [$this->getHash('php') => 'php'];
+            $this->extensions = ['php' => 'php'];
         }
 
         foreach ($extensions as $extension) {
@@ -449,14 +449,16 @@ class Loader
      * @return Loader
      * @throws Exception
      */
-    public function setFileCheckingCallback(string | callable | null $method = null): static
+    public function setFileCheckingCallback(mixed $method = null): static
     {
-        if (is_callable($method) || is_string($method)) {
+        if (is_callable($method)) {
             $this->fileCheckingCallback = $method;
-        } else {
-            $this->fileCheckingCallback = function () {
+        } elseif (null === $method) {
+            $this->fileCheckingCallback = function ($file) {
                 return true;
             };
+        } else {
+            throw new LoaderMethodNotCallable();
         }
 
         return $this;
@@ -723,9 +725,13 @@ class Loader
      * @return TStrings
      */
     private function checkDirectories(
-        array | string $directories,
+        mixed $directories,
         string $dirSeparator
     ): array {
+        if (!is_string($directories) && !is_array($directories)) {
+            throw new Exceptions\LoaderDirectoriesNotArray();
+        }
+
         if (is_string($directories)) {
             $directories = [$directories];
         }
@@ -734,20 +740,10 @@ class Loader
         foreach ($directories as $directory) {
             $directory = rtrim($directory, $dirSeparator) . $dirSeparator;
 
-            $results[$this->getHash($directory)] = $directory;
+            $results[$directory] = $directory;
         }
 
         return $results;
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return string
-     */
-    private function getHash(string $content): string
-    {
-        return hash('sha256', $content);
     }
 
     /**

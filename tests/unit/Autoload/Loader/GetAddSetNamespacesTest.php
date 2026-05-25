@@ -52,11 +52,11 @@ final class GetAddSetNamespacesTest extends AbstractUnitTestCase
 
         $expected = [
             'Phalcon\Loader\\'   => [
-                hash("sha256", '/path/to/loader/') => '/path/to/loader/',
+                '/path/to/loader/' => '/path/to/loader/',
             ],
             'Phalcon\Provider\\' => [
-                hash("sha256", '/path/to/provider/source/') => '/path/to/provider/source/',
-                hash("sha256", '/path/to/provider/target/') => '/path/to/provider/target/',
+                '/path/to/provider/source/' => '/path/to/provider/source/',
+                '/path/to/provider/target/' => '/path/to/provider/target/',
             ],
         ];
         $actual   = $loader->getNamespaces();
@@ -91,11 +91,11 @@ final class GetAddSetNamespacesTest extends AbstractUnitTestCase
 
         $expected = [
             'Phalcon\Loader\\'   => [
-                hash("sha256", '/path/to/loader/') => '/path/to/loader/',
+                '/path/to/loader/' => '/path/to/loader/',
             ],
             'Phalcon\Provider\\' => [
-                hash("sha256", '/path/to/provider/source/') => '/path/to/provider/source/',
-                hash("sha256", '/path/to/provider/target/') => '/path/to/provider/target/',
+                '/path/to/provider/source/' => '/path/to/provider/source/',
+                '/path/to/provider/target/' => '/path/to/provider/target/',
             ],
         ];
         $actual   = $loader->getNamespaces();
@@ -132,12 +132,25 @@ final class GetAddSetNamespacesTest extends AbstractUnitTestCase
 
         $expected = [
             'Phalcon\Loader\\' => [
-                hash("sha256", '/path/to/provider/target/') => '/path/to/provider/target/',
-                hash("sha256", '/path/to/loader/')          => '/path/to/loader/',
-                hash("sha256", '/path/to/provider/source/') => '/path/to/provider/source/',
+                '/path/to/provider/target/' => '/path/to/provider/target/',
+                '/path/to/loader/'          => '/path/to/loader/',
+                '/path/to/provider/source/' => '/path/to/provider/source/',
             ],
         ];
         $actual   = $loader->getNamespaces();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testAutoloaderLoaderGetAddSetNamespacesException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('The directories parameter is not a string or array');
+
+        $loader = new Loader();
+        $loader->addNamespace('Phalcon\Loader', 1234);
     }
 }
