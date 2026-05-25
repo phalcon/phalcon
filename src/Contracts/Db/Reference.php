@@ -58,7 +58,7 @@ interface Reference
      *
      * @return string
      */
-    public function getReferencedSchema(): string;
+    public function getReferencedSchema(): ?string;
 
     /**
      * Gets the referenced table
@@ -70,7 +70,7 @@ interface Reference
     /**
      * Gets the schema where referenced table is
      *
-     * @return string
+     * @return string|null
      */
-    public function getSchemaName(): string;
+    public function getSchemaName(): ?string;
 }

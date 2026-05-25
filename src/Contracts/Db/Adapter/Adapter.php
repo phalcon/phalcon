@@ -447,9 +447,9 @@ interface Adapter
     /**
      * Gets the active connection unique identifier
      *
-     * @return string
+     * @return int
      */
-    public function getConnectionId(): string;
+    public function getConnectionId(): int;
 
     /**
      * Return the default identity value to insert in an identity column

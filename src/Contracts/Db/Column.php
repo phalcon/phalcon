@@ -88,7 +88,7 @@ interface Column
      *
      * @return array|string|int
      */
-    public function getTypeValues(): array | string;
+    public function getTypeValues(): array | string | int;
 
 
     /**
