@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Application;
 
+use Phalcon\Application\Exceptions\ModuleNotRegistered;
 use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
@@ -51,7 +52,9 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      */
     public function __construct(DiInterface | Collection | null $container = null)
     {
-        $this->container = $container;
+        if (null !== $container) {
+            $this->container = $container;
+        }
     }
 
     /**
@@ -75,10 +78,7 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     public function getModule(string $name): array | object
     {
         if (!isset($this->modules[$name])) {
-            throw new Exception(
-                "Module '" . $name
-                . "' is not registered in the application container"
-            );
+            throw new ModuleNotRegistered($name);
         }
 
         return $this->modules[$name];
