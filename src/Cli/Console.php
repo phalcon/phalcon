@@ -15,6 +15,10 @@ namespace Phalcon\Cli;
 
 use Phalcon\Application\AbstractApplication;
 use Phalcon\Cli\Console\Exception;
+use Phalcon\Cli\Console\Exceptions\ConsoleModuleNotRegistered;
+use Phalcon\Cli\Console\Exceptions\ContainerRequired;
+use Phalcon\Cli\Console\Exceptions\InvalidModuleDefinitionPath;
+use Phalcon\Cli\Console\Exceptions\ModuleDefinitionPathNotFound;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
@@ -22,13 +26,14 @@ use Phalcon\Events\Exception as EventsException;
 use function array_merge;
 use function array_shift;
 use function class_exists;
-use function explode;
 use function file_exists;
 use function implode;
 use function is_array;
 use function is_string;
-use function ltrim;
 use function strncmp;
+use function strpos;
+use function substr;
+use function trim;
 
 /**
  * This component allows to create CLI applications using Phalcon
@@ -57,7 +62,9 @@ class Console extends AbstractApplication
      */
     public function handle(array $arguments = [])
     {
-        $this->checkContainer(Exception::class, 'internal services');
+        if (null === $this->container) {
+            throw new ContainerRequired();
+        }
 
         /**
          * Call boot event, this allows the developer to perform initialization
@@ -95,15 +102,13 @@ class Console extends AbstractApplication
             }
 
             if (!isset($this->modules[$moduleName])) {
-                throw new Exception(
-                    "Module '" . $moduleName . "' isn't registered in the console container"
-                );
+                throw new ConsoleModuleNotRegistered($moduleName);
             }
 
             $module = $this->modules[$moduleName];
 
             if (!is_array($module)) {
-                throw new Exception("Invalid module definition path");
+                throw new InvalidModuleDefinitionPath();
             }
 
             $className = $module["className"] ?? "Module";
@@ -111,9 +116,7 @@ class Console extends AbstractApplication
             if (isset($module["path"])) {
                 $path = $module["path"];
                 if (true !== file_exists($path)) {
-                    throw new Exception(
-                        "Module definition path '" . $path . "' does not exist"
-                    );
+                    throw new ModuleDefinitionPathNotFound($path);
                 }
 
                 if (true !== class_exists($className, false)) {
@@ -141,7 +144,7 @@ class Console extends AbstractApplication
         $dispatcher->setModuleName($moduleName);
         $dispatcher->setTaskName($router->getTaskName());
         $dispatcher->setActionName($router->getActionName());
-        $dispatcher->setParams($router->getParams());
+        $dispatcher->setParams($router->getParameters());
         $dispatcher->setOptions($this->options);
 
         if (false === $this->fireManagerEvent("console:beforeHandleTask", $dispatcher)) {
@@ -180,14 +183,15 @@ class Console extends AbstractApplication
         foreach ($arguments as $argument) {
             if (is_string($argument)) {
                 if (0 === strncmp($argument, "--", 2)) {
-                    $parts    = explode("=", $argument);
-                    $parts[0] = ltrim($parts[0], '-');
-                    $parts[1] = $parts[1] ?? true;
+                    $pos = strpos($argument, "=");
 
-                    $opts[$parts[0]] = $parts[1];
+                    if (false !== $pos) {
+                        $opts[trim(substr($argument, 2, $pos - 2))] = trim(substr($argument, $pos + 1));
+                    } else {
+                        $opts[trim(substr($argument, 2))] = true;
+                    }
                 } elseif (0 === strncmp($argument, "-", 1)) {
-                    $argument        = ltrim($argument, '-');
-                    $opts[$argument] = true;
+                    $opts[substr($argument, 1)] = true;
                 } else {
                     $args[] = $argument;
                 }
