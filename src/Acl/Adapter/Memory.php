@@ -38,7 +38,6 @@ use ReflectionFunction;
 use ReflectionNamedType;
 
 use function array_keys;
-use function array_shift;
 use function call_user_func;
 use function call_user_func_array;
 use function get_class;
@@ -323,8 +322,10 @@ class Memory extends AbstractAdapter
 
                 $usedRoleToInherits = [];
 
-                while (!empty($checkRoleToInherits)) {
-                    $checkRoleToInherit = array_shift($checkRoleToInherits);
+                $pendingIndex = 0;
+                while ($pendingIndex < count($checkRoleToInherits)) {
+                    $checkRoleToInherit = $checkRoleToInherits[$pendingIndex];
+                    $pendingIndex++;
 
                     if (isset($usedRoleToInherits[$checkRoleToInherit])) {
                         continue;
@@ -934,12 +935,14 @@ class Memory extends AbstractAdapter
     ): string | bool {
         $accessList = $this->access;
 
-        $accessKey = $roleName . '!' . $componentName . '!' . $access;
+        $roleComponentPrefix = $roleName . '!' . $componentName . '!';
+
+        $accessKey = $roleComponentPrefix . $access;
         if (isset($accessList[$accessKey])) {
             return $accessKey;
         }
 
-        $accessKey = $roleName . '!' . $componentName . '!*';
+        $accessKey = $roleComponentPrefix . '*';
         if (isset($accessList[$accessKey])) {
             return $accessKey;
         }
@@ -957,8 +960,10 @@ class Memory extends AbstractAdapter
 
             $usedRoleToInherits = [];
 
-            while (!empty($checkRoleToInherits)) {
-                $checkRoleToInherit = array_shift($checkRoleToInherits);
+            $pendingIndex = 0;
+            while ($pendingIndex < count($checkRoleToInherits)) {
+                $checkRoleToInherit = $checkRoleToInherits[$pendingIndex];
+                $pendingIndex++;
 
                 if (isset($usedRoleToInherits[$checkRoleToInherit])) {
                     continue;
@@ -966,12 +971,13 @@ class Memory extends AbstractAdapter
 
                 $usedRoleToInherits[$checkRoleToInherit] = true;
 
-                $accessKey = $checkRoleToInherit . '!' . $componentName . '!' . $access;
+                $inheritPrefix = $checkRoleToInherit . '!' . $componentName . '!';
+                $accessKey     = $inheritPrefix . $access;
                 if (isset($accessList[$accessKey])) {
                     return $accessKey;
                 }
 
-                $accessKey = $checkRoleToInherit . '!' . $componentName . '!*';
+                $accessKey = $inheritPrefix . '*';
                 if (isset($accessList[$accessKey])) {
                     return $accessKey;
                 }
