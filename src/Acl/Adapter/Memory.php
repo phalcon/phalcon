@@ -63,12 +63,10 @@ use const E_USER_WARNING;
  */
 class Memory extends AbstractAdapter
 {
-    use EventsAwareTrait;
-
     /**
      * Access
      *
-     * @var array<string, bool>
+     * @var array<string, int>
      */
     protected array $access = [];
 
@@ -99,7 +97,7 @@ class Memory extends AbstractAdapter
      *
      * @var string|null
      */
-    protected string | null $activeKey = null;
+    protected $activeKey = null;
 
     /**
      * Components
@@ -680,7 +678,7 @@ class Memory extends AbstractAdapter
         /**
          * Check in the inherits roles
          */
-        $this->accessGranted = $haveAccess;
+        $this->accessGranted = $haveAccess ?? Enum::DENY;
         $this->fireManagerEvent('acl:afterCheckAccess', $this);
 
         $this->activeKey      = $accessKey;
@@ -789,7 +787,7 @@ class Memory extends AbstractAdapter
 
             $this->activeFunctionCustomArgumentsCount = $userParametersSizeShouldBe;
 
-            if (count($parameters) > $userParametersSizeShouldBe) {
+            if (is_array($parameters) && count($parameters) > $userParametersSizeShouldBe) {
                 trigger_error(
                     "Number of parameters in array is higher than " .
                     "the number of parameters in defined function when checking if '" .

@@ -33,9 +33,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Access Granted
      *
-     * @var bool
+     * @var int
      */
-    protected bool $accessGranted = false;
+    protected int $accessGranted = Enum::DENY;
 
     /**
      * Active access which the list is checking if some role can access it
