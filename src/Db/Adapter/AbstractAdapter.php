@@ -171,6 +171,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         }
 
         $this->descriptor = $descriptor;
+
+        if (isset($descriptor["options"]) && is_array($descriptor["options"])) {
+            self::setup($descriptor["options"]);
+        }
     }
 
     /**

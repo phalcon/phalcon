@@ -25,7 +25,6 @@ use Phalcon\Db\Exceptions\NoActiveTransaction;
 use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Support\Settings;
 
 use function array_merge;
@@ -58,8 +57,6 @@ use function preg_replace;
  */
 abstract class AbstractPdo extends AbstractAdapter
 {
-    use EventsAwareTrait;
-
     /**
      * Last affected rows
      *
