@@ -79,7 +79,7 @@ class Route implements RouteInterface
     /**
      * @var string
      */
-    protected string $pattern;
+    protected string $pattern = "";
     /**
      * @var string
      */

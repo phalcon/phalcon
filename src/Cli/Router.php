@@ -409,6 +409,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
                 $this->task       = $this->defaultTask;
                 $this->action     = $this->defaultAction;
                 $this->parameters = $this->defaultParams;
+
+                return;
             }
         } else {
             $parts = $arguments;

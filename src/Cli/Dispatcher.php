@@ -124,7 +124,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      */
     public function getOption(
         int | string $option,
-        array | string $filters = [],
+        array | string | null $filters = null,
         mixed $defaultValue = null
     ): mixed {
         if (!isset($this->options[$option])) {
@@ -132,7 +132,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         }
 
         $optionValue = $this->options[$option];
-        if (empty($filters)) {
+        if (null === $filters) {
             return $optionValue;
         }
 
