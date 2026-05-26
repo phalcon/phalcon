@@ -131,17 +131,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     }
 
     /**
-     * Sets the events manager
-     *
-     * @param ManagerInterface $eventsManager
-     */
-    public function setEventsManager(ManagerInterface $eventsManager): void
-    {
-        $this->getDI()->set('eventsManager', $eventsManager);
-        $this->eventsManager = $eventsManager;
-    }
-
-    /**
      * Sets the module name to be used if the router does not return a valid
      * module
      *
@@ -154,5 +143,16 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
         $this->defaultModule = $defaultModule;
 
         return $this;
+    }
+
+    /**
+     * Sets the events manager
+     *
+     * @param ManagerInterface $eventsManager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->getDI()->set('eventsManager', $eventsManager);
+        $this->eventsManager = $eventsManager;
     }
 }
