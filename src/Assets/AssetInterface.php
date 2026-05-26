@@ -28,9 +28,9 @@ interface AssetInterface
     /**
      * Gets extra HTML attributes.
      *
-     * @return array<string, string>
+     * @return array<string, string>|null
      */
-    public function getAttributes(): array;
+    public function getAttributes(): array | null;
 
     /**
      * Gets if the asset must be filtered or not.
