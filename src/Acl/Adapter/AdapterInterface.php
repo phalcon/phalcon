@@ -165,7 +165,7 @@ interface AdapterInterface
      *
      * @return TComponent
      */
-    public function getComponents(): array;
+    public function getComponents(): array | null;
 
     /**
      * Returns the default action
@@ -183,7 +183,7 @@ interface AdapterInterface
      *
      * @return array<int|string, string|array<int, string>>
      */
-    public function getInheritedRoles(string $roleName = ''): array;
+    public function getInheritedRoles(string $roleName = ''): array | null;
 
     /**
      * Returns the default ACL access level for no arguments provided in
@@ -198,7 +198,7 @@ interface AdapterInterface
      *
      * @return TRole
      */
-    public function getRoles(): array;
+    public function getRoles(): array | null;
 
     /**
      * Check whether a role is allowed to access an action from a component

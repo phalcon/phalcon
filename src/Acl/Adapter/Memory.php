@@ -31,7 +31,6 @@ use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Events\Traits\EventsAwareTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -65,9 +64,9 @@ class Memory extends AbstractAdapter
     /**
      * Access
      *
-     * @var array<string, int>
+     * @var array<string, int>|null
      */
-    protected array $access = [];
+    protected ?array $access = null;
 
     /**
      * Access List
@@ -101,9 +100,9 @@ class Memory extends AbstractAdapter
     /**
      * Components
      *
-     * @var array<string, ComponentInterface>
+     * @var array<string, ComponentInterface>|null
      */
-    protected array $components = [];
+    protected ?array $components = null;
 
     /**
      * Components
@@ -115,9 +114,9 @@ class Memory extends AbstractAdapter
     /**
      * Function List
      *
-     * @var array<string, callable|string>
+     * @var array<string, callable|string>|null
      */
-    protected array $functions = [];
+    protected ?array $functions = null;
 
     /**
      * Default action for no arguments is `deny`
@@ -129,16 +128,16 @@ class Memory extends AbstractAdapter
     /**
      * Role Inherits
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, array<int, string>>|null
      */
-    protected array $roleInherits = [];
+    protected ?array $roleInherits = null;
 
     /**
      * Roles
      *
-     * @var array<string, RoleInterface>
+     * @var array<string, RoleInterface>|null
      */
-    protected array $roles = [];
+    protected ?array $roles = null;
 
     /**
      * Memory constructor.
@@ -432,7 +431,7 @@ class Memory extends AbstractAdapter
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
-            $rolesArray = array_keys($this->roles);
+            $rolesArray = array_keys($this->roles ?? []);
         }
 
         foreach ($rolesArray as $role) {
@@ -478,7 +477,7 @@ class Memory extends AbstractAdapter
     ): void {
         $rolesArray = [$roleName];
         if ('*' === $roleName) {
-            $rolesArray = array_keys($this->roles);
+            $rolesArray = array_keys($this->roles ?? []);
         }
 
         foreach ($rolesArray as $role) {
@@ -545,7 +544,7 @@ class Memory extends AbstractAdapter
      *
      * @return array<string, ComponentInterface>
      */
-    public function getComponents(): array
+    public function getComponents(): array | null
     {
         return $this->components;
     }
@@ -559,7 +558,7 @@ class Memory extends AbstractAdapter
      *
      * @return array<int|string, string|array<int, string>>
      */
-    public function getInheritedRoles(string $roleName = ''): array
+    public function getInheritedRoles(string $roleName = ''): array | null
     {
         if ('' === $roleName) {
             return $this->roleInherits;
@@ -584,7 +583,7 @@ class Memory extends AbstractAdapter
      *
      * @return array<string, RoleInterface>
      */
-    public function getRoles(): array
+    public function getRoles(): array | null
     {
         return $this->roles;
     }
@@ -999,15 +998,15 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * @param array<string, mixed> $collection
-     * @param string               $element
-     * @param string               $elementName
-     * @param string               $suffix
+     * @param array<string, mixed>|null $collection
+     * @param string                    $element
+     * @param string                    $elementName
+     * @param string                    $suffix
      *
      * @throws Exception
      */
     private function checkExists(
-        array $collection,
+        ?array $collection,
         string $element,
         string $elementName,
         string $suffix = 'ACL'
