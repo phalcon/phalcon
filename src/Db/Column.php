@@ -13,6 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Db\Exceptions\ColumnTypeRejectsAutoIncrement;
+use Phalcon\Db\Exceptions\ColumnTypeRejectsScale;
+use Phalcon\Db\Exceptions\ColumnTypeRequired;
+use Phalcon\Db\Exceptions\GeneratedAutoIncrementConflict;
+use Phalcon\Db\Exceptions\GeneratedDefaultConflict;
+use Phalcon\Db\Exceptions\InvalidGenerationExpression;
+
 /**
  * Allows to define columns to be used on create or alter table operations
  *
@@ -465,10 +472,10 @@ class Column implements ColumnInterface
          * Get the column type, one of the TYPE_* constants
          */
         if (!isset($definition["type"])) {
-            throw new Exception("Column type is required");
+            throw new ColumnTypeRequired();
         }
 
-        $this->after         = array_key_exists("after", $definition) ? $definition["after"] : "";
+        $this->after         = $definition["after"] ?? null;
         $this->bindType      = $definition["bindType"] ?? 2;
         $this->comment       = $definition["comment"] ?? null;
         $this->defaultValue  = $definition["default"] ?? null;
@@ -495,9 +502,7 @@ class Column implements ColumnInterface
                 self::TYPE_MEDIUMINTEGER,
                 self::TYPE_SMALLINTEGER,
                 self::TYPE_TINYINTEGER => $definition["scale"],
-                default                => throw new Exception(
-                    "Column type does not support scale parameter"
-                ),
+                default                => throw new ColumnTypeRejectsScale(),
             };
         }
 
@@ -513,9 +518,7 @@ class Column implements ColumnInterface
                     self::TYPE_MEDIUMINTEGER,
                     self::TYPE_SMALLINTEGER,
                     self::TYPE_TINYINTEGER => true,
-                    default                => throw new Exception(
-                        "Column type cannot be auto-increment"
-                    ),
+                    default                => throw new ColumnTypeRejectsAutoIncrement(),
                 };
             }
         }
@@ -529,21 +532,15 @@ class Column implements ColumnInterface
             $generated = $definition["generated"];
 
             if (!is_string($generated)) {
-                throw new Exception(
-                    "Column generation expression must be a string"
-                );
+                throw new InvalidGenerationExpression();
             }
 
             if ($this->isAutoIncrement) {
-                throw new Exception(
-                    "Generated column cannot also be auto-increment"
-                );
+                throw new GeneratedAutoIncrementConflict();
             }
 
             if ($this->defaultValue !== null) {
-                throw new Exception(
-                    "Generated column cannot have a default value"
-                );
+                throw new GeneratedDefaultConflict();
             }
 
             $this->generated = $generated;

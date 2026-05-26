@@ -18,6 +18,9 @@ use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\MissingDefinitionKey;
+use Phalcon\Db\Exceptions\ReturningRequiresColumn;
+use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\ReferenceInterface;
@@ -224,9 +227,7 @@ class Postgresql extends Dialect
         array $definition
     ): string {
         if (!isset($definition["columns"])) {
-            throw new Exception(
-                "The index 'columns' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("columns");
         }
 
         $tableName = $this->prepareTable($tableName, $schemaName);
@@ -395,9 +396,7 @@ class Postgresql extends Dialect
         string | null $schemaName = null
     ): string {
         if (!isset($definition["sql"])) {
-            throw new Exception(
-                "The index 'sql' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("sql");
         }
 
         return "CREATE VIEW "
@@ -804,11 +803,135 @@ class Postgresql extends Dialect
 
                 break;
 
+            case Column::TYPE_BYTEA:
+                if (empty($columnSql)) {
+                    $columnSql .= "BYTEA";
+                }
+
+                break;
+
+            case Column::TYPE_INET:
+                if (empty($columnSql)) {
+                    $columnSql .= "INET";
+                }
+
+                break;
+
+            case Column::TYPE_CIDR:
+                if (empty($columnSql)) {
+                    $columnSql .= "CIDR";
+                }
+
+                break;
+
+            case Column::TYPE_MACADDR:
+                if (empty($columnSql)) {
+                    $columnSql .= "MACADDR";
+                }
+
+                break;
+
+            case Column::TYPE_INT4RANGE:
+                if (empty($columnSql)) {
+                    $columnSql .= "INT4RANGE";
+                }
+
+                break;
+
+            case Column::TYPE_INT8RANGE:
+                if (empty($columnSql)) {
+                    $columnSql .= "INT8RANGE";
+                }
+
+                break;
+
+            case Column::TYPE_NUMRANGE:
+                if (empty($columnSql)) {
+                    $columnSql .= "NUMRANGE";
+                }
+
+                break;
+
+            case Column::TYPE_TSRANGE:
+                if (empty($columnSql)) {
+                    $columnSql .= "TSRANGE";
+                }
+
+                break;
+
+            case Column::TYPE_TSTZRANGE:
+                if (empty($columnSql)) {
+                    $columnSql .= "TSTZRANGE";
+                }
+
+                break;
+
+            case Column::TYPE_DATERANGE:
+                if (empty($columnSql)) {
+                    $columnSql .= "DATERANGE";
+                }
+
+                break;
+
+            case Column::TYPE_GEOMETRY:
+                if (empty($columnSql)) {
+                    $columnSql .= "GEOMETRY";
+                }
+
+                break;
+
+            case Column::TYPE_POINT:
+                if (empty($columnSql)) {
+                    $columnSql .= "POINT";
+                }
+
+                break;
+
+            case Column::TYPE_LINESTRING:
+                if (empty($columnSql)) {
+                    $columnSql .= "LINESTRING";
+                }
+
+                break;
+
+            case Column::TYPE_POLYGON:
+                if (empty($columnSql)) {
+                    $columnSql .= "POLYGON";
+                }
+
+                break;
+
+            case Column::TYPE_MULTIPOINT:
+                if (empty($columnSql)) {
+                    $columnSql .= "MULTIPOINT";
+                }
+
+                break;
+
+            case Column::TYPE_MULTILINESTRING:
+                if (empty($columnSql)) {
+                    $columnSql .= "MULTILINESTRING";
+                }
+
+                break;
+
+            case Column::TYPE_MULTIPOLYGON:
+                if (empty($columnSql)) {
+                    $columnSql .= "MULTIPOLYGON";
+                }
+
+                break;
+
+            case Column::TYPE_GEOMETRYCOLLECTION:
+                if (empty($columnSql)) {
+                    $columnSql .= "GEOMETRYCOLLECTION";
+                }
+
+                break;
+
             default:
                 if (empty($columnSql)) {
-                    throw new Exception(
-                        "Unrecognized PostgreSQL data type at column " . $column->getName()
-                    );
+                    throw new UnrecognizedDataType("PostgreSQL", $column->getName());
                 }
 
                 $typeValues = $column->getTypeValues();
@@ -830,6 +953,10 @@ class Postgresql extends Dialect
                             . "')";
                     }
                 }
+        }
+
+        if ($column->isArray()) {
+            $columnSql .= "[]";
         }
 
         return $columnSql;
@@ -957,8 +1084,8 @@ class Postgresql extends Dialect
         // DEFAULT
         if ($column->getDefault() !== $currentColumn->getDefault()) {
             if (
-                empty($column->getDefault()) &&
-                !empty($currentColumn->getDefault())
+                !$column->hasDefault() &&
+                $currentColumn->hasDefault()
             ) {
                 $sql .= $sqlAlterTable
                     . " ALTER COLUMN \""
@@ -968,19 +1095,11 @@ class Postgresql extends Dialect
 
             if ($column->hasDefault()) {
                 $defaultValue = $this->castDefault($column);
-
-                if (str_contains(strtoupper($columnDefinition), "BOOLEAN")) {
-                    $sql .= " ALTER COLUMN \""
-                        . $column->getName()
-                        . "\" SET DEFAULT "
-                        . $defaultValue;
-                } else {
-                    $sql .= $sqlAlterTable
-                        . " ALTER COLUMN \""
-                        . $column->getName()
-                        . "\" SET DEFAULT "
-                        . $defaultValue;
-                }
+                $sql .= $sqlAlterTable
+                    . " ALTER COLUMN \""
+                    . $column->getName()
+                    . "\" SET DEFAULT "
+                    . $defaultValue;
             }
         }
 
@@ -1017,9 +1136,7 @@ class Postgresql extends Dialect
     public function returning(string $sqlQuery, array $columns): string
     {
         if (empty($columns)) {
-            throw new Exception(
-                "RETURNING requires at least one column or '*'"
-            );
+            throw new ReturningRequiresColumn();
         }
 
         if (count($columns) === 1 && (string) $columns[0] === '*') {
@@ -1045,9 +1162,7 @@ class Postgresql extends Dialect
         ?string $schemaName = null
     ): string {
         if (!isset($definition['sql'])) {
-            throw new Exception(
-                "The index 'sql' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("sql");
         }
 
         return 'CREATE MATERIALIZED VIEW '
@@ -1206,7 +1321,8 @@ class Postgresql extends Dialect
         $columnType       = $column->getType();
 
         if (str_contains(strtoupper($columnDefinition), "BOOLEAN")) {
-            return $defaultValue;
+            $boolStr = strtolower((string) $defaultValue);
+            return ($boolStr === "false" || $boolStr === "0" || $boolStr === "") ? "false" : "true";
         }
 
         if (

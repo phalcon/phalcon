@@ -18,6 +18,13 @@ use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\DialectInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\CannotInsertWithoutData;
+use Phalcon\Db\Exceptions\IncompleteBindTypes;
+use Phalcon\Db\Exceptions\InvalidWhereConditions;
+use Phalcon\Db\Exceptions\NestedTransactionChangeBlocked;
+use Phalcon\Db\Exceptions\SavepointsNotSupported;
+use Phalcon\Db\Exceptions\TableMustHaveColumn;
+use Phalcon\Db\Exceptions\UpdateFieldCountMismatch;
 use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
@@ -290,7 +297,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     ): bool {
         $columns = $definition["columns"] ?? [];
         if (empty($columns)) {
-            throw new Exception("The table must contain at least one column");
+            throw new TableMustHaveColumn();
         }
 
         return $this->execute(
@@ -318,7 +325,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string | null $schemaName = null
     ): bool {
         if (!isset($definition["sql"])) {
-            throw new Exception("The table must contain at least one column");
+            throw new TableMustHaveColumn();
         }
 
         return $this->execute(
@@ -793,11 +800,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Gets the active connection unique identifier
      *
-     * @return string
+     * @return int
      */
-    public function getConnectionId(): string
+    public function getConnectionId(): int
     {
-        return (string)$this->connectionId;
+        return $this->connectionId;
     }
 
     /**
@@ -978,9 +985,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * A valid array with more than one element is required
          */
         if (empty($values)) {
-            throw new Exception(
-                "Unable to insert into " . $tableName . " without data"
-            );
+            throw new CannotInsertWithoutData($tableName);
         }
 
         $placeholders  = [];
@@ -1007,9 +1012,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
                     if (!empty($dataTypes)) {
                         if (!isset($dataTypes[$position])) {
-                            throw new Exception(
-                                "Incomplete number of bind types"
-                            );
+                            throw new IncompleteBindTypes();
                         }
 
                         $bindDataTypes[] = $dataTypes[$position];
@@ -1263,10 +1266,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         bool $flag
     ): AdapterInterface {
         if ($this->transactionLevel > 0) {
-            throw new Exception(
-                "Nested transaction with savepoints behavior "
-                . "cannot be changed while a transaction is open"
-            );
+            throw new NestedTransactionChangeBlocked();
         }
 
         $this->checkSavepoints();
@@ -1563,9 +1563,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          */
         foreach ($values as $position => $value) {
             if (!isset($fields[$position])) {
-                throw new Exception(
-                    "The number of values in the update is not the same as fields"
-                );
+                throw new UpdateFieldCountMismatch();
             }
 
             $field        = $fields[$position];
@@ -1585,9 +1583,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
                     if (!empty($dataTypes)) {
                         if (!isset($dataTypes[$position])) {
-                            throw new Exception(
-                                "Incomplete number of bind types"
-                            );
+                            throw new IncompleteBindTypes();
                         }
 
                         $bindDataTypes[] = $dataTypes[$position];
@@ -1751,9 +1747,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected function checkSavepoints(): void
     {
         if (true !== $this->dialect->supportsSavePoints()) {
-            throw new Exception(
-                "Savepoints are not supported by this database adapter"
-            );
+            throw new SavepointsNotSupported();
         }
+    }
+
+    /**
+     * Enables/disables options in the Database component
+     *
+     * @param array $options
+     */
+    public static function setup(array $options): void
+    {
+        \Phalcon\Db\AbstractDb::setup($options);
     }
 }

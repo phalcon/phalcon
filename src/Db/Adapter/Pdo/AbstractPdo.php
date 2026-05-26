@@ -18,6 +18,10 @@ use PDOStatement;
 use Phalcon\Db\Adapter\AbstractAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\CannotPrepareStatement;
+use Phalcon\Db\Exceptions\InvalidBindParameter;
+use Phalcon\Db\Exceptions\MatchedParameterNotFound;
+use Phalcon\Db\Exceptions\NoActiveTransaction;
 use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
@@ -184,7 +188,7 @@ abstract class AbstractPdo extends AbstractAdapter
          * Check the transaction nesting level
          */
         if (0 === $this->transactionLevel) {
-            throw new Exception("There is no active transaction");
+            throw new NoActiveTransaction();
         }
 
         if (1 === $this->transactionLevel) {
@@ -389,15 +393,11 @@ abstract class AbstractPdo extends AbstractAdapter
                     $value = $parameters[$placeMatch[1]];
                 } else {
                     if (!isset($placeMatch[2])) {
-                        throw new Exception(
-                            "Matched parameter was not found in parameters list"
-                        );
+                        throw new MatchedParameterNotFound();
                     }
 
                     if (!isset($parameters[$placeMatch[2]])) {
-                        throw new Exception(
-                            "Matched parameter was not found in parameters list"
-                        );
+                        throw new MatchedParameterNotFound();
                     }
 
                     $value = $parameters[$placeMatch[2]];
@@ -547,7 +547,7 @@ abstract class AbstractPdo extends AbstractAdapter
             } elseif (is_string($wildcard)) {
                 $parameter = $wildcard;
             } else {
-                throw new Exception("Invalid bind parameter (1)");
+                throw new InvalidBindParameter();
             }
 
             if (isset($dataTypes[$wildcard])) {
@@ -772,7 +772,7 @@ abstract class AbstractPdo extends AbstractAdapter
 
         $statement = $this->pdo->prepare($sqlStatement);
         if (false === $statement) {
-            throw new Exception("Cannot prepare statement");
+            throw new CannotPrepareStatement();
         }
 
         $this->prepareRealSql($sqlStatement, $bindParams);
@@ -814,7 +814,7 @@ abstract class AbstractPdo extends AbstractAdapter
          * Check the transaction nesting level
          */
         if (0 === $this->transactionLevel) {
-            throw new Exception("There is no active transaction");
+            throw new NoActiveTransaction();
         }
 
         if (1 === $this->transactionLevel) {

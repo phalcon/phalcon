@@ -73,9 +73,9 @@ class Profiler
     /**
      * Active Item
      *
-     * @var Item
+     * @var Item|null
      */
-    protected Item $activeProfile;
+    protected ?Item $activeProfile = null;
 
     /**
      * All the Items in the active profile
@@ -83,6 +83,15 @@ class Profiler
      * @var Item[]
      */
     protected array $allProfiles = [];
+
+    /**
+     * Maximum number of profiles to retain. 0 (default) keeps the
+     * original unbounded behavior; a positive value drops the oldest
+     * profile FIFO before a new one is appended.
+     *
+     * @var int
+     */
+    protected int $maxProfiles = 0;
 
     /**
      * Total time spent by all profiles to complete in nanoseconds
@@ -94,11 +103,22 @@ class Profiler
     /**
      * Returns the last profile executed in the profiler
      *
-     * @return Item
+     * @return Item|null
      */
-    public function getLastProfile(): Item
+    public function getLastProfile(): ?Item
     {
         return $this->activeProfile;
+    }
+
+    /**
+     * Returns the configured maximum number of retained profiles
+     * (0 = unlimited)
+     *
+     * @return int
+     */
+    public function getMaxProfiles(): int
+    {
+        return $this->maxProfiles;
     }
 
     /**
@@ -164,6 +184,21 @@ class Profiler
     }
 
     /**
+     * Sets the maximum number of retained profiles. 0 disables the cap
+     * (the default; preserves the original unbounded behavior).
+     *
+     * @param int $maxProfiles
+     *
+     * @return $this
+     */
+    public function setMaxProfiles(int $maxProfiles): static
+    {
+        $this->maxProfiles = $maxProfiles;
+
+        return $this;
+    }
+
+    /**
      * Starts the profile of a SQL sentence
      *
      * @param string $sqlStatement
@@ -205,6 +240,13 @@ class Profiler
         $activeProfile = $this->activeProfile;
 
         $activeProfile->setFinalTime(hrtime(true));
+
+        if ($this->maxProfiles > 0 && count($this->allProfiles) >= $this->maxProfiles) {
+            $firstKey = array_key_first($this->allProfiles);
+            if (null !== $firstKey) {
+                unset($this->allProfiles[$firstKey]);
+            }
+        }
 
         $this->totalNanoseconds = $this->totalNanoseconds + $activeProfile->getTotalElapsedNanoseconds();
         $this->allProfiles[]    = $activeProfile;

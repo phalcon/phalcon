@@ -18,6 +18,7 @@ use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\MissingSqliteDatabase;
 use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
@@ -90,9 +91,7 @@ class Sqlite extends PdoAdapter
 
             unset($descriptor["dbname"]);
         } elseif (!isset($descriptor["dsn"])) {
-            throw new Exception(
-                "The database must be specified with either 'dbname' or 'dsn'."
-            );
+            throw new MissingSqliteDatabase();
         }
 
         parent::connect($descriptor);
@@ -240,6 +239,15 @@ class Sqlite extends PdoAdapter
                     $definition["bindType"]  = Column::TYPE_DECIMAL;
 
                     break;
+                case str_contains($lowerType, "real"):
+                    /**
+                     * Real are float
+                     */
+                    $definition["type"]      = Column::TYPE_FLOAT;
+                    $definition["isNumeric"] = true;
+                    $definition["bindType"]  = Column::BIND_PARAM_DECIMAL;
+
+                    break;
                 /**
                  * TIMESTAMP
                  */
@@ -268,10 +276,10 @@ class Sqlite extends PdoAdapter
 
                     break;
                 /**
-                 * Text are varchars
+                 * TEXT
                  */
                 case str_contains($lowerType, "text"):
-                    $definition["type"] = Column::TYPE_VARCHAR;
+                    $definition["type"] = Column::TYPE_TEXT;
 
                     break;
                 default:
@@ -349,7 +357,11 @@ class Sqlite extends PdoAdapter
                     !empty($field[4]) &&
                     0 !== strcasecmp($field[4], "null")
                 ) {
-                    $definition["default"] = trim($field[4], "'");
+                    $definition["default"] = preg_replace(
+                        "/^'|'$/",
+                        "",
+                        $field[4]
+                    );
                 }
             }
 
@@ -383,10 +395,8 @@ class Sqlite extends PdoAdapter
         string | null $schemaName = null
     ): array {
         $indexes = [];
-        $records = $this->fetchAll(
-            $this->dialect->describeIndexes($tableName, $schemaName)
-        );
-        foreach ($records as $index) {
+
+        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName), Enum::FETCH_ASSOC) as $index) {
             $keyName = $index["name"];
 
             if (!isset($indexes[$keyName])) {
@@ -396,7 +406,8 @@ class Sqlite extends PdoAdapter
             $columns = $indexes[$keyName]["columns"] ?? [];
 
             $describeIndexes = $this->fetchAll(
-                $this->dialect->describeIndex($keyName)
+                $this->dialect->describeIndex($keyName),
+                Enum::FETCH_ASSOC
             );
 
             foreach ($describeIndexes as $describeIndex) {

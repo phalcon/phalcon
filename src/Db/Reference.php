@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Db\Exceptions\ForeignKeyColumnsRequired;
+use Phalcon\Db\Exceptions\ReferencedColumnCountMismatch;
+use Phalcon\Db\Exceptions\ReferencedColumnsRequired;
+use Phalcon\Db\Exceptions\ReferencedTableRequired;
+
 use function is_array;
 
 /**
@@ -65,9 +70,9 @@ class Reference implements ReferenceInterface
     /**
      * Referenced Schema
      *
-     * @var string
+     * @var string|null
      */
-    protected string $referencedSchema;
+    protected ?string $referencedSchema = null;
     /**
      * Referenced Table
      *
@@ -77,9 +82,9 @@ class Reference implements ReferenceInterface
     /**
      * Schema name
      *
-     * @var string
+     * @var string|null
      */
-    protected string $schemaName;
+    protected ?string $schemaName = null;
 
     /**
      * Phalcon\Db\Reference constructor
@@ -94,43 +99,31 @@ class Reference implements ReferenceInterface
         array $definition
     ) {
         if (!isset($definition["referencedTable"])) {
-            throw new Exception("Referenced table is required");
+            throw new ReferencedTableRequired();
         }
+
+        $this->referencedTable = $definition["referencedTable"];
 
         if (!isset($definition["columns"])) {
-            throw new Exception("Foreign key columns are required");
+            throw new ForeignKeyColumnsRequired();
         }
+
+        $this->columns = $definition["columns"];
 
         if (!isset($definition["referencedColumns"])) {
-            throw new Exception(
-                "Referenced columns of the foreign key are required"
-            );
+            throw new ReferencedColumnsRequired();
         }
 
-        if (!is_array($definition["columns"])) {
-            throw new Exception("Foreign key columns must be an array");
-        }
-
-        if (!is_array(($definition["referencedColumns"]))) {
-            throw new Exception(
-                "Referenced columns of the foreign key must be an array"
-            );
-        }
-
-        $this->columns           = $definition["columns"];
         $this->referencedColumns = $definition["referencedColumns"];
 
-        if (count($this->columns) !== count($this->referencedColumns)) {
-            throw new Exception(
-                "Number of columns is not equals than the number of columns referenced"
-            );
-        }
-
-        $this->referencedTable  = $definition["referencedTable"];
-        $this->schemaName       = $definition["schema"] ?? "";
-        $this->referencedSchema = $definition["referencedSchema"] ?? "";
+        $this->schemaName       = $definition["schema"] ?? null;
+        $this->referencedSchema = $definition["referencedSchema"] ?? null;
         $this->onDelete         = $definition["onDelete"] ?? null;
         $this->onUpdate         = $definition["onUpdate"] ?? null;
+
+        if (count($this->columns) !== count($this->referencedColumns)) {
+            throw new ReferencedColumnCountMismatch();
+        }
     }
 
     /**
@@ -188,7 +181,7 @@ class Reference implements ReferenceInterface
      *
      * @return string
      */
-    public function getReferencedSchema(): string
+    public function getReferencedSchema(): ?string
     {
         return $this->referencedSchema;
     }
@@ -208,7 +201,7 @@ class Reference implements ReferenceInterface
      *
      * @return string
      */
-    public function getSchemaName(): string
+    public function getSchemaName(): ?string
     {
         return $this->schemaName;
     }

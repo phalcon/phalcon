@@ -13,6 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Db\Exceptions\ConflictTargetColumnRequired;
+use Phalcon\Db\Exceptions\ConflictUpdateColumnRequired;
+use Phalcon\Db\Exceptions\InvalidGroupByExpression;
+use Phalcon\Db\Exceptions\InvalidListExpression;
+use Phalcon\Db\Exceptions\InvalidOrderByExpression;
+use Phalcon\Db\Exceptions\InvalidSqlExpression;
+use Phalcon\Db\Exceptions\InvalidSqlExpressionType;
+use Phalcon\Db\Exceptions\InvalidUnaryExpression;
+use Phalcon\Db\Exceptions\InvalidWhereConditions;
+use Phalcon\Db\Exceptions\MaterializedViewsNotSupported;
+use Phalcon\Db\Exceptions\MissingDefinitionKey;
+use Phalcon\Db\Exceptions\ReturningNotSupported;
+use Phalcon\Db\Exceptions\ReturningRequiresColumn;
 use Phalcon\Support\Settings;
 
 use function explode;
@@ -268,15 +281,11 @@ abstract class Dialect implements DialectInterface
         array $updateColumns
     ): string {
         if (empty($conflictColumns)) {
-            throw new Exception(
-                'ON CONFLICT requires at least one conflict-target column'
-            );
+            throw new ConflictTargetColumnRequired();
         }
 
         if (empty($updateColumns)) {
-            throw new Exception(
-                'ON CONFLICT DO UPDATE requires at least one update column'
-            );
+            throw new ConflictUpdateColumnRequired();
         }
 
         $assignments = [];
@@ -306,9 +315,7 @@ abstract class Dialect implements DialectInterface
         array $definition,
         ?string $schemaName = null
     ): string {
-        throw new Exception(
-            'Materialized views are not supported by this dialect'
-        );
+        throw new MaterializedViewsNotSupported();
     }
 
     /**
@@ -326,9 +333,7 @@ abstract class Dialect implements DialectInterface
         ?string $schemaName = null,
         bool $ifExists = true
     ): string {
-        throw new Exception(
-            'Materialized views are not supported by this dialect'
-        );
+        throw new MaterializedViewsNotSupported();
     }
 
     /**
@@ -346,9 +351,7 @@ abstract class Dialect implements DialectInterface
         ?string $schemaName = null,
         bool $concurrent = false
     ): string {
-        throw new Exception(
-            'Materialized views are not supported by this dialect'
-        );
+        throw new MaterializedViewsNotSupported();
     }
 
     /**
@@ -363,9 +366,7 @@ abstract class Dialect implements DialectInterface
      */
     public function returning(string $sqlQuery, array $columns): string
     {
-        throw new Exception(
-            'RETURNING clauses are not supported by this dialect'
-        );
+        throw new ReturningNotSupported();
     }
 
     /**
@@ -506,7 +507,7 @@ abstract class Dialect implements DialectInterface
         array $bindCounts = []
     ): string {
         if (!isset($expression["type"])) {
-            throw new Exception("Invalid SQL expression");
+            throw new InvalidSqlExpression();
         }
 
         $type = $expression["type"];
@@ -669,7 +670,7 @@ abstract class Dialect implements DialectInterface
         /**
          * Expression type wasn't found
          */
-        throw new Exception("Invalid SQL expression type '" . $type . "'");
+        throw new InvalidSqlExpressionType($type);
     }
 
     /**
@@ -792,15 +793,11 @@ abstract class Dialect implements DialectInterface
     public function select(array $definition): string
     {
         if (!isset($definition["tables"])) {
-            throw new Exception(
-                "The index 'tables' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("tables");
         }
 
         if (!isset($definition["columns"])) {
-            throw new Exception(
-                "The index 'columns' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("columns");
         }
 
         $bindCounts = $definition["bindCounts"] ?? [];
@@ -1242,7 +1239,7 @@ abstract class Dialect implements DialectInterface
             $fields = [];
             foreach ($expression as $field) {
                 if (!is_array($field)) {
-                    throw new Exception("Invalid SQL-GROUP-BY expression");
+                    throw new InvalidGroupByExpression();
                 }
 
                 $fields[] = $this->getSqlExpression(
@@ -1433,7 +1430,7 @@ abstract class Dialect implements DialectInterface
             return "(" . implode($separator, $items) . ")";
         }
 
-        throw new Exception("Invalid SQL-list expression");
+        throw new InvalidListExpression();
     }
 
     /**
@@ -1493,7 +1490,7 @@ abstract class Dialect implements DialectInterface
             $fields = [];
             foreach ($expression as $field) {
                 if (!is_array($field)) {
-                    throw new Exception("Invalid SQL-ORDER-BY expression");
+                    throw new InvalidOrderByExpression();
                 }
 
                 $fieldSql = $this->getSqlExpression(
@@ -1560,7 +1557,7 @@ abstract class Dialect implements DialectInterface
         }
 
         if (!isset($expression["value"])) {
-            throw new Exception("Invalid SQL expression");
+            throw new InvalidSqlExpression();
         }
 
         $value = $expression["value"];
@@ -1609,7 +1606,7 @@ abstract class Dialect implements DialectInterface
                 );
         }
 
-        throw new Exception("Invalid SQL-unary expression");
+        throw new InvalidUnaryExpression();
     }
 
     /**

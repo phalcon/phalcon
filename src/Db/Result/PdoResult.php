@@ -97,7 +97,7 @@ class PdoResult implements ResultInterface
          * PDO does not support scrollable cursors, so we need to re-execute the
          * statement
          */
-        if (!empty($this->bindParams)) {
+        if (is_array($this->bindParams)) {
             $statement = $pdo->prepare($this->sqlStatement);
 
             if (is_object($statement)) {
@@ -131,6 +131,8 @@ class PdoResult implements ResultInterface
      */
     public function execute(): bool
     {
+        $this->rowCount = null;
+
         return $this->pdoStatement->execute();
     }
 

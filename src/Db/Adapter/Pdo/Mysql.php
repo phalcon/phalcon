@@ -19,12 +19,11 @@ use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\MissingForeignKeyChecks;
 use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
-use Phalcon\Events\Exception as EventsException;
-
 use function preg_match;
 use function str_starts_with;
 use function strtolower;
@@ -107,7 +106,6 @@ class Mysql extends PdoAdapter
      *
      * @return bool
      * @throws Exception
-     * @throws EventsException
      */
     public function addForeignKey(
         string $tableName,
@@ -117,9 +115,7 @@ class Mysql extends PdoAdapter
         $foreignKeyCheck = $this->prepare($this->dialect->getForeignKeyChecks());
 
         if (true !== $foreignKeyCheck->execute()) {
-            throw new Exception(
-                "DATABASE PARAMETER 'FOREIGN_KEY_CHECKS' HAS TO BE 1"
-            );
+            throw new MissingForeignKeyChecks();
         }
 
         return $this->execute(
@@ -396,6 +392,14 @@ class Mysql extends PdoAdapter
                     break;
 
                 /**
+                 * VARCHAR
+                 */
+                case str_starts_with($columnType, "varchar"):
+                    $definition["type"] = Column::TYPE_VARCHAR;
+
+                    break;
+
+                /**
                  * CHAR
                  */
                 case str_starts_with($columnType, "char"):
@@ -420,8 +424,51 @@ class Mysql extends PdoAdapter
                     break;
 
                 /**
+                 * Spatial types — order matters: detect the multi-* and
+                 * geometrycollection variants before the bare names.
+                 */
+                case str_starts_with($columnType, "multipoint"):
+                    $definition["type"] = Column::TYPE_MULTIPOINT;
+
+                    break;
+
+                case str_starts_with($columnType, "multilinestring"):
+                    $definition["type"] = Column::TYPE_MULTILINESTRING;
+
+                    break;
+
+                case str_starts_with($columnType, "multipolygon"):
+                    $definition["type"] = Column::TYPE_MULTIPOLYGON;
+
+                    break;
+
+                case str_starts_with($columnType, "geometrycollection"):
+                    $definition["type"] = Column::TYPE_GEOMETRYCOLLECTION;
+
+                    break;
+
+                case str_starts_with($columnType, "linestring"):
+                    $definition["type"] = Column::TYPE_LINESTRING;
+
+                    break;
+
+                case str_starts_with($columnType, "polygon"):
+                    $definition["type"] = Column::TYPE_POLYGON;
+
+                    break;
+
+                case str_starts_with($columnType, "point"):
+                    $definition["type"] = Column::TYPE_POINT;
+
+                    break;
+
+                case str_starts_with($columnType, "geometry"):
+                    $definition["type"] = Column::TYPE_GEOMETRY;
+
+                    break;
+
+                /**
                  * Default
-                 * VARCHAR
                  */
                 default:
                     $definition["type"] = Column::TYPE_VARCHAR;
@@ -515,11 +562,12 @@ class Mysql extends PdoAdapter
                  * Check if the column has default value
                  */
                 if (null !== $field[5]) {
-                    $definition["default"] = $field[5];
-                    if (str_contains(strtolower((string) $extraValue), "on update")) {
-                        $definition["default"] .= " " . $extraValue;
+                    if (str_contains((string) $extraValue, "on update")) {
+                        $definition["default"] = $field[5] . " " . $extraValue;
+                    } else {
+                        $definition["default"] = $field[5];
                     }
-                } elseif (str_contains(strtolower((string) $extraValue), "on update")) {
+                } elseif (str_contains((string) $extraValue, "on update")) {
                     $definition["default"] = "NULL " . $extraValue;
                 }
             }
@@ -560,11 +608,8 @@ class Mysql extends PdoAdapter
         string | null $schemaName = null
     ): array {
         $indexes = [];
-        $records = $this->fetchAll(
-            $this->dialect->describeIndexes($tableName, $schemaName)
-        );
 
-        foreach ($records as $index) {
+        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName), Enum::FETCH_ASSOC) as $index) {
             $keyName   = $index["Key_name"];
             $indexType = $index["Index_type"];
 
@@ -577,23 +622,64 @@ class Mysql extends PdoAdapter
             $columns[]                    = $index["Column_name"];
             $indexes[$keyName]["columns"] = $columns;
 
+            $directions = $indexes[$keyName]["directions"] ?? [];
+
+            $collation = "";
+            if (isset($index["Collation"]) && $index["Collation"] !== null) {
+                $collation = (string) $index["Collation"];
+            }
+
+            if ($collation === "D") {
+                $directions[] = "DESC";
+            } else {
+                $directions[] = "ASC";
+            }
+
+            $indexes[$keyName]["directions"] = $directions;
+
             if ($keyName === "PRIMARY") {
                 $indexes[$keyName]["type"] = "PRIMARY";
-            } elseif ($indexType == "FULLTEXT") {
+            } elseif ($indexType === "FULLTEXT") {
                 $indexes[$keyName]["type"] = "FULLTEXT";
-            } elseif ($index["Non_unique"] === 0) {
+            } elseif ($index["Non_unique"] == 0) {
                 $indexes[$keyName]["type"] = "UNIQUE";
             } else {
                 $indexes[$keyName]["type"] = "";
+            }
+
+            if (isset($index["Visible"]) && $index["Visible"] === "NO") {
+                $indexes[$keyName]["invisible"] = true;
             }
         }
 
         $indexObjects = [];
         foreach ($indexes as $name => $index) {
+            $invisible = false;
+            if (isset($index["invisible"])) {
+                $invisible = (bool) $index["invisible"];
+            }
+
+            $directions   = $index["directions"];
+            $anyDirection = false;
+            foreach ($directions as $collation) {
+                if ($collation === "DESC") {
+                    $anyDirection = true;
+                    break;
+                }
+            }
+
+            if (!$anyDirection) {
+                $directions = [];
+            }
+
             $indexObjects[$name] = new Index(
                 $name,
-                $index["columns"],
-                $index["type"]
+                [
+                    "columns"    => $index["columns"],
+                    "type"       => $index["type"],
+                    "invisible"  => $invisible,
+                    "directions" => $directions,
+                ]
             );
         }
 

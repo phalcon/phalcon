@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Db\Exceptions\CheckExpressionRequired;
+use Phalcon\Db\Exceptions\InvalidCheckExpression;
+
 /**
  * Allows to define `CHECK` constraints on tables. CHECK constraints enforce
  * a boolean SQL predicate on each row of the table; rows that fail the
@@ -68,15 +71,13 @@ class Check implements CheckInterface
     public function __construct(string $name, array $definition)
     {
         if (!isset($definition['expression'])) {
-            throw new Exception('CHECK expression is required');
+            throw new CheckExpressionRequired();
         }
 
         $expression = $definition['expression'];
 
         if (!is_string($expression) || $expression === '') {
-            throw new Exception(
-                'CHECK expression must be a non-empty string'
-            );
+            throw new InvalidCheckExpression();
         }
 
         $this->name       = $name;

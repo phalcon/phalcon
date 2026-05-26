@@ -18,15 +18,17 @@ use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\TableMustHaveColumn;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
-use Phalcon\Events\Exception as EventsException;
 use Throwable;
 
 use function explode;
+use function is_string;
 use function preg_replace;
 use function strcasecmp;
+use function strlen;
 use function trigger_error;
 
 /**
@@ -82,7 +84,6 @@ class Postgresql extends PdoAdapter
      *
      * @return void
      * @throws Exception
-     * @throws EventsException
      */
     public function connect(array $descriptor = []): void
     {
@@ -90,8 +91,9 @@ class Postgresql extends PdoAdapter
         $schemaName = $descriptor["schema"] ?? null;
         unset($descriptor['schema']);
         if (isset($descriptor["password"])) {
-            $password               = $descriptor["password"];
-            $descriptor["password"] = (!empty($password)) ? $password : null;
+            if (is_string($descriptor["password"]) && strlen($descriptor["password"]) === 0) {
+                $descriptor["password"] = null;
+            }
         }
 
         parent::connect($descriptor);
@@ -111,7 +113,6 @@ class Postgresql extends PdoAdapter
      * @param array  $definition
      *
      * @return bool
-     * @throws EventsException
      * @throws Exception
      */
     public function createTable(
@@ -123,9 +124,7 @@ class Postgresql extends PdoAdapter
             !isset($definition["columns"]) ||
             (isset($definition["columns"]) && empty($definition["columns"]))
         ) {
-            throw new Exception(
-                "The table must contain at least one column"
-            );
+            throw new TableMustHaveColumn();
         }
 
         $sql = $this->dialect->createTable(
@@ -224,9 +223,6 @@ class Postgresql extends PdoAdapter
                  * BOOL
                  */
                 case str_contains($columnType, "boolean"):
-                    /**
-                     * tinyint(1) is boolean
-                     */
                     $definition["type"]     = Column::TYPE_BOOLEAN;
                     $definition["bindType"] = Column::BIND_PARAM_BOOL;
 
@@ -266,9 +262,6 @@ class Postgresql extends PdoAdapter
                  * TINYINT
                  */
                 case str_contains($columnType, "tinyint"):
-                    /**
-                     * Smallint/Bigint/Integers/Int are int
-                     */
                     $definition["type"]      = Column::TYPE_TINYINTEGER;
                     $definition["isNumeric"] = true;
                     $definition["bindType"]  = Column::BIND_PARAM_INT;
@@ -357,6 +350,14 @@ class Postgresql extends PdoAdapter
                     break;
 
                 /**
+                 * MEDIUMBLOB
+                 */
+                case str_contains($columnType, "mediumblob"):
+                    $definition["type"] = Column::TYPE_TEXT;
+
+                    break;
+
+                /**
                  * LONGBLOB
                  */
                 case str_contains($columnType, "longblob"):
@@ -437,9 +438,8 @@ class Postgresql extends PdoAdapter
                     break;
 
                 /**
-                 * TEXT, MEDIUMBLOB
+                 * TEXT
                  */
-                case str_contains($columnType, "mediumblob"):
                 case str_contains($columnType, "text"):
                     $definition["type"] = Column::TYPE_TEXT;
 
@@ -473,12 +473,85 @@ class Postgresql extends PdoAdapter
                     break;
 
                 /**
+                 * BYTEA
+                 */
+                case str_contains($columnType, "bytea"):
+                    $definition["type"] = Column::TYPE_BYTEA;
+
+                    break;
+
+                /**
+                 * INET
+                 */
+                case str_contains($columnType, "inet"):
+                    $definition["type"] = Column::TYPE_INET;
+
+                    break;
+
+                /**
+                 * CIDR
+                 */
+                case str_contains($columnType, "cidr"):
+                    $definition["type"] = Column::TYPE_CIDR;
+
+                    break;
+
+                /**
+                 * MACADDR
+                 */
+                case str_contains($columnType, "macaddr"):
+                    $definition["type"] = Column::TYPE_MACADDR;
+
+                    break;
+
+                /**
+                 * Range types — order matters: more-specific names first
+                 * (`tstzrange` before `tsrange`, etc.).
+                 */
+                case str_contains($columnType, "int4range"):
+                    $definition["type"] = Column::TYPE_INT4RANGE;
+
+                    break;
+
+                case str_contains($columnType, "int8range"):
+                    $definition["type"] = Column::TYPE_INT8RANGE;
+
+                    break;
+
+                case str_contains($columnType, "numrange"):
+                    $definition["type"] = Column::TYPE_NUMRANGE;
+
+                    break;
+
+                case str_contains($columnType, "tstzrange"):
+                    $definition["type"] = Column::TYPE_TSTZRANGE;
+
+                    break;
+
+                case str_contains($columnType, "tsrange"):
+                    $definition["type"] = Column::TYPE_TSRANGE;
+
+                    break;
+
+                case str_contains($columnType, "daterange"):
+                    $definition["type"] = Column::TYPE_DATERANGE;
+
+                    break;
+
+                /**
                  * Default
                  */
                 default:
                     $definition["type"] = Column::TYPE_VARCHAR;
 
                     break;
+            }
+
+            /**
+             * Detect PostgreSQL array types.
+             */
+            if (str_contains($columnType, "ARRAY") || str_contains($columnType, "[]")) {
+                $definition["array"] = true;
             }
 
             /**
@@ -526,7 +599,7 @@ class Postgresql extends PdoAdapter
                  */
                 if (null !== $field[9]) {
                     $definition["default"] = preg_replace(
-                        "/^('|'?::[[:alnum:][:space:]]+)$/",
+                        "/^'|'?::[[:alnum:][:space:]]+$/",
                         "",
                         $field[9]
                     );
@@ -656,7 +729,6 @@ class Postgresql extends PdoAdapter
      * @param ColumnInterface|null $currentColumn
      *
      * @return bool
-     * @throws EventsException
      * @throws Exception
      */
     public function modifyColumn(
@@ -691,7 +763,7 @@ class Postgresql extends PdoAdapter
                 throw $exception;
             }
         } else {
-            return (!empty($sql)) || $this->execute($queries[0] . ";");
+            return !empty($sql) ? $this->execute($queries[0] . ";") : true;
         }
     }
 

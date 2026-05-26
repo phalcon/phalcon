@@ -19,6 +19,9 @@ use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Dialect;
 use Phalcon\Db\Dialect\Traits\TextTrait;
 use Phalcon\Db\Exception;
+use Phalcon\Db\Exceptions\MissingDefinitionKey;
+use Phalcon\Db\Exceptions\MysqlOnConflictNotSupported;
+use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
@@ -176,9 +179,7 @@ class Mysql extends Dialect
         array $definition
     ): string {
         if (!isset($definition["columns"])) {
-            throw new Exception(
-                "The index 'columns' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("columns");
         }
 
         $tableName = $this->prepareTable($tableName, $schemaName);
@@ -227,9 +228,7 @@ class Mysql extends Dialect
         string | null $schemaName = null
     ): string {
         if (!isset($definition["sql"])) {
-            throw new Exception(
-                "The index 'sql' is required in the definition array"
-            );
+            throw new MissingDefinitionKey("sql");
         }
 
         return "CREATE VIEW "
@@ -671,10 +670,7 @@ class Mysql extends Dialect
         array $conflictColumns,
         array $updateColumns
     ): string {
-        throw new Exception(
-            'ON CONFLICT upserts are not supported by MySQL; use '
-            . 'INSERT ... ON DUPLICATE KEY UPDATE via raw SQL instead'
-        );
+        throw new MysqlOnConflictNotSupported();
     }
 
     /**
