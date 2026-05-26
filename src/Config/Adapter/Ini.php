@@ -141,12 +141,12 @@ class Ini extends Config
 
         // Decode boolean
         $castMap = [
-            'true'  => true,
-            'false' => false,
-            'yes'   => true,
-            'no'    => false,
             'on'    => true,
+            'true'  => true,
+            'yes'   => true,
             'off'   => false,
+            'no'    => false,
+            'false' => false,
         ];
 
         if (false !== isset($castMap[$lowerIni])) {

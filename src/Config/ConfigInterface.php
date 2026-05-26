@@ -48,9 +48,9 @@ interface ConfigInterface extends CollectionInterface
     );
 
     /**
-     * @param string $delimiter
+     * @param string|null $delimiter
      *
      * @return ConfigInterface
      */
-    public function setPathDelimiter(string $delimiter): ConfigInterface;
+    public function setPathDelimiter(string | null $delimiter = null): ConfigInterface;
 }
