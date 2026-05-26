@@ -69,6 +69,20 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     }
 
     /**
+     * Checks the key. If it contains invalid characters an exception is thrown
+     *
+     * @param mixed $keys
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function checkKeys(mixed $keys): void
+    {
+        if (!is_array($keys) && !($keys instanceof Traversable)) {
+            throw new CacheKeysNotIterable();
+        }
+    }
+
+    /**
      * Wipes clean the entire cache's keys.
      *
      * @return bool True on success and false on failure.
@@ -118,6 +132,8 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doDeleteMultiple(iterable $keys): bool
     {
+        $this->checkKeys($keys);
+
         $this->fire("cache:beforeDeleteMultiple", $keys);
 
         $keysArray = [];
@@ -177,6 +193,8 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doGetMultiple(iterable $keys, mixed $default = null): iterable
     {
+        $this->checkKeys($keys);
+
         $this->fire("cache:beforeGetMultiple", $keys);
 
         if ($this->adapter instanceof Redis) {
@@ -284,6 +302,8 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doSetMultiple(iterable $values, mixed $ttl = null): bool
     {
+        $this->checkKeys($values);
+
         $this->fire("cache:beforeSetMultiple", array_keys((array)$values));
 
         $result = true;

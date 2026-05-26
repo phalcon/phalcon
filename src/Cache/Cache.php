@@ -16,7 +16,6 @@ namespace Phalcon\Cache;
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
-use Psr\SimpleCache\InvalidArgumentException as PsrInvalidArgumentException;
 
 /**
  * This component offers caching capabilities for your application.
