@@ -225,9 +225,9 @@ class PdoResult implements ResultInterface
      * }
      *```
      *
-     * @return array
+     * @return mixed
      */
-    public function fetchArray(): array
+    public function fetchArray(): mixed
     {
         return $this->pdoStatement->fetch($this->fetchMode);
     }
@@ -277,29 +277,27 @@ class PdoResult implements ResultInterface
                  * (PDO) has an arbitrary number of rows, so we need to perform
                  * an extra count to know that
                  */
-                $rowCount = 1;
-                $matches  = [];
+                if (true !== str_starts_with($this->sqlStatement, "SELECT COUNT(*) ")) {
+                    $matches = null;
 
-                /**
-                 * If the sql_statement starts with SELECT COUNT(*) we don't
-                 * make the count
-                 */
-                if (
-                    true !== str_starts_with($this->sqlStatement, "SELECT COUNT(*) ") &&
-                    preg_match(
-                        "/^SELECT\\s+(.*)/i",
-                        $this->sqlStatement,
-                        $matches
-                    )
-                ) {
-                    $result = $this->connection->query(
-                        "SELECT COUNT(*) \"numrows\" FROM (SELECT " . $matches[1] . ")",
-                        $this->bindParams,
-                        $this->bindTypes
-                    );
+                    if (
+                        preg_match(
+                            "/^SELECT\\s+(.*)/i",
+                            $this->sqlStatement,
+                            $matches
+                        )
+                    ) {
+                        $result = $this->connection->query(
+                            "SELECT COUNT(*) \"numrows\" FROM (SELECT " . $matches[1] . ")",
+                            $this->bindParams,
+                            $this->bindTypes
+                        );
 
-                    $row      = $result->fetch();
-                    $rowCount = (int)$row["numrows"];
+                        $row      = $result->fetch();
+                        $rowCount = $row["numrows"];
+                    }
+                } else {
+                    $rowCount = 1;
                 }
             }
 
@@ -348,18 +346,18 @@ class PdoResult implements ResultInterface
         null | object | string $colNoOrClassNameOrObject = null,
         mixed $ctorargs = null
     ): bool {
-        if (
-            (
-                (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO === $fetchMode) &&
-                !$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject, $ctorargs)
-            ) ||
-            (
-                Enum::FETCH_COLUMN === $fetchMode &&
-                !$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject)
-            ) ||
-            (!$this->pdoStatement->setFetchMode($fetchMode))
-        ) {
-            return false;
+        if (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO === $fetchMode) {
+            if (!$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject, $ctorargs)) {
+                return false;
+            }
+        } elseif (Enum::FETCH_COLUMN === $fetchMode) {
+            if (!$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject)) {
+                return false;
+            }
+        } else {
+            if (!$this->pdoStatement->setFetchMode($fetchMode)) {
+                return false;
+            }
         }
 
         $this->fetchMode = $fetchMode;
