@@ -124,7 +124,7 @@ class Config extends Collection implements ConfigInterface
         mixed $defaultValue = null,
         string | null $delimiter = null
     ) {
-        if (false !== $this->has($path)) {
+        if (true === $this->has($path)) {
             return $this->get($path);
         }
 
@@ -143,7 +143,7 @@ class Config extends Collection implements ConfigInterface
                 break;
             }
 
-            if (false !== empty($keys)) {
+            if (true === empty($keys)) {
                 return $config->get($key);
             }
 
@@ -160,11 +160,11 @@ class Config extends Collection implements ConfigInterface
     /**
      * Sets the default path delimiter
      *
-     * @param string $delimiter
+     * @param string|null $delimiter
      *
      * @return ConfigInterface
      */
-    public function setPathDelimiter(string $delimiter): ConfigInterface
+    public function setPathDelimiter(string | null $delimiter = null): ConfigInterface
     {
         $this->pathDelimiter = $delimiter;
 
