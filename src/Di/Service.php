@@ -15,6 +15,8 @@ namespace Phalcon\Di;
 
 use Closure;
 use Phalcon\Di\Exception\ServiceResolutionException;
+use Phalcon\Di\Exceptions\DefinitionMustBeArrayForRead;
+use Phalcon\Di\Exceptions\DefinitionMustBeArrayForUpdate;
 use Phalcon\Di\Service\Builder;
 use Phalcon\Di\Traits\DiInstanceTrait;
 
@@ -95,9 +97,11 @@ class Service implements ServiceInterface
      */
     public function getParameter(int $position): mixed
     {
-        $arguments = $this->definition['arguments'] ?? [];
+        if (!is_array($this->definition)) {
+            throw new DefinitionMustBeArrayForRead();
+        }
 
-        return $arguments[$position] ?? null;
+        return $this->definition['arguments'][$position] ?? null;
     }
 
     /**
@@ -224,9 +228,7 @@ class Service implements ServiceInterface
     public function setParameter(int $position, array $parameter): ServiceInterface
     {
         if (!is_array($this->definition)) {
-            throw new Exception(
-                'Definition must be an array to update its parameters'
-            );
+            throw new DefinitionMustBeArrayForUpdate();
         }
 
         /**

@@ -15,6 +15,9 @@ namespace Phalcon\Di;
 
 use Phalcon\Di\Exception as DiException;
 use Phalcon\Di\Exception\ServiceResolutionException;
+use Phalcon\Di\Exceptions\AliasAlreadyInUse;
+use Phalcon\Di\Exceptions\AliasNameMustBeString;
+use Phalcon\Di\Exceptions\CircularAliasReference;
 use Phalcon\Di\Traits\DiArrayAccessTrait;
 use Phalcon\Di\Traits\DiEventsTrait;
 use Phalcon\Di\Traits\DiExceptionsTrait;
@@ -521,7 +524,7 @@ class Di extends stdClass implements DiInterface
     public function setAlias(string $name, array | string $aliases): self
     {
         if (true !== $this->has($name)) {
-            throw new DiException("Service '" . $name . "' is not registered in the container");
+            $this->throwServiceNotFound($name);
         }
 
         if (true !== is_array($aliases)) {
@@ -530,11 +533,11 @@ class Di extends stdClass implements DiInterface
 
         foreach ($aliases as $alias) {
             if (true !== is_string($alias)) {
-                throw new DiException("Alias name must be a string");
+                throw new AliasNameMustBeString();
             }
 
             if (true === isset($this->aliases[$alias]) || true === $this->has($alias)) {
-                throw new DiException("Alias '" . $alias . "' is already in use by an existing service");
+                throw new AliasAlreadyInUse($alias);
             }
 
             $this->aliases[$alias] = $name;
@@ -667,12 +670,7 @@ class Di extends stdClass implements DiInterface
 
         while (isset($this->aliases[$current])) {
             if (isset($seen[$current])) {
-                throw new DiException(
-                    sprintf(
-                        "Circular alias reference detected while resolving '%s'",
-                        $name
-                    )
-                );
+                throw new CircularAliasReference($name);
             }
             $seen[$current] = true;
             $current        = $this->aliases[$current];
