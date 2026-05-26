@@ -13,58 +13,63 @@ declare(strict_types=1);
 
 namespace Phalcon\Dispatcher;
 
-use Exception as BaseException;
-use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Cli\Dispatcher\Exception as CliDispatcherException;
-use Phalcon\Cli\TaskInterface;
+use Exception;
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
-use Phalcon\Di\Injectable;
-use Phalcon\Dispatcher\Exception as DispatcherException;
+use Phalcon\Dispatcher\Exception as PhalconException;
+use Phalcon\Dispatcher\Exceptions\ForwardInInitializeForbidden;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
-use Phalcon\Mvc\ControllerInterface;
+use Phalcon\Mvc\Model\Binder;
 use Phalcon\Mvc\Model\BinderInterface;
-use Phalcon\Events\ManagerInterface;
 use Phalcon\Support\Collection;
 
 use function array_map;
 use function array_values;
 use function call_user_func_array;
 use function class_exists;
+use function implode;
 use function is_callable;
 use function is_object;
-use function is_string;
 use function lcfirst;
 use function method_exists;
 use function preg_split;
 use function spl_object_hash;
+use function str_contains;
+use function str_ends_with;
+use function ucfirst;
 
 /**
  * This is the base class for Phalcon\Mvc\Dispatcher and Phalcon\Cli\Dispatcher.
  * This class can't be instantiated directly, you can use it to create your own
  * dispatchers.
  */
-abstract class AbstractDispatcher extends Injectable implements DispatcherInterface, EventsAwareInterface
+abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
+
+    /**
+     * @var object|null
+     */
+    protected $activeHandler = null;
+
+    /**
+     * @var array
+     */
+    protected array $activeMethodMap = [];
 
     /**
      * @var string
      */
     protected string $actionName = "";
+
     /**
      * @var string
      */
     protected string $actionSuffix = "Action";
-    /**
-     * @var TaskInterface|ControllerInterface|null
-     */
-    protected TaskInterface | ControllerInterface | null $activeHandler = null;
-    /**
-     * @var array
-     */
-    protected array $activeMethodMap = [];
+
     /**
      * @var array
      */
@@ -74,34 +79,47 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      * @var string
      */
     protected string $defaultAction = "";
-    /**
-     * @var string
-     */
-    protected string $defaultHandler = "";
+
     /**
      * @var string
      */
     protected string $defaultNamespace = "";
+
     /**
-     * @var bool
+     * @var string
      */
-    protected bool $finished = false;
-    /**
-     * @var bool
-     */
-    protected bool $forwarded = false;
+    protected string $defaultHandler = "";
+
     /**
      * @var array
      */
     protected array $handlerHashes = [];
+
+    /**
+     * @var array
+     */
+    protected array $handlerHookCache = [];
+
     /**
      * @var string
      */
     protected string $handlerName = "";
+
     /**
      * @var string
      */
     protected string $handlerSuffix = "";
+
+    /**
+     * @var bool
+     */
+    protected bool $finished = false;
+
+    /**
+     * @var bool
+     */
+    protected bool $forwarded = false;
+
     /**
      * @var bool
      */
@@ -115,7 +133,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * @var BinderInterface|null
      */
-    protected BinderInterface | null $modelBinder = null;
+    protected ?BinderInterface $modelBinder = null;
 
     /**
      * @var bool
@@ -135,7 +153,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * @var array
      */
-    protected array $parameters = [];
+    protected array $params = [];
 
     /**
      * @var string
@@ -160,30 +178,37 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * @param mixed  $handler
      * @param string $actionMethod
-     * @param array  $parameters
+     * @param array  $params
      *
      * @return mixed
      */
     public function callActionMethod(
         mixed $handler,
         string $actionMethod,
-        array $parameters = []
+        array $params = []
     ): mixed {
         $altHandler = $handler;
         $altAction  = $actionMethod;
-        $altParams  = $parameters;
+        $altParams  = $params;
 
         if (
             null !== $this->eventsManager &&
             $this->eventsManager instanceof ManagerInterface
         ) {
-            $observer = new Collection([
-                "handler" => $handler,
-                "action"  => $actionMethod,
-                "params"  => $parameters,
-            ]);
+            $observer = $this->getDI()->get(
+                Collection::class,
+                [[
+                    "handler" => $handler,
+                    "action"  => $actionMethod,
+                    "params"  => $params,
+                ]]
+            );
 
-            $this->eventsManager->fire("dispatch:beforeCallAction", $this, $observer);
+            $this->eventsManager->fire(
+                "dispatch:beforeCallAction",
+                $this,
+                $observer
+            );
 
             $altHandler = $observer->get("handler");
             $altAction  = $observer->get("action");
@@ -201,7 +226,11 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         ) {
             $observer["result"] = $result;
 
-            $this->eventsManager->fire("dispatch:afterCallAction", $this, $observer);
+            $this->eventsManager->fire(
+                "dispatch:afterCallAction",
+                $this,
+                $observer
+            );
         }
 
         return $result;
@@ -211,69 +240,44 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      * Process the results of the router by calling into the appropriate
      * controller action(s) including any routing data or injected parameters.
      *
-     * @return bool|mixed|null Returns the dispatched handler class (the
-     *                         Controller for Mvc dispatching or a Task for CLI
-     *                         dispatching) or <tt>false</tt> if an exception
-     *                         occurred and the operation was stopped by
-     *                         returning <tt>false</tt> in the exception handler.
-     *
-     * @throws BaseException if any uncaught or unhandled exception occurs during
-     *                   the dispatcher process.
+     * @return mixed
+     * @throws Exception
      */
     public function dispatch()
     {
-        if (null === $this->container) {
+        $container = $this->container;
+
+        if (null === $container) {
             $this->throwDispatchException(
-                "A dependency injection container is required to access "
-                . "related dispatching services",
-                DispatcherException::EXCEPTION_NO_DI
+                "A dependency injection container is required to access related dispatching services",
+                PhalconException::EXCEPTION_NO_DI
             );
 
             return false;
         }
 
-        $hasEventsManager = (null !== $this->eventsManager);
+        $eventsManager    = $this->eventsManager;
+        $hasEventsManager = is_object($eventsManager);
         $this->finished   = true;
 
-        if (true === $hasEventsManager) {
+        if ($hasEventsManager) {
             try {
-                // Calling beforeDispatchLoop event
-                // Note: Allow user to forward in the beforeDispatchLoop.
                 if (
-                    $this->fireManagerEvent("dispatch:beforeDispatchLoop") === false &&
-                    false !== $this->finished
+                    $eventsManager->fire("dispatch:beforeDispatchLoop", $this) === false &&
+                    $this->finished !== false
                 ) {
                     return false;
                 }
-            } catch (BaseException $ex) {
-                // Exception occurred in beforeDispatchLoop.
+            } catch (Exception $e) {
+                $status = $this->handleException($e);
 
-                /**
-                 * The user can optionally forward now in the
-                 * `dispatch:beforeException` event or return <tt>false</tt> to
-                 * handle the exception and prevent it from bubbling. In the
-                 * event the user does forward but does or does not return
-                 * false, we assume the forward takes precedence. The returning
-                 * false intuitively makes more sense when inside the dispatch
-                 * loop and technically we are not here. Therefore, returning
-                 * false only impacts whether non-forwarded exceptions are
-                 * silently handled or bubbled up the stack. Note that this
-                 * behavior is slightly different than other subsequent events
-                 * handled inside the dispatch loop.
-                 */
-
-                $status = $this->handleException($ex);
-
-                if (false !== $this->finished) {
-                    // No forwarding
-                    if (false === $status) {
+                if ($this->finished !== false) {
+                    if ($status === false) {
                         return false;
                     }
 
-                    // Otherwise, bubble Exception
-                    throw $ex;
+                    throw $e;
                 }
-                // Otherwise, user forwarded, continue
             }
         }
 
@@ -282,15 +286,13 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         $numberDispatches = 0;
         $this->finished   = false;
 
-        while (true !== $this->finished) {
+        while (!$this->finished) {
             $numberDispatches++;
 
-            // Throw an exception after 256 consecutive forwards
-            if (256 === $numberDispatches) {
+            if ($numberDispatches === 256) {
                 $this->throwDispatchException(
-                    "Dispatcher has detected a cyclic routing causing "
-                    . "stability problems",
-                    DispatcherException::EXCEPTION_CYCLIC_ROUTING
+                    "Dispatcher has detected a cyclic routing causing stability problems",
+                    PhalconException::EXCEPTION_CYCLIC_ROUTING
                 );
 
                 break;
@@ -300,408 +302,339 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
 
             $this->resolveEmptyProperties();
 
-            if (true === $hasEventsManager) {
+            if ($hasEventsManager) {
                 try {
-                    // Calling "dispatch:beforeDispatch" event
                     if (
-                        false === $this->fireManagerEvent("dispatch:beforeDispatch") ||
-                        false === $this->finished
+                        $eventsManager->fire("dispatch:beforeDispatch", $this) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
-                } catch (BaseException $ex) {
+                } catch (Exception $e) {
                     if (
-                        false === $this->handleException($ex) ||
-                        false === $this->finished
+                        $this->handleException($e) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
 
-                    throw $ex;
+                    throw $e;
                 }
             }
 
             $handlerClass = $this->getHandlerClass();
 
-            /**
-             * Handlers are retrieved as shared instances from the Service
-             * Container
-             */
-            $hasService = $this->container->has($handlerClass);
-            if (true !== $hasService) {
-                /**
-                 * DI does not have a service with that name, try to load it
-                 * using an autoloader
-                 */
+            $hasService = (bool) $container->has($handlerClass);
+            if (!$hasService) {
                 $hasService = class_exists($handlerClass);
             }
 
-            // If the service can be loaded we throw an exception
-            if (true !== $hasService) {
+            if (!$hasService) {
                 $status = $this->throwDispatchException(
                     $handlerClass . " handler class cannot be loaded",
-                    DispatcherException::EXCEPTION_HANDLER_NOT_FOUND
+                    PhalconException::EXCEPTION_HANDLER_NOT_FOUND
                 );
 
-                if (
-                    false === $status &&
-                    false === $this->finished
-                ) {
+                if ($status === false && $this->finished === false) {
                     continue;
                 }
 
                 break;
             }
 
-            if ($this->container instanceof DiInterface) {
-                $handler = $this->container->getShared($handlerClass);
-            } else {
-                $handler = $this->container->get($handlerClass);
-            }
+            $handler = $container->getShared($handlerClass);
 
-            // Handlers must be only objects
             if (!is_object($handler)) {
                 $status = $this->throwDispatchException(
                     "Invalid handler returned from the services container",
-                    DispatcherException::EXCEPTION_INVALID_HANDLER
+                    PhalconException::EXCEPTION_INVALID_HANDLER
                 );
 
-                if (false === $status && false === $this->finished) {
+                if ($status === false && $this->finished === false) {
                     continue;
                 }
 
                 break;
             }
 
-            // Check if the handler is new (hasn't been initialized).
             $handlerHash  = spl_object_hash($handler);
             $isNewHandler = !isset($this->handlerHashes[$handlerHash]);
 
-            if (true === $isNewHandler) {
+            if ($isNewHandler) {
                 $this->handlerHashes[$handlerHash] = true;
             }
 
             $this->activeHandler = $handler;
-            $namespaceName       = $this->namespaceName;
-            $handlerName         = $this->handlerName;
-            $actionName          = $this->actionName;
 
-            // Check if the method exists in the handler
-            $actionMethod = $this->getActiveMethod();
+            if (!isset($this->handlerHookCache[$handlerClass])) {
+                $this->handlerHookCache[$handlerClass] = [
+                    method_exists($handler, "beforeExecuteRoute"),
+                    method_exists($handler, "initialize"),
+                    method_exists($handler, "afterBinding"),
+                    method_exists($handler, "afterExecuteRoute"),
+                ];
+            }
 
-            if (!is_callable([$handler, $actionMethod])) {
-                if (true === $hasEventsManager) {
-                    if (false === $this->fireManagerEvent("dispatch:beforeNotFoundAction")) {
-                        continue;
-                    }
+            $hookCache = $this->handlerHookCache[$handlerClass];
 
-                    if (false === $this->finished) {
-                        continue;
-                    }
-                }
+            $namespaceName = $this->namespaceName;
+            $handlerName   = $this->handlerName;
+            $actionName    = $this->actionName;
 
-                /**
-                 * Try to throw an exception when an action isn't defined on the
-                 * object
-                 */
+            if (!is_array($this->params)) {
                 $status = $this->throwDispatchException(
-                    "Action '" . $actionName . "' was not found on handler '"
-                    . $handlerName . "'",
-                    DispatcherException::EXCEPTION_ACTION_NOT_FOUND
+                    "Action parameters must be an Array",
+                    PhalconException::EXCEPTION_INVALID_PARAMS
                 );
 
-                if (false === $status && false === $this->finished) {
+                if ($status === false && $this->finished === false) {
                     continue;
                 }
 
                 break;
             }
 
-            /**
-             * In order to ensure that the `initialize()` gets called we'll
-             * destroy the current handlerClass from the DI container in the
-             * event that an error occurs and we continue out of this block.
-             * This is necessary because there is a disjoin between retrieval of
-             * the instance and the execution of the `initialize()` event. From
-             * a coding perspective, it would have made more sense to probably
-             * put the `initialize()` prior to the beforeExecuteRoute which
-             * would have solved this. However, for posterity, and to remain
-             * consistency, we'll ensure the default and documented behavior
-             * works correctly.
-             */
-            if (true === $hasEventsManager) {
+            $actionMethod = $this->getActiveMethod();
+
+            if (!is_callable([$handler, $actionMethod])) {
+                if ($hasEventsManager) {
+                    if ($eventsManager->fire("dispatch:beforeNotFoundAction", $this) === false) {
+                        continue;
+                    }
+
+                    if ($this->finished === false) {
+                        continue;
+                    }
+                }
+
+                $status = $this->throwDispatchException(
+                    "Action '" . $actionName . "' was not found on handler '" . $handlerName . "'",
+                    PhalconException::EXCEPTION_ACTION_NOT_FOUND
+                );
+
+                if ($status === false && $this->finished === false) {
+                    continue;
+                }
+
+                break;
+            }
+
+            if ($hasEventsManager) {
                 try {
-                    // Calling "dispatch:beforeExecuteRoute" event
                     if (
-                        false === $this->fireManagerEvent("dispatch:beforeExecuteRoute") ||
-                        false === $this->finished
+                        $eventsManager->fire("dispatch:beforeExecuteRoute", $this) === false ||
+                        $this->finished === false
                     ) {
-                        $this->container->remove($handlerClass);
+                        $container->remove($handlerClass);
                         continue;
                     }
-                } catch (BaseException $ex) {
+                } catch (Exception $e) {
                     if (
-                        false === $this->handleException($ex) ||
-                        false === $this->finished
+                        $this->handleException($e) === false ||
+                        $this->finished === false
                     ) {
-                        $this->container->remove($handlerClass);
-
+                        $container->remove($handlerClass);
                         continue;
                     }
 
-                    throw $ex;
+                    throw $e;
                 }
             }
 
-            if (true === method_exists($handler, "beforeExecuteRoute")) {
+            if ($hookCache[0]) {
                 try {
-                    // Calling "beforeExecuteRoute" as direct method
                     if (
-                        false === $handler->beforeExecuteRoute($this) ||
-                        false === $this->finished
+                        $handler->beforeExecuteRoute($this) === false ||
+                        $this->finished === false
                     ) {
-                        $this->container->remove($handlerClass);
-
+                        $container->remove($handlerClass);
                         continue;
                     }
-                } catch (BaseException $ex) {
+                } catch (Exception $e) {
                     if (
-                        false === $this->handleException($ex) ||
-                        false === $this->finished
+                        $this->handleException($e) === false ||
+                        $this->finished === false
                     ) {
-                        $this->container->remove($handlerClass);
-
+                        $container->remove($handlerClass);
                         continue;
                     }
 
-                    throw $ex;
+                    throw $e;
                 }
             }
 
-            /**
-             * Call the "initialize" method just once per request
-             *
-             * Note: The `dispatch:afterInitialize` event is called regardless
-             *       of the presence of an `initialize()` method. The naming is
-             *       poor; however, the intent is for a more global "constructor
-             *       is ready to go" or similarly "__onConstruct()" methodology.
-             *
-             * Note: In Phalcon 4.0, the `initialize()` and
-             * `dispatch:afterInitialize` event will be handled prior to the
-             * `beforeExecuteRoute` event/method blocks. This was a bug in the
-             * original design that was not able to change due to widespread
-             * implementation. With proper documentation change and blog posts
-             * for 4.0, this change will happen.
-             *
-             * @see https://github.com/phalcon/cphalcon/pull/13112
-             */
-            if (true === $isNewHandler) {
-                if (true === method_exists($handler, "initialize")) {
+            if ($isNewHandler) {
+                if ($hookCache[1]) {
                     try {
                         $this->isControllerInitialize = true;
 
                         $handler->initialize();
-                    } catch (BaseException $ex) {
+                    } catch (Exception $e) {
                         $this->isControllerInitialize = false;
 
-                        /**
-                         * If this is a dispatch exception (e.g. From
-                         * forwarding) ensure we don't handle this twice. In
-                         * order to ensure this does not happen all other
-                         * exceptions thrown outside this method in this class
-                         * should not call "throwDispatchException" but instead
-                         * throw a normal Exception.
-                         */
                         if (
-                            false === $this->handleException($ex) ||
-                            false === $this->finished
+                            $this->handleException($e) === false ||
+                            $this->finished === false
                         ) {
                             continue;
                         }
 
-                        throw $ex;
+                        throw $e;
                     }
                 }
 
                 $this->isControllerInitialize = false;
 
-                /**
-                 * Calling "dispatch:afterInitialize" event
-                 */
-                if (true === $hasEventsManager) {
+                if (
+                    !$hasEventsManager &&
+                    null !== $this->eventsManager &&
+                    $this->eventsManager instanceof ManagerInterface
+                ) {
+                    $eventsManager    = $this->eventsManager;
+                    $hasEventsManager = true;
+                }
+
+                if ($eventsManager) {
                     try {
                         if (
-                            false === $this->fireManagerEvent("dispatch:afterInitialize") ||
-                            false === $this->finished
+                            $eventsManager->fire("dispatch:afterInitialize", $this) === false ||
+                            $this->finished === false
                         ) {
                             continue;
                         }
-                    } catch (BaseException $ex) {
+                    } catch (Exception $e) {
                         if (
-                            false === $this->handleException($ex) ||
-                            false === $this->finished
+                            $this->handleException($e) === false ||
+                            $this->finished === false
                         ) {
                             continue;
                         }
 
-                        throw $ex;
+                        throw $e;
                     }
                 }
             }
 
-            if (true === $this->modelBinding) {
+            if ($this->modelBinding) {
                 $modelBinder  = $this->modelBinder;
                 $bindCacheKey = "_PHMB_" . $handlerClass . "_" . $actionMethod;
 
-                $this->parameters = $modelBinder->bindToHandler(
+                $this->params = $modelBinder->bindToHandler(
                     $handler,
-                    $this->parameters,
+                    $this->params,
                     $bindCacheKey,
                     $actionMethod
                 );
             }
 
-            /**
-             * Calling afterBinding
-             */
-            if (true === $hasEventsManager) {
-                if (false === $this->fireManagerEvent("dispatch:afterBinding")) {
+            if ($hasEventsManager) {
+                if ($eventsManager->fire("dispatch:afterBinding", $this) === false) {
                     continue;
                 }
 
-                /**
-                 * Check if the user made a forward in the listener
-                 */
-                if (false === $this->finished) {
+                if ($this->finished === false) {
                     continue;
                 }
             }
 
-            /**
-             * Calling afterBinding as callback and event
-             */
-            if (true === method_exists($handler, "afterBinding")) {
-                if (false === $handler->afterBinding($this)) {
+            if ($hookCache[2]) {
+                if ($handler->afterBinding($this) === false) {
                     continue;
                 }
 
-                /**
-                 * Check if the user made a forward in the listener
-                 */
-                if (false === $this->finished) {
+                if ($this->finished === false) {
                     continue;
                 }
             }
 
-            /**
-             * Save the current handler
-             */
             $this->lastHandler = $handler;
 
             try {
-                /**
-                 * We update the latest value produced by the latest handler
-                 */
                 $this->returnedValue = $this->callActionMethod(
                     $handler,
                     $actionMethod,
-                    $this->parameters
+                    $this->params
                 );
 
-                if (false === $this->finished) {
+                if ($this->finished === false) {
                     continue;
                 }
-            } catch (BaseException $ex) {
+            } catch (Exception $e) {
                 if (
-                    false === $this->handleException($ex) ||
-                    false === $this->finished
+                    $this->handleException($e) === false ||
+                    $this->finished === false
                 ) {
                     continue;
                 }
 
-                throw $ex;
+                throw $e;
             }
 
-            /**
-             * Calling "dispatch:afterExecuteRoute" event
-             */
-            if (true === $hasEventsManager) {
+            if ($hasEventsManager) {
                 try {
                     if (
-                        false === $this->fireManagerEvent("dispatch:afterExecuteRoute", $value) ||
-                        false === $this->finished
+                        $eventsManager->fire("dispatch:afterExecuteRoute", $this, $value) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
-                } catch (BaseException $ex) {
+                } catch (Exception $e) {
                     if (
-                        false === $this->handleException($ex) ||
-                        false === $this->finished
+                        $this->handleException($e) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
 
-                    throw $ex;
+                    throw $e;
                 }
             }
 
-            /**
-             * Calling "afterExecuteRoute" as direct method
-             */
-            if (true === method_exists($handler, "afterExecuteRoute")) {
+            if ($hookCache[3]) {
                 try {
                     if (
-                        false === $handler->afterExecuteRoute($this, $value) ||
-                        false === $this->finished
+                        $handler->afterExecuteRoute($this, $value) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
-                } catch (BaseException $ex) {
+                } catch (Exception $e) {
                     if (
-                        false === $this->handleException($ex) ||
-                        false === $this->finished
+                        $this->handleException($e) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
 
-                    throw $ex;
+                    throw $e;
                 }
             }
 
-            // Calling "dispatch:afterDispatch" event
-            if (true === $hasEventsManager) {
+            if ($hasEventsManager) {
                 try {
-                    $this->fireManagerEvent("dispatch:afterDispatch", $value);
-                } catch (BaseException $ex) {
-                    /**
-                     * Still check for finished here as we want to prioritize
-                     * `forwarding()` calls
-                     */
+                    $eventsManager->fire("dispatch:afterDispatch", $this, $value);
+                } catch (Exception $e) {
                     if (
-                        false === $this->handleException($ex) ||
-                        false === $this->finished
+                        $this->handleException($e) === false ||
+                        $this->finished === false
                     ) {
                         continue;
                     }
 
-                    throw $ex;
+                    throw $e;
                 }
             }
         }
 
-        if (true === $hasEventsManager) {
+        if ($hasEventsManager) {
             try {
-                // Calling "dispatch:afterDispatchLoop" event
-                // Note: We don't worry about forwarding in after dispatch loop.
-                $this->fireManagerEvent("dispatch:afterDispatchLoop");
-            } catch (BaseException $ex) {
-                // Exception occurred in afterDispatchLoop.
-                if (false === $this->handleException($ex)) {
+                $eventsManager->fire("dispatch:afterDispatchLoop", $this);
+            } catch (Exception $e) {
+                if ($this->handleException($e) === false) {
                     return false;
                 }
 
-                // Otherwise, bubble Exception
-                throw $ex;
+                throw $e;
             }
         }
 
@@ -723,36 +656,35 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      * @param array $forward
      *
      * @return void
-     * @throws DispatcherException
+     * @throws PhalconException
      */
     public function forward(array $forward): void
     {
-        if (true === $this->isControllerInitialize) {
-            /**
-             * Note: Important that we do not throw a "throwDispatchException"
-             * call here. This is important because it would allow the
-             * application to break out of the defined logic inside the
-             * dispatcher which handles all dispatch exceptions.
-             */
-            throw new DispatcherException(
-                "Forwarding inside a controller's initialize() method is forbidden"
-            );
+        if ($this->isControllerInitialize === true) {
+            throw new ForwardInInitializeForbidden();
         }
 
-        /**
-         * Save current values as previous to ensure calls to getPrevious
-         * methods don't return null.
-         */
         $this->previousNamespaceName = $this->namespaceName;
         $this->previousHandlerName   = $this->handlerName;
         $this->previousActionName    = $this->actionName;
 
-        // Check if we need to forward to another namespace
-        $this->namespaceName = $forward["namespace"] ?? $this->namespaceName;
-        $this->handlerName   = $forward["controller"] ?? $this->handlerName;
-        $this->handlerName   = $forward["task"] ?? $this->handlerName;
-        $this->actionName    = $forward["action"] ?? $this->actionName;
-        $this->parameters    = $forward["params"] ?? $this->parameters;
+        if (isset($forward["namespace"])) {
+            $this->namespaceName = $forward["namespace"];
+        }
+
+        if (isset($forward["controller"])) {
+            $this->handlerName = $forward["controller"];
+        } elseif (isset($forward["task"])) {
+            $this->handlerName = $forward["task"];
+        }
+
+        if (isset($forward["action"])) {
+            $this->actionName = $forward["action"];
+        }
+
+        if (isset($forward["params"])) {
+            $this->params = $forward["params"];
+        }
 
         $this->finished  = false;
         $this->forwarded = true;
@@ -785,28 +717,21 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      */
     public function getActiveMethod(): string
     {
-        if (!isset($this->activeMethodMap[$this->actionName])) {
-            $this->activeMethodMap[$this->actionName] = lcfirst(
+        $activeMethodName = $this->activeMethodMap[$this->actionName] ?? null;
+
+        if (null === $activeMethodName) {
+            $activeMethodName = lcfirst(
                 $this->toCamelCase($this->actionName)
             );
+
+            $this->activeMethodMap[$this->actionName] = $activeMethodName;
         }
 
-        return $this->activeMethodMap[$this->actionName] . $this->actionSuffix;
+        return $activeMethodName . $this->actionSuffix;
     }
 
     /**
      * Returns bound models from binder instance
-     *
-     * ```php
-     * class UserController extends Controller
-     * {
-     *     public function showAction(User $user)
-     *     {
-     *         // return array with $user
-     *         $boundModels = $this->dispatcher->getBoundModels();
-     *     }
-     * }
-     * ```
      *
      * @return array
      */
@@ -829,8 +754,11 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         return $this->defaultNamespace;
     }
 
+
     /**
      * Possible class name that will be located to dispatch the request
+     *
+     * @return string
      */
     public function getHandlerClass(): string
     {
@@ -840,16 +768,14 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         $handlerName   = $this->handlerName;
         $namespaceName = $this->namespaceName;
 
-        // We don't camelize the classes if they are in namespaces
-        if (true !== str_contains($handlerName, "\\")) {
+        if (!str_contains($handlerName, "\\")) {
             $camelizedClass = $this->toCamelCase($handlerName);
         } else {
             $camelizedClass = $handlerName;
         }
 
-        // Create the complete controller class name prepending the namespace
         if ($namespaceName) {
-            if (true !== str_ends_with($namespaceName, "\\")) {
+            if (!str_ends_with($namespaceName, "\\")) {
                 $namespaceName .= "\\";
             }
 
@@ -876,7 +802,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      *
      * @return BinderInterface|null
      */
-    public function getModelBinder(): BinderInterface | null
+    public function getModelBinder(): ?BinderInterface
     {
         return $this->modelBinder;
     }
@@ -884,9 +810,9 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Gets the module where the controller class is
      *
-     * @return string
+     * @return string|null
      */
-    public function getModuleName(): string
+    public function getModuleName(): ?string
     {
         return $this->moduleName;
     }
@@ -904,62 +830,66 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Gets a param by its name or numeric index
      *
-     * @param int|string   $parameter
-     * @param array|string $filters
-     * @param mixed|null   $defaultValue
+     * @param string|int        $param
+     * @param string|array|null $filters
+     * @param mixed             $defaultValue
      *
      * @return mixed
-     * @throws CliDispatcherException
-     * @todo deprecate this in the future
+     * @todo remove this in future versions
      */
     public function getParam(
-        int | string $parameter,
-        array | string $filters = [],
+        string | int $param,
+        string | array | null $filters = null,
         mixed $defaultValue = null
     ): mixed {
-        return $this->getParameter($parameter, $filters, $defaultValue);
+        return $this->getParameter($param, $filters, $defaultValue);
     }
 
     /**
      * Gets a param by its name or numeric index
      *
-     * @param int|string   $parameter
-     * @param array|string $filters
-     * @param mixed|null   $defaultValue
+     * @param string|int        $param
+     * @param string|array|null $filters
+     * @param mixed             $defaultValue
      *
      * @return mixed
-     * @throws CliDispatcherException
      */
     public function getParameter(
-        int | string $parameter,
-        array | string $filters = [],
+        string | int $param,
+        string | array | null $filters = null,
         mixed $defaultValue = null
     ): mixed {
-        if (!isset($this->parameters[$parameter])) {
+        if (!isset($this->params[$param])) {
             return $defaultValue;
         }
 
-        $paramValue = $this->parameters[$parameter];
-        if (empty($filters)) {
+        $paramValue = $this->params[$param];
+
+        if (null === $filters) {
             return $paramValue;
         }
 
         if (null === $this->container) {
             $this->throwDispatchException(
-                "A dependency injection container is required to "
-                . "access the 'filter' service",
-                DispatcherException::EXCEPTION_NO_DI
+                "A dependency injection container is required to access the 'filter' service",
+                PhalconException::EXCEPTION_NO_DI
             );
         }
 
-        /** @var FilterInterface $filter */
-        if ($this->container instanceof DiInterface) {
-            $filter = $this->container->getShared("filter");
-        } else {
-            $filter = $this->container->get("filter");
-        }
+        $filter = $this->container->getShared("filter");
 
         return $filter->sanitize($paramValue, $filters);
+    }
+
+    /**
+     * Gets action params
+     *
+     * @return array
+     * @todo remove this in future versions
+     */
+    public function getParams(): array
+    {
+        return $this->getParameters();
     }
 
     /**
@@ -969,24 +899,13 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      */
     public function getParameters(): array
     {
-        return $this->parameters;
-    }
-
-    /**
-     * Gets action params
-     *
-     * @return array
-     * @todo deprecate this in the future
-     */
-    public function getParams(): array
-    {
-        return $this->getParameters();
+        return $this->params;
     }
 
     /**
      * Returns value returned by the latest dispatched action
      *
-     * @return mixed|null
+     * @return mixed
      */
     public function getReturnedValue(): mixed
     {
@@ -996,26 +915,26 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Check if a param exists
      *
-     * @param int|string $parameter
+     * @param string|int $param
      *
      * @return bool
      * @todo deprecate this in the future
      */
-    public function hasParam(int | string $parameter): bool
+    public function hasParam(string | int $param): bool
     {
-        return $this->hasParameter($parameter);
+        return $this->hasParameter($param);
     }
 
     /**
      * Check if a param exists
      *
-     * @param int|string $parameter
+     * @param string|int $param
      *
      * @return bool
      */
-    public function hasParameter(int | string $parameter): bool
+    public function hasParameter(string | int $param): bool
     {
-        return isset($this->parameters[$parameter]);
+        return isset($this->params[$param]);
     }
 
     /**
@@ -1077,6 +996,7 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
         $this->defaultNamespace = $defaultNamespace;
     }
 
+
     /**
      * Sets the default suffix for the handler
      *
@@ -1092,40 +1012,20 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Enable model binding during dispatch
      *
-     * ```php
-     * $di->set(
-     *     'dispatcher',
-     *     function() {
-     *         $dispatcher = new Dispatcher();
-     *
-     *         $dispatcher->setModelBinder(
-     *             new Binder(),
-     *             'cache'
-     *         );
-     *
-     *         return $dispatcher;
-     *     }
-     * );
-     * ```
-     *
-     * @param BinderInterface              $modelBinder
-     * @param AdapterInterface|string|null $cache
+     * @param BinderInterface $modelBinder
+     * @param mixed           $cache
      *
      * @return DispatcherInterface
      */
     public function setModelBinder(
         BinderInterface $modelBinder,
-        AdapterInterface | string | null $cache = null
+        mixed $cache = null
     ): DispatcherInterface {
         if (is_string($cache)) {
-            if ($this->container instanceof DiInterface) {
-                $cache = $this->container->getShared($cache);
-            } else {
-                $cache = $this->container->get($cache);
-            }
+            $cache = $this->container->get($cache);
         }
 
-        if ($cache instanceof AdapterInterface) {
+        if (null !== $cache) {
             $modelBinder->setCache($cache);
         }
 
@@ -1138,11 +1038,11 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Sets the module where the controller is (only informative)
      *
-     * @param string $moduleName
+     * @param string|null $moduleName
      *
      * @return void
      */
-    public function setModuleName(string $moduleName): void
+    public function setModuleName(string | null $moduleName = null): void
     {
         $this->moduleName = $moduleName;
     }
@@ -1162,53 +1062,53 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Set a param by its name or numeric index
      *
-     * @param int|string $parameter
+     * @param string|int $param
      * @param mixed      $value
      *
      * @return void
      * @todo deprecate this in the future
      */
-    public function setParam(int | string $parameter, mixed $value): void
+    public function setParam(string | int $param, mixed $value): void
     {
-        $this->setParameter($parameter, $value);
+        $this->setParameter($param, $value);
     }
 
     /**
      * Set a param by its name or numeric index
      *
-     * @param int|string $parameter
+     * @param string|int $param
      * @param mixed      $value
      *
      * @return void
      */
-    public function setParameter(int | string $parameter, mixed $value): void
+    public function setParameter(string | int $param, mixed $value): void
     {
-        $this->parameters[$parameter] = $value;
+        $this->params[$param] = $value;
     }
 
     /**
      * Sets action params to be dispatched
      *
-     * @param array $parameters
-     *
-     * @return void
-     */
-    public function setParameters(array $parameters): void
-    {
-        $this->parameters = $parameters;
-    }
-
-    /**
-     * Sets action params to be dispatched
-     *
-     * @param array $parameters
+     * @param array $params
      *
      * @return void
      * @todo deprecate this in the future
      */
-    public function setParams(array $parameters): void
+    public function setParams(array $params): void
     {
-        $this->setParameters($parameters);
+        $this->setParameters($params);
+    }
+
+    /**
+     * Sets action params to be dispatched
+     *
+     * @param array $params
+     *
+     * @return void
+     */
+    public function setParameters(array $params): void
+    {
+        $this->params = $params;
     }
 
     /**
@@ -1236,38 +1136,31 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
     /**
      * Handles a user exception
      *
-     * @param BaseException $exception
+     * @param Exception $exception
      *
-     * @return false|void
+     * @return mixed
      */
-    abstract protected function handleException(BaseException $exception);
+    abstract protected function handleException(Exception $exception);
 
     /**
      * Set empty properties to their defaults (where defaults are available)
+     *
+     * @return void
      */
     protected function resolveEmptyProperties(): void
     {
-        $this->namespaceName = !empty($this->namespaceName)
-            ? $this->namespaceName
-            : $this->defaultNamespace;
-        $this->handlerName   = !empty($this->handlerName)
-            ? $this->handlerName
-            : $this->defaultHandler;
-        $this->actionName    = !empty($this->actionName)
-            ? $this->actionName
-            : $this->defaultAction;
-    }
+        if (!$this->namespaceName) {
+            $this->namespaceName = $this->defaultNamespace;
+        }
 
-    /**
-     * Throws an internal exception
-     *
-     * @param string $message
-     * @param int    $exceptionCode
-     *
-     * @return false
-     * @throws CliDispatcherException
-     */
-    abstract protected function throwDispatchException(string $message, int $exceptionCode = 0);
+        if (!$this->handlerName) {
+            $this->handlerName = $this->defaultHandler;
+        }
+
+        if (!$this->actionName) {
+            $this->actionName = $this->defaultAction;
+        }
+    }
 
     /**
      * @param string $input
@@ -1276,16 +1169,33 @@ abstract class AbstractDispatcher extends Injectable implements DispatcherInterf
      */
     protected function toCamelCase(string $input): string
     {
-        if (!isset($this->camelCaseMap[$input])) {
-            $this->camelCaseMap[$input] = implode(
+        $camelCaseInput = $this->camelCaseMap[$input] ?? null;
+
+        if (null === $camelCaseInput) {
+            $camelCaseInput = implode(
                 "",
                 array_map(
                     "ucfirst",
                     preg_split("/[_-]+/", $input)
                 )
             );
+
+            $this->camelCaseMap[$input] = $camelCaseInput;
         }
 
-        return $this->camelCaseMap[$input];
+        return $camelCaseInput;
     }
+
+    /**
+     * Throws an internal exception
+     *
+     * @param string $message
+     * @param int    $exceptionCode
+     *
+     * @return mixed
+     */
+    abstract protected function throwDispatchException(
+        string $message,
+        int $exceptionCode = 0
+    );
 }

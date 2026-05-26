@@ -58,12 +58,27 @@ interface DispatcherInterface
     /**
      * Gets a param by its name or numeric index
      *
-     * @param string       $parameter
-     * @param string|array $filters
+     * @param string|int        $param
+     * @param string|array|null $filters
      *
      * @return mixed
      */
-    public function getParam(string $parameter, string | array $filters = []): mixed;
+    public function getParam(string | int $param, string | array | null $filters = null): mixed;
+
+    /**
+     * Gets a param by its name or numeric index
+     *
+     * @param string|int        $param
+     * @param string|array|null $filters
+     *
+     * @return mixed
+     */
+    public function getParameter(string | int $param, string | array | null $filters = null): mixed;
+
+    /**
+     * Gets action params
+     */
+    public function getParameters(): array;
 
     /**
      * Gets action params
@@ -82,7 +97,7 @@ interface DispatcherInterface
      *
      * @return bool
      */
-    public function hasParam(string $parameter): bool;
+    public function hasParam(string | int $param): bool;
 
     /**
      * Checks if the dispatch loop is finished or has more pendent
@@ -144,7 +159,7 @@ interface DispatcherInterface
      *
      * @return void
      */
-    public function setModuleName(string $moduleName): void;
+    public function setModuleName(string | null $moduleName = null): void;
 
     /**
      * Sets the namespace which the controller belongs to
@@ -163,7 +178,7 @@ interface DispatcherInterface
      *
      * @return void
      */
-    public function setParam(string $parameter, mixed $value): void;
+    public function setParam(string | int $param, mixed $value): void;
 
     /**
      * Sets action params to be dispatched
