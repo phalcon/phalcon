@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Paginator;
 
+use Phalcon\Paginator\Adapter\AdapterInterface;
+
 /**
  * Interface for Phalcon\Paginator adapters
  */
@@ -39,14 +41,14 @@ interface Adapter
      *
      * @return Adapter
      */
-    public function setCurrentPage(int $page): Adapter;
+    public function setCurrentPage(int $page): AdapterInterface;
 
     /**
      * Set current rows limit
      *
      * @param int $limit
      *
-     * @return Adapter
+     * @return AdapterInterface
      */
-    public function setLimit(int $limit): Adapter;
+    public function setLimit(int $limit): AdapterInterface;
 }

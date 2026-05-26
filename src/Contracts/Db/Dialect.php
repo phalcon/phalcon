@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Contracts\Db;
 
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Dialect as DbDialect;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
@@ -363,12 +364,12 @@ interface Dialect
      * @param string   $name
      * @param callable $customFunction
      *
-     * @return Dialect
+     * @return DbDialect
      */
     public function registerCustomFunction(
         string $name,
         callable $customFunction
-    ): Dialect;
+    ): DbDialect;
 
     /**
      * Generate SQL to release a savepoint
