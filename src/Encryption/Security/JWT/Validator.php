@@ -142,7 +142,6 @@ class Validator
      */
     public function validateClaim(string $name, bool|int|string $value): static
     {
-        /** @var array $tokenAudience */
         $claimValue = $this->token->getClaims()->get($name);
 
         if ($value !== $claimValue) {
@@ -161,15 +160,11 @@ class Validator
      */
     public function validateExpiration(int $timestamp): static
     {
-        $tokenExpirationTime = $this
-            ->token
-            ->getClaims()
-            ->get(Enum::EXPIRATION_TIME)
-        ;
+        $tokenExpirationTime = (int) $this->token->getClaims()->get(Enum::EXPIRATION_TIME);
 
         if (
-            null !== $tokenExpirationTime &&
-            $this->getTimestamp($timestamp) > (int)$tokenExpirationTime
+            $this->token->getClaims()->has(Enum::EXPIRATION_TIME) &&
+            $this->getTimestamp($timestamp) > $tokenExpirationTime
         ) {
             $this->errors[] = "Validation: the token has expired";
         }

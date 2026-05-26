@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT\Exceptions;
 
-use Exception;
+use InvalidArgumentException;
 
-/**
- * Exception thrown when the validation does not pass for JWT
- */
-class ValidatorException extends Exception
+class InvalidHeader extends InvalidArgumentException
 {
+    public function __construct()
+    {
+        parent::__construct("Invalid Header (not an array)");
+    }
 }

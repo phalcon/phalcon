@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT;
 
+use Phalcon\Encryption\Security\JWT\Exceptions\EmptyPassphrase;
+use Phalcon\Encryption\Security\JWT\Exceptions\InvalidExpirationTime;
+use Phalcon\Encryption\Security\JWT\Exceptions\InvalidNotBefore;
 use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
+use Phalcon\Encryption\Security\JWT\Exceptions\WeakPassphrase;
 use Phalcon\Encryption\Security\JWT\Signer\SignerInterface;
 use Phalcon\Encryption\Security\JWT\Token\Enum;
 use Phalcon\Encryption\Security\JWT\Token\Item;
@@ -193,7 +197,7 @@ class Builder
     public function getToken(): Token
     {
         if (empty($this->passphrase)) {
-            throw new ValidatorException('Invalid passphrase (empty)');
+            throw new EmptyPassphrase();
         }
 
         $encodedClaims    = $this->doEncodeUrl($this->encode->__invoke($this->getClaims()));
@@ -250,7 +254,7 @@ class Builder
             $audience = [$audience];
         }
 
-        return $this->addClaim(Enum::AUDIENCE, $audience);
+        return $this->setClaim(Enum::AUDIENCE, $audience);
     }
 
     /**
@@ -284,10 +288,10 @@ class Builder
     public function setExpirationTime(int $timestamp): static
     {
         if ($timestamp < time()) {
-            throw new ValidatorException('Invalid Expiration Time');
+            throw new InvalidExpirationTime();
         }
 
-        return $this->addClaim(Enum::EXPIRATION_TIME, $timestamp);
+        return $this->setClaim(Enum::EXPIRATION_TIME, $timestamp);
     }
 
     /**
@@ -306,7 +310,7 @@ class Builder
      */
     public function setId(string $jwtId): static
     {
-        return $this->addClaim(Enum::ID, $jwtId);
+        return $this->setClaim(Enum::ID, $jwtId);
     }
 
     /**
@@ -321,7 +325,7 @@ class Builder
      */
     public function setIssuedAt(int $timestamp): static
     {
-        return $this->addClaim(Enum::ISSUED_AT, $timestamp);
+        return $this->setClaim(Enum::ISSUED_AT, $timestamp);
     }
 
     /**
@@ -336,7 +340,7 @@ class Builder
      */
     public function setIssuer(string $issuer): static
     {
-        return $this->addClaim(Enum::ISSUER, $issuer);
+        return $this->setClaim(Enum::ISSUER, $issuer);
     }
 
     /**
@@ -356,10 +360,10 @@ class Builder
     public function setNotBefore(int $timestamp): static
     {
         if ($timestamp > time()) {
-            throw new ValidatorException('Invalid Not Before');
+            throw new InvalidNotBefore();
         }
 
-        return $this->addClaim(Enum::NOT_BEFORE, $timestamp);
+        return $this->setClaim(Enum::NOT_BEFORE, $timestamp);
     }
 
     /**
@@ -376,7 +380,7 @@ class Builder
                 $passphrase
             )
         ) {
-            throw new ValidatorException('Invalid passphrase (too weak)');
+            throw new WeakPassphrase();
         }
 
         $this->passphrase = $passphrase;
@@ -399,6 +403,21 @@ class Builder
      */
     public function setSubject(string $subject): static
     {
-        return $this->addClaim(Enum::SUBJECT, $subject);
+        return $this->setClaim(Enum::SUBJECT, $subject);
+    }
+
+    /**
+     * Sets a registered claim
+     *
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return Builder
+     */
+    protected function setClaim(string $name, mixed $value): static
+    {
+        $this->claims->set($name, $value);
+
+        return $this;
     }
 }

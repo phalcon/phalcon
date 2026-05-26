@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Encryption\Security\JWT\Exceptions;
+namespace Phalcon\Encryption\Security\Exceptions;
 
-use Exception;
+use Phalcon\Encryption\Security\Exception;
 
-/**
- * Exception thrown when the validation does not pass for JWT
- */
-class ValidatorException extends Exception
+class InvalidRandomInput extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct("Input number must be a positive integer");
+    }
 }

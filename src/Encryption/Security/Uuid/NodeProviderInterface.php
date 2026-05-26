@@ -7,17 +7,16 @@
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by sinbadxiii/cphalcon-uuid
+ * @link    https://github.com/sinbadxiii/cphalcon-uuid
  */
 
 declare(strict_types=1);
 
-namespace Phalcon\Encryption\Security\JWT\Exceptions;
+namespace Phalcon\Encryption\Security\Uuid;
 
-use Exception;
-
-/**
- * Exception thrown when the validation does not pass for JWT
- */
-class ValidatorException extends Exception
+interface NodeProviderInterface
 {
+    public function getNode(): string;
 }

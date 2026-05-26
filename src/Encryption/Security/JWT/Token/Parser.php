@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace Phalcon\Encryption\Security\JWT\Token;
 
 use InvalidArgumentException;
+use Phalcon\Encryption\Security\JWT\Exceptions\InvalidClaims;
+use Phalcon\Encryption\Security\JWT\Exceptions\InvalidHeader;
+use Phalcon\Encryption\Security\JWT\Exceptions\MalformedJwtString;
+use Phalcon\Encryption\Security\JWT\Exceptions\MissingJwtTypHeader;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Support\Traits\Base64Trait;
 
 use function explode;
 use function is_array;
-use function json_decode;
 
 /**
  * Token Parser class.
@@ -84,9 +87,7 @@ class Parser
         );
 
         if (!is_array($decoded)) {
-            throw new InvalidArgumentException(
-                'Invalid Claims (not an array)'
-            );
+            throw new InvalidClaims();
         }
 
         /**
@@ -111,18 +112,14 @@ class Parser
      */
     private function decodeHeaders(string $headers): Item
     {
-        $decoded = json_decode($this->doDecodeUrl($headers), true);
+        $decoded = $this->decode->__invoke($this->doDecodeUrl($headers), true);
 
         if (!is_array($decoded)) {
-            throw new InvalidArgumentException(
-                'Invalid Header (not an array)'
-            );
+            throw new InvalidHeader();
         }
 
         if (!isset($decoded[Enum::TYPE])) {
-            throw new InvalidArgumentException(
-                "Invalid Header (missing 'typ' element)"
-            );
+            throw new MissingJwtTypHeader();
         }
 
         return new Item($decoded, $headers);
@@ -139,14 +136,14 @@ class Parser
     private function decodeSignature(Item $headers, string $signature): Signature
     {
         $algo    = $headers->get(Enum::ALGO, 'none');
-        $decoded = '';
-        $sig     = '';
+        $decoded          = '';
+        $encodedSignature = '';
         if ('none' !== $algo) {
-            $decoded = $this->doDecodeUrl($signature);
-            $sig     = $signature;
+            $decoded          = $this->doDecodeUrl($signature);
+            $encodedSignature = $signature;
         }
 
-        return new Signature($decoded, $sig);
+        return new Signature($decoded, $encodedSignature);
     }
 
     /**
@@ -161,9 +158,7 @@ class Parser
         $parts = explode('.', $token);
 
         if (count($parts) !== 3) {
-            throw new InvalidArgumentException(
-                'Invalid JWT string (dots misalignment)'
-            );
+            throw new MalformedJwtString();
         }
 
         return $parts;

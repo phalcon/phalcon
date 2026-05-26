@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Encryption\Security;
 
 use Exception as BaseException;
+use Phalcon\Encryption\Security\Exceptions\InvalidRandomInput;
 use Phalcon\Traits\Php\UrlTrait;
 
 /**
+ * Phalcon\Encryption\Security\Random
+ *
  * Secure random number generator class.
  *
  * Provides secure random number generator which is suitable for generating
@@ -54,13 +57,19 @@ use Phalcon\Traits\Php\UrlTrait;
  * echo $random->base64Safe();           // PcV6jGbJ6vfVw7hfKIFDGA
  * echo $random->base64Safe();           // GD8JojhzSTrqX7Q8J6uug
  * echo $random->base64Safe(8);          // mGyy0evy3ok
- * echo $random->base64Safe(16, true); // DRrAgOFkS4rvRiVHFefcQ==
+ * echo $random->base64Safe(null, true); // DRrAgOFkS4rvRiVHFefcQ==
  *
- * // Random UUID
+ * // Random UUID (version 4) — returns a string
  * echo $random->uuid(); // db082997-2572-4e2c-a046-5eefe97b1235
  * echo $random->uuid(); // da2aa0e2-b4d0-4e3c-99f5-f5ef62c57fe2
- * echo $random->uuid(); // 75e6b628-c562-4117-bb76-61c4153455a9
- * echo $random->uuid(); // dc446df1-0848-4d05-b501-4af3c220c13d
+ *
+ * // For other UUID versions (1, 3, 5, 6, 7) or object-based access use the
+ * // Phalcon\Encryption\Security\Uuid factory instead:
+ * //
+ * // $uuid = new \Phalcon\Encryption\Security\Uuid();
+ * // echo $uuid->v1(); // time-based
+ * // echo $uuid->v6(); // reordered time-based (sortable)
+ * // echo $uuid->v7(); // Unix-timestamp based (sortable)
  *
  * // Random number between 0 and $len
  * echo $random->number(256); // 84
@@ -278,7 +287,7 @@ class Random
     public function number(int $len): int
     {
         if ($len <= 0) {
-            throw new Exception('Input number must be a positive integer');
+            throw new InvalidRandomInput();
         }
 
         return random_int(0, $len);
@@ -310,19 +319,7 @@ class Random
      */
     public function uuid(): string
     {
-        $values = array_values(
-            unpack(
-                'N1a/n1b/n1c/n1d/n1e/N1f',
-                $this->bytes()
-            )
-        );
-
-        $values[2] = ($values[2] & 0x0fff) | 0x4000;
-        $values[3] = ($values[3] & 0x3fff) | 0x8000;
-
-        array_unshift($values, '%08x-%04x-%04x-%04x-%04x%08x');
-
-        return call_user_func_array('sprintf', $values);
+        return (string) (new Uuid())->v4();
     }
 
 

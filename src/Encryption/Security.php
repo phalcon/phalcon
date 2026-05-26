@@ -9,39 +9,17 @@
  * file that was distributed with this source code.
  */
 
-declare(strict_types=1);
-
 namespace Phalcon\Encryption;
 
-use Exception as BaseException;
 use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
 use Phalcon\Di\DiInterface;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Encryption\Security\Exception;
-use Phalcon\Encryption\Security\Random;
-use Phalcon\Encryption\Security\SecurityInterface;
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Http\RequestInterface;
+use Phalcon\Encryption\Security\Exception;
+use Phalcon\Encryption\Security\Exceptions\UnknownHashAlgorithm;
+use Phalcon\Encryption\Security\Random;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-use Phalcon\Traits\Helper\Str\StartsWithTrait;
 use ValueError;
-
-use function crypt;
-use function hash_equals;
-use function hash_hmac;
-use function is_array;
-use function password_get_info;
-use function password_hash;
-use function password_verify;
-use function sprintf;
-use function strlen;
-
-use const PASSWORD_ARGON2_DEFAULT_MEMORY_COST;
-use const PASSWORD_ARGON2_DEFAULT_THREADS;
-use const PASSWORD_ARGON2_DEFAULT_TIME_COST;
-use const PASSWORD_ARGON2I;
-use const PASSWORD_ARGON2ID;
-use const PASSWORD_BCRYPT;
 
 /**
  * This component provides a set of functions to improve the security in Phalcon
@@ -59,27 +37,17 @@ use const PASSWORD_BCRYPT;
  *     }
  * }
  *```
- *
- * @phpstan-type TOptions = array{
- *     cost?: int,
- *     memory_cost: int,
- *     time_cost: int,
- *     threads: int
- * }
  */
-class Security implements InjectionAwareInterface, SecurityContract
+class Security extends AbstractInjectionAware implements SecurityContract
 {
-    use InjectionAwareTrait;
-    use StartsWithTrait;
-
     public const CRYPT_ARGON2I    = 10;
     public const CRYPT_ARGON2ID   = 11;
     public const CRYPT_BCRYPT     = 0;
+    public const CRYPT_DEFAULT    = 0;
     public const CRYPT_BLOWFISH   = 4;
     public const CRYPT_BLOWFISH_A = 5;
     public const CRYPT_BLOWFISH_X = 6;
     public const CRYPT_BLOWFISH_Y = 7;
-    public const CRYPT_DEFAULT    = 0;
     public const CRYPT_EXT_DES    = 2;
     public const CRYPT_MD5        = 3;
     public const CRYPT_SHA256     = 8;
@@ -94,7 +62,7 @@ class Security implements InjectionAwareInterface, SecurityContract
     /**
      * @var int
      */
-    protected int $defaultHash = Security::CRYPT_DEFAULT;
+    protected int $defaultHash = self::CRYPT_DEFAULT;
 
     /**
      * @var int
@@ -109,17 +77,17 @@ class Security implements InjectionAwareInterface, SecurityContract
     /**
      * @var string|null
      */
-    protected string | null $requestToken = null;
+    protected ?string $requestToken = null;
 
     /**
      * @var string|null
      */
-    protected string | null $token = null;
+    protected ?string $token = null;
 
     /**
      * @var string|null
      */
-    protected string | null $tokenKey = null;
+    protected ?string $tokenKey = null;
 
     /**
      * @var string
@@ -137,28 +105,16 @@ class Security implements InjectionAwareInterface, SecurityContract
     protected int $workFactor = 10;
 
     /**
-     * @var RequestInterface|null
-     */
-    private RequestInterface | null $localRequest = null;
-
-    /**
-     * @var SessionInterface|null
-     */
-    private SessionInterface | null $localSession = null;
-
-    /**
      * Security constructor.
      *
      * @param SessionInterface|null $session
      * @param RequestInterface|null $request
      */
     public function __construct(
-        SessionInterface | null $session = null,
-        RequestInterface | null $request = null
+        private SessionInterface|null $session = null,
+        private RequestInterface|null $request = null
     ) {
-        $this->random       = new Random();
-        $this->localRequest = $request;
-        $this->localSession = $session;
+        $this->random = new Random();
     }
 
     /**
@@ -176,10 +132,10 @@ class Security implements InjectionAwareInterface, SecurityContract
         string $passwordHash,
         int $maxPassLength = 0
     ): bool {
-        if ($maxPassLength > 0 && mb_strlen($password) > $maxPassLength) {
+        if ($maxPassLength > 0 && strlen($password) > $maxPassLength) {
             return false;
         }
-
+    
         return password_verify($password, $passwordHash);
     }
 
@@ -194,8 +150,8 @@ class Security implements InjectionAwareInterface, SecurityContract
      * @return bool
      */
     public function checkToken(
-        string | null $tokenKey = null,
-        string | null $tokenValue = null,
+        ?string $tokenKey = null,
+        mixed $tokenValue = null,
         bool $destroyIfValid = true
     ): bool {
         $tokenKey = $this->processTokenKey($tokenKey);
@@ -203,7 +159,7 @@ class Security implements InjectionAwareInterface, SecurityContract
         /**
          * If tokenKey does not exist in session return false
          */
-        if (empty($tokenKey)) {
+        if (!$tokenKey) {
             return false;
         }
 
@@ -215,12 +171,13 @@ class Security implements InjectionAwareInterface, SecurityContract
         if (null === $knownToken || null === $userToken) {
             return false;
         }
+
         $equals = hash_equals($knownToken, $userToken);
 
         /**
          * Remove the key and value of the CSRF token in session
          */
-        if (true === $equals && true === $destroyIfValid) {
+        if ($equals && $destroyIfValid) {
             $this->destroyToken();
         }
 
@@ -241,21 +198,17 @@ class Security implements InjectionAwareInterface, SecurityContract
     public function computeHmac(
         string $data,
         string $key,
-        string $algo,
+        string $algorithm,
         bool $raw = false
     ): string {
         try {
-            $hmac = hash_hmac($algo, $data, $key, $raw);
+            $hmac = hash_hmac($algorithm, $data, $key, $raw);
         } catch (ValueError) {
-            throw new Exception(
-                sprintf("Unknown hashing algorithm: %s", $algo)
-            );
+            throw new UnknownHashAlgorithm($algorithm);
         }
-
+    
         if (!$hmac) {
-            throw new Exception(
-                sprintf("Unknown hashing algorithm: %s", $algo)
-            );
+            throw new UnknownHashAlgorithm($algorithm);
         }
 
         return $hmac;
@@ -263,14 +216,12 @@ class Security implements InjectionAwareInterface, SecurityContract
 
     /**
      * Removes the value of the CSRF token and key from session
-     *
-     * @return $this
      */
     public function destroyToken(): static
     {
-        /** @var SessionInterface|null $session */
-        $session = $this->getLocalService('session', 'localSession');
-        if (null !== $session) {
+        $session = $this->getLocalService("session");
+
+        if ($session) {
             $session->remove($this->tokenKeySessionId);
             $session->remove($this->tokenValueSessionId);
         }
@@ -301,15 +252,11 @@ class Security implements InjectionAwareInterface, SecurityContract
      */
     public function getHashInformation(string $hash): array
     {
-        $info = password_get_info($hash);
-
-        return is_array($info) ? $info : [];
+        return password_get_info($hash);
     }
 
     /**
      * Returns a secure random number generator instance
-     *
-     * @return Random
      */
     public function getRandom(): Random
     {
@@ -319,8 +266,6 @@ class Security implements InjectionAwareInterface, SecurityContract
     /**
      * Returns a number of bytes to be generated by the openssl pseudo random
      * generator
-     *
-     * @return int
      */
     public function getRandomBytes(): int
     {
@@ -329,8 +274,6 @@ class Security implements InjectionAwareInterface, SecurityContract
 
     /**
      * Returns the value of the CSRF token for the current request.
-     *
-     * @return string|null
      */
     public function getRequestToken(): string | null
     {
@@ -342,18 +285,39 @@ class Security implements InjectionAwareInterface, SecurityContract
     }
 
     /**
+     * Returns the value of the CSRF token in session
+     *
+     * @return string|null
+     */
+    public function getSessionToken(): string | null
+    {
+        $session = $this->getLocalService("session");
+
+        if ($session) {
+            return $session->get($this->tokenValueSessionId);
+        }
+
+        return null;
+    }
+
+    /**
      * Generate a >22-length pseudo random string to be used as salt for
      * passwords
      *
      * @param int $numberBytes
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     public function getSaltBytes(int $numberBytes = 0): string
     {
+        if (!$numberBytes) {
+            $numberBytes = $this->numberBytes;
+        }
+
         while (true) {
             $safeBytes = $this->random->base64Safe($numberBytes);
+
             if ($safeBytes && strlen($safeBytes) >= $numberBytes) {
                 break;
             }
@@ -363,33 +327,17 @@ class Security implements InjectionAwareInterface, SecurityContract
     }
 
     /**
-     * Returns the value of the CSRF token in session
-     *
-     * @return string|null
-     */
-    public function getSessionToken(): string | null
-    {
-        /** @var SessionInterface|null $session */
-        $session = $this->getLocalService('session', 'localSession');
-        if (null !== $session) {
-            return $session->get($this->tokenValueSessionId);
-        }
-
-        return null;
-    }
-
-    /**
      * Generates a pseudo random token value to be used as input's value in a
      * CSRF check
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
-    public function getToken(): string
+    public function getToken(): string | null
     {
         if (null === $this->token) {
             /** @var SessionInterface|null $session */
-            $session = $this->getLocalService('session', 'localSession');
+            $session = $this->getLocalService("session");
 
             /**
              * When auto-refresh is disabled, reuse any existing session
@@ -426,13 +374,13 @@ class Security implements InjectionAwareInterface, SecurityContract
      * check
      *
      * @return string|null
-     * @throws BaseException
+     * @throws Exception
      */
     public function getTokenKey(): string | null
     {
         if (null === $this->tokenKey) {
             /** @var SessionInterface|null $session */
-            $session = $this->getLocalService('session', 'localSession');
+            $session = $this->getLocalService("session");
             if (null !== $session) {
                 /**
                  * Auto-refresh disabled: reuse the existing session value
@@ -469,23 +417,22 @@ class Security implements InjectionAwareInterface, SecurityContract
     /**
      * Creates a password hash using bcrypt with a pseudo random salt
      *
-     * @param string   $password
-     * @param TOptions $options
+     * @param string $password
+     * @param array  $options
      *
      * @return string
      */
     public function hash(string $password, array $options = []): string
     {
-        $cost = $this->processCost($options);
-
-        $formatted = sprintf('%02s', $cost);
+        /**
+         * The `legacy` variable distinguishes between `password_hash` and
+         * non `password_hash` hashing.
+         */
+        $cost      = $this->processCost($options);
+        $formatted = sprintf("%02s", $cost);
         $prefix    = "";
         $bytes     = 22;
-        /**
-         * This distinguishes between `password_hash` and non `password_hash`
-         * hashing.
-         */
-        $legacy = true;
+        $legacy    = true;
 
         switch ($this->defaultHash) {
             case self::CRYPT_MD5:
@@ -525,9 +472,10 @@ class Security implements InjectionAwareInterface, SecurityContract
                 break;
         }
 
-        if (true === $legacy) {
+        if ($legacy) {
             $salt = $prefix . $this->getSaltBytes($bytes) . "$";
-            return (string)crypt($password, $salt);
+
+            return crypt($password, $salt);
         }
 
         /**
@@ -536,13 +484,13 @@ class Security implements InjectionAwareInterface, SecurityContract
          * We will not provide a "salt" but let PHP calculate it.
          */
         $options = [
-            "cost" => $cost,
+            "cost" => $cost
         ];
 
         $algorithm = $this->processAlgorithm();
         $arguments = $this->processArgonOptions($options);
 
-        return (string)password_hash($password, $algorithm, $arguments);
+        return password_hash($password, $algorithm, $arguments);
     }
 
     /**
@@ -554,7 +502,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      */
     public function isLegacyHash(string $passwordHash): bool
     {
-        return $this->toStartsWith($passwordHash, '$2a$');
+        return str_starts_with($passwordHash, "$2a$");
     }
 
     /**
@@ -563,8 +511,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      * after a successful login or any other state change where rotating the
      * token is appropriate.
      *
-     * @return Security
-     * @throws BaseException
+     * @return static
      */
     public function refreshToken(): static
     {
@@ -573,7 +520,7 @@ class Security implements InjectionAwareInterface, SecurityContract
         $this->requestToken = null;
 
         /** @var SessionInterface|null $session */
-        $session = $this->getLocalService('session', 'localSession');
+        $session = $this->getLocalService("session");
         if (null !== $session) {
             $session->set($this->tokenValueSessionId, $this->token);
             $session->set($this->tokenKeySessionId, $this->tokenKey);
@@ -590,7 +537,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @param bool $autoRefresh
      *
-     * @return Security
+     * @return static
      */
     public function setAutoRefresh(bool $autoRefresh): static
     {
@@ -604,7 +551,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @param int $defaultHash
      *
-     * @return Security
+     * @return static
      */
     public function setDefaultHash(int $defaultHash): static
     {
@@ -619,7 +566,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @param int $randomBytes
      *
-     * @return Security
+     * @return static
      */
     public function setRandomBytes(int $randomBytes): static
     {
@@ -633,7 +580,7 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @param int $workFactor
      *
-     * @return $this
+     * @return static
      */
     public function setWorkFactor(int $workFactor): static
     {
@@ -644,27 +591,20 @@ class Security implements InjectionAwareInterface, SecurityContract
 
     /**
      * @param string $name
-     * @param string $property
      *
      * @return RequestInterface|SessionInterface|null
      */
-    protected function getLocalService(
-        string $name,
-        string $property
-    ): RequestInterface | SessionInterface | null {
+    protected function getLocalService(string $name)
+    {
         if (
-            null === $this->$property &&
+            null === $this->$name &&
             null !== $this->container &&
             true === $this->container->has($name)
         ) {
-            if ($this->container instanceof DiInterface) {
-                $this->$property = $this->container->getShared($name);
-            } else {
-                $this->$property = $this->container->get($name);
-            }
+            $this->$name = $this->container->getShared($name);
         }
 
-        return $this->$property;
+        return $this->$name;
     }
 
     /**
@@ -690,9 +630,9 @@ class Security implements InjectionAwareInterface, SecurityContract
      * We check if the algorithm is Argon based. If yes, options are set for
      * `password_hash` such as `memory_cost`, `time_cost` and `threads`
      *
-     * @param TOptions $options
+     * @param array $options
      *
-     * @return array<string, int>
+     * @return array
      */
     private function processArgonOptions(array $options): array
     {
@@ -700,9 +640,23 @@ class Security implements InjectionAwareInterface, SecurityContract
             $this->defaultHash === self::CRYPT_ARGON2I ||
             $this->defaultHash === self::CRYPT_ARGON2ID
         ) {
-            $options["memory_cost"] = $options["memory_cost"] ?? PASSWORD_ARGON2_DEFAULT_MEMORY_COST;
-            $options["time_cost"]   = $options["time_cost"] ?? PASSWORD_ARGON2_DEFAULT_TIME_COST;
-            $options["threads"]     = $options["threads"] ?? PASSWORD_ARGON2_DEFAULT_THREADS;
+            $value = $options["memory_cost"] ?? null;
+            if (!$value) {
+                $value = PASSWORD_ARGON2_DEFAULT_MEMORY_COST;
+            }
+            $options["memory_cost"] = $value;
+
+            $value = $options["time_cost"] ?? null;
+            if (!$value) {
+                $value = PASSWORD_ARGON2_DEFAULT_TIME_COST;
+            }
+            $options["time_cost"] = $value;
+
+            $value = $options["threads"] ?? null;
+            if (!$value) {
+                $value = PASSWORD_ARGON2_DEFAULT_THREADS;
+            }
+            $options["threads"] = $value;
         }
 
         return $options;
@@ -712,16 +666,26 @@ class Security implements InjectionAwareInterface, SecurityContract
      * Checks the options array for `cost`. If not defined it is set to 10.
      * It also checks the cost if it is between 4 and 31
      *
-     * @param TOptions $options
+     * @param array $options
      *
      * @return int
      */
     private function processCost(array $options = []): int
     {
-        $cost = $options["cost"] ?? 10;
-        $cost = ($cost >= 4) ? $cost : 4;
+        $cost = $options["cost"] ?? null;
+        if (!$cost) {
+            $cost = $this->workFactor;
+        }
 
-        return ($cost <= 31) ? $cost : 31;
+        if ($cost < 4) {
+            $cost = 4;
+        }
+
+        if ($cost > 31) {
+            $cost = 31;
+        }
+
+        return $cost;
     }
 
     /**
@@ -729,15 +693,15 @@ class Security implements InjectionAwareInterface, SecurityContract
      *
      * @return string|null
      */
-    private function processTokenKey(string | null $tokenKey = null): string | null
+    private function processTokenKey(string $tokenKey = null): string | null
     {
-        /** @var SessionInterface|null $session */
-        $session = $this->getLocalService('session', 'localSession');
-        if (null !== $session && empty($tokenKey)) {
-            $tokenKey = $session->get($this->tokenKeySessionId);
+        $key     = $tokenKey;
+        $session = $this->getLocalService("session");
+        if (null !== $session && true === empty($key)) {
+            $key = $session->get($this->tokenKeySessionId);
         }
 
-        return $tokenKey;
+        return $key;
     }
 
     /**
@@ -748,19 +712,19 @@ class Security implements InjectionAwareInterface, SecurityContract
      */
     private function processUserToken(
         string $tokenKey,
-        string | null $tokenValue = null
+        ?string $tokenValue = null
     ): string | null {
         $userToken = $tokenValue;
-        if (null === $tokenValue) {
+        if (!$tokenValue) {
             /** @var RequestInterface|null $request */
-            $request = $this->getLocalService('request', 'localRequest');
+            $request = $this->getLocalService("request");
 
             /**
              * We always check if the value is correct in post
              */
             if (null !== $request) {
                 /** @var string|null $userToken */
-                $userToken = $request->getPost($tokenKey, 'string');
+                $userToken = $request->getPost($tokenKey, "string");
             }
         }
 

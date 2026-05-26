@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Encryption\Security\JWT\Signer;
 
 use Phalcon\Encryption\Security\JWT\Exceptions\UnsupportedAlgorithmException;
+use Phalcon\Encryption\Security\JWT\Exceptions\UnsupportedHmacAlgorithm;
 
 use function hash_equals;
 use function hash_hmac;
@@ -40,9 +41,7 @@ class Hmac extends AbstractSigner
         ];
 
         if (!isset($supported[$algo])) {
-            throw new UnsupportedAlgorithmException(
-                'Unsupported HMAC algorithm'
-            );
+            throw new UnsupportedHmacAlgorithm();
         }
 
         $this->algorithm = $algo;

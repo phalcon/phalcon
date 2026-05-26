@@ -11,13 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Encryption\Security\JWT\Exceptions;
+namespace Phalcon\Encryption\Crypt\Exception;
 
-use Exception;
-
-/**
- * Exception thrown when the validation does not pass for JWT
- */
-class ValidatorException extends Exception
+class IvLengthCalculationFailed extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct(
+            "Cannot calculate the initialization vector (IV) length of the cipher"
+        );
+    }
 }

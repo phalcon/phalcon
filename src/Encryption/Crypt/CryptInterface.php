@@ -31,12 +31,12 @@ interface CryptInterface
     /**
      * Decrypt a text that is coded as a base64 string
      *
-     * @param string     $input
-     * @param mixed|null $key
+     * @param string      $input
+     * @param string|null $key
      *
      * @return string
      */
-    public function decryptBase64(string $input, mixed $key = null): string;
+    public function decryptBase64(string $input, ?string $key = null): string;
 
     /**
      * Encrypts a text
@@ -51,12 +51,12 @@ interface CryptInterface
     /**
      * Encrypts a text returning the result as a base64 string
      *
-     * @param string     $input
-     * @param mixed|null $key
+     * @param string      $input
+     * @param string|null $key
      *
      * @return string
      */
-    public function encryptBase64(string $input, mixed $key = null): string;
+    public function encryptBase64(string $input, ?string $key = null): string;
 
     /**
      * Returns authentication data
@@ -82,7 +82,8 @@ interface CryptInterface
     /**
      * Returns a list of available cyphers
      *
-     * @return array<array-key, string>
+     * @return array
+     * @phpstan-return array<array-key, string>
      */
     public function getAvailableCiphers(): array;
 
