@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Escaper;
 
 /**
- * Interface for Phalcon\Escaper
+ * Interface for Phalcon\Html\Escaper
  */
 interface EscaperInterface
 {
@@ -79,7 +79,7 @@ interface EscaperInterface
      *
      * @return EscaperInterface
      */
-    public function setHtmlQuoteType(int $flags): EscaperInterface;
+    public function setFlags(int $flags): EscaperInterface;
 
     /**
      * Escapes a URL. Internally uses rawurlencode
