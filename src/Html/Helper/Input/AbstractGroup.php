@@ -3,8 +3,14 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by AuraPHP
+ * @link    https://github.com/auraphp/Aura.Html
+ * @license https://github.com/auraphp/Aura.Html/blob/2.x/LICENSE
  */
 
 declare(strict_types=1);
@@ -39,9 +45,9 @@ use const PHP_EOL;
 abstract class AbstractGroup extends AbstractHelper
 {
     /**
-     * @var string
+     * @var mixed
      */
-    protected string $type = 'checkbox';
+    protected mixed $checked = null;
 
     /**
      * @var string
@@ -49,19 +55,19 @@ abstract class AbstractGroup extends AbstractHelper
     protected string $name = '';
 
     /**
-     * @var array<string, mixed>
+     * @var array
      */
     protected array $options = [];
 
     /**
-     * @var mixed
-     */
-    protected mixed $checked = null;
-
-    /**
-     * @var array<string, mixed>
+     * @var array
      */
     protected array $sharedAttributes = [];
+
+    /**
+     * @var string
+     */
+    protected string $type = 'checkbox';
 
     /**
      * @param string               $name
@@ -127,7 +133,7 @@ abstract class AbstractGroup extends AbstractHelper
      *
      * @return string
      */
-    private function renderItem(string $value, string | array $definition): string
+    protected function renderItem(string $value, string | array $definition): string
     {
         if (is_array($definition)) {
             $label     = $definition['label'] ?? null;

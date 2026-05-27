@@ -3,8 +3,14 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by AuraPHP
+ * @link    https://github.com/auraphp/Aura.Html
+ * @license https://github.com/auraphp/Aura.Html/blob/2.x/LICENSE
  */
 
 declare(strict_types=1);
@@ -80,14 +86,14 @@ class Select extends AbstractList
     }
 
     /**
-     * Add an element to the list
+     * Add a placeholder to the element
      *
      * @param string      $text
      * @param string|null $value
      * @param array       $attributes
      * @param bool        $raw
      *
-     * @return Select
+     * @return static
      */
     public function addPlaceholder(
         string $text,
@@ -248,6 +254,9 @@ class Select extends AbstractList
         return 'select';
     }
 
+    /**
+     * @return string
+     */
     protected function optGroupEnd(): string
     {
         return '</optgroup>';
