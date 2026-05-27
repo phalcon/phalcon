@@ -168,9 +168,9 @@ class Escaper implements EscaperInterface
      *
      * @deprecated
      */
-    public function escapeHtml(string $input = ''): string
+    public function escapeHtml(?string $input = null): string
     {
-        return $this->html($input);
+        return $this->html((string) $input);
     }
 
     /**
@@ -180,9 +180,9 @@ class Escaper implements EscaperInterface
      *
      * @deprecated
      */
-    public function escapeHtmlAttr(string $input = ''): string
+    public function escapeHtmlAttr(?string $input = null): string
     {
-        return $this->attributes($input);
+        return $this->attributes((string) $input);
     }
 
     /**

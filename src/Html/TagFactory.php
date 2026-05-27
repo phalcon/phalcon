@@ -13,6 +13,7 @@ namespace Phalcon\Html;
 
 use Closure;
 use Phalcon\Html\Escaper\EscaperInterface;
+use Phalcon\Html\Exceptions\ServiceNotRegistered;
 use Phalcon\Html\Helper\Anchor;
 use Phalcon\Html\Helper\Base;
 use Phalcon\Html\Helper\Body;
@@ -192,7 +193,7 @@ class TagFactory
     public function newInstance(string $name): object
     {
         if (!isset($this->factories[$name])) {
-            throw new Exception('Service ' . $name . ' is not registered');
+            throw new ServiceNotRegistered($name);
         }
 
         if (!isset($this->instances[$name])) {
@@ -225,66 +226,65 @@ class TagFactory
      */
     protected function getDefaultServices(): array
     {
-        $self     = $this;
         $escaper  = $this->escaper;
         $response = $this->response;
         $url      = $this->url;
 
         return [
-            'a'                  => fn() => new Anchor($escaper, $self->newInstance('doctype')),
-            'aRaw'               => fn() => new Anchor($escaper, $self->newInstance('doctype'), true),
-            'base'               => fn() => new Base($escaper, $self->newInstance('doctype')),
-            'body'               => fn() => new Body($escaper, $self->newInstance('doctype')),
+            'a'                  => fn() => new Anchor($escaper, $this->newInstance('doctype')),
+            'aRaw'               => fn() => new Anchor($escaper, $this->newInstance('doctype'), true),
+            'base'               => fn() => new Base($escaper, $this->newInstance('doctype')),
+            'body'               => fn() => new Body($escaper, $this->newInstance('doctype')),
             'breadcrumbs'        => fn() => new Breadcrumbs($escaper, $url),
-            'button'             => fn() => new Button($escaper, $self->newInstance('doctype')),
-            'buttonRaw'          => fn() => new Button($escaper, $self->newInstance('doctype'), true),
-            'close'              => fn() => new Close($escaper, $self->newInstance('doctype')),
-            'doctype'            => fn() => $self->doctype,
-            'element'            => fn() => new Element($escaper, $self->newInstance('doctype')),
-            'elementRaw'         => fn() => new Element($escaper, $self->newInstance('doctype'), true),
-            'form'               => fn() => new Form($escaper, $self->newInstance('doctype')),
+            'button'             => fn() => new Button($escaper, $this->newInstance('doctype')),
+            'buttonRaw'          => fn() => new Button($escaper, $this->newInstance('doctype'), true),
+            'close'              => fn() => new Close($escaper, $this->newInstance('doctype')),
+            'doctype'            => fn() => $this->doctype,
+            'element'            => fn() => new Element($escaper, $this->newInstance('doctype')),
+            'elementRaw'         => fn() => new Element($escaper, $this->newInstance('doctype'), true),
+            'form'               => fn() => new Form($escaper, $this->newInstance('doctype')),
             'friendlyTitle'      => fn() => new FriendlyTitle($escaper),
-            'img'                => fn() => new Img($escaper, $self->newInstance('doctype')),
-            'inputCheckbox'      => fn() => new Checkbox($escaper, $self->newInstance('doctype')),
-            'inputCheckboxGroup' => fn() => new CheckboxGroup($escaper, $self->newInstance('doctype')),
-            'inputColor'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'color'),
-            'inputDate'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'date'),
-            'inputDateTime'      => fn() => new Generic($escaper, $self->newInstance('doctype'), 'datetime'),
-            'inputDateTimeLocal' => fn() => new Generic($escaper, $self->newInstance('doctype'), 'datetime-local'),
-            'inputEmail'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'email'),
-            'inputFile'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'file'),
-            'inputHidden'        => fn() => new Generic($escaper, $self->newInstance('doctype'), 'hidden'),
-            'inputImage'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'image'),
-            'inputInput'         => fn() => new Generic($escaper, $self->newInstance('doctype')),
-            'inputMonth'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'month'),
-            'inputNumeric'       => fn() => new Generic($escaper, $self->newInstance('doctype'), 'number'),
-            'inputPassword'      => fn() => new Generic($escaper, $self->newInstance('doctype'), 'password'),
-            'inputRadio'         => fn() => new Radio($escaper, $self->newInstance('doctype')),
-            'inputRadioGroup'    => fn() => new RadioGroup($escaper, $self->newInstance('doctype')),
-            'inputRange'         => fn() => new Generic($escaper, $self->newInstance('doctype'), 'range'),
-            'inputSearch'        => fn() => new Generic($escaper, $self->newInstance('doctype'), 'search'),
-            'inputSelect'        => fn() => new Select($escaper, $self->newInstance('doctype')),
-            'inputSubmit'        => fn() => new Generic($escaper, $self->newInstance('doctype'), 'submit'),
-            'inputTel'           => fn() => new Generic($escaper, $self->newInstance('doctype'), 'tel'),
-            'inputText'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'text'),
-            'inputTextarea'      => fn() => new Textarea($escaper, $self->newInstance('doctype')),
-            'inputTime'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'time'),
-            'inputUrl'           => fn() => new Generic($escaper, $self->newInstance('doctype'), 'url'),
-            'inputWeek'          => fn() => new Generic($escaper, $self->newInstance('doctype'), 'week'),
-            'label'              => fn() => new Label($escaper, $self->newInstance('doctype')),
-            'labelRaw'           => fn() => new Label($escaper, $self->newInstance('doctype'), true),
-            'link'               => fn() => new Link($escaper, $self->newInstance('doctype')),
-            'meta'               => fn() => new Meta($escaper, $self->newInstance('doctype')),
-            'ol'                 => fn() => new Ol($escaper, $self->newInstance('doctype')),
-            'olRaw'              => fn() => new Ol($escaper, $self->newInstance('doctype'), true),
+            'img'                => fn() => new Img($escaper, $this->newInstance('doctype')),
+            'inputCheckbox'      => fn() => new Checkbox($escaper, $this->newInstance('doctype')),
+            'inputCheckboxGroup' => fn() => new CheckboxGroup($escaper, $this->newInstance('doctype')),
+            'inputColor'         => fn() => new Generic($escaper, $this->newInstance('doctype'), 'color'),
+            'inputDate'          => fn() => new Generic($escaper, $this->newInstance('doctype'), 'date'),
+            'inputDateTime'      => fn() => new Generic($escaper, $this->newInstance('doctype'), 'datetime'),
+            'inputDateTimeLocal' => fn() => new Generic($escaper, $this->newInstance('doctype'), 'datetime-local'),
+            'inputEmail'         => fn() => new Generic($escaper, $this->newInstance('doctype'), 'email'),
+            'inputFile'          => fn() => new Generic($escaper, $this->newInstance('doctype'), 'file'),
+            'inputHidden'        => fn() => new Generic($escaper, $this->newInstance('doctype'), 'hidden'),
+            'inputImage'         => fn() => new Generic($escaper, $this->newInstance('doctype'), 'image'),
+            'inputInput'         => fn() => new Generic($escaper, $this->newInstance('doctype')),
+            'inputMonth'         => fn() => new Generic($escaper, $this->newInstance('doctype'), 'month'),
+            'inputNumeric'       => fn() => new Generic($escaper, $this->newInstance('doctype'), 'number'),
+            'inputPassword'      => fn() => new Generic($escaper, $this->newInstance('doctype'), 'password'),
+            'inputRadio'         => fn() => new Radio($escaper, $this->newInstance('doctype')),
+            'inputRadioGroup'    => fn() => new RadioGroup($escaper, $this->newInstance('doctype')),
+            'inputRange'         => fn() => new Generic($escaper, $this->newInstance('doctype'), 'range'),
+            'inputSearch'        => fn() => new Generic($escaper, $this->newInstance('doctype'), 'search'),
+            'inputSelect'        => fn() => new Select($escaper, $this->newInstance('doctype')),
+            'inputSubmit'        => fn() => new Generic($escaper, $this->newInstance('doctype'), 'submit'),
+            'inputTel'           => fn() => new Generic($escaper, $this->newInstance('doctype'), 'tel'),
+            'inputText'          => fn() => new Generic($escaper, $this->newInstance('doctype'), 'text'),
+            'inputTextarea'      => fn() => new Textarea($escaper, $this->newInstance('doctype')),
+            'inputTime'          => fn() => new Generic($escaper, $this->newInstance('doctype'), 'time'),
+            'inputUrl'           => fn() => new Generic($escaper, $this->newInstance('doctype'), 'url'),
+            'inputWeek'          => fn() => new Generic($escaper, $this->newInstance('doctype'), 'week'),
+            'label'              => fn() => new Label($escaper, $this->newInstance('doctype')),
+            'labelRaw'           => fn() => new Label($escaper, $this->newInstance('doctype'), true),
+            'link'               => fn() => new Link($escaper, $this->newInstance('doctype')),
+            'meta'               => fn() => new Meta($escaper, $this->newInstance('doctype')),
+            'ol'                 => fn() => new Ol($escaper, $this->newInstance('doctype')),
+            'olRaw'              => fn() => new Ol($escaper, $this->newInstance('doctype'), true),
             'preload'            => fn() => new Preload($escaper, $response),
-            'script'             => fn() => new Script($escaper, $self->newInstance('doctype')),
-            'style'              => fn() => new Style($escaper, $self->newInstance('doctype')),
-            'tag'                => fn() => new Tag($escaper, $self->newInstance('doctype')),
-            'title'              => fn() => new Title($escaper, $self->newInstance('doctype')),
-            'ul'                 => fn() => new Ul($escaper, $self->newInstance('doctype')),
-            'ulRaw'              => fn() => new Ul($escaper, $self->newInstance('doctype'), true),
-            'voidTag'            => fn() => new VoidTag($escaper, $self->newInstance('doctype')),
+            'script'             => fn() => new Script($escaper, $this->newInstance('doctype')),
+            'style'              => fn() => new Style($escaper, $this->newInstance('doctype')),
+            'tag'                => fn() => new Tag($escaper, $this->newInstance('doctype')),
+            'title'              => fn() => new Title($escaper, $this->newInstance('doctype')),
+            'ul'                 => fn() => new Ul($escaper, $this->newInstance('doctype')),
+            'ulRaw'              => fn() => new Ul($escaper, $this->newInstance('doctype'), true),
+            'voidTag'            => fn() => new VoidTag($escaper, $this->newInstance('doctype')),
         ];
     }
 }

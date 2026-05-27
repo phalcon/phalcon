@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Html;
 
 use Phalcon\Html\Attributes\RenderInterface;
+use Phalcon\Html\Exceptions\AttributeNotRenderable;
 use Phalcon\Support\Collection;
 
 use function htmlspecialchars;
@@ -42,14 +43,9 @@ class Attributes extends Collection implements RenderInterface
     }
 
     /**
-     * @param array $attributes
-     *
-     * @return string
-     * @throws Exception
-     *
-     * @todo Move this in a trait and start using the escaper
+     * @todo remove this when we refactor forms. Maybe remove this class? Put it into traits
      */
-    private function renderAttributes(array $attributes): string
+    protected function renderAttributes(array $attributes): string
     {
         $order = [
             'rel'    => null,
@@ -76,14 +72,11 @@ class Attributes extends Collection implements RenderInterface
         foreach ($results as $key => $value) {
             if (is_string($key) && null !== $value) {
                 if (is_array($value) || is_resource($value)) {
-                    throw new Exception(
-                        'Value at index: "' . $key . '" type: "' .
-                        gettype($value) . '" cannot be rendered'
-                    );
+                    throw new AttributeNotRenderable($key, gettype($value));
                 }
 
                 $result .= $key . "=\""
-                    . htmlspecialchars($value, ENT_QUOTES, "utf-8")
+                    . htmlspecialchars($value, ENT_QUOTES, "utf-8", true)
                     . "\" ";
             }
         }
