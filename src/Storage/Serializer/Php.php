@@ -68,6 +68,8 @@ class Php extends AbstractSerializer
             if (true === $warning || false === $result) {
                 $this->isSuccess = false;
                 $result          = "";
+            } else {
+                $this->isSuccess = true;
             }
 
             $this->data = $result;

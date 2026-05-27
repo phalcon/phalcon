@@ -35,6 +35,15 @@ class Memory extends AbstractAdapter
     protected array $data = [];
 
     /**
+     * Maximum number of items retained in the in-memory store.
+     * 0 (default) keeps the original unbounded behavior; a positive
+     * value drops the oldest entry FIFO before a new key is stored.
+     *
+     * @var int
+     */
+    protected int $maxItems = 0;
+
+    /**
      * Memory constructor.
      *
      * @param SerializerFactory $factory
@@ -71,6 +80,33 @@ class Memory extends AbstractAdapter
     public function getKeys(string $prefix = ''): array
     {
         return $this->getFilteredKeys(array_keys($this->data), $prefix);
+    }
+
+    /**
+     * Returns the configured store cap (0 = unlimited). See setMaxItems().
+     *
+     * @return int
+     */
+    public function getMaxItems(): int
+    {
+        return $this->maxItems;
+    }
+
+    /**
+     * Caps the number of items retained in the in-memory store.
+     * 0 disables the cap (the default; preserves the original
+     * unbounded behavior). When the cap is exceeded, the oldest
+     * entry is evicted FIFO before a new key is stored.
+     *
+     * @param int $maxItems
+     *
+     * @return static
+     */
+    public function setMaxItems(int $maxItems): static
+    {
+        $this->maxItems = $maxItems;
+
+        return $this;
     }
 
     /**
@@ -197,6 +233,17 @@ class Memory extends AbstractAdapter
 
         $content     = $this->getSerializedData($value);
         $prefixedKey = $this->getPrefixedKey($key);
+
+        if (
+            $this->maxItems > 0
+            && !array_key_exists($prefixedKey, $this->data)
+            && count($this->data) >= $this->maxItems
+        ) {
+            $firstKey = array_key_first($this->data);
+            if (null !== $firstKey) {
+                unset($this->data[$firstKey]);
+            }
+        }
 
         $this->data[$prefixedKey] = $content;
 

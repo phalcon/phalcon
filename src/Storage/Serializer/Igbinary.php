@@ -32,11 +32,13 @@ class Igbinary extends AbstractSerializer
             return $this->data;
         }
 
-        $result = $this->phpIgbinarySerialize($this->data);
+        $result = $this->doSerialize($this->data);
 
         if (null === $result) {
             $this->isSuccess = false;
             $result          = "";
+        } else {
+            $this->isSuccess = true;
         }
 
         return $result;
@@ -69,6 +71,8 @@ class Igbinary extends AbstractSerializer
             if (true === $warning || false === $result) {
                 $this->isSuccess = false;
                 $result          = "";
+            } else {
+                $this->isSuccess = true;
             }
 
             $this->data = $result;
@@ -76,7 +80,19 @@ class Igbinary extends AbstractSerializer
     }
 
     /**
-     * Wrapper for `igbinary_unserialize`
+     * Serialize
+     *
+     * @param mixed $value
+     *
+     * @return string|null
+     */
+    protected function doSerialize(mixed $value): string | null
+    {
+        return $this->phpIgbinarySerialize($value);
+    }
+
+    /**
+     * Unserialize
      *
      * @param string $value
      *

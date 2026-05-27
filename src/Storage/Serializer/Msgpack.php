@@ -14,21 +14,20 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Serializer;
 
 use function msgpack_pack;
+use function msgpack_unpack;
 
 class Msgpack extends Igbinary
 {
     /**
      * Serializes data
      *
-     * @return string|null
+     * @param mixed $value
+     *
+     * @return string
      */
-    public function serialize(): mixed
+    protected function doSerialize(mixed $value): string
     {
-        if (true !== $this->isSerializable($this->data)) {
-            return $this->data;
-        }
-
-        return msgpack_pack($this->data);
+        return msgpack_pack($value);
     }
 
     /**

@@ -54,6 +54,8 @@ class Base64 extends AbstractSerializer
         if (false === $result) {
             $this->isSuccess = false;
             $result          = "";
+        } else {
+            $this->isSuccess = true;
         }
 
         $this->data = $result;
