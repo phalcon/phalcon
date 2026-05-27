@@ -351,7 +351,7 @@ class Debug
                 <li><a href='#files'>Included Files</a></li>
                 <li><a href='#memory'>Memory</a></li>";
 
-            if (is_array($this->data)) {
+            if (!empty($this->data)) {
                 $html .= "
                 <li><a href='#variables'>Variables</a></li>";
             }

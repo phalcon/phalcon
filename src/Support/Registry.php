@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Phalcon.
+ * This file is part of the Phalcon Framework.
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
@@ -19,7 +19,7 @@ use const JSON_HEX_AMP;
 use const JSON_HEX_APOS;
 use const JSON_HEX_QUOT;
 use const JSON_HEX_TAG;
-use const JSON_UNESCAPED_UNICODE;
+use const JSON_UNESCAPED_SLASHES;
 
 /**
  * A registry is a container for storing objects and values in the application
