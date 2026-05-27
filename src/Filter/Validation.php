@@ -500,14 +500,10 @@ class Validation extends Injectable implements ValidationInterface
      * Adds labels for fields
      *
      * @param array $labels
-     *
-     * @return ValidationInterface
      */
-    public function setLabels(array $labels): static
+    public function setLabels(array $labels): void
     {
         $this->labels = $labels;
-
-        return $this;
     }
 
     /**

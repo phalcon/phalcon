@@ -16,7 +16,12 @@ namespace Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exception;
-use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Messages\Message;
+
+use function function_exists;
+use function is_array;
+use function mb_strlen;
+use function strlen;
 
 /**
  * Validates that a string has the specified minimum constraints
@@ -66,12 +71,20 @@ use Phalcon\Traits\Php\InfoTrait;
  */
 class Min extends AbstractValidator
 {
-    use InfoTrait;
-
     /**
      * @var string|null
      */
     protected string | null $template = "Field :field must be at least :min characters long";
+
+    /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
 
     /**
      * Executes the validation
@@ -80,26 +93,44 @@ class Min extends AbstractValidator
      * @param string     $field
      *
      * @return bool
-     * @throws Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         $value = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
-        $length      = mb_strlen((string)$value);
-        $optionField = $this->getOptionField();
-        $optionValue = $this->checkArray($this->getOption($optionField), $field);
-        $included    = (bool)$this->checkArray(
-            $this->getOption("included", false),
-            $field
-        );
+        // Check if mbstring is available to calculate the correct length
+        if (function_exists("mb_strlen")) {
+            $length = mb_strlen((string)$value);
+        } else {
+            $length = strlen((string)$value);
+        }
 
-        if (true === $this->getConditional($length, $optionValue, $included)) {
+        $minimum = $this->getOption("min");
+
+        if (is_array($minimum)) {
+            $minimum = $minimum[$field];
+        }
+
+        $included = $this->getOption("included");
+
+        if (is_array($included)) {
+            $included = (bool)$included[$field];
+        } else {
+            $included = (bool)$included;
+        }
+
+        if ($included) {
+            $failed = $length < $minimum;
+        } else {
+            $failed = $length <= $minimum;
+        }
+
+        if ($failed) {
             $replacePairs = [
-                ":" . $optionField => $optionValue,
+                ":min" => $minimum,
             ];
 
             $validation->appendMessage(
@@ -110,34 +141,5 @@ class Min extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Executes the conditional
-     *
-     * @param int  $source
-     * @param int  $target
-     * @param bool $included
-     *
-     * @return bool
-     */
-    protected function getConditional(
-        int $source,
-        int $target,
-        bool $included = false
-    ): bool {
-        if (true === $included) {
-            return $source < $target;
-        }
-
-        return $source <= $target;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getOptionField(): string
-    {
-        return "min";
     }
 }

@@ -13,6 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator\StringLength;
 
+use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Filter\Validation\Exception;
+use Phalcon\Messages\Message;
+
+use function function_exists;
+use function is_array;
+use function mb_strlen;
+use function strlen;
+
 /**
  * Validates that a string has the specified maximum constraints
  * The test is passed if for a string's length L, L<=max, i.e. L must
@@ -59,7 +69,7 @@ namespace Phalcon\Filter\Validation\Validator\StringLength;
  * );
  * ```
  */
-class Max extends Min
+class Max extends AbstractValidator
 {
     /**
      * @var string|null
@@ -67,31 +77,69 @@ class Max extends Min
     protected string | null $template = "Field :field must not exceed :max characters long";
 
     /**
-     * Executes the conditional
+     * Constructor
      *
-     * @param int  $source
-     * @param int  $target
-     * @param bool $included
-     *
-     * @return bool
+     * @param array $options
      */
-    protected function getConditional(
-        int $source,
-        int $target,
-        bool $included = false
-    ): bool {
-        if (true === $included) {
-            return $source > $target;
-        }
-
-        return $source >= $target;
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
     }
 
     /**
-     * @return string
+     * Executes the validation
+     *
+     * @param Validation $validation
+     * @param string     $field
+     *
+     * @return bool
      */
-    protected function getOptionField(): string
+    public function validate(Validation $validation, string $field): bool
     {
-        return "max";
+        $value = $validation->getValue($field);
+        if ($this->allowEmpty($field, $value)) {
+            return true;
+        }
+
+        // Check if mbstring is available to calculate the correct length
+        if (function_exists("mb_strlen")) {
+            $length = mb_strlen((string)$value);
+        } else {
+            $length = strlen((string)$value);
+        }
+
+        $maximum = $this->getOption("max");
+
+        if (is_array($maximum)) {
+            $maximum = $maximum[$field];
+        }
+
+        $included = $this->getOption("included");
+
+        if (is_array($included)) {
+            $included = (bool)$included[$field];
+        } else {
+            $included = (bool)$included;
+        }
+
+        if ($included) {
+            $failed = $length > $maximum;
+        } else {
+            $failed = $length >= $maximum;
+        }
+
+        if ($failed) {
+            $replacePairs = [
+                ":max" => $maximum,
+            ];
+
+            $validation->appendMessage(
+                $this->messageFactory($validation, $field, $replacePairs)
+            );
+
+            return false;
+        }
+
+        return true;
     }
 }

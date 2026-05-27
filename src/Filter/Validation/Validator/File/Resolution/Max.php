@@ -13,6 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator\File\Resolution;
 
+use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\Validator\File\AbstractFile;
+use Phalcon\Messages\Message;
+
+use function explode;
+use function getimagesize;
+use function is_array;
+
 /**
  * Checks if a file has the right resolution
  *
@@ -57,7 +65,7 @@ namespace Phalcon\Filter\Validation\Validator\File\Resolution;
  * );
  * ```
  */
-class Max extends Equal
+class Max extends AbstractFile
 {
     /**
      * @var string|null
@@ -65,27 +73,75 @@ class Max extends Equal
     protected string | null $template = "File :field exceeds the maximum resolution of :resolution";
 
     /**
-     * Executes the conditional
+     * Constructor
      *
-     * @param int  $sourceWidth
-     * @param int  $targetWidth
-     * @param int  $sourceHeight
-     * @param int  $targetHeight
-     * @param bool $included
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
+     * Executes the validation
+     *
+     * @param Validation $validation
+     * @param string     $field
      *
      * @return bool
      */
-    protected function getConditional(
-        int $sourceWidth,
-        int $targetWidth,
-        int $sourceHeight,
-        int $targetHeight,
-        bool $included = false
-    ): bool {
-        if (true === $included) {
-            return $sourceWidth >= $targetWidth || $sourceHeight >= $targetHeight;
+    public function validate(Validation $validation, string $field): bool
+    {
+        // Check file upload
+        if (false === $this->checkUpload($validation, $field)) {
+            return false;
         }
 
-        return $sourceWidth > $targetWidth || $sourceHeight > $targetHeight;
+        $value  = $validation->getValue($field);
+        $tmp    = getimagesize($value["tmp_name"]);
+        $width  = $tmp[0];
+        $height = $tmp[1];
+
+        $resolution = $this->getOption("resolution");
+
+        if (is_array($resolution)) {
+            $resolution = $resolution[$field];
+        }
+
+        $resolutionArray = explode("x", $resolution);
+        $maxWidth        = $resolutionArray[0];
+        $maxHeight       = $resolutionArray[1];
+
+        $included = $this->getOption("included");
+
+        if (is_array($included)) {
+            $included = (bool)$included[$field];
+        } else {
+            $included = (bool)$included;
+        }
+
+        if ($included) {
+            $result = $width >= $maxWidth || $height >= $maxHeight;
+        } else {
+            $result = $width > $maxWidth || $height > $maxHeight;
+        }
+
+        if (is_array($resolution)) {
+            $resolution = $resolution[$field];
+        }
+
+        if ($result) {
+            $replacePairs = [
+                ":resolution" => $resolution,
+            ];
+
+            $validation->appendMessage(
+                $this->messageFactory($validation, $field, $replacePairs)
+            );
+
+            return false;
+        }
+
+        return true;
     }
 }

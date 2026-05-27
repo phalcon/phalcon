@@ -15,9 +15,11 @@ namespace Phalcon\Filter\Validation\Validator\File\Resolution;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
+use Phalcon\Messages\Message;
 
 use function explode;
 use function getimagesize;
+use function is_array;
 
 /**
  * Checks if a file has the right resolution
@@ -66,46 +68,50 @@ class Equal extends AbstractFile
     protected string | null $template = "The resolution of the field :field has to be equal :resolution";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         // Check file upload
-        if (true !== $this->checkUpload($validation, $field)) {
+        if (false === $this->checkUpload($validation, $field)) {
             return false;
         }
 
-        $value   = $validation->getValue($field);
-        $tmpName = getimagesize($value["tmp_name"]);
-        $width   = (int)$tmpName[0];
-        $height  = (int)$tmpName[1];
+        $value  = $validation->getValue($field);
+        $tmp    = getimagesize($value["tmp_name"]);
+        $width  = $tmp[0];
+        $height = $tmp[1];
 
-        $resolution = $this->checkArray($this->getOption("resolution"), $field);
+        $resolution = $this->getOption("resolution");
+
+        if (is_array($resolution)) {
+            $resolution = $resolution[$field];
+        }
 
         $resolutionArray = explode("x", $resolution);
-        $equalWidth      = (int)$resolutionArray[0];
-        $equalHeight     = (int)$resolutionArray[1];
+        $equalWidth      = $resolutionArray[0];
+        $equalHeight     = $resolutionArray[1];
 
-        $included = (bool)$this->checkArray(
-            $this->getOption("included", false),
-            $field
-        );
+        if (is_array($resolution)) {
+            $resolution = $resolution[$field];
+        }
 
-        if (
-            true === $this->getConditional(
-                $width,
-                $equalWidth,
-                $height,
-                $equalHeight,
-                $included
-            )
-        ) {
+        if ($width != $equalWidth || $height != $equalHeight) {
             $replacePairs = [
                 ":resolution" => $resolution,
             ];
@@ -118,27 +124,5 @@ class Equal extends AbstractFile
         }
 
         return true;
-    }
-
-    /**
-     * Executes the conditional
-     *
-     * @param int  $sourceWidth
-     * @param int  $targetWidth
-     * @param int  $sourceHeight
-     * @param int  $targetHeight
-     * @param bool $included
-     *
-     * @return bool
-     */
-    protected function getConditional(
-        int $sourceWidth,
-        int $targetWidth,
-        int $sourceHeight,
-        int $targetHeight,
-        bool $included = false
-    ): bool {
-        return false === $included &&
-            ($sourceWidth !== $targetWidth || $sourceHeight !== $targetHeight);
     }
 }

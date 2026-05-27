@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
+use Phalcon\Filter\Exceptions\FilterNotRegistered;
+
 use function call_user_func_array;
 use function is_array;
 use function is_string;
@@ -117,9 +119,7 @@ class Filter implements FilterInterface
     public function get(string $name): mixed
     {
         if (!isset($this->mapper[$name])) {
-            throw new Exception(
-                'Filter ' . $name . ' is not registered'
-            );
+            throw new FilterNotRegistered($name);
         }
 
         if (!isset($this->services[$name])) {
@@ -318,17 +318,17 @@ class Filter implements FilterInterface
         string $sanitizerName,
         array $sanitizerParams = []
     ): array {
-        $arrayValue = [];
+        $arrayValues = [];
 
         foreach ($values as $itemKey => $itemValue) {
-            $arrayValue[$itemKey] = $this->sanitizer(
+            $arrayValues[$itemKey] = $this->sanitizer(
                 $itemValue,
                 $sanitizerName,
                 $sanitizerParams
             );
         }
 
-        return $arrayValue;
+        return $arrayValues;
     }
 
     /**

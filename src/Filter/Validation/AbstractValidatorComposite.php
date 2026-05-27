@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation;
 
 use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\Exceptions\NoValidatorsInComposite;
 
+use function count;
 use function get_class;
 
 /**
@@ -46,15 +48,12 @@ abstract class AbstractValidatorComposite extends AbstractValidator implements V
      */
     public function validate(Validation $validation, string $field): bool
     {
-        if (empty($this->validators)) {
-            throw new Exception(
-                get_class($this)
-                . " does not have any validator added"
-            );
+        if (count($this->getValidators()) === 0) {
+            throw new NoValidatorsInComposite(get_class($this));
         }
 
-        foreach ($this->validators as $validator) {
-            if (false === $validator->validate($validation, $field)) {
+        foreach ($this->getValidators() as $validator) {
+            if ($validator->validate($validation, $field) === false) {
                 return false;
             }
         }

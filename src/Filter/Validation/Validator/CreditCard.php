@@ -66,18 +66,27 @@ class CreditCard extends AbstractValidator
     protected string | null $template = "Field :field is not valid for a credit card number";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         $value = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
@@ -95,7 +104,7 @@ class CreditCard extends AbstractValidator
     }
 
     /**
-     * A simple checksum formula used to validate a variety of identification
+     * is a simple checksum formula used to validate a variety of identification
      * numbers
      *
      * @param string $number
@@ -104,30 +113,19 @@ class CreditCard extends AbstractValidator
      */
     private function verifyByLuhnAlgorithm(string $number): bool
     {
-        $hash     = "";
-        $digits   = str_split($number);
-        $reversed = array_reverse($digits);
-
-        foreach ($reversed as $position => $digit) {
-            $hash .= ($position % 2 ? (int)$digit * 2 : $digit);
+        if (ctype_digit($number) === false) {
+            return false;
         }
 
-        $warning = false;
-        set_error_handler(
-            function () use (&$warning) {
-                $warning = true; // @codeCoverageIgnore
-            },
-            E_WARNING
-        );
+        $hash   = "";
+        $digits = array_reverse(str_split($number));
 
-        $result = array_sum(str_split($hash)); // Sum the digits
-
-        restore_error_handler();
-
-        if ($warning) {
-            return false; // @codeCoverageIgnore
+        foreach ($digits as $position => $digit) {
+            $hash .= ($position % 2 ? $digit * 2 : $digit);
         }
 
-        return 0 === $result % 10;
+        $result = array_sum(str_split($hash));
+
+        return ($result % 10 == 0);
     }
 }

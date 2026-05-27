@@ -60,27 +60,34 @@ class Numericality extends AbstractValidator
     protected string | null $template = "Field :field does not have a valid numeric format";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         // Dump spaces in the string if we have any
-        $value = $validation->getValue($field);
-        $value = (string)$value;
+        $value   = $validation->getValue($field);
+        $value   = (string)$value;
+//        $value   = str_replace(" ", "", $value);
+        $pattern = "/((^[-]?[0-9,]+(\\.[0-9]+)?$)|(^[-]?[0-9.]+(,[0-9]+)?$))/";
 
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
-
-        // Dump spaces in the string if we have any
-//        $value   = str_replace(" ", "", $value);
-        $pattern = "/((^[-]?[0-9,]+(\\.\d+)?$)|(^[-]?[0-9.]+(,\d+)?$))/";
 
         if (!preg_match($pattern, $value)) {
             $validation->appendMessage(

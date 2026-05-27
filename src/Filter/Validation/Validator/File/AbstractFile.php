@@ -271,7 +271,7 @@ abstract class AbstractFile extends AbstractValidator
         preg_match(
             "/^([0-9]+(?:\\.[0-9]+)?)("
             . implode("|", array_keys($byteUnits))
-            . ")?$/Di",
+            . ")?/Di",
             $size,
             $matches
         );

@@ -15,8 +15,12 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
-use Phalcon\Filter\Validation\Exception as ValidationException;
+use Phalcon\Filter\Validation\Exception;
+use Phalcon\Filter\Validation\Exceptions\InvalidDomainOption;
+use Phalcon\Filter\Validation\Exceptions\InvalidStrictOption;
+use Phalcon\Messages\Message;
 
+use function implode;
 use function in_array;
 use function is_array;
 use function is_bool;
@@ -68,15 +72,33 @@ use function is_bool;
  */
 class ExclusionIn extends AbstractValidator
 {
+    /**
+     * @var string|null
+     */
     protected string | null $template = "Field :field must not be a part of list: :domain";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
+     *
+     * @param Validation $validation
+     * @param string     $field
+     *
+     * @return bool
      */
     public function validate(Validation $validation, string $field): bool
     {
         $value = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
@@ -84,31 +106,36 @@ class ExclusionIn extends AbstractValidator
          * A domain is an array with a list of valid values
          */
         $domain = $this->getOption("domain");
-        if (
-            is_array($domain) &&
-            isset($domain[$field]) &&
-            is_array($domain[$field])
-        ) {
-            $domain = $domain[$field];
+
+        if (isset($domain[$field])) {
+            $fieldDomain = $domain[$field];
+            if (is_array($fieldDomain)) {
+                $domain = $fieldDomain;
+            }
         }
 
         if (!is_array($domain)) {
-            throw new ValidationException("Option 'domain' must be an array");
+            throw new InvalidDomainOption();
         }
 
         $strict = false;
-        if (true === $this->hasOption("strict")) {
-            $strict = $this->checkArray($this->getOption("strict"), $field);
+
+        if ($this->hasOption("strict")) {
+            $strict = $this->getOption("strict");
+
+            if (is_array($strict)) {
+                $strict = $strict[$field];
+            }
 
             if (!is_bool($strict)) {
-                throw new ValidationException("Option 'strict' must be a bool");
+                throw new InvalidStrictOption();
             }
         }
 
         /**
          * Check if the value is contained by the array
          */
-        if (true === $this->getConditional($value, $domain, $strict)) {
+        if (in_array($value, $domain, $strict)) {
             $replacePairs = [
                 ":domain" => implode(", ", $domain),
             ];
@@ -121,22 +148,5 @@ class ExclusionIn extends AbstractValidator
         }
 
         return true;
-    }
-
-    /**
-     * Execute the conditional
-     *
-     * @param mixed $value
-     * @param array $domain
-     * @param bool  $strict
-     *
-     * @return bool
-     */
-    protected function getConditional(
-        mixed $value,
-        array $domain,
-        bool $strict
-    ): bool {
-        return in_array($value, $domain, $strict);
     }
 }

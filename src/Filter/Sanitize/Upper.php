@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use function function_exists;
 use function mb_convert_case;
-
-use const MB_CASE_UPPER;
+use function strtoupper;
+use function utf8_decode;
 
 /**
  * Sanitizes a value to uppercase
@@ -25,10 +26,14 @@ class Upper
     /**
      * @param string $input The text to sanitize
      *
-     * @return string
+     * @return false|string|string[]
      */
-    public function __invoke(string $input): string
+    public function __invoke(string $input)
     {
-        return mb_convert_case($input, MB_CASE_UPPER, 'UTF-8');
+        if (true === function_exists("mb_convert_case")) {
+            return mb_convert_case($input, MB_CASE_UPPER, "UTF-8");
+        }
+
+        return strtoupper(utf8_decode($input));
     }
 }

@@ -58,6 +58,16 @@ class PresenceOf extends AbstractValidator
     protected string | null $template = "Field :field is required";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      */
     public function validate(Validation $validation, string $field): bool

@@ -212,8 +212,8 @@ class File extends AbstractValidatorComposite
         if (isset($options["equalResolution"])) {
             $validator = new EqualResolution(
                 [
-                    "size"    => $options["equalResolution"],
-                    "message" => $options["messageEqualResolution"] ?? null,
+                    "resolution" => $options["equalResolution"],
+                    "message"    => $options["messageEqualResolution"] ?? null,
                 ]
             );
 
@@ -245,9 +245,9 @@ class File extends AbstractValidatorComposite
         if (isset($options["maxResolution"])) {
             $validator = new MaxResolution(
                 [
-                    "size"     => $options["maxResolution"],
-                    "message"  => $options["messageMaxResolution"] ?? null,
-                    "included" => $options["includedMaxResolution"] ?? false,
+                    "resolution" => $options["maxResolution"],
+                    "included"   => $options["includedMaxResolution"] ?? false,
+                    "message"    => $options["messageMaxResolution"] ?? null,
                 ]
             );
 
@@ -279,9 +279,9 @@ class File extends AbstractValidatorComposite
         if (isset($options["minResolution"])) {
             $validator = new MinResolution(
                 [
-                    "size"     => $options["minResolution"],
-                    "message"  => $options["messageMinResolution"] ?? null,
-                    "included" => $options["includedMinResolution"] ?? false,
+                    "resolution" => $options["minResolution"],
+                    "included"   => $options["includedMinResolution"] ?? false,
+                    "message"    => $options["messageMinResolution"] ?? null,
                 ]
             );
 

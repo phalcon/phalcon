@@ -66,22 +66,34 @@ class Date extends AbstractValidator
     protected string | null $template = "Field :field is not a valid date";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         $value = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
-        $format = $this->checkArray($this->getOption("format"), $field);
+        $format = $this->getOption("format");
+        if (is_array($format)) {
+            $format = $format[$field];
+        }
 
         if (empty($format)) {
             $format = "Y-m-d";
@@ -110,12 +122,9 @@ class Date extends AbstractValidator
             return false;
         }
 
-        DateTime::createFromFormat($format, $value);
+        $date   = DateTime::createFromFormat($format, $value);
         $errors = DateTime::getLastErrors();
 
-        $warningCount = $errors["warning_count"] ?? 0;
-        $errorsCount  = $errors["error_count"] ?? 0;
-
-        return 0 === $warningCount && 0 === $errorsCount;
+        return $errors === false || ($errors["warning_count"] == 0 && $errors["error_count"] == 0);
     }
 }

@@ -16,6 +16,8 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 
+use function is_array;
+
 /**
  * Checks if a value is identical to other
  *
@@ -63,32 +65,43 @@ class Identical extends AbstractValidator
     protected string | null $template = "Field :field does not have the expected value";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
-        $valid    = false;
-        $accepted = false;
-        $value    = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        $valid = false;
+        $value = $validation->getValue($field);
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
-        if (true === $this->hasOption("accepted")) {
+        if ($this->hasOption("accepted")) {
             $accepted = $this->getOption("accepted");
         } elseif ($this->hasOption("value")) {
             $accepted = $this->getOption("value");
         }
 
         if ($accepted) {
-            $accepted = $this->checkArray($accepted, $field);
-            $valid    = $value === $accepted;
+            if (is_array($accepted)) {
+                $accepted = $accepted[$field];
+            }
+
+            $valid = $value == $accepted;
         }
 
         if (!$valid) {

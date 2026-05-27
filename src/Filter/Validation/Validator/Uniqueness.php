@@ -16,6 +16,10 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
 use Phalcon\Filter\Validation\Exception;
+use Phalcon\Filter\Validation\Exceptions\UniquenessConversionMustBeArray;
+use Phalcon\Filter\Validation\Exceptions\UniquenessModelRequired;
+use Phalcon\Filter\Validation\Exceptions\UniquenessOnlyForPhalconModel;
+use Phalcon\Messages\Message;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
@@ -104,22 +108,31 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     protected string | null $template = "Field :field must be unique";
 
     /**
-     * @var array
+     * @var array|null
      */
-    private array $columnMap = [];
+    private array | null $columnMap = null;
+
+    /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
 
     /**
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
-     * @throws Exception
      */
     public function validate(Validation $validation, array | string $field): bool
     {
-        if (true !== $this->isUniqueness($validation, $field)) {
+        if (!$this->isUniqueness($validation, $field)) {
             $validation->appendMessage(
                 $this->messageFactory($validation, $field)
             );
@@ -141,15 +154,15 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     protected function getColumnNameReal(mixed $record, string $field): string
     {
         // Caching columnMap
-        if (Settings::get("orm.column_renaming") && empty($this->columnMap)) {
+        if (Settings::get("orm.column_renaming") && !$this->columnMap) {
             $this->columnMap = $record
                 ->getDI()
-                ->get("modelsMetadata")
-                ->getColumnMap($record) ?? []
+                ->getShared("modelsMetadata")
+                ->getColumnMap($record)
             ;
         }
 
-        if (isset($this->columnMap[$field])) {
+        if (is_array($this->columnMap) && isset($this->columnMap[$field])) {
             return $this->columnMap[$field];
         }
 
@@ -187,7 +200,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             $values = $convert($values);
 
             if (!is_array($values)) {
-                throw new Exception("Value conversion must return an array");
+                throw new UniquenessConversionMustBeArray();
             }
         }
 
@@ -199,9 +212,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             $record = $validation->getEntity();
 
             if (empty($record)) {
-                throw new Exception(
-                    "Model of record must be set to property \"model\""
-                );
+                throw new UniquenessModelRequired();
             }
         }
 
@@ -219,9 +230,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 //        } elseif isDocument {
 //            let params = this->isUniquenessCollection(record, field, values);
         } else {
-            throw new Exception(
-                "The uniqueness validator works only with Phalcon\\Mvc\\Model"
-            );
+            throw new UniquenessOnlyForPhalconModel();
 //
 // @todo: Restore when new Collection is reintroduced
 //
@@ -431,14 +440,9 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
         /**
          * If the operation is update, there must be values in the object
-         *
-         * @todo Change this to the commented line
          */
-        // if ($record->getDirtyState() == Model::DIRTY_STATE_PERSISTENT) {
-        if (0 === $record->getDirtyState()) {
-            $metaData   = $record->getDI()
-                                 ->get("modelsMetadata")
-            ;
+        if ($record->getDirtyState() == Model::DIRTY_STATE_PERSISTENT) {
+            $metaData = $record->getDI()->getShared("modelsMetadata");
             $attributes = $metaData->getPrimaryKeyAttributes($record);
             foreach ($attributes as $primaryField) {
                 $params["conditions"][] = $this->getColumnNameReal(

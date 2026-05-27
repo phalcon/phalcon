@@ -16,6 +16,8 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 
+use function is_array;
+
 /**
  * Validates that a value is between an inclusive range of two values.
  * For a value x, the test is passed if minimum<=x<=maximum.
@@ -69,23 +71,40 @@ class Between extends AbstractValidator
     protected string | null $template = "Field :field must be within the range of :min to :max";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
-        $value = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        $value   = $validation->getValue($field);
+        $minimum = $this->getOption("minimum");
+        $maximum = $this->getOption("maximum");
+
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
-        $minimum = $this->checkArray($this->getOption("minimum"), $field);
-        $maximum = $this->checkArray($this->getOption("maximum"), $field);
+        if (is_array($minimum)) {
+            $minimum = $minimum[$field];
+        }
+
+        if (is_array($maximum)) {
+            $maximum = $maximum[$field];
+        }
 
         if ($value < $minimum || $value > $maximum) {
             $replacePairs = [

@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
-use Phalcon\Di\Exception as DiException;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exception;
-use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Filter\Validation\Exceptions\MissingMbstring;
+use Phalcon\Messages\Message;
 
+use function function_exists;
+use function is_array;
+use function mb_strtolower;
 use function strcmp;
 
 /**
@@ -62,12 +65,20 @@ use function strcmp;
  */
 class Confirmation extends AbstractValidator
 {
-    use InfoTrait;
-
     /**
      * @var string|null
      */
     protected string | null $template = "Field :field must be the same as :with";
+
+    /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
 
     /**
      * Executes the validation
@@ -76,20 +87,24 @@ class Confirmation extends AbstractValidator
      * @param string     $field
      *
      * @return bool
-     * @throws Exception
-     * @throws DiException
      */
     public function validate(Validation $validation, string $field): bool
     {
-        $fieldWith = $this->checkArray($this->getOption("with"), $field);
+        $fieldWith = $this->getOption("with");
+
+        if (is_array($fieldWith)) {
+            $fieldWith = $fieldWith[$field];
+        }
+
         $value     = $validation->getValue($field);
         $valueWith = $validation->getValue($fieldWith);
 
-        if (true !== $this->compare((string)$value, (string)$valueWith)) {
-            $labelWith = $this->checkArray(
-                $this->getOption("labelWith"),
-                $field
-            );
+        if (!$this->compare((string)$value, (string)$valueWith)) {
+            $labelWith = $this->getOption("labelWith");
+
+            if (is_array($labelWith)) {
+                $labelWith = $labelWith[$fieldWith];
+            }
 
             if (empty($labelWith)) {
                 $labelWith = $validation->getLabel($fieldWith);
@@ -112,18 +127,25 @@ class Confirmation extends AbstractValidator
     /**
      * Compare strings
      *
-     * @param string $source
-     * @param string $target
+     * @param string $a
+     * @param string $b
      *
      * @return bool
      */
-    final protected function compare(string $source, string $target): bool
+    final protected function compare(string $a, string $b): bool
     {
-        if (true === $this->getOption("ignoreCase", false)) {
-            $source = mb_strtolower($source, "utf-8");
-            $target = mb_strtolower($target, "utf-8");
+        if ($this->getOption("ignoreCase", false)) {
+            /**
+             * mbstring is required here
+             */
+            if (!function_exists("mb_strtolower")) {
+                throw new MissingMbstring();
+            }
+
+            $a = mb_strtolower($a, "utf-8");
+            $b = mb_strtolower($b, "utf-8");
         }
 
-        return 0 === strcmp($source, $target);
+        return strcmp($a, $b) === 0;
     }
 }

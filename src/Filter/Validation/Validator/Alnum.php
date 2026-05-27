@@ -60,6 +60,16 @@ class Alnum extends AbstractValidator
     protected string | null $template = "Field :field must contain only letters and numbers";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation

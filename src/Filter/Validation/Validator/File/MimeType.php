@@ -14,12 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation\Validator\File;
 
 use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\Exception;
-use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Filter\Validation\Exceptions\InvalidAllowedTypes;
 
 use function finfo_close;
 use function finfo_file;
 use function finfo_open;
+use function function_exists;
+use function implode;
 use function in_array;
 use function is_array;
 
@@ -75,8 +76,6 @@ use const FILEINFO_MIME_TYPE;
  */
 class MimeType extends AbstractFile
 {
-    use InfoTrait;
-
     /**
      * @var string|null
      */
@@ -89,33 +88,39 @@ class MimeType extends AbstractFile
      * @param string     $field
      *
      * @return bool
-     * @throws Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         // Check file upload
-        if (true !== $this->checkUpload($validation, $field)) {
+        if (false === $this->checkUpload($validation, $field)) {
             return false;
         }
 
         $value = $validation->getValue($field);
-        $types = $this->checkArray($this->getOption("types"), $field);
+        $types = $this->getOption("types");
+
+        if (isset($types[$field])) {
+            $types = $types[$field];
+        }
 
         if (!is_array($types)) {
-            throw new Exception(
-                "Option 'allowedTypes' must be an array"
-            );
-        }
-        if (true === $this->phpFunctionExists("finfo_open")) {
-            $mimeType = finfo_open(FILEINFO_MIME_TYPE);
-            $mime     = finfo_file($mimeType, $value["tmp_name"]);
-
-            finfo_close($mimeType);
-        } else {
-            $mime = $value['type']; // @codeCoverageIgnore
+            throw new InvalidAllowedTypes();
         }
 
-        if (true !== in_array($mime, $types)) {
+        $mime = null;
+        if (function_exists("finfo_open")) {
+            $tmp = finfo_open(FILEINFO_MIME_TYPE);
+            if ($tmp) {
+                $mime = finfo_file($tmp, $value["tmp_name"]);
+                finfo_close($tmp);
+            }
+        }
+
+        if (!$mime) {
+            $mime = $value["type"];
+        }
+
+        if (!in_array($mime, $types)) {
             $replacePairs = [
                 ":types" => implode(", ", $types),
             ];

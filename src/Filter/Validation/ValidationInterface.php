@@ -116,7 +116,6 @@ interface ValidationInterface
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
-     * @todo remove this
      */
     public function rule(
         array | string $field,
@@ -153,10 +152,8 @@ interface ValidationInterface
      * Adds labels for fields
      *
      * @param array $labels
-     *
-     * @return ValidationInterface
      */
-    public function setLabels(array $labels): ValidationInterface;
+    public function setLabels(array $labels): void;
 
     /**
      * Validate a set of data according to a set of rules

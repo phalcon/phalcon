@@ -15,6 +15,7 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Filter\Validation\Exceptions\InvalidCallbackReturn;
 use Phalcon\Filter\Validation\ValidatorInterface;
 
 use function call_user_func;
@@ -73,13 +74,22 @@ class Callback extends AbstractValidator
     protected string | null $template = "Field :field must match the callback function";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
@@ -95,7 +105,7 @@ class Callback extends AbstractValidator
             $returnedValue = call_user_func($callback, $data);
 
             if (is_bool($returnedValue)) {
-                if (true !== $returnedValue) {
+                if (!$returnedValue) {
                     $validation->appendMessage(
                         $this->messageFactory($validation, $field)
                     );
@@ -108,10 +118,7 @@ class Callback extends AbstractValidator
                 return $returnedValue->validate($validation, $field);
             }
 
-            throw new Exception(
-                "Callback must return bool or "
-                . "Phalcon\\Filter\\Validation\\Validator object"
-            );
+            throw new InvalidCallbackReturn();
         }
 
         return true;

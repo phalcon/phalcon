@@ -15,8 +15,10 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Messages\Message;
 
 use function filter_var;
+use function is_array;
 
 use const FILTER_FLAG_IPV4;
 use const FILTER_FLAG_IPV6;
@@ -86,33 +88,44 @@ class Ip extends AbstractValidator
     protected string | null $template = "Field :field must be a valid IP address";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
      *
      * @param Validation $validation
      * @param string     $field
      *
      * @return bool
-     * @throws Validation\Exception
      */
     public function validate(Validation $validation, string $field): bool
     {
         $value = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
-        $version       = $this->checkArray(
-            $this->getOption("version", FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6),
-            $field
-        );
-        $allowPrivate  = $this->checkArray(
-            $this->getOption("allowPrivate") ? 0 : FILTER_FLAG_NO_PRIV_RANGE,
-            $field
-        );
-        $allowReserved = $this->checkArray(
-            $this->getOption("allowReserved") ? 0 : FILTER_FLAG_NO_RES_RANGE,
-            $field
-        );
+        $version = $this->getOption("version", FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6);
+        if (is_array($version)) {
+            $version = $version[$field];
+        }
+
+        $allowPrivate = $this->getOption("allowPrivate") ? 0 : FILTER_FLAG_NO_PRIV_RANGE;
+        if (is_array($allowPrivate)) {
+            $allowPrivate = $allowPrivate[$field];
+        }
+
+        $allowReserved = $this->getOption("allowReserved") ? 0 : FILTER_FLAG_NO_RES_RANGE;
+        if (is_array($allowReserved)) {
+            $allowReserved = $allowReserved[$field];
+        }
 
         $options = [
             "options" => [

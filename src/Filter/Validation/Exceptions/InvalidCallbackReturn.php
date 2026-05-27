@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Filter\Validation\Exceptions;
+
+use Phalcon\Filter\Validation\Exception;
+
+class InvalidCallbackReturn extends Exception
+{
+    public function __construct()
+    {
+        parent::__construct(
+            "Callback must return bool or Phalcon\\Filter\\Validation\\Validator object"
+        );
+    }
+}

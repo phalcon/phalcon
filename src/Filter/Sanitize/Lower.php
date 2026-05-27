@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use function function_exists;
 use function mb_convert_case;
+use function strtolower;
+use function utf8_decode;
 
 /**
  * Sanitizes a value to lowercase
@@ -23,10 +26,14 @@ class Lower
     /**
      * @param string $input The text to sanitize
      *
-     * @return string
+     * @return false|string|string[]
      */
-    public function __invoke(string $input): string
+    public function __invoke(string $input)
     {
-        return mb_convert_case($input, MB_CASE_LOWER, "UTF-8");
+        if (true === function_exists("mb_convert_case")) {
+            return mb_convert_case($input, MB_CASE_LOWER, "UTF-8");
+        }
+
+        return strtolower(utf8_decode($input));
     }
 }

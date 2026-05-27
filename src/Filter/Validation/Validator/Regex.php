@@ -15,7 +15,9 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Messages\Message;
 
+use function is_array;
 use function preg_match;
 
 /**
@@ -65,24 +67,44 @@ class Regex extends AbstractValidator
     protected string | null $template = "Field :field does not match the required format";
 
     /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+    }
+
+    /**
      * Executes the validation
+     *
+     * @param Validation $validation
+     * @param string     $field
+     *
+     * @return bool
      */
     public function validate(Validation $validation, string $field): bool
     {
-        $matches = [];
+        $matches = null;
         $value   = $validation->getValue($field);
-        if (true === $this->allowEmpty($field, $value)) {
+        if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
-        $pattern = $this->checkArray($this->getOption("pattern"), $field);
+        $pattern = $this->getOption("pattern");
+
+        if (is_array($pattern)) {
+            $pattern = $pattern[$field];
+        }
 
         /**
          * Since PHP8.1 $value can't be null.
          */
-        $failed = true;
-        if (null !== $value && preg_match($pattern, $value, $matches)) {
-            $failed = $matches[0] !== $value;
+        if ($value !== null && preg_match($pattern, $value, $matches)) {
+            $failed = $matches[0] != $value;
+        } else {
+            $failed = true;
         }
 
         if ($failed) {

@@ -13,9 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\AbstractValidatorComposite;
+use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
+use Phalcon\Messages\Message;
 
 /**
  * Validates that a string has the specified maximum and minimum constraints
@@ -97,79 +100,74 @@ class StringLength extends AbstractValidatorComposite
      */
     public function __construct(array $options = [])
     {
-        $this
-            ->processValidator(
-                $options,
-                Min::class,
-                "min",
-                "messageMinimum",
-                "includedMinimum"
-            )
-            ->processValidator(
-                $options,
-                Max::class,
-                "max",
-                "messageMaximum",
-                "includedMaximum"
-            )
-        ;
+        $included = null;
+        $message  = null;
 
-        unset(
-            $options["min"],
-            $options["message"],
-            $options["messageMinimum"],
-            $options["included"],
-            $options["includedMinimum"],
-            $options["max"],
-            $options["messageMaximum"],
-            $options["includedMaximum"]
-        );
+        // create individual validators
+        foreach ($options as $key => $value) {
+            if (strcasecmp($key, "min") === 0) {
+                // get custom message
+                if (isset($options["message"])) {
+                    $message = $options["message"];
+                } elseif (isset($options["messageMinimum"])) {
+                    $message = $options["messageMinimum"];
+                }
 
-        parent::__construct($options);
-    }
+                // get included option
+                if (isset($options["included"])) {
+                    $included = $options["included"];
+                } elseif (isset($options["includedMinimum"])) {
+                    $included = $options["includedMinimum"];
+                }
 
-    /**
-     * @param array  $options
-     * @param string $class
-     * @param string $key
-     * @param string $messageKey
-     * @param string $includedKey
-     *
-     * @return StringLength
-     */
-    private function processValidator(
-        array $options,
-        string $class,
-        string $key,
-        string $messageKey,
-        string $includedKey
-    ): StringLength {
-        if (isset($options[$key])) {
-            $message  = null;
-            $included = false;
-            // get custom message
-            if (isset($options["message"])) {
-                $message = $options["message"];
-            } elseif (isset($options[$messageKey])) {
-                $message = $options[$messageKey];
+                $validator = new Min(
+                    [
+                        "min"      => $value,
+                        "message"  => $message,
+                        "included" => $included,
+                    ]
+                );
+
+                unset($options["min"]);
+                unset($options["message"]);
+                unset($options["messageMinimum"]);
+                unset($options["included"]);
+                unset($options["includedMinimum"]);
+            } elseif (strcasecmp($key, "max") === 0) {
+                // get custom message
+                if (isset($options["message"])) {
+                    $message = $options["message"];
+                } elseif (isset($options["messageMaximum"])) {
+                    $message = $options["messageMaximum"];
+                }
+
+                // get included option
+                if (isset($options["included"])) {
+                    $included = $options["included"];
+                } elseif (isset($options["includedMaximum"])) {
+                    $included = $options["includedMaximum"];
+                }
+
+                $validator = new Max(
+                    [
+                        "max"      => $value,
+                        "message"  => $message,
+                        "included" => $included,
+                    ]
+                );
+
+                unset($options["max"]);
+                unset($options["message"]);
+                unset($options["messageMaximum"]);
+                unset($options["included"]);
+                unset($options["includedMaximum"]);
+            } else {
+                continue;
             }
 
-            // get included option
-            if (isset($options["included"])) {
-                $included = $options["included"];
-            } elseif (isset($options[$includedKey])) {
-                $included = $options[$includedKey];
-            }
-
-            $this->validators[] = new $class(
-                [
-                    $key       => $options[$key],
-                    "message"  => $message,
-                    "included" => $included,
-                ]
-            );
+            $this->validators[] = $validator;
         }
 
-        return $this;
+        parent::__construct($options);
     }
 }

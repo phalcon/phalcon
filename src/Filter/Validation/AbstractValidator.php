@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation;
 
 use Phalcon\Filter\Validation;
+use Phalcon\Filter\Validation\Exceptions\FieldNotPrintable;
 use Phalcon\Messages\Message;
 use Phalcon\Support\Helper\Arr\Whitelist;
 
@@ -30,11 +31,6 @@ use function is_string;
 abstract class AbstractValidator implements ValidatorInterface
 {
     /**
-     * @var array
-     */
-    protected array $options = [];
-
-    /**
      * Message template
      *
      * @var string|null
@@ -47,6 +43,11 @@ abstract class AbstractValidator implements ValidatorInterface
      * @var array
      */
     protected array $templates = [];
+
+    /**
+     * @var array
+     */
+    protected array $options = [];
 
     /**
      * Phalcon\Filter\Validation\Validator constructor
@@ -170,9 +171,12 @@ abstract class AbstractValidator implements ValidatorInterface
         array | string $field,
         array $replacements = []
     ): Message {
-        $singleField = $field;
         if (is_array($field)) {
             $singleField = implode(", ", $field);
+        } elseif (is_string($field)) {
+            $singleField = $field;
+        } else {
+            throw new FieldNotPrintable();
         }
 
         $replacements = array_merge(
@@ -258,17 +262,33 @@ abstract class AbstractValidator implements ValidatorInterface
      *
      * @return bool
      */
-    protected function allowEmpty(string $field, mixed $value): bool
+    protected function allowEmpty(mixed $field, mixed $value): bool
     {
         $allowEmpty = $this->getOption("allowEmpty", false);
 
         if (is_array($allowEmpty)) {
-            $allowEmpty = isset($allowEmpty[$field])
-                ? $allowEmpty[$field]
-                : false;
+            /**
+             * Per-field map: ['fieldName' => true/false]
+             * Used by multi-field validators such as Ip.
+             */
+            if (isset($allowEmpty[$field])) {
+                return $allowEmpty[$field] && empty($value);
+            }
+
+            /**
+             * Value list: [null, '']
+             * Strict comparison so that '0' is not treated as empty.
+             */
+            foreach ($allowEmpty as $emptyValue) {
+                if ($emptyValue === $value) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        return true === $allowEmpty && empty($value);
+        return $allowEmpty && empty($value);
     }
 
     /**
@@ -300,7 +320,11 @@ abstract class AbstractValidator implements ValidatorInterface
     {
         $code = $this->getOption("code", 0);
 
-        return $this->checkArray($code, $field);
+        if (is_array($code)) {
+            $code = $code[$field];
+        }
+
+        return $code;
     }
 
     /**
@@ -316,7 +340,10 @@ abstract class AbstractValidator implements ValidatorInterface
         string $field
     ): mixed {
         $label = $this->getOption("label");
-        $label = $this->checkArray($label, $field);
+
+        if (is_array($label)) {
+            $label = $label[$field];
+        }
 
         if (empty($label)) {
             $label = $validation->getLabel($field);
