@@ -24,6 +24,7 @@ use Phalcon\Filter\Validation\Validator\Date;
 use Phalcon\Filter\Validation\Validator\Digit;
 use Phalcon\Filter\Validation\Validator\Email;
 use Phalcon\Filter\Validation\Exception;
+use Phalcon\Filter\Validation\Validator\Exception as ValidatorException;
 use Phalcon\Filter\Validation\Validator\ExclusionIn;
 use Phalcon\Filter\Validation\Validator\File;
 use Phalcon\Filter\Validation\Validator\Identical;
@@ -91,6 +92,7 @@ class ValidatorFactory
             "date"         => Date::class,
             "digit"        => Digit::class,
             "email"        => Email::class,
+            "exception"    => ValidatorException::class,
             "exclusionIn"  => ExclusionIn::class,
             "file"         => File::class,
             "identical"    => Identical::class,
