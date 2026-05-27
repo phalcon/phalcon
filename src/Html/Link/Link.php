@@ -15,6 +15,9 @@ namespace Phalcon\Html\Link;
 
 use Phalcon\Html\Link\Interfaces\LinkInterface;
 
+/**
+ * Class Phalcon\Html\Link\Link
+ */
 class Link extends AbstractLink implements LinkInterface
 {
     /**

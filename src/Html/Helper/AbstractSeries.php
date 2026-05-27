@@ -3,8 +3,14 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by AuraPHP
+ * @link    https://github.com/auraphp/Aura.Html
+ * @license https://github.com/auraphp/Aura.Html/blob/2.x/LICENSE
  */
 
 declare(strict_types=1);
@@ -12,7 +18,8 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 /**
- * Abstract class for series elements
+ * @property array $attributes
+ * @property array $store
  */
 abstract class AbstractSeries extends AbstractHelper
 {
@@ -38,7 +45,6 @@ abstract class AbstractSeries extends AbstractHelper
     ): static {
         $this->delimiter = null === $delimiter ? PHP_EOL : $delimiter;
         $this->indent    = $indent;
-        $this->store     = [];
 
         return $this;
     }

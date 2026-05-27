@@ -5,16 +5,21 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by AuraPHP
+ * @link    https://github.com/auraphp/Aura.Html
+ * @license https://github.com/auraphp/Aura.Html/blob/2.x/LICENSE
  */
 
 declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input\Select;
 
-use InvalidArgumentException;
 use Phalcon\Contracts\Html\Helper\Input\SelectData;
+use Phalcon\Html\Exceptions\InvalidResultsetValue;
+use Phalcon\Html\Exceptions\UsingRequiresTwoValues;
 use Phalcon\Mvc\Model\ResultsetInterface;
 
 use function call_user_func;
@@ -45,9 +50,7 @@ class ResultsetData implements SelectData
         protected array $attributesMap = []
     ) {
         if (count($using) !== 2) {
-            throw new InvalidArgumentException(
-                "The 'using' parameter requires exactly two values"
-            );
+            throw new UsingRequiresTwoValues();
         }
     }
 
@@ -114,9 +117,7 @@ class ResultsetData implements SelectData
 
         foreach ($this->resultset as $option) {
             if (!is_object($option) && !is_array($option)) {
-                throw new InvalidArgumentException(
-                    'Resultset returned an invalid value'
-                );
+                throw new InvalidResultsetValue();
             }
 
             $optionValue = $this->readField($option, $usingZero);

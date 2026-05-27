@@ -15,6 +15,9 @@ namespace Phalcon\Html\Link;
 
 use Phalcon\Html\Link\Interfaces\EvolvableLinkInterface;
 
+/**
+ * Class Phalcon\Html\Link\EvolvableLink
+ */
 class EvolvableLink extends Link implements EvolvableLinkInterface
 {
     /**

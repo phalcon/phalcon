@@ -7,6 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by AuraPHP
+ * @link    https://github.com/auraphp/Aura.Html
+ * @license https://github.com/auraphp/Aura.Html/blob/2.x/LICENSE
  */
 
 declare(strict_types=1);
@@ -259,13 +263,14 @@ class Breadcrumbs extends AbstractHelper
             return '';
         }
 
+        $data        = $this->data;
         $output      = [];
-        $lastUrl     = array_key_last($this->data);
-        $lastElement = $this->data[$lastUrl];
+        $lastUrl     = array_key_last($data);
+        $lastElement = $data[$lastUrl];
 
-        unset($this->data[$lastUrl]);
+        unset($data[$lastUrl]);
 
-        foreach ($this->data as $element) {
+        foreach ($data as $element) {
             $output[] = $this->getLink($this->template['line'], $element);
         }
 

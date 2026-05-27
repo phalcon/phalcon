@@ -53,7 +53,9 @@ class Header implements SerializerInterface
 
             foreach ($attributes as $key => $value) {
                 if (is_array($value)) {
-                    $parts = $this->processArray($parts, $value, $key);
+                    foreach ($value as $subValue) {
+                        $parts[] = $key . '="' . $subValue . '"';
+                    }
                     continue;
                 }
 
@@ -78,23 +80,5 @@ class Header implements SerializerInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Traverses a value array and add the parts
-     *
-     * @param array  $parts
-     * @param array  $value
-     * @param string $key
-     *
-     * @return array
-     */
-    private function processArray(array $parts, array $value, string $key): array
-    {
-        foreach ($value as $subValue) {
-            $parts[] = $key . '="' . $subValue . '"';
-        }
-
-        return $parts;
     }
 }

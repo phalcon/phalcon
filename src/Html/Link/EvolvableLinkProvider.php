@@ -16,6 +16,11 @@ namespace Phalcon\Html\Link;
 use Phalcon\Html\Link\Interfaces\EvolvableLinkProviderInterface;
 use Phalcon\Html\Link\Interfaces\LinkInterface;
 
+/**
+ * Class Phalcon\Html\Link\EvolvableLinkProvider
+ *
+ * @property LinkInterface[] $links
+ */
 class EvolvableLinkProvider extends LinkProvider implements EvolvableLinkProviderInterface
 {
     /**

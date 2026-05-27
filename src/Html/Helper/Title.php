@@ -7,6 +7,10 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * Implementation of this file has been influenced by AuraPHP
+ * @link    https://github.com/auraphp/Aura.Html
+ * @license https://github.com/auraphp/Aura.Html/blob/2.x/LICENSE
  */
 
 declare(strict_types=1);
@@ -20,6 +24,13 @@ use const PHP_EOL;
 
 /**
  * Class Title
+ *
+ * @property array  $append
+ * @property string $delimiter
+ * @property string $indent
+ * @property array  $prepend
+ * @property string $title
+ * @property string $separator
  */
 class Title extends AbstractHelper
 {
@@ -32,14 +43,16 @@ class Title extends AbstractHelper
      * @var array
      */
     protected array $prepend = [];
-    /**
-     * @var string
-     */
-    protected string $separator = '';
+
     /**
      * @var string
      */
     protected string $title = '';
+
+    /**
+     * @var string
+     */
+    protected string $separator = '';
 
     /**
      * Sets the separator and returns the object back
@@ -114,33 +127,18 @@ class Title extends AbstractHelper
     }
 
     /**
-     * Prepends text to current document title
-     *
-     * @param string $text
-     * @param bool   $raw
-     *
-     * @return Title
-     */
-    public function prepend(string $text, bool $raw = false): static
-    {
-        $text = $raw ? $text : $this->escaper->html($text);
-
-        array_unshift($this->prepend, $text);
-
-        return $this;
-    }
-
-    /**
      * Sets the title
      *
      * @param string $text
      * @param bool   $raw
      *
-     * @return Title
+     * @return static
      */
     public function set(string $text, bool $raw = false): static
     {
-        $this->title = $raw ? $text : $this->escaper->html($text);
+        $text = $raw ? $text : $this->escaper->html($text);
+
+        $this->title = $text;
 
         return $this;
     }
@@ -151,11 +149,28 @@ class Title extends AbstractHelper
      * @param string $separator
      * @param bool   $raw
      *
-     * @return Title
+     * @return static
      */
     public function setSeparator(string $separator, bool $raw = false): static
     {
         $this->separator = $raw ? $separator : $this->escaper->html($separator);
+
+        return $this;
+    }
+
+    /**
+     * Prepends text to current document title
+     *
+     * @param string $text
+     * @param bool   $raw
+     *
+     * @return static
+     */
+    public function prepend(string $text, bool $raw = false): static
+    {
+        $text = $raw ? $text : $this->escaper->html($text);
+
+        array_unshift($this->prepend, $text);
 
         return $this;
     }
