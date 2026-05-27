@@ -16,9 +16,11 @@ namespace Phalcon\Forms;
 use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\CheckGroup;
 use Phalcon\Forms\Element\Date;
-use Phalcon\Forms\Element\Email;
 use Phalcon\Forms\Element\ElementInterface;
+use Phalcon\Forms\Element\Email;
 use Phalcon\Forms\Element\File;
+use Phalcon\Forms\Exceptions\FormNotInLocator;
+use Phalcon\Forms\Exceptions\UnknownFormElementType;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Numeric;
 use Phalcon\Forms\Element\Password;
@@ -94,9 +96,7 @@ class FormsLocator
     public function getElement(string $type): callable
     {
         if (!isset($this->elements[$type])) {
-            throw new Exception(
-                'Unknown form element type "' . $type . '"'
-            );
+            throw new UnknownFormElementType($type);
         }
 
         return $this->elements[$type];
@@ -147,9 +147,7 @@ class FormsLocator
     public function get(string $name, object | null $entity = null): Form
     {
         if (!$this->has($name)) {
-            throw new Exception(
-                "Form '" . $name . "' is not registered in the FormsLocator"
-            );
+            throw new FormNotInLocator($name);
         }
 
         if ($entity !== null) {

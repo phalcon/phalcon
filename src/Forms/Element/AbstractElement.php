@@ -18,6 +18,8 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Forms\Exception;
+use Phalcon\Forms\Exceptions\FormElementNameRequired;
+use Phalcon\Forms\Exceptions\InvalidFilterType;
 use Phalcon\Forms\Form;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\MessageInterface;
@@ -91,9 +93,7 @@ abstract class AbstractElement implements ElementInterface
         $name = trim($name);
 
         if (empty($name)) {
-            throw new InvalidArgumentException(
-                "Form element name is required"
-            );
+            throw new FormElementNameRequired();
         }
 
         $this->name       = $name;
@@ -120,7 +120,15 @@ abstract class AbstractElement implements ElementInterface
      */
     public function addFilter(string $filter): ElementInterface
     {
-        $this->filters[] = $filter;
+        $filters = $this->filters;
+
+        if (is_array($filters)) {
+            $this->filters[] = $filter;
+        } elseif (is_string($filters)) {
+            $this->filters = [$filters, $filter];
+        } else {
+            $this->filters = [$filter];
+        }
 
         return $this;
     }
@@ -462,6 +470,10 @@ abstract class AbstractElement implements ElementInterface
     public function setFilters(
         array | string $filters
     ): ElementInterface {
+        if (!is_string($filters) && !is_array($filters)) {
+            throw new InvalidFilterType();
+        }
+
         if (is_string($filters)) {
             $filters = [$filters];
         }
@@ -592,11 +604,7 @@ abstract class AbstractElement implements ElementInterface
                 $container = Di::getDefault();
 
                 if (null !== $container && true === $container->has("tag")) {
-                    if ($container instanceof DiInterface) {
-                        $tagFactory = $container->getShared("tag");
-                    } else {
-                        $tagFactory = $container->get("tag");
-                    }
+                    $tagFactory = $container->getShared("tag");
                 }
             }
 

@@ -15,6 +15,8 @@ namespace Phalcon\Forms\Loader;
 
 use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Forms\Exception;
+use Phalcon\Forms\Exceptions\YamlExtensionRequired;
+use Phalcon\Forms\Exceptions\YamlSchemaNotArray;
 
 use function extension_loaded;
 use function is_array;
@@ -47,10 +49,8 @@ class YamlLoader implements Schema
      */
     public function load(): array
     {
-        if (!extension_loaded('yaml')) {
-            throw new Exception(
-                'YamlLoader requires the "yaml" PHP extension (pecl/yaml)'
-            );
+        if (!extension_loaded("yaml")) {
+            throw new YamlExtensionRequired();
         }
 
         if (is_file($this->source) && is_readable($this->source)) {
@@ -60,7 +60,7 @@ class YamlLoader implements Schema
         }
 
         if (!is_array($definitions)) {
-            throw new Exception('YAML form schema must parse to an array');
+            throw new YamlSchemaNotArray();
         }
 
         $loader = new ArrayLoader($definitions);

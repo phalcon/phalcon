@@ -18,12 +18,14 @@ use Iterator;
 use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
+use Phalcon\Filter\FilterInterface;
 use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\Exception as ValidationException;
 use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\ElementInterface;
-use Phalcon\Forms\FormsLocator;
+use Phalcon\Forms\Exceptions\ElementNotInForm;
+use Phalcon\Forms\Exceptions\InvalidEntity;
+use Phalcon\Forms\Exceptions\NoFormElements;
 use Phalcon\Html\Attributes;
 use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Html\TagFactory;
@@ -97,8 +99,12 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Phalcon\Forms\Form constructor
      */
-    public function __construct(?object $entity = null, array $userOptions = [])
+    public function __construct($entity = null, array $userOptions = [])
     {
+        if ($entity !== null && !is_object($entity)) {
+            throw new InvalidEntity();
+        }
+
         $this->entity = $entity;
 
         /**
@@ -156,15 +162,17 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
              * Walk elements and add the element to a particular position
              */
             foreach ($this->elements as $key => $value) {
-                $elements = $this->processElementByPosition(
-                    $key,
-                    $position,
-                    $type,
-                    $element,
-                    $elements,
-                    $name,
-                    $value
-                );
+                if ($key == $position) {
+                    if ($type) {
+                        $elements[$name] = $element;
+                        $elements[$key]  = $value;
+                    } else {
+                        $elements[$key]  = $value;
+                        $elements[$name] = $element;
+                    }
+                } else {
+                    $elements[$key] = $value;
+                }
             }
 
             $this->elements = $elements;
@@ -189,7 +197,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         array $whitelist = []
     ): static {
         if (empty($this->elements)) {
-            throw new Exception("There are no elements in the form");
+            throw new NoFormElements();
         }
 
         if (empty($whitelist)) {
@@ -250,14 +258,10 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
              */
             $filters       = $element->getFilters();
             $filteredValue = $value;
-            if (!empty($filters)) {
-                if (null === $filter) {
+            if ($filters) {
+                if (!is_object($filter)) {
                     $container = $this->getDI();
-                    if ($container instanceof DiInterface) {
-                        $filter = $container->getShared("filter");
-                    } else {
-                        $filter = $container->get("filter");
-                    }
+                    $filter    = $container->getShared("filter");
                 }
 
                 /**
@@ -386,9 +390,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     public function get(string $name): ElementInterface
     {
         if (!isset($this->elements[$name])) {
-            throw new Exception(
-                "Element with ID=" . $name . " is not part of the form"
-            );
+            throw new ElementNotInForm($name);
         }
 
         return $this->elements[$name];
@@ -1041,76 +1043,4 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         return isset($this->elementsIndexed[$this->position]);
     }
 
-    /**
-     * @param int|string       $key
-     * @param string           $position
-     * @param bool|null        $type
-     * @param ElementInterface $element
-     * @param mixed            $elements
-     * @param string           $name
-     * @param mixed            $value
-     *
-     * @return array|mixed
-     */
-    private function processElementByPosition(
-        int | string $key,
-        string $position,
-        ?bool $type,
-        ElementInterface $element,
-        mixed $elements,
-        string $name,
-        mixed $value
-    ): mixed {
-        if ($key === $position) {
-            $elements = $this->processElements(
-                $type,
-                $element,
-                $elements,
-                $name,
-                $value,
-                $key
-            );
-        } else {
-            /**
-             * Copy the element to new array
-             */
-            $elements[$key] = $value;
-        }
-        return $elements;
-    }
-
-    /**
-     * @param bool|null        $type
-     * @param ElementInterface $element
-     * @param array            $elements
-     * @param string           $name
-     * @param mixed            $value
-     * @param string           $key
-     *
-     * @return array
-     */
-    private function processElements(
-        ?bool $type,
-        ElementInterface $element,
-        array $elements,
-        string $name,
-        mixed $value,
-        string $key
-    ): array {
-        if (true === $type) {
-            /**
-             * Add the element before position
-             */
-            $elements[$name] = $element;
-            $elements[$key]  = $value;
-        } else {
-            /**
-             * Add the element after position
-             */
-            $elements[$key]  = $value;
-            $elements[$name] = $element;
-        }
-
-        return $elements;
-    }
 }

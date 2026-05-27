@@ -15,6 +15,8 @@ namespace Phalcon\Forms\Loader;
 
 use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Forms\Exception;
+use Phalcon\Forms\Exceptions\InvalidJsonSchema;
+use Phalcon\Forms\Exceptions\JsonSchemaNotArray;
 
 use function array_is_list;
 use function file_get_contents;
@@ -56,11 +58,11 @@ class JsonLoader implements Schema
         try {
             $definitions = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw new Exception('JSON form schema is invalid: ' . $e->getMessage());
+            throw new InvalidJsonSchema($e->getMessage());
         }
 
         if (!is_array($definitions) || !array_is_list($definitions)) {
-            throw new Exception('JSON form schema must decode to an array');
+            throw new JsonSchemaNotArray();
         }
 
         $loader = new ArrayLoader($definitions);
