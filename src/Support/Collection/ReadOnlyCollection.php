@@ -61,7 +61,7 @@ class ReadOnlyCollection extends Collection
     }
 
     /**
-     * @throws Exception
+     * @throws ReadOnlyViolation
      */
     public function clear(): void
     {
@@ -69,7 +69,7 @@ class ReadOnlyCollection extends Collection
     }
 
     /**
-     * @throws Exception
+     * @throws ReadOnlyViolation
      */
     public function init(array $data = []): void
     {
@@ -85,7 +85,7 @@ class ReadOnlyCollection extends Collection
      *
      * @param string $element Name of the element
      *
-     * @throws Exception
+     * @throws ReadOnlyViolation
      */
     public function remove(string $element): void
     {
@@ -97,7 +97,7 @@ class ReadOnlyCollection extends Collection
      *
      * @param array<int|string, mixed> $data
      *
-     * @throws Exception
+     * @throws ReadOnlyViolation
      */
     public function replace(array $data): void
     {
@@ -110,7 +110,7 @@ class ReadOnlyCollection extends Collection
      * @param string $element Name of the element
      * @param mixed  $value   Value to store for the element
      *
-     * @throws Exception
+     * @throws ReadOnlyViolation
      */
     public function set(string $element, $value): void
     {
