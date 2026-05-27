@@ -16,6 +16,8 @@ namespace Phalcon\Flash;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Flash\Exceptions\EscaperServiceUnavailable;
+use Phalcon\Flash\Exceptions\FlashMessageNotStringOrArray;
 use Phalcon\Flash\Traits\FlashGettersTrait;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
@@ -94,28 +96,16 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             return $this->escaperService;
         }
 
-        $this->checkContainer(
-            Exception::class,
-            "the 'escaper' service"
-        );
+        if (
+            null !== $this->container &&
+            true === $this->container->has("escaper")
+        ) {
+            $this->escaperService = $this->container->getShared("escaper");
 
-        if (true !== $this->container->has('escaper')) {
-            $this->checkContainer(
-                Exception::class,
-                "the 'escaper' service"
-            );
+            return $this->escaperService;
         }
 
-        if (null === $this->escaperService) {
-            if ($this->container instanceof DiInterface) {
-                $this->escaperService = $this->container->getShared('escaper');
-            } else {
-                $this->escaperService = $this->container->get('escaper');
-            }
-        }
-
-
-        return $this->escaperService;
+        throw new EscaperServiceUnavailable();
     }
 
     /**
@@ -147,9 +137,13 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * @return string|null
      * @throws Exception
      */
-    public function outputMessage(string $type, array|string $message): string | null
+    public function outputMessage(string $type, mixed $message): string | null
     {
-        $content = '';
+        $content = "";
+
+        if (!is_array($message) && !is_string($message)) {
+            throw new FlashMessageNotStringOrArray();
+        }
 
         /**
          * Make this an array. Same code processes string and array
@@ -402,15 +396,15 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             return $message;
         }
 
-        $replaceCss     = $this->checkClasses($this->cssClasses, $type);
-        $replaceIconCss = $this->checkClasses($this->cssIconClasses, $type);
+        $cssClasses     = $this->checkClasses($this->cssClasses, $type);
+        $cssIconClasses = $this->checkClasses($this->cssIconClasses, $type);
 
         return $this->toInterpolate(
-            $this->getTemplate($replaceCss, $replaceIconCss),
+            $this->getTemplate($cssClasses, $cssIconClasses),
             [
-                'cssClass'     => $replaceCss,
-                'cssIconClass' => $replaceIconCss,
-                'message'      => $message,
+                "cssClass"     => $cssClasses,
+                "cssIconClass" => $cssIconClasses,
+                "message"      => $message,
             ]
         );
     }

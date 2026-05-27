@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
-use Phalcon\Di\DiInterface;
+use Phalcon\Flash\Exceptions\SessionServiceUnavailable;
 use Phalcon\Session\ManagerInterface;
 
 /**
@@ -27,7 +27,10 @@ use Phalcon\Session\ManagerInterface;
  */
 class Session extends AbstractFlash
 {
-    private const SESSION_KEY = '_flashMessages';
+    /**
+     * @var string
+     */
+    public const SESSION_KEY = "_flashMessages";
 
     /**
      * Clear messages in the session messenger
@@ -66,28 +69,16 @@ class Session extends AbstractFlash
             return $this->sessionService;
         }
 
-        $this->checkContainer(
-            Exception::class,
-            "the 'session' service"
-        );
+        if (
+            null !== $this->container &&
+            true === $this->container->has("session")
+        ) {
+            $this->sessionService = $this->container->getShared("session");
 
-        if (true !== $this->container->has('session')) {
-            $this->checkContainer(
-                Exception::class,
-                "the 'session' service"
-            );
+            return $this->sessionService;
         }
 
-        if (null === $this->sessionService) {
-            if ($this->container instanceof DiInterface) {
-                $this->sessionService = $this->container->getShared('session');
-            } else {
-                $this->sessionService = $this->container->get('session');
-            }
-        }
-
-
-        return $this->sessionService;
+        throw new SessionServiceUnavailable();
     }
 
     /**
@@ -102,8 +93,8 @@ class Session extends AbstractFlash
     {
         $messages = $this->getSessionMessages(false);
 
-        if (null === $type) {
-            return !empty($messages);
+        if (!$type) {
+            return (true !== empty($messages));
         }
 
         return isset($messages[$type]);
