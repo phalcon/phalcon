@@ -95,7 +95,7 @@ abstract class AbstractUuid implements UuidInterface
 
         return DateTimeImmutable::createFromFormat(
             "U u",
-            $sec . " " . str_pad($usec, 6, "0", STR_PAD_LEFT)
+            $sec . " " . str_pad((string) $usec, 6, "0", STR_PAD_LEFT)
         );
     }
 

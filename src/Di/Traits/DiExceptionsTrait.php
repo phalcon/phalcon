@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Di\Traits;
 
 use Phalcon\Di\Exception;
+use Phalcon\Di\Exceptions\MissingParameterKey;
 
 use function class_exists;
 use function is_array;
@@ -219,10 +220,7 @@ trait DiExceptionsTrait
         int $position
     ): void {
         if (!isset($argument[$name])) {
-            throw new Exception(
-                'Service "' . $name . '" is required in parameter ' .
-                'on position ' . $position
-            );
+            throw new MissingParameterKey($name, $position);
         }
     }
 
