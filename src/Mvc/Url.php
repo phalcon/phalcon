@@ -18,12 +18,15 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\UrlInterface;
 
+use function array_merge;
 use function http_build_query;
 use function is_array;
 use function is_string;
+use function parse_str;
 use function preg_match;
 use function preg_replace;
 use function strlen;
+use function strpos;
 use function substr;
 
 /**
@@ -110,7 +113,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
         array | string | null $uri = null,
         mixed $arguments = null,
         ?bool $local = null,
-        mixed $baseUri = null
+        mixed $baseUri = null,
+        bool $replaceArgs = false
     ): string {
         if (null === $local) {
             if (
@@ -209,10 +213,25 @@ class Url extends AbstractInjectionAware implements UrlInterface
         }
 
         if ($arguments) {
+            $queryPos = strpos($uri, "?");
+
+            if ($replaceArgs && $queryPos !== false) {
+                $existing = [];
+
+                parse_str(
+                    (string)substr($uri, $queryPos + 1),
+                    $existing
+                );
+
+                $arguments = array_merge($existing, (array)$arguments);
+                $uri       = (string)substr($uri, 0, $queryPos);
+                $queryPos  = false;
+            }
+
             $queryString = http_build_query($arguments);
 
             if (strlen($queryString)) {
-                if (str_contains($uri, "?")) {
+                if ($queryPos !== false) {
                     $uri .= "&" . $queryString;
                 } else {
                     $uri .= "?" . $queryString;
