@@ -24,7 +24,7 @@ use DateTimeImmutable;
  * @property string            $message
  * @property int               $level
  * @property string            $levelName
- * @property DateTimeImmutable $datetime
+ * @property DateTimeImmutable $dateTime
  */
 class Item
 {
@@ -34,14 +34,14 @@ class Item
      * @param string            $message
      * @param string            $levelName
      * @param int               $level
-     * @param DateTimeImmutable $datetime
+     * @param DateTimeImmutable $dateTime
      * @param array             $context
      */
     public function __construct(
         protected string $message,
         protected string $levelName,
         protected int $level,
-        protected DateTimeImmutable $datetime,
+        protected DateTimeImmutable $dateTime,
         protected array $context = []
     ) {
     }
@@ -59,7 +59,7 @@ class Item
      */
     public function getDateTime(): DateTimeImmutable
     {
-        return $this->datetime;
+        return $this->dateTime;
     }
 
     /**

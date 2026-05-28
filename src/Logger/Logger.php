@@ -17,6 +17,8 @@ use Psr\Log\LoggerTrait;
 use Stringable;
 
 /**
+ * Phalcon Logger.
+ *
  * A logger, with various adapters and formatters. A formatter
  * interface is available as well as an adapter one. Adapters can be created
  * easily using the built-in AdapterFactory. A LoggerFactory is also available

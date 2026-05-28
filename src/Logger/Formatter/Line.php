@@ -55,9 +55,9 @@ class Line extends AbstractFormatter
         $message = strtr(
             $this->format,
             [
-                '%date%'    => $this->getFormattedDate($item),
-                '%level%'   => $item->getLevelName(),
-                '%message%' => $item->getMessage(),
+                $this->interpolatorLeft . 'date'    . $this->interpolatorRight => $this->getFormattedDate($item),
+                $this->interpolatorLeft . 'level'   . $this->interpolatorRight => $item->getLevelName(),
+                $this->interpolatorLeft . 'message' . $this->interpolatorRight => $item->getMessage(),
             ]
         );
 

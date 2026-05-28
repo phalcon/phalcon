@@ -29,6 +29,7 @@ use Phalcon\Logger\Item;
  * @property FormatterInterface $formatter
  * @property bool               $inTransaction
  * @property array              $queue
+ * @property int                $queueLimit
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -59,6 +60,16 @@ abstract class AbstractAdapter implements AdapterInterface
      * @var array
      */
     protected array $queue = [];
+
+    /**
+     * Maximum number of items retained in the transaction queue.
+     * 0 (default) keeps the original unbounded behavior; a positive
+     * value drops the oldest queued item FIFO before a new one is
+     * appended in add().
+     *
+     * @var int
+     */
+    protected int $queueLimit = 0;
 
     /**
      * Destructor cleanup
@@ -107,6 +118,13 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function add(Item $item): AdapterInterface
     {
+        if ($this->queueLimit > 0 && count($this->queue) >= $this->queueLimit) {
+            $firstKey = array_key_first($this->queue);
+            if ($firstKey !== null) {
+                unset($this->queue[$firstKey]);
+            }
+        }
+
         $this->queue[] = $item;
 
         return $this;
@@ -162,6 +180,16 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Returns the configured transaction-queue cap (0 = unlimited)
+     *
+     * @return int
+     */
+    public function getQueueLimit(): int
+    {
+        return $this->queueLimit;
+    }
+
+    /**
      * Returns the whether the logger is currently in an active transaction or
      * not
      *
@@ -205,6 +233,22 @@ abstract class AbstractAdapter implements AdapterInterface
     public function setFormatter(FormatterInterface $formatter): AdapterInterface
     {
         $this->formatter = $formatter;
+
+        return $this;
+    }
+
+    /**
+     * Sets the maximum number of items retained in the transaction
+     * queue. 0 disables the cap (the default; preserves the original
+     * unbounded behavior).
+     *
+     * @param int $queueLimit
+     *
+     * @return AdapterInterface
+     */
+    public function setQueueLimit(int $queueLimit): AdapterInterface
+    {
+        $this->queueLimit = $queueLimit;
 
         return $this;
     }

@@ -42,7 +42,6 @@ use const PHP_EOL;
  * @property resource|null $handler
  * @property string        $mode
  * @property string        $name
- * @property array         $options
  */
 class Stream extends AbstractAdapter
 {
@@ -61,13 +60,6 @@ class Stream extends AbstractAdapter
      * @var string
      */
     protected string $mode = 'ab';
-
-    /**
-     * Path options
-     *
-     * @var array
-     */
-    protected array $options;
 
     /**
      * Stream constructor.

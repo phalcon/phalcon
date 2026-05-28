@@ -117,7 +117,7 @@ class Syslog extends AbstractAdapter
      *
      * @return bool
      */
-    protected function openlog(string $ident, int $option, int $facility)
+    protected function openlog(string $ident, int $option, int $facility): bool
     {
         return openlog($ident, $option, $facility);
     }

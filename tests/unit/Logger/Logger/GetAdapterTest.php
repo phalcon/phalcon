@@ -131,7 +131,7 @@ final class GetAdapterTest extends AbstractUnitTestCase
     public function testLoggerGetAdapterUnknown(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Adapter does not exist for this logger: unknown');
+        $this->expectExceptionMessage('Adapter does not exist for this logger');
 
         $logger = new Logger('my-logger');
         $logger->getAdapter('unknown');

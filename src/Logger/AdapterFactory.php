@@ -21,9 +21,7 @@ use Phalcon\Logger\Adapter\Syslog;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
- * Class AdapterFactory
- *
- * @package Phalcon\Logger
+ * Factory used to create adapters used for Logging
  */
 class AdapterFactory
 {
