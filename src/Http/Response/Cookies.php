@@ -15,10 +15,9 @@ namespace Phalcon\Http\Response;
 
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
-use Phalcon\Http\Cookie;
 use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Http\Cookie\Exception;
-use Phalcon\Http\ResponseInterface;
+use Phalcon\Http\Response\Exceptions\ResponseServiceUnavailable;
 
 use function headers_sent;
 
@@ -141,17 +140,18 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
         /**
          * Create the cookie if it does not exist.
-         * It's value come from $_COOKIE with request, so it shouldn't be saved
+         * Its value comes from $_COOKIE with request, so it shouldn't be saved
          * to _cookies property, otherwise it will always be resent after get.
          */
-        $this->checkContainer(Exception::class, "the 'response' service");
+        $container = $this->checkGetContainer();
 
-        $cookie = new Cookie($name);
+        /** @var CookieInterface $cookie */
+        $cookie = $container->get("Phalcon\\Http\\Cookie", [$name]);
 
         /**
          * Pass the DI to created cookies
          */
-        $cookie->setDi($this->container);
+        $cookie->setDi($container);
 
         /**
          * Enable encryption in the cookie
@@ -273,16 +273,13 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         /**
          * Check if the cookie needs to be updated or
          */
+        $encryption = $this->useEncryption;
+
         if (!isset($this->cookies[$name])) {
-            $cookie = new Cookie(
-                $name,
-                $value,
-                $expire,
-                $path,
-                $secure,
-                $domain,
-                $httpOnly,
-                $options
+            /** @var CookieInterface $cookie */
+            $cookie = $this->container->get(
+                "Phalcon\\Http\\Cookie",
+                [$name, $value, $expire, $path, $secure, $domain, $httpOnly, $options]
             );
 
             /**
@@ -293,41 +290,34 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
             /**
              * Enable encryption in the cookie
              */
-            if (true === $this->useEncryption) {
-                $cookie->useEncryption($this->useEncryption);
+            if ($encryption) {
+                $cookie->useEncryption($encryption);
                 $cookie->setSignKey($this->signKey);
             }
 
             $this->cookies[$name] = $cookie;
         } else {
+            /** @var CookieInterface $cookie */
             $cookie = $this->cookies[$name];
             /**
              * Override any settings in the cookie
              */
-            $cookie
-                ->setValue($value)
-                ->setExpiration($expire)
-                ->setPath($path)
-                ->setSecure($secure)
-                ->setDomain($domain)
-                ->setHttpOnly($httpOnly)
-                ->setOptions($options)
-                ->setSignKey($this->signKey)
-            ;
+            $cookie->setValue($value);
+            $cookie->setExpiration($expire);
+            $cookie->setPath($path);
+            $cookie->setSecure($secure);
+            $cookie->setDomain($domain);
+            $cookie->setHttpOnly($httpOnly);
+            $cookie->setOptions($options);
+            $cookie->setSignKey($this->signKey);
         }
 
         /**
          * Register the cookies bag in the response
          */
         if (true !== $this->isRegistered) {
-            $this->checkContainer(Exception::class, "the 'response' service");
-
-            /** @var ResponseInterface $response */
-            if ($this->container instanceof DiInterface) {
-                $response = $this->container->getShared('response');
-            } else {
-                $response = $this->container->get('response');
-            }
+            $container = $this->checkGetContainer();
+            $response  = $container->getShared('response');
 
             /**
              * Pass the cookies bag to the response so it can send the headers
@@ -373,5 +363,21 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         $this->useEncryption = $useEncryption;
 
         return $this;
+    }
+
+    /**
+     * @return DiInterface
+     *
+     * @throws ResponseServiceUnavailable
+     */
+    protected function checkGetContainer(): DiInterface
+    {
+        $container = $this->container;
+
+        if (null === $container) {
+            throw new ResponseServiceUnavailable();
+        }
+
+        return $container;
     }
 }

@@ -21,10 +21,15 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
 use Phalcon\Http\Request\Exception;
+use Phalcon\Http\Request\Exceptions\FilterServiceUnavailable;
+use Phalcon\Http\Request\Exceptions\InvalidHost;
+use Phalcon\Http\Request\Exceptions\InvalidHttpMethod;
+use Phalcon\Http\Request\Exceptions\MissingFilters;
+use Phalcon\Http\Request\Exceptions\SanitizerNotFound;
 use Phalcon\Http\Request\File;
 use Phalcon\Http\Request\FileInterface;
+use Phalcon\Support\Helper\Json\Decode;
 use stdClass;
-use UnexpectedValueException;
 
 use function array_key_exists;
 use function array_merge;
@@ -36,7 +41,6 @@ use function gethostbyname;
 use function is_array;
 use function is_numeric;
 use function is_string;
-use function json_decode;
 use function parse_str;
 use function preg_match_all;
 use function preg_replace;
@@ -89,28 +93,28 @@ class Request extends AbstractInjectionAware implements
     /**
      * @var FilterInterface|null
      */
-    private FilterInterface | null $filterService = null;
+    protected FilterInterface | null $filterService = null;
 
     /**
      * @var bool
      */
-    private bool $methodOverride = false;
+    protected bool $methodOverride = false;
     /**
      * @var array|null
      */
-    private array | null $postCache = null;
+    protected array | null $postCache = null;
     /**
      * @var array
      */
-    private array $queryFilters = [];
+    protected array $queryFilters = [];
     /**
      * @var string
      */
-    private string $rawBody = '';
+    protected string $rawBody = '';
     /**
      * @var bool
      */
-    private bool $strictHostCheck = false;
+    protected bool $strictHostCheck = false;
     /**
      * @var array
      */
@@ -483,23 +487,13 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Gets web page that refers active request. ie: https://www.google.com
-     *
-     * @return string
-     */
-    public function getHTTPReferer(): string
-    {
-        return $_SERVER['HTTP_REFERER'] ?? '';
-    }
-
-    /**
      * Gets HTTP header from request data
      *
      * @param string $header
      *
      * @return string
      */
-    final public function getHeader(string $header): string
+    public function getHeader(string $header): string
     {
         $name = strtoupper(strtr($header, '-', '_'));
 
@@ -659,7 +653,7 @@ class Request extends AbstractInjectionAware implements
             if (
                 '' !== preg_replace("/[a-z0-9-]+\.?/", "", $cleanHost)
             ) {
-                throw new UnexpectedValueException('Invalid host ' . $host);
+                throw new InvalidHost($host);
             }
         }
 
@@ -677,6 +671,16 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Gets web page that refers active request. ie: https://www.google.com
+     *
+     * @return string
+     */
+    public function getHTTPReferer(): string
+    {
+        return $_SERVER['HTTP_REFERER'] ?? '';
+    }
+
+    /**
      * Gets decoded JSON HTTP raw request body
      *
      * @param bool $associative
@@ -691,7 +695,7 @@ class Request extends AbstractInjectionAware implements
             $rawBody = '{}';
         }
 
-        return json_decode($rawBody, $associative);
+        return (new Decode())->__invoke($rawBody, $associative);
     }
 
     /**
@@ -718,7 +722,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string
      */
-    final public function getMethod(): string
+    public function getMethod(): string
     {
         if (!isset($_SERVER['REQUEST_METHOD'])) {
             return self::METHOD_GET;
@@ -772,7 +776,7 @@ class Request extends AbstractInjectionAware implements
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed {
-        $this->postCache = $this->getPostData($_POST);
+        $this->postCache = $this->getPostData($this->postCache);
 
         return $this->getHelper(
             $this->postCache,
@@ -1029,7 +1033,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string
      */
-    final public function getURI(bool $onlyPath = false): string
+    public function getURI(bool $onlyPath = false): string
     {
         $requestURI = $this->getServer("REQUEST_URI");
         if (null === $requestURI) {
@@ -1228,17 +1232,6 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Checks whether request content type contains json data
-     *
-     * @return bool
-     */
-    public function isJson(): bool
-    {
-        return $this->hasServer("CONTENT_TYPE") &&
-            stripos($this->getServer("CONTENT_TYPE"), "json") !== false;
-    }
-
-    /**
      * Checks whether HTTP method is CONNECT.
      * if _SERVER["REQUEST_METHOD"]==="CONNECT"
      *
@@ -1283,6 +1276,17 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Checks whether request content type contains json data
+     *
+     * @return bool
+     */
+    public function isJson(): bool
+    {
+        return $this->hasServer("CONTENT_TYPE") &&
+            stripos($this->getServer("CONTENT_TYPE"), "json") !== false;
+    }
+
+    /**
      * Check if HTTP method match any of the passed methods
      * When strict is true it checks if validated methods are real HTTP methods
      *
@@ -1302,7 +1306,7 @@ class Request extends AbstractInjectionAware implements
                 true === $strict &&
                 true !== $this->isValidHttpMethod($methods)
             ) {
-                throw new Exception('Invalid HTTP method: ' . $methods);
+                throw new InvalidHttpMethod($methods);
             }
 
             return $methods === $httpMethod;
@@ -1319,7 +1323,7 @@ class Request extends AbstractInjectionAware implements
         }
 
         if (true === $strict) {
-            throw new Exception('Invalid HTTP method: non-string');
+            throw new InvalidHttpMethod('non-string');
         }
 
         return false;
@@ -1526,17 +1530,13 @@ class Request extends AbstractInjectionAware implements
         array $scope = []
     ): static {
         if (empty($filters)) {
-            throw new Exception(
-                "Filters have not been defined for '" . $name . "'"
-            );
+            throw new MissingFilters($name);
         }
 
         $filterService = $this->getFilterService();
         foreach ($filters as $sanitizer) {
             if (true !== $filterService->has($sanitizer)) {
-                throw new Exception(
-                    "Sanitizer '" . $sanitizer . "' does not exist in the filter locator"
-                );
+                throw new SanitizerNotFound($sanitizer);
             }
         }
 
@@ -1614,96 +1614,6 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Check if an IP address exists in CIDR range
-     *
-     * @param string $ip The IP address to check.
-     * @param string $cidr The CIDR range to compare against.
-     * @return bool True if the IP is in range, false otherwise.
-     */
-    protected function isIpAddressInCIDR(string $ip, string $cidr): bool
-    {
-        $parts       = explode('/', $cidr);
-        $subnet      = $parts[0];
-        $maskLength  = $parts[1];
-
-        $ipBin     = inet_pton($ip);
-        $subnetBin = inet_pton($subnet);
-
-        if ($ipBin === false || $subnetBin === false || strlen($ipBin) !== strlen($subnetBin)) {
-            return false; // Invalid IP
-        }
-
-        $ipBits        = unpack("H*", $ipBin);
-        $subnetBits    = unpack("H*", $subnetBin);
-
-        $ipBits     = $ipBits[1];
-        $subnetBits = $subnetBits[1];
-
-        // Convert hex string to binary string
-        $ipBits     = hex2bin(str_pad($ipBits, strlen($ipBits), "0"));
-        $subnetBits = hex2bin(str_pad($subnetBits, strlen($subnetBits), "0"));
-
-        $maskBytes     = (int)floor($maskLength / 8);
-        $remainingBits = $maskLength % 8;
-
-        // Compare full bytes
-        if (strncmp($ipBits, $subnetBits, $maskBytes) !== 0) {
-            return false;
-        }
-
-        if ($remainingBits === 0) {
-            return true;
-        }
-
-        $ipByte     = ord($ipBits[$maskBytes]);
-        $subnetByte = ord($subnetBits[$maskBytes]);
-
-        $tempMask = (1 << (8 - $remainingBits)) - 1;
-        $mask = 0xFF ^ $tempMask;
-
-        return ($ipByte & $mask) === ($subnetByte & $mask);
-    }
-
-
-    /**
-     * Verify if given IP address is trusted
-     *
-     * @param string $ip
-     * @return bool
-     */
-    private function isProxyTrusted(string $ip): bool
-    {
-        foreach ($this->trustedProxies as $trusted) {
-            if (strpos($trusted, '/') !== false) {
-                return $this->isIpAddressInCIDR($ip, $trusted);
-            } else {
-                return $ip === $trusted;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Verify if given IP address is public, eg. not private or reserved IP
-     *
-     * @param string $forwardedIp
-     * @return string|false
-     * @throws \Phalcon\Filter\Exception
-     */
-    private function isValidPublicIp(string $forwardedIp): string | false
-    {
-        $filterService = $this->getFilterService();
-        $filtered = $filterService->sanitize($forwardedIp, [
-            "ip" => [
-                "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-            ]
-        ]);
-
-        return $filtered;
-    }
-
-    /**
      * Process a request header and return the one with best quality
      *
      * @param array  $qualityParts
@@ -1711,7 +1621,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return string
      */
-    final protected function getBestQuality(
+    protected function getBestQuality(
         array $qualityParts,
         string $name
     ): string {
@@ -1752,7 +1662,7 @@ class Request extends AbstractInjectionAware implements
      * @return mixed
      * @throws Exception
      */
-    final protected function getHelper(
+    protected function getHelper(
         array $source,
         string | null $name = null,
         mixed $filters = null,
@@ -1806,7 +1716,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return array
      */
-    final protected function getQualityHeader(
+    protected function getQualityHeader(
         string $serverIndex,
         string $name
     ): array {
@@ -1859,7 +1769,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return int
      */
-    final protected function hasFileHelper(
+    protected function hasFileHelper(
         mixed $data,
         bool $onlySuccessful
     ): int {
@@ -1886,6 +1796,57 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $numberFiles;
+    }
+
+    /**
+     * Check if an IP address exists in CIDR range
+     *
+     * @param string $ip The IP address to check.
+     * @param string $cidr The CIDR range to compare against.
+     * @return bool True if the IP is in range, false otherwise.
+     */
+    protected function isIpAddressInCIDR(string $ip, string $cidr): bool
+    {
+        $parts       = explode('/', $cidr);
+        $subnet      = $parts[0];
+        $maskLength  = $parts[1];
+
+        $ipBin     = inet_pton($ip);
+        $subnetBin = inet_pton($subnet);
+
+        if ($ipBin === false || $subnetBin === false || strlen($ipBin) !== strlen($subnetBin)) {
+            return false; // Invalid IP
+        }
+
+        $ipBits        = unpack("H*", $ipBin);
+        $subnetBits    = unpack("H*", $subnetBin);
+
+        $ipBits     = $ipBits[1];
+        $subnetBits = $subnetBits[1];
+
+        // Convert hex string to binary string
+        $ipBits     = hex2bin(str_pad($ipBits, strlen($ipBits), "0"));
+        $subnetBits = hex2bin(str_pad($subnetBits, strlen($subnetBits), "0"));
+
+        $maskBytes     = (int)floor($maskLength / 8);
+        $remainingBits = $maskLength % 8;
+
+        // Compare full bytes
+        if (strncmp($ipBits, $subnetBits, $maskBytes) !== 0) {
+            return false;
+        }
+
+        if ($remainingBits === 0) {
+            return true;
+        }
+
+        $ipByte     = ord($ipBits[$maskBytes]);
+        $subnetByte = ord($subnetBits[$maskBytes]);
+
+        $tempMask = (1 << (8 - $remainingBits)) - 1;
+        $mask = 0xFF ^ $tempMask;
+
+        return ($ipByte & $mask) === ($subnetByte & $mask);
     }
 
     /**
@@ -2003,7 +1964,7 @@ class Request extends AbstractInjectionAware implements
      *
      * @return array
      */
-    final protected function smoothFiles(
+    protected function smoothFiles(
         array $names,
         array $types,
         array $tmpNames,
@@ -2055,10 +2016,7 @@ class Request extends AbstractInjectionAware implements
     {
         if (null === $this->filterService) {
             if (null === $this->container) {
-                throw new Exception(
-                    "A dependency injection container is required "
-                    . "to access the 'filter' service"
-                );
+                throw new FilterServiceUnavailable();
             }
 
             if ($this->container instanceof DiInterface) {
@@ -2069,38 +2027,6 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $this->filterService;
-    }
-
-    /**
-     * Return post data from rawBody or urlencoded form data
-     *
-     * @param array|null $data
-     * @return array
-     */
-    private function getPostData(array|null $data): array
-    {
-        if (empty($data)) {
-            if ($this->isJson()) {
-                $result = $this->getJsonRawBody(true);
-            } elseif (
-                $this->getContentType() &&
-                stripos($this->getContentType(), 'multipart/form-data') !== false
-            ) {
-                $result = $this->getFormData();
-            } else {
-                // fallback to application/x-www-form-urlencoded parsing raw body
-                $result = [];
-                parse_str($this->getRawBody(), $result);
-            }
-        } else {
-            $result = $data;
-        }
-
-        if (!is_array($result)) {
-            $result = [];
-        }
-
-        return $result;
     }
 
     /**
@@ -2162,6 +2088,76 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $dataset;
+    }
+
+    /**
+     * Return post data from rawBody or urlencoded form data
+     *
+     * @param array|null $data
+     * @return array
+     */
+    private function getPostData(array|null $data): array
+    {
+        if (empty($data)) {
+            if ($this->isJson()) {
+                $result = $this->getJsonRawBody(true);
+            } elseif (
+                $this->getContentType() &&
+                stripos($this->getContentType(), 'multipart/form-data') !== false
+            ) {
+                $result = $this->getFormData();
+            } else {
+                // fallback to application/x-www-form-urlencoded parsing raw body
+                $result = [];
+                parse_str($this->getRawBody(), $result);
+            }
+        } else {
+            $result = $data;
+        }
+
+        if (!is_array($result)) {
+            $result = [];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Verify if given IP address is trusted
+     *
+     * @param string $ip
+     * @return bool
+     */
+    private function isProxyTrusted(string $ip): bool
+    {
+        foreach ($this->trustedProxies as $trusted) {
+            if (strpos($trusted, '/') !== false) {
+                return $this->isIpAddressInCIDR($ip, $trusted);
+            } else {
+                return $ip === $trusted;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verify if given IP address is public, eg. not private or reserved IP
+     *
+     * @param string $forwardedIp
+     * @return string|false
+     * @throws \Phalcon\Filter\Exception
+     */
+    private function isValidPublicIp(string $forwardedIp): string | false
+    {
+        $filterService = $this->getFilterService();
+        $filtered = $filterService->sanitize($forwardedIp, [
+            "ip" => [
+                "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+            ]
+        ]);
+
+        return $filtered;
     }
 
     /**

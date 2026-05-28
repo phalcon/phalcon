@@ -15,8 +15,6 @@ namespace Phalcon\Http;
 
 use DateTime;
 use DateTimeZone;
-use InvalidArgumentException;
-use Phalcon\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
@@ -27,25 +25,29 @@ use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface;
 use Phalcon\Http\Message\ResponseStatusCodeInterface as RootResponseStatusCodeInterface;
 use Phalcon\Http\Response\CookiesInterface;
 use Phalcon\Http\Response\Exception;
+use Phalcon\Http\Response\Exceptions\NonStandardStatusCodeRequiresMessage;
+use Phalcon\Http\Response\Exceptions\ResponseAlreadySent;
+use Phalcon\Http\Response\Exceptions\UrlServiceUnavailable;
 use Phalcon\Http\Response\Headers;
 use Phalcon\Http\Response\HeadersInterface;
 use Phalcon\Http\Traits\StatusPhrasesTrait;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Mvc\View\ViewInterface;
 use Phalcon\Support\Helper\File\Basename;
+use Phalcon\Support\Helper\Json\Encode;
 
 use function addcslashes;
 use function array_keys;
-use function json_encode;
-use function json_last_error;
-use function json_last_error_msg;
+use function function_exists;
+use function is_string;
+use function mb_detect_encoding;
+use function mb_detect_order;
 use function preg_match;
 use function rawurlencode;
 use function readfile;
+use function strlen;
 use function strtolower;
 use function substr;
-
-use const JSON_ERROR_NONE;
 
 // @todo this will also be removed when traits are available
 
@@ -73,10 +75,21 @@ class Response extends Injectable implements
     use StatusPhrasesTrait;
 
     private const DATETIME_FORMAT = 'D, d M Y H:i:s';
+
+    /**
+     * @var string|null
+     */
+    protected string | null $content = null;
+
     /**
      * @var CookiesInterface|null
      */
     protected ?CookiesInterface $cookies = null;
+
+    /**
+     * @var Encode
+     */
+    protected Encode $encode;
 
     /**
      * @var string|null
@@ -96,20 +109,25 @@ class Response extends Injectable implements
     /**
      * Constructor
      *
-     * @param string      $content
+     * @param string|null $content
      * @param int|null    $code
      * @param string|null $status
      *
      * @throws Exception
      */
     public function __construct(
-        protected string $content = '',
+        string | null $content = null,
         int | null $code = null,
         string | null $status = null
     ) {
         // A Phalcon\Http\Response\Headers bag is temporary used to manage
         // the headers before sent them to the client
         $this->headers = new Headers();
+        $this->encode  = new Encode();
+
+        if (null !== $content) {
+            $this->setContent($content);
+        }
 
         if (null !== $code) {
             $this->setStatusCode($code, $status);
@@ -119,13 +137,13 @@ class Response extends Injectable implements
     /**
      * Appends a string to the HTTP response body
      *
-     * @param string $content
+     * @param mixed $content
      *
      * @return ResponseInterface
      */
-    public function appendContent(string $content): ResponseInterface
+    public function appendContent(mixed $content): ResponseInterface
     {
-        $this->content .= $content;
+        $this->content = $this->getContent() . $content;
 
         return $this;
     }
@@ -138,7 +156,7 @@ class Response extends Injectable implements
     public function getContent(): string
     {
         // Type cast is required here to satisfy the interface
-        return $this->content;
+        return (string) $this->content;
     }
 
     /**
@@ -154,25 +172,25 @@ class Response extends Injectable implements
     /**
      * Returns the internal dependency injector
      *
-     * @return DiInterface|Collection
-     * @throws Exception
+     * @return DiInterface
+     * @throws UrlServiceUnavailable
      */
-    public function getDI(): DiInterface | Collection
+    public function getDI(): DiInterface
     {
-        if (null === $this->container) {
+        /** @var DiInterface|null $container */
+        $container = $this->container;
+
+        if (null === $container) {
             $container = Di::getDefault();
 
             if (null === $container) {
-                throw new Exception(
-                    "A dependency injection container is required to "
-                    . "access the 'url' service"
-                );
+                throw new UrlServiceUnavailable();
             }
 
             $this->container = $container;
         }
 
-        return $this->container;
+        return $container;
     }
 
     /**
@@ -371,7 +389,7 @@ class Response extends Injectable implements
     public function send(): ResponseInterface
     {
         if (true === $this->sent) {
-            throw new Exception('Response was already sent');
+            throw new ResponseAlreadySent();
         }
 
         $this
@@ -382,10 +400,10 @@ class Response extends Injectable implements
         /**
          * Output the response body
          */
-        if (!empty($this->content)) {
+        if (null !== $this->content) {
             echo $this->content;
         } else {
-            if (!empty($this->file)) {
+            if (is_string($this->file) && strlen($this->file)) {
                 readfile($this->file);
             }
         }
@@ -485,7 +503,7 @@ class Response extends Injectable implements
      */
     public function setContentLength(int $contentLength): ResponseInterface
     {
-        $this->setHeader('Content-Length', (string)$contentLength);
+        $this->setHeader('Content-Length', $contentLength);
 
         return $this;
     }
@@ -507,7 +525,7 @@ class Response extends Injectable implements
         string $contentType,
         string | null $charset = null
     ): ResponseInterface {
-        if (!empty($charset)) {
+        if (null !== $charset) {
             $contentType .= '; charset=' . $charset;
         }
 
@@ -592,18 +610,24 @@ class Response extends Injectable implements
     public function setFileToSend(
         string $filePath,
         string | null $attachmentName = null,
-        bool $attach = true
+        bool $attachment = true
     ): ResponseInterface {
-        $basePath = $attachmentName;
-        if (empty($attachmentName)) {
+        $basePathEncoding = 'ASCII';
+
+        if (!is_string($attachmentName)) {
             $basePath = (new Basename())($filePath);
+        } else {
+            $basePath = $attachmentName;
         }
-        if (true === $attach) {
-            $basePathEncoding = mb_detect_encoding(
-                $basePath,
-                mb_detect_order(),
-                true
-            );
+        if (true === $attachment) {
+            // mbstring is a non-default extension
+            if (function_exists('mb_detect_encoding')) {
+                $basePathEncoding = mb_detect_encoding(
+                    $basePath,
+                    mb_detect_order(),
+                    true
+                );
+            }
 
             $this
                 ->setRawHeader('Content-Description: File Transfer')
@@ -654,9 +678,9 @@ class Response extends Injectable implements
      *
      * @return ResponseInterface
      */
-    public function setHeader(string $name, string $value): ResponseInterface
+    public function setHeader(string $name, mixed $value): ResponseInterface
     {
-        $this->headers->set($name, $value);
+        $this->headers->set($name, (string) $value);
 
         return $this;
     }
@@ -670,7 +694,9 @@ class Response extends Injectable implements
      */
     public function setHeaders(HeadersInterface $headers): ResponseInterface
     {
-        foreach ($headers as $name => $value) {
+        $data = $headers->toArray();
+
+        foreach ($data as $name => $value) {
             $this->headers->set($name, $value);
         }
 
@@ -704,7 +730,7 @@ class Response extends Injectable implements
     ): ResponseInterface {
         $this
             ->setContentType('application/json')
-            ->setContent($this->encode($content, $jsonOptions, $depth))
+            ->setContent($this->encode->__invoke($content, $jsonOptions, $depth))
         ;
 
         return $this;
@@ -807,9 +833,7 @@ class Response extends Injectable implements
             // See: https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
             $statusCodes = $this->getPhrases();
             if (!isset($statusCodes[$code])) {
-                throw new Exception(
-                    "Non-standard status-code given without a message"
-                );
+                throw new NonStandardStatusCodeRequiresMessage();
             }
 
             $message = $statusCodes[$code];
@@ -825,22 +849,4 @@ class Response extends Injectable implements
         return $this;
     }
 
-    /**
-     * @todo This will be removed when traits are introduced
-     */
-    private function encode(
-        mixed $data,
-        int $options = 0,
-        int $depth = 512
-    ): string {
-        $encoded = json_encode($data, $options, $depth);
-
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new InvalidArgumentException(
-                "json_encode error: " . json_last_error_msg()
-            );
-        }
-
-        return $encoded;
-    }
 }

@@ -19,6 +19,10 @@ use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Http\Cookie\Exception as CookieException;
+use Phalcon\Http\Cookie\Exceptions\CookieKeyTooShort;
+use Phalcon\Http\Cookie\Exceptions\CryptInterfaceRequired;
+use Phalcon\Http\Cookie\Exceptions\CryptServiceUnavailable;
+use Phalcon\Http\Cookie\Exceptions\FilterServiceUnavailable;
 use Phalcon\Http\Response\Exception;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
 use Stringable;
@@ -26,7 +30,6 @@ use Stringable;
 use function array_filter;
 use function is_object;
 use function is_string;
-use function sprintf;
 use function time;
 
 /**
@@ -120,7 +123,7 @@ class Cookie extends AbstractInjectionAware implements
         }
 
         $this->value = null;
-        $options     = $this->getCookieOptions();
+        $options     = $this->getCookieOptions(time() - 691200);
 
         setcookie($this->name, "", $options);
     }
@@ -139,8 +142,7 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns the current expiration time
-     */
-    /**
+     *
      * @return int
      */
     public function getExpiration(): int
@@ -232,10 +234,7 @@ class Cookie extends AbstractInjectionAware implements
             $decryptedValue = $value;
             if (true === $this->useEncryption) {
                 if (null === $this->container) {
-                    throw new Exception(
-                        "A dependency injection container is required "
-                        . "to access the 'filter' and 'crypt' services"
-                    );
+                    throw new CryptServiceUnavailable();
                 }
 
                 /** @var CryptInterface $crypt */
@@ -246,10 +245,7 @@ class Cookie extends AbstractInjectionAware implements
                 }
 
                 if (!is_object($crypt)) {
-                    throw new Exception(
-                        'A dependency which implements CryptInterface '
-                        . 'is required to use encryption'
-                    );
+                    throw new CryptInterfaceRequired();
                 }
 
                 /**
@@ -279,10 +275,7 @@ class Cookie extends AbstractInjectionAware implements
             if (null !== $filters) {
                 if (null === $this->filter) {
                     if (null === $this->container) {
-                        throw new Exception(
-                            "A dependency injection container is "
-                            . "required to access the 'filter' service"
-                        );
+                        throw new FilterServiceUnavailable();
                     }
 
                     /** @var FilterInterface $filter */
@@ -405,10 +398,7 @@ class Cookie extends AbstractInjectionAware implements
         $encryptValue = $this->value;
         if (true === $this->useEncryption && !empty($this->value)) {
             if (null === $this->container) {
-                throw new Exception(
-                    "A dependency injection container is required to "
-                    . "access the 'filter' service"
-                );
+                throw new FilterServiceUnavailable();
             }
 
             /** @var CryptInterface $crypt */
@@ -419,10 +409,7 @@ class Cookie extends AbstractInjectionAware implements
             }
 
             if (!is_object($crypt)) {
-                throw new Exception(
-                    'A dependency which implements CryptInterface '
-                    . 'is required to use encryption'
-                );
+                throw new CryptInterfaceRequired();
             }
 
             /**
@@ -442,7 +429,7 @@ class Cookie extends AbstractInjectionAware implements
         /**
          * Sets the cookie using the standard 'setcookie' function
          */
-        $options = $this->getCookieOptions();
+        $options = $this->getCookieOptions($this->expire);
 
         setcookie($this->name, $encryptValue, $options);
 
@@ -611,13 +598,7 @@ class Cookie extends AbstractInjectionAware implements
         $length = mb_strlen($signKey);
 
         if ($length < 32) {
-            throw new CookieException(
-                sprintf(
-                    "The cookie's key should be at least 32 characters long. "
-                    . "Current length is %d.",
-                    $length
-                )
-            );
+            throw new CookieKeyTooShort($length);
         }
     }
 
@@ -634,12 +615,14 @@ class Cookie extends AbstractInjectionAware implements
     }
 
     /**
+     * @param int $expiresDefault
+     *
      * @return array
      */
-    private function getCookieOptions(): array
+    private function getCookieOptions(int $expiresDefault): array
     {
         $options             = $this->options;
-        $options['expires']  = $options['expires'] ?? time() - 691200;
+        $options['expires']  = $options['expires'] ?? $expiresDefault;
         $options['domain']   = $options['domain'] ?? $this->domain;
         $options['path']     = $options['path'] ?? $this->path;
         $options['secure']   = $options['secure'] ?? $this->secure;
