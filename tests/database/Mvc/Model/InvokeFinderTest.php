@@ -19,6 +19,7 @@ use Phalcon\Tests\Support\Models\Objects;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class InvokeFinderTest extends AbstractDatabaseTestCase
@@ -41,14 +42,13 @@ final class InvokeFinderTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: invokeFinder()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
      * @group pgsql
      * @group sqlite
+     * @group pgsql
      */
     public function testMvcModelInvokeFinder(): void
     {

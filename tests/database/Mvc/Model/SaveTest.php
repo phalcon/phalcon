@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
+use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData;
@@ -28,6 +29,8 @@ use Phalcon\Tests\Support\Models\CustomersDefaults;
 use Phalcon\Tests\Support\Models\CustomersKeepSnapshots;
 use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Models\InvoicesBelongsToCustomers;
+use Phalcon\Tests\Support\Models\InvoicesHasOneKeepSnapshots;
+use Phalcon\Tests\Support\Models\InvoicesHasOneNotReusable;
 use Phalcon\Tests\Support\Models\InvoicesKeepSnapshots;
 use Phalcon\Tests\Support\Models\InvoicesSchema;
 use Phalcon\Tests\Support\Models\InvoicesValidationFails;
@@ -38,6 +41,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class SaveTest extends AbstractDatabaseTestCase
@@ -59,14 +63,13 @@ final class SaveTest extends AbstractDatabaseTestCase
 
 
     /**
-     * Tests Phalcon\Mvc\Model\ :: save() Infinite Loop
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/16395
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-09
-     * @issue  https://github.com/phalcon/cphalcon/issues/16395
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function infiniteSaveLoop(): void
     {
@@ -87,16 +90,13 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with a model whose only column is an
-     * auto-increment primary key.
-     *
+     * @issue  https://github.com/phalcon/phalcon/issues/156
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-04
-     * @issue  https://github.com/phalcon/phalcon/issues/156
      *
-     * @group  mysql
-     * @group  pgsql
-     * @group  sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveOnlyIdentityColumn(): void
     {
@@ -119,14 +119,14 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save()
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
-     * @since  2019-04-30
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-04-30
      * @since  2019-05-10
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSave(): void
     {
@@ -192,14 +192,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() after fetching related records
-     *
-     * @see    https://github.com/phalcon/cphalcon/issues/13964
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-26
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveAfterFetchingRelated(): void
     {
@@ -238,14 +236,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() after setting empty array
-     *
-     * @see    https://github.com/phalcon/cphalcon/issues/1482214270
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-10-09
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveAfterSettingEmptyRelated(): void
     {
@@ -274,14 +270,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() after using related records getters
-     *
-     * @see    https://github.com/phalcon/cphalcon/issues/13964
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-26
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveAfterUsingRelatedGetters(): void
     {
@@ -320,14 +314,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() when default values are not set
-     *
-     * @see    https://github.com/phalcon/cphalcon/issues/13781
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-05-17
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveAfterWithoutDefaultValues(): void
     {
@@ -367,11 +359,11 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with circular unsaved relations
-     *
      * @since  2019-04-28
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveCircularRelation(): void
     {
@@ -410,14 +402,161 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\ :: save() with property source
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-21
      *
+     * @issue  https://github.com/phalcon/cphalcon/issues/15554
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelSaveMultipleChangedRelationValues(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+
+        $invoicesMigration = new InvoicesMigration($connection);
+        $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));
+
+        $customersMigration = new CustomersMigration($connection);
+        $customersMigration->insert(1, 1, 'firstName', 'lastName');
+
+        $invoice = InvoicesHasOneNotReusable::findFirst(77);
+
+        $invoice->customer->cst_name_first  = 'newFirstName';
+        $invoice->customer->cst_status_flag = 0;
+
+        $this->assertTrue($invoice->save());
+
+        $customer = Customers::findFirst(1);
+
+        $this->assertSame('newFirstName', $customer->cst_name_first);
+        $this->assertSame(0, (int) $customer->cst_status_flag);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-02
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/16222
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelSaveBelongsToUpdatesExistingParent(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+
+        $customersMigration = new CustomersMigration($connection);
+        $customersMigration->insert(1, 1, 'firstName', 'lastName');
+
+        $invoicesMigration = new InvoicesMigration($connection);
+
+        $customer = Customers::findFirst(1);
+        $this->assertNotNull($customer);
+
+        $customer->cst_name_first = 'updatedFirstName';
+
+        $invoice = new InvoicesBelongsToCustomers();
+        $invoice->inv_title      = uniqid('inv-', true);
+        $invoice->inv_created_at = date('Y-m-d H:i:s');
+        $invoice->setCustomer($customer);
+
+        $this->assertTrue($invoice->save());
+
+        $reloaded = Customers::findFirst(1);
+
+        $this->assertSame('updatedFirstName', $reloaded->cst_name_first);
+        $this->assertSame(1, (int) $invoice->inv_cst_id);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-30
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/16611
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelSaveNullRelatedAfterCallingGetter(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+
+        $customersMigration = new CustomersMigration($connection);
+        $customersMigration->insert(1, 1, 'firstName', 'lastName');
+
+        $invoicesMigration = new InvoicesMigration($connection);
+        $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));
+
+        $invoice = InvoicesBelongsToCustomers::findFirst(77);
+
+        $this->assertNotNull($invoice->inv_cst_id);
+
+        // Calling the getter caches the related customer in $this->related.
+        // Setting the relation to null must clear that cache so that
+        // preSaveRelatedRecords() does not overwrite inv_cst_id on save.
+        $invoice->getCustomer();
+        $invoice->setCustomer(null);
+
+        $this->assertTrue($invoice->save());
+
+        $reloaded = InvoicesBelongsToCustomers::findFirst(77);
+
+        $this->assertNull($reloaded->inv_cst_id);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-28
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/16000
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelSaveDoesNotSaveUnmodifiedHasOneRelation(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getConnection();
+
+        $customersMigration = new CustomersMigration($connection);
+        $customersMigration->insert(1, 1, 'firstName', 'lastName');
+
+        $invoicesMigration = new InvoicesMigration($connection);
+        $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));
+
+        $invoice  = InvoicesHasOneKeepSnapshots::findFirst(77);
+        $customer = $invoice->getRelated('customer');
+
+        $this->assertNotFalse($customer);
+
+        $eventsManager  = new EventsManager();
+        $customerSaved  = false;
+        $eventsManager->attach(
+            'model:beforeSave',
+            function () use (&$customerSaved): void {
+                $customerSaved = true;
+            }
+        );
+        $customer->setEventsManager($eventsManager);
+
+        $invoice->inv_title = uniqid('inv-updated-', true);
+
+        $this->assertTrue($invoice->save());
+        $this->assertFalse($customerSaved, 'Unmodified hasOne related record must not be saved');
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/cphalcon/issues/11922
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-16
-     * @issue  #11922
      *
-     * @group  mysql
-     * @group  sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveWithPropertySource(): void
     {
@@ -466,14 +605,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with related records property (relation many - belongs)
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-11-04
      *
-     * @see    https://github.com/phalcon/cphalcon/issues/15148
-     *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveWithRelatedManyAndBelongsRecordsProperty(): void
     {
@@ -517,12 +654,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with related records
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveWithRelatedRecords(): void
     {
@@ -561,14 +698,12 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with related records property
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-31
      *
-     * @see    https://github.com/phalcon/cphalcon/issues/15148
-     *
-     * @group  mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveWithRelatedRecordsProperty(): void
     {
@@ -612,12 +747,10 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\ :: save() with schema
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-16
      *
-     * @group  mysql
+     * @group mysql
      */
     public function testMvcModelSaveWithSchema(): void
     {
@@ -646,15 +779,14 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with a tinyint(1)
-     *
-     * @see          https://github.com/phalcon/cphalcon/issues/14355
+     * @dataProvider tinyintProvider
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2019-08-02
-     * @dataProvider tinyintProvider
      *
-     * @group        mysql
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelSaveWithTinyInt(string $value): void
     {
@@ -676,7 +808,9 @@ final class SaveTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() clears the reusable-records cache
+     * Tests that the reusable-records cache in Manager is cleared after a
+     * successful save(), preventing unbounded memory growth in long-running
+     * processes that call save() in a loop.
      *
      * @issue  https://github.com/phalcon/cphalcon/issues/16566
      * @author Phalcon Team <team@phalcon.io>
@@ -694,16 +828,17 @@ final class SaveTest extends AbstractDatabaseTestCase
 
         /** @var Manager $manager */
         $manager = $this->container->getShared('modelsManager');
+
         $manager->setReusableRecords('SomeModel', 'key-abc', ['record1', 'record2']);
 
         $actual = $manager->getReusableRecords('SomeModel', 'key-abc');
         $this->assertNotNull($actual);
 
-        $invoice                 = new Invoices();
-        $invoice->inv_cst_id     = 1;
+        $invoice              = new Invoices();
+        $invoice->inv_cst_id  = 1;
         $invoice->inv_status_flag = 0;
-        $invoice->inv_title      = uniqid('inv-', true);
-        $invoice->inv_total      = 100.0;
+        $invoice->inv_title   = uniqid('inv-', true);
+        $invoice->inv_total   = 100.0;
         $invoice->inv_created_at = date('Y-m-d H:i:s');
 
         $actual = $invoice->save();
@@ -711,43 +846,6 @@ final class SaveTest extends AbstractDatabaseTestCase
 
         $actual = $manager->getReusableRecords('SomeModel', 'key-abc');
         $this->assertNull($actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-30
-     *
-     * @issue  16611
-     * @group mysql
-     * @group pgsql
-     * @group sqlite
-     */
-    public function testMvcModelSaveNullRelatedAfterCallingGetter(): void
-    {
-        /** @var PDO $connection */
-        $connection = self::getConnection();
-
-        $customersMigration = new CustomersMigration($connection);
-        $customersMigration->insert(1, 1, 'firstName', 'lastName');
-
-        $invoicesMigration = new InvoicesMigration($connection);
-        $invoicesMigration->insert(77, 1, 0, uniqid('inv-', true));
-
-        $invoice = InvoicesBelongsToCustomers::findFirst(77);
-
-        $this->assertNotNull($invoice->inv_cst_id);
-
-        // Calling the getter caches the related customer in $this->related.
-        // Setting the relation to null must clear that cache so that
-        // preSaveRelatedRecords() does not overwrite inv_cst_id on save.
-        $invoice->getCustomer();
-        $invoice->setCustomer(null);
-
-        $this->assertTrue($invoice->save());
-
-        $reloaded = InvoicesBelongsToCustomers::findFirst(77);
-
-        $this->assertNull($reloaded->inv_cst_id);
     }
 
     /**

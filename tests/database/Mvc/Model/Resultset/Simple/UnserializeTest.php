@@ -40,12 +40,12 @@ final class UnserializeTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Resultset\Simple :: unserialize()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelResultsetSimpleUnserialize(): void
     {

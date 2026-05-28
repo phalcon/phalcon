@@ -19,12 +19,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class SetDirtyStateTest extends AbstractDatabaseTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Model\Row :: setDirtyState()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelRowSetDirtyState(): void
     {

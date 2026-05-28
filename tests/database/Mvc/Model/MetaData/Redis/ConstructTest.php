@@ -26,6 +26,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function env;
 
 /**
+ *
  * @group phql
  */
 final class ConstructTest extends AbstractDatabaseTestCase
@@ -71,12 +72,12 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\MetaData\Redis :: __construct() - isEmpty and reset
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelMetadataRedisConstruct(): void
     {

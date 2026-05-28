@@ -22,6 +22,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class RefreshTest extends AbstractDatabaseTestCase
@@ -39,9 +40,10 @@ final class RefreshTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: refresh()
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelRefresh(): void
     {

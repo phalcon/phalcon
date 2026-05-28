@@ -24,6 +24,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function cacheDir;
 
 /**
+ *
  * @group phql
  */
 final class ConstructTest extends AbstractDatabaseTestCase
@@ -72,12 +73,12 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\MetaData\Stream :: __construct() - isEmpty and reset
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelMetadataStreamConstruct(): void
     {

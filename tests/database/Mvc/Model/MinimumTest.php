@@ -13,6 +13,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class MinimumTest extends AbstractDatabaseTestCase
@@ -31,12 +32,12 @@ final class MinimumTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: minimum()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-30
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelMinimum(): void

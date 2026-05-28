@@ -20,6 +20,7 @@ use Phalcon\Tests\Support\Models\Personas;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class RollbackTest extends AbstractDatabaseTestCase
@@ -41,12 +42,12 @@ final class RollbackTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Transaction :: rollback()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelTransactionRollback(): void
@@ -78,12 +79,12 @@ final class RollbackTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Transaction :: rollback() - exception
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelTransactionRollbackException(): void

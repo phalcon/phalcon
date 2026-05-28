@@ -28,12 +28,12 @@ final class GetReadConnectionTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: getReadConnection()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-31
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelGetReadConnection(): void
     {

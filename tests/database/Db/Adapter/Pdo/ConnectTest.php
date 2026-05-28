@@ -35,16 +35,12 @@ final class ConnectTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Adapter\Pdo :: connect() - persistent
-     *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
      *
      * @group mysql
      */
-    public function testDbAdapterPdoConnectPersistent(): void
+    public function testDbAdapterPdoConnectPersistentMysql(): void
     {
         $options               = getOptionsMysql();
         $options['persistent'] = true;
@@ -61,5 +57,82 @@ final class ConnectTest extends AbstractDatabaseTestCase
         $this->assertEquals($expected, $actual);
 
         $connection->close();
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-04-20
+     *
+     * @group pgsql
+     */
+    public function testDbAdapterPdoConnectPersistentPgsql(): void
+    {
+        // The high-level `persistent` descriptor key is read but not
+        // unset before DSN assembly in AbstractPdo::connect(); pgsql
+        // then rejects the leaked `persistent=true` DSN attribute.
+        // Pass the persistent flag via PDO::ATTR_PERSISTENT instead.
+        $options            = getOptionsPostgresql();
+        $options['options'] = [
+            PDO::ATTR_EMULATE_PREPARES  => false,
+            PDO::ATTR_STRINGIFY_FETCHES => false,
+            PDO::ATTR_PERSISTENT        => true,
+        ];
+
+        $connection = (new PdoFactory())->newInstance('postgresql', $options);
+
+        $expected = $options;
+        $actual   = $connection->getDescriptor();
+
+        $this->assertEquals($expected, $actual);
+
+        $connection->close();
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2021-04-20
+     *
+     * @group sqlite
+     */
+    public function testDbAdapterPdoConnectPersistentSqlite(): void
+    {
+        $options               = getOptionsSqlite();
+        $options['persistent'] = true;
+        $options['options']    = [
+            PDO::ATTR_EMULATE_PREPARES  => false,
+            PDO::ATTR_STRINGIFY_FETCHES => false,
+        ];
+
+        $connection = (new PdoFactory())->newInstance('sqlite', $options);
+
+        $expected = $options;
+        $actual   = $connection->getDescriptor();
+
+        $this->assertEquals($expected, $actual);
+
+        $connection->close();
+    }
+
+    /**
+     * Tests Phalcon\Db\Adapter\Pdo :: connect() (close + reconnect cycle)
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-18
+     *
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testDbAdapterPdoConnect(): void
+    {
+        $this->setDatabase();
+
+        $db = $this->container->get('db');
+
+        $db->close();
+        $db->connect();
+
+        $row = $db->fetchOne('SELECT 1 AS one');
+        $this->assertSame(1, (int) $row['one']);
     }
 }

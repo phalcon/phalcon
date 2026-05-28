@@ -24,6 +24,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function cacheDir;
 
 /**
+ *
  * @group phql
  */
 final class CacheTest extends AbstractDatabaseTestCase
@@ -58,15 +59,15 @@ final class CacheTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query :: cache()
-     *
      * @dataProvider getValidSerializers
      *
+     * @issue
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2021-05-06
-     * @issue
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryCache(
         string $serializer

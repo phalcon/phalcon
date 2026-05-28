@@ -33,14 +33,13 @@ final class GetConnectionTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Transaction :: getConnection()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2012-08-07
      *
      * @group mysql
      * @group pgsql
      * @group sqlite
+     * @group pgsql
      */
     public function testMvcModelTransactionGetConnection(): void
     {

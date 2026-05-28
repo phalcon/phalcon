@@ -29,6 +29,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class QueryTest extends AbstractDatabaseTestCase
@@ -71,12 +72,12 @@ final class QueryTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: query()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQuery(): void
     {
@@ -93,13 +94,13 @@ final class QueryTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: query() - Issue 14535
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/14535
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-01
-     * @issue  14535
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryIssue14535(): void
     {
@@ -120,13 +121,13 @@ final class QueryTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: query() - Issue 14783
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/14783
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
-     * @issue  14783
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryIssue14783(): void
     {
@@ -177,19 +178,10 @@ final class QueryTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Transforming method used for test
-     *
-     * @param Row $row
-     *
-     * @issue 14783
-     *
-     * @return mixed
+     * @issue https://github.com/phalcon/cphalcon/issues/14783
      */
     private function transform(Row $row): CustomersKeepSnapshots
     {
-        // Namespaced model names are now preserved verbatim as the row
-        // attribute, matching cphalcon's behavior (previously the alias
-        // was lcfirst'd, producing `phalcon\Tests\...\CustomersKeepSnapshots`).
         $invoice           = $row->readAttribute(CustomersKeepSnapshots::class);
         $customer          = $row->readAttribute('join_1');
         $invoice->customer = $customer;

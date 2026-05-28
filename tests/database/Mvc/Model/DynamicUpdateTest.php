@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Support\Collection;
+use Phalcon\Support\Settings;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\CustomersMigration;
 use Phalcon\Tests\Support\Models\Customers;
@@ -38,18 +39,15 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with DynamicUpdate Disabled
-     *
-     * @todo Enable once Phalcon\Support\Settings (settings.zep) is ported to cphalcon
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDisableDynamicUpdate(): void
     {
-        $this->markTestSkipped('TODO: Phalcon\\Support\\Settings (settings.zep) not yet ported to cphalcon');
 
         $connection         = self::getConnection();
         $customersMigration = new CustomersMigration($connection);
@@ -73,7 +71,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
         /**
          * Disable system wide dynamic update
          */
-        MvcModel::setup(['dynamicUpdate' => false]);
+        Settings::set('orm.dynamic_update', false);
 
         /**
          * New model
@@ -99,18 +97,15 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() with DynamicUpdate Disabled Cherry pick
-     *
-     * @todo Enable once Phalcon\Support\Settings (settings.zep) is ported to cphalcon
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDisabledCherryPickDynamicUpdate(): void
     {
-        $this->markTestSkipped('TODO: Phalcon\\Support\\Settings (settings.zep) not yet ported to cphalcon');
 
         $connection         = self::getConnection();
         $customersMigration = new CustomersMigration($connection);
@@ -133,7 +128,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
         /**
          * Disable system wide dynamic update
          */
-        MvcModel::setup(['dynamicUpdate' => false]);
+        Settings::set('orm.dynamic_update', false);
 
         /**
          * New model
@@ -157,20 +152,16 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: save() With DynamicUpdate Enabled
-     *
-     * @todo Enable once Phalcon\Support\Settings (settings.zep) is ported to cphalcon
-     *
+     * @issue https://github.com/phalcon/cphalcon/issues/16343
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-08-11
      *
-     * @issue https://github.com/phalcon/cphalcon/issues/16343
-     *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelEnableDynamicUpdate(): void
     {
-        $this->markTestSkipped('TODO: Phalcon\\Support\\Settings (settings.zep) not yet ported to cphalcon');
 
         $connection         = self::getConnection();
         $customersMigration = new CustomersMigration($connection);
@@ -179,7 +170,7 @@ final class DynamicUpdateTest extends AbstractDatabaseTestCase
         /**
          * Enable system wide dynamic update
          */
-        MvcModel::setup(['dynamicUpdate' => true]);
+        Settings::set('orm.dynamic_update', true);
 
         $collection    = new Collection();
         $connection    = $this->container->get('db');

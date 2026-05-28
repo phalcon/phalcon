@@ -19,9 +19,11 @@ use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\Robotto;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class ConstructTest extends AbstractDatabaseTestCase
@@ -55,12 +57,12 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\MetaData\Memory :: __construct() - isEmpty and reset
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelMetadataMemoryConstruct(): void
     {
@@ -79,59 +81,30 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\MetaData\Memory :: __construct() - manual
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelMetadataMemoryConstructManual(): void
     {
-        $this->markTestSkipped(
-            'Robotto model needs to be migrated to active models'
-        );
+        $metaData = $this->container->getShared('modelsMetadata');
+        $robotto  = new Robotto();
 
-        // /** @var MetaDataInterface $metaData */
-        // $metaData = $this->container->getShared('modelsMetadata');
-        //
-        // $robotto = new Robotto();
-        //
-        // //Robots
-        // $pAttributes = [
-        //     0 => 'id',
-        //     1 => 'name',
-        //     2 => 'type',
-        //     3 => 'year',
-        // ];
-        //
-        // $attributes = $metaData->getAttributes($robotto);
-        // $expected   = $pAttributes;
-        // $actual     = $attributes;
-        // $this->assertEquals($expected, $actual);
-        //
-        // $ppkAttributes = [
-        //     0 => 'id',
-        // ];
-        //
-        // $pkAttributes = $metaData->getPrimaryKeyAttributes($robotto);
-        // $expected     = $ppkAttributes;
-        // $actual       = $pkAttributes;
-        // $this->assertEquals($expected, $actual);
-        //
-        // $pnpkAttributes = [
-        //     0 => 'name',
-        //     1 => 'type',
-        //     2 => 'year',
-        // ];
-        //
-        // $npkAttributes = $metaData->getNonPrimaryKeyAttributes($robotto);
-        // $expected      = $pnpkAttributes;
-        // $actual        = $npkAttributes;
-        // $this->assertEquals($expected, $actual);
-        //
-        // $expected = 'id';
-        // $actual   = $metaData->getIdentityField($robotto);
-        // $this->assertEquals($expected, $actual);
+        $this->assertSame(
+            ['id', 'name', 'type', 'year'],
+            $metaData->getAttributes($robotto)
+        );
+        $this->assertSame(
+            ['id'],
+            $metaData->getPrimaryKeyAttributes($robotto)
+        );
+        $this->assertSame(
+            ['name', 'type', 'year'],
+            $metaData->getNonPrimaryKeyAttributes($robotto)
+        );
+        $this->assertSame('id', $metaData->getIdentityField($robotto));
     }
 }

@@ -23,6 +23,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class GetFirstTest extends AbstractDatabaseTestCase
@@ -54,13 +55,13 @@ final class GetFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Mvc\Model\Resultset :: getFirst() - Issue 15027
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/15027
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
-     * @issue  15027
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelResultsetGetFirst(): void

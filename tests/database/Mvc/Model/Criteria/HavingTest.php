@@ -29,12 +29,12 @@ final class HavingTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Criteria :: having()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelCriteriaHaving(): void
     {

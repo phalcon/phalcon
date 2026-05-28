@@ -61,17 +61,6 @@ final class CurrentTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Mvc\Model\Resultset\Complex - current()
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testMvcModelResultsetComplexCurrent(): void
-    {
-        $this->markTestSkipped('Need implementation');
-    }
-
-    /**
      * Default behavior: `orm.resultset_empty_left_join_model` is `true`, so
      * a LEFT JOIN with no matching row hydrates an empty Model instance
      * (every property is null). This preserves pre-5.12 behavior and is
@@ -79,7 +68,7 @@ final class CurrentTest extends AbstractDatabaseTestCase
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-13
-     * @issue  CP-16960
+     * @issue  https://github.com/phalcon/cphalcon/issues/16960
      *
      * @group mysql
      * @group pgsql
@@ -142,15 +131,15 @@ final class CurrentTest extends AbstractDatabaseTestCase
 
     /**
      * Opt-in behavior: setting `orm.resultset_empty_left_join_model` to
-     * `false` restores the cphalcon 5.12.x "explicit null on no match"
-     * semantics so the LEFT JOIN slot is plainly `null` instead of an
-     * empty Model instance. New applications that prefer the cleaner
-     * contract enable this once at bootstrap.
+     * `false` restores the 5.12.x "explicit null on no match" semantics so
+     * the LEFT JOIN slot is plainly `null` instead of an empty Model
+     * instance. New applications that prefer the cleaner contract enable
+     * this once at bootstrap.
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-05-13
-     * @issue  CP-16239
-     * @issue  CP-16960
+     * @since  2026-04-23
+     * @issue  https://github.com/phalcon/cphalcon/issues/16239
+     * @issue  https://github.com/phalcon/cphalcon/issues/16960
      *
      * @group mysql
      * @group pgsql

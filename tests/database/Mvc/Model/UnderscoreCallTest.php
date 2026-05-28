@@ -22,6 +22,7 @@ use Phalcon\Tests\Support\Models;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class UnderscoreCallTest extends AbstractDatabaseTestCase
@@ -40,12 +41,12 @@ final class UnderscoreCallTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: __call()
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-10-03
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelCall(): void
     {

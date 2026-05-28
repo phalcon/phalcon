@@ -37,12 +37,12 @@ final class JoinTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Criteria :: join()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelCriteriaJoin(): void
     {
@@ -66,10 +66,7 @@ final class JoinTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Criteria :: join() and use ManyToMany with
-     * Multiple schemas
-     *
-     * @issue  14716
+     * @issue  https://github.com/phalcon/cphalcon/issues/14716
      * @author Jeremy PASTOURET <https://github.com/jenovateurs>
      * @since  2020-02-06
      *
@@ -78,13 +75,11 @@ final class JoinTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelCriteriaJoinManyToManyMultipleSchema(): void
     {
-        $this->markTestSkipped('TODO: Check the schemas');
+        // sqlite is excluded above — it doesn't model multiple schemas
+        // the way mysql/pgsql do, so the `private.co_orders_x_products`
+        // join the test asserts on can't be produced there.
         $this->setDatabase();
 
-        /**
-         * The following test needs to skip sqlite because I think
-         * we can't create multiple schemas with sqlite
-         */
         $criteria = new Criteria();
         $criteria->setDI($this->container);
 

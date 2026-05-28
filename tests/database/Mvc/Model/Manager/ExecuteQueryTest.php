@@ -23,6 +23,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class ExecuteQueryTest extends AbstractDatabaseTestCase
@@ -44,13 +45,13 @@ final class ExecuteQueryTest extends AbstractDatabaseTestCase
         $this->setDatabase();
     }
     /**
-     * Tests Phalcon\Mvc\Model\Manager :: executeQuery() - Issue 15024
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/15024
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
-     * @issue  15024
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelManagerExecuteQuery(): void
@@ -74,8 +75,8 @@ final class ExecuteQueryTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * @issue  16976
-     * @issue  2373
+     * @issue  https://github.com/phalcon/cphalcon/issues/16976
+     * @issue  https://github.com/phalcon/cphalcon/issues/2373
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-04
      *
@@ -85,6 +86,12 @@ final class ExecuteQueryTest extends AbstractDatabaseTestCase
      */
     public function testMvcModelManagerExecuteQueryIssue16976(): void
     {
+        $this->markTestSkipped(
+            "Skipped pending re-implementation of #16976. "
+            . "Original fix reverted because the substitution path triggered "
+            . "a use-after-free during record->update (#17042)."
+        );
+
         /** @var ManagerInterface $manager */
         $manager = $this->getService("modelsManager");
 

@@ -38,12 +38,12 @@ final class GetSetTransactionTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query :: getTransaction() / setTransaction()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryGetSetTransaction(): void
     {

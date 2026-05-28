@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Cache;
+use Phalcon\Db\RawValue;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Router;
 use Phalcon\Storage\SerializerFactory;
@@ -38,6 +39,7 @@ use function uniqid;
 use function var_dump;
 
 /**
+ *
  * @group phql
  */
 final class FindTest extends AbstractDatabaseTestCase
@@ -51,12 +53,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFind(): void
     {
@@ -75,12 +77,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - deprecation warning PHP 8.2
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-08-02
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindDeprecationWarning(): void
     {
@@ -121,13 +123,13 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - private property with Redis cache
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/15439
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-05-25
-     * @issue  15439
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindPrivatePropertyWithRedisCache(): void
     {
@@ -240,14 +242,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - second iteration of Resultset
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-10-17
      *
-     * @see    https://github.com/phalcon/cphalcon/issues/15065
-     *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindResultsetSecondIteration(): void
     {
@@ -306,12 +306,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindWithCache(): void
     {
@@ -381,13 +381,13 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find()
-     *
+     * @issue https://github.com/phalcon/cphalcon/issues/16696
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
-     * @issue 16696
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindWithCacheLifetimeFromCacheService(): void
     {
@@ -450,12 +450,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - with cache/exception
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-05-10
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindWithCacheException(): void
     {
@@ -488,12 +488,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - specific column
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2023-06-30
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindWithSpecificColumn(): void
     {
@@ -521,12 +521,12 @@ final class FindTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - cache options lifetime priority over adapter lifetime
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-08-02
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindWithCacheOptionsLifetimePriorityOverCacheService(): void
     {
@@ -591,5 +591,34 @@ final class FindTest extends AbstractDatabaseTestCase
 
         $data = $modelsCache->get('my-cache');
         $this->assertNull($data);
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/cphalcon/issues/16350
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-23
+     *
+     * @group mysql
+     */
+    public function testMvcModelFindWithRawValueBind(): void
+    {
+        $connection = self::getConnection();
+        $migration  = new InvoicesMigration($connection);
+        $migration->insert(1, null, 1, 'raw-value-one', 100, '2000-01-01 00:00:00');
+        $migration->insert(2, null, 1, 'raw-value-two', 200, '2000-06-01 00:00:00');
+        $migration->insert(3, null, 0, 'raw-value-three', 50, '2000-01-01 00:00:00');
+
+        $invoices = Invoices::find(
+            [
+                'conditions' => 'inv_created_at <= :date: AND inv_status_flag = :status:',
+                'bind'       => [
+                    'date'   => new RawValue('NOW()'),
+                    'status' => 1,
+                ],
+            ]
+        );
+
+        $this->assertNotNull($invoices);
+        $this->assertCount(2, $invoices);
     }
 }

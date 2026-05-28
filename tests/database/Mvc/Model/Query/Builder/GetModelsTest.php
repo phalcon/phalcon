@@ -38,12 +38,12 @@ final class GetModelsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query\Builder :: getModels() - null
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-04-08
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderGetModelsNull(): void
     {
@@ -54,12 +54,12 @@ final class GetModelsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query\Builder :: getModels() - string
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-04-08
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderGetModelsString(): void
     {
@@ -75,12 +75,12 @@ final class GetModelsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query\Builder :: getModels() - array
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-04-08
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderGetModelsArray(): void
     {

@@ -23,6 +23,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class ExecuteTest extends AbstractDatabaseTestCase
@@ -39,12 +40,12 @@ final class ExecuteTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Criteria :: execute()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelCriteriaExecute(): void
     {

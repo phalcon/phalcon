@@ -23,6 +23,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
@@ -41,12 +42,12 @@ final class UnderscoreCallStaticTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: __callStatic()
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-10-14
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelUnderscoreCallStatic(): void
     {

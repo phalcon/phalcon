@@ -22,6 +22,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class GetSqlTest extends AbstractDatabaseTestCase
@@ -53,13 +54,13 @@ final class GetSqlTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query :: getSql() - Issue 14657
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/14657
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-05-06
-     * @issue  14657
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryGetSql(): void
     {

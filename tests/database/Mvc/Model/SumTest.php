@@ -23,6 +23,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class SumTest extends AbstractDatabaseTestCase
@@ -67,12 +68,12 @@ final class SumTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: sum()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-30
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelSum(): void
@@ -162,19 +163,20 @@ final class SumTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: sum()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-30
      *
      * @group mysql
      * @group pgsql
+     * @group sqlite
+     * @group pgsql
      */
     public function testMvcModelSumTransaction(): void
     {
-        $this->insertDataInvoices($this->invoiceMigration, 7, 'default', 2, 'ccc');
-        $this->insertDataInvoices($this->invoiceMigration, 1, 'default', 3, 'aaa');
-        $this->insertDataInvoices($this->invoiceMigration, 11, 'default', 1, 'aaa');
+        $invId = ('sqlite' === self::getDriver()) ? 'null' : 'default';
+        $this->insertDataInvoices($this->invoiceMigration, 7, $invId, 2, 'ccc');
+        $this->insertDataInvoices($this->invoiceMigration, 1, $invId, 3, 'aaa');
+        $this->insertDataInvoices($this->invoiceMigration, 11, $invId, 1, 'aaa');
 
         $originalTotal = Invoices::sum(
             [

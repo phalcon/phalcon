@@ -26,6 +26,7 @@ use function date;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class DeleteTest extends AbstractDatabaseTestCase
@@ -39,12 +40,12 @@ final class DeleteTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: delete()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDelete(): void
     {
@@ -69,12 +70,12 @@ final class DeleteTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: delete() with related items
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-08-02
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDeleteCascadeRelated(): void
     {
@@ -140,12 +141,12 @@ final class DeleteTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: delete() from getRelated
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-11-18
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDeleteGetRelated(): void
     {
@@ -161,9 +162,6 @@ final class DeleteTest extends AbstractDatabaseTestCase
          */
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->insert($custId, 0, $firstName, $lastName);
-
-        $paidInvoiceId   = 40;
-        $unpaidInvoiceId = 50;
 
         $title = uniqid('inv-');
 
@@ -260,17 +258,18 @@ final class DeleteTest extends AbstractDatabaseTestCase
          * Check for the number of invoices
          */
         $expected = 0;
+        $customer->invoices->refresh();
         $actual   = $customer->invoices->count();
         $this->assertEquals($expected, $actual);
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: delete() with restricted related items
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-17
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDeleteRestrictRelated(): void
     {
@@ -317,15 +316,12 @@ final class DeleteTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: delete() with restricted related items
-     * in transaction
-     *
-     * @see    https://github.com/phalcon/cphalcon/issues/14114
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2020-10-17
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelDeleteRestrictRelatedInTransaction(): void
     {

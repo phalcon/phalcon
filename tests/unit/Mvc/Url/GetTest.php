@@ -64,6 +64,125 @@ final class GetTest extends AbstractUnitTestCase
 
     /**
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetAppendsArgsWhenUriHasNoQueryString(): void
+    {
+        $url = new Url();
+        $url->setBaseUri('/');
+
+        $expected = '/show/products?id=1&name=Carrots';
+        $actual   = $url->get(
+            'show/products',
+            ['id' => 1, 'name' => 'Carrots']
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetAppendsArgsWithAmpersandWhenUriHasQueryString(): void
+    {
+        $url = new Url();
+
+        $expected = 'http://example.com?page=1&page=5';
+        $actual   = $url->get(
+            'http://example.com?page=1',
+            ['page' => 5]
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetReplaceArgsOverridesExistingQueryKeys(): void
+    {
+        $url = new Url();
+
+        $expected = 'http://example.com?page=5';
+        $actual   = $url->get(
+            'http://example.com?page=1',
+            ['page' => 5],
+            null,
+            null,
+            true
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetReplaceArgsMergesNewKeysWithExistingQuery(): void
+    {
+        $url = new Url();
+
+        $actual = $url->get(
+            'http://example.com?page=1&sort=asc',
+            ['page' => 5, 'limit' => 20],
+            null,
+            null,
+            true
+        );
+
+        parse_str(parse_url($actual, PHP_URL_QUERY), $query);
+
+        $this->assertSame('5', $query['page']);
+        $this->assertSame('asc', $query['sort']);
+        $this->assertSame('20', $query['limit']);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetReplaceArgsWithNoExistingQueryStillAppends(): void
+    {
+        $url = new Url();
+
+        $expected = 'http://example.com?page=5';
+        $actual   = $url->get(
+            'http://example.com',
+            ['page' => 5],
+            null,
+            null,
+            true
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-04
+     */
+    public function testGetUsesProvidedBaseUriOverInstanceBaseUri(): void
+    {
+        $url = new Url();
+
+        $url->setBaseUri('https://phalcon.io/');
+
+        $expected = 'https://example.com/products/edit/1';
+        $actual   = $url->get(
+            'products/edit/1',
+            null,
+            null,
+            'https://example.com/'
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-13
      * @issue  https://github.com/phalcon/cphalcon/issues/17007
      */

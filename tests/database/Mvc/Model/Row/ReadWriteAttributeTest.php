@@ -19,12 +19,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Model\Row :: readAttribute() / writeAttribute()
-     *
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-06-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelRowReadWriteAttribute(): void
     {

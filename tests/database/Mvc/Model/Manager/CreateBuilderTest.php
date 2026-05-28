@@ -24,12 +24,12 @@ final class CreateBuilderTest extends AbstractDatabaseTestCase
     use DiTrait;
 
     /**
-     * Tests Phalcon\Mvc\Model\Manager :: createBuilder()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-07-04
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelManagerCreateBuilder(): void

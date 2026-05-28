@@ -36,12 +36,12 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: writeAttribute()
-     *
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelWriteAttribute(): void
     {
@@ -67,14 +67,13 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: writeAttribute() undefined property with
-     * associative array
-     *
-     * @issue  14021
+     * @issue  https://github.com/phalcon/cphalcon/issues/14021
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelWriteAttributeUndefinedPropertyWithAssociativeArray(): void
     {
@@ -100,12 +99,12 @@ final class ReadWriteAttributeTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: writeAttribute() with associative array
-     *
      * @author Balázs Németh <https://github.com/zsilbi>
      * @since  2019-04-30
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelWriteAttributeWithAssociativeArray(): void
     {

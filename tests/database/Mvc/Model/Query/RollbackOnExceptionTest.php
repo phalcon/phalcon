@@ -21,6 +21,7 @@ use RuntimeException;
 use Throwable;
 
 /**
+ *
  * @group phql
  */
 final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
@@ -47,11 +48,10 @@ final class RollbackOnExceptionTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query :: mvcModelQueryRollbackOnException() - Issue 16604
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/16604
      * @author noone-silent <lominum@protonmail.com>
      * @since  2024-06-10
-     * @issue  16604
+     *
      * @group mysql
      * @group pgsql
      */

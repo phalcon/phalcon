@@ -26,10 +26,6 @@ final class IntrospectionTest extends AbstractDatabaseTestCase
     use DiTrait;
 
     /**
-     * Tests Phalcon\Mvc\Model\MetaData\Strategy\Introspection
-     *
-     * @return void
-     * @throws Exception
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
@@ -111,14 +107,12 @@ final class IntrospectionTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\MetaData\Strategy\Introspection - exception
-     *
-     * @return void
-     * @throws Exception
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2023-07-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelMetadataIntrospectionException(): void
     {

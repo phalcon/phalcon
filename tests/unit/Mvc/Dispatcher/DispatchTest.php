@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Dispatcher;
 
 use Phalcon\Dispatcher\Exception;
+use Phalcon\Mvc\Dispatcher;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\DispatcherTestDefaultController;
 
@@ -96,6 +97,45 @@ class DispatchTest extends BaseDispatcher
         $this->expectExceptionCode(Exception::EXCEPTION_ACTION_NOT_FOUND);
 
         $dispatcher->dispatch();
+    }
+
+    /**
+     * Tests that events fired after initialize() are received when the
+     * controller attaches an events manager to the dispatcher inside
+     * initialize() and no events manager was set before dispatch started.
+     *
+     * @see https://github.com/phalcon/cphalcon/issues/16440
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-29
+     */
+    public function testDispatchEventsAttachedInsideInitialize(): void
+    {
+        $di = $this->getDI();
+
+        $dispatcher = new Dispatcher();
+        $dispatcher->setDI($di);
+        $dispatcher->setNamespaceName('Phalcon\Tests\Unit\Mvc\Dispatcher\Helper');
+        $dispatcher->setControllerName('dispatcher-test-initialize-set-events-manager');
+        $dispatcher->setActionName('index');
+
+        $di->setShared('dispatcher', $dispatcher);
+
+        $dispatcher->dispatch();
+
+        $expected = [
+            'initialize-method',
+            'afterInitialize',
+            'indexAction',
+            'afterExecuteRoute',
+            'afterDispatch',
+            'afterDispatchLoop',
+        ];
+
+        $this->assertEquals(
+            $expected,
+            $this->getDispatcherListener()->getTrace()
+        );
     }
 
     /**

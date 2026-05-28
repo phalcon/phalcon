@@ -18,6 +18,7 @@ use Phalcon\Mvc\Model;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models\InvoicesMap;
+use Phalcon\Tests\Support\Models\InvoicesWithSetters;
 use Phalcon\Tests\Support\Models\InvoicesWithTypedSetters;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
@@ -61,14 +62,14 @@ final class CloneResultMapTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: cloneResultMap()
-     *
      * @dataProvider modelDataProvider
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-10-05
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelCloneResultMap(
         int | string $invId,
@@ -117,6 +118,41 @@ final class CloneResultMapTest extends AbstractDatabaseTestCase
     }
 
     /**
+     * Tests that cloneResultMap() calls model setters during hydration when
+     * orm.disable_assign_setters is false (the default).
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/14810
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-22
+     *
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelCloneResultMapCallsSetters(): void
+    {
+        /** @var InvoicesWithSetters $invoice */
+        $invoice = Model::cloneResultMap(
+            new InvoicesWithSetters(),
+            [
+                'inv_id'          => 1,
+                'inv_cst_id'      => 2,
+                'inv_status_flag' => 0,
+                'inv_title'       => 'original-title',
+                'inv_total'       => 10.0,
+                'inv_created_at'  => '2026-01-01 00:00:00',
+            ],
+            null
+        );
+
+        // setInvTitle() prepends 'SET:' → setter must have been called
+        $this->assertSame('SET:original-title', $invoice->inv_title);
+
+        // setInvTotal() doubles the value → setter must have been called
+        $this->assertSame(20.0, (float) $invoice->inv_total);
+    }
+
+    /**
      * Tests that cloneResultMap() does not throw when a setter has a strict
      * type hint that is incompatible with the raw DB value. The ORM must catch
      * the TypeError and fall back to direct property assignment.
@@ -151,14 +187,14 @@ final class CloneResultMapTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: cloneResultMap() with casting
-     *
      * @dataProvider modelDataProvider
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-10-05
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      * @group pgsql
      */
     public function testMvcModelCloneResultMapWithCasting(

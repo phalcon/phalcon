@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\PdoFactory;
 
+use Phalcon\Config\Config;
 use Phalcon\Db\Adapter\Pdo\Mysql;
+use Phalcon\Db\Adapter\Pdo\Postgresql;
+use Phalcon\Db\Adapter\Pdo\Sqlite;
 use Phalcon\Db\Adapter\PdoFactory;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\FactoryTrait;
@@ -30,45 +33,121 @@ final class LoadTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Db\Adapter\PdoFactory :: load()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-19
-     * @group  mysql
+     *
+     * @group mysql
      */
-    public function testDbAdapterPdoFactoryLoad(): void
+    public function testDbAdapterPdoFactoryLoadMysql(): void
     {
         $options = $this->config->database;
         $data    = $options->toArray();
 
-        $this->runTests($options, $data);
+        $this->runTests(Mysql::class, $options, $data);
     }
 
     /**
-     * Tests Phalcon\Db\Adapter\PdoFactory :: load() - array
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-19
-     * @group  mysql
+     *
+     * @group mysql
      */
-    public function testDbAdapterPdoFactoryLoadArray(): void
+    public function testDbAdapterPdoFactoryLoadMysqlArray(): void
     {
         $options = $this->arrayConfig['database'];
         $data    = $options;
 
-        $this->runTests($options, $data);
+        $this->runTests(Mysql::class, $options, $data);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-05-19
+     *
+     * @group pgsql
+     */
+    public function testDbAdapterPdoFactoryLoadPgsql(): void
+    {
+        $data    = $this->getPostgresqlData();
+        $options = new Config($data);
+
+        $this->runTests(Postgresql::class, $options, $data);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-05-19
+     *
+     * @group pgsql
+     */
+    public function testDbAdapterPdoFactoryLoadPgsqlArray(): void
+    {
+        $data = $this->getPostgresqlData();
+
+        $this->runTests(Postgresql::class, $data, $data);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-05-19
+     *
+     * @group sqlite
+     */
+    public function testDbAdapterPdoFactoryLoadSqlite(): void
+    {
+        $data    = $this->getSqliteData();
+        $options = new Config($data);
+
+        $this->runTests(Sqlite::class, $options, $data);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2019-05-19
+     *
+     * @group sqlite
+     */
+    public function testDbAdapterPdoFactoryLoadSqliteArray(): void
+    {
+        $data = $this->getSqliteData();
+
+        $this->runTests(Sqlite::class, $data, $data);
+    }
+
+    private function getPostgresqlData(): array
+    {
+        return [
+            'adapter' => 'postgresql',
+            'options' => [
+                'host'     => env('DATA_POSTGRES_HOST'),
+                'username' => env('DATA_POSTGRES_USER'),
+                'password' => env('DATA_POSTGRES_PASS'),
+                'dbname'   => env('DATA_POSTGRES_NAME'),
+                'port'     => (int) env('DATA_POSTGRES_PORT'),
+            ],
+        ];
+    }
+
+    private function getSqliteData(): array
+    {
+        return [
+            'adapter' => 'sqlite',
+            'options' => [
+                'dbname' => env('DATA_SQLITE_NAME'),
+            ],
+        ];
     }
 
     /**
      * @param mixed $options
      * @param array $data
      */
-    private function runTests(mixed $options, array $data): void
+    private function runTests(string $class, mixed $options, array $data): void
     {
         $factory = new PdoFactory();
         $adapter = $factory->load($options);
 
-        $this->assertInstanceOf(Mysql::class, $adapter);
+        $this->assertInstanceOf($class, $adapter);
 
         $expected = array_intersect_assoc(
             $adapter->getDescriptor(),

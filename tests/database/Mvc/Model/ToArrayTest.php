@@ -28,6 +28,7 @@ use function getOptionsMysql;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class ToArrayTest extends AbstractDatabaseTestCase
@@ -45,12 +46,12 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: toArray()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-03
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelToArray(): void
     {
@@ -92,12 +93,12 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: toArray() - column map
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-03
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelToArrayColumnMap(): void
     {
@@ -139,14 +140,13 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: toArray() - execute column not in columnMap
-     *
+     * @issue https://github.com/phalcon/cphalcon/issues/16467
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-11-21
      *
-     * @issue https://github.com/phalcon/cphalcon/issues/16467
-     *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelToArrayExecuteColumnNotInColumnMap(): void
     {
@@ -176,13 +176,14 @@ final class ToArrayTest extends AbstractDatabaseTestCase
         $result->next();
         $result->rewind();
 
+        $isPgsql  = ('pgsql' === self::getDriver());
         $expected = [
             [
                 'id'          => 4,
                 'cst_id'      => 1,
                 'status_flag' => 0,
                 'title'       => $title,
-                'total'       => 111.26,
+                'total'       => $isPgsql ? '111.26' : 111.26,
                 'created_at'  => $date,
             ],
             [
@@ -190,7 +191,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
                 'cst_id'      => 2,
                 'status_flag' => 1,
                 'title'       => $title,
-                'total'       => 222.19,
+                'total'       => $isPgsql ? '222.19' : 222.19,
                 'created_at'  => $date,
             ],
         ];
@@ -199,12 +200,9 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: toArray() - find - castOnHydrate/forceCasting
-     *
+     * @issue https://github.com/phalcon/cphalcon/issues/15361
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-03
-     *
-     * @issue https://github.com/phalcon/cphalcon/issues/15361
      *
      * @group mysql
      */
@@ -275,14 +273,12 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: toArray() - find first columns
-     *
+     * @issue https://github.com/phalcon/cphalcon/issues/1701
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-11-03
      *
-     * @issue https://github.com/phalcon/cphalcon/issues/1701
-     *
      * @group mysql
+     * @group pgsql
      * @group sqlite
      */
     public function testMvcModelToArrayFindFirstColumns(): void
@@ -321,13 +317,12 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\ :: save() with property source
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/11922
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-16
-     * @issue  #11922
      *
      * @group mysql
+     * @group pgsql
      * @group sqlite
      */
     public function testMvcModelToArrayModelWithGetters(): void
@@ -378,13 +373,12 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\ :: save() with property source
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/11922
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-11-16
-     * @issue  #11922
      *
      * @group mysql
+     * @group pgsql
      * @group sqlite
      */
     public function testMvcModelToArrayModelWithGettersSerialize(): void

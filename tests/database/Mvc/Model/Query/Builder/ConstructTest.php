@@ -38,25 +38,45 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query\Builder :: __construct()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderConstruct(): void
     {
-        $this->markTestSkipped('Need implementation');
+        $params = [
+            'models'     => Invoices::class,
+            'columns'    => ['inv_id', 'inv_title'],
+            'conditions' => 'inv_id > 5',
+            'group'      => ['inv_status_flag'],
+            'having'     => 'inv_id < 100',
+            'order'      => ['inv_title'],
+            'limit'      => 10,
+            'offset'     => 15,
+        ];
+
+        $builder = new Builder($params);
+
+        $this->assertSame(Invoices::class, $builder->getFrom());
+        $this->assertSame(['inv_id', 'inv_title'], $builder->getColumns());
+        $this->assertSame('inv_id > 5', $builder->getWhere());
+        $this->assertSame(['inv_status_flag'], $builder->getGroupBy());
+        $this->assertSame('inv_id < 100', $builder->getHaving());
+        $this->assertSame(['inv_title'], $builder->getOrderBy());
+        $this->assertSame(10, $builder->getLimit());
+        $this->assertSame(15, $builder->getOffset());
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query\Builder :: __construct() - passing DI
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderConstructWithDi(): void
     {
@@ -79,12 +99,12 @@ final class ConstructTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query\Builder :: __construct() - limit/offset via separate params
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderConstructLimitAndOffset(): void
     {

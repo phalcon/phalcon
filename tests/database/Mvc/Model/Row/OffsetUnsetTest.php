@@ -20,12 +20,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class OffsetUnsetTest extends AbstractDatabaseTestCase
 {
     /**
-     * Tests Phalcon\Mvc\Model\Row :: offsetUnset()
-     *
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-06-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelRowOffsetUnset(): void
     {

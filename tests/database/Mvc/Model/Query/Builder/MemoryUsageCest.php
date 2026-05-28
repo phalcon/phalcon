@@ -38,7 +38,6 @@ class MemoryUsageCest
     }
 
     /**
-     * Executes the same builder pattern in a loop and verifies memory stays stable.
      *
      * @group sqlite
      */

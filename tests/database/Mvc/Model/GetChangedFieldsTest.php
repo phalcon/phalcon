@@ -20,6 +20,7 @@ use Phalcon\Tests\Support\Models\InvoicesKeepSnapshots;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 /**
+ *
  * @group phql
  */
 final class GetChangedFieldsTest extends AbstractDatabaseTestCase
@@ -41,14 +42,13 @@ final class GetChangedFieldsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: getChangedFields() returns empty on new model
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
      * @group pgsql
      * @group sqlite
+     * @group pgsql
      */
     public function testMvcModelGetChangedFieldsNewModel(): void
     {
@@ -66,14 +66,13 @@ final class GetChangedFieldsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: getChangedFields() with keepSnapshots enabled
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      *
      * @group mysql
      * @group pgsql
      * @group sqlite
+     * @group pgsql
      */
     public function testMvcModelGetChangedFieldsWithSnapshot(): void
     {
@@ -89,10 +88,12 @@ final class GetChangedFieldsTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Regression coverage for [#CP-17042]: a freshly-loaded row whose
-     * nullable columns hold `null` must report no changed fields, and
-     * modifying an unrelated column must not list the null columns as
-     * changed.
+     * Regression coverage for [#17042]: a freshly-loaded row whose nullable
+     * columns hold `null` must report no changed fields, and modifying an
+     * unrelated column must not list the null columns as changed. The
+     * pre-fix `isset $snapshot[name]` compiled by the post-5.13.0 Zephir
+     * runtime returned false for null-valued snapshot entries, causing
+     * every nullable column to be reported as changed.
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-21

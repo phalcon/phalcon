@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model;
 
 use PDO;
+use Phalcon\Db\RawValue;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Row;
@@ -31,6 +32,7 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function uniqid;
 
 /**
+ *
  * @group phql
  */
 final class FindFirstTest extends AbstractDatabaseTestCase
@@ -77,12 +79,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst()
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirst(): void
     {
@@ -114,12 +116,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirstBy() - not found
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstByNotFound(): void
     {
@@ -128,14 +130,13 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - option 'column'
-     *
-     * @since  2020-11-22
      * @issue  https://github.com/phalcon/cphalcon/issues/15356
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-11-22
      *
      * @group mysql
-     *
-     * @author Phalcon Team <team@phalcon.io>
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstColumn(): void
     {
@@ -164,12 +165,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - with column map
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstColumnMap(): void
     {
@@ -209,12 +210,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - exception
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstException(): void
     {
@@ -228,12 +229,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - extended
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstExtended(): void
     {
@@ -258,12 +259,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - extended column
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-02-05
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstExtendedColumn(): void
     {
@@ -289,12 +290,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: find() - found/not found and getRelated
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2022-06-14
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstFoundNotFoundGetRelated(): void
     {
@@ -380,12 +381,12 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - not found
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-01
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstNotFound(): void
     {
@@ -399,14 +400,14 @@ final class FindFirstTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: findFirst() - exception
-     *
      * @dataProvider findFirstProvider
      *
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-01-27
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelFindFirstStringPrimaryKey(
         array | string $params,
@@ -426,5 +427,36 @@ final class FindFirstTest extends AbstractDatabaseTestCase
         $model = ModelWithStringPrimary::findFirst($params);
 
         $this->assertSame($found, $model instanceof Model);
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/cphalcon/issues/16350
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-23
+     *
+     * @group mysql
+     */
+    public function testMvcModelFindFirstWithRawValueBind(): void
+    {
+        $connection = self::getConnection();
+        $migration  = new InvoicesMigration($connection);
+        $migration->insert(4, null, 1, 'test-raw-value', 100, '2000-01-01 00:00:00');
+
+        $invoice = Invoices::findFirst(
+            [
+                'conditions' => 'inv_created_at <= :date: AND inv_status_flag = :status:',
+                'bind'       => [
+                    'date'   => new RawValue('NOW()'),
+                    'status' => 1,
+                ],
+            ]
+        );
+
+        $this->assertNotNull($invoice);
+        $this->assertInstanceOf(Invoices::class, $invoice);
+
+        $expected = 4;
+        $actual   = $invoice->inv_id;
+        $this->assertEquals($expected, $actual);
     }
 }

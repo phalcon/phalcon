@@ -42,13 +42,13 @@ final class OrderByTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model\Query :: getSql() - Issue 14657
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/15411
      * @author Phalcon Team <team@phalcon.io>
      * @since  2021-04-20
-     * @issue  15411
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelQueryBuilderOrderBy(): void
     {

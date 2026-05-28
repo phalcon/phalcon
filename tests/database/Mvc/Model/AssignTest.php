@@ -16,7 +16,9 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use Phalcon\Tests\Support\Migrations\SourcesMigration;
 use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\Sources;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function uniqid;
@@ -35,12 +37,12 @@ final class AssignTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: assign()
-     *
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelAssign(): void
     {
@@ -90,19 +92,12 @@ final class AssignTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: assign() - auto_increment primary
-     *
-     * Current test serves for example with PHP 7.4 and nullable model's
-     * property.
-     * > Uncaught Error: Typed property Model::$id must not be accessed before
-     * initialization
-     *
-     * Example: public ?int $id = null;
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-02-13
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelAssignAutoPrimary(): void
     {
@@ -122,12 +117,12 @@ final class AssignTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: assign() - incomplete
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
      *
      * @group mysql
+     * @group pgsql
+     * @group sqlite
      */
     public function testMvcModelAssignIncomplete(): void
     {
@@ -154,13 +149,12 @@ final class AssignTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Tests Phalcon\Mvc\Model :: assign() - with transaction
-     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/15739
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-29
-     * @issue  https://github.com/phalcon/cphalcon/issues/15739
      *
      * @group mysql
+     * @group pgsql
      * @group sqlite
      */
     public function testMvcModelAssignWithTransaction(): void
@@ -185,5 +179,35 @@ final class AssignTest extends AbstractDatabaseTestCase
 
         $result = $invoice->delete();
         $this->assertTrue($result);
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/cphalcon/issues/16617
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-02
+     *
+     * @group mysql
+     * @group pgsql
+     * @group sqlite
+     */
+    public function testMvcModelAssignReservedSetterColumn(): void
+    {
+        $connection = self::getConnection();
+        (new SourcesMigration($connection));
+
+        $value  = uniqid('src-');
+        $record = new Sources();
+        $record->assign(
+            [
+                'id'       => 1,
+                'username' => 'darth',
+                'source'   => $value,
+            ]
+        );
+
+        $this->assertSame(1, $record->readAttribute('id'));
+        $this->assertSame('darth', $record->readAttribute('username'));
+        $this->assertSame($value, $record->readAttribute('source'));
+        $this->assertSame('co_sources', $record->getSource());
     }
 }
