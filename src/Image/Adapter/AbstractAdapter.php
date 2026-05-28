@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
-use GdImage;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 use Phalcon\Image\Exceptions\MissingDimensions;
@@ -431,8 +430,8 @@ abstract class AbstractAdapter implements AdapterInterface
      * Add a text to an image with a specified opacity
      *
      * @param string      $text
-     * @param mixed       $offsetX
-     * @param mixed       $offsetY
+     * @param int         $offsetX
+     * @param int         $offsetY
      * @param int         $opacity
      * @param string      $color
      * @param int         $size
@@ -443,8 +442,8 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function text(
         string $text,
-        $offsetX = false,
-        $offsetY = false,
+        int $offsetX = 0,
+        int $offsetY = 0,
         int $opacity = 100,
         string $color = "000000",
         int $size = 12,
@@ -610,10 +609,10 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param string $file
      * @param int    $quality
      *
-     * @return void
+     * @return bool
      * @throws Exception
      */
-    abstract protected function processSave(string $file, int $quality): void;
+    abstract protected function processSave(string $file, int $quality): bool;
 
     /**
      * @param int $amount

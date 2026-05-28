@@ -60,7 +60,6 @@ use function imagelayereffect;
 use function imagepng;
 use function imagerotate;
 use function imagesavealpha;
-use function imagescale;
 use function imagesetpixel;
 use function imagestring;
 use function imagesx;
@@ -185,6 +184,8 @@ class Gd extends AbstractAdapter
         if (null !== $image) {
             imagedestroy($image);
         }
+
+        $this->image = null;
     }
 
     /**
@@ -564,7 +565,7 @@ class Gd extends AbstractAdapter
      * @param string $extension
      * @param int    $quality
      *
-     * @return string
+     * @return false|string
      * @throws Exception
      */
     protected function processRender(string $extension, int $quality)
@@ -596,7 +597,7 @@ class Gd extends AbstractAdapter
                 throw new UnsupportedImageType($extension);
         }
 
-        return (string)ob_get_clean();
+        return ob_get_clean();
     }
 
     /**
@@ -607,7 +608,11 @@ class Gd extends AbstractAdapter
      */
     protected function processResize(int $width, int $height): void
     {
-        $image = imagescale($this->image, $width, $height);
+        $image = imagecreatetruecolor($width, $height);
+
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+        imagecopyresampled($image, $this->image, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
 
         imagedestroy($this->image);
 
@@ -666,10 +671,10 @@ class Gd extends AbstractAdapter
      * @param string $file
      * @param int    $quality
      *
-     * @return void
+     * @return bool
      * @throws Exception
      */
-    protected function processSave(string $file, int $quality): void
+    protected function processSave(string $file, int $quality): bool
     {
         /** @var string $extension */
         $extension = pathinfo($file, PATHINFO_EXTENSION);
@@ -717,6 +722,8 @@ class Gd extends AbstractAdapter
         }
 
         $this->mime = image_type_to_mime_type($this->type);
+
+        return true;
     }
 
     /**

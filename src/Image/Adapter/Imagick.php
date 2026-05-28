@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
-use GdImage;
 use Imagick as ImagickNative;
 use ImagickDraw;
 use ImagickDrawException;
@@ -29,7 +28,6 @@ use Phalcon\Image\Exceptions\ResizeFailed;
 use Phalcon\Image\Exceptions\ResourceTypeError;
 
 use function is_bool;
-use function is_float;
 use function is_int;
 use function strtolower;
 
@@ -162,7 +160,7 @@ class Imagick extends AbstractAdapter
      * @param int $rigidity Introduces a bias for non-straight seams. This
      *                      parameter is typically 0.
      *
-     * @return void
+     * @return AbstractAdapter
      * @throws Exception
      * @throws ImagickException
      */
@@ -171,7 +169,7 @@ class Imagick extends AbstractAdapter
         int $height,
         int $deltaX = 0,
         int $rigidity = 0
-    ): void {
+    ): AbstractAdapter {
         $image = $this->image;
 
         $image->setIteratorIndex(0);
@@ -195,6 +193,8 @@ class Imagick extends AbstractAdapter
 
         $this->width  = $image->getImageWidth();
         $this->height = $image->getImageHeight();
+
+        return $this;
     }
 
     /**
@@ -240,11 +240,12 @@ class Imagick extends AbstractAdapter
         int $blue,
         int $opacity
     ): void {
-        $opacity    /= 100;
-        $color      = sprintf("rgb(%d, %d, %d)", $red, $green, $blue);
-        $pixel1     = new ImagickPixel($color);
-        $pixel2     = new ImagickPixel("transparent");
-        $background = new ImagickNative();
+        $localOpacity  = $opacity;
+        $localOpacity /= 100;
+        $color         = sprintf("rgb(%d, %d, %d)", $red, $green, $blue);
+        $pixel1        = new ImagickPixel($color);
+        $pixel2        = new ImagickPixel("transparent");
+        $background    = new ImagickNative();
 
         $this->image->setIteratorIndex(0);
 
@@ -265,7 +266,7 @@ class Imagick extends AbstractAdapter
 
             $background->evaluateImage(
                 self::EVALUATE_MULTIPLY,
-                $opacity,
+                $localOpacity,
                 self::CHANNEL_ALPHA
             );
 
@@ -677,10 +678,10 @@ class Imagick extends AbstractAdapter
      * @param string $file
      * @param int    $quality
      *
-     * @return void
+     * @return bool
      * @throws ImagickException
      */
-    protected function processSave(string $file, int $quality): void
+    protected function processSave(string $file, int $quality): bool
     {
         /** @var string $extension */
         $extension = pathinfo($file, PATHINFO_EXTENSION);
@@ -701,7 +702,7 @@ class Imagick extends AbstractAdapter
 
                 fclose($fp);
 
-                return;
+                return true;
             case "jpg":
             case "jpeg":
                 $this->image->setImageCompression(self::COMPRESSION_JPEG);
@@ -713,6 +714,8 @@ class Imagick extends AbstractAdapter
         }
 
         $this->image->writeImage($file);
+
+        return true;
     }
 
     /**
@@ -815,8 +818,8 @@ class Imagick extends AbstractAdapter
 
                     $offsetY = 0;
                     $offsetX = ($x < 0) ? $x * -1 : $offsetX;
-                } elseif (is_float($offsetY)) {
-                    $y = (int)$offsetY;
+                } elseif (is_int($offsetY)) {
+                    $y = $offsetY;
 
                     $offsetX = ($x < 0) ? $x * -1 : 0;
                     $offsetY = ($y < 0) ? $y * -1 : $offsetY;
