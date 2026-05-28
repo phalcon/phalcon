@@ -19,6 +19,7 @@ class FractalDates extends Model
     public $ftime;
     public $fdatetime;
     public $ftimestamp;
+    public $cuuid;
 
     public function initialize()
     {

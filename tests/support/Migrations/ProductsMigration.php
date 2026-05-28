@@ -22,19 +22,29 @@ class ProductsMigration extends AbstractMigration
 
     public function insert(
         ?int $id,
-        ?string $name = null
+        ?string $name = null,
+        int $statusFlag = 0
     ): int {
-        $id    = $id ?: 'null';
-        $name  = $name ?: uniqid();
         $sql    = <<<SQL
 insert into co_products (
-    prd_id, prd_name
+    prd_id, prd_name, prd_status_flag
 ) values (
-    {$id}, {$name}
+    :id, :name, :statusFlag
 )
 SQL;
+        $params = [
+            ':id'         => $id,
+            ':name'       => $name ?: uniqid(),
+            ':statusFlag' => $statusFlag,
+        ];
 
-        return $this->connection->exec($sql);
+        $result = $this->execute($sql, $params);
+
+        if ($id !== null) {
+            $this->advanceSequence('prd_id', $id);
+        }
+
+        return $result;
     }
 
     protected function getSqlMysql(): array
@@ -47,6 +57,7 @@ drop table if exists `co_products`;
 CREATE TABLE `co_products` (
     `prd_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prd_name` VARCHAR(70) NULL,
+    `prd_status_flag` tinyint(1) NULL,
     PRIMARY KEY (`prd_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             "
@@ -55,7 +66,14 @@ CREATE TABLE `co_products` (
 
     protected function getSqlSqlite(): array
     {
-        return [];
+        return [
+"drop table if exists `co_products`;",
+"create table `co_products` (
+    `prd_id` integer constraint prd_id_pk primary key autoincrement,
+    `prd_name` text NULL,
+    `prd_status_flag` integer NULL
+);"
+        ];
     }
 
     protected function getSqlPgsql(): array
@@ -67,10 +85,9 @@ drop table if exists co_products;
             "
 create table co_products
 (
-    prd_id serial not null
-    constraint prd_pk
-      primary key,
-      prd_name varchar(70)
+    prd_id serial constraint co_prd_pk primary key,
+    prd_name varchar(70),
+    prd_status_flag integer
 );
             "
         ];

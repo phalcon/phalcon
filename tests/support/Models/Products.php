@@ -20,12 +20,14 @@ use Phalcon\Mvc\Model;
  *
  * @property int    $prd_id;
  * @property string $prd_name;
+ * @property int    $prd_status_flag;
  */
 #[\AllowDynamicProperties]
 class Products extends Model
 {
     public $prd_id;
     public $prd_name;
+    public $prd_status_flag;
 
     public function initialize()
     {
