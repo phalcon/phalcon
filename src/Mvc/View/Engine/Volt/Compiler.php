@@ -1514,7 +1514,9 @@ class Compiler implements InjectionAwareInterface
 
                 case Opcode::STRING->value:
                     if ($doubleQuotes === false) {
-                        $exprCode = "'" . $expr["value"] . "'";
+                        $exprCode = "'"
+                            . preg_replace("/(?<!\\\\)'/", "\\\\'", $expr["value"])
+                            . "'";
                     } else {
                         $exprCode = "\"" . $expr["value"] . "\"";
                     }
