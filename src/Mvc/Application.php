@@ -20,6 +20,9 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Application\Exception;
+use Phalcon\Mvc\Application\Exceptions\ContainerRequired;
+use Phalcon\Mvc\Application\Exceptions\InvalidModuleDefinition;
+use Phalcon\Mvc\Application\Exceptions\ModuleDefinitionPathNotFound;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
@@ -103,7 +106,7 @@ class Application extends AbstractApplication
      */
     public function handle(string $uri): ResponseInterface | bool
     {
-        $this->checkContainer(Exception::class, 'internal services');
+        $this->checkContainer(ContainerRequired::class, 'internal services');
 
         /**
          * Call boot event, this allows the developer to perform initialization
@@ -202,7 +205,7 @@ class Application extends AbstractApplication
              * A module definition must be an array or an object
              */
             if (!is_array($module) && !is_object($module)) {
-                throw new Exception("Invalid module definition");
+                throw new InvalidModuleDefinition();
             }
 
             /**
@@ -221,9 +224,7 @@ class Application extends AbstractApplication
                 if (isset($module["path"])) {
                     $path = $module["path"];
                     if (true !== $this->phpFileExists($path)) {
-                        throw new Exception(
-                            "Module definition path '" . $path . "' does not exist"
-                        );
+                        throw new ModuleDefinitionPathNotFound($path);
                     }
 
                     if (true !== class_exists($className, false)) {
@@ -244,7 +245,7 @@ class Application extends AbstractApplication
                  * A module definition object, can be a Closure instance
                  */
                 if (!($module instanceof Closure)) {
-                    throw new Exception("Invalid module definition");
+                    throw new InvalidModuleDefinition();
                 }
 
                 $moduleObject = call_user_func_array(
