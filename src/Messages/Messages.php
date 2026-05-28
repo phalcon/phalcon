@@ -17,10 +17,13 @@ use ArrayAccess;
 use Countable;
 use Iterator;
 use JsonSerializable;
+use Phalcon\Messages\Exceptions\MessagesNotIterable;
 use Phalcon\Messages\Traits\MessagesHelperTrait;
 use Phalcon\Support\Traits\JsonTrait;
 
+use function array_merge;
 use function is_array;
+use function is_object;
 
 /**
  * Class Messages
@@ -67,16 +70,40 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
      *
      * @param MessageInterface[]|Iterator $messages
      *
-     * @throws Exception
+     * @throws MessagesNotIterable
      */
     public function appendMessages($messages): void
     {
-        if (true !== is_iterable($messages)) {
-            throw new Exception('The messages must be iterable');
+        if (!is_array($messages) && !is_object($messages)) {
+            throw new MessagesNotIterable();
         }
 
-        $this->checkAppendMessagesIterator($messages);
-        $this->checkAppendMessagesArray($messages);
+        $currentMessages = $this->messages;
+
+        if (is_array($messages)) {
+            /**
+             * An array of messages is simply merged into the current one
+             */
+            if (is_array($currentMessages)) {
+                $finalMessages = array_merge($currentMessages, $messages);
+            } else {
+                $finalMessages = $messages;
+            }
+
+            $this->messages = $finalMessages;
+        } else {
+            /**
+             * A collection of messages is iterated and appended one-by-one to
+             * the current list
+             */
+            $messages->rewind();
+
+            while ($messages->valid()) {
+                $message = $messages->current();
+                $this->appendMessage($message);
+                $messages->next();
+            }
+        }
     }
 
     /**
@@ -129,40 +156,5 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
         }
 
         return $records;
-    }
-
-    /**
-     * @param mixed $messages
-     */
-    private function checkAppendMessagesArray($messages): void
-    {
-        if (is_array($messages)) {
-            /**
-             * An array of messages is simply merged into the current one
-             */
-
-            $this->messages = [...$this->messages, ...$messages];
-        }
-    }
-
-    /**
-     * @param mixed $messages
-     */
-    private function checkAppendMessagesIterator($messages): void
-    {
-        if (!is_array($messages)) {
-            /**
-             * A collection of messages is iterated and appended one-by-one to
-             * the current list
-             */
-
-            $messages->rewind();
-
-            while ($messages->valid()) {
-                $message = $messages->current();
-                $this->appendMessage($message);
-                $messages->next();
-            }
-        }
     }
 }

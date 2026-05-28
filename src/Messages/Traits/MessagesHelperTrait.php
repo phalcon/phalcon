@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Messages\Traits;
 
-use Phalcon\Messages\Exception;
+use Phalcon\Messages\Exceptions\MessageNotObject;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\MessageInterface;
 
@@ -121,12 +121,12 @@ trait MessagesHelperTrait
      * @param mixed   $offset
      * @param Message $message
      *
-     * @throws Exception
+     * @throws MessageNotObject
      */
     public function offsetSet($offset, $message): void
     {
         if (!is_object($message)) {
-            throw new Exception('The message must be an object');
+            throw new MessageNotObject();
         }
 
         $this->messages[$offset] = $message;
