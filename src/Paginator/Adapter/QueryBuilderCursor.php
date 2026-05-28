@@ -15,6 +15,9 @@ namespace Phalcon\Paginator\Adapter;
 
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Paginator\Exception;
+use Phalcon\Paginator\Exceptions\InvalidBuilderInstance;
+use Phalcon\Paginator\Exceptions\InvalidCursorColumn;
+use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\RepositoryInterface;
 
 use function array_column;
@@ -75,9 +78,9 @@ class QueryBuilderCursor extends AbstractAdapter
     /**
      * The cursor value for the current page (null = first page)
      *
-     * @var int|null
+     * @var mixed
      */
-    protected int | null $cursor = null;
+    protected mixed $cursor = null;
 
     /**
      * The column used as the cursor (must be unique and indexed)
@@ -99,32 +102,27 @@ class QueryBuilderCursor extends AbstractAdapter
     public function __construct(array $config)
     {
         if (!isset($config["limit"])) {
-            throw new Exception("Parameter 'limit' is required");
+            throw new MissingRequiredParameter("limit");
         }
 
         if (!isset($config["builder"])) {
-            throw new Exception("Parameter 'builder' is required");
+            throw new MissingRequiredParameter("builder");
         }
 
         $builder = $config["builder"];
 
         if (!($builder instanceof Builder)) {
-            throw new Exception(
-                "Parameter 'builder' must be an instance " .
-                "of Phalcon\\Mvc\\Model\\Query\\Builder"
-            );
+            throw new InvalidBuilderInstance();
         }
 
         if (!isset($config["cursorColumn"])) {
-            throw new Exception("Parameter 'cursorColumn' is required");
+            throw new MissingRequiredParameter("cursorColumn");
         }
 
         $cursorColumn = $config["cursorColumn"];
 
         if (!is_string($cursorColumn) || $cursorColumn === '') {
-            throw new Exception(
-                "Parameter 'cursorColumn' must be a non-empty string"
-            );
+            throw new InvalidCursorColumn();
         }
 
         $this->cursorColumn = $cursorColumn;
@@ -141,9 +139,9 @@ class QueryBuilderCursor extends AbstractAdapter
     /**
      * Get the cursor value for the current page (null on first page)
      *
-     * @return int|null
+     * @return mixed
      */
-    public function getCursor(): int | null
+    public function getCursor(): mixed
     {
         return $this->cursor;
     }
@@ -172,7 +170,7 @@ class QueryBuilderCursor extends AbstractAdapter
             return 0;
         }
 
-        return $this->cursor;
+        return (int) $this->cursor;
     }
 
     /**
@@ -199,7 +197,7 @@ class QueryBuilderCursor extends AbstractAdapter
         $builder       = clone $this->builder;
         $limit         = (int) $this->limitRows;
         $currentCursor = $this->cursor;
-        $currentPage   = ($currentCursor === null) ? 0 : $currentCursor;
+        $currentPage   = ($currentCursor === null) ? 0 : (int) $currentCursor;
 
         if ($currentCursor !== null) {
             $builder->andWhere(
@@ -243,11 +241,11 @@ class QueryBuilderCursor extends AbstractAdapter
      * Pass the value returned by Repository::getNext() to advance to the
      * next page, or null to restart from the first page.
      *
-     * @param int|null $cursor
+     * @param mixed $cursor
      *
      * @return QueryBuilderCursor
      */
-    public function setCursor(int | null $cursor): static
+    public function setCursor(mixed $cursor): static
     {
         $this->cursor = $cursor;
 

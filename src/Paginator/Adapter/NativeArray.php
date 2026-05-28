@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Paginator\Adapter;
 
 use Phalcon\Paginator\Exception;
+use Phalcon\Paginator\Exceptions\PaginatorDataNotArray;
 use Phalcon\Paginator\RepositoryInterface;
 
 use function array_slice;
@@ -56,7 +57,7 @@ class NativeArray extends AbstractAdapter
         $items = $this->config["data"];
 
         if (!is_array($items)) {
-            throw new Exception("Invalid data for paginator");
+            throw new PaginatorDataNotArray();
         }
 
         $show       = (int)$this->limitRows;

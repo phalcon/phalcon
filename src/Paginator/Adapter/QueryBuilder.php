@@ -16,6 +16,10 @@ namespace Phalcon\Paginator\Adapter;
 use Phalcon\Db\Enum;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Paginator\Exception;
+use Phalcon\Paginator\Exceptions\BuilderModelNotDefined;
+use Phalcon\Paginator\Exceptions\InvalidBuilderInstance;
+use Phalcon\Paginator\Exceptions\MissingColumnsForHaving;
+use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\RepositoryInterface;
 
 use function array_values;
@@ -77,20 +81,17 @@ class QueryBuilder extends AbstractAdapter
     public function __construct(array $config)
     {
         if (!isset($config["limit"])) {
-            throw new Exception("Parameter 'limit' is required");
+            throw new MissingRequiredParameter("limit");
         }
 
         if (!isset($config["builder"])) {
-            throw new Exception("Parameter 'builder' is required");
+            throw new MissingRequiredParameter("builder");
         }
 
         $builder = $config["builder"];
 
         if (!($builder instanceof Builder)) {
-            throw new Exception(
-                "Parameter 'builder' must be an instance " .
-                "of Phalcon\\Mvc\\Model\\Query\\Builder"
-            );
+            throw new InvalidBuilderInstance();
         }
 
         if (isset($config["columns"])) {
@@ -167,41 +168,42 @@ class QueryBuilder extends AbstractAdapter
         /**
          * Execute the query an return the requested slice of data
          */
-        $items        = $query->execute();
-        $hasHaving    = !empty($totalBuilder->getHaving());
-        $groups       = $totalBuilder->getGroupBy();
-        $hasGroup     = !empty($groups);
-        $useSubquery  = false;
+        $items     = $query->execute();
+        $hasHaving = !empty($totalBuilder->getHaving());
+        $groups    = $totalBuilder->getGroupBy();
+        $hasGroup  = !empty($groups);
+
+        $hasMultipleGroups = false;
 
         /**
          * Change the queried columns by a COUNT(*)
          */
-
         if ($hasHaving && !$hasGroup) {
             if (empty($columns)) {
-                throw new Exception(
-                    "When having is set there should be columns "
-                    . "option provided for which calculate row count"
-                );
+                throw new MissingColumnsForHaving();
             }
 
             $totalBuilder->columns($columns);
         } else {
+            $hasDistinct    = false;
             $builderColumns = $builder->getColumns();
 
-            if (is_string($builderColumns) && stripos(trim($builderColumns), 'DISTINCT ') === 0) {
+            if (is_string($builderColumns) && stripos(trim($builderColumns), "DISTINCT ") === 0) {
                 $distinctColumn = trim(substr(trim($builderColumns), 9));
+                $hasDistinct    = true;
 
-                if (strpos($distinctColumn, ',') !== false) {
-                    $totalBuilder->columns(['DISTINCT ' . $distinctColumn]);
-                    $useSubquery = true;
+                if (strpos($distinctColumn, ",") !== false) {
+                    $totalBuilder->columns(["DISTINCT " . $distinctColumn]);
+                    $hasMultipleGroups = true;
                 } else {
                     $totalBuilder->columns(
-                        ['COUNT(DISTINCT ' . $distinctColumn . ') AS [rowcount]']
+                        ["COUNT(DISTINCT " . $distinctColumn . ") AS [rowcount]"]
                     );
                 }
-            } else {
-                $totalBuilder->columns('COUNT(*) [rowcount]');
+            }
+
+            if (!$hasDistinct) {
+                $totalBuilder->columns("COUNT(*) [rowcount]");
             }
         }
 
@@ -210,17 +212,37 @@ class QueryBuilder extends AbstractAdapter
          */
         if ($hasGroup) {
             if (is_array($groups)) {
-                $groupColumn = implode(", ", $groups);
+                $groupColumn       = implode(", ", $groups);
+                $hasMultipleGroups = count($groups) > 1;
             } else {
-                $groupColumn = $groups;
+                $groupColumn       = $groups;
+                $hasMultipleGroups = false;
             }
 
             if (!$hasHaving) {
-                $totalBuilder->groupBy(null)->columns(
-                    [
-                        "COUNT(DISTINCT " . $groupColumn . ") AS [rowcount]",
-                    ]
-                );
+                if (!empty($columns)) {
+                    $groupColumn       = $columns;
+                    $hasMultipleGroups = false;
+                }
+
+                if ($hasMultipleGroups) {
+                    /**
+                     * Multiple GROUP BY columns: COUNT(DISTINCT col1, col2) is
+                     * invalid in PostgreSQL. Use DISTINCT columns and wrap in a
+                     * subquery (same strategy as hasHaving) to count groups.
+                     */
+                    $totalBuilder->groupBy(null)->columns(
+                        [
+                            "DISTINCT " . $groupColumn,
+                        ]
+                    );
+                } else {
+                    $totalBuilder->groupBy(null)->columns(
+                        [
+                            "COUNT(DISTINCT " . $groupColumn . ") AS [rowcount]",
+                        ]
+                    );
+                }
             } else {
                 $totalBuilder->columns(
                     [
@@ -244,12 +266,12 @@ class QueryBuilder extends AbstractAdapter
          * Obtain the result of the total query
          * If we have having perform native count on temp table
          */
-        if ($hasHaving || $useSubquery) {
+        if ($hasHaving || $hasMultipleGroups) {
             $sql        = $totalQuery->getSql();
             $modelClass = $builder->getModels();
 
             if ($modelClass === null) {
-                throw new Exception("Model not defined in builder");
+                throw new BuilderModelNotDefined();
             }
 
             if (is_array($modelClass)) {
