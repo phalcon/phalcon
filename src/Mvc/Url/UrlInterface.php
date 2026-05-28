@@ -24,13 +24,17 @@ interface UrlInterface
      * @param array|string|null $uri       URI
      * @param array|object|null $arguments Optional arguments to be appended to the query string
      * @param bool|null         $local
+     * @param mixed             $baseUri
+     * @param bool              $replaceArgs
      *
      * @return string
      */
     public function get(
         array | string | null $uri = null,
         array | object | null $arguments = null,
-        bool | null $local = null
+        bool | null $local = null,
+        mixed $baseUri = null,
+        bool $replaceArgs = false
     ): string;
 
     /**

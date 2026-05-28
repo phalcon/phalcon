@@ -16,11 +16,15 @@ namespace Phalcon\Mvc;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Url\Exception;
+use Phalcon\Mvc\Url\Exceptions\MissingRouteName;
+use Phalcon\Mvc\Url\Exceptions\RouteNotFound;
+use Phalcon\Mvc\Url\Exceptions\RouterServiceUnavailable;
 use Phalcon\Mvc\Url\UrlInterface;
 
 use function array_merge;
 use function http_build_query;
 use function is_array;
+use function is_object;
 use function is_string;
 use function parse_str;
 use function preg_match;
@@ -137,9 +141,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
 
         if (is_array($uri)) {
             if (!isset($uri["for"])) {
-                throw new Exception(
-                    "It's necessary to define the route name with the parameter 'for'"
-                );
+                throw new MissingRouteName();
             }
 
             $routeName = $uri["for"];
@@ -149,17 +151,11 @@ class Url extends AbstractInjectionAware implements UrlInterface
              */
             if (null === $this->router) {
                 if (null === $this->container) {
-                    throw new Exception(
-                        "A dependency injection container is "
-                        . "required to access the 'router' service"
-                    );
+                    throw new RouterServiceUnavailable();
                 }
 
                 if (true !== $this->container->has("router")) {
-                    throw new Exception(
-                        "A dependency injection container is "
-                        . "required to access the 'router' service"
-                    );
+                    throw new RouterServiceUnavailable();
                 }
 
                 if ($this->container instanceof DiInterface) {
@@ -174,10 +170,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
              */
             $route = $this->router->getRouteByName($routeName);
 
-            if (false === $route) {
-                throw new Exception(
-                    "Cannot obtain a route using the name '" . $routeName . "'"
-                );
+            if (!is_object($route)) {
+                throw new RouteNotFound($routeName);
             }
 
             /**
@@ -197,7 +191,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
              */
             $hostname = $route->getHostname();
 
-            if (!empty($hostname)) {
+            if (null !== $hostname && "" !== $hostname) {
                 $uri   = '//' . $hostname . (substr($uri, 0, 1) !== '/' ? '/' . $uri : $uri);
                 $local = false;
             }
