@@ -32,7 +32,10 @@ $finder = PhpCsFixer\Finder::create()
     );
 
 return (new PhpCsFixer\Config())
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRiskyAllowed(false)
+    ->setUsingCache(true)
+    ->setCacheFile(__DIR__ . '/../tests/_output/.php-cs-fixer.cache')
     ->setRules(
         [
             'ordered_imports'        => [
