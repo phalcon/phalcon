@@ -78,7 +78,7 @@ use function call_user_func_array;
  * @method string        element(string $tag, string $text, array $attributes = [], bool $raw = false)
  * @method string        elementRaw(string $tag, string $text, array $attributes = [])
  * @method string        form(array $attributes = [])
- * @method string        friendlyTitle(string $text, string $separator = '-', bool $lowercase = true, mixed $replace = null)
+ * @method string        friendlyTitle(string $text, string $separator = '-', bool $lower = true, mixed $replace = null)
  * @method string        img(string $src, array $attributes = [])
  * @method Checkbox      inputCheckbox(string $name, string $value = null, array $attributes = [])
  * @method CheckboxGroup inputCheckboxGroup(string $name, array $options, mixed $checked = null, array $attributes = [])

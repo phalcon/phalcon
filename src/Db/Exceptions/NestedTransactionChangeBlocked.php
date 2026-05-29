@@ -19,6 +19,8 @@ class NestedTransactionChangeBlocked extends Exception
 {
     public function __construct()
     {
-        parent::__construct("Nested transaction with savepoints behavior cannot be changed while a transaction is open");
+        parent::__construct(
+            "Nested transaction with savepoints behavior cannot be changed while a transaction is open"
+        );
     }
 }

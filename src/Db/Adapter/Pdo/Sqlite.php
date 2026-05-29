@@ -396,7 +396,7 @@ class Sqlite extends PdoAdapter
     ): array {
         $indexes = [];
 
-        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName), Enum::FETCH_ASSOC) as $index) {
+        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName)) as $index) {
             $keyName = $index["name"];
 
             if (!isset($indexes[$keyName])) {

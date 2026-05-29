@@ -135,7 +135,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
         if ($maxPassLength > 0 && strlen($password) > $maxPassLength) {
             return false;
         }
-    
+
         return password_verify($password, $passwordHash);
     }
 
@@ -206,7 +206,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
         } catch (ValueError) {
             throw new UnknownHashAlgorithm($algorithm);
         }
-    
+
         if (!$hmac) {
             throw new UnknownHashAlgorithm($algorithm);
         }

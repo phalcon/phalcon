@@ -19,6 +19,9 @@ class MysqlOnConflictNotSupported extends Exception
 {
     public function __construct()
     {
-        parent::__construct("ON CONFLICT upserts are not supported by MySQL; use INSERT ... ON DUPLICATE KEY UPDATE via raw SQL instead");
+        parent::__construct(
+            "ON CONFLICT upserts are not supported by MySQL; "
+            . "use INSERT ... ON DUPLICATE KEY UPDATE via raw SQL instead"
+        );
     }
 }

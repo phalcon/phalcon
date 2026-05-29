@@ -367,7 +367,7 @@ class Crypt implements CryptInterface
                 "="
             );
         }
-    
+
         return base64_encode($this->encrypt($input, $key));
     }
 

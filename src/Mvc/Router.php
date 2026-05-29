@@ -1291,11 +1291,13 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         if ($this->eventsManager === null) {
             $staticBucketMethod = null;
 
-            if (isset($this->staticByMethod[$requestMethod][$handledUri])
+            if (
+                isset($this->staticByMethod[$requestMethod][$handledUri])
                 && !isset($this->staticShadowedByMethod[$requestMethod][$handledUri])
             ) {
                 $staticBucketMethod = $requestMethod;
-            } elseif (isset($this->staticByMethod["*"][$handledUri])
+            } elseif (
+                isset($this->staticByMethod["*"][$handledUri])
                 && !isset($this->staticShadowedByMethod["*"][$handledUri])
             ) {
                 $staticBucketMethod = "*";
@@ -1443,150 +1445,150 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         if (!$routeFound) {
             foreach (array_reverse($candidateRoutes, true) as $routeIdx => $route) {
-            $routeMeta = $this->routeMeta[$route->getRouteId()];
-            $params    = [];
-            $matches   = null;
+                $routeMeta = $this->routeMeta[$route->getRouteId()];
+                $params    = [];
+                $matches   = null;
 
             /**
              * Look for hostname constraints
              */
-            $hostname = $routeMeta["hostname"];
-            if (null !== $hostname) {
-                /**
-                 * Check if the current hostname is the same as the route
-                 */
-                if (null === $currentHostName) {
-                    $currentHostName = $request->getHttpHost();
+                $hostname = $routeMeta["hostname"];
+                if (null !== $hostname) {
+                    /**
+                     * Check if the current hostname is the same as the route
+                     */
+                    if (null === $currentHostName) {
+                        $currentHostName = $request->getHttpHost();
+                    }
+
+                    /**
+                     * No HTTP_HOST, maybe in CLI mode?
+                     */
+                    if (!$currentHostName) {
+                        continue;
+                    }
+
+                    /**
+                     * Check if the hostname restriction is the same as the current
+                     * in the route
+                     */
+                    $regexHostName = $routeMeta["hostRegex"];
+
+                    if ($regexHostName !== null) {
+                        $matched = preg_match($regexHostName, $currentHostName);
+                    } else {
+                        $matched = $currentHostName == $hostname;
+                    }
+
+                    if (!$matched) {
+                        continue;
+                    }
                 }
 
-                /**
-                 * No HTTP_HOST, maybe in CLI mode?
-                 */
-                if (!$currentHostName) {
-                    continue;
-                }
-
-                /**
-                 * Check if the hostname restriction is the same as the current
-                 * in the route
-                 */
-                $regexHostName = $routeMeta["hostRegex"];
-
-                if ($regexHostName !== null) {
-                    $matched = preg_match($regexHostName, $currentHostName);
-                } else {
-                    $matched = $currentHostName == $hostname;
-                }
-
-                if (!$matched) {
-                    continue;
-                }
-            }
-
-            $this->fireManagerEvent('router:beforeCheckRoute', $route);
+                $this->fireManagerEvent('router:beforeCheckRoute', $route);
 
             /**
              * If the route has parentheses use preg_match
              */
-            $pattern = $routeMeta["pattern"];
+                $pattern = $routeMeta["pattern"];
 
-            if ($routeMeta["isRegex"]) {
-                $routeFound = preg_match($pattern, $handledUri, $matches);
-            } else {
-                $routeFound = $pattern === $handledUri;
-            }
+                if ($routeMeta["isRegex"]) {
+                    $routeFound = preg_match($pattern, $handledUri, $matches);
+                } else {
+                    $routeFound = $pattern === $handledUri;
+                }
 
             /**
              * Check for beforeMatch conditions
              */
-            if ($routeFound) {
-                $this->fireManagerEvent('router:matchedRoute', $route);
+                if ($routeFound) {
+                    $this->fireManagerEvent('router:matchedRoute', $route);
 
-                $beforeMatch = $routeMeta["beforeMatch"];
-                if ($beforeMatch !== null) {
-                    /**
-                     * Check first if the callback is callable
-                     */
-                    if (!is_callable($beforeMatch)) {
-                        throw new Exception(
-                            "Before-Match callback is not callable in matched route"
-                        );
+                    $beforeMatch = $routeMeta["beforeMatch"];
+                    if ($beforeMatch !== null) {
+                        /**
+                         * Check first if the callback is callable
+                         */
+                        if (!is_callable($beforeMatch)) {
+                            throw new Exception(
+                                "Before-Match callback is not callable in matched route"
+                            );
+                        }
+
+                        $routeFound = $beforeMatch($handledUri, $route, $this);
                     }
-
-                    $routeFound = $beforeMatch($handledUri, $route, $this);
+                } else {
+                    $this->fireManagerEvent('router:notMatchedRoute', $route);
                 }
-            } else {
-                $this->fireManagerEvent('router:notMatchedRoute', $route);
-            }
 
-            if ($routeFound) {
-                /**
-                 * Start from the default paths
-                 */
-                $paths = $route->getPaths();
-                $parts = $paths;
-
-                /**
-                 * Check if the matches has variables
-                 */
-                if (is_array($matches)) {
+                if ($routeFound) {
                     /**
-                     * Get the route converters if any
+                     * Start from the default paths
                      */
-                    $converters = $route->getConverters();
+                    $paths = $route->getPaths();
+                    $parts = $paths;
 
-                    foreach ($paths as $part => $position) {
-                        if (!is_string($part)) {
-                            throw new Exception("Wrong key in paths: " . $part);
-                        }
+                    /**
+                     * Check if the matches has variables
+                     */
+                    if (is_array($matches)) {
+                        /**
+                         * Get the route converters if any
+                         */
+                        $converters = $route->getConverters();
 
-                        if (!is_string($position) && !is_int($position)) {
-                            continue;
-                        }
+                        foreach ($paths as $part => $position) {
+                            if (!is_string($part)) {
+                                throw new Exception("Wrong key in paths: " . $part);
+                            }
 
-                        if (isset($matches[$position])) {
-                            $matchPosition = $matches[$position];
-                            /**
-                             * Check if the part has a converter
-                             */
-                            if (is_array($converters) && isset($converters[$part])) {
-                                $converter    = $converters[$part];
-                                $parts[$part] = $converter($matchPosition);
-
+                            if (!is_string($position) && !is_int($position)) {
                                 continue;
                             }
 
-                            /**
-                             * Update the parts if there is no converter
-                             */
-                            $parts[$part] = $matchPosition;
-                        } else {
-                            /**
-                             * Apply the converters anyway
-                             */
-                            if (is_array($converters) && isset($converters[$part])) {
-                                $converter    = $converters[$part];
-                                $parts[$part] = $converter($position);
-                            } elseif (is_int($position)) {
+                            if (isset($matches[$position])) {
+                                $matchPosition = $matches[$position];
                                 /**
-                                 * Remove the path if the parameter was not
-                                 * matched
+                                 * Check if the part has a converter
                                  */
-                                unset($parts[$part]);
+                                if (is_array($converters) && isset($converters[$part])) {
+                                    $converter    = $converters[$part];
+                                    $parts[$part] = $converter($matchPosition);
+
+                                    continue;
+                                }
+
+                                /**
+                                 * Update the parts if there is no converter
+                                 */
+                                $parts[$part] = $matchPosition;
+                            } else {
+                                /**
+                                 * Apply the converters anyway
+                                 */
+                                if (is_array($converters) && isset($converters[$part])) {
+                                    $converter    = $converters[$part];
+                                    $parts[$part] = $converter($position);
+                                } elseif (is_int($position)) {
+                                    /**
+                                     * Remove the path if the parameter was not
+                                     * matched
+                                     */
+                                    unset($parts[$part]);
+                                }
                             }
                         }
+
+                        /**
+                         * Update the matches generated by preg_match
+                         */
+                        $this->matches = $matches;
                     }
 
-                    /**
-                     * Update the matches generated by preg_match
-                     */
-                    $this->matches = $matches;
+                    $this->matchedRoute = $route;
+
+                    break;
                 }
-
-                $this->matchedRoute = $route;
-
-                break;
-            }
             }
         }
 
@@ -2282,7 +2284,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
             while ($chunkOffset < count($combinedAlternatives)) {
                 $chunkSlice      = array_slice($combinedAlternatives, $chunkOffset, self::REGEX_CHUNK_SIZE);
-                $chunkMarkSubset = array_slice($reversedMarkIds,      $chunkOffset, self::REGEX_CHUNK_SIZE);
+                $chunkMarkSubset = array_slice($reversedMarkIds, $chunkOffset, self::REGEX_CHUNK_SIZE);
                 $chunkSliceMap   = [];
 
                 foreach ($chunkMarkSubset as $chunkMarkId) {

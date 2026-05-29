@@ -1042,5 +1042,4 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     {
         return isset($this->elementsIndexed[$this->position]);
     }
-
 }

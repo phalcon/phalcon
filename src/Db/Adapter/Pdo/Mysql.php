@@ -24,6 +24,7 @@ use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+
 use function preg_match;
 use function str_starts_with;
 use function strtolower;
@@ -609,7 +610,7 @@ class Mysql extends PdoAdapter
     ): array {
         $indexes = [];
 
-        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName), Enum::FETCH_ASSOC) as $index) {
+        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName)) as $index) {
             $keyName   = $index["Key_name"];
             $indexType = $index["Index_type"];
 

@@ -105,11 +105,24 @@ class SysNodeProvider implements NodeProviderInterface
             $output = ob_get_clean();
 
             if (
-                    preg_match(
-                        "/Physical Address[^:]*:\\s+([0-9a-f]{2}-[0-9a-f]{2}-[0-9a-f]{2}-[0-9a-f]{2}-[0-9a-f]{2}-[0-9a-f]{2})/i",
-                        $output,
-                        $matches
-                    )
+                preg_match(
+                    "/"                   // pattern delimiter (open)
+                    . "Physical Address"  // literal label text
+                    . "[^:]*"             // any characters except a colon
+                    . ":"                 // the colon after the label
+                    . "\\s+"              // one or more whitespace characters
+                    . "("                 // start of the MAC capture group
+                    . "[0-9a-f]{2}-"      // MAC octet 1 (two hex digits + dash)
+                    . "[0-9a-f]{2}-"      // MAC octet 2
+                    . "[0-9a-f]{2}-"      // MAC octet 3
+                    . "[0-9a-f]{2}-"      // MAC octet 4
+                    . "[0-9a-f]{2}-"      // MAC octet 5
+                    . "[0-9a-f]{2}"       // MAC octet 6 (no trailing dash)
+                    . ")"                 // end of the capture group
+                    . "/i",               // delimiter (close) + case-insensitive
+                    $output,
+                    $matches
+                )
             ) {
                 $node = strtolower(str_replace("-", "", $matches[1]));
             }

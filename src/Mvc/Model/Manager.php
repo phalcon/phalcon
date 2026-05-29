@@ -1323,11 +1323,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             if (is_array($fields)) {
                 $columnCount = count($fields) - 1;
                 for ($i = 0; $i <= $columnCount; $i++) {
-                    $conditions[]             = "[" . $intermediateModel . "].[" . $intermediateFields[$i] . "] = :APR" . $i . ":";
+                    $conditions[]             = "[" . $intermediateModel
+                        . "].[" . $intermediateFields[$i] . "] = :APR" . $i . ":";
                     $placeholders["APR" . $i] = $record->readAttribute($fields[$i]);
                 }
             } else {
-                $conditions[]         = "[" . $intermediateModel . "].[" . $intermediateFields . "] = :APR0:";
+                $conditions[]         = "[" . $intermediateModel
+                    . "].[" . $intermediateFields . "] = :APR0:";
                 $placeholders["APR0"] = $record->readAttribute($fields);
             }
 
@@ -1342,10 +1344,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             if (is_array($intermediateReferenceFields)) {
                 $columnCount = count($intermediateReferenceFields) - 1;
                 for ($i = 0; $i <= $columnCount; $i++) {
-                    $joinConditions[] = "[" . $intermediateModel . "].[" . $intermediateReferenceFields[$i] . "] = [" . $referencedModel . "].[" . $referencedFields[$i] . "]";
+                    $joinConditions[] = "[" . $intermediateModel
+                        . "].[" . $intermediateReferenceFields[$i]
+                        . "] = [" . $referencedModel
+                        . "].[" . $referencedFields[$i] . "]";
                 }
             } else {
-                $joinConditions[] = "[" . $intermediateModel . "].[" . $intermediateReferenceFields . "] = [" . $referencedModel . "].[" . $referencedFields . "]";
+                $joinConditions[] = "[" . $intermediateModel
+                    . "].[" . $intermediateReferenceFields
+                    . "] = [" . $referencedModel
+                    . "].[" . $referencedFields . "]";
             }
 
             /**
