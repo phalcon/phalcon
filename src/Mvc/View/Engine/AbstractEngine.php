@@ -18,7 +18,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Mvc\View\ViewBaseInterface;
+use Phalcon\Mvc\ViewBaseInterface;
 
 /**
  * All the template engine adapters must inherit this class. This provides

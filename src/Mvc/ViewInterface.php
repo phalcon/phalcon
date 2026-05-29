@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Mvc\View;
+namespace Phalcon\Mvc;
 
 /**
  * Interface for Phalcon\Mvc\View
@@ -66,7 +66,7 @@ interface ViewInterface extends ViewBaseInterface
     /**
      * Returns the name of the main view
      */
-    public function getLayout(): string;
+    public function getLayout(): string | null;
 
     /**
      * Gets the current layouts sub-directory

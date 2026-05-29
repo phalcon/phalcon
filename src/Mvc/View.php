@@ -20,7 +20,11 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
-use Phalcon\Mvc\View\ViewInterface;
+use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
+use Phalcon\Mvc\View\Exceptions\ViewNotFound;
+use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
+use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
+use Phalcon\Mvc\ViewInterface;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_keys;
@@ -161,7 +165,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * @var string
      */
-    protected string $partialsDir = ""; // TODO: Make always array
+    protected string $partialsDir = "";
 
     /**
      * @var array|null
@@ -415,8 +419,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @return int
-     *
-     * @return int
      */
     public function getCurrentRenderLevel(): int
     {
@@ -426,9 +428,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Returns the name of the main view
      *
-     * @return string
+     * @return string | null
      */
-    public function getLayout(): string
+    public function getLayout(): string | null
     {
         return $this->layout;
     }
@@ -513,8 +515,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @return array
-     *
-     * @return array
      */
     public function getRegisteredEngines(): array
     {
@@ -591,8 +591,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     }
 
     /**
-     * @return int
-     *
      * @return int
      */
     public function getRenderLevel(): int
@@ -1303,9 +1301,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
             foreach ($viewsDir as $position => $directory) {
                 if (!is_string($directory)) {
-                    throw new Exception(
-                        "Views directory item must be a string"
-                    );
+                    throw new ViewsDirItemMustBeString();
                 }
 
                 $newViewsDir[$position] = $this->toDirSeparator($directory);
@@ -1433,9 +1429,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         }
 
         if (!$silence) {
-            throw new Exception(
-                "View '" . $viewPath . "' was not found in any of the views directory"
-            );
+            throw new ViewNotFound($viewPath);
         }
     }
 
@@ -1492,7 +1486,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
                 $this->checkContainer(
-                    Exception::class,
+                    ViewServicesUnavailable::class,
                     'the application services'
                 );
 
@@ -1519,10 +1513,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                          * Engine can be a string representing a service in the DI
                          */
                         if (!is_string($engineService)) {
-                            throw new Exception(
-                                "Invalid template engine registration for extension: "
-                                . $extension
-                            );
+                            throw new InvalidEngineRegistration($extension);
                         }
 
                         $engines[$extension] = $this->container->get(

@@ -21,6 +21,10 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
+use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
+use Phalcon\Mvc\View\Exceptions\SimpleViewNotFound;
+use Phalcon\Mvc\View\Exceptions\SimpleViewServicesUnavailable;
+use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 
 use function array_merge;
@@ -479,9 +483,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
          * Always throw an exception if the view does not exist
          */
         if ($notExists) {
-            throw new Exception(
-                "View '" . $viewsDirPath . "' was not found in the views directory"
-            );
+            throw new SimpleViewNotFound($viewsDirPath);
         }
 
         /**
@@ -512,7 +514,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
                 $this->checkContainer(
-                    Exception::class,
+                    SimpleViewServicesUnavailable::class,
                     'the application services'
                 );
 
@@ -554,10 +556,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                             );
                         }
                     } else {
-                        throw new Exception(
-                            "Invalid template engine registration for extension: "
-                            . $extension
-                        );
+                        throw new InvalidEngineRegistration($extension);
                     }
 
                     $engines[$extension] = $engineObject;

@@ -17,7 +17,7 @@ use Closure;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Mvc\View\Engine\Volt\Exception;
-use Phalcon\Mvc\View\ViewBaseInterface;
+use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Volt\Compiler\Opcode;

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Mvc\View;
+namespace Phalcon\Mvc;
 
 /**
  * Interface for Phalcon\Mvc\View and Phalcon\Mvc\View\Simple

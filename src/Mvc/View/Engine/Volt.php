@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
+use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
-use Phalcon\Mvc\View\Exception;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroNotFound;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
 
 use function array_slice;
 use function asort;
@@ -32,7 +34,7 @@ use function str_replace;
 /**
  * Designer friendly and fast template engine for PHP written in Zephir/C
  */
-class Volt extends AbstractEngine
+class Volt extends AbstractEngine implements EventsAwareInterface
 {
     /**
      * @var Compiler|null
@@ -56,12 +58,12 @@ class Volt extends AbstractEngine
      * @param array  $arguments
      *
      * @return mixed
-     * @throws Exception
+     * @throws MacroNotFound
      */
     public function callMacro(string $name, array $arguments = []): mixed
     {
         if (!isset($this->macros[$name])) {
-            throw new Exception("Macro '" . $name . "' does not exist");
+            throw new MacroNotFound($name);
         }
 
         return call_user_func($this->macros[$name], $arguments);
@@ -75,28 +77,15 @@ class Volt extends AbstractEngine
      * @param string $to
      *
      * @return string
-     * @throws Exception
+     * @throws MbstringRequired
      */
     public function convertEncoding(string $text, string $from, string $to): string
     {
-        /**
-         * latin1 -> utf8 (replaces deprecated utf8_encode())
-         */
-        if ($from === "latin1" || $to === "utf8") {
-            return mb_convert_encoding($text, "UTF-8", "ISO-8859-1");
+        if (!function_exists("mb_convert_encoding")) {
+            throw new MbstringRequired();
         }
 
-        /**
-         * utf8 -> latin1 (replaces deprecated utf8_decode())
-         */
-        if ($to === "latin1" || $from === "utf8") {
-            return mb_convert_encoding($text, "ISO-8859-1", "UTF-8");
-        }
-
-        /**
-         * Fallback to mb_convert_encoding
-         */
-        return mb_convert_encoding($text, $from, $to);
+        return mb_convert_encoding($text, $to, $from);
     }
 
     /**
