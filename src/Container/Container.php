@@ -44,7 +44,7 @@ use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Exception\NotFound;
 use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Container\Resolver\Resolver;
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\InjectionAwareInterface;
 use ReflectionException;
 

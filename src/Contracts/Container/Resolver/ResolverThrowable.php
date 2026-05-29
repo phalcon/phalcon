@@ -30,12 +30,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Contracts\Container\Resolver;
 
-use Phalcon\Contracts\Container\Ioc\IocThrowable;
-use Phalcon\Contracts\Container\Resolver\ResolverThrowable;
-use Phalcon\Contracts\Container\Service\Throwable as ServiceThrowable;
+use Throwable;
 
-interface ContainerThrowable extends IocThrowable, ResolverThrowable, ServiceThrowable
+// Copied from resolver-interop/interface. Source: https://github.com/resolver-interop/interface
+interface ResolverThrowable extends Throwable
 {
 }

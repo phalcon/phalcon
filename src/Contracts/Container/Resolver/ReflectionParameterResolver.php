@@ -10,10 +10,9 @@
  *
  * Implementation of this file has been heavily influenced by CapsulePHP.
  * Additionally, there are implementations from ioc-interop, which is a
- * Composer dependency, and from service-interop and resolver-interop. The
- * latter two are copied and re-implemented here: service-interop is not yet
- * published on Packagist, and resolver-interop requires PHP 8.4 (this project
- * targets PHP 8.1). Once both packages become available and compatible, the
+ * Composer dependency, and from service-interop and resolver-interop. They
+ * are copied and re-implemented here because we need to support PHP 8.1.
+ * Once we move to min 8.4 and packages become available and compatible, the
  * copies will be replaced with the actual Composer dependencies.
  *
  * @link    https://github.com/capsulephp/di
@@ -31,9 +30,9 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Resolver;
+namespace Phalcon\Contracts\Container\Resolver;
 
-use IocInterop\Interface\IocContainer;
+use Phalcon\Contracts\Container\Ioc\IocContainer;
 use ReflectionParameter;
 
 // Copied from resolver-interop/interface. Source: https://github.com/resolver-interop/interface

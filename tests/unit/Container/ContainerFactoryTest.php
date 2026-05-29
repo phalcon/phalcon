@@ -33,9 +33,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container;
 
-use IocInterop\Interface\IocContainer;
 use Phalcon\Container\Container;
 use Phalcon\Container\ContainerFactory;
+use Phalcon\Contracts\Container\Ioc\IocContainer;
 use Phalcon\Tests\Unit\Container\Fake\FakeServiceProvider;
 use PHPUnit\Framework\TestCase;
 

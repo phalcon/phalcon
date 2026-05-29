@@ -30,12 +30,24 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Exception;
+namespace Phalcon\Contracts\Container\Ioc;
 
-use Phalcon\Contracts\Container\Ioc\IocThrowable;
-use Phalcon\Contracts\Container\Resolver\ResolverThrowable;
-use Phalcon\Contracts\Container\Service\Throwable as ServiceThrowable;
-
-interface ContainerThrowable extends IocThrowable, ResolverThrowable, ServiceThrowable
+/**
+ * [_IocContainerFactory_][] affords obtaining a new instance of
+ * [_IocContainer_][].
+ */
+interface IocContainerFactory
 {
+    /**
+     * Returns a new instance of [_IocContainer_][].
+     *
+     * - Notes:
+     *
+     *     - **Container instantiation logic is not specified.** Implementations
+     *       might use providers, configuration files, attribute or annotation
+     *       collection, or some other means to create and populate a container.
+     *       Implementations might also choose to return a compiled or otherwise
+     *       reconstituted container.
+     */
+    public function newContainer(): IocContainer;
 }

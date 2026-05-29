@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;

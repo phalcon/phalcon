@@ -10,10 +10,9 @@
  *
  * Implementation of this file has been heavily influenced by CapsulePHP.
  * Additionally, there are implementations from ioc-interop, which is a
- * Composer dependency, and from service-interop and resolver-interop. The
- * latter two are copied and re-implemented here: service-interop is not yet
- * published on Packagist, and resolver-interop requires PHP 8.4 (this project
- * targets PHP 8.1). Once both packages become available and compatible, the
+ * Composer dependency, and from service-interop and resolver-interop. They
+ * are copied and re-implemented here because we need to support PHP 8.1.
+ * Once we move to min 8.4 and packages become available and compatible, the
  * copies will be replaced with the actual Composer dependencies.
  *
  * @link    https://github.com/capsulephp/di
@@ -31,12 +30,27 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Service;
+namespace Phalcon\Contracts\Container\Ioc;
 
-// Copied from service-interop/interface. Source: https://github.com/service-interop/interface
-class Lifetime
+/**
+ * [_IocTypeAliases_][] provides custom PHPStan types to aid static analysis.
+ *
+ * - ```
+ *   ioc_service_name_string class-string<T>|non-empty-string
+ *   ```
+ *     - A `class-string` or `string` name for a service.
+ *
+ * - ```
+ *   ioc_service_object ($serviceName is class-string<T> ? T : object)
+ *   ```
+ *     - The service `object` for a given service name.
+ *
+ * @template T of object
+ *
+ * @phpstan-type ioc_service_name_string class-string<T>|non-empty-string
+ *
+ * @phpstan-type ioc_service_object ($serviceName is class-string<T> ? T : object)
+ */
+interface IocTypeAliases
 {
-    public const SCOPED    = 'SCOPED';
-    public const SINGLETON = 'SINGLETON';
-    public const TRANSIENT = 'TRANSIENT';
 }

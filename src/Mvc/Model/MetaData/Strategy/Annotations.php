@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
 use Phalcon\Annotations\Parser\Collection;
-use Phalcon\Container\Service\Collection as ServiceCollection;
+use Phalcon\Contracts\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;

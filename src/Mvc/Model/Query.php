@@ -15,11 +15,11 @@ namespace Phalcon\Mvc\Model;
 
 use PDOException;
 use Phalcon\Cache\CacheInterface;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\ResultInterface;
-use Phalcon\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;

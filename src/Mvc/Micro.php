@@ -16,7 +16,7 @@ namespace Phalcon\Mvc;
 use ArrayAccess;
 use Closure;
 use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Injectable;

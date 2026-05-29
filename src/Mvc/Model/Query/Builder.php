@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;

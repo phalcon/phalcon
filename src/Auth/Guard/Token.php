@@ -18,9 +18,9 @@ namespace Phalcon\Auth\Guard;
 
 use Phalcon\Auth\Guard\Config\TokenGuardConfig;
 use Phalcon\Auth\Internal\Options;
-use Phalcon\Container\Service\Collection;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthUser;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Http\RequestInterface;
 
 /**

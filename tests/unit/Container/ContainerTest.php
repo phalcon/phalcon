@@ -40,7 +40,7 @@ use Phalcon\Container\Definition\ServiceLifetime;
 use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Exception\NotFound;
 use Phalcon\Container\Resolver\Lazy\Env;
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Container\Fake\FakeService;
 use Phalcon\Tests\Unit\Container\Fake\FakeServiceProvider;

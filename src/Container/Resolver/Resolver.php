@@ -36,7 +36,7 @@ namespace Phalcon\Container\Resolver;
 use Closure;
 use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Resolver\Lazy\Lazy;
-use Phalcon\Container\Resolver\ResolverService;
+use Phalcon\Contracts\Container\Resolver\ResolverService;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;

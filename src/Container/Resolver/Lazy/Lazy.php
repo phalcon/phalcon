@@ -33,7 +33,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
-use Phalcon\Container\Resolver\Resolvable;
+use Phalcon\Contracts\Container\Resolver\Resolvable;
 
 abstract class Lazy implements Resolvable
 {

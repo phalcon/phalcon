@@ -31,25 +31,12 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Container\Resolver;
+namespace Phalcon\Contracts\Container\Service;
 
-use IocInterop\Interface\IocContainer;
-use ReflectionMethod;
-use ReflectionParameter;
-use ReflectionType;
-
-// Copied from resolver-interop/interface. Source: https://github.com/resolver-interop/interface
-interface ResolverService extends ReflectionParameterResolver
+// Copied from service-interop/interface. Source: https://github.com/service-interop/interface
+class Lifetime
 {
-    public function isResolvableClass(string $className): bool;
-
-    public function resolveCall(IocContainer $ioc, callable $callable, array $arguments): mixed;
-
-    public function resolveClass(IocContainer $ioc, string $className, array $arguments): object;
-
-    public function resolveMethod(IocContainer $ioc, ReflectionMethod $method, object $object): void;
-
-    public function resolveParameters(IocContainer $ioc, array $parameters, array $arguments): array;
-
-    public function resolveType(IocContainer $ioc, ReflectionType $type): mixed;
+    public const SCOPED    = 'SCOPED';
+    public const SINGLETON = 'SINGLETON';
+    public const TRANSIENT = 'TRANSIENT';
 }

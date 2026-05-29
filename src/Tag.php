@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon;
 
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Html\Escaper\EscaperInterface;

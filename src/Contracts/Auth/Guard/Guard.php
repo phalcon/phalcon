@@ -16,9 +16,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Auth\Guard;
 
-use Phalcon\Container\Service\Collection;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthUser;
+use Phalcon\Contracts\Container\Service\Collection;
 
 /**
  * @phpstan-import-type AuthCredentials from Adapter

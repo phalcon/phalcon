@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Application;
 
 use Phalcon\Application\Exceptions\ModuleNotRegistered;
-use Phalcon\Container\Service\Collection;
+use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;

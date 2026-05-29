@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use JsonSerializable;
-use Phalcon\Container\Service\Collection as ServiceCollection;
+use Phalcon\Contracts\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;

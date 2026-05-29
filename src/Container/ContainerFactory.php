@@ -33,8 +33,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Container;
 
-use IocInterop\Interface\IocContainerFactory;
-use Phalcon\Container\Service\Provider;
+use Phalcon\Contracts\Container\Ioc\IocContainerFactory;
+use Phalcon\Contracts\Container\Service\Provider;
 
 class ContainerFactory implements IocContainerFactory
 {
