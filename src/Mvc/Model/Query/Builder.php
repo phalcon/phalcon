@@ -19,6 +19,12 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\Exceptions\ManagerOrmServicesUnavailable;
+use Phalcon\Mvc\Model\Query\Exceptions\Builder\BuilderColumnNotInMap;
+use Phalcon\Mvc\Model\Query\Exceptions\Builder\BuilderConditionInvalid;
+use Phalcon\Mvc\Model\Query\Exceptions\Builder\ModelRequired;
+use Phalcon\Mvc\Model\Query\Exceptions\Builder\NoPrimaryKey;
+use Phalcon\Mvc\Model\Query\Exceptions\Builder\OperatorNotAvailable;
 use Phalcon\Mvc\Model\QueryInterface;
 use Phalcon\Support\Settings;
 
@@ -271,7 +277,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                 if (is_array($limitClause)) {
                     if (isset($limitClause[0])) {
                         if (is_int($limitClause[0])) {
-                            $this->limit = (string)$limitClause[0];
+                            $this->limit = $limitClause[0];
                         }
 
                         if (isset($limitClause[1]) && is_int($limitClause[1])) {
@@ -717,7 +723,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      *
      * @return array|string
      */
-    public function getLimit(): array | string
+    public function getLimit()
     {
         return $this->limit;
     }
@@ -771,15 +777,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         $models = $this->models;
         if (is_array($models)) {
             if (!count($models)) {
-                throw new Exception(
-                    "At least one model is required to build the query"
-                );
+                throw new ModelRequired();
             }
         } else {
             if (!$models) {
-                throw new Exception(
-                    "At least one model is required to build the query"
-                );
+                throw new ModelRequired();
             }
         }
 
@@ -792,9 +794,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              */
             if (is_array($models)) {
                 if (count($models) > 1) {
-                    throw new Exception(
-                        "Cannot build the query. Invalid condition"
-                    );
+                    throw new BuilderConditionInvalid();
                 }
 
                 $model = $models[0];
@@ -828,11 +828,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
                 if (is_array($columnMap)) {
                     if (!isset($columnMap[$firstPrimaryKey])) {
-                        throw new Exception(
-                            "Column '"
-                            . $firstPrimaryKey
-                            . "' isn't part of the column map"
-                        );
+                        throw new BuilderColumnNotInMap($firstPrimaryKey);
                     } else {
                         $attributeField = $columnMap[$firstPrimaryKey];
                     }
@@ -840,31 +836,25 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                     $attributeField = $firstPrimaryKey;
                 }
 
-                // check the type of the condition, if it's a string put single quotes around the value
-                if (is_string($conditions)) {
-                    /*
-                     * Example : if the developer writes findFirstBy('135'), Phalcon will generate where uuid = 135.
-                     * But the column's type is text so Postgres needs to have single quotes such as ;
-                     * where uuid = '135'.
-                     */
-                    $conditions = "'" . $conditions . "'";
-                }
-
-                $conditions = $this->autoescape($model)
+                /**
+                 * Use a named bind parameter instead of embedding the value
+                 * directly in the PHQL string. Embedding produces a unique
+                 * PHQL string per ID value, causing unbounded growth of the
+                 * internal PHQL cache in long-running processes.
+                 */
+                $this->bindParams["APK0"] = $conditions;
+                $conditions               = $this->autoescape($model)
                     . "."
                     . $this->autoescape($attributeField)
-                    . " = "
-                    . $conditions;
-                $noPrimary  = false;
+                    . " = :APK0:";
+                $noPrimary                = false;
             }
 
             /**
              * A primary key is mandatory in these cases
              */
             if ($noPrimary) {
-                throw new Exception(
-                    "Source related to this model does not have a primary key defined"
-                );
+                throw new NoPrimaryKey();
             }
         }
 
@@ -1123,9 +1113,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         $container = $this->container;
 
         if (!is_object($container)) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ORM"
-            );
+            throw new ManagerOrmServicesUnavailable();
         }
 
         /**
@@ -1804,12 +1792,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         mixed $maximum
     ): BuilderInterface {
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
-            throw new Exception(
-                sprintf(
-                    "Operator %s is not available.",
-                    $operator
-                )
-            );
+            throw new OperatorNotAvailable($operator);
         }
 
         $operatorMethod = $operator . $clause;
@@ -1860,12 +1843,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         array $values
     ): BuilderInterface {
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
-            throw new Exception(
-                sprintf(
-                    "Operator %s is not available.",
-                    $operator
-                )
-            );
+            throw new OperatorNotAvailable($operator);
         }
 
         $operatorMethod = $operator . $clause;
@@ -1917,12 +1895,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         mixed $maximum
     ): BuilderInterface {
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
-            throw new Exception(
-                sprintf(
-                    "Operator %s is not available.",
-                    $operator
-                )
-            );
+            throw new OperatorNotAvailable($operator);
         }
 
         $operatorMethod = $operator . $clause;
@@ -1965,12 +1938,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         array $values
     ): BuilderInterface {
         if ($operator !== Builder::OPERATOR_AND && $operator !== Builder::OPERATOR_OR) {
-            throw new Exception(
-                sprintf(
-                    "Operator %s is not available.",
-                    $operator
-                )
-            );
+            throw new OperatorNotAvailable($operator);
         }
 
         $operatorMethod = $operator . $clause;
