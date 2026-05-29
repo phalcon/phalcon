@@ -18,6 +18,7 @@ use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Mvc\Model\Exceptions\InvalidModelName;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 
 use function abs;
@@ -317,7 +318,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $model = $this->getModelName();
 
         if (!is_string($model)) {
-            throw new Exception("Model name must be string");
+            throw new InvalidModelName();
         }
 
         return $model::find($this->getParams());
@@ -635,7 +636,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         mixed $conditions = null,
         mixed $alias = null
     ): CriteriaInterface {
-        return $this->join($model, $conditions, $alias, "INNER");
+        return $this->addJoinClause($model, $conditions, $alias, "INNER");
     }
 
     /**
@@ -680,22 +681,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         mixed $alias = null,
         mixed $type = null
     ): CriteriaInterface {
-        $join = [$model, $conditions, $alias, $type];
-
-        if (isset($this->params["joins"])) {
-            $currentJoins = $this->params["joins"];
-            if (is_array($currentJoins)) {
-                $mergedJoins = array_merge($currentJoins, [$join]);
-            } else {
-                $mergedJoins = [$join];
-            }
-        } else {
-            $mergedJoins = [$join];
-        }
-
-        $this->params["joins"] = $mergedJoins;
-
-        return $this;
+        return $this->addJoinClause($model, $conditions, $alias, $type);
     }
 
     /**
@@ -722,7 +708,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         mixed $conditions = null,
         mixed $alias = null
     ): CriteriaInterface {
-        return $this->join($model, $conditions, $alias, "LEFT");
+        return $this->addJoinClause($model, $conditions, $alias, "LEFT");
     }
 
     /**
@@ -904,7 +890,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function rightJoin(string $model, mixed $conditions = null, mixed $alias = null): CriteriaInterface
     {
-        return $this->join($model, $conditions, $alias, "RIGHT");
+        return $this->addJoinClause($model, $conditions, $alias, "RIGHT");
     }
 
     /**
@@ -990,6 +976,44 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
                 $this->params["bindTypes"] = $bindTypes;
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Appends a JOIN clause to the criteria params under a non-conflicting
+     * name. Internal wrappers (innerJoin/leftJoin/rightJoin/join) all
+     * delegate here so that the call site is not subject to Zephir's
+     * name collision between the public `join()` method and PHP's
+     * built-in `join()` function.
+     *
+     * @param string     $model
+     * @param mixed|null $conditions
+     * @param mixed|null $alias
+     * @param mixed|null $type
+     *
+     * @return CriteriaInterface
+     */
+    private function addJoinClause(
+        string $model,
+        mixed $conditions = null,
+        mixed $alias = null,
+        mixed $type = null
+    ): CriteriaInterface {
+        $join = [$model, $conditions, $alias, $type];
+
+        if (isset($this->params["joins"])) {
+            $currentJoins = $this->params["joins"];
+            if (is_array($currentJoins)) {
+                $mergedJoins = array_merge($currentJoins, [$join]);
+            } else {
+                $mergedJoins = [$join];
+            }
+        } else {
+            $mergedJoins = [$join];
+        }
+
+        $this->params["joins"] = $mergedJoins;
 
         return $this;
     }

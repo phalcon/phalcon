@@ -17,7 +17,10 @@ use Closure;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Mvc\Controller\BindModelInterface;
 use Phalcon\Mvc\Model\Binder\BindableInterface;
-use ReflectionClass;
+use Phalcon\Mvc\Model\Exceptions\HandlerMustImplementBindable;
+use Phalcon\Mvc\Model\Exceptions\InvalidGetModelNameReturn;
+use Phalcon\Mvc\Model\Exceptions\MissingMethodName;
+use Phalcon\Mvc\Model\Exceptions\MissingModelClassName;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -84,9 +87,7 @@ class Binder implements BinderInterface
         $this->originalValues = [];
 
         if (!($handler instanceof Closure) && null === $methodName) {
-            throw new Exception(
-                "You must specify methodName for handler or pass Closure as handler"
-            );
+            throw new MissingMethodName();
         }
 
         $this->boundModels = [];
@@ -223,14 +224,12 @@ class Binder implements BinderInterface
         $paramsKeys   = array_keys($params);
 
         foreach ($methodParams as $paramKey => $methodParam) {
-            $reflectionType = $methodParam->getType();
-            if (null === $reflectionType) {
+            $reflectionClass = $methodParam->getType();
+            if (!$reflectionClass || !($reflectionClass instanceof ReflectionNamedType)) {
                 continue;
             }
-            /** @var ReflectionNamedType $typeClassName */
-            $typeClassName   = $reflectionType->getName();
-            $reflectionClass = new ReflectionClass($typeClassName);
-            $className       = $reflectionClass->getName();
+
+            $className = $reflectionClass->getName();
 
             if (!isset($params[$paramKey])) {
                 $paramKey = $paramsKeys[$paramKey];
@@ -247,21 +246,13 @@ class Binder implements BinderInterface
                     } elseif ($handler instanceof BindableInterface) {
                         $realClasses = $handler->getModelName();
                     } else {
-                        throw new Exception(
-                            "Handler must implement "
-                            . "Phalcon\Mvc\Model\Binder\BindableInterface in "
-                            . "order to use Phalcon\Mvc\Model as parameter"
-                        );
+                        throw new HandlerMustImplementBindable();
                     }
                 }
 
                 if (is_array($realClasses)) {
                     if (!isset($realClasses[$paramKey])) {
-                        throw new Exception(
-                            "You should provide model class name for "
-                            . $paramKey
-                            . " parameter"
-                        );
+                        throw new MissingModelClassName($paramKey);
                     }
                     $className  = $realClasses[$paramKey];
                     $boundModel = $this->findBoundModel($paramValue, $className);
@@ -269,9 +260,7 @@ class Binder implements BinderInterface
                     $className  = $realClasses;
                     $boundModel = $this->findBoundModel($paramValue, $className);
                 } else {
-                    throw new Exception(
-                        "getModelName should return array or string"
-                    );
+                    throw new InvalidGetModelNameReturn();
                 }
             } elseif (is_subclass_of($className, "Phalcon\Mvc\Model")) {
                 $boundModel = $this->findBoundModel($paramValue, $className);

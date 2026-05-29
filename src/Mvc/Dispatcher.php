@@ -20,6 +20,7 @@ use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\Dispatcher\Exception;
+use Phalcon\Mvc\Dispatcher\Exceptions\ResponseServiceUnavailable;
 use Phalcon\Support\Helper\Str\Uncamelize;
 
 /**
@@ -272,7 +273,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
     protected function throwDispatchException(string $message, int $exceptionCode = 0): bool
     {
         $this->checkContainer(
-            Exception::class,
+            ResponseServiceUnavailable::class,
             "the 'response' service",
             Exception::EXCEPTION_NO_DI
         );

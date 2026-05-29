@@ -18,7 +18,7 @@ use Phalcon\Mvc\ModelInterface;
 /**
  * This is an optional base class for ORM behaviors
  */
-abstract class AbstractBehavior implements BehaviorInterface
+abstract class Behavior implements BehaviorInterface
 {
     public function __construct(
         protected array $options = []
@@ -60,12 +60,12 @@ abstract class AbstractBehavior implements BehaviorInterface
      *
      * @param string|null $eventName
      *
-     * @return array
+     * @return mixed
      */
-    protected function getOptions(string | null $eventName = null): array
+    protected function getOptions(string | null $eventName = null)
     {
         if (null !== $eventName) {
-            return $this->options[$eventName] ?? [];
+            return $this->options[$eventName] ?? null;
         }
 
         return $this->options;

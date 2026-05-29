@@ -14,7 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model\Behavior;
 
 use Closure;
-use Phalcon\Mvc\Model\AbstractBehavior;
+use Phalcon\Mvc\Model\Behavior;
+use Phalcon\Mvc\Model\Behavior\Exceptions\MissingRequiredOption;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\ModelInterface;
 
@@ -25,7 +26,7 @@ use function is_object;
  * Allows to automatically update a model’s attribute saving the datetime when a
  * record is created or updated
  */
-class Timestampable extends AbstractBehavior
+class Timestampable extends Behavior
 {
     /**
      * Listens for notifications from the models manager
@@ -47,7 +48,7 @@ class Timestampable extends AbstractBehavior
 
         $options = $this->getOptions($type);
 
-        if (empty($options)) {
+        if (!is_array($options)) {
             return;
         }
 
@@ -55,7 +56,7 @@ class Timestampable extends AbstractBehavior
          * The field name is required in this behavior
          */
         if (!isset($options['field'])) {
-            throw new Exception("The option 'field' is required");
+            throw new MissingRequiredOption("field");
         }
 
         $field     = $options['field'];

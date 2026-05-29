@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Behavior;
 
-use Phalcon\Mvc\Model\AbstractBehavior;
+use Phalcon\Mvc\Model\Behavior;
+use Phalcon\Mvc\Model\Behavior\Exceptions\MissingRequiredOption;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
@@ -22,7 +23,7 @@ use Phalcon\Support\Settings;
  * Instead of permanently delete a record it marks the record as deleted
  * changing the value of a flag column
  */
-class SoftDelete extends AbstractBehavior
+class SoftDelete extends Behavior
 {
     /**
      * Listens for notifications from the models manager
@@ -39,14 +40,14 @@ class SoftDelete extends AbstractBehavior
          * 'value' is the value to be updated instead of delete the record
          */
         if (!isset($options['value'])) {
-            throw new Exception("The option 'value' is required");
+            throw new MissingRequiredOption("value");
         }
 
         /**
          * 'field' is the attribute to be updated instead of delete the record
          */
         if (!isset($options['field'])) {
-            throw new Exception("The option 'field' is required");
+            throw new MissingRequiredOption("field");
         }
 
         $field = $options['field'];
