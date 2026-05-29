@@ -18,6 +18,9 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\Exceptions\InvalidContainer;
+use Phalcon\Mvc\Model\Exceptions\InvalidSerializationData;
+use Phalcon\Mvc\Model\Exceptions\ResultsetColumnNotInMap;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Row;
@@ -85,7 +88,7 @@ class Simple extends Resultset
         $this->count       = count($data["rows"]);
         $this->cache       = $data["cache"];
         $this->columnMap   = $data["columnMap"];
-        $this->hydrateMode = (int)$data["hydrateMode"];
+        $this->hydrateMode = $data["hydrateMode"];
 
         if (isset($data["keepSnapshots"])) {
             $this->keepSnapshots = $data["keepSnapshots"];
@@ -183,9 +186,7 @@ class Simple extends Resultset
     {
         $container = Di::getDefault();
         if ($container === null) {
-            throw new Exception(
-                "The dependency injector container is not valid"
-            );
+            throw new InvalidContainer();
         }
 
         $data = [
@@ -262,18 +263,14 @@ class Simple extends Resultset
                              * Check if the key is part of the column map
                              */
                             if (!isset($this->columnMap[$key])) {
-                                throw new Exception(
-                                    "Column '" . $key . "' is not part of the column map"
-                                );
+                                throw new ResultsetColumnNotInMap($key);
                             }
 
                             $renamedKey = $this->columnMap[$key];
 
                             if (is_array($renamedKey)) {
                                 if (!isset($renamedKey[0])) {
-                                    throw new Exception(
-                                        "Column '" . $key . "' is not part of the column map"
-                                    );
+                                    throw new ResultsetColumnNotInMap($key);
                                 }
 
                                 $renamedKey = $renamedKey[0];
@@ -300,13 +297,11 @@ class Simple extends Resultset
      * Unserializing a resultset will allow to only works on the rows present in
      * the saved state
      */
-    public function unserialize(string $data): void
+    public function unserialize(mixed $data): void
     {
         $container = Di::getDefault();
         if ($container === null) {
-            throw new Exception(
-                "The dependency injector container is not valid"
-            );
+            throw new InvalidContainer();
         }
 
         if ($container->has("serializer")) {
@@ -323,7 +318,7 @@ class Simple extends Resultset
         }
 
         if (!is_array($resultset)) {
-            throw new Exception("Invalid serialization data");
+            throw new InvalidSerializationData();
         }
 
         $this->model       = $resultset["model"];
@@ -331,7 +326,7 @@ class Simple extends Resultset
         $this->count       = count($resultset["rows"]);
         $this->cache       = $resultset["cache"];
         $this->columnMap   = $resultset["columnMap"];
-        $this->hydrateMode = (int)$resultset["hydrateMode"];
+        $this->hydrateMode = $resultset["hydrateMode"];
 
         if (isset($resultset["keepSnapshots"])) {
             $this->keepSnapshots = $resultset["keepSnapshots"];

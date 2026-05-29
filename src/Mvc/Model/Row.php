@@ -16,6 +16,8 @@ namespace Phalcon\Mvc\Model;
 use ArrayAccess;
 use JsonSerializable;
 use Phalcon\Mvc\EntityInterface;
+use Phalcon\Mvc\Model\Exceptions\IndexNotInRow;
+use Phalcon\Mvc\Model\Exceptions\RowIsImmutable;
 use Phalcon\Mvc\ModelInterface;
 use stdClass;
 
@@ -60,7 +62,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
         $key = (string) $offset;
 
         if (!property_exists($this, $key)) {
-            throw new Exception("The index does not exist in the row");
+            throw new IndexNotInRow();
         }
 
         return $this->$key;
@@ -78,7 +80,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        throw new Exception("Row is an immutable ArrayAccess object");
+        throw new RowIsImmutable();
     }
 
     /**
@@ -92,7 +94,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      */
     public function offsetUnset(mixed $offset): void
     {
-        throw new Exception("Row is an immutable ArrayAccess object");
+        throw new RowIsImmutable();
     }
 
     /**

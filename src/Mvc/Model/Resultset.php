@@ -20,6 +20,10 @@ use Iterator;
 use JsonSerializable;
 use Phalcon\Db\Enum;
 use Phalcon\Messages\MessageInterface;
+use Phalcon\Mvc\Model\Exceptions\CursorIsImmutable;
+use Phalcon\Mvc\Model\Exceptions\IndexNotInCursor;
+use Phalcon\Mvc\Model\Exceptions\InvalidResultsetCacheService;
+use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 use Psr\SimpleCache\CacheInterface;
@@ -136,6 +140,13 @@ abstract class Resultset implements
     protected array | null $rows = null;
 
     /**
+     * Phalcon\Db\ResultInterface or false for empty resultset
+     *
+     * @var ResultInterface|bool
+     */
+    protected mixed $result = null;
+
+    /**
      * Phalcon\Mvc\Model\Resultset constructor
      *
      * @param ResultInterface|false $result
@@ -144,7 +155,7 @@ abstract class Resultset implements
      * @throws Exception
      */
     public function __construct(
-        protected mixed $result,
+        mixed $result,
         mixed $cache = null
     ) {
         /**
@@ -158,14 +169,16 @@ abstract class Resultset implements
         }
 
         /**
+         * Valid resultsets are Phalcon\Db\ResultInterface instances
+         */
+        $this->result = $result;
+
+        /**
          * Update the related cache if any
          */
         if ($cache !== null) {
             if (!$cache instanceof CacheInterface) {
-                throw new Exception(
-                    "Cache service must be an object implementing " .
-                    "Psr\SimpleCache\CacheInterface"
-                );
+                throw new InvalidResultsetCacheService();
             }
 
 
@@ -244,7 +257,7 @@ abstract class Resultset implements
                  * We only can delete resultsets if every element is a complete object
                  */
                 if (!method_exists($record, "getWriteConnection")) {
-                    throw new Exception("The returned record is not valid");
+                    throw new InvalidReturnedRecord();
                 }
 
                 $connection  = $record->getWriteConnection();
@@ -294,6 +307,8 @@ abstract class Resultset implements
         if ($transaction === true) {
             $connection->commit();
         }
+
+        $this->refresh();
 
         return $result;
     }
@@ -531,7 +546,7 @@ abstract class Resultset implements
     public function offsetGet(mixed $index): mixed
     {
         if ($index >= $this->count) {
-            throw new Exception("The index does not exist in the cursor");
+            throw new IndexNotInCursor();
         }
 
         /**
@@ -554,7 +569,7 @@ abstract class Resultset implements
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        throw new Exception("Cursor is an immutable ArrayAccess object");
+        throw new CursorIsImmutable();
     }
 
     /**
@@ -568,7 +583,7 @@ abstract class Resultset implements
      */
     public function offsetUnset(mixed $offset): void
     {
-        throw new Exception("Cursor is an immutable ArrayAccess object");
+        throw new CursorIsImmutable();
     }
 
     /**
@@ -701,7 +716,7 @@ abstract class Resultset implements
                  * We only can update resultsets if every element is a complete object
                  */
                 if (!method_exists($record, "getWriteConnection")) {
-                    throw new Exception("The returned record is not valid");
+                    throw new InvalidReturnedRecord();
                 }
 
                 $connection  = $record->getWriteConnection();
@@ -753,6 +768,8 @@ abstract class Resultset implements
             $connection->commit();
         }
 
+        $this->refresh();
+
         return $transaction;
     }
 
@@ -764,5 +781,71 @@ abstract class Resultset implements
     public function valid(): bool
     {
         return $this->pointer < $this->count;
+    }
+
+    /**
+     * @return bool
+     */
+    public function refresh(): bool
+    {
+        /**
+         * 'false' is given as result for empty result-sets
+         */
+        if (!is_object($this->result)) {
+            $this->count = 0;
+            $this->rows  = [];
+
+            return true;
+        }
+
+        $result  = $this->result;
+        $success = $result->execute();
+        if ($success === false) {
+            return false;
+        }
+
+        $this->isFresh = true;
+
+        /**
+         * Update the row-count
+         */
+        $rowCount    = $result->numRows();
+        $this->count = $rowCount;
+
+        /**
+         * Empty result-set
+         */
+        if ($rowCount == 0) {
+            $this->rows = [];
+
+            return true;
+        }
+
+        /**
+         * Small result-sets with less equals 32 rows are fetched at once
+         */
+        $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
+        if ($prefetchRecords > 0 && $rowCount <= $prefetchRecords) {
+            /**
+             * Fetch ALL rows from database
+             */
+            $rows = $result->fetchAll();
+
+            if (is_array($rows)) {
+                $this->rows = $rows;
+            } else {
+                $this->rows = [];
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResult(): mixed
+    {
+        return $this->result;
     }
 }

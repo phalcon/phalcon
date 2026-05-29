@@ -18,6 +18,9 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\Exceptions\CorruptColumnType;
+use Phalcon\Mvc\Model\Exceptions\InvalidContainer;
+use Phalcon\Mvc\Model\Exceptions\InvalidSerializationData;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
@@ -37,7 +40,7 @@ use function unserialize;
  * @template TKey of int
  * @template TValue of mixed
  */
-class Complex extends Resultset implements ResultsetInterface
+class Complex extends Resultset
 {
     /**
      * Unserialised result-set hydrated all rows already. unserialise() sets
@@ -102,7 +105,7 @@ class Complex extends Resultset implements ResultsetInterface
         $this->count       = count($data["rows"]);
         $this->cache       = $data["cache"];
         $this->columnTypes = $data["columnTypes"];
-        $this->hydrateMode = (int)$data["hydrateMode"];
+        $this->hydrateMode = $data["hydrateMode"];
     }
 
     /**
@@ -166,7 +169,7 @@ class Complex extends Resultset implements ResultsetInterface
          */
         foreach ($this->columnTypes as $alias => $column) {
             if (!is_array($column)) {
-                throw new Exception("Column type is corrupt");
+                throw new CorruptColumnType();
             }
 
             $type = $column["type"];
@@ -308,9 +311,7 @@ class Complex extends Resultset implements ResultsetInterface
     {
         $container = Di::getDefault();
         if ($container === null) {
-            throw new Exception(
-                "The dependency injector container is not valid"
-            );
+            throw new InvalidContainer();
         }
 
         $data = [
@@ -374,9 +375,7 @@ class Complex extends Resultset implements ResultsetInterface
 
         $container = Di::getDefault();
         if ($container === null) {
-            throw new Exception(
-                "The dependency injector container is not valid"
-            );
+            throw new InvalidContainer();
         }
 
         if ($container->has("serializer")) {
@@ -393,13 +392,13 @@ class Complex extends Resultset implements ResultsetInterface
         }
 
         if (!is_array($resultset)) {
-            throw new Exception("Invalid serialization data");
+            throw new InvalidSerializationData();
         }
 
         $this->rows        = $resultset["rows"];
         $this->count       = count($resultset["rows"]);
         $this->cache       = $resultset["cache"];
         $this->columnTypes = $resultset["columnTypes"];
-        $this->hydrateMode = (int)$resultset["hydrateMode"];
+        $this->hydrateMode = $resultset["hydrateMode"];
     }
 }
