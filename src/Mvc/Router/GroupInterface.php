@@ -185,14 +185,14 @@ interface GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
      *
-     * @param string     $pattern
-     * @param mixed|null $paths
+     * @param string            $pattern
+     * @param array|string|null $paths
      *
      * @return RouteInterface
      */
     public function addPut(
         string $pattern,
-        mixed $paths = null
+        array | string | null $paths = null
     ): RouteInterface;
 
     /**

@@ -121,15 +121,15 @@ class Group implements GroupInterface
      *                                 'action' => '',
      *                                 'namespace' => ''
      *                                 ]
-     * @param mixed|null        $httpMethods
+     * @param array|string|null $httpMethods
      *
      * @return RouteInterface
      * @throws Exception
      */
     public function add(
         string $pattern,
-        mixed $paths = null,
-        mixed $httpMethods = null
+        array | string | null $paths = null,
+        array | string | null $httpMethods = null
     ): RouteInterface {
         return $this->addRoute($pattern, $paths, $httpMethods);
     }
@@ -148,7 +148,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addConnect(string $pattern, mixed $paths = null): RouteInterface
+    public function addConnect(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "CONNECT");
     }
@@ -167,7 +167,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addDelete(string $pattern, mixed $paths = null): RouteInterface
+    public function addDelete(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "DELETE");
     }
@@ -186,7 +186,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addGet(string $pattern, mixed $paths = null): RouteInterface
+    public function addGet(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "GET");
     }
@@ -205,7 +205,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addHead(string $pattern, mixed $paths = null): RouteInterface
+    public function addHead(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "HEAD");
     }
@@ -224,7 +224,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addOptions(string $pattern, mixed $paths = null): RouteInterface
+    public function addOptions(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "OPTIONS");
     }
@@ -243,7 +243,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addPatch(string $pattern, mixed $paths = null): RouteInterface
+    public function addPatch(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "PATCH");
     }
@@ -262,7 +262,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addPost(string $pattern, mixed $paths = null): RouteInterface
+    public function addPost(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "POST");
     }
@@ -281,7 +281,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addPurge(string $pattern, mixed $paths = null): RouteInterface
+    public function addPurge(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "PURGE");
     }
@@ -300,7 +300,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addPut(string $pattern, mixed $paths = null): RouteInterface
+    public function addPut(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "PUT");
     }
@@ -319,7 +319,7 @@ class Group implements GroupInterface
      * @return RouteInterface
      * @throws Exception
      */
-    public function addTrace(string $pattern, mixed $paths = null): RouteInterface
+    public function addTrace(string $pattern, array | string | null $paths = null): RouteInterface
     {
         return $this->addRoute($pattern, $paths, "TRACE");
     }

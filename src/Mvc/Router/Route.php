@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use Phalcon\Mvc\Router\Exceptions\InvalidRoutePaths;
+
 use function array_flip;
 use function array_merge;
 use function array_pop;
@@ -63,30 +65,37 @@ class Route implements RouteInterface
      * @mixed string|null
      */
     protected string | null $hostname = null;
+
     /**
      * @mixed callable|null
      */
     protected mixed $match = null;
+
     /**
      * @mixed array|string|null
      */
     protected array | string | null $methods = [];
+
     /**
      * @mixed string|null
      */
     protected string | null $name = null;
+
     /**
      * @mixed array
      */
     protected array $paths = [];
+
     /**
      * @mixed string
      */
     protected string $pattern = '';
+
     /**
      * @mixed string
      */
     protected string $routeId = "";
+
     /**
      * @mixed $int
      */
@@ -603,7 +612,7 @@ class Route implements RouteInterface
         }
 
         if (!is_array($routePaths)) {
-            throw new Exception("The route contains invalid paths");
+            throw new InvalidRoutePaths();
         }
 
         return $routePaths;

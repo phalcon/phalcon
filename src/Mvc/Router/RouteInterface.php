@@ -152,9 +152,9 @@ interface RouteInterface
     /**
      * Set one or more HTTP methods that constraint the matching of the route
      *
-     * @param array|string $httpMethods
+     * @param array|string|null $httpMethods
      *
      * @return RouteInterface
      */
-    public function via(array | string $httpMethods): RouteInterface;
+    public function via(array | string | null $httpMethods): RouteInterface;
 }
