@@ -32,7 +32,7 @@ use Phalcon\Http\Response\Headers;
 use Phalcon\Http\Response\HeadersInterface;
 use Phalcon\Http\Traits\StatusPhrasesTrait;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Mvc\View\ViewInterface;
+use Phalcon\Mvc\ViewInterface;
 use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Support\Helper\Json\Encode;
 
@@ -848,5 +848,4 @@ class Response extends Injectable implements
 
         return $this;
     }
-
 }
