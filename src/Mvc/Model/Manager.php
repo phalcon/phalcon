@@ -23,6 +23,12 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Exceptions\InvalidConnectionService;
+use Phalcon\Mvc\Model\Exceptions\ManagerOrmServicesUnavailable;
+use Phalcon\Mvc\Model\Exceptions\ModelCouldNotLoad;
+use Phalcon\Mvc\Model\Exceptions\ReferencedFieldsMismatch;
+use Phalcon\Mvc\Model\Exceptions\RelationAliasMustBeString;
+use Phalcon\Mvc\Model\Exceptions\UnknownRelationType;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
@@ -293,8 +299,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same
          */
         if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "BelongsTo",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -315,7 +323,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (isset($options["alias"])) {
             $alias = $options["alias"];
             if (!is_string($alias)) {
-                throw new Exception("Relation alias must be a string");
+                throw new RelationAliasMustBeString(
+                    "BelongsTo",
+                    $entityName,
+                    $referencedEntity
+                );
             }
 
             $lowerAlias = strtolower($alias);
@@ -378,8 +390,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same
          */
         if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "HasMany",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -400,7 +414,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (isset($options["alias"])) {
             $alias = $options["alias"];
             if (!is_string($alias)) {
-                throw new Exception("Relation alias must be a string");
+                throw new RelationAliasMustBeString(
+                    "HasMany",
+                    $entityName,
+                    $referencedEntity
+                );
             }
 
             $lowerAlias = strtolower($alias);
@@ -473,8 +491,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * intermediate model
          */
         if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "HasManytoMany",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -483,8 +503,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * model to the referenced model
          */
         if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "HasManytoMany",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -514,7 +536,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (isset($options["alias"])) {
             $alias = $options["alias"];
             if (!is_string($alias)) {
-                throw new Exception("Relation alias must be a string");
+                throw new RelationAliasMustBeString(
+                    "HasManytoMany",
+                    $entityName,
+                    $referencedEntity
+                );
             }
 
             $lowerAlias = strtolower($alias);
@@ -583,8 +609,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same
          */
         if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "HasOne",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -605,7 +633,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (isset($options["alias"])) {
             $alias = $options["alias"];
             if (!is_string($alias)) {
-                throw new Exception("Relation alias must be a string");
+                throw new RelationAliasMustBeString(
+                    "HasOne",
+                    $entityName,
+                    $referencedEntity
+                );
             }
 
             $lowerAlias = strtolower($alias);
@@ -678,8 +710,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * intermediate model
          */
         if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "HasOneThrough",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -688,8 +722,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * model to the referenced model
          */
         if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
-            throw new Exception(
-                "Number of referenced fields are not the same"
+            throw new ReferencedFieldsMismatch(
+                "HasOneThrough",
+                $entityName,
+                $referencedEntity
             );
         }
 
@@ -719,7 +755,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (isset($options["alias"])) {
             $alias = $options["alias"];
             if (!is_string($alias)) {
-                throw new Exception("Relation alias must be a string");
+                throw new RelationAliasMustBeString(
+                    "HasOneThrough",
+                    $entityName,
+                    $referencedEntity
+                );
             }
 
             $lowerAlias = strtolower($alias);
@@ -779,7 +819,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function createBuilder(array | string | null $params = null): BuilderInterface
     {
         $this->checkContainer(
-            Exception::class,
+            ManagerOrmServicesUnavailable::class,
             'the services related to the ORM'
         );
 
@@ -808,7 +848,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     public function createQuery(string $phql): QueryInterface
     {
         $this->checkContainer(
-            Exception::class,
+            ManagerOrmServicesUnavailable::class,
             'the services related to the ORM'
         );
 
@@ -1180,9 +1220,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         // Extract the real class name from the namespaced class
         $modelName = array_pop($modelArray);
 
-        // Extract the namespace from the namespaced class
-        $namespaceName = implode("\\", $modelArray);
-
         if (!isset($this->sources[$entityName])) {
             $this->setModelSource(
                 $model,
@@ -1251,7 +1288,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): Simple | ModelInterface | int | false | null {
+    ) {
         /**
          * Re-use bound parameters
          */
@@ -1284,26 +1321,32 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $fields = $relation->getFields();
 
             if (is_array($fields)) {
-                throw new Exception("Not supported");
+                $columnCount = count($fields) - 1;
+                for ($i = 0; $i <= $columnCount; $i++) {
+                    $conditions[]             = "[" . $intermediateModel . "].[" . $intermediateFields[$i] . "] = :APR" . $i . ":";
+                    $placeholders["APR" . $i] = $record->readAttribute($fields[$i]);
+                }
+            } else {
+                $conditions[]         = "[" . $intermediateModel . "].[" . $intermediateFields . "] = :APR0:";
+                $placeholders["APR0"] = $record->readAttribute($fields);
             }
 
-            $conditions[]         = "[" . $intermediateModel . "].[" . $intermediateFields . "] = :APR0:";
-            $placeholders["APR0"] = $record->readAttribute($fields);
-            $joinConditions       = [];
+            $joinConditions = [];
 
             /**
              * Create the join conditions
              */
-            $intermediateFields = $relation->getIntermediateReferencedFields();
+            $intermediateReferenceFields = $relation->getIntermediateReferencedFields();
+            $referencedFields            = $relation->getReferencedFields();
 
-            if (is_array($intermediateFields)) {
-                throw new Exception("Not supported");
+            if (is_array($intermediateReferenceFields)) {
+                $columnCount = count($intermediateReferenceFields) - 1;
+                for ($i = 0; $i <= $columnCount; $i++) {
+                    $joinConditions[] = "[" . $intermediateModel . "].[" . $intermediateReferenceFields[$i] . "] = [" . $referencedModel . "].[" . $referencedFields[$i] . "]";
+                }
+            } else {
+                $joinConditions[] = "[" . $intermediateModel . "].[" . $intermediateReferenceFields . "] = [" . $referencedModel . "].[" . $referencedFields . "]";
             }
-
-            $joinConditions[] = "[" . $intermediateModel
-                . "].[" . $intermediateFields
-                . "] = [" . $referencedModel
-                . "].[" . $relation->getReferencedFields() . "]";
 
             /**
              * We don't trust the user or the database so we use bound parameters
@@ -1340,11 +1383,33 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
              */
             $query = $builder->getQuery();
 
-            return match ($relation->getType()) {
+            $reusable = $relation->isReusable();
+
+            if ($reusable) {
+                $uniqueKey = $this->getUniqueKey(
+                    $record,
+                    $referencedModel,
+                    [$intermediateModel, $parameters, $record->readAttribute($fields)]
+                );
+
+                $records = $this->getReusableRecords($referencedModel, $uniqueKey);
+
+                if (is_array($records) || is_object($records)) {
+                    return $records;
+                }
+            }
+
+            $records = match ($relation->getType()) {
                 Relation::HAS_MANY_THROUGH => $query->execute(),
                 Relation::HAS_ONE_THROUGH  => $query->setUniqueRow(true)->execute(),
-                default                    => throw new Exception("Unknown relation type"),
+                default                    => throw new UnknownRelationType(),
             };
+
+            if ($reusable) {
+                $this->setReusableRecords($referencedModel, $uniqueKey, $records);
+            }
+
+            return $records;
         }
 
         $conditions = [];
@@ -1360,11 +1425,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $referencedFields = $relation->getReferencedFields();
 
         if (!is_array($fields)) {
-            $conditions[]         = "[" . $referencedFields . "] = :APR0:";
+            $conditions[]         = "[" . $referencedModel . "].[" . $referencedFields . "] = :APR0:";
             $placeholders["APR0"] = $record->readAttribute($fields);
         } else {
             foreach ($relation->getFields() as $refPosition => $field) {
                 $conditions[] = "["
+                    . $referencedModel
+                    . "].["
                     . $referencedFields[$refPosition]
                     . "] = :APR"
                     . $refPosition . ":";
@@ -1400,7 +1467,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $retrieveMethod = match ($relation->getType()) {
                 Relation::BELONGS_TO, Relation::HAS_ONE => "findFirst",
                 Relation::HAS_MANY                      => "find",
-                default                                 => throw new Exception("Unknown relation type"),
+                default                                 => throw new UnknownRelationType(),
             };
         } else {
             $retrieveMethod = $method;
@@ -1820,9 +1887,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * The model does not exist throw an exception
          */
         if (!class_exists($modelName)) {
-            throw new Exception(
-                "Model '" . $modelName . "' could not be loaded"
-            );
+            throw new ModelCouldNotLoad($modelName);
         }
 
         /**
@@ -2122,7 +2187,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $service = $this->getConnectionService($model, $connectionServices);
 
         $this->checkContainer(
-            Exception::class,
+            ManagerOrmServicesUnavailable::class,
             'the services related to the ORM'
         );
 
@@ -2136,7 +2201,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         }
 
         if (!is_object($connection)) {
-            throw new Exception("Invalid injected connection service");
+            throw new InvalidConnectionService();
         }
 
         return $connection;

@@ -43,7 +43,7 @@ interface ManagerInterface
      * @param ModelInterface $model
      * @param mixed          $fields
      * @param string         $referencedModel
-     * @param string         $referencedFields
+     * @param mixed          $referencedFields
      * @param array          $options
      *
      * @return RelationInterface
@@ -52,7 +52,7 @@ interface ManagerInterface
         ModelInterface $model,
         mixed $fields,
         string $referencedModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): RelationInterface;
 
@@ -62,7 +62,7 @@ interface ManagerInterface
      * @param ModelInterface $model
      * @param mixed          $fields
      * @param string         $referencedModel
-     * @param string         $referencedFields
+     * @param mixed          $referencedFields
      * @param array          $options
      *
      * @return RelationInterface
@@ -71,7 +71,7 @@ interface ManagerInterface
         ModelInterface $model,
         mixed $fields,
         string $referencedModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): RelationInterface;
 
@@ -84,7 +84,7 @@ interface ManagerInterface
      * @param mixed          $intermediateFields
      * @param mixed          $intermediateReferencedFields
      * @param string         $referencedModel
-     * @param string         $referencedFields
+     * @param mixed          $referencedFields
      * @param array          $options
      *
      * @return RelationInterface
@@ -96,7 +96,7 @@ interface ManagerInterface
         mixed $intermediateFields,
         mixed $intermediateReferencedFields,
         string $referencedModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): RelationInterface;
 
@@ -106,7 +106,7 @@ interface ManagerInterface
      * @param ModelInterface $model
      * @param mixed          $fields
      * @param string         $referencedModel
-     * @param string         $referencedFields
+     * @param mixed          $referencedFields
      * @param array          $options
      *
      * @return RelationInterface
@@ -115,7 +115,7 @@ interface ManagerInterface
         ModelInterface $model,
         mixed $fields,
         string $referencedModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): RelationInterface;
 
@@ -128,7 +128,7 @@ interface ManagerInterface
      * @param mixed          $intermediateFields
      * @param mixed          $intermediateReferencedFields
      * @param string         $referencedModel
-     * @param string         $referencedFields
+     * @param mixed          $referencedFields
      * @param array          $options
      *
      * @return RelationInterface
@@ -140,9 +140,16 @@ interface ManagerInterface
         mixed $intermediateFields,
         mixed $intermediateReferencedFields,
         string $referencedModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): RelationInterface;
+
+    /**
+     * Clears the internal reusable list
+     *
+     * @return void
+     */
+    public function clearReusableObjects(): void;
 
     /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
@@ -370,7 +377,7 @@ interface ManagerInterface
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): ModelInterface | Simple | int | false | null;
+    );
 
     /**
      * Query all the relationships defined on a model
@@ -393,6 +400,16 @@ interface ManagerInterface
         string $first,
         string $second
     ): array | bool;
+
+    /**
+     * Returns a reusable object from the internal list
+     *
+     * @param string $modelName
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function getReusableRecords(string $modelName, string $key);
 
     /**
      * Returns the connection to write data related to a model
@@ -632,6 +649,21 @@ interface ManagerInterface
     public function setReadConnectionService(
         ModelInterface $model,
         string $connectionService
+    ): void;
+
+    /**
+     * Stores a reusable record in the internal list
+     *
+     * @param string $modelName
+     * @param string $key
+     * @param mixed  $records
+     *
+     * @return void
+     */
+    public function setReusableRecords(
+        string $modelName,
+        string $key,
+        mixed $records
     ): void;
 
     /**
