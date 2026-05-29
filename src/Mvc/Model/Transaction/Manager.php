@@ -17,6 +17,7 @@ use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Mvc\Model\Exceptions\ManagerOrmServicesUnavailable;
 use Phalcon\Mvc\Model\Transaction;
 use Phalcon\Mvc\Model\TransactionInterface;
 
@@ -100,7 +101,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      *
      * @param object|null $container
      *
-     * @throws Exception
+     * @throws ManagerOrmServicesUnavailable
      */
     public function __construct(
         protected object | null $container = null
@@ -112,10 +113,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface
         $this->container = $container;
 
         if (!is_object($container)) {
-            throw new Exception(
-                "A dependency injection container is required "
-                . "to access the services related to the ORM"
-            );
+            throw new ManagerOrmServicesUnavailable();
         }
     }
 
@@ -148,6 +146,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface
             if (true === $connection->isUnderTransaction()) {
                 $connection->commit();
             }
+
+            $this->collectTransaction($transaction);
         }
     }
 
@@ -203,15 +203,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      * @param bool $autoBegin
      *
      * @return TransactionInterface
-     * @throws Exception
+     * @throws ManagerOrmServicesUnavailable
      */
     public function getOrCreateTransaction(bool $autoBegin = true): TransactionInterface
     {
         if (null === $this->container) {
-            throw new Exception(
-                "A dependency injection container is required "
-                . "to access the services related to the ORM"
-            );
+            throw new ManagerOrmServicesUnavailable();
         }
 
         if ($this->number) {
@@ -372,7 +369,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
         foreach ($this->transactions as $managedTransaction) {
             if ($managedTransaction != $transaction) {
-                $newTransactions[] = $transaction;
+                $newTransactions[] = $managedTransaction;
             } else {
                 $this->number--;
             }

@@ -33,8 +33,6 @@ class Failed extends Exception
         string $message,
         protected ModelInterface | null $record = null
     ) {
-        $this->record = $record;
-
         parent::__construct($message);
     }
 

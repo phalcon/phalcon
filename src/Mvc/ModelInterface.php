@@ -26,6 +26,8 @@ use Phalcon\Mvc\Model\TransactionInterface;
 
 /**
  * Interface for Phalcon\Mvc\Model
+ *
+ * @template T
  */
 interface ModelInterface
 {
@@ -148,9 +150,9 @@ interface ModelInterface
      *
      * @param mixed|null $parameters
      *
-     * @return ResultsetInterface
+     * @return T[]|\Phalcon\Mvc\Model\Resultset<int, T>
      */
-    public static function find(mixed $parameters = null): ResultsetInterface;
+    public static function find(mixed $parameters = null);
 
     /**
      * Allows to query the first record that match the specified conditions
@@ -163,7 +165,7 @@ interface ModelInterface
      *
      * @param mixed|null $parameters
      *
-     * @return mixed|ModelInterface|Row|null
+     * @return T|ModelInterface|Row|null
      */
     public static function findFirst(mixed $parameters = null): mixed;
 
