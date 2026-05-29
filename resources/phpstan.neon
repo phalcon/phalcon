@@ -1,7 +1,7 @@
 parameters:
     paths:
-        - src
+        - ../src
     level: 1
-    tmpDir: tests/_output
+    tmpDir: ../tests/_output
     ignoreErrors:
         - "#Unsafe usage of new static#"
