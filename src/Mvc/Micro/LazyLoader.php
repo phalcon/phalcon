@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Micro;
 
+use Phalcon\Mvc\Micro\Exceptions\LazyHandlerNotFound;
 use Phalcon\Mvc\Model\BinderInterface;
 
 use function array_values;
@@ -56,9 +57,7 @@ class LazyLoader
 
         if (null === $this->handler) {
             if (!class_exists($definition)) {
-                throw new Exception(
-                    "Handler '" . $definition . "' does not exist"
-                );
+                throw new LazyHandlerNotFound($definition);
             }
 
             $this->handler = new $definition();

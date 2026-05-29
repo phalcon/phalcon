@@ -27,6 +27,14 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Micro\CollectionInterface;
 use Phalcon\Mvc\Micro\Exception;
+use Phalcon\Mvc\Micro\Exceptions\ContainerRequired;
+use Phalcon\Mvc\Micro\Exceptions\HandlerNotCallable;
+use Phalcon\Mvc\Micro\Exceptions\InvalidRegisteredHandler;
+use Phalcon\Mvc\Micro\Exceptions\MissingCollectionMainHandler;
+use Phalcon\Mvc\Micro\Exceptions\NoHandlersToMount;
+use Phalcon\Mvc\Micro\Exceptions\NoMatchedRouteHandler;
+use Phalcon\Mvc\Micro\Exceptions\NotFoundHandlerNotCallable;
+use Phalcon\Mvc\Micro\Exceptions\ResponseHandlerNotCallable;
 use Phalcon\Mvc\Micro\LazyLoader;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 use Phalcon\Mvc\Model\BinderInterface;
@@ -355,7 +363,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
         $realHandler = null;
 
         $this->checkContainer(
-            Exception::class,
+            ContainerRequired::class,
             'micro services'
         );
 
@@ -391,9 +399,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 
             if (null !== $matchedRoute) {
                 if (!isset($this->handlers[$matchedRoute->getRouteId()])) {
-                    throw new Exception(
-                        "Matched route does not have an associated handler"
-                    );
+                    throw new NoMatchedRouteHandler();
                 }
 
                 /**
@@ -430,9 +436,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $status = $before->call($this);
                     } else {
                         if (!is_callable($before)) {
-                            throw new Exception(
-                                "'before' handler is not callable"
-                            );
+                            throw new HandlerNotCallable("before");
                         }
 
                         /**
@@ -538,9 +542,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $status = $afterBinding->call($this);
                     } else {
                         if (!is_callable($afterBinding)) {
-                            throw new Exception(
-                                "'afterBinding' handler is not callable"
-                            );
+                            throw new HandlerNotCallable("afterBinding");
                         }
 
                         /**
@@ -580,9 +582,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $status = $after->call($this);
                     } else {
                         if (!is_callable($after)) {
-                            throw new Exception(
-                                "One of the 'after' handlers is not callable"
-                            );
+                            throw new HandlerNotCallable("after");
                         }
 
                         $status = call_user_func($after);
@@ -607,9 +607,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                  * Check if a notfoundhandler is defined and it's callable
                  */
                 if (!is_callable($this->notFoundHandler)) {
-                    throw new Exception(
-                        "Not-Found handler is not callable or is not defined"
-                    );
+                    throw new NotFoundHandlerNotCallable();
                 }
 
                 /**
@@ -639,9 +637,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                     $status = $finish->call($this);
                 } else {
                     if (!is_callable($finish)) {
-                        throw new Exception(
-                            "One of the 'finish' handlers is not callable"
-                        );
+                        throw new HandlerNotCallable("finish");
                     }
 
                     /**
@@ -696,9 +692,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
          */
         if (null !== $this->responseHandler) {
             if (!is_callable($this->responseHandler)) {
-                throw new Exception(
-                    "Response handler is not callable or is not defined"
-                );
+                throw new ResponseHandlerNotCallable();
             }
 
             $returnedValue = call_user_func($this->responseHandler);
@@ -790,13 +784,13 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
         $mainHandler = $collection->getHandler();
 
         if (empty($mainHandler)) {
-            throw new Exception("Collection requires a main handler");
+            throw new MissingCollectionMainHandler();
         }
 
         $handlers = $collection->getHandlers();
 
         if (empty($handlers)) {
-            throw new Exception("There are no handlers to mount");
+            throw new NoHandlersToMount();
         }
 
         /**
@@ -815,9 +809,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 
         foreach ($handlers as $handler) {
             if (!is_array($handler)) {
-                throw new Exception(
-                    "One of the registered handlers is invalid"
-                );
+                throw new InvalidRegisteredHandler();
             }
 
             $methods    = $handler[0];

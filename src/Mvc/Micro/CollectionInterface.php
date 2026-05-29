@@ -108,8 +108,7 @@ interface CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
-     */
-    /**
+     *
      * @param string      $routePattern
      * @param callable    $handler
      * @param string|null $name
