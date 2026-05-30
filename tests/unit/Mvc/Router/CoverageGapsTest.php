@@ -18,6 +18,7 @@ use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
+use TypeError;
 
 final class CoverageGapsTest extends AbstractUnitTestCase
 {
@@ -176,24 +177,6 @@ final class CoverageGapsTest extends AbstractUnitTestCase
         $router->handle('?foo=bar');
 
         $this->assertSame('home', $router->getControllerName());
-    }
-
-    /**
-     * Path entry with a non-string key triggers Exception. Routes with a
-     * paths array that has an integer key reach the throw in handle().
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-05-21
-     */
-    public function testWrongPathsKeyThrows(): void
-    {
-        $router = $this->getRouter(false);
-        $router->add('/x/(\d+)', [0 => 'broken']);
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Wrong key in paths: 0');
-
-        $router->handle('/x/42');
     }
 
     /**

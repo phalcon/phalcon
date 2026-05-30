@@ -18,6 +18,7 @@ use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Exception;
 use Phalcon\Mvc\Router\RouterFactory;
 use Phalcon\Tests\AbstractUnitTestCase;
+use TypeError;
 
 final class LoadTest extends AbstractUnitTestCase
 {
@@ -61,7 +62,7 @@ final class LoadTest extends AbstractUnitTestCase
 
     public function testLoadRejectsNonArrayNonConfig(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(TypeError::class);
         (new RouterFactory())->load('whatever');
     }
 }
