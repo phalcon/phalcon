@@ -197,9 +197,9 @@ interface MetaDataInterface
      * @param ModelInterface $model
      * @param int            $index
      *
-     * @return mixed
+     * @return array|null
      */
-    public function readColumnMapIndex(ModelInterface $model, int $index);
+    public function readColumnMapIndex(ModelInterface $model, int $index): array | null;
 
     /**
      * Reads meta-data for certain model
@@ -216,9 +216,9 @@ interface MetaDataInterface
      * @param ModelInterface $model
      * @param int            $index
      *
-     * @return mixed
+     * @return array|string|null
      */
-    public function readMetaDataIndex(ModelInterface $model, int $index): mixed;
+    public function readMetaDataIndex(ModelInterface $model, int $index): array | string | null;
 
     /**
      * Resets internal meta-data in order to regenerate it

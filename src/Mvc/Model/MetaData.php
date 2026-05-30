@@ -17,6 +17,8 @@ use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
+use Phalcon\Mvc\Model\MetaData\Exceptions\CorruptedMetaData;
+use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataStrategyFailed;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
@@ -51,7 +53,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 {
     use IniTrait;
 
-    private const MESSAGE_INVALID_METADATA = "The meta-data is invalid or is corrupt";
     public const MODELS_ATTRIBUTES               = 0;
     public const MODELS_AUTOMATIC_DEFAULT_INSERT = 10;
     public const MODELS_AUTOMATIC_DEFAULT_UPDATE = 11;
@@ -131,7 +132,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -155,7 +156,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -181,7 +182,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -207,7 +208,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -234,7 +235,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -297,7 +298,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -323,7 +324,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -349,7 +350,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -375,7 +376,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -468,7 +469,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -494,7 +495,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -520,7 +521,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -546,7 +547,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
             return $data;
         }
 
-        throw new Exception(self::MESSAGE_INVALID_METADATA);
+        throw new CorruptedMetaData();
     }
 
     /**
@@ -642,7 +643,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     final public function readColumnMap(ModelInterface $model): array | null
     {
-        if (Settings::get("orm.column_renaming")) {
+        if (!Settings::get("orm.column_renaming")) {
             return null;
         }
 
@@ -727,12 +728,12 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param ModelInterface $model
      * @param int            $index
      *
-     * @return mixed
+     * @return array|string|null
      * @throws Exception
      * @todo check the return type; 8 seems to be only string
      *
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): mixed
+    final public function readMetaDataIndex(ModelInterface $model, int $index): array | string | null
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {
@@ -1035,13 +1036,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                      * Store the meta-data in the adapter
                      */
                     $this->write($prefixKey, $modelMetadata);
+                }
 
-                    if (isset($this->pendingMetaDataWrites[$key])) {
-                        foreach ($this->pendingMetaDataWrites[$key] as $pendingIndex => $pendingData) {
-                            $this->metaData[$key][$pendingIndex] = $pendingData;
-                        }
-                        unset($this->pendingMetaDataWrites[$key]);
+                if (isset($this->pendingMetaDataWrites[$key])) {
+                    foreach ($this->pendingMetaDataWrites[$key] as $pendingIndex => $pendingData) {
+                        $this->metaData[$key][$pendingIndex] = $pendingData;
                     }
+                    unset($this->pendingMetaDataWrites[$key]);
                 }
             }
 
@@ -1064,7 +1065,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         $message = "Failed to store metaData to the cache adapter";
 
         if ($option) {
-            throw new Exception($message);
+            throw new MetaDataStrategyFailed($message);
         } else {
             trigger_error($message);
         }

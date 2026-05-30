@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\Model\MetaData;
 
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataDirectoryNotWritable;
 use Phalcon\Support\Settings;
 use Phalcon\Support\Traits\FilePathTrait;
 
@@ -73,7 +74,7 @@ class Stream extends MetaData
         if (false === file_exists($path)) {
             return null;
         }
-        return require_once $path;
+        return require $path;
     }
 
     /**
@@ -107,9 +108,7 @@ class Stream extends MetaData
     private function throwWriteException($option): void
     {
         if ($option) {
-            throw new Exception(
-                "Meta-Data directory cannot be written"
-            );
+            throw new MetaDataDirectoryNotWritable();
         } else {
             trigger_error(
                 "Meta-Data directory cannot be written"

@@ -19,6 +19,9 @@ use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\Model\MetaData\Exceptions\InvalidContainer;
+use Phalcon\Mvc\Model\MetaData\Exceptions\NoAnnotationsForClass;
+use Phalcon\Mvc\Model\MetaData\Exceptions\NoPropertyAnnotationsForClass;
 use Phalcon\Mvc\ModelInterface;
 
 class Annotations implements StrategyInterface
@@ -181,7 +184,7 @@ class Annotations implements StrategyInterface
                 default    => Column::BIND_PARAM_STR,
             };
 
-            $numericTyped[$columnName] = match ($feature) {
+            $isNumeric = match ($feature) {
                 "biginteger",
                 "bit",
                 "decimal",
@@ -194,6 +197,10 @@ class Annotations implements StrategyInterface
                 "tinyint" => true,
                 default   => false,
             };
+
+            if (true === $isNumeric) {
+                $numericTyped[$columnName] = true;
+            }
 
             /**
              * All columns marked with the "Primary" annotation are considered
@@ -216,22 +223,22 @@ class Annotations implements StrategyInterface
             /**
              * Column will be skipped on INSERT operation
              */
-            if ($columnAnnotations->getNamedParameter("skipOnInsert")) {
+            if ($columnAnnotations->getNamedParameter("skip_on_insert")) {
                 $skipOnInsert[$columnName] = true;
             }
 
             /**
              * Column will be skipped on UPDATE operation
              */
-            if ($columnAnnotations->getNamedParameter("skipOnUpdate")) {
+            if ($columnAnnotations->getNamedParameter("skip_on_update")) {
                 $skipOnUpdate[$columnName] = true;
             }
 
             /**
              * Allow empty strings for column
              */
-            if ($columnAnnotations->getNamedParameter("allowEmptyString")) {
-                $emptyStringValues[$columnName] = true;
+            if ($columnAnnotations->getNamedParameter("allow_empty_string")) {
+                $emptyStringValues[$columnName] = $columnName;
             }
 
             /**
@@ -282,7 +289,7 @@ class Annotations implements StrategyInterface
     private function getProperties(ModelInterface $model, DiInterface | ServiceCollection $container): array
     {
         if (false === is_object($container)) {
-            throw new Exception("The dependency injector is invalid in MetaData Strategy Annotations");
+            throw new InvalidContainer();
         }
 
         /** @var \Phalcon\Annotations\Annotations $annotations */
@@ -292,9 +299,7 @@ class Annotations implements StrategyInterface
         $reflection = $annotations->get($className);
 
         if (!is_object($reflection)) {
-            throw new Exception(
-                "No annotations were found in class " . $className
-            );
+            throw new NoAnnotationsForClass($className);
         }
 
         /**
@@ -303,9 +308,7 @@ class Annotations implements StrategyInterface
         $propertiesAnnotations = $reflection->getPropertiesAnnotations();
 
         if (0 === count($propertiesAnnotations)) {
-            throw new Exception(
-                "No properties with annotations were found in class " . $className
-            );
+            throw new NoPropertyAnnotationsForClass($className);
         }
 
         return $propertiesAnnotations;

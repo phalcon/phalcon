@@ -15,8 +15,10 @@ namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
-use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\Model\MetaData\Exceptions\CannotObtainTableColumns;
+use Phalcon\Mvc\Model\MetaData\Exceptions\ColumnMapNotArray;
+use Phalcon\Mvc\Model\MetaData\Exceptions\TableNotInDatabase;
 use Phalcon\Mvc\ModelInterface;
 
 use function method_exists;
@@ -41,7 +43,7 @@ class Introspection implements StrategyInterface
             $userColumnMap = $model->columnMap();
 
             if (!is_array($userColumnMap)) {
-                throw new Exception("columnMap() not returned an array");
+                throw new ColumnMapNotArray();
             }
 
             $reversedColumnMap = [];
@@ -80,11 +82,7 @@ class Introspection implements StrategyInterface
             /**
              * The table not exists
              */
-            throw new Exception(
-                "Table '" . $completeTable
-                . "' does not exist in database when dumping meta-data for "
-                . get_class($model)
-            );
+            throw new TableNotInDatabase($completeTable, get_class($model));
         }
 
         /**
@@ -101,12 +99,7 @@ class Introspection implements StrategyInterface
             /**
              * The table not exists
              */
-            throw new Exception(
-                "Cannot obtain table columns for the mapped source '"
-                . $completeTable
-                . "' used in model "
-                . get_class($model)
-            );
+            throw new CannotObtainTableColumns($completeTable, get_class($model));
         }
 
         /**
