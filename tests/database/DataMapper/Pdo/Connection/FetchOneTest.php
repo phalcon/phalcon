@@ -78,7 +78,7 @@ final class FetchOneTest extends AbstractDatabaseTestCase
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
+        $migration  = new InvoicesMigration(self::getConnection());
         $migration->clear();
 
         $result = $migration->insert(1);
@@ -117,7 +117,7 @@ final class FetchOneTest extends AbstractDatabaseTestCase
     ): void {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
+        $migration  = new InvoicesMigration(self::getConnection());
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, 'test-1');
@@ -143,7 +143,7 @@ final class FetchOneTest extends AbstractDatabaseTestCase
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
+        $migration  = new InvoicesMigration(self::getConnection());
         $migration->clear();
 
         $result = $migration->insert(1);

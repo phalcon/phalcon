@@ -33,7 +33,7 @@ final class DeleteTest extends AbstractDatabaseTestCase
     public function testDmQueryDelete(): void
     {
         $connection = self::getDataMapperConnection();
-        $invoices   = new InvoicesMigration($connection);
+        $invoices   = new InvoicesMigration(self::getConnection());
 
         /**
          * Create an invoice

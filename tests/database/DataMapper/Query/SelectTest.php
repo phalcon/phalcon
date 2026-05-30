@@ -33,7 +33,7 @@ final class SelectTest extends AbstractDatabaseTestCase
     public function testDmQuerySelect(): void
     {
         $connection = self::getDataMapperConnection();
-        $invoices   = new InvoicesMigration($connection);
+        $invoices   = new InvoicesMigration(self::getConnection());
 
         /**
          * Create an invoice

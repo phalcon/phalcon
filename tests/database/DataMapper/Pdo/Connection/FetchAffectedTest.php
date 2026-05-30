@@ -28,7 +28,7 @@ final class FetchAffectedTest extends AbstractDatabaseTestCase
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
+        $migration  = new InvoicesMigration(self::getConnection());
         $migration->clear();
 
         $result = $migration->insert(1);

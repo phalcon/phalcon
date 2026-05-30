@@ -1,5 +1,33 @@
 
 
+drop table if exists album;
+            
+
+
+create table album
+(
+    id       integer constraint album_pk primary key autoincrement not null,
+    name     text    not null,
+    album_id integer null,
+    photo_id integer null
+);
+            
+
+
+drop table if exists album_photo;
+            
+
+
+create table album_photo
+(
+    id       integer constraint album_photo_pk primary key autoincrement not null,
+    photo_id integer null,
+    album_id integer null,
+    position integer not null default 999999999
+);
+            
+
+
 drop table if exists albums;
             
 
@@ -25,6 +53,20 @@ create table artists
 (
     id   integer constraint artists_pk primary key autoincrement not null,
     name text not null
+);
+            
+
+
+drop table if exists complex_default;
+            
+
+
+create table complex_default
+(
+    id           integer constraint complex_default_pk primary key autoincrement,
+    created      text default (datetime('now')),
+    updated      text default (datetime('now')),
+    updated_null text null
 );
             
 
@@ -137,6 +179,55 @@ create table co_dialect
             
 
 
+DROP TABLE IF EXISTS foreign_key_child;
+            
+
+
+DROP TABLE IF EXISTS foreign_key_parent;
+            
+
+
+CREATE TABLE foreign_key_parent (
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    name      varchar(70) NOT NULL,
+    refer_int INTEGER     NOT NULL,
+    UNIQUE (refer_int)
+);
+            
+
+
+CREATE TABLE foreign_key_child (
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    name      varchar(70) NOT NULL,
+    child_int INTEGER     NOT NULL,
+    UNIQUE (child_int)
+);
+            
+
+DROP TABLE IF EXISTS co_invoices_fk;
+
+DROP TABLE IF EXISTS co_customers_fk;
+
+
+CREATE TABLE co_customers_fk (
+    cst_id   integer CONSTRAINT co_customers_fk_pk PRIMARY KEY AUTOINCREMENT,
+    cst_name text
+);
+            
+
+
+CREATE TABLE co_invoices_fk (
+    inv_id     integer CONSTRAINT co_invoices_fk_pk PRIMARY KEY AUTOINCREMENT,
+    inv_cst_id integer NOT NULL,
+    inv_title  text,
+    CONSTRAINT co_invoices_fk_cst_fk
+        FOREIGN KEY (inv_cst_id)
+        REFERENCES co_customers_fk (cst_id)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+            
+
+
 drop table if exists co_invoices;
             
 
@@ -215,6 +306,68 @@ create table co_only_identity
 );
             
 
+drop table if exists `co_orders`;
+
+create table `co_orders` (
+    `ord_id` integer constraint ord_id_pk primary key autoincrement,
+    `ord_name` text NULL,
+    `ord_status_flag` integer NULL
+);
+
+drop table if exists co_orders_x_products_mult_comp;
+
+create table co_orders_x_products_mult_comp (
+  `oxp_ord_id` integer NOT NULL,
+  `oxp_ord_status_flag` integer NULL,
+  `oxp_prd_id` integer NOT NULL,
+  `oxp_prd_status_flag` integer NULL,
+  `oxp_quantity` integer NULL,
+  primary key (`oxp_ord_id`, `oxp_prd_id`, `oxp_ord_status_flag`, `oxp_prd_status_flag`)
+);
+
+drop table if exists co_orders_x_products_mult;
+
+create table co_orders_x_products_mult (
+  `oxp_id` integer constraint co_oxp_mult_pk primary key autoincrement,
+  `oxp_ord_id` integer NOT NULL,
+  `oxp_ord_status_flag` integer NULL,
+  `oxp_prd_id` integer NOT NULL,
+  `oxp_prd_status_flag` integer NULL,
+  `oxp_quantity` integer NULL
+);
+
+drop table if exists co_orders_x_products_one_comp;
+
+create table co_orders_x_products_one_comp (
+  `oxp_ord_id` integer NOT NULL,
+  `oxp_prd_id` integer NOT NULL,
+  `oxp_quantity` integer NULL,
+  primary key (`oxp_ord_id`, `oxp_prd_id`)
+);
+
+drop table if exists co_orders_x_products_one;
+
+create table co_orders_x_products_one (
+  `oxp_id` integer constraint co_oxp_one_pk primary key autoincrement,
+  `oxp_ord_id` integer NOT NULL,
+  `oxp_prd_id` integer NOT NULL,
+  `oxp_quantity` integer NULL
+);
+
+
+drop table if exists co_orders_x_products;
+            
+
+
+create table co_orders_x_products
+(
+    oxp_ord_id   integer not null,
+    oxp_prd_id   integer not null,
+    oxp_quantity integer not null,
+    primary key (oxp_ord_id, oxp_prd_id)
+);
+            
+
 
 drop table if exists personas;
             
@@ -231,6 +384,45 @@ create table personas
     primary key (cedula)
 );
             
+
+
+drop table if exists photo;
+            
+
+
+create table photo
+(
+    id                integer constraint photo_pk primary key autoincrement not null,
+    date_uploaded     text    not null default (datetime('now')),
+    original_filename text    not null,
+    path              text    not null,
+    width             integer not null,
+    height            integer not null,
+    thumb_path        text    not null,
+    thumb_width       integer not null,
+    thumb_height      integer not null,
+    display_path      text    not null,
+    display_width     integer not null,
+    display_height    integer not null,
+    mime_type         text    not null,
+    filesize          integer null,
+    phash             integer not null,
+    battles           integer not null default 0,
+    wins              integer not null default 0
+);
+            
+
+drop table if exists `co_products`;
+
+create table `co_products` (
+    `prd_id` integer constraint prd_id_pk primary key autoincrement,
+    `prd_name` text NULL,
+    `prd_status_flag` integer NULL
+);
+
+DROP TABLE IF EXISTS co_rb_test_model;
+
+CREATE TABLE co_rb_test_model (id integer, name text not null);
 
 
 drop table if exists ph_select;
@@ -294,6 +486,14 @@ create table co_sources
 create index co_sources_username_index
     on co_sources (username);
             
+
+drop table if exists table_with_string_field;
+
+create table table_with_string_field
+            (
+                id    integer constraint table_with_string_field_pk primary key autoincrement not null,
+                field text not null
+            );
 
 
 drop table if exists table_with_uuid_primary;

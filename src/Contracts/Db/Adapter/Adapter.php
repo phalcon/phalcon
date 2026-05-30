@@ -408,14 +408,14 @@ interface Adapter
      * @param array  $bindParams
      * @param array  $bindTypes
      *
-     * @return array
+     * @return array|bool
      */
     public function fetchOne(
         string $sqlQuery,
         int $fetchMode = 2,
         array $bindParams = [],
         array $bindTypes = []
-    ): array;
+    ): array | bool;
 
     /**
      * Returns a SQL modified with a FOR UPDATE clause

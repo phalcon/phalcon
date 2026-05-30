@@ -2,6 +2,51 @@
 CREATE SCHEMA IF NOT EXISTS private;
 
 
+drop table if exists album;
+            
+
+
+create table album
+(
+    id       serial        constraint album_pk primary key,
+    name     varchar(100)  not null,
+    album_id integer       null,
+    photo_id integer       null
+);
+            
+
+
+create index index_foreignkey_album_album on album (album_id);
+            
+
+
+create index album_ibfk_2 on album (photo_id);
+            
+
+
+drop table if exists album_photo;
+            
+
+
+create table album_photo
+(
+    id       serial   constraint album_photo_pk primary key,
+    photo_id integer  null,
+    album_id integer  null,
+    position integer  not null default 999999999,
+    constraint UQ_cadf1c545153612614511f15197cae7b6dacac97 unique (album_id, photo_id)
+);
+            
+
+
+create index index_foreignkey_album_photo_photo on album_photo (photo_id);
+            
+
+
+create index index_foreignkey_album_photo_album on album_photo (album_id);
+            
+
+
 drop table if exists albums;
             
 
@@ -338,6 +383,42 @@ COMMENT ON COLUMN co_dialect.field_varchar_default IS 'field_varchar_default fie
             
 
 
+DROP TABLE IF EXISTS foreign_key_child;
+            
+
+
+DROP TABLE IF EXISTS foreign_key_parent;
+            
+
+
+CREATE TABLE foreign_key_parent (
+    id        serial      not null,
+    name      varchar(70) not null,
+    refer_int integer     not null,
+    PRIMARY KEY (id),
+    UNIQUE (refer_int)
+);
+            
+
+
+CREATE TABLE foreign_key_child (
+    id        serial      not null,
+    name      varchar(70) not null,
+    child_int integer     not null,
+    PRIMARY KEY (id),
+    UNIQUE (child_int)
+);
+            
+
+
+ALTER TABLE foreign_key_child
+    ADD CONSTRAINT test_describereferences
+    FOREIGN KEY (child_int)
+    REFERENCES foreign_key_parent (refer_int)
+    ON UPDATE CASCADE ON DELETE RESTRICT;
+            
+
+
 drop table if exists fractal_dates;
             
 
@@ -348,6 +429,29 @@ CREATE TABLE fractal_dates (
     fdatetime    TIMESTAMP(2),
     ftimestamp   TIMESTAMP(2),
     cuuid        uuid         not null default gen_random_uuid()
+);
+            
+
+DROP TABLE IF EXISTS co_invoices_fk;
+
+DROP TABLE IF EXISTS co_customers_fk;
+
+
+CREATE TABLE co_customers_fk (
+    cst_id   serial PRIMARY KEY,
+    cst_name varchar(100)
+);
+            
+
+
+CREATE TABLE co_invoices_fk (
+    inv_id     serial PRIMARY KEY,
+    inv_cst_id integer NOT NULL,
+    inv_title  varchar(100),
+    CONSTRAINT co_invoices_fk_cst_fk
+        FOREIGN KEY (inv_cst_id)
+        REFERENCES co_customers_fk (cst_id)
+        ON UPDATE CASCADE ON DELETE RESTRICT
 );
             
 
@@ -398,6 +502,18 @@ create table co_manufacturers
             
 
 
+drop table if exists no_primary_key;
+            
+
+
+create table no_primary_key
+(
+    nokey_id   integer,
+    nokey_name varchar(100) not null
+);
+            
+
+
 drop table if exists objects;
             
 
@@ -428,10 +544,69 @@ drop table if exists co_orders;
 
 create table co_orders
 (
-    ord_id serial not null
-    constraint ord_pk
-      primary key,
-      ord_name varchar(70)
+    ord_id serial not null constraint ord_pk primary key,
+    ord_name varchar(70),
+    ord_status_flag integer
+);
+            
+
+
+drop table if exists co_orders_x_products_mult_comp;
+            
+
+
+create table co_orders_x_products_mult_comp
+(
+    oxp_ord_id int not null,
+    oxp_prd_id int not null,
+    oxp_quantity int null,
+    oxp_ord_status_flag integer,
+    oxp_prd_status_flag integer,
+    primary key (oxp_ord_id, oxp_prd_id, oxp_ord_status_flag, oxp_prd_status_flag)
+);
+            
+
+
+drop table if exists co_orders_x_products_mult;
+            
+
+
+create table co_orders_x_products_mult
+(
+    oxp_id serial not null constraint co_oxp_mult_pk primary key,
+    oxp_ord_id int not null,
+    oxp_prd_id int not null,
+    oxp_quantity int null,
+    oxp_ord_status_flag integer,
+    oxp_prd_status_flag integer
+);
+            
+
+
+drop table if exists co_orders_x_products_one_comp;
+            
+
+
+create table co_orders_x_products_one_comp
+(
+    oxp_ord_id int not null,
+    oxp_prd_id int not null,
+    oxp_quantity int null,
+    primary key (oxp_ord_id, oxp_prd_id)
+);
+            
+
+
+drop table if exists co_orders_x_products_one;
+            
+
+
+create table co_orders_x_products_one
+(
+    oxp_id serial not null constraint co_oxp_one_pk primary key,
+    oxp_ord_id int not null,
+    oxp_prd_id int not null,
+    oxp_quantity int null
 );
             
 
@@ -444,7 +619,8 @@ create table private.co_orders_x_products
 (
     oxp_ord_id int not null,
     oxp_prd_id int not null,
-    oxp_quantity int not null
+    oxp_quantity int null
+
 );
             
 
@@ -462,6 +638,33 @@ create table personas
     cupo              numeric(16, 2) not null,
     estado            char(1)        not null default 'A',
     primary key (cedula)
+);
+            
+
+
+drop table if exists photo;
+            
+
+
+create table photo
+(
+    id                serial        constraint photo_pk primary key,
+    date_uploaded     timestamp     not null default current_timestamp,
+    original_filename text          not null,
+    path              text          not null,
+    width             smallint      not null,
+    height            smallint      not null,
+    thumb_path        text          not null,
+    thumb_width       smallint      not null,
+    thumb_height      smallint      not null,
+    display_path      text          not null,
+    display_width     smallint      not null,
+    display_height    smallint      not null,
+    mime_type         varchar(255)  not null,
+    filesize          integer       null,
+    phash             bigint        not null,
+    battles           integer       not null default 0,
+    wins              integer       not null default 0
 );
             
 
@@ -485,10 +688,9 @@ drop table if exists co_products;
 
 create table co_products
 (
-    prd_id serial not null
-    constraint prd_pk
-      primary key,
-      prd_name varchar(70)
+    prd_id serial constraint co_prd_pk primary key,
+    prd_name varchar(70),
+    prd_status_flag integer
 );
             
 
@@ -541,6 +743,31 @@ create index songs_albums_id_index on songs (albums_id);
             
 
 
+drop table if exists co_sources;
+            
+
+
+create table co_sources
+(
+    id       serial       constraint co_sources_pk primary key,
+    username varchar(100) null,
+    source   varchar(100) null
+);
+            
+
+
+create index co_sources_username_index on co_sources (username);
+            
+
+drop table if exists table_with_string_field;
+
+create table table_with_string_field
+            (
+                id    serial       constraint table_with_string_field_pk primary key,
+                field varchar(255) not null
+            );
+
+
 drop table if exists table_with_uuid_primary;
             
 
@@ -549,5 +776,18 @@ create table table_with_uuid_primary
 (
     uuid char(36) not null primary key,
     int_field int null
+);
+            
+
+
+drop table if exists stuff;
+            
+
+
+create table stuff
+(
+    stf_id   serial       constraint stuff_pk primary key,
+    stf_name varchar(100) not null,
+    stf_type smallint     not null
 );
             

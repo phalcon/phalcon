@@ -197,6 +197,34 @@ create table co_dialect
             
 
 
+DROP TABLE IF EXISTS `foreign_key_child`;
+            
+
+
+DROP TABLE IF EXISTS `foreign_key_parent`;
+            
+
+
+CREATE TABLE `foreign_key_parent` (
+    `id`        int(10) NOT NULL AUTO_INCREMENT,
+    `name`      varchar(70) NOT NULL,
+    `refer_int` int NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `foreign_key_parent_refer_int` (`refer_int`)
+) ENGINE=InnoDB;
+            
+
+
+CREATE TABLE `foreign_key_child` (
+    `id`        int(10) NOT NULL AUTO_INCREMENT,
+    `name`      varchar(70) NOT NULL,
+    `child_int` int NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `foreign_key_child_child_int` (`child_int`)
+) ENGINE=InnoDB;
+            
+
+
 drop table if exists `fractal_dates`;
             
 
@@ -208,6 +236,32 @@ create table fractal_dates
     `fdatetime`    datetime(2)  null,
     `ftimestamp`   timestamp(2) null
 );
+            
+
+DROP TABLE IF EXISTS `co_invoices_fk`;
+
+DROP TABLE IF EXISTS `co_customers_fk`;
+
+
+CREATE TABLE `co_customers_fk` (
+    `cst_id`   int(10) NOT NULL AUTO_INCREMENT,
+    `cst_name` varchar(100) NULL,
+    PRIMARY KEY (`cst_id`)
+) ENGINE=InnoDB;
+            
+
+
+CREATE TABLE `co_invoices_fk` (
+    `inv_id`     int(10) NOT NULL AUTO_INCREMENT,
+    `inv_cst_id` int(10) NOT NULL,
+    `inv_title`  varchar(100) NULL,
+    PRIMARY KEY (`inv_id`),
+    KEY `co_invoices_fk_inv_cst_id_index` (`inv_cst_id`),
+    CONSTRAINT `co_invoices_fk_cst_fk`
+        FOREIGN KEY (`inv_cst_id`)
+        REFERENCES `co_customers_fk` (`cst_id`)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB;
             
 
 
@@ -298,8 +352,67 @@ drop table if exists `co_orders`;
 CREATE TABLE `co_orders` (
     `ord_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `ord_name` VARCHAR(70) NULL,
+    `ord_status_flag` tinyint(1) NULL,
     PRIMARY KEY (`ord_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+
+
+drop table if exists `co_orders_x_products_mult_comp`;
+            
+
+
+CREATE TABLE  `co_orders_x_products_mult_comp` (
+  `oxp_ord_id` int(10) unsigned NOT NULL,
+  `oxp_ord_status_flag` tinyint(1) NOT NULL,
+  `oxp_prd_id` int(10) unsigned NOT NULL,
+  `oxp_prd_status_flag` tinyint(1) NOT NULL,
+  `oxp_quantity` int(10) unsigned NULL,
+  PRIMARY KEY (`oxp_ord_id`, `oxp_prd_id`, `oxp_ord_status_flag`, `oxp_prd_status_flag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+
+
+drop table if exists `co_orders_x_products_mult`;
+            
+
+
+CREATE TABLE  `co_orders_x_products_mult` (
+  `oxp_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `oxp_ord_id` int(10) unsigned NOT NULL,
+  `oxp_ord_status_flag` tinyint(1) NOT NULL,
+  `oxp_prd_id` int(10) unsigned NOT NULL,
+  `oxp_prd_status_flag` tinyint(1) NOT NULL,
+  `oxp_quantity` int(10) unsigned NULL,
+  PRIMARY KEY (`oxp_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+
+
+drop table if exists `co_orders_x_products_one_comp`;
+            
+
+
+CREATE TABLE `co_orders_x_products_one_comp` (
+  `oxp_ord_id` int(10) unsigned NOT NULL,
+  `oxp_prd_id` int(10) unsigned NOT NULL,
+  `oxp_quantity` int(10) unsigned NULL,
+  PRIMARY KEY (`oxp_ord_id`, `oxp_prd_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+
+
+drop table if exists `co_orders_x_products_one`;
+            
+
+
+CREATE TABLE `co_orders_x_products_one` (
+  `oxp_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `oxp_ord_id` int(10) unsigned NOT NULL,
+  `oxp_prd_id` int(10) unsigned NOT NULL,
+  `oxp_quantity` int(10) unsigned NULL,
+  PRIMARY KEY (`oxp_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
 
 
@@ -380,6 +493,7 @@ drop table if exists `co_products`;
 CREATE TABLE `co_products` (
     `prd_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
     `prd_name` VARCHAR(70) NULL,
+    `prd_status_flag` tinyint(1) NULL,
     PRIMARY KEY (`prd_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
@@ -450,6 +564,14 @@ create table co_sources
 create index co_sources_username_index
     on co_sources (username);
             
+
+drop table if exists `table_with_string_field`;
+
+create table `table_with_string_field`
+            (
+                `id`    int(10) unsigned not null auto_increment primary key,
+                `field` varchar(255) not null
+            ) engine=InnoDB default charset=utf8;
 
 
 drop table if exists `table_with_uuid_primary`;

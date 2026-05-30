@@ -33,7 +33,7 @@ final class UpdateTest extends AbstractDatabaseTestCase
     public function testDmQueryUpdate(): void
     {
         $connection = self::getDataMapperConnection();
-        $invoices   = new InvoicesMigration($connection);
+        $invoices   = new InvoicesMigration(self::getConnection());
 
         /**
          * Create an invoice

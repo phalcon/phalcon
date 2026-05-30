@@ -167,7 +167,7 @@ interface ModelInterface
      *
      * @return T|ModelInterface|Row|null
      */
-    public static function findFirst(mixed $parameters = null): mixed;
+    public static function findFirst(mixed $parameters = null);
 
     /**
      * Fires an event, implicitly calls behaviors and listeners in the events

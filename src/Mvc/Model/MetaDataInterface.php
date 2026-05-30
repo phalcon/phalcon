@@ -216,9 +216,9 @@ interface MetaDataInterface
      * @param ModelInterface $model
      * @param int            $index
      *
-     * @return array|string|null
+     * @return array|string|bool|null
      */
-    public function readMetaDataIndex(ModelInterface $model, int $index): array | string | null;
+    public function readMetaDataIndex(ModelInterface $model, int $index): array | string | bool | null;
 
     /**
      * Resets internal meta-data in order to regenerate it

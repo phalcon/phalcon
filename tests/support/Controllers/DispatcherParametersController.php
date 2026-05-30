@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Support\Controllers;
 
-use Phalcon\Mvc\ControllerInterface;
 use Phalcon\Mvc\Dispatcher;
 
-class DispatcherParametersController implements ControllerInterface
+class DispatcherParametersController
 {
     public function afterExecuteRoute(Dispatcher $dispatcher)
     {

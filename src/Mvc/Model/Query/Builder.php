@@ -109,9 +109,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected bool $forUpdate = false;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected array $group = [];
+    protected $group = [];
 
     /**
      * @var string|null

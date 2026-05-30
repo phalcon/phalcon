@@ -2052,7 +2052,7 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public static function findFirst(
         mixed $parameters = null
-    ): ModelInterface | Row | null {
+    ) {
         if (null === $parameters) {
             $params = [];
         } elseif (is_array($parameters)) {
@@ -3822,7 +3822,7 @@ abstract class Model extends AbstractInjectionAware implements
     protected function belongsTo(
         mixed $fields,
         string $referenceModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): Relation {
         return $this->modelsManager->addBelongsTo(
@@ -5256,7 +5256,7 @@ abstract class Model extends AbstractInjectionAware implements
     protected function hasMany(
         mixed $fields,
         string $referenceModel,
-        string | array $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): Relation {
         return $this->modelsManager->addHasMany(
@@ -5328,10 +5328,10 @@ abstract class Model extends AbstractInjectionAware implements
     protected function hasManyToMany(
         mixed $fields,
         string $intermediateModel,
-        array | string $intermediateFields,
-        array | string $intermediateReferencedFields,
+        mixed $intermediateFields,
+        mixed $intermediateReferencedFields,
         string $referenceModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): Relation {
         return $this->modelsManager->addHasManyToMany(
@@ -5398,7 +5398,7 @@ abstract class Model extends AbstractInjectionAware implements
     protected function hasOne(
         mixed $fields,
         string $referenceModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): Relation {
         return $this->modelsManager->addHasOne(
@@ -5470,10 +5470,10 @@ abstract class Model extends AbstractInjectionAware implements
     protected function hasOneThrough(
         mixed $fields,
         string $intermediateModel,
-        array | string $intermediateFields,
-        array | string $intermediateReferencedFields,
+        mixed $intermediateFields,
+        mixed $intermediateReferencedFields,
         string $referenceModel,
-        string $referencedFields,
+        mixed $referencedFields,
         array $options = []
     ): Relation {
         return $this->modelsManager->addHasOneThrough(

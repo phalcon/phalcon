@@ -32,7 +32,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        (new InvoicesMigration($connection));
+        (new InvoicesMigration(self::getConnection()));
         $connection->beginTransaction();
 
         $this->assertTrue($connection->inTransaction());
@@ -76,7 +76,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        (new InvoicesMigration($connection));
+        (new InvoicesMigration(self::getConnection()));
         $connection->beginTransaction();
 
         $this->assertTrue($connection->inTransaction());

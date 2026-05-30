@@ -32,7 +32,7 @@ final class LastInsertIdTest extends AbstractDatabaseTestCase
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
-        $migration  = new InvoicesMigration($connection);
+        $migration  = new InvoicesMigration(self::getConnection());
         $migration->clear();
 
         $template = 'insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, '

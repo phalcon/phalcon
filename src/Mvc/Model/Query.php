@@ -23,6 +23,53 @@ use Phalcon\Db\ResultInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Mvc\Model\Query\Exceptions\AmbiguousColumn;
+use Phalcon\Mvc\Model\Query\Exceptions\AmbiguousJoinRelation;
+use Phalcon\Mvc\Model\Query\Exceptions\BindParameterNotInPlaceholders;
+use Phalcon\Mvc\Model\Query\Exceptions\BindTypeRequiresArray;
+use Phalcon\Mvc\Model\Query\Exceptions\BindValueRequired;
+use Phalcon\Mvc\Model\Query\Exceptions\ColumnNotInDomain;
+use Phalcon\Mvc\Model\Query\Exceptions\ColumnNotInSelectedModels;
+use Phalcon\Mvc\Model\Query\Exceptions\CorruptedAst;
+use Phalcon\Mvc\Model\Query\Exceptions\CorruptedDeleteAst;
+use Phalcon\Mvc\Model\Query\Exceptions\CorruptedInsertAst;
+use Phalcon\Mvc\Model\Query\Exceptions\CorruptedSelectAst;
+use Phalcon\Mvc\Model\Query\Exceptions\CorruptedUpdateAst;
+use Phalcon\Mvc\Model\Query\Exceptions\DeleteMultipleNotSupported;
+use Phalcon\Mvc\Model\Query\Exceptions\DuplicateAlias;
+use Phalcon\Mvc\Model\Query\Exceptions\EmptyArrayPlaceholderValue;
+use Phalcon\Mvc\Model\Query\Exceptions\InsertColumnCountMismatch;
+use Phalcon\Mvc\Model\Query\Exceptions\InvalidCachedResultset;
+use Phalcon\Mvc\Model\Query\Exceptions\InvalidColumnDefinition;
+use Phalcon\Mvc\Model\Query\Exceptions\InvalidInjectedManager;
+use Phalcon\Mvc\Model\Query\Exceptions\InvalidInjectedMetadata;
+use Phalcon\Mvc\Model\Query\Exceptions\InvalidQueryCacheService;
+use Phalcon\Mvc\Model\Query\Exceptions\InvalidResultsetClass;
+use Phalcon\Mvc\Model\Query\Exceptions\JoinAliasAlreadyUsed;
+use Phalcon\Mvc\Model\Query\Exceptions\JoinFieldCountMismatch;
+use Phalcon\Mvc\Model\Query\Exceptions\MissingCacheKey;
+use Phalcon\Mvc\Model\Query\Exceptions\MissingMetaData;
+use Phalcon\Mvc\Model\Query\Exceptions\MissingModelAttribute;
+use Phalcon\Mvc\Model\Query\Exceptions\MissingModelsManager;
+use Phalcon\Mvc\Model\Query\Exceptions\MixedDatabaseSystems;
+use Phalcon\Mvc\Model\Query\Exceptions\ModelsListNotLoaded;
+use Phalcon\Mvc\Model\Query\Exceptions\ModelSourceNotFound;
+use Phalcon\Mvc\Model\Query\Exceptions\MultipleSqlStatementsNotSupported;
+use Phalcon\Mvc\Model\Query\Exceptions\NoModelForAlias;
+use Phalcon\Mvc\Model\Query\Exceptions\PhqlColumnNotInMap;
+use Phalcon\Mvc\Model\Query\Exceptions\ReadConnectionMissing;
+use Phalcon\Mvc\Model\Query\Exceptions\RelationshipNotFound;
+use Phalcon\Mvc\Model\Query\Exceptions\ResultsetClassNotFound;
+use Phalcon\Mvc\Model\Query\Exceptions\ResultsetNonCacheable;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownBindType;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownColumnType;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownJoinType;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownModelOrAlias;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlExpression;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlExpressionType;
+use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlStatement;
+use Phalcon\Mvc\Model\Query\Exceptions\UpdateMultipleNotSupported;
+use Phalcon\Mvc\Model\Query\Exceptions\WriteConnectionMissing;
 use Phalcon\Mvc\Model\Query\Status;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Complex;
@@ -40,7 +87,6 @@ use function get_class;
 use function is_array;
 use function is_int;
 use function is_object;
-use function is_scalar;
 use function is_subclass_of;
 use function lcfirst;
 use function method_exists;
@@ -125,9 +171,9 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected CacheInterface | null $cache = null;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected array $cacheOptions = [];
+    protected array | null $cacheOptions = null;
 
     /**
      * @var bool
@@ -293,18 +339,16 @@ class Query implements QueryInterface, InjectionAwareInterface
     {
         $key          = null;
         $cache        = null;
-        $lifetime     = 3600;
+        $lifetime     = null;
         $uniqueRow    = $this->uniqueRow;
         $cacheOptions = $this->cacheOptions;
 
-        if (!empty($cacheOptions)) {
+        if (null !== $cacheOptions) {
             /**
              * The user must set a cache key
              */
             if (!isset($cacheOptions["key"])) {
-                throw new Exception(
-                    "A cache key must be provided to identify the cached resultset in the cache backend"
-                );
+                throw new MissingCacheKey();
             }
 
             $key          = $cacheOptions["key"];
@@ -318,10 +362,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             }
 
             if (!$cache instanceof CacheInterface) {
-                throw new Exception(
-                    "Cache service must be an object implementing " .
-                    "Phalcon\Cache\CacheInterface"
-                );
+                throw new InvalidQueryCacheService();
             }
 
             /**
@@ -330,15 +371,16 @@ class Query implements QueryInterface, InjectionAwareInterface
              */
             $adapter       = $cache->getAdapter();
             $cacheLifetime = $adapter->getLifetime();
-            $lifetime      = (int)($cacheOptions["lifetime"] ?? $cacheLifetime);
+            $lifetime      = $cacheOptions["lifetime"] ?? $cacheLifetime;
 
-            $result = $cache->get($key);
+            $result = false;
+            if ($cache->has($key)) {
+                $result = $cache->get($key);
+            }
 
             if (!empty($result)) {
                 if (!is_object($result)) {
-                    throw new Exception(
-                        "Cache didn't return a valid resultset"
-                    );
+                    throw new InvalidCachedResultset();
                 }
 
                 $result->setIsFresh(false);
@@ -404,20 +446,18 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $mergedParams,
                 $mergedTypes
             ),
-            default             => throw new Exception("Unknown statement " . $type),
+            default             => throw new UnknownPhqlStatement((string) $type),
         };
 
         /**
          * We store the resultset in the cache if any
          */
-        if (!empty($cacheOptions)) {
+        if (null !== $cacheOptions) {
             /**
              * Only PHQL SELECTs can be cached
              */
             if ($type != Opcode::SELECT->value) {
-                throw new Exception(
-                    "Only PHQL statements that return resultsets can be cached"
-                );
+                throw new ResultsetNonCacheable();
             }
 
             $cache->set($key, $result, $lifetime);
@@ -472,7 +512,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     public function getCacheOptions(): array
     {
-        return $this->cacheOptions;
+        return $this->cacheOptions ?? [];
     }
 
     /**
@@ -541,9 +581,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             );
         }
 
-        throw new Exception(
-            "This type of statement generates multiple SQL statements"
-        );
+        throw new MultipleSqlStatementsNotSupported();
     }
 
     /**
@@ -641,15 +679,13 @@ class Query implements QueryInterface, InjectionAwareInterface
                     Opcode::INSERT->value => $this->prepareInsert(),
                     Opcode::UPDATE->value => $this->prepareUpdate(),
                     Opcode::DELETE->value => $this->prepareDelete(),
-                    default             => throw new Exception(
-                        "Unknown statement " . $type . ", when preparing: " . $phql
-                    ),
+                    default             => throw new UnknownPhqlStatement((string) $type),
                 };
             }
         }
 
         if (!is_array($irPhql)) {
-            throw new Exception("Corrupted AST");
+            throw new CorruptedAst();
         }
 
         /**
@@ -724,7 +760,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         if (!is_object($manager)) {
-            throw new Exception("Injected service 'modelsManager' is invalid");
+            throw new InvalidInjectedManager();
         }
 
         if ($container instanceof DiInterface) {
@@ -734,7 +770,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         if (!is_object($metaData)) {
-            throw new Exception("Injected service 'modelsMetaData' is invalid");
+            throw new InvalidInjectedMetadata();
         }
 
         $this->manager  = $manager;
@@ -833,9 +869,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $models = $intermediate["models"];
 
         if (isset($models[1])) {
-            throw new Exception(
-                "Delete from several models at the same time is still not supported"
-            );
+            throw new DeleteMultipleNotSupported();
         }
 
         $modelName = $models[0];
@@ -971,9 +1005,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          * in the model
          */
         if (count($fields) != count($values)) {
-            throw new Exception(
-                "The column count does not match the values count"
-            );
+            throw new InsertColumnCountMismatch();
         }
 
         /**
@@ -1006,11 +1038,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     );
 
                     if (!isset($bindParams[$wildcard])) {
-                        throw new Exception(
-                            "Bound parameter '"
-                            . $wildcard
-                            . "' cannot be replaced because it isn't in the placeholders list"
-                        );
+                        throw new BindParameterNotInPlaceholders($wildcard);
                     }
 
                     $insertValue = $bindParams[$wildcard];
@@ -1032,9 +1060,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              */
             if ($automaticFields && is_array($columnMap)) {
                 if (!isset($columnMap[$fieldName])) {
-                    throw new Exception(
-                        "Column '" . $fieldName . "' isn't part of the column map"
-                    );
+                    throw new PhqlColumnNotInMap($fieldName);
                 }
 
                 $attributeName = $columnMap[$fieldName];
@@ -1107,9 +1133,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $connectionTypes[$connection->getType()] = true;
 
                 if (count($connectionTypes) == 2) {
-                    throw new Exception(
-                        "Cannot use models of different database systems in the same query"
-                    );
+                    throw new MixedDatabaseSystems();
                 }
             }
         }
@@ -1126,7 +1150,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         foreach ($columns as $column) {
             if (!is_array($column)) {
-                throw new Exception("Invalid column definition");
+                throw new InvalidColumnDefinition();
             }
 
             if ($column["type"] === "scalar") {
@@ -1300,6 +1324,23 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         /**
+         * Embed RawValue bind params directly in the SQL instead of passing
+         * them to PDO, which would quote them as strings.
+         */
+        foreach ($processed as $wildcard => $value) {
+            if ($value instanceof RawValue) {
+                if (substr((string) $wildcard, 0, 1) === ":") {
+                    $sqlSelect = str_replace((string) $wildcard, (string) $value, $sqlSelect);
+                } else {
+                    $sqlSelect = str_replace(":" . $wildcard, (string) $value, $sqlSelect);
+                }
+
+                unset($processed[$wildcard]);
+                unset($processedTypes[$wildcard]);
+            }
+        }
+
+        /**
          * Return the SQL to be executed instead of execute it
          */
         if ($simulate) {
@@ -1396,17 +1437,11 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                 if ($resultsetClassName) {
                     if (!class_exists($resultsetClassName)) {
-                        throw new Exception(
-                            "Resultset class \"" . $resultsetClassName . "\" not found"
-                        );
+                        throw new ResultsetClassNotFound($resultsetClassName);
                     }
 
                     if (!is_subclass_of($resultsetClassName, "Phalcon\\Mvc\\Model\\ResultsetInterface")) {
-                        throw new Exception(
-                            "Resultset class \""
-                            . $resultsetClassName
-                            . "\" must be an implementation of Phalcon\\Mvc\\Model\\ResultsetInterface"
-                        );
+                        throw new InvalidResultsetClass($resultsetClassName);
                     }
 
                     return new $resultsetClassName(
@@ -1455,9 +1490,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $models = $intermediate["models"];
 
         if (isset($models[1])) {
-            throw new Exception(
-                "Updating several models at the same time is still not supported"
-            );
+            throw new UpdateMultipleNotSupported();
         }
 
         $modelName = $models[0];
@@ -1517,11 +1550,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     );
 
                     if (!isset($bindParams[$wildcard])) {
-                        throw new Exception(
-                            "Bound parameter '"
-                            . $wildcard
-                            . "' cannot be replaced because it's not in the placeholders list"
-                        );
+                        throw new BindParameterNotInPlaceholders($wildcard);
                     }
 
                     $updateValue = $bindParams[$wildcard];
@@ -1649,27 +1678,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                 throw $ex;
             }
-        }
-
-        //for record in iterator(records) {
-        while ($records->valid()) {
-            $record = $records->current();
-
-            $record->assign($updateValues);
-
-            /**
-             * We apply the executed values to every record found
-             */
-            if (!$record->update()) {
-                /**
-                 * Rollback the transaction on failure
-                 */
-                $connection->rollback();
-
-                return new Status(false, $record);
-            }
-
-            $records->next();
         }
 
         /**
@@ -2085,23 +2093,17 @@ class Query implements QueryInterface, InjectionAwareInterface
                             case "array-str":
                             case "array-int":
                                 if (!isset($this->bindParams[$name])) {
-                                    throw new Exception(
-                                        "Bind value is required for array type placeholder: " . $name
-                                    );
+                                    throw new BindValueRequired($name);
                                 }
 
                                 $bind = $this->bindParams[$name];
 
                                 if (!is_array($bind)) {
-                                    throw new Exception(
-                                        "Bind type requires an array in placeholder: " . $name
-                                    );
+                                    throw new BindTypeRequiresArray($name);
                                 }
 
                                 if (empty($bind)) {
-                                    throw new Exception(
-                                        "At least one value must be bound in placeholder: " . $name
-                                    );
+                                    throw new EmptyArrayPlaceholderValue($name);
                                 }
 
                                 $exprReturn = [
@@ -2114,9 +2116,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                                 break;
 
                             default:
-                                throw new Exception(
-                                    "Unknown bind type: " . $bindType
-                                );
+                                throw new UnknownBindType($bindType);
                         }
                     } else {
                         $exprReturn = [
@@ -2243,7 +2243,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 case Opcode::BETWEEN_NOT->value:
                     $exprReturn = [
                         "type"  => "binary-op",
-                        "op"    => "BETWEEN NOT",
+                        "op"    => "NOT BETWEEN",
                         "left"  => $left,
                         "right" => $right,
                     ];
@@ -2315,7 +2315,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     break;
 
                 default:
-                    throw new Exception("Unknown expression type " . $exprType);
+                    throw new UnknownPhqlExpressionType((string) $exprType);
             }
 
             return $exprReturn;
@@ -2344,7 +2344,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             ];
         }
 
-        throw new Exception("Unknown expression");
+        throw new UnknownPhqlExpression();
     }
 
     /**
@@ -2459,7 +2459,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             }
         }
 
-        throw new Exception("Corrupted SELECT AST");
+        throw new CorruptedSelectAst();
     }
 
     /**
@@ -2473,7 +2473,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     final protected function getJoinType(array $join): string
     {
         if (!isset($join["type"])) {
-            throw new Exception("Corrupted SELECT AST");
+            throw new CorruptedSelectAst();
         }
 
         $type = $join["type"];
@@ -2494,9 +2494,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 return "FULL OUTER";
         }
 
-        throw new Exception(
-            "Unknown join type " . $type . ", when preparing: " . $this->phql
-        );
+        throw new UnknownJoinType((string) $type, (string) $this->phql);
     }
 
     /**
@@ -2570,12 +2568,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Check if alias is unique
                  */
                 if (isset($joinModels[$alias])) {
-                    throw new Exception(
-                        "Cannot use '"
-                        . $alias
-                        . "' as join alias because it was already used, when preparing: "
-                        . $this->phql
-                    );
+                    throw new JoinAliasAlreadyUsed($alias, (string) $this->phql);
                 }
 
                 /**
@@ -2632,12 +2625,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Check if alias is unique
                  */
                 if (isset($joinModels[$realModelName])) {
-                    throw new Exception(
-                        "Cannot use '"
-                        . $realModelName
-                        . "' as join alias because it was already used, when preparing: "
-                        . $this->phql
-                    );
+                    throw new JoinAliasAlreadyUsed($realModelName, (string) $this->phql);
                 }
 
                 /**
@@ -2782,14 +2770,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                              * More than one relation must throw an exception
                              */
                             if (count($relations) != 1) {
-                                throw new Exception(
-                                    "There is more than one relation between models '"
-                                    . $fromModelName
-                                    . "' and '"
-                                    . $joinModel
-                                    . "', the join must be done using an alias, when preparing: "
-                                    . $this->phql
-                                );
+                                throw new AmbiguousJoinRelation($fromModelName, $joinModel, (string) $this->phql);
                             }
 
                             /**
@@ -2976,14 +2957,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         if (is_array($fields)) {
             foreach ($fields as $field => $position) {
                 if (!isset($referencedFields[$position])) {
-                    throw new Exception(
-                        "The number of fields must be equal to the number of referenced fields in join "
-                        . $modelAlias
-                        . "-"
-                        . $joinAlias
-                        . ", when preparing: "
-                        . $this->phql
-                    );
+                    throw new JoinFieldCountMismatch($modelAlias, $joinAlias, (string) $this->phql);
                 }
 
                 /**
@@ -3169,12 +3143,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * The column has a domain, we need to check if it's an alias
              */
             if (!isset($sqlAliases[$columnDomain])) {
-                throw new Exception(
-                    "Unknown model or alias '"
-                    . $columnDomain
-                    . "' (11), when preparing: "
-                    . $this->phql
-                );
+                throw new UnknownModelOrAlias($columnDomain, "11", (string) $this->phql);
             }
 
             $source = $sqlAliases[$columnDomain];
@@ -3194,12 +3163,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * map
                  */
                 if (!isset($sqlAliasesModelsInstances[$columnDomain])) {
-                    throw new Exception(
-                        "There is no model related to model or alias '"
-                        . $columnDomain
-                        . "', when executing: "
-                        . $this->phql
-                    );
+                    throw new NoModelForAlias($columnDomain, (string) $this->phql);
                 }
 
                 $model     = $sqlAliasesModelsInstances[$columnDomain];
@@ -3208,13 +3172,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             if (is_array($columnMap)) {
                 if (!isset($columnMap[$columnName])) {
-                    throw new Exception(
-                        "Column '"
-                        . $columnName
-                        . "' does not belong to the model or alias '"
-                        . $columnDomain . "', when executing: "
-                        . $this->phql
-                    );
+                    throw new ColumnNotInDomain($columnName, $columnDomain, (string) $this->phql);
                 }
 
                 $realColumnName = $columnMap[$columnName];
@@ -3237,12 +3195,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     $number++;
 
                     if ($number > 1) {
-                        throw new Exception(
-                            "The column '"
-                            . $columnName
-                            . "' is ambiguous, when preparing: "
-                            . $this->phql
-                        );
+                        throw new AmbiguousColumn($columnName, (string) $this->phql);
                     }
 
                     $hasModel = $model;
@@ -3254,12 +3207,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * the selected models
              */
             if ($hasModel === false) {
-                throw new Exception(
-                    "Column '"
-                    . $columnName
-                    . "' does not belong to any of the selected models (1), when preparing: "
-                    . $this->phql
-                );
+                throw new ColumnNotInSelectedModels($columnName, "1", (string) $this->phql);
             }
 
             /**
@@ -3268,9 +3216,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $models = $this->models;
 
             if (!is_array($models)) {
-                throw new Exception(
-                    "The models list was not loaded correctly"
-                );
+                throw new ModelsListNotLoaded();
             }
 
             /**
@@ -3279,11 +3225,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $className = get_class($hasModel);
 
             if (!isset($models[$className])) {
-                throw new Exception(
-                    "Can't obtain model's source from models list: '"
-                    . $className . "', when preparing: "
-                    . $this->phql
-                );
+                throw new ModelSourceNotFound($className, (string) $this->phql);
             }
 
             $source = $models[$className];
@@ -3301,12 +3243,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * The real column name is in the column map
                  */
                 if (!isset($columnMap[$columnName])) {
-                    throw new Exception(
-                        "Column '"
-                        . $columnName
-                        . "' does not belong to any of the selected models (3), when preparing: "
-                        . $this->phql
-                    );
+                    throw new ColumnNotInSelectedModels($columnName, "3", (string) $this->phql);
                 }
                 $realColumnName = $columnMap[$columnName];
             } else {
@@ -3359,9 +3296,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             );
 
             if (!is_object($connection)) {
-                throw new Exception(
-                    "selectReadConnection did not return a connection"
-                );
+                throw new ReadConnectionMissing();
             }
 
             return $connection;
@@ -3442,7 +3377,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     final protected function getSelectColumn(array $column): array
     {
         if (!isset($column["type"])) {
-            throw new Exception("Corrupted SELECT AST");
+            throw new CorruptedSelectAst();
         }
 
         $columnType = $column["type"];
@@ -3482,7 +3417,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         if (!isset($column["column"])) {
-            throw new Exception("Corrupted SELECT AST");
+            throw new CorruptedSelectAst();
         }
 
         /**
@@ -3497,12 +3432,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $columnDomain = $column["column"];
 
             if (!isset($sqlAliases[$columnDomain])) {
-                throw new Exception(
-                    "Unknown model or alias '"
-                    . $columnDomain
-                    . "' (2), when preparing: "
-                    . $this->phql
-                );
+                throw new UnknownModelOrAlias($columnDomain, "2", (string) $this->phql);
             }
 
             $source = $sqlAliases[$columnDomain];
@@ -3585,7 +3515,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             return $sqlColumns;
         }
 
-        throw new Exception("Unknown type of column " . $columnType);
+        throw new UnknownColumnType((string) $columnType);
     }
 
     /**
@@ -3656,13 +3586,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Get the referenced field in the same position
                  */
                 if (!isset($referencedFields[$position])) {
-                    throw new Exception(
-                        "The number of fields must be equal to the number of referenced fields in join "
-                        . $modelAlias
-                        . "-"
-                        . $joinAlias . ", when preparing: "
-                        . $this->phql
-                    );
+                    throw new JoinFieldCountMismatch($modelAlias, $joinAlias, (string) $this->phql);
                 }
 
                 $referencedField = $referencedFields[$position];
@@ -3717,7 +3641,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         array $qualifiedName
     ): array | string {
         if (!isset($qualifiedName["name"])) {
-            throw new Exception("Corrupted SELECT AST");
+            throw new CorruptedSelectAst();
         }
 
         $modelName = $qualifiedName["name"];
@@ -3765,9 +3689,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             );
 
             if (!is_object($connection)) {
-                throw new Exception(
-                    "selectWriteConnection did not return a connection"
-                );
+                throw new WriteConnectionMissing();
             }
 
             return $connection;
@@ -3788,13 +3710,13 @@ class Query implements QueryInterface, InjectionAwareInterface
         $ast = $this->ast;
 
         if (!isset($ast["delete"])) {
-            throw new Exception("Corrupted DELETE AST");
+            throw new CorruptedDeleteAst();
         }
 
         $delete = $ast["delete"];
 
         if (!isset($delete["tables"])) {
-            throw new Exception("Corrupted DELETE AST");
+            throw new CorruptedDeleteAst();
         }
 
         $tables = $delete["tables"];
@@ -3892,14 +3814,14 @@ class Query implements QueryInterface, InjectionAwareInterface
             !isset($ast["qualifiedName"]) ||
             !isset($ast["values"])
         ) {
-            throw new Exception("Corrupted INSERT AST");
+            throw new CorruptedInsertAst();
         }
 
         $qualifiedName = $ast["qualifiedName"];
 
         // Check if the related model exists
         if (!isset($qualifiedName["name"])) {
-            throw new Exception("Corrupted INSERT AST");
+            throw new CorruptedInsertAst();
         }
 
         $manager   = $this->manager;
@@ -3940,14 +3862,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                 // Check that inserted fields are part of the model
                 if (!$metaData->hasAttribute($model, $name)) {
-                    throw new Exception(
-                        "The model '"
-                        . $modelName
-                        . "' does not have the attribute '"
-                        . $name
-                        . "', when preparing: "
-                        . $this->phql
-                    );
+                    throw new MissingModelAttribute($modelName, $name, (string) $this->phql);
                 }
 
                 // Add the file to the insert list
@@ -3985,7 +3900,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             !isset($select["tables"]) ||
             !isset($select["columns"])
         ) {
-            throw new Exception("Corrupted SELECT AST");
+            throw new CorruptedSelectAst();
         }
 
         $tables  = $select["tables"];
@@ -4053,15 +3968,11 @@ class Query implements QueryInterface, InjectionAwareInterface
         $metaData = $this->metaData;
 
         if (!is_object($manager)) {
-            throw new Exception(
-                "A models-manager is required to execute the query"
-            );
+            throw new MissingModelsManager();
         }
 
         if (!is_object($metaData)) {
-            throw new Exception(
-                "A meta-data is required to execute the query"
-            );
+            throw new MissingMetaData();
         }
 
         // Process selected models
@@ -4094,11 +4005,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $alias = $selectedModel["alias"];
                 // Check if the alias was used before
                 if (isset($sqlAliases[$alias])) {
-                    throw new Exception(
-                        "Alias '"
-                        . $alias . "' is used more than once, when preparing: "
-                        . $this->phql
-                    );
+                    throw new DuplicateAlias($alias, (string) $this->phql);
                 }
 
                 $sqlAliases[$alias]                = $alias;
@@ -4155,14 +4062,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                         );
 
                         if (!is_object($relation)) {
-                            throw new Exception(
-                                "Can't find a relationship between '"
-                                . $modelName
-                                . "' and '"
-                                . $relationModel
-                                . "' when preparing: "
-                                . $this->phql
-                            );
+                            throw new RelationshipNotFound($modelName, $relationModel, (string) $this->phql);
                         }
 
                         $bestAlias     = $relation->getOption("alias");
@@ -4215,15 +4115,34 @@ class Query implements QueryInterface, InjectionAwareInterface
             $tempSqlModelsAliases          = $this->sqlModelsAliases;
             $tempSqlAliasesModelsInstances = $this->sqlAliasesModelsInstances;
 
-            $this->models                    = array_merge($this->models, $models);
-            $this->modelsInstances           = array_merge($this->modelsInstances, $modelsInstances);
-            $this->sqlAliases                = array_merge($this->sqlAliases, $sqlAliases);
-            $this->sqlAliasesModels          = array_merge($this->sqlAliasesModels, $sqlAliasesModels);
-            $this->sqlModelsAliases          = array_merge($this->sqlModelsAliases, $sqlModelsAliases);
-            $this->sqlAliasesModelsInstances = array_merge(
-                $this->sqlAliasesModelsInstances,
-                $sqlAliasesModelsInstances
-            );
+            /**
+             * In-place updates instead of array_merge: preserves the
+             * "right-side wins, original order kept" semantics that
+             * union (+) cannot give, with no fresh array allocation.
+             */
+            foreach ($models as $mergeKey => $mergeValue) {
+                $this->models[$mergeKey] = $mergeValue;
+            }
+
+            foreach ($modelsInstances as $mergeKey => $mergeValue) {
+                $this->modelsInstances[$mergeKey] = $mergeValue;
+            }
+
+            foreach ($sqlAliases as $mergeKey => $mergeValue) {
+                $this->sqlAliases[$mergeKey] = $mergeValue;
+            }
+
+            foreach ($sqlAliasesModels as $mergeKey => $mergeValue) {
+                $this->sqlAliasesModels[$mergeKey] = $mergeValue;
+            }
+
+            foreach ($sqlModelsAliases as $mergeKey => $mergeValue) {
+                $this->sqlModelsAliases[$mergeKey] = $mergeValue;
+            }
+
+            foreach ($sqlAliasesModelsInstances as $mergeKey => $mergeValue) {
+                $this->sqlAliasesModelsInstances[$mergeKey] = $mergeValue;
+            }
         }
 
         $joins = $select["joins"] ?? [];
@@ -4275,7 +4194,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                         $alias              = $sqlColumn["balias"];
                         $sqlColumns[$alias] = $sqlColumn;
                     } else {
-                        if (is_scalar($sqlColumn["type"])) {
+                        if ($sqlColumn["type"] === "scalar") {
                             $sqlColumns["_" . $position] = $sqlColumn;
                         } else {
                             $sqlColumns[] = $sqlColumn;
@@ -4360,7 +4279,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $ast = $this->ast;
 
         if (!isset($ast["update"])) {
-            throw new Exception("Corrupted UPDATE AST");
+            throw new CorruptedUpdateAst();
         }
 
         $update = $ast["update"];
@@ -4368,7 +4287,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             !isset($update["tables"]) ||
             !isset($update["values"])
         ) {
-            throw new Exception("Corrupted UPDATE AST");
+            throw new CorruptedUpdateAst();
         }
 
         $tables = $update["tables"];
