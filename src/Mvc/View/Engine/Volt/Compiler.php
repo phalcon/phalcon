@@ -17,6 +17,26 @@ use Closure;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Mvc\View\Engine\Volt\Exception;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\CannotOpenCompiledFile;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatement;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatementWithData;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidCompilationPrefix;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidExtension;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidOptionType;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidPathClosureReturn;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidPathType;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidStatement;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidUserFilterDefinition;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidUserFunctionDefinition;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroAlreadyDefined;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\TemplateFileNotFound;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\TemplateFileNotOpenable;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\TemplatePathCollision;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltExpression;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltFilter;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltFilterType;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltStatement;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
@@ -32,7 +52,6 @@ use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function filemtime;
-use function hash;
 use function implode;
 use function is_array;
 use function is_bool;
@@ -40,9 +59,11 @@ use function is_object;
 use function is_string;
 use function lcfirst;
 use function method_exists;
+use function ord;
 use function preg_replace;
 use function realpath;
 use function serialize;
+use function sprintf;
 use function strlen;
 use function unserialize;
 
@@ -180,7 +201,7 @@ class Compiler implements InjectionAwareInterface
     public function addExtension(mixed $extension): static
     {
         if (!is_object($extension)) {
-            throw new Exception("The extension is not valid");
+            throw new InvalidExtension();
         }
 
         /**
@@ -262,19 +283,6 @@ class Compiler implements InjectionAwareInterface
             }
         } else {
             $leftCode = $this->expression($left);
-//            $leftType = $left["type"];
-//
-//            /**
-//             * @todo What?
-//             */
-//            if (
-//                $leftType != Opcode::DOT->value &&
-//                $leftType != Opcode::FCALL->value
-//            ) {
-//                $exprCode .= $leftCode;
-//            } else {
-//                $exprCode .= $leftCode;
-//            }
             $exprCode .= $leftCode;
         }
 
@@ -329,7 +337,7 @@ class Compiler implements InjectionAwareInterface
          */
         $compileAlways = $options["always"] ?? false;
         if (!is_bool($compileAlways)) {
-            throw new Exception("'always' must be a bool value");
+            throw new InvalidOptionType("always", "bool value");
         }
 
         /**
@@ -337,7 +345,7 @@ class Compiler implements InjectionAwareInterface
          */
         $prefix = $options["prefix"] ?? '';
         if (!is_string($prefix)) {
-            throw new Exception("'prefix' must be a string");
+            throw new InvalidOptionType("prefix", "string");
         }
 
         /**
@@ -351,7 +359,7 @@ class Compiler implements InjectionAwareInterface
          */
         $compiledSeparator = $options["separator"] ?? '%%';
         if (!is_string($compiledSeparator)) {
-            throw new Exception("'separator' must be a string");
+            throw new InvalidOptionType("separator", "string");
         }
 
         /**
@@ -359,7 +367,7 @@ class Compiler implements InjectionAwareInterface
          */
         $compiledExtension = $options["extension"] ?? '.php';
         if (!is_string($compiledExtension)) {
-            throw new Exception("'extension' must be a string");
+            throw new InvalidOptionType("extension", "string");
         }
 
         /**
@@ -417,14 +425,10 @@ class Compiler implements InjectionAwareInterface
              * The closure must return a valid path
              */
             if (!is_string($compiledTemplatePath)) {
-                throw new Exception(
-                    "'path' closure didn't return a valid string"
-                );
+                throw new InvalidPathClosureReturn();
             }
         } else {
-            throw new Exception(
-                "'path' must be a string or a closure"
-            );
+            throw new InvalidPathType();
         }
 
         /**
@@ -446,7 +450,7 @@ class Compiler implements InjectionAwareInterface
                  * Compare modification timestamps to check if the file
                  * needs to be recompiled
                  */
-                if (filemtime($templatePath) !== filemtime($compiledTemplatePath)) {
+                if (filemtime($templatePath) >= filemtime($compiledTemplatePath)) {
                     $compilation = $this->compileFile(
                         $templatePath,
                         $compiledTemplatePath,
@@ -461,11 +465,7 @@ class Compiler implements InjectionAwareInterface
                         $blocksCode = file_get_contents($compiledTemplatePath);
 
                         if ($blocksCode === false) {
-                            throw new Exception(
-                                "Extends compilation file "
-                                . $compiledTemplatePath
-                                . " could not be opened"
-                            );
+                            throw new CannotOpenCompiledFile($compiledTemplatePath);
                         }
 
                         /**
@@ -501,7 +501,7 @@ class Compiler implements InjectionAwareInterface
          * A valid option is required
          */
         if (!isset($statement["enable"])) {
-            throw new Exception("Corrupted statement");
+            throw new CorruptedStatement();
         }
 
         /**
@@ -557,7 +557,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -582,7 +582,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -607,7 +607,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -659,7 +659,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -693,16 +693,14 @@ class Compiler implements InjectionAwareInterface
         bool $extendsMode = false
     ): array | string {
         if ($path == $compiledPath) {
-            throw new Exception(
-                "Template path and compilation template path cannot be the same"
-            );
+            throw new TemplatePathCollision();
         }
 
         /**
          * Check if the template does exist
          */
         if (!file_exists($path)) {
-            throw new Exception("Template file " . $path . " does not exist");
+            throw new TemplateFileNotFound($path);
         }
 
         /**
@@ -712,9 +710,7 @@ class Compiler implements InjectionAwareInterface
         $viewCode = file_get_contents($path);
 
         if ($viewCode === false) {
-            throw new Exception(
-                "Template file " . $path . " could not be opened"
-            );
+            throw new TemplateFileNotOpenable($path);
         }
 
         $this->currentPath = $path;
@@ -734,7 +730,7 @@ class Compiler implements InjectionAwareInterface
          * directly, this respect the open_basedir directive
          */
         if (file_put_contents($compiledPath, $finalCompilation) === false) {
-            throw new Exception("Volt directory can't be written");
+            throw new VoltDirectoryNotWritable();
         }
 
         return $compilation;
@@ -776,7 +772,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupted statement");
+            throw new CorruptedStatement();
         }
 
         $this->foreachLevel++;
@@ -944,7 +940,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -988,7 +984,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["path"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $pathExpr = $statement["path"];
@@ -1065,7 +1061,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["name"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $name = $statement["name"];
@@ -1074,7 +1070,7 @@ class Compiler implements InjectionAwareInterface
          * Check if the macro is already defined
          */
         if (isset($this->macros[$name])) {
-            throw new Exception("Macro '" . $name . "' is already defined");
+            throw new MacroAlreadyDefined($name);
         }
 
         /**
@@ -1156,7 +1152,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -1231,7 +1227,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["assignments"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $assignments = $statement["assignments"];
@@ -1303,7 +1299,7 @@ class Compiler implements InjectionAwareInterface
          * A valid expression is required
          */
         if (!isset($statement["expr"])) {
-            throw new Exception("Corrupt statement", $statement);
+            throw new CorruptedStatementWithData($statement);
         }
 
         $expr = $statement["expr"];
@@ -1730,14 +1726,7 @@ class Compiler implements InjectionAwareInterface
                     break;
 
                 default:
-                    throw new Exception(
-                        "Unknown expression "
-                        . $type
-                        . " in "
-                        . $expr["file"]
-                        . " on line "
-                        . $expr["line"]
-                    );
+                    throw new UnknownVoltExpression((int) $type, (string) $expr["file"], (int) $expr["line"]);
             }
 
             break;
@@ -1858,14 +1847,7 @@ class Compiler implements InjectionAwareInterface
                     );
                 }
 
-                throw new Exception(
-                    "Invalid definition for user function '"
-                    . $name
-                    . "' in "
-                    . $expr["file"]
-                    . " on line "
-                    . $expr["line"]
-                );
+                throw new InvalidUserFunctionDefinition((string) $name, (string) $expr["file"], (int) $expr["line"]);
             }
 
             /**
@@ -2022,10 +2004,6 @@ class Compiler implements InjectionAwareInterface
                 return "(new Phalcon\\Support\\Version)->getId()";
             }
 
-            if ($name == "preload") {
-                return '$this->preload(' . $arguments . ")";
-            }
-
             /**
              * Read PHP constants in templates
              */
@@ -2144,7 +2122,7 @@ class Compiler implements InjectionAwareInterface
         }
 
         if (!is_string($this->prefix)) {
-            throw new Exception("The unique compilation prefix is invalid");
+            throw new InvalidCompilationPrefix();
         }
 
         return $this->prefix;
@@ -2247,7 +2225,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return $this
      */
-    public function setOption(string $option, mixed $value): self
+    public function setOption(string $option, mixed $value): static
     {
         $this->options[$option] = $value;
 
@@ -2261,7 +2239,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return $this
      */
-    public function setOptions(array $options): self
+    public function setOptions(array $options): static
     {
         $this->options = $options;
 
@@ -2275,7 +2253,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @return $this
      */
-    public function setUniquePrefix(string $prefix): self
+    public function setUniquePrefix(string $prefix): static
     {
         $this->prefix = $prefix;
 
@@ -2304,13 +2282,13 @@ class Compiler implements InjectionAwareInterface
              */
             $autoescape = $this->options["autoescape"];
             if (!is_bool($autoescape)) {
-                throw new Exception("'autoescape' must be bool");
+                throw new InvalidOptionType("autoescape", "bool");
             }
 
             $this->autoescape = $autoescape;
         }
 
-        $intermediate = (new Parser())->parse($viewCode, $this->currentPath ?? 'eval code');
+        $intermediate = $this->parser->parse($viewCode, $this->currentPath ?? 'eval code');
         $compilation  = $this->statementList($intermediate, $extendsMode);
 
         /**
@@ -2407,11 +2385,15 @@ class Compiler implements InjectionAwareInterface
             $viewsDirs = $this->view->getViewsDir();
 
             if (is_array($viewsDirs)) {
+                $viewsDir = '';
+
                 foreach ($viewsDirs as $viewsDir) {
                     if (file_exists($viewsDir . $path)) {
                         return $viewsDir . $path;
                     }
                 }
+
+                return $viewsDir . $path;
             }
 
             return $viewsDirs . $path;
@@ -2443,12 +2425,7 @@ class Compiler implements InjectionAwareInterface
                 /**
                  * Unknown filter throw an exception
                  */
-                throw new Exception(
-                    "Unknown filter type in "
-                    . $filter["file"]
-                    . " on line "
-                    . $filter["line"]
-                );
+                throw new UnknownVoltFilterType((string) $filter["file"], (int) $filter["line"]);
             }
 
             $functionName = $filter["name"];
@@ -2536,12 +2513,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * Invalid filter definition throw an exception
              */
-            throw new Exception(
-                "Invalid definition for user filter '"
-                . $name . "' in "
-                . $filter["file"] . " on line "
-                . $filter["line"]
-            );
+            throw new InvalidUserFilterDefinition((string) $name, (string) $filter["file"], (int) $filter["line"]);
         }
 
         switch ($name) {
@@ -2618,10 +2590,7 @@ class Compiler implements InjectionAwareInterface
             case "url_encode":
                 return "urlencode(" . $arguments . ")";
             default:
-                throw new Exception(
-                    'Unknown filter "' . $name . '" in '
-                    . $filter["file"] . ' on line ' . $filter["line"]
-                );
+                throw new UnknownVoltFilter((string) $name, (string) $filter["file"], (int) $filter["line"]);
         }
     }
 
@@ -2662,19 +2631,14 @@ class Compiler implements InjectionAwareInterface
              * All statements must be arrays
              */
             if (!is_array($statement)) {
-                throw new Exception("Corrupted statement");
+                throw new CorruptedStatement();
             }
 
             /**
              * Check if the statement is valid
              */
             if (!isset($statement["type"])) {
-                throw new Exception(
-                    "Invalid statement in "
-                    . $statement["file"] . " on line "
-                    . $statement["line"],
-                    $statement
-                );
+                throw new InvalidStatement((string) $statement["file"], (int) $statement["line"], $statement);
             }
 
             /**
@@ -2892,11 +2856,7 @@ class Compiler implements InjectionAwareInterface
                     break;
 
                 default:
-                    throw new Exception(
-                        "Unknown statement " . $type . " in "
-                        . $statement["file"] . " on line "
-                        . $statement["line"]
-                    );
+                    throw new UnknownVoltStatement((int) $type, (string) $statement["file"], (int) $statement["line"]);
             }
         }
 
@@ -2973,11 +2933,31 @@ class Compiler implements InjectionAwareInterface
      */
     private function getUniquePathKey(string | null $path): string
     {
-        if ($path) {
-            return "v" . hash('crc32b', $path);
+        if (!$path) {
+            return '';
         }
 
-        return '';
+        /**
+         * Modified Bernstein (DJBX33A) hash over the path including its
+         * trailing NUL byte, returned as an unsigned 64-bit integer.
+         * Mirrors Zephir's unique_path_key()/zend_hash_func().
+         */
+        $hash   = 5381;
+        $length = strlen($path);
+
+        for ($index = 0; $index <= $length; $index++) {
+            $char = $index < $length ? ord($path[$index]) : 0;
+
+            /**
+             * hash = (hash * 33 + char) mod 2^64, using 32-bit limbs to keep
+             * the arithmetic inside PHP's signed integer range.
+             */
+            $low  = ($hash & 0xFFFFFFFF) * 33 + $char;
+            $high = (($hash >> 32) & 0xFFFFFFFF) * 33 + ($low >> 32);
+            $hash = (($high & 0xFFFFFFFF) << 32) | ($low & 0xFFFFFFFF);
+        }
+
+        return "v" . sprintf('%u', $hash);
     }
 
     /**
