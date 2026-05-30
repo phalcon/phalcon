@@ -86,7 +86,18 @@
     "test-db-pgsql-coverage-html": "vendor/bin/phpunit -c resources/phpunit.pgsql.xml --coverage-html tests/_output/coverage/",
     "test-db-sqlite": "vendor/bin/phpunit -c resources/phpunit.sqlite.xml",
     "test-db-sqlite-coverage": "vendor/bin/phpunit -c resources/phpunit.sqlite.xml  --coverage-clover tests/_output/coverage.xml",
-    "test-db-sqlite-coverage-html": "vendor/bin/phpunit -c resources/phpunit.sqlite.xml --coverage-html tests/_output/coverage/"
+    "test-db-sqlite-coverage-html": "vendor/bin/phpunit -c resources/phpunit.sqlite.xml --coverage-html tests/_output/coverage/",
+    "test-db": [
+      "@test-db-mysql",
+      "@test-db-pgsql",
+      "@test-db-sqlite"
+    ],
+    "test-all": [
+      "@test-unit",
+      "@test-db-mysql",
+      "@test-db-pgsql",
+      "@test-db-sqlite"
+    ]
   },
   "config": {
   }
