@@ -22,6 +22,15 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\Router\Exception;
+use Phalcon\Mvc\Router\Exceptions\BeforeMatchNotCallable;
+use Phalcon\Mvc\Router\Exceptions\ConfigKeyMustBeArray;
+use Phalcon\Mvc\Router\Exceptions\EmptyGroupOfRoutes;
+use Phalcon\Mvc\Router\Exceptions\GroupRoutesMustBeArray;
+use Phalcon\Mvc\Router\Exceptions\InvalidRoutePosition;
+use Phalcon\Mvc\Router\Exceptions\MissingGroupRouteKey;
+use Phalcon\Mvc\Router\Exceptions\MissingRouteConfigKey;
+use Phalcon\Mvc\Router\Exceptions\UnknownHttpMethod;
+use Phalcon\Mvc\Router\Exceptions\WrongPathsKey;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
@@ -649,7 +658,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 $this->routes = array_merge([$route], $this->routes);
                 break;
             default:
-                throw new Exception("Invalid route position");
+                throw new InvalidRoutePosition();
         }
 
         $this->methodRoutesDirty = true;
@@ -1335,9 +1344,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                     if ($staticBeforeMatch !== null) {
                         if (!is_callable($staticBeforeMatch)) {
-                            throw new Exception(
-                                "Before-Match callback is not callable in matched route"
-                            );
+                            throw new BeforeMatchNotCallable();
                         }
 
                         $routeFound = $staticBeforeMatch($handledUri, $staticRoute, $this);
@@ -1392,9 +1399,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                 if ($combinedBeforeMatch !== null) {
                     if (!is_callable($combinedBeforeMatch)) {
-                        throw new Exception(
-                            "Before-Match callback is not callable in matched route"
-                        );
+                        throw new BeforeMatchNotCallable();
                     }
 
                     if (!$combinedBeforeMatch($handledUri, $combinedRoute, $this)) {
@@ -1412,7 +1417,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                 foreach ($combinedPaths as $combinedPart => $combinedPosition) {
                     if (!is_string($combinedPart)) {
-                        throw new Exception("Wrong key in paths: " . $combinedPart);
+                        throw new WrongPathsKey($combinedPart);
                     }
 
                     if (!is_string($combinedPosition) && !is_int($combinedPosition)) {
@@ -1510,9 +1515,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                          * Check first if the callback is callable
                          */
                         if (!is_callable($beforeMatch)) {
-                            throw new Exception(
-                                "Before-Match callback is not callable in matched route"
-                            );
+                            throw new BeforeMatchNotCallable();
                         }
 
                         $routeFound = $beforeMatch($handledUri, $route, $this);
@@ -1539,7 +1542,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                         foreach ($paths as $part => $position) {
                             if (!is_string($part)) {
-                                throw new Exception("Wrong key in paths: " . $part);
+                                throw new WrongPathsKey($part);
                             }
 
                             if (!is_string($position) && !is_int($position)) {
@@ -1727,14 +1730,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         if (isset($config['defaults'])) {
             if (!is_array($config['defaults'])) {
-                throw new Exception("'defaults' must be an array");
+                throw new ConfigKeyMustBeArray("defaults");
             }
             $this->setDefaults($config['defaults']);
         }
 
         if (isset($config['routes'])) {
             if (!is_array($config['routes'])) {
-                throw new Exception("'routes' must be an array");
+                throw new ConfigKeyMustBeArray("routes");
             }
             foreach ($config['routes'] as $routeData) {
                 $this->addRouteFromConfig($routeData);
@@ -1743,7 +1746,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         if (isset($config['groups'])) {
             if (!is_array($config['groups'])) {
-                throw new Exception("'groups' must be an array");
+                throw new ConfigKeyMustBeArray("groups");
             }
             foreach ($config['groups'] as $groupData) {
                 $this->mountGroupFromConfig($groupData);
@@ -1773,9 +1776,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $groupRoutes = $group->getRoutes();
 
         if (empty($groupRoutes)) {
-            throw new Exception(
-                "The group of routes does not contain any routes"
-            );
+            throw new EmptyGroupOfRoutes();
         }
 
         /**
@@ -1999,11 +2000,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected function addRouteFromConfig(array $routeData): void
     {
         if (!isset($routeData['pattern'])) {
-            throw new Exception("Route config entry is missing 'pattern'");
+            throw new MissingRouteConfigKey("pattern");
         }
 
         if (!isset($routeData['paths'])) {
-            throw new Exception("Route config entry is missing 'paths'");
+            throw new MissingRouteConfigKey("paths");
         }
 
         $pattern = $routeData['pattern'];
@@ -2030,9 +2031,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 $route      = $this->{$methodCall}($pattern, $paths);
                 break;
             default:
-                throw new Exception(
-                    "Unknown HTTP method '" . $method . "' in route config"
-                );
+                throw new UnknownHttpMethod($method);
         }
 
         if (isset($routeData['name'])) {
@@ -2080,15 +2079,15 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $routes = $groupData['routes'] ?? [];
 
         if (!is_array($routes)) {
-            throw new Exception("Group 'routes' must be an array");
+            throw new GroupRoutesMustBeArray();
         }
 
         foreach ($routes as $routeData) {
             if (!isset($routeData['pattern'])) {
-                throw new Exception("Group route entry is missing 'pattern'");
+                throw new MissingGroupRouteKey("pattern");
             }
             if (!isset($routeData['paths'])) {
-                throw new Exception("Group route entry is missing 'paths'");
+                throw new MissingGroupRouteKey("paths");
             }
 
             $pattern    = $routeData['pattern'];
@@ -2115,9 +2114,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     $route      = $group->{$methodCall}($pattern, $routePaths);
                     break;
                 default:
-                    throw new Exception(
-                        "Unknown HTTP method '" . $method . "' in group route config"
-                    );
+                    throw new UnknownHttpMethod($method);
             }
 
             if (isset($routeData['name'])) {
