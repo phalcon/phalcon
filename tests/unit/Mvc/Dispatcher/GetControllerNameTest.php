@@ -28,32 +28,4 @@ class GetControllerNameTest extends BaseDispatcher
         $dispatcher = $this->getDispatcher();
         $this->assertSame('dispatcher-test-default', $dispatcher->getControllerName());
     }
-
-    /**
-     * Tests Phalcon\Mvc\Dispatcher :: getControllerName() - PascalCase single word
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-21
-     * @issue  https://github.com/phalcon/cphalcon/issues/15996
-     */
-    public function testMvcDispatcherGetControllerNameWithPascalCase(): void
-    {
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->setControllerName('Page');
-        $this->assertSame('page', $dispatcher->getControllerName());
-    }
-
-    /**
-     * Tests Phalcon\Mvc\Dispatcher :: getControllerName() - PascalCase multi-word
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-21
-     * @issue  https://github.com/phalcon/cphalcon/issues/15996
-     */
-    public function testMvcDispatcherGetControllerNameWithMultiWordPascalCase(): void
-    {
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->setControllerName('DispatcherTestDefault');
-        $this->assertSame('dispatcher_test_default', $dispatcher->getControllerName());
-    }
 }

@@ -2,11 +2,6 @@
 
 ## 6.0.0 alpha 1 (2026-XX-XX)
 
-### Breaking Compatibility Changes
-
-- Changed `Phalcon\Mvc\Dispatcher::getControllerName()` and `Phalcon\Mvc\Dispatcher::getPreviousControllerName()` to return the uncamelized (snake_case lowercase) controller name, restoring the behavior from Phalcon 4 and ensuring consistent output regardless of the casing used in route definitions [#CP-15996](https://github.com/phalcon/cphalcon/issues/15996)
-- 
-
 ### Changed
 
 - `Phalcon\Mvc\Router::handle()` is now significantly faster on apps with static routes. Internal optimizations: O(1) hash lookup for literal-URI routes with shadow detection that preserves reverse-iteration "last attached wins" semantics; per-HTTP-method candidate buckets are pre-merged with `"*"` (no-constraint) routes at rebuild time so `handle()` no longer calls `array_merge` per request; hot-loop reads (pattern, host regex, beforeMatch callable) come from a parallel scalar array instead of six accessor calls per route per request; `Phalcon\Mvc\Router\Route::getCompiledHostName()` caches the compiled hostname regex (invalidated by `setHostname()`); `beforeMatch` and converter callables are invoked via direct PHP call syntax instead of `call_user_func_array`. The static fast path is disabled when an events manager is attached so per-route events continue to fire from the regular loop with their existing semantics. [#CP-17012](https://github.com/phalcon/cphalcon/issues/17012)

@@ -21,7 +21,6 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\Dispatcher\Exception;
 use Phalcon\Mvc\Dispatcher\Exceptions\ResponseServiceUnavailable;
-use Phalcon\Support\Helper\Str\Uncamelize;
 
 /**
  * Dispatching is the process of taking the request object, extracting the
@@ -160,7 +159,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getControllerName(): string
     {
-        return Uncamelize::staticToUncamelize($this->handlerName);
+        return $this->handlerName;
     }
 
     /**
@@ -190,7 +189,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getPreviousControllerName(): string
     {
-        return Uncamelize::staticToUncamelize($this->previousHandlerName);
+        return $this->previousHandlerName;
     }
 
     /**

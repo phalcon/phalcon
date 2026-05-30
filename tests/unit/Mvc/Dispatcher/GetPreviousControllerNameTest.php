@@ -29,20 +29,4 @@ class GetPreviousControllerNameTest extends BaseDispatcher
         $dispatcher->dispatch();
         $this->assertSame('dispatcher-test-default-two', $dispatcher->getPreviousControllerName());
     }
-
-    /**
-     * Tests Phalcon\Mvc\Dispatcher :: getPreviousControllerName() - PascalCase
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-21
-     * @issue  https://github.com/phalcon/cphalcon/issues/15996
-     */
-    public function testMvcDispatcherGetPreviousControllerNameWithPascalCase(): void
-    {
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->setControllerName('DispatcherTestDefaultTwo');
-        $dispatcher->setActionName('forwardExternal');
-        $dispatcher->dispatch();
-        $this->assertSame('dispatcher_test_default_two', $dispatcher->getPreviousControllerName());
-    }
 }
