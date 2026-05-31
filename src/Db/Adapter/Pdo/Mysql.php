@@ -173,8 +173,13 @@ class Mysql extends PdoAdapter
             /**
              * By checking every column type we convert it to a
              * Phalcon\Db\Column
+             *
+             * The value is kept in its original case (matching cphalcon).
+             * MySQL's information_schema returns the type keyword in lower
+             * case already, so the str_starts_with checks below still match,
+             * while preserving the case of ENUM values (e.g. 'A','I','X').
              */
-            $columnType = strtolower($field[1]);
+            $columnType = $field[1];
 
             /**
              * The order of these IF statements matters. Since we are using
@@ -575,8 +580,12 @@ class Mysql extends PdoAdapter
 
             /**
              * Check if the column has comment
+             *
+             * MySQL returns an empty string (not null) when a column has no
+             * comment; treat that as "no comment" so the definition mirrors
+             * the cphalcon extension, which leaves the comment unset (null).
              */
-            if (null !== $field[8]) {
+            if (null !== $field[8] && "" !== $field[8]) {
                 $definition["comment"] = $field[8];
             }
 

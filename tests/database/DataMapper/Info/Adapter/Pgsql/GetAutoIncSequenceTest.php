@@ -32,8 +32,8 @@ final class GetAutoIncSequenceTest extends AbstractDatabaseTestCase
         $pgsql  = new Pgsql($connection);
         $schema = $pgsql->getCurrentSchema();
 
-        $expected = 'field_primary';
-        $actual   = $pgsql->getAutoincSequence($schema, 'co_dialect');
+        $expected = 'inv_id';
+        $actual   = $pgsql->getAutoincSequence($schema, 'co_invoices');
         $this->assertSame($expected, $actual);
 
         $actual = $pgsql->getAutoincSequence($schema, 'co_rb_test_model');

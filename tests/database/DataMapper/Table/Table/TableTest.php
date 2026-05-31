@@ -151,6 +151,7 @@ final class TableTest extends AbstractDatabaseTestCase
         $table = $this->locator->get(OrdersXProductsTable::class);
 
         $migration = new OrdersProductsMigration($this->connection);
+        $migration->create();
         $migration->insert(1, 1, 10);
 
         $row = $table->fetchRow(
@@ -180,6 +181,7 @@ final class TableTest extends AbstractDatabaseTestCase
         $table = $this->locator->get(OrdersXProductsTable::class);
 
         $migration = new OrdersProductsMigration($this->connection);
+        $migration->create();
         $migration->insert(1, 1, 10);
 
         /**
@@ -207,6 +209,7 @@ final class TableTest extends AbstractDatabaseTestCase
         $table = $this->locator->get(OrdersXProductsTable::class);
 
         $migration = new OrdersProductsMigration($this->connection);
+        $migration->create();
         $migration->insert(1, 1, 10);
 
         /**
@@ -387,6 +390,7 @@ final class TableTest extends AbstractDatabaseTestCase
             ],
         ];
         $migration = new OrdersProductsMigration($this->connection);
+        $migration->create();
         foreach ($data as $record) {
             $migration->insert(
                 $record['oxp_ord_id'],

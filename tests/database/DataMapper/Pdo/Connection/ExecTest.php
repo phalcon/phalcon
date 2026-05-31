@@ -90,7 +90,7 @@ final class ExecTest extends AbstractDatabaseTestCase
 
         $messages = $logger->getMessages();
 
-        $expected = 14;
+        $expected = 18;
         $actual   = $messages;
         $this->assertCount($expected, $actual);
 
@@ -154,7 +154,7 @@ final class ExecTest extends AbstractDatabaseTestCase
         $actual   = $messages[8];
         $this->assertStringContainsString($expected, $actual);
 
-        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::exec';
+        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::prepare';
         $actual   = $messages[9];
         $this->assertStringContainsString($expected, $actual);
 
@@ -166,19 +166,11 @@ final class ExecTest extends AbstractDatabaseTestCase
         $actual   = $messages[9];
         $this->assertStringContainsString($expected, $actual);
 
-        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::exec';
+        $expected = 'M: getAttribute';
         $actual   = $messages[10];
         $this->assertStringContainsString($expected, $actual);
 
-        $expected = 'S: insert into co_invoices ('
-            . PHP_EOL
-            . '    inv_id, inv_cst_id, inv_status_flag, inv_title, inv_total, inv_created_at'
-            . PHP_EOL
-            . ') values (';
-        $actual   = $messages[10];
-        $this->assertStringContainsString($expected, $actual);
-
-        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::exec';
+        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::prepare';
         $actual   = $messages[11];
         $this->assertStringContainsString($expected, $actual);
 
@@ -190,24 +182,48 @@ final class ExecTest extends AbstractDatabaseTestCase
         $actual   = $messages[11];
         $this->assertStringContainsString($expected, $actual);
 
-        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::exec';
+        $expected = 'M: getAttribute';
         $actual   = $messages[12];
         $this->assertStringContainsString($expected, $actual);
 
-        $expected = 'S: insert into co_invoices ('
-            . PHP_EOL
-            . '    inv_id, inv_cst_id, inv_status_flag, inv_title, inv_total, inv_created_at'
-            . PHP_EOL
-            . ') values (';
-        $actual   = $messages[12];
-        $this->assertStringContainsString($expected, $actual);
-
-        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::exec';
+        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::prepare';
         $actual   = $messages[13];
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'S: insert into co_invoices ('
+            . PHP_EOL
+            . '    inv_id, inv_cst_id, inv_status_flag, inv_title, inv_total, inv_created_at'
+            . PHP_EOL
+            . ') values (';
+        $actual   = $messages[13];
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'M: getAttribute';
+        $actual   = $messages[14];
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::prepare';
+        $actual   = $messages[15];
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'S: insert into co_invoices ('
+            . PHP_EOL
+            . '    inv_id, inv_cst_id, inv_status_flag, inv_title, inv_total, inv_created_at'
+            . PHP_EOL
+            . ') values (';
+        $actual   = $messages[15];
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'M: getAttribute';
+        $actual   = $messages[16];
+        $this->assertStringContainsString($expected, $actual);
+
+        $expected = 'M: Phalcon\DataMapper\Pdo\Connection\AbstractConnection::exec';
+        $actual   = $messages[17];
         $this->assertStringContainsString($expected, $actual);
 
         $expected = 'S: update co_invoices set inv_total = inv_total + 100';
-        $actual   = $messages[13];
+        $actual   = $messages[17];
         $this->assertStringContainsString($expected, $actual);
     }
 }

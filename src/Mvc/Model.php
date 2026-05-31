@@ -1153,14 +1153,14 @@ abstract class Model extends AbstractInjectionAware implements
                         try {
                             $instance->$setter($value);
                         } catch (\TypeError) {
-                            $instance->$key = $value;
+                            self::assignCoercedValue($instance, $key, $value);
                         }
 
                         continue;
                     }
                 }
 
-                $instance->$key = $value;
+                self::assignCoercedValue($instance, $key, $value);
 
                 continue;
             }
@@ -1203,14 +1203,18 @@ abstract class Model extends AbstractInjectionAware implements
                         try {
                             $instance->$setter($value);
                         } catch (\TypeError) {
-                            $instance->$attribute = $value;
+                            self::assignCoercedValue(
+                                $instance,
+                                $attribute,
+                                $value
+                            );
                         }
 
                         continue;
                     }
                 }
 
-                $instance->$attribute = $value;
+                self::assignCoercedValue($instance, $attribute, $value);
 
                 continue;
             }
@@ -6665,6 +6669,50 @@ abstract class Model extends AbstractInjectionAware implements
 
         // If there is a message, it returns false otherwise true
         return !count($messages);
+    }
+
+    /**
+     * Assigns a value to a model property replicating the coercive property
+     * write performed by the C extension. PDO adapters (notably PostgreSQL)
+     * return numeric columns as strings; cphalcon relies on the extension to
+     * coerce them to the property's declared scalar type on assignment. Under
+     * strict_types a direct write throws a TypeError, so when that happens we
+     * coerce the scalar value to the declared type and retry. Non-coercible
+     * cases are re-thrown unchanged.
+     *
+     * @param object $instance
+     * @param string $property
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    private static function assignCoercedValue(
+        object $instance,
+        string $property,
+        mixed $value
+    ): void {
+        try {
+            $instance->$property = $value;
+        } catch (\TypeError $ex) {
+            if (!is_scalar($value) || !property_exists($instance, $property)) {
+                throw $ex;
+            }
+
+            $propertyType = (new \ReflectionProperty($instance, $property))
+                ->getType();
+
+            if (!$propertyType instanceof \ReflectionNamedType) {
+                throw $ex;
+            }
+
+            $instance->$property = match ($propertyType->getName()) {
+                "bool"   => (bool) $value,
+                "float"  => (float) $value,
+                "int"    => (int) $value,
+                "string" => (string) $value,
+                default  => throw $ex,
+            };
+        }
     }
 
     /**
