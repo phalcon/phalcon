@@ -89,7 +89,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @var string
      */
-    protected string $realSqlStatement;
+    protected string $realSqlStatement = "";
 
     /**
      * Active SQL Bind Types

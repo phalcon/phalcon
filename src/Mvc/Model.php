@@ -1561,7 +1561,7 @@ abstract class Model extends AbstractInjectionAware implements
              * If the attribute is currently set in the object add it to the
              * conditions
              */
-            if (!isset($this->$attributeField)) {
+            if (!property_exists($this, $attributeField)) {
                 throw new PrimaryKeyAttributeNotSet($attributeField, get_class($this));
             }
 
@@ -2205,7 +2205,7 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
         ) {
-            $logger = $container?->get('logger') ?? $container?->get(LoggerInterface::class);
+            $logger = $this->getEventLogger($container);
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
                 try {
@@ -2269,7 +2269,7 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
         ) {
-            $logger = $container?->get('logger') ?? $container?->get(LoggerInterface::class);
+            $logger = $this->getEventLogger($container);
 
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
@@ -2321,6 +2321,35 @@ abstract class Model extends AbstractInjectionAware implements
             $eventName,
             $this
         );
+    }
+
+    /**
+     * Resolves an optional PSR-3 logger from the container. Returns null when
+     * no logger service is registered: logging model-event dispatch errors is
+     * best-effort and must not abort the operation. The container's get()
+     * throws on a missing service, so has() is checked first.
+     *
+     * @param object|null $container
+     *
+     * @return LoggerInterface|null
+     */
+    protected function getEventLogger(object | null $container): LoggerInterface | null
+    {
+        if (!$container instanceof DiInterface) {
+            return null;
+        }
+
+        foreach (['logger', LoggerInterface::class] as $service) {
+            if ($container->has($service)) {
+                $logger = $container->get($service);
+
+                if ($logger instanceof LoggerInterface) {
+                    return $logger;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -2388,7 +2417,7 @@ abstract class Model extends AbstractInjectionAware implements
              * If some attribute is not present in the model, we assume the
              * record as changed
              */
-            if (!isset($this->$name)) {
+            if (!property_exists($this, $name)) {
                 $changed[] = $name;
 
                 continue;
@@ -4285,6 +4314,10 @@ abstract class Model extends AbstractInjectionAware implements
                 continue;
             }
 
+            if ($record->hasSnapshotData() && !$record->hasChanged()) {
+                continue;
+            }
+
             $record->setDirtyState(self::DIRTY_STATE_TRANSIENT);
             $dirtyRelated[$name] = $record;
         }
@@ -4367,7 +4400,7 @@ abstract class Model extends AbstractInjectionAware implements
                         $values[]                  = $rawValue;
                         $bindTypes[]               = $bindType;
                         $snapshot[$attributeField] = $rawValue;
-                    } elseif (isset($this->$attributeField)) {
+                    } elseif (property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
                         if ($value === null && isset($defaultValues[$field])) {
                             $snapshot[$attributeField]           = $defaultValues[$field];
@@ -4555,6 +4588,30 @@ abstract class Model extends AbstractInjectionAware implements
                 $lastInsertedId = intval($lastInsertedId, 10);
             }
 
+            /**
+             * PDO returns the auto-increment id as a numeric string. cphalcon
+             * relies on the C extension's coercive property write to convert it
+             * to the property's declared type. Under strict_types we coerce
+             * explicitly: cast to int only when the identity property is typed
+             * int, otherwise keep the original value so an unsigned BIGINT that
+             * overflows PHP's int range (mapped to a string property) keeps its
+             * full string representation.
+             */
+            if (
+                is_numeric($lastInsertedId) &&
+                property_exists($this, $attributeField)
+            ) {
+                $propertyType = (new \ReflectionProperty($this, $attributeField))
+                    ->getType();
+
+                if (
+                    $propertyType instanceof \ReflectionNamedType &&
+                    $propertyType->getName() === "int"
+                ) {
+                    $lastInsertedId = (int) $lastInsertedId;
+                }
+            }
+
             $this->$attributeField     = $lastInsertedId;
             $snapshot[$attributeField] = $lastInsertedId;
 
@@ -4661,12 +4718,12 @@ abstract class Model extends AbstractInjectionAware implements
                         $values[]                     = $rawValue;
                         $bindTypes[]                  = $bindType;
                         $newSnapshot[$attributeField] = $rawValue;
-                    } elseif (isset($this->$attributeField)) {
+                    } elseif (property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
                         /**
                          * If the field is not part of the snapshot we add them as changed
                          */
-                        if (!isset($snapshot[$attributeField])) {
+                        if (!array_key_exists($attributeField, $snapshot)) {
                             $changed = true;
                         } else {
                             $snapshotValue = $snapshot[$attributeField];
@@ -4787,7 +4844,7 @@ abstract class Model extends AbstractInjectionAware implements
                         $values[]                     = $rawValue;
                         $bindTypes[]                  = $bindType;
                         $newSnapshot[$attributeField] = $rawValue;
-                    } elseif (isset($this->$attributeField)) {
+                    } elseif (property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
 
                         /**

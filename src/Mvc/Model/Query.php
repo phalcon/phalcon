@@ -1121,12 +1121,21 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $model = $this->modelsInstances[$modelName];
             }
 
-            $connection = $this->getReadConnection(
-                $model,
-                $intermediate,
-                $bindParams,
-                $bindTypes
-            );
+            if (isset($intermediate["forUpdate"]) && $intermediate["forUpdate"]) {
+                $connection = $this->getWriteConnection(
+                    $model,
+                    $intermediate,
+                    $bindParams,
+                    $bindTypes
+                );
+            } else {
+                $connection = $this->getReadConnection(
+                    $model,
+                    $intermediate,
+                    $bindParams,
+                    $bindTypes
+                );
+            }
 
             if (is_object($connection)) {
                 // More than one type of connection is not allowed
