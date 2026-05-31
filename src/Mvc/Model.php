@@ -6,7 +6,7 @@
  * (c) Phalcon Team <team@phalcon.io>
  *
  * For the full copyright and license information, please view the LICENSE.txt
- * file that was distributed with $this source code.
+ * file that was distributed with the source code.
  */
 
 declare(strict_types=1);
@@ -30,6 +30,31 @@ use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Mvc\Model\CriteriaInterface;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\Exceptions\BelongsToRequiresObject;
+use Phalcon\Mvc\Model\Exceptions\BindTypeNotDefined;
+use Phalcon\Mvc\Model\Exceptions\CannotResolveAttribute;
+use Phalcon\Mvc\Model\Exceptions\ColumnNotInMap;
+use Phalcon\Mvc\Model\Exceptions\ColumnNotInTableColumns;
+use Phalcon\Mvc\Model\Exceptions\ColumnNotInTableMap;
+use Phalcon\Mvc\Model\Exceptions\DataTypeNotDefined;
+use Phalcon\Mvc\Model\Exceptions\IdentityNotInColumnMap;
+use Phalcon\Mvc\Model\Exceptions\IdentityNotInTableColumns;
+use Phalcon\Mvc\Model\Exceptions\InvalidDumpResultKey;
+use Phalcon\Mvc\Model\Exceptions\InvalidFindParameters;
+use Phalcon\Mvc\Model\Exceptions\InvalidModelsManagerService;
+use Phalcon\Mvc\Model\Exceptions\InvalidModelsMetadataService;
+use Phalcon\Mvc\Model\Exceptions\MethodNotFound;
+use Phalcon\Mvc\Model\Exceptions\ModelOrmServicesUnavailable;
+use Phalcon\Mvc\Model\Exceptions\PrimaryKeyAttributeNotSet;
+use Phalcon\Mvc\Model\Exceptions\PrimaryKeyRequired;
+use Phalcon\Mvc\Model\Exceptions\PropertyNotAccessible;
+use Phalcon\Mvc\Model\Exceptions\RecordCannotRefresh;
+use Phalcon\Mvc\Model\Exceptions\RecordNotPersisted;
+use Phalcon\Mvc\Model\Exceptions\RelationNotDefined;
+use Phalcon\Mvc\Model\Exceptions\RelationRequiresObjectOrArray;
+use Phalcon\Mvc\Model\Exceptions\SnapshotsDisabled;
+use Phalcon\Mvc\Model\Exceptions\StaticMethodRequiresOneArgument;
+use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\QueryInterface;
@@ -72,6 +97,7 @@ use function method_exists;
 use function property_exists;
 use function serialize;
 use function spl_object_id;
+use function str_contains;
 use function str_starts_with;
 use function strtolower;
 use function substr;
@@ -166,6 +192,10 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * @var array
      */
+    protected array $rawValues = [];
+    /**
+     * @var array
+     */
     protected array $related = [];
     /**
      * @var bool
@@ -219,10 +249,7 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         if ($container === null) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ODM in '"
-                . get_class($this) . "'"
-            );
+            throw new ModelOrmServicesUnavailable(get_class($this));
         }
 
         $this->container = $container;
@@ -233,10 +260,7 @@ abstract class Model extends AbstractInjectionAware implements
         if ($modelsManager === null) {
             $modelsManager = $container->get("modelsManager");
             if ($modelsManager === null) {
-                throw new Exception(
-                    "The injected service 'modelsManager' is not valid in '"
-                    . get_class($this) . "'"
-                );
+                throw new InvalidModelsManagerService(get_class($this));
             }
         }
 
@@ -304,11 +328,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * The method does not exist throw an exception
          */
-        throw new Exception(
-            "The method '"
-            . $method . "' does not exist on model '"
-            . $modelName . "'"
-        );
+        throw new MethodNotFound($method, $modelName);
     }
 
     /**
@@ -333,11 +353,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * The method does not exist throw an exception
          */
-        throw new Exception(
-            "The method '"
-            . $method . "' does not exist on model '"
-            . $modelName . "'"
-        );
+        throw new MethodNotFound($method, $modelName);
     }
 
     /**
@@ -369,6 +385,25 @@ abstract class Model extends AbstractInjectionAware implements
              */
             if (isset($this->dirtyRelated[$lowerProperty])) {
                 return $this->dirtyRelated[$lowerProperty];
+            }
+
+            /**
+             * Return an already-loaded single model for non-reusable relations to
+             * avoid overwriting modifications made to the object between accesses.
+             * Resultsets (hasMany) are never returned from this cache because they
+             * can go stale after external deletes; reusable relations delegate
+             * caching to the models manager.
+             */
+            if (
+                isset($this->related[$lowerProperty]) &&
+                !$relation->isReusable()
+            ) {
+                if (
+                    is_object($this->related[$lowerProperty]) &&
+                    $this->related[$lowerProperty] instanceof ModelInterface
+                ) {
+                    return $this->related[$lowerProperty];
+                }
             }
 
             /**
@@ -601,11 +636,7 @@ abstract class Model extends AbstractInjectionAware implements
             $manager = $this->getModelsManager();
 
             if (!$manager->isVisibleModelProperty($this, $property)) {
-                throw new Exception(
-                    "Cannot access property '"
-                    . $property . "' (not public) in '"
-                    . get_class($this) . "'"
-                );
+                throw new PropertyNotAccessible($property, get_class($this));
             }
         }
 
@@ -635,10 +666,7 @@ abstract class Model extends AbstractInjectionAware implements
          */
         $container = Di::getDefault();
         if ($container === null) {
-            throw new Exception(
-                "A dependency injection container is required to access the services related to the ODM in '"
-                . get_class($this) . "'"
-            );
+            throw new ModelOrmServicesUnavailable(get_class($this));
         }
 
         /**
@@ -651,10 +679,7 @@ abstract class Model extends AbstractInjectionAware implements
          */
         $manager = $container->get("modelsManager");
         if ($manager === null) {
-            throw new Exception(
-                "The injected service 'modelsManager' is not valid in '"
-                . get_class($this) . "'"
-            );
+            throw new InvalidModelsManagerService(get_class($this));
         }
 
         /**
@@ -666,6 +691,14 @@ abstract class Model extends AbstractInjectionAware implements
          * Try to initialize the model
          */
         $manager->initialize($this);
+
+        /**
+         * Allow the developer to run initialization code every time
+         * the model is instantiated, including when restored from cache
+         */
+        if (method_exists($this, "onConstruct")) {
+            $this->onConstruct();
+        }
 
         /**
          * Fetch serialized props
@@ -858,6 +891,9 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $whiteList = null,
         mixed $dataColumnMap = null
     ): ModelInterface {
+        $rawValues       = [];
+        $this->rawValues = $rawValues;
+
         $disableAssignSetters = Settings::get("orm.disable_assign_setters");
 
         // apply column map for data, if exist
@@ -899,12 +935,7 @@ abstract class Model extends AbstractInjectionAware implements
             if (is_array($columnMap)) {
                 if (!isset($columnMap[$attribute])) {
                     if (!Settings::get("orm.ignore_unknown_columns")) {
-                        throw new Exception(
-                            "Column '"
-                            . $attribute
-                            . "' does not make part of the column map in '"
-                            . get_class($this) . "'"
-                        );
+                        throw new ColumnNotInMap($attribute, get_class($this));
                     }
 
                     continue;
@@ -927,7 +958,9 @@ abstract class Model extends AbstractInjectionAware implements
                 }
 
                 // Try to find a possible getter
-                if (
+                if (is_object($value) && $value instanceof RawValue) {
+                    $rawValues[$attributeField] = $value;
+                } elseif (
                     $disableAssignSetters ||
                     !$this->possibleSetter($attributeField, $value)
                 ) {
@@ -935,6 +968,8 @@ abstract class Model extends AbstractInjectionAware implements
                 }
             }
         }
+
+        $this->rawValues = $rawValues;
 
         return $this;
     }
@@ -1022,10 +1057,7 @@ abstract class Model extends AbstractInjectionAware implements
 
         foreach ($data as $key => $value) {
             if (!is_string($key)) {
-                throw new Exception(
-                    "Invalid key in array data provided to dumpResult() in '"
-                    . get_class($base) . "'"
-                );
+                throw new InvalidDumpResultKey(get_class($base));
             }
 
             $instance->$key = $value;
@@ -1072,8 +1104,31 @@ abstract class Model extends AbstractInjectionAware implements
     ): ModelInterface | ResultInterface {
         $instance = clone $base;
 
+        if ($instance instanceof Model) {
+            $metaData          = $instance->getModelsMetaData();
+            $notNullAttributes = $metaData->getNotNullAttributes($instance);
+        } else {
+            $metaData          = null;
+            $notNullAttributes = [];
+        }
+
         // Change the dirty state to persistent
         $instance->setDirtyState($dirtyState);
+
+        $disableSetters = (bool) Settings::get("orm.disable_assign_setters");
+
+        $localMethods = [
+            "setConnectionService"      => 1,
+            "setDirtyState"             => 1,
+            "setEventsManager"          => 1,
+            "setReadConnectionService"  => 1,
+            "setOldSnapshotData"        => 1,
+            "setSchema"                 => 1,
+            "setSnapshotData"           => 1,
+            "setSource"                 => 1,
+            "setTransaction"            => 1,
+            "setWriteConnectionService" => 1,
+        ];
 
         /**
          * Assign the data in the model
@@ -1084,7 +1139,27 @@ abstract class Model extends AbstractInjectionAware implements
                 continue;
             }
 
+            if ($value === null && in_array($key, $notNullAttributes)) {
+                continue;
+            }
+
             if (!is_array($columnMap)) {
+                if (!$disableSetters) {
+                    $setter = "set" . self::staticToCamelize($key);
+                    if (
+                        method_exists($instance, $setter) &&
+                        !isset($localMethods[$setter])
+                    ) {
+                        try {
+                            $instance->$setter($value);
+                        } catch (\TypeError) {
+                            $instance->$key = $value;
+                        }
+
+                        continue;
+                    }
+                }
+
                 $instance->$key = $value;
 
                 continue;
@@ -1093,30 +1168,23 @@ abstract class Model extends AbstractInjectionAware implements
             // Every field must be part of the column map
             if (!isset($columnMap[$key])) {
                 if (is_array($columnMap) && !empty($columnMap)) {
-                    $metaData   = $instance->getModelsMetaData();
+                    if ($metaData === null) {
+                        $metaData = $instance->getModelsMetaData();
+                    }
+
                     $reverseMap = $metaData->getReverseColumnMap($instance);
                     if (!isset($reverseMap[$key])) {
                         if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new Exception(
-                                "Column '"
-                                . $key
-                                . "' does not make part of the column map in '"
-                                . get_class($base) . "'"
-                            );
+                            throw new ColumnNotInMap($key, get_class($base));
                         }
 
                         continue;
-                    } else {
-                        $attribute = $reverseMap[$key];
                     }
+
+                    $attribute = $reverseMap[$key];
                 } else {
                     if (!Settings::get("orm.ignore_unknown_columns")) {
-                        throw new Exception(
-                            "Column '"
-                            . $key
-                            . "' does not make part of the column map in '"
-                            . get_class($base) . "'"
-                        );
+                        throw new ColumnNotInMap($key, get_class($base));
                     }
 
                     continue;
@@ -1126,6 +1194,22 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             if (!is_array($attribute)) {
+                if (!$disableSetters) {
+                    $setter = "set" . self::staticToCamelize($attribute);
+                    if (
+                        method_exists($instance, $setter) &&
+                        !isset($localMethods[$setter])
+                    ) {
+                        try {
+                            $instance->$setter($value);
+                        } catch (\TypeError) {
+                            $instance->$attribute = $value;
+                        }
+
+                        continue;
+                    }
+                }
+
                 $instance->$attribute = $value;
 
                 continue;
@@ -1158,17 +1242,39 @@ abstract class Model extends AbstractInjectionAware implements
                 };
             }
 
-            $attributeName            = $attribute[0];
+            $attributeName = $attribute[0];
+            $data[$key]    = $castValue;
+
+            if (!$disableSetters) {
+                $setter = "set" . self::staticToCamelize($attributeName);
+                if (
+                    method_exists($instance, $setter) &&
+                    !isset($localMethods[$setter])
+                ) {
+                    try {
+                        $instance->$setter($castValue);
+                    } catch (\TypeError) {
+                        $instance->$attributeName = $castValue;
+                    }
+
+                    continue;
+                }
+            }
+
             $instance->$attributeName = $castValue;
-            $data[$key]               = $castValue;
         }
 
         /**
-         * Models that keep snapshots store the original data in t
+         * Models that keep snapshots store the original data in t.
+         * At hydration both snapshot and oldSnapshot are the same
+         * "as fetched" baseline — reuse the column-mapped result of
+         * setSnapshotData() instead of running the column-map walk
+         * a second time. PHP's COW lets the two refs share memory
+         * until one is mutated by save().
          */
         if ($keepSnapshots) {
             $instance->setSnapshotData($data, $columnMap);
-            $instance->setOldSnapshotData($data, $columnMap);
+            $instance->setOldSnapshotData($instance->getSnapshotData());
         }
 
         /**
@@ -1233,11 +1339,7 @@ abstract class Model extends AbstractInjectionAware implements
                          * @todo unless we pass the model name in the function
                          *       we cannot tell what model has this problem
                          */
-                        throw new Exception(
-                            "Column '"
-                            . $key
-                            . "' does not make part of the column map"
-                        );
+                        throw new ColumnNotInMap($key, get_called_class());
                     }
 
                     continue;
@@ -1426,10 +1528,7 @@ abstract class Model extends AbstractInjectionAware implements
          * We can't create dynamic SQL without a primary key
          */
         if (!count($primaryKeys)) {
-            throw new Exception(
-                "A primary key must be defined in the model in order to perform the operation in '"
-                . get_class($this) . "'"
-            );
+            throw new PrimaryKeyRequired(get_class($this));
         }
 
         /**
@@ -1441,12 +1540,7 @@ abstract class Model extends AbstractInjectionAware implements
              * types
              */
             if (!isset($bindDataTypes[$primaryKey])) {
-                throw new Exception(
-                    "Column '"
-                    . $primaryKey
-                    . "' have not defined a bind data type in '"
-                    . get_class($this) . "'"
-                );
+                throw new BindTypeNotDefined($primaryKey, get_class($this));
             }
 
             $bindType = $bindDataTypes[$primaryKey];
@@ -1456,12 +1550,7 @@ abstract class Model extends AbstractInjectionAware implements
              */
             if (is_array($columnMap)) {
                 if (!isset($columnMap[$primaryKey])) {
-                    throw new Exception(
-                        "Column '"
-                        . $primaryKey
-                        . "' isn't part of the column map in '"
-                        . get_class($this) . "'"
-                    );
+                    throw new ColumnNotInTableMap($primaryKey, get_class($this));
                 }
                 $attributeField = $columnMap[$primaryKey];
             } else {
@@ -1472,13 +1561,8 @@ abstract class Model extends AbstractInjectionAware implements
              * If the attribute is currently set in the object add it to the
              * conditions
              */
-            if (!property_exists($this, $attributeField)) {
-                throw new Exception(
-                    "Cannot delete the record because the primary key attribute: '"
-                    . $attributeField
-                    . "' was not set in '"
-                    . get_class($this) . "'"
-                );
+            if (!isset($this->$attributeField)) {
+                throw new PrimaryKeyAttributeNotSet($attributeField, get_class($this));
             }
 
             $value = $this->$attributeField;
@@ -1547,7 +1631,8 @@ abstract class Model extends AbstractInjectionAware implements
          * we can get proper counts.
          */
         if ($success) {
-            $this->related = [];
+            $this->related      = [];
+            $this->dirtyRelated = [];
             $this->modelsManager->clearReusableObjects();
         }
 
@@ -1673,6 +1758,14 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         /**
+         * Capture the current snapshot before the write so it can be restored
+         * if postSaveRelatedRecords later rolls back the transaction
+         */
+        $manager          = $this->getModelsManager();
+        $savedSnapshot    = $this->snapshot;
+        $savedOldSnapshot = $this->oldSnapshot;
+
+        /**
          * Depending if the record exists we do an update or an insert operation
          */
         if ($exists) {
@@ -1720,6 +1813,19 @@ abstract class Model extends AbstractInjectionAware implements
 
         if ($success === false) {
             $this->cancelOperation();
+
+            /**
+             * If the transaction was rolled back, restore the snapshot to its
+             * pre-save state so that Dynamic Update can detect changes correctly
+             * on the next save attempt
+             */
+            if (
+                $manager->isKeepingSnapshots($this) &&
+                Settings::get("orm.update_snapshot_on_save")
+            ) {
+                $this->snapshot    = $savedSnapshot;
+                $this->oldSnapshot = $savedOldSnapshot;
+            }
         } else {
             if ($hasRelatedToSave) {
                 /**
@@ -1728,6 +1834,7 @@ abstract class Model extends AbstractInjectionAware implements
                 $this->dirtyRelated = [];
             }
 
+            $this->related = [];
             $this->modelsManager->clearReusableObjects();
             $this->fireEvent("afterSave");
         }
@@ -1945,7 +2052,7 @@ abstract class Model extends AbstractInjectionAware implements
             $params = $parameters;
         }
 
-        $query = self::getPreparedQuery($params);
+        $query = static::getPreparedQuery($params);
 
         /**
          * Execute the query passing the bind-params and casting-types
@@ -2060,13 +2167,10 @@ abstract class Model extends AbstractInjectionAware implements
         } elseif (is_string($parameters) || is_numeric($parameters)) {
             $params = [$parameters];
         } else {
-            throw new Exception(
-                "Parameters passed must be of type array, string, numeric or null in '"
-                . get_called_class() . "'"
-            );
+            throw new InvalidFindParameters(get_called_class());
         }
 
-        $query = self::getPreparedQuery($params, 1);
+        $query = static::getPreparedQuery($params, 1);
 
         /**
          * Return only the first row
@@ -2240,10 +2344,7 @@ abstract class Model extends AbstractInjectionAware implements
         $snapshot = $this->snapshot;
 
         if (!is_array($snapshot)) {
-            throw new Exception(
-                "The 'keepSnapshots' option must be enabled to track changes in '"
-                . get_class($this) . "'"
-            );
+            throw new SnapshotsDisabled(get_class($this));
         }
 
         /**
@@ -2275,7 +2376,7 @@ abstract class Model extends AbstractInjectionAware implements
              * record as changed. array_key_exists() / property_exists() are
              * used so a snapshot or model property that legitimately holds
              * `null` (e.g. a nullable DB column loaded from a fresh row) is
-             * not mistaken for absent. [#CP-17042]
+             * not mistaken for absent. [#17042]
              */
             if (!array_key_exists($name, $snapshot)) {
                 $changed[] = $name;
@@ -2287,7 +2388,7 @@ abstract class Model extends AbstractInjectionAware implements
              * If some attribute is not present in the model, we assume the
              * record as changed
              */
-            if (!property_exists($this, $name)) {
+            if (!isset($this->$name)) {
                 $changed[] = $name;
 
                 continue;
@@ -2356,7 +2457,7 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function getMessages(array | string | null $filter = null): array
     {
-        if (!empty($filter)) {
+        if ((is_string($filter) || is_array($filter)) && !empty($filter)) {
             $filtered = [];
 
             if (is_string($filter)) {
@@ -2398,10 +2499,7 @@ abstract class Model extends AbstractInjectionAware implements
             $metaData = $this->container->get("modelsMetadata");
 
             if (!is_object($metaData)) {
-                throw new Exception(
-                    "The injected service 'modelsMetadata' is not valid in '"
-                    . get_class($this) . "'"
-                );
+                throw new InvalidModelsMetadataService(get_class($this));
             }
 
             /**
@@ -2481,10 +2579,7 @@ abstract class Model extends AbstractInjectionAware implements
         );
 
         if (!is_object($relation)) {
-            throw new Exception(
-                "There is no defined relations for the model '"
-                . $className . "' using alias '" . $alias . "'"
-            );
+            throw new RelationNotDefined($className, $alias);
         }
 
         /**
@@ -2508,6 +2603,13 @@ abstract class Model extends AbstractInjectionAware implements
 //                 */
 //                $this->related[lowerAlias] = result;
 //            }
+            if (isset($this->dirtyRelated[$lowerAlias])) {
+                return $this->dirtyRelated[$lowerAlias];
+            }
+            if (isset($this->related[$lowerAlias])) {
+                return $this->related[$lowerAlias];
+            }
+
             /**
              * We do not need conditionals here. The models manager stores
              * reusable related records so we utilize that and remove complexity
@@ -2595,26 +2697,18 @@ abstract class Model extends AbstractInjectionAware implements
         $oldSnapshot = $this->oldSnapshot;
 
         if (!Settings::get("orm.update_snapshot_on_save")) {
-            throw new Exception(
-                "The 'updateSnapshotOnSave' option must be enabled for this method to work properly in '"
-                . get_class($this) . "'"
-            );
+            throw new UpdateSnapshotDisabled(get_class($this));
         }
 
         if (!is_array($snapshot)) {
-            throw new Exception(
-                "The 'keepSnapshots' option must be enabled to track changes"
-            );
+            throw new SnapshotsDisabled(get_class($this));
         }
 
         /**
          * Dirty state must be DIRTY_PERSISTENT to make the checking
          */
         if ($this->dirtyState != self::DIRTY_STATE_PERSISTENT) {
-            throw new Exception(
-                "Change checking cannot be performed because the object has not been persisted or is deleted in '"
-                . get_class($this) . "'"
-            );
+            throw new RecordNotPersisted(get_class($this));
         }
 
         $updated = [];
@@ -2623,7 +2717,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * If some attribute is not present in the oldSnapshot, we assume
              * the record as changed. array_key_exists() is used so a stored
-             * `null` is not mistaken for an absent key. [#CP-17042]
+             * `null` is not mistaken for an absent key. [#17042]
              */
             if (!array_key_exists($name, $oldSnapshot) || $value !== $oldSnapshot[$name]) {
                 $updated[] = $name;
@@ -2930,10 +3024,7 @@ abstract class Model extends AbstractInjectionAware implements
     public function refresh(): ModelInterface
     {
         if ($this->dirtyState != self::DIRTY_STATE_PERSISTENT) {
-            throw new Exception(
-                "The record cannot be refreshed because it does not exist or is deleted in '"
-                . get_class($this) . "'"
-            );
+            throw new RecordCannotRefresh(get_class($this));
         }
 
         $metaData       = $this->getModelsMetaData();
@@ -2956,10 +3047,7 @@ abstract class Model extends AbstractInjectionAware implements
              * We need to check if the record exists
              */
             if (!$this->has($metaData, $readConnection)) {
-                throw new Exception(
-                    "The record cannot be refreshed because it does not exist or is deleted in '"
-                    . get_class($this) . "'"
-                );
+                throw new RecordCannotRefresh(get_class($this));
             }
 
             $uniqueKey = $this->uniqueKey;
@@ -2968,10 +3056,7 @@ abstract class Model extends AbstractInjectionAware implements
         $uniqueParams = $this->uniqueParams;
 
         if (!is_array($uniqueParams)) {
-            throw new Exception(
-                "The record cannot be refreshed because it does not exist or is deleted in '"
-                . get_class($this) . "'"
-            );
+            throw new RecordCannotRefresh(get_class($this));
         }
 
         /**
@@ -3059,10 +3144,10 @@ abstract class Model extends AbstractInjectionAware implements
      * Serializes the object ignoring connections, services, related objects or
      * static properties
      *
-     * @return string
+     * @return string|null
      * @throws Exception
      */
-    public function serialize(): string
+    public function serialize(): string | null
     {
         /**
          * Use the standard serialize function to serialize the array data
@@ -3141,7 +3226,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @return void
      * @throws Exception
      */
-    public function setOldSnapshotData(array $data, array | null $columnMap = null)
+    public function setOldSnapshotData(array $data, mixed $columnMap = null)
     {
         /**
          * Build the snapshot based on a column map
@@ -3162,12 +3247,7 @@ abstract class Model extends AbstractInjectionAware implements
                  */
                 if (!isset($columnMap[$key])) {
                     if (!Settings::get("orm.ignore_unknown_columns")) {
-                        throw new Exception(
-                            "Column '"
-                            . $key
-                            . "' does not make part of the column map in '"
-                            . get_class($this) . "'"
-                        );
+                        throw new ColumnNotInMap($key, get_class($this));
                     }
 
                     continue;
@@ -3177,11 +3257,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (is_array($attribute)) {
                     if (!isset($attribute[0])) {
                         if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new Exception(
-                                "Column '"
-                                . $key . "' does not make part of the column map in '"
-                                . get_class($this) . "'"
-                            );
+                            throw new ColumnNotInMap($key, get_class($this));
                         }
 
                         continue;
@@ -3251,11 +3327,7 @@ abstract class Model extends AbstractInjectionAware implements
                  */
                 if (!isset($columnMap[$key])) {
                     if (!Settings::get("orm.ignore_unknown_columns")) {
-                        throw new Exception(
-                            "Column '"
-                            . $key . "' does not make part of the column map in '"
-                            . get_class($this) . "'"
-                        );
+                        throw new ColumnNotInMap($key, get_class($this));
                     }
 
                     continue;
@@ -3266,11 +3338,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (is_array($attribute)) {
                     if (!isset($attribute[0])) {
                         if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new Exception(
-                                "Column '"
-                                . $key . "' does not make part of the column map in '"
-                                . get_class($this) . "'"
-                            );
+                            throw new ColumnNotInMap($key, get_class($this));
                         }
 
                         continue;
@@ -3440,7 +3508,6 @@ abstract class Model extends AbstractInjectionAware implements
         $result = self::groupResult("SUM", "sumatory", $parameters);
 
         return is_string($result) ? (float)$result : $result;
-        //return self::groupResult("SUM", "sumatory", $parameters);
     }
 
     /**
@@ -3484,11 +3551,7 @@ abstract class Model extends AbstractInjectionAware implements
 
                 if (!isset($columnMap[$attribute])) {
                     if (!Settings::get("orm.ignore_unknown_columns")) {
-                        throw new Exception(
-                            "Column '"
-                            . $attribute . "' does not make part of the column map in '"
-                            . get_class($this) . "'"
-                        );
+                        throw new ColumnNotInMap($attribute, get_class($this));
                     }
 
                     continue;
@@ -3519,8 +3582,12 @@ abstract class Model extends AbstractInjectionAware implements
                 "getSource" !== $method &&
                 method_exists($this, $method)
             ) {
-                $data[$attributeField] = $this->$method();
-            } elseif (property_exists($this, $attributeField)) {
+                try {
+                    $data[$attributeField] = $this->$method();
+                } catch (\Error) {
+                    $data[$attributeField] = null;
+                }
+            } elseif (isset($this->$attributeField)) {
                 $data[$attributeField] = $this->$attributeField;
             } else {
                 $data[$attributeField] = null;
@@ -3554,10 +3621,7 @@ abstract class Model extends AbstractInjectionAware implements
              */
             $container = Di::getDefault();
             if ($container === null) {
-                throw new Exception(
-                    "A dependency injection container is required to access the services related to the ODM in '"
-                    . get_class($this) . "'"
-                );
+                throw new ModelOrmServicesUnavailable(get_class($this));
             }
 
             /**
@@ -3571,10 +3635,7 @@ abstract class Model extends AbstractInjectionAware implements
             $manager = $container->get("modelsManager");
 
             if (!is_object($manager)) {
-                throw new Exception(
-                    "The injected service 'modelsManager' is not valid in '"
-                    . get_class($this) . "'"
-                );
+                throw new InvalidModelsManagerService(get_class($this));
             }
 
             /**
@@ -3588,6 +3649,14 @@ abstract class Model extends AbstractInjectionAware implements
             $manager->initialize($this);
 
             /**
+             * Allow the developer to run initialization code every time
+             * the model is instantiated, including when restored from cache
+             */
+            if (method_exists($this, "onConstruct")) {
+                $this->onConstruct();
+            }
+
+            /**
              * Fetch serialized props
              */
             if (isset($attributes["attributes"])) {
@@ -3596,7 +3665,10 @@ abstract class Model extends AbstractInjectionAware implements
                  * Update the objects properties
                  */
                 foreach ($properties as $key => $value) {
-                    $this->$key = $value;
+                    try {
+                        $this->$key = $value;
+                    } catch (\TypeError) {
+                    }
                 }
             } else {
                 $properties = [];
@@ -3984,9 +4056,9 @@ abstract class Model extends AbstractInjectionAware implements
                             . $fields
                             . "\" does not exist on referenced table";
                     }
+                } else {
+                    $message = $foreignKey["message"];
                 }
-
-                $message = $foreignKey["message"];
 
                 /**
                  * Create a message
@@ -4245,6 +4317,7 @@ abstract class Model extends AbstractInjectionAware implements
         $snapshot            = [];
         $bindTypes           = [];
         $unsetDefaultValues  = [];
+        $rawValues           = $this->rawValues;
         $attributes          = $metaData->getAttributes($this);
         $bindDataTypes       = $metaData->getBindTypes($this);
         $automaticAttributes = $metaData->getAutomaticCreateAttributes($this);
@@ -4265,12 +4338,7 @@ abstract class Model extends AbstractInjectionAware implements
              */
             if (is_array($columnMap)) {
                 if (!isset($columnMap[$field])) {
-                    throw new Exception(
-                        "Column '"
-                        . $field . "' in '"
-                        . get_class($this)
-                        . "' isn't part of the column map"
-                    );
+                    throw new ColumnNotInTableMap($field, get_class($this));
                 }
 
                 $attributeField = $columnMap[$field];
@@ -4287,7 +4355,19 @@ abstract class Model extends AbstractInjectionAware implements
                      * This isset checks that the property be defined in the
                      * model
                      */
-                    if (property_exists($this, $attributeField)) {
+                    if (isset($rawValues[$attributeField])) {
+                        $rawValue = $rawValues[$attributeField];
+
+                        if (!isset($bindDataTypes[$field])) {
+                            throw new BindTypeNotDefined($field, get_class($this));
+                        }
+
+                        $bindType                  = $bindDataTypes[$field];
+                        $fields[]                  = $field;
+                        $values[]                  = $rawValue;
+                        $bindTypes[]               = $bindType;
+                        $snapshot[$attributeField] = $rawValue;
+                    } elseif (isset($this->$attributeField)) {
                         $value = $this->$attributeField;
                         if ($value === null && isset($defaultValues[$field])) {
                             $snapshot[$attributeField]           = $defaultValues[$field];
@@ -4306,12 +4386,7 @@ abstract class Model extends AbstractInjectionAware implements
                          * Every column must have a bind data type defined
                          */
                         if (!isset($bindDataTypes[$field])) {
-                            throw new Exception(
-                                "Column '"
-                                . $field . "' in '"
-                                . get_class($this)
-                                . "' have not defined a bind data type"
-                            );
+                            throw new BindTypeNotDefined($field, get_class($this));
                         }
 
                         $bindType    = $bindDataTypes[$field];
@@ -4361,11 +4436,7 @@ abstract class Model extends AbstractInjectionAware implements
              */
             if (is_array($columnMap)) {
                 if (!isset($columnMap[$identityField])) {
-                    throw new Exception(
-                        "Identity column '"
-                        . $identityField . "' isn't part of the column map in '"
-                        . get_class($this) . "'"
-                    );
+                    throw new IdentityNotInColumnMap($identityField, get_class($this));
                 }
 
                 $attributeField = $columnMap[$identityField];
@@ -4405,12 +4476,7 @@ abstract class Model extends AbstractInjectionAware implements
                      * The field is valid we look for a bind value (normally int)
                      */
                     if (!isset($bindDataTypes[$identityField])) {
-                        throw new Exception(
-                            "Identity column '"
-                            . $identityField
-                            . "' isn\'t part of the table columns in '"
-                            . get_class($this) . "'"
-                        );
+                        throw new IdentityNotInTableColumns($identityField, get_class($this));
                     }
 
                     $bindType    = $bindDataTypes[$identityField];
@@ -4468,9 +4534,19 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             /**
-             * Recover the last "insert id" and assign it to the object
+             * Recover the last "insert id" and assign it to the object.
+             * If an explicit identity value was provided the sequence was not
+             * used, so calling lastInsertId() would fail on PostgreSQL because
+             * currval() requires nextval() to have been called in the session.
+             * Reuse the value already present on the model in that case.
              */
-            $lastInsertedId = $connection->lastInsertId($sequenceName);
+            $value = $this->$attributeField ?? null;
+
+            if ($value !== null && $value !== "") {
+                $lastInsertedId = $value;
+            } else {
+                $lastInsertedId = $connection->lastInsertId($sequenceName);
+            }
 
             /**
              * If we want auto casting
@@ -4483,9 +4559,11 @@ abstract class Model extends AbstractInjectionAware implements
             $snapshot[$attributeField] = $lastInsertedId;
 
             /**
-             * Since the primary key was modified, we delete the uniqueParams
-             * to force any future update to re-build the primary key
+             * Since the primary key was modified, we delete the uniqueKey
+             * and uniqueParams to force any future has() call to re-build
+             * the primary key condition from current attribute values
              */
+            $this->uniqueKey    = null;
             $this->uniqueParams = [];
         }
 
@@ -4530,6 +4608,7 @@ abstract class Model extends AbstractInjectionAware implements
         $values      = [];
         $bindTypes   = [];
         $newSnapshot = [];
+        $rawValues   = $this->rawValues;
         $manager     = $this->modelsManager;
 
         /**
@@ -4539,6 +4618,7 @@ abstract class Model extends AbstractInjectionAware implements
         $snapshot            = $this->snapshot;
         $dataTypes           = $metaData->getDataTypes($this);
         $bindDataTypes       = $metaData->getBindTypes($this);
+        $defaultValues       = $metaData->getDefaultValues($this);
         $nonPrimary          = $metaData->getNonPrimaryKeyAttributes($this);
         $automaticAttributes = $metaData->getAutomaticUpdateAttributes($this);
 
@@ -4553,12 +4633,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (is_array($columnMap)) {
                     if (!isset($columnMap[$field])) {
                         if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new Exception(
-                                "Column '"
-                                . $field . "' in '"
-                                . get_class($this)
-                                . "' isn't part of the column map"
-                            );
+                            throw new ColumnNotInTableMap($field, get_class($this));
                         }
                     }
 
@@ -4571,12 +4646,7 @@ abstract class Model extends AbstractInjectionAware implements
                      * Check a bind type for field to update
                      */
                     if (!isset($bindDataTypes[$field])) {
-                        throw new Exception(
-                            "Column '"
-                            . $field . "' in '"
-                            . get_class($this)
-                            . "' have not defined a bind data type"
-                        );
+                        throw new BindTypeNotDefined($field, get_class($this));
                     }
 
                     $bindType = $bindDataTypes[$field];
@@ -4585,7 +4655,13 @@ abstract class Model extends AbstractInjectionAware implements
                      * Get the field's value
                      * If a field isn't set there was no change
                      */
-                    if (isset($this->$attributeField)) {
+                    if (isset($rawValues[$attributeField])) {
+                        $rawValue                     = $rawValues[$attributeField];
+                        $fields[]                     = $field;
+                        $values[]                     = $rawValue;
+                        $bindTypes[]                  = $bindType;
+                        $newSnapshot[$attributeField] = $rawValue;
+                    } elseif (isset($this->$attributeField)) {
                         $value = $this->$attributeField;
                         /**
                          * If the field is not part of the snapshot we add them as changed
@@ -4609,12 +4685,7 @@ abstract class Model extends AbstractInjectionAware implements
                                     $changed = true;
                                 } else {
                                     if (!isset($dataTypes[$field])) {
-                                        throw new Exception(
-                                            "Column '"
-                                            . $field . "' in '"
-                                            . get_class($this)
-                                            . "' have not defined a data type"
-                                        );
+                                        throw new DataTypeNotDefined($field, get_class($this));
                                     }
 
                                     $dataType = $dataTypes[$field];
@@ -4629,39 +4700,28 @@ abstract class Model extends AbstractInjectionAware implements
                                         $snapshotValue = $snapshotValue->getValue();
                                     }
 
-                                    /**
-                                     * A RawValue holds a SQL expression (e.g.
-                                     * "col + 2"). It cannot be meaningfully
-                                     * compared to a stored scalar, so always
-                                     * treat the field as changed. This fixes
-                                     * the case where the current DB value is 0
-                                     * and the expression evaluates (via
-                                     * floatval) to 0.0, incorrectly suppressing
-                                     * the UPDATE.
-                                     */
+                                    $updateValue = $value;
                                     if (
                                         is_object($value) &&
                                         $value instanceof RawValue
                                     ) {
-                                        $changed = true;
-                                    } else {
-                                        $updateValue = $value;
-
-                                        $changed = match ($dataType) {
-                                            Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
-                                            Column::TYPE_DECIMAL,
-                                            Column::TYPE_FLOAT      =>
-                                                floatval($snapshotValue) !== floatval($updateValue),
-                                            Column::TYPE_INTEGER,
-                                            Column::TYPE_DATE,
-                                            Column::TYPE_DATETIME,
-                                            Column::TYPE_CHAR,
-                                            Column::TYPE_TEXT,
-                                            Column::TYPE_VARCHAR,
-                                            Column::TYPE_BIGINTEGER => (string)$snapshotValue !== (string)$updateValue,
-                                            default                 => $updateValue != $snapshotValue,
-                                        };
+                                        $updateValue = $value->getValue();
                                     }
+
+                                    $changed = match ($dataType) {
+                                        Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
+                                        Column::TYPE_DECIMAL,
+                                        Column::TYPE_FLOAT      =>
+                                            floatval($snapshotValue) !== floatval($updateValue),
+                                        Column::TYPE_INTEGER,
+                                        Column::TYPE_DATE,
+                                        Column::TYPE_DATETIME,
+                                        Column::TYPE_CHAR,
+                                        Column::TYPE_TEXT,
+                                        Column::TYPE_VARCHAR,
+                                        Column::TYPE_BIGINTEGER => (string)$snapshotValue !== (string)$updateValue,
+                                        default                 => $updateValue != $snapshotValue,
+                                    };
                                 }
                             }
                         }
@@ -4676,19 +4736,6 @@ abstract class Model extends AbstractInjectionAware implements
                         $newSnapshot[$attributeField] = $value;
                     } else {
                         $newSnapshot[$attributeField] = null;
-                        /**
-                         * PHP's isset() returns false for null properties, so
-                         * a declared property set to null lands here. Treat it
-                         * as changed when the snapshot held a non-null value.
-                         */
-                        if (
-                            !array_key_exists($attributeField, $snapshot) ||
-                            $snapshot[$attributeField] !== null
-                        ) {
-                            $fields[]    = $field;
-                            $values[]    = null;
-                            $bindTypes[] = $bindType;
-                        }
                     }
                 }
             }
@@ -4711,12 +4758,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (is_array($columnMap)) {
                     if (!isset($columnMap[$field])) {
                         if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new Exception(
-                                "Column '"
-                                . $field . "' in '"
-                                . get_class($this)
-                                . "' isn't part of the column map"
-                            );
+                            throw new ColumnNotInTableMap($field, get_class($this));
                         }
                     }
 
@@ -4730,12 +4772,7 @@ abstract class Model extends AbstractInjectionAware implements
                      * Check a bind type for field to update
                      */
                     if (!isset($bindDataTypes[$field])) {
-                        throw new Exception(
-                            "Column '"
-                            . $field . "' in '"
-                            . get_class($this)
-                            . "' have not defined a bind data type"
-                        );
+                        throw new BindTypeNotDefined($field, get_class($this));
                     }
 
                     $bindType = $bindDataTypes[$field];
@@ -4744,8 +4781,31 @@ abstract class Model extends AbstractInjectionAware implements
                      * Get the field's value
                      * If a field isn't set we pass a null value
                      */
-                    if (isset($this->$attributeField)) {
+                    if (isset($rawValues[$attributeField])) {
+                        $rawValue                     = $rawValues[$attributeField];
+                        $fields[]                     = $field;
+                        $values[]                     = $rawValue;
+                        $bindTypes[]                  = $bindType;
+                        $newSnapshot[$attributeField] = $rawValue;
+                    } elseif (isset($this->$attributeField)) {
                         $value = $this->$attributeField;
+
+                        /**
+                         * Skip columns whose value is still the function-call
+                         * default from the DB (e.g. "gen_random_uuid()"). Passing
+                         * such a string as a bound parameter would fail type
+                         * validation on the DB side.
+                         */
+                        if (
+                            is_string($value) &&
+                            isset($defaultValues[$field]) &&
+                            $value === $defaultValues[$field] &&
+                            str_contains($value, "(")
+                        ) {
+                            $newSnapshot[$attributeField] = $value;
+
+                            continue;
+                        }
 
                         /**
                          * When dynamic update is not used we pass every field to the update
@@ -4784,10 +4844,7 @@ abstract class Model extends AbstractInjectionAware implements
              * We can't create dynamic SQL without a primary key
              */
             if (!count($primaryKeys)) {
-                throw new Exception(
-                    "A primary key must be defined in the model in order to perform the operation in '"
-                    . get_class($this) . "'"
-                );
+                throw new PrimaryKeyRequired(get_class($this));
             }
 
             $uniqueParams = [];
@@ -4798,12 +4855,7 @@ abstract class Model extends AbstractInjectionAware implements
                  */
                 if (is_array($columnMap)) {
                     if (!isset($columnMap[$field])) {
-                        throw new Exception(
-                            "Column '"
-                            . $field . "' in '"
-                            . get_class($this)
-                            . "' isn't part of the column map"
-                        );
+                        throw new ColumnNotInTableMap($field, get_class($this));
                     }
 
                     $attributeField = $columnMap[$field];
@@ -5083,12 +5135,7 @@ abstract class Model extends AbstractInjectionAware implements
             foreach ($primaryKeys as $field) {
                 if (is_array($columnMap)) {
                     if (!isset($columnMap[$field])) {
-                        throw new Exception(
-                            "Column '"
-                            . $field . "' in '"
-                            . get_class($this)
-                            . "' isn't part of the column map"
-                        );
+                        throw new ColumnNotInTableMap($field, get_class($this));
                     }
                     $attributeField = $columnMap[$field];
                 } else {
@@ -5119,12 +5166,7 @@ abstract class Model extends AbstractInjectionAware implements
                 }
 
                 if (!isset($bindDataTypes[$field])) {
-                    throw new Exception(
-                        "Column '"
-                        . $field . "' in '"
-                        . get_class($this)
-                        . "' isn't part of the table columns"
-                    );
+                    throw new ColumnNotInTableColumns($field, get_class($this));
                 }
 
                 $type          = $bindDataTypes[$field];
@@ -5534,11 +5576,7 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         if (!array_key_exists(0, $arguments)) {
-            throw new Exception(
-                "The static method '"
-                . $method . "' in '"
-                . get_called_class() . "' requires one argument"
-            );
+            throw new StaticMethodRequiresOneArgument($method, get_called_class());
         }
 
         $model    = new $modelName();
@@ -5573,11 +5611,7 @@ abstract class Model extends AbstractInjectionAware implements
                 $field = self::staticToUncamelize($extraMethod);
 
                 if (!isset($attributes[$field])) {
-                    throw new Exception(
-                        "Cannot resolve attribute '"
-                        . $extraMethod . "' in the model '"
-                        . get_called_class() . "'"
-                    );
+                    throw new CannotResolveAttribute($extraMethod, get_called_class());
                 }
             }
         }
@@ -5672,12 +5706,14 @@ abstract class Model extends AbstractInjectionAware implements
             return false;
         }
 
-        if (!isset($localMethods[$possibleSetter])) {
-            try {
-                $this->$possibleSetter($value);
-            } catch (\TypeError) {
-                $this->$property = $value;
-            }
+        if (isset($localMethods[$possibleSetter])) {
+            return false;
+        }
+
+        try {
+            $this->$possibleSetter($value);
+        } catch (\TypeError) {
+            $this->$property = $value;
         }
 
         return true;
@@ -5743,26 +5779,12 @@ abstract class Model extends AbstractInjectionAware implements
                 if (!is_object($record) && !is_array($record)) {
                     $connection->rollback($nesting);
 
-                    throw new Exception(
-                        "Only objects/arrays can be stored as part of "
-                        . "has-many/has-one/has-one-through/has-many-to-many "
-                        . "relations on model "
-                        . $className . " on Relation " . $name
-                    );
+                    throw new RelationRequiresObjectOrArray($className, $name);
                 }
 
                 $columns          = $relation->getFields();
                 $referencedModel  = $relation->getReferencedModel();
                 $referencedFields = $relation->getReferencedFields();
-
-                if (is_array($columns)) {
-                    $connection->rollback($nesting);
-
-                    throw new Exception(
-                        "Not implemented in '"
-                        . $className . "' on Relation " . $name
-                    );
-                }
 
                 /**
                  * Create an implicit array for has-many/has-one records
@@ -5773,22 +5795,6 @@ abstract class Model extends AbstractInjectionAware implements
                     $relatedRecords = $record;
                 }
 
-                if (!isset($this->$columns)) {
-                    $connection->rollback($nesting);
-
-                    throw new Exception(
-                        "The column '"
-                        . $columns . "' needs to be present in the model '"
-                        . $className . "'"
-                    );
-                }
-
-                $value = $this->$columns;
-
-                /**
-                 * Get the value of the field from the current model
-                 * Check if the relation is a has-many-to-many
-                 */
                 $isThrough = $relation->isThrough();
 
                 /**
@@ -5798,6 +5804,29 @@ abstract class Model extends AbstractInjectionAware implements
                     $intermediateModelName        = $relation->getIntermediateModel();
                     $intermediateFields           = $relation->getIntermediateFields();
                     $intermediateReferencedFields = $relation->getIntermediateReferencedFields();
+                    $placeholders                 = [];
+                    $conditions                   = [];
+                    $columnCount                  = 0;
+
+                    /**
+                     * Always check for existing intermediate models
+                     * otherwise conflicts will arise on insert instead of update
+                     */
+                    if (is_array($columns)) {
+                        $columnCount = count($columns) - 1;
+
+                        for ($i = 0; $i <= $columnCount; $i++) {
+                            $columnA                  = $columns[$i];
+                            $conditions[]             = "[" . $intermediateFields[$i] . "] = :APR" . $i . ":";
+                            $placeholders["APR" . $i] = $this->readAttribute($columnA);
+                        }
+
+                        $i = $columnCount + 1;
+                    } else {
+                        $conditions[]         = "[" . $intermediateFields . "] = :APR0:";
+                        $placeholders["APR0"] = $this->readAttribute($columns);
+                        $i                    = 1;
+                    }
 
                     foreach ($relatedRecords as $recordAfter) {
                         /**
@@ -5817,6 +5846,31 @@ abstract class Model extends AbstractInjectionAware implements
 
                             return false;
                         }
+
+                        /**
+                         * Build per-iteration query: start from parent conditions, add
+                         * child (referenced) conditions for HAS_MANY_THROUGH so that
+                         * conditions and their placeholder values are always in sync.
+                         */
+                        $loopConditions   = $conditions;
+                        $loopPlaceholders = $placeholders;
+
+                        if ($relation->getType() === Relation::HAS_MANY_THROUGH) {
+                            if (is_array($referencedFields)) {
+                                $referencedFieldsCount = count($referencedFields) - 1;
+
+                                for ($j = 0; $j <= $referencedFieldsCount; $j++) {
+                                    $columnA          = $referencedFields[$j];
+                                    $t                = $j + $i;
+                                    $loopConditions[] = "[" . $intermediateReferencedFields[$j] . "] = :APR" . $t . ":";
+                                    $loopPlaceholders["APR" . $t] = $recordAfter->readAttribute($columnA);
+                                }
+                            } else {
+                                $loopConditions[] = "[" . $intermediateReferencedFields . "] = :APR" . $i . ":";
+                                $loopPlaceholders["APR" . $i] = $recordAfter->readAttribute($referencedFields);
+                            }
+                        }
+
                         /**
                          * Create a new instance of the intermediate model
                          */
@@ -5825,44 +5879,62 @@ abstract class Model extends AbstractInjectionAware implements
                         );
 
                         /**
-                         * Has-one-through relations can only use one intermediate model.
                          * If it already exist, it can be updated with the new referenced key.
                          */
-                        if ($relation->getType() == Relation::HAS_ONE_THROUGH) {
-                            $existingIntermediateModel = $intermediateModel->findFirst(
-                                [
-                                    "[" . $intermediateFields . "] = ?0",
-                                    "bind" => [$value],
-                                ]
-                            );
+                        $existingIntermediateModel = $intermediateModel->findFirst(
+                            [
+                                implode(" AND ", $loopConditions),
+                                "bind" => $loopPlaceholders,
+                            ]
+                        );
 
-                            if ($existingIntermediateModel) {
-                                $intermediateModel = $existingIntermediateModel;
-                            }
+                        if ($existingIntermediateModel) {
+                            $intermediateModel = $existingIntermediateModel;
                         }
 
-                        /**
-                         * Write value in the intermediate model
-                         */
-                        $intermediateModel->writeAttribute(
-                            $intermediateFields,
-                            $value
-                        );
+                        if (
+                            !$existingIntermediateModel ||
+                            $relation->getType() === Relation::HAS_ONE_THROUGH
+                        ) {
+                            /**
+                             * Write value in the intermediate model
+                             */
+                            if (is_array($columns)) {
+                                for ($h = 0; $h <= $columnCount; $h++) {
+                                    $columnA = $columns[$h];
+                                    $columnB = $intermediateFields[$h];
 
-                        /**
-                         * Get the value from the referenced model
-                         */
-                        $intermediateValue = $recordAfter->readAttribute(
-                            $referencedFields
-                        );
+                                    $intermediateModel->writeAttribute(
+                                        $columnB,
+                                        $this->readAttribute($columnA)
+                                    );
+                                }
+                            } else {
+                                $intermediateModel->writeAttribute(
+                                    $intermediateFields,
+                                    $this->readAttribute($columns)
+                                );
+                            }
 
-                        /**
-                         * Write the intermediate value in the intermediate model
-                         */
-                        $intermediateModel->writeAttribute(
-                            $intermediateReferencedFields,
-                            $intermediateValue
-                        );
+                            if (is_array($referencedFields)) {
+                                $referencedFieldsCount = count($referencedFields) - 1;
+
+                                for ($h = 0; $h <= $referencedFieldsCount; $h++) {
+                                    $columnA = $referencedFields[$h];
+                                    $columnB = $intermediateReferencedFields[$h];
+
+                                    $intermediateModel->writeAttribute(
+                                        $columnB,
+                                        $recordAfter->readAttribute($columnA)
+                                    );
+                                }
+                            } else {
+                                $intermediateModel->writeAttribute(
+                                    $intermediateReferencedFields,
+                                    $recordAfter->readAttribute($referencedFields)
+                                );
+                            }
+                        }
 
                         /**
                          * Save the record and get messages
@@ -5882,27 +5954,65 @@ abstract class Model extends AbstractInjectionAware implements
                         }
                     }
                 } else {
-                    foreach ($relatedRecords as $recordAfter) {
-                        /**
-                         * Assign the value to the
-                         */
-                        $recordAfter->writeAttribute($referencedFields, $value);
-                        /**
-                         * Save the record and get messages
-                         */
-                        if (!$recordAfter->doSave($visited)) {
-                            /**
-                             * Get the validation messages generated by the
-                             * referenced model
-                             */
-                            $this->appendMessagesFrom($recordAfter);
+                    if (is_array($columns)) {
+                        $columnCount = count($columns) - 1;
+
+                        foreach ($relatedRecords as $recordAfter) {
+                            for ($i = 0; $i <= $columnCount; $i++) {
+                                $columnA = $columns[$i];
+                                $columnB = $referencedFields[$i];
+
+                                $recordAfter->writeAttribute(
+                                    $columnB,
+                                    $this->readAttribute($columnA)
+                                );
+                            }
 
                             /**
-                             * Rollback the implicit transaction
+                             * Save the record and get messages
                              */
-                            $connection->rollback($nesting);
+                            if (!$recordAfter->doSave($visited)) {
+                                /**
+                                 * Get the validation messages generated by the
+                                 * referenced model
+                                 */
+                                $this->appendMessagesFrom($recordAfter);
 
-                            return false;
+                                /**
+                                 * Rollback the implicit transaction
+                                 */
+                                $connection->rollback($nesting);
+
+                                return false;
+                            }
+                        }
+                    } else {
+                        foreach ($relatedRecords as $recordAfter) {
+                            /**
+                             * Assign the value to the
+                             */
+                            $recordAfter->writeAttribute(
+                                $referencedFields,
+                                $this->readAttribute($columns)
+                            );
+
+                            /**
+                             * Save the record and get messages
+                             */
+                            if (!$recordAfter->doSave($visited)) {
+                                /**
+                                 * Get the validation messages generated by the
+                                 * referenced model
+                                 */
+                                $this->appendMessagesFrom($recordAfter);
+
+                                /**
+                                 * Rollback the implicit transaction
+                                 */
+                                $connection->rollback($nesting);
+
+                                return false;
+                            }
                         }
                     }
                 }
@@ -5910,10 +6020,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (!is_array($record)) {
                     $connection->rollback($nesting);
 
-                    throw new Exception(
-                        "There are no defined relations for the model '"
-                        . $className . "' using alias '" . $name . "'"
-                    );
+                    throw new RelationNotDefined($className, $name);
                 }
             }
         }
@@ -6233,35 +6340,15 @@ abstract class Model extends AbstractInjectionAware implements
                     if (!is_object($record)) {
                         $connection->rollback($nesting);
 
-                        throw new Exception(
-                            "Only objects can be stored as part of belongs-to relations in '"
-                            . get_class($this) . "' Relation " . $name
-                        );
-                    }
-
-                    $columns          = $relation->getFields();
-                    $referencedFields = $relation->getReferencedFields();
-//                    $columns = relation->getFields(),
-//                        referencedModel = relation->getReferencedModel(),
-//                        referencedFields = relation->getReferencedFields();
-
-                    if (is_array($columns)) {
-                        $connection->rollback($nesting);
-
-                        throw new Exception(
-                            "Not implemented in '"
-                            . get_class($this) . "' Relation " . $name
-                        );
+                        throw new BelongsToRequiresObject(get_class($this), $name);
                     }
 
                     /**
-                     * If dynamic update is enabled, saving the record must not take any action
-                     * Only save if the model is dirty to prevent circular relations causing an infinite loop
+                     * If dynamic update is enabled, saving the record must not
+                     * take any action. Recursion through circular relations is
+                     * prevented by the visited collection inside doSave().
                      */
-                    if (
-                        $record->dirtyState !== Model::DIRTY_STATE_PERSISTENT &&
-                        !$record->doSave($visited)
-                    ) {
+                    if (!$record->doSave($visited)) {
                         /**
                          * Get the validation messages generated by the
                          * referenced model
@@ -6280,7 +6367,21 @@ abstract class Model extends AbstractInjectionAware implements
                      * Read the attribute from the referenced model and assign
                      * it to the current model
                      */
-                    $this->$columns = $record->readAttribute($referencedFields);
+                    $columns          = $relation->getFields();
+                    $referencedFields = $relation->getReferencedFields();
+
+                    if (is_array($columns)) {
+                        $columnCount = count($columns) - 1;
+
+                        for ($i = 0; $i <= $columnCount; $i++) {
+                            $columnA = $columns[$i];
+                            $columnB = $referencedFields[$i];
+
+                            $this->$columnA = $record->readAttribute($columnB);
+                        }
+                    } else {
+                        $this->$columns = $record->readAttribute($referencedFields);
+                    }
                 }
             }
         }
