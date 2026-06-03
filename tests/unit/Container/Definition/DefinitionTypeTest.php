@@ -15,9 +15,9 @@ final class DefinitionTypeTest extends AbstractUnitTestCase
      */
     public function testContainerDefinitionDefinitionTypeConstants(): void
     {
-        $this->assertSame('closure', DefinitionType::CLOSURE);
-        $this->assertSame('object', DefinitionType::OBJECT);
-        $this->assertSame('parameter', DefinitionType::PARAMETER);
-        $this->assertSame('string', DefinitionType::STRING);
+        $this->assertSame('closure', DefinitionType::CLOSURE_TYPE);
+        $this->assertSame('object', DefinitionType::OBJECT_TYPE);
+        $this->assertSame('parameter', DefinitionType::PARAMETER_TYPE);
+        $this->assertSame('string', DefinitionType::STRING_TYPE);
     }
 }

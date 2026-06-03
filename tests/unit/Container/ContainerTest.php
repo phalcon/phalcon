@@ -37,8 +37,13 @@ use Closure;
 use Phalcon\Container\Container;
 use Phalcon\Container\Definition\ServiceDefinition;
 use Phalcon\Container\Definition\ServiceLifetime;
-use Phalcon\Container\Exception\Invalid;
-use Phalcon\Container\Exception\NotFound;
+use Phalcon\Container\Exceptions\CannotExtendResolved;
+use Phalcon\Container\Exceptions\CircularAliasFound;
+use Phalcon\Container\Exceptions\InstanceNotFound;
+use Phalcon\Container\Exceptions\NoProcessorFound;
+use Phalcon\Container\Exceptions\ParameterNotFound;
+use Phalcon\Container\Exceptions\ServiceNotFound;
+use Phalcon\Container\Exceptions\ServiceNotRegistered;
 use Phalcon\Container\Resolver\Lazy\Env;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Tests\AbstractUnitTestCase;
@@ -149,7 +154,7 @@ final class ContainerTest extends AbstractUnitTestCase
         $bucket->set('a', FakeService::class);
         $bucket->setAlias('a', 'b');
 
-        $this->expectException(Invalid::class);
+        $this->expectException(CircularAliasFound::class);
 
         $bucket->setAlias('b', 'a');
     }
@@ -195,7 +200,7 @@ final class ContainerTest extends AbstractUnitTestCase
     public function testContainerExtendThrowsForUnregisteredService(): void
     {
         $bucket = new Container();
-        $this->expectException(NotFound::class);
+        $this->expectException(ServiceNotFound::class);
         $bucket->extend('unknown', static function (object $svc, object $c) {
             return $svc;
         });
@@ -211,7 +216,7 @@ final class ContainerTest extends AbstractUnitTestCase
         $bucket->set('fake', FakeService::class);
         $bucket->get('fake');
 
-        $this->expectException(Invalid::class);
+        $this->expectException(CannotExtendResolved::class);
 
         $bucket->extend('fake', static function (FakeService $svc): FakeService {
             return $svc;
@@ -225,7 +230,7 @@ final class ContainerTest extends AbstractUnitTestCase
     public function testContainerFindProcessorThrowsForUnprocessable(): void
     {
         $bucket = new Container();
-        $this->expectException(Invalid::class);
+        $this->expectException(NoProcessorFound::class);
         $bucket->set('svc', 42);
     }
 
@@ -277,7 +282,7 @@ final class ContainerTest extends AbstractUnitTestCase
     {
         $bucket = new Container();
 
-        $this->expectException(NotFound::class);
+        $this->expectException(ServiceNotFound::class);
 
         $bucket->getDefinition('missing');
     }
@@ -290,7 +295,7 @@ final class ContainerTest extends AbstractUnitTestCase
     {
         $bucket = new Container();
 
-        $this->expectException(NotFound::class);
+        $this->expectException(InstanceNotFound::class);
 
         $bucket->getInstance('missing');
     }
@@ -323,7 +328,7 @@ final class ContainerTest extends AbstractUnitTestCase
     {
         $bucket = new Container();
 
-        $this->expectException(NotFound::class);
+        $this->expectException(ParameterNotFound::class);
 
         $bucket->getParameter('missing');
     }
@@ -419,7 +424,7 @@ final class ContainerTest extends AbstractUnitTestCase
         $bucket = new Container();
         $bucket->setParameter('scalar', 'not-an-object');
 
-        $this->expectException(Invalid::class);
+        $this->expectException(ServiceNotRegistered::class);
 
         $bucket->getService('scalar');
     }
@@ -606,7 +611,7 @@ final class ContainerTest extends AbstractUnitTestCase
         $bucket = new Container();
         // Inject a pre-existing cycle to trigger the safety-net in resolveAlias()
         $this->setProtectedProperty($bucket, 'aliases', ['a' => 'b', 'b' => 'a']);
-        $this->expectException(Invalid::class);
+        $this->expectException(CircularAliasFound::class);
         $bucket->get('a');
     }
 
@@ -632,7 +637,7 @@ final class ContainerTest extends AbstractUnitTestCase
         $bucket = new Container();
         $bucket->setAutowire(false);
 
-        $this->expectException(NotFound::class);
+        $this->expectException(ServiceNotFound::class);
 
         $bucket->get(FakeService::class);
     }

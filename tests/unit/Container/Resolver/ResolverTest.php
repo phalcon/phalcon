@@ -34,7 +34,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Container\Resolver;
 
 use Countable;
-use Phalcon\Container\Exception\Invalid;
+use Phalcon\Container\Exceptions\CannotResolveParameter;
 use Phalcon\Container\Resolver\Lazy\Get;
 use Phalcon\Container\Resolver\Resolver;
 use Phalcon\Tests\AbstractUnitTestCase;
@@ -156,7 +156,7 @@ final class ResolverTest extends AbstractUnitTestCase
         $resolver  = new Resolver();
         $container = new FakeContainerResolver();
 
-        $this->expectException(Invalid::class);
+        $this->expectException(CannotResolveParameter::class);
         $this->expectExceptionMessage("Cannot resolve parameter '\$host' for");
 
         $resolver->resolveClass($container, FakeServiceWithArgs::class, []);

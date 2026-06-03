@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container\Resolver\Lazy;
 
-use Phalcon\Container\Exception\NotFound;
+use Phalcon\Container\Exceptions\EnvNotDefined;
 use Phalcon\Container\Resolver\Lazy\Env;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Container\Resolver\Fake\FakeNameContainer;
@@ -104,7 +104,7 @@ final class EnvTest extends AbstractUnitTestCase
         $container = new FakeNameContainer();
         $lazy      = new Env('PHALCON_UNDEFINED_ENV_VAR_XYZ');
 
-        $this->expectException(NotFound::class);
+        $this->expectException(EnvNotDefined::class);
         $this->expectExceptionMessage(
             "Environment variable 'PHALCON_UNDEFINED_ENV_VAR_XYZ' is not defined"
         );

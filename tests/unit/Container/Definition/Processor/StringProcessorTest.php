@@ -102,7 +102,7 @@ final class StringProcessorTest extends AbstractUnitTestCase
 
         $def = $processor->process('myService', stdClass::class, new FakeContainer());
 
-        $this->assertSame(DefinitionType::STRING, $def->getType());
+        $this->assertSame(DefinitionType::STRING_TYPE, $def->getType());
     }
 
     /**
