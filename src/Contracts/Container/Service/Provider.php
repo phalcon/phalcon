@@ -32,7 +32,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Container\Service;
 
-// Copied from service-interop/interface. Source: https://github.com/service-interop/interface
 interface Provider
 {
     public function provide(Collection $services): void;

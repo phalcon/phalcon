@@ -37,16 +37,15 @@ use ReflectionMethod;
 use ReflectionParameter;
 use ReflectionType;
 
-// Copied from resolver-interop/interface. Source: https://github.com/resolver-interop/interface
 interface ResolverService extends ReflectionParameterResolver
 {
     public function isResolvableClass(string $className): bool;
 
-    public function resolveCall(IocContainer $ioc, callable $callable, array $arguments): mixed;
+    public function resolveCall(IocContainer $ioc, callable $callableObject, array $arguments): mixed;
 
     public function resolveClass(IocContainer $ioc, string $className, array $arguments): object;
 
-    public function resolveMethod(IocContainer $ioc, ReflectionMethod $method, object $object): void;
+    public function resolveMethod(IocContainer $ioc, ReflectionMethod $method, object $instance): void;
 
     public function resolveParameters(IocContainer $ioc, array $parameters, array $arguments): array;
 

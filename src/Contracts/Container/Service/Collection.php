@@ -66,10 +66,10 @@ interface Collection extends IocContainer
     public function unsetParameter(string $name): void;
 
     // Our additions — Container-specific
-    public function bind(string $interface, string $concrete): ServiceDefinition;
+    public function bind(string $interfaceName, string $concrete): ServiceDefinition;
     public function callableGet(string $name): Closure;
     public function callableNew(string $name): Closure;
-    public function extend(string $name, callable $callable): void;
+    public function extend(string $name, callable $callableObject): void;
     public function get(string $name): mixed;
     public function getByTag(string $tag): array;
     public function getResolver(): Resolver;
