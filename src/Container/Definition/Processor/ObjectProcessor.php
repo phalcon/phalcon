@@ -67,7 +67,7 @@ class ObjectProcessor implements Processor
         mixed $definition,
         object $container
     ): ServiceDefinition {
-        $def = new ServiceDefinition($name, DefinitionType::OBJECT, $definition);
+        $def = new ServiceDefinition($name, DefinitionType::OBJECT_TYPE, $definition);
         $def->setFactory(static function () use ($definition) {
             return $definition;
         });

@@ -67,7 +67,7 @@ class StringProcessor implements Processor
         mixed $definition,
         object $container
     ): ServiceDefinition {
-        $def = new ServiceDefinition($name, DefinitionType::STRING, $definition);
+        $def = new ServiceDefinition($name, DefinitionType::STRING_TYPE, $definition);
         $def->setClass($definition);
         $def->setIsCacheable(true);
 

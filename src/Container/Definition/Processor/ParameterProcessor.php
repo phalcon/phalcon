@@ -67,7 +67,7 @@ class ParameterProcessor implements Processor
         mixed $definition,
         object $container
     ): ServiceDefinition {
-        $def       = new ServiceDefinition($name, DefinitionType::PARAMETER, $definition);
+        $def       = new ServiceDefinition($name, DefinitionType::PARAMETER_TYPE, $definition);
         $cacheable = !($definition instanceof Closure) && !is_object($definition);
         $def->setIsCacheable($cacheable);
 

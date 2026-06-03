@@ -65,7 +65,7 @@ class ClosureProcessor implements Processor
         mixed $definition,
         object $container
     ): ServiceDefinition {
-        $def = new ServiceDefinition($name, DefinitionType::CLOSURE, $definition);
+        $def = new ServiceDefinition($name, DefinitionType::CLOSURE_TYPE, $definition);
         $def->setFactory($definition);
 
         return $def;
