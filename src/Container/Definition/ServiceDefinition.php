@@ -33,7 +33,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Definition;
 
-use Phalcon\Container\Exception\Invalid;
+use Phalcon\Container\Exceptions\FrozenDefinition;
+use Phalcon\Container\Exceptions\InvalidExtender;
+use Phalcon\Container\Exceptions\NoClassSet;
+use Phalcon\Container\Exceptions\NoFactorySet;
 use ReflectionClass;
 use ReflectionException;
 
@@ -48,7 +51,7 @@ class ServiceDefinition
     protected array $arguments = [];
 
     protected object|null $container = null;
-    protected string|null $class     = null;
+    protected string|null $className = null;
     /**
      * @var array
      */
@@ -79,7 +82,7 @@ class ServiceDefinition
      * @param callable $extender
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function addExtender(callable $extender): static
     {
@@ -95,7 +98,7 @@ class ServiceDefinition
      * @param string $tag
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function addTag(string $tag): static
     {
@@ -128,9 +131,9 @@ class ServiceDefinition
         if ($this->hasFactory()) {
             $instance = ($this->factory)($container);
         } else {
-            $class      = $this->class ?? $this->serviceName;
+            $className  = $this->className ?? $this->serviceName;
             $args       = $this->resolveArgs($container, $this->constructorArgs);
-            $reflection = new ReflectionClass($class);
+            $reflection = new ReflectionClass($className);
             $instance   = $reflection->newInstanceArgs($args);
         }
 
@@ -156,12 +159,12 @@ class ServiceDefinition
         }
 
         if (
-            $this->type === DefinitionType::STRING &&
+            $this->type === DefinitionType::STRING_TYPE &&
             method_exists($container, 'isAutowireEnabled') &&
             $container->isAutowireEnabled()
         ) {
-            $class       = $this->class ?? $this->serviceName;
-            $reflection  = new ReflectionClass($class);
+            $className   = $this->className ?? $this->serviceName;
+            $reflection  = new ReflectionClass($className);
             $constructor = $reflection->getConstructor();
             $params      = $constructor !== null ? $constructor->getParameters() : [];
 
@@ -172,7 +175,7 @@ class ServiceDefinition
                     $this->arguments
                 );
             }
-        } elseif ($this->type === DefinitionType::STRING && !empty($this->arguments)) {
+        } elseif ($this->type === DefinitionType::STRING_TYPE && !empty($this->arguments)) {
             $this->constructorArgs = $this->arguments;
         }
 
@@ -193,15 +196,15 @@ class ServiceDefinition
      * Returns the class
      *
      * @return string
-     * @throws Invalid
+     * @throws NoClassSet
      */
     public function getClass(): string
     {
-        if ($this->class === null) {
-            throw Invalid::noClassSet($this->serviceName);
+        if ($this->className === null) {
+            throw new NoClassSet($this->serviceName);
         }
 
-        return $this->class;
+        return $this->className;
     }
 
     /**
@@ -228,12 +231,12 @@ class ServiceDefinition
      * Returns the factory
      *
      * @return callable
-     * @throws Invalid
+     * @throws NoFactorySet
      */
     public function getFactory(): callable
     {
         if ($this->factory === null) {
-            throw Invalid::noFactorySet($this->serviceName);
+            throw new NoFactorySet($this->serviceName);
         }
 
         return $this->factory;
@@ -286,7 +289,7 @@ class ServiceDefinition
      */
     public function hasClass(): bool
     {
-        return $this->class !== null;
+        return $this->className !== null;
     }
 
     /**
@@ -336,7 +339,7 @@ class ServiceDefinition
      * @param mixed      $value
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function setArgument(int|string $param, mixed $value): static
     {
@@ -366,12 +369,12 @@ class ServiceDefinition
      * @param string $className
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function setClass(string $className): static
     {
         $this->checkFrozen();
-        $this->class = $className;
+        $this->className = $className;
 
         return $this;
     }
@@ -382,7 +385,8 @@ class ServiceDefinition
      * @param array<array-key, callable> $extenders
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
+     * @throws InvalidExtender
      */
     public function setExtenders(array $extenders): static
     {
@@ -390,7 +394,7 @@ class ServiceDefinition
 
         foreach ($extenders as $key => $extender) {
             if (!is_callable($extender)) {
-                throw Invalid::invalidExtender($this->serviceName, $key);
+                throw new InvalidExtender($this->serviceName, (string) $key);
             }
         }
 
@@ -405,7 +409,7 @@ class ServiceDefinition
      * @param callable $factory
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function setFactory(callable $factory): static
     {
@@ -420,7 +424,7 @@ class ServiceDefinition
      * @param bool $isCacheable
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function setIsCacheable(bool $isCacheable): static
     {
@@ -436,7 +440,7 @@ class ServiceDefinition
      * @param string $lifetime
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function setLifetime(string $lifetime): static
     {
@@ -450,12 +454,12 @@ class ServiceDefinition
      * Unset class
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function unsetClass(): static
     {
         $this->checkFrozen();
-        $this->class = null;
+        $this->className = null;
 
         return $this;
     }
@@ -464,7 +468,7 @@ class ServiceDefinition
      * Unset extenders
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function unsetExtenders(): static
     {
@@ -478,7 +482,7 @@ class ServiceDefinition
      * Unset the factory
      *
      * @return $this
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     public function unsetFactory(): static
     {
@@ -492,12 +496,12 @@ class ServiceDefinition
      * Check if frozen
      *
      * @return void
-     * @throws Invalid
+     * @throws FrozenDefinition
      */
     protected function checkFrozen(): void
     {
         if ($this->frozen) {
-            throw Invalid::frozenDefinition($this->serviceName);
+            throw new FrozenDefinition($this->serviceName);
         }
     }
 
