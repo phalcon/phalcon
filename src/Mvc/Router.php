@@ -2163,7 +2163,29 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 continue;
             }
 
-            $this->candidatesByMethod[$method] = array_merge($methodSpecific, $starRoutes);
+            /**
+             * Build the bucket by walking the routes in their original
+             * attach order, keeping both method-specific routes and the
+             * unconstrained "*" routes. array_merge() would place every
+             * method-specific route ahead of the "*" routes regardless of
+             * when each was attached, inverting the reverse-iteration
+             * priority that route matching relies on (see #17062).
+             */
+            $this->candidatesByMethod[$method] = [];
+
+            foreach ($this->routes as $route) {
+                $methods = $route->getHttpMethods();
+
+                if (null === $methods) {
+                    $this->candidatesByMethod[$method][] = $route;
+                } elseif (is_string($methods)) {
+                    if ($methods === $method) {
+                        $this->candidatesByMethod[$method][] = $route;
+                    }
+                } elseif (in_array($method, $methods, true)) {
+                    $this->candidatesByMethod[$method][] = $route;
+                }
+            }
         }
 
         /**
