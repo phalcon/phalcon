@@ -37,7 +37,6 @@ use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Auth\Access\AccessLocator;
-use Phalcon\Container\Exception\Invalid;
 use Phalcon\Container\Resolver\Lazy\LazyFactory;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Contracts\Container\Service\Provider;
@@ -86,7 +85,6 @@ class Web implements Provider
      * @param Collection $services
      *
      * @return void
-     * @throws Invalid
      */
     public function provide(Collection $services): void
     {
