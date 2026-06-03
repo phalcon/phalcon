@@ -43,14 +43,14 @@ class NewInstance extends Lazy
     /**
      * Resolve a new instance
      *
-     * @param object $container
+     * @param object $ioc
      *
      * @return mixed
      */
-    public function resolve(object $container): mixed
+    public function resolve(object $ioc): mixed
     {
-        $id = $this->resolveArgument($container, $this->id);
+        $id = $this->resolveArgument($ioc, $this->id);
 
-        return $container->new($id);
+        return $ioc->new($id);
     }
 }

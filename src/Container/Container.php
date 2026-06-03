@@ -40,8 +40,13 @@ use Phalcon\Container\Definition\Processor\Processor;
 use Phalcon\Container\Definition\Processor\StringProcessor;
 use Phalcon\Container\Definition\ServiceDefinition;
 use Phalcon\Container\Definition\ServiceLifetime;
-use Phalcon\Container\Exception\Invalid;
-use Phalcon\Container\Exception\NotFound;
+use Phalcon\Container\Exceptions\CannotExtendResolved;
+use Phalcon\Container\Exceptions\CircularAliasFound;
+use Phalcon\Container\Exceptions\InstanceNotFound;
+use Phalcon\Container\Exceptions\NoProcessorFound;
+use Phalcon\Container\Exceptions\ParameterNotFound;
+use Phalcon\Container\Exceptions\ServiceNotFound;
+use Phalcon\Container\Exceptions\ServiceNotRegistered;
 use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Container\Resolver\Resolver;
 use Phalcon\Contracts\Container\Service\Collection;
@@ -104,9 +109,9 @@ class Container implements Collection
      *
      * @return ServiceDefinition
      */
-    public function bind(string $interface, string $concrete): ServiceDefinition
+    public function bind(string $interfaceName, string $concrete): ServiceDefinition
     {
-        return $this->set($interface, $concrete);
+        return $this->set($interfaceName, $concrete);
     }
 
     /**
@@ -143,22 +148,22 @@ class Container implements Collection
      * @param callable $callable
      *
      * @return void
-     * @throws Invalid
-     * @throws NotFound
+     * @throws CannotExtendResolved
+     * @throws ServiceNotFound
      */
-    public function extend(string $name, callable $callable): void
+    public function extend(string $name, callable $callableObject): void
     {
         $name = $this->resolveAlias($name);
 
         if (array_key_exists($name, $this->instances)) {
-            throw Invalid::cannotExtendResolved($name);
+            throw new CannotExtendResolved($name);
         }
 
         if (!array_key_exists($name, $this->services)) {
-            throw NotFound::serviceNotFound($name);
+            throw new ServiceNotFound($name);
         }
 
-        $this->services[$name]->addExtender($callable);
+        $this->services[$name]->addExtender($callableObject);
     }
 
     /**
@@ -167,8 +172,7 @@ class Container implements Collection
      * @param string $name
      *
      * @return mixed
-     * @throws Invalid
-     * @throws NotFound
+     * @throws ServiceNotFound
      */
     public function get(string $name): mixed
     {
@@ -222,12 +226,12 @@ class Container implements Collection
      * @param string $name
      *
      * @return ServiceDefinition
-     * @throws NotFound
+     * @throws ServiceNotFound
      */
     public function getDefinition(string $name): ServiceDefinition
     {
         if (!array_key_exists($name, $this->services)) {
-            throw NotFound::serviceNotFound($name);
+            throw new ServiceNotFound($name);
         }
 
         return $this->services[$name];
@@ -239,12 +243,12 @@ class Container implements Collection
      * @param string $name
      *
      * @return object
-     * @throws NotFound
+     * @throws InstanceNotFound
      */
     public function getInstance(string $name): object
     {
         if (!array_key_exists($name, $this->instances)) {
-            throw NotFound::instanceNotFound($name);
+            throw new InstanceNotFound($name);
         }
 
         return $this->instances[$name];
@@ -256,12 +260,12 @@ class Container implements Collection
      * @param string $name
      *
      * @return mixed
-     * @throws NotFound
+     * @throws ParameterNotFound
      */
     public function getParameter(string $name): mixed
     {
         if (!array_key_exists($name, $this->parameters)) {
-            throw NotFound::parameterNotFound($name);
+            throw new ParameterNotFound($name);
         }
 
         return $this->resolveParameter($name);
@@ -283,15 +287,15 @@ class Container implements Collection
      * @param string $serviceName
      *
      * @return object
-     * @throws Invalid
-     * @throws NotFound
+     * @throws ServiceNotFound
+     * @throws ServiceNotRegistered
      */
     public function getService(string $serviceName): object
     {
         $result = $this->get($serviceName);
 
         if (!is_object($result)) {
-            throw Invalid::serviceNotFound($serviceName);
+            throw new ServiceNotRegistered($serviceName);
         }
 
         return $result;
@@ -303,7 +307,7 @@ class Container implements Collection
      * @param string $name
      *
      * @return bool
-     * @throws Invalid
+     * @throws CircularAliasFound
      */
     public function has(string $name): bool
     {
@@ -374,7 +378,7 @@ class Container implements Collection
      * @param string $serviceName
      *
      * @return bool
-     * @throws Invalid
+     * @throws CircularAliasFound
      */
     public function hasService(string $serviceName): bool
     {
@@ -397,8 +401,9 @@ class Container implements Collection
      * @param string $name
      *
      * @return mixed
-     * @throws Invalid
-     * @throws NotFound
+     * @throws CircularAliasFound
+     * @throws ReflectionException
+     * @throws ServiceNotFound
      */
     public function new(string $name): mixed
     {
@@ -426,7 +431,7 @@ class Container implements Collection
      * @param mixed  $definition
      *
      * @return ServiceDefinition
-     * @throws Invalid
+     * @throws NoProcessorFound
      */
     public function set(string $name, mixed $definition): ServiceDefinition
     {
@@ -446,7 +451,7 @@ class Container implements Collection
      * @param string $alias
      *
      * @return $this
-     * @throws Invalid
+     * @throws CircularAliasFound
      */
 
     public function setAlias(string $name, string $alias): static
@@ -608,7 +613,7 @@ class Container implements Collection
      * @param string $target
      *
      * @return void
-     * @throws Invalid
+     * @throws CircularAliasFound
      */
     private function detectCircularAlias(string $alias, string $target): void
     {
@@ -617,7 +622,7 @@ class Container implements Collection
 
         while (true) {
             if ($current === $alias) {
-                throw Invalid::circularAlias($alias);
+                throw new CircularAliasFound($alias);
             }
 
             if (array_key_exists($current, $seen)) {
@@ -639,7 +644,7 @@ class Container implements Collection
      * @param mixed $definition
      *
      * @return Processor
-     * @throws Invalid
+     * @throws NoProcessorFound
      */
     private function findProcessor(mixed $definition): Processor
     {
@@ -649,7 +654,7 @@ class Container implements Collection
             }
         }
 
-        throw Invalid::noProcessorFound();
+        throw new NoProcessorFound();
     }
 
     /**
@@ -659,8 +664,7 @@ class Container implements Collection
      * @param bool   $cache
      *
      * @return mixed
-     * @throws Invalid
-     * @throws NotFound
+     * @throws ServiceNotFound
      * @throws ReflectionException
      */
     private function resolve(string $name, bool $cache): mixed
@@ -669,7 +673,7 @@ class Container implements Collection
             if ($this->autowire && class_exists($name)) {
                 $this->set($name, $name);
             } else {
-                throw NotFound::serviceNotFound($name);
+                throw new ServiceNotFound($name);
             }
         }
 
@@ -698,7 +702,7 @@ class Container implements Collection
      * @param string $name
      *
      * @return string
-     * @throws Invalid
+     * @throws CircularAliasFound
      */
     private function resolveAlias(string $name): string
     {
@@ -707,7 +711,7 @@ class Container implements Collection
 
         while (array_key_exists($current, $this->aliases)) {
             if (array_key_exists($current, $seen)) {
-                throw Invalid::circularAlias($name);
+                throw new CircularAliasFound($name);
             }
 
             $seen[$current] = true;

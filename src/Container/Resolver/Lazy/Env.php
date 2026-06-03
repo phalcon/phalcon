@@ -33,7 +33,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
-use Phalcon\Container\Exception\NotFound;
+use Phalcon\Container\Exceptions\EnvNotDefined;
 
 class Env extends Lazy
 {
@@ -46,12 +46,12 @@ class Env extends Lazy
     /**
      * Resolve an environment variable
      *
-     * @param object $container
+     * @param object $ioc
      *
      * @return mixed
-     * @throws NotFound
+     * @throws EnvNotDefined
      */
-    public function resolve(object $container): mixed
+    public function resolve(object $ioc): mixed
     {
         return $this->cast($this->getEnv());
     }
@@ -76,14 +76,14 @@ class Env extends Lazy
      * Return the env value
      *
      * @return string
-     * @throws NotFound
+     * @throws EnvNotDefined
      */
     protected function getEnv(): string
     {
         $envs = array_merge($_ENV, getenv());
 
         if (!array_key_exists($this->varname, $envs)) {
-            throw NotFound::envNotDefined($this->varname);
+            throw new EnvNotDefined($this->varname);
         }
 
         return $envs[$this->varname];

@@ -50,15 +50,15 @@ class NewCall extends Lazy
     /**
      * Resolve a new instance method call
      *
-     * @param object $container
+     * @param object $ioc
      *
      * @return mixed
      */
-    public function resolve(object $container): mixed
+    public function resolve(object $ioc): mixed
     {
-        $id        = $this->resolveArgument($container, $this->id);
-        $arguments = $this->resolveArguments($container, $this->arguments);
-        $service   = $container->new($id);
+        $id        = $this->resolveArgument($ioc, $this->id);
+        $arguments = $this->resolveArguments($ioc, $this->arguments);
+        $service   = $ioc->new($id);
 
         return call_user_func_array([$service, $this->method], $arguments);
     }

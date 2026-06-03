@@ -45,9 +45,9 @@ class LazyFactory
         return new ArrayValues($values);
     }
 
-    public static function call(callable $callable): Call
+    public static function call(callable $callableObject): Call
     {
-        return new Call($callable);
+        return new Call($callableObject);
     }
 
     public static function callableGet(string $id): CallableGet
@@ -70,9 +70,9 @@ class LazyFactory
         return new Env($name, $type);
     }
 
-    public static function envDefault(string $name, mixed $default, ?string $type = null): EnvDefault
+    public static function envDefault(string $name, mixed $defaultValue, ?string $type = null): EnvDefault
     {
-        return new EnvDefault($name, $default, $type);
+        return new EnvDefault($name, $defaultValue, $type);
     }
 
     /**
@@ -81,9 +81,9 @@ class LazyFactory
      *
      * @return FunctionCall
      */
-    public static function functionCall(string $function, array $args): FunctionCall
+    public static function functionCall(string $functionName, array $args): FunctionCall
     {
-        return new FunctionCall($function, $args);
+        return new FunctionCall($functionName, $args);
     }
 
     public static function get(string $id): Get

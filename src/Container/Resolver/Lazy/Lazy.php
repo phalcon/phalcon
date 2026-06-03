@@ -37,34 +37,34 @@ use Phalcon\Contracts\Container\Resolver\Resolvable;
 
 abstract class Lazy implements Resolvable
 {
-    public function __invoke(object $container): mixed
+    public function __invoke(object $ioc): mixed
     {
-        return $this->resolve($container);
+        return $this->resolve($ioc);
     }
 
-    abstract public function resolve(object $container): mixed;
+    abstract public function resolve(object $ioc): mixed;
 
-    protected function resolveArgument(object $container, mixed $argument): mixed
+    protected function resolveArgument(object $ioc, mixed $argument): mixed
     {
         if ($argument instanceof self) {
-            return $argument->resolve($container);
+            return $argument->resolve($ioc);
         }
 
         return $argument;
     }
 
     /**
-     * @param object                  $container
+     * @param object                  $ioc
      * @param array<array-key, mixed> $arguments
      *
      * @return array<array-key, mixed>
      */
-    protected function resolveArguments(object $container, array $arguments): array
+    protected function resolveArguments(object $ioc, array $arguments): array
     {
         $resolved = [];
 
         foreach ($arguments as $key => $argument) {
-            $resolved[$key] = $this->resolveArgument($container, $argument);
+            $resolved[$key] = $this->resolveArgument($ioc, $argument);
         }
 
         return $resolved;

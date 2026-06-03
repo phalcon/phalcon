@@ -34,7 +34,7 @@ declare(strict_types=1);
 namespace Phalcon\Container\Resolver;
 
 use Closure;
-use Phalcon\Container\Exception\Invalid;
+use Phalcon\Container\Exceptions\CannotResolveParameter;
 use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Contracts\Container\Resolver\ResolverService;
 use ReflectionClass;
@@ -71,32 +71,32 @@ class Resolver implements ResolverService
     /**
      * Resolve a call
      *
-     * @param object   $container
-     * @param callable $callable
+     * @param object   $ioc
+     * @param callable $callableObject
      * @param array    $arguments
      *
      * @return mixed
      * @throws ReflectionException
      */
     public function resolveCall(
-        object $container,
-        callable $callable,
+        object $ioc,
+        callable $callableObject,
         array $arguments
     ): mixed {
-        $closure    = $callable instanceof Closure
-            ? $callable
-            : Closure::fromCallable($callable);
+        $closure    = $callableObject instanceof Closure
+            ? $callableObject
+            : Closure::fromCallable($callableObject);
         $reflection = new ReflectionFunction($closure);
         $params     = $reflection->getParameters();
-        $resolved   = $this->resolveParameters($container, $params, $arguments);
+        $resolved   = $this->resolveParameters($ioc, $params, $arguments);
 
-        return call_user_func_array($callable, $resolved);
+        return call_user_func_array($callableObject, $resolved);
     }
 
     /**
      * Resolve a class
      *
-     * @param object $container
+     * @param object $ioc
      * @param string $className
      * @param array  $arguments
      *
@@ -104,7 +104,7 @@ class Resolver implements ResolverService
      * @throws ReflectionException
      */
     public function resolveClass(
-        object $container,
+        object $ioc,
         string $className,
         array $arguments
     ): object {
@@ -116,7 +116,7 @@ class Resolver implements ResolverService
         }
 
         $params   = $constructor->getParameters();
-        $resolved = $this->resolveParameters($container, $params, $arguments);
+        $resolved = $this->resolveParameters($ioc, $params, $arguments);
 
         return $reflection->newInstanceArgs($resolved);
     }
@@ -124,36 +124,36 @@ class Resolver implements ResolverService
     /**
      * Resolve a method
      *
-     * @param object           $container
+     * @param object           $ioc
      * @param ReflectionMethod $method
-     * @param object           $object
+     * @param object           $instance
      *
      * @return void
      * @throws ReflectionException
      */
     public function resolveMethod(
-        object $container,
+        object $ioc,
         ReflectionMethod $method,
-        object $object
+        object $instance
     ): void {
         $params   = $method->getParameters();
-        $resolved = $this->resolveParameters($container, $params, []);
+        $resolved = $this->resolveParameters($ioc, $params, []);
 
-        $method->invokeArgs($object, $resolved);
+        $method->invokeArgs($instance, $resolved);
     }
 
     /**
      * Resolve parameters
      *
-     * @param object              $container
+     * @param object              $ioc
      * @param ReflectionParameter $parameter
      *
      * @return mixed
-     * @throws Invalid
+     * @throws CannotResolveParameter
      * @throws ReflectionException
      */
     public function resolveParameter(
-        object $container,
+        object $ioc,
         ReflectionParameter $parameter
     ): mixed {
         $type = $parameter->getType();
@@ -161,8 +161,8 @@ class Resolver implements ResolverService
         if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
             $typeName = $type->getName();
 
-            if (method_exists($container, 'has') && $container->has($typeName)) {
-                return $container->get($typeName);
+            if (method_exists($ioc, 'has') && $ioc->has($typeName)) {
+                return $ioc->get($typeName);
             }
         }
 
@@ -170,14 +170,14 @@ class Resolver implements ResolverService
             return $parameter->getDefaultValue();
         }
 
-        throw Invalid::cannotResolveParameter(
+        throw new CannotResolveParameter(
             $parameter->getName(),
             $parameter->getDeclaringClass()?->getName() ?? 'unknown'
         );
     }
 
     public function resolveParameters(
-        object $container,
+        object $ioc,
         array $parameters,
         array $arguments
     ): array {
@@ -187,23 +187,23 @@ class Resolver implements ResolverService
             $name = $parameter->getName();
 
             if (array_key_exists($position, $arguments)) {
-                $resolved[$position] = $this->resolveArg($container, $arguments[$position]);
+                $resolved[$position] = $this->resolveArg($ioc, $arguments[$position]);
                 continue;
             }
 
             if (array_key_exists($name, $arguments)) {
-                $resolved[$position] = $this->resolveArg($container, $arguments[$name]);
+                $resolved[$position] = $this->resolveArg($ioc, $arguments[$name]);
                 continue;
             }
 
-            $resolved[$position] = $this->resolveParameter($container, $parameter);
+            $resolved[$position] = $this->resolveParameter($ioc, $parameter);
         }
 
         return $resolved;
     }
 
     public function resolveType(
-        object $container,
+        object $ioc,
         ReflectionType $type
     ): mixed {
         if ($type instanceof ReflectionNamedType) {
@@ -213,10 +213,10 @@ class Resolver implements ResolverService
         return null;
     }
 
-    private function resolveArg(object $container, mixed $arg): mixed
+    private function resolveArg(object $ioc, mixed $arg): mixed
     {
         if ($arg instanceof Lazy) {
-            return $arg->resolve($container);
+            return $arg->resolve($ioc);
         }
 
         return $arg;

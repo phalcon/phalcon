@@ -43,16 +43,16 @@ class CallableGet extends Lazy
     /**
      * Resolve to a closure on a get()
      *
-     * @param object $container
+     * @param object $ioc
      *
      * @return mixed
      */
-    public function resolve(object $container): mixed
+    public function resolve(object $ioc): mixed
     {
-        return function () use ($container) {
-            $id = $this->resolveArgument($container, $this->id);
+        return function () use ($ioc) {
+            $id = $this->resolveArgument($ioc, $this->id);
 
-            return $container->get($id);
+            return $ioc->get($id);
         };
     }
 }

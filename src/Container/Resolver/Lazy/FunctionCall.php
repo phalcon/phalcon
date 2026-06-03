@@ -36,11 +36,11 @@ namespace Phalcon\Container\Resolver\Lazy;
 class FunctionCall extends Lazy
 {
     /**
-     * @param string                  $function
+     * @param string                  $functionName
      * @param array<array-key, mixed> $arguments
      */
     public function __construct(
-        protected string $function,
+        protected string $functionName,
         protected array $arguments
     ) {
     }
@@ -48,14 +48,14 @@ class FunctionCall extends Lazy
     /**
      * Resolve a function
      *
-     * @param object $container
+     * @param object $ioc
      *
      * @return mixed
      */
-    public function resolve(object $container): mixed
+    public function resolve(object $ioc): mixed
     {
-        $arguments = $this->resolveArguments($container, $this->arguments);
+        $arguments = $this->resolveArguments($ioc, $this->arguments);
 
-        return call_user_func_array($this->function, $arguments);
+        return call_user_func_array($this->functionName, $arguments);
     }
 }
