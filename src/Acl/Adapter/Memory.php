@@ -95,7 +95,7 @@ class Memory extends AbstractAdapter
      *
      * @var string|null
      */
-    protected $activeKey = null;
+    protected string | null $activeKey = null;
 
     /**
      * Components
@@ -616,7 +616,7 @@ class Memory extends AbstractAdapter
         mixed $roleName,
         mixed $componentName,
         string $access,
-        array $parameters = null
+        array | null $parameters = null
     ): bool {
         $componentObject = null;
         $haveAccess      = null;

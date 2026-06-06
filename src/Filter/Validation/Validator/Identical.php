@@ -84,8 +84,9 @@ class Identical extends AbstractValidator
      */
     public function validate(Validation $validation, string $field): bool
     {
-        $valid = false;
-        $value = $validation->getValue($field);
+        $accepted = false;
+        $valid    = false;
+        $value    = $validation->getValue($field);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

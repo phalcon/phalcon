@@ -136,7 +136,7 @@ class Config extends Collection implements ConfigInterface
         $config = clone $this;
         $keys   = explode($delimiter, $path);
 
-        while (!empty($keys)) {
+        while ([] !== $keys) {
             $key = array_shift($keys);
 
             if (true !== $config->has($key)) {

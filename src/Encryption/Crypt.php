@@ -147,7 +147,7 @@ class Crypt implements CryptInterface
     public function __construct(
         string $cipher = self::DEFAULT_CIPHER,
         bool $useSigning = true,
-        PadFactory $padFactory = null
+        PadFactory | null $padFactory = null
     ) {
         if (null === $padFactory) {
             $padFactory = new PadFactory();

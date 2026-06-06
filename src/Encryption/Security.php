@@ -693,7 +693,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
      *
      * @return string|null
      */
-    private function processTokenKey(string $tokenKey = null): string | null
+    private function processTokenKey(string | null $tokenKey = null): string | null
     {
         $key     = $tokenKey;
         $session = $this->getLocalService("session");
