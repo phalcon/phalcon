@@ -266,7 +266,7 @@ jobs:
           fi
 
           cp tests/support/_config/.env.default .env
-          php tests/support/_config/generate-db-schemas.php
+          php bin/generate-db-schemas.php
 
       - name: Run Database Tests (MySQL)
         env:
