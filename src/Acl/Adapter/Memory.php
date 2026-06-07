@@ -95,7 +95,7 @@ class Memory extends AbstractAdapter
      *
      * @var string|null
      */
-    protected string | null $activeKey = null;
+    protected $activeKey = null;
 
     /**
      * Components
