@@ -13,76 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Events;
 
+use Phalcon\Contracts\Events\Manager as ManagerContract;
+
 /**
  * Phalcon\Events\ManagerInterface
  *
- * Interface for Phalcon\Events managers.
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Events\Manager} instead.
  */
-interface ManagerInterface
+interface ManagerInterface extends ManagerContract
 {
-    public const DEFAULT_PRIORITY = 100;
-
-    /**
-     * Attach a listener to the events manager
-     *
-     * @param string          $eventType
-     * @param object|callable $handler
-     * @param int             $priority
-     */
-    public function attach(
-        string $eventType,
-        callable | object $handler,
-        int $priority = self::DEFAULT_PRIORITY
-    ): void;
-
-    /**
-     * Detach the listener from the events manager
-     *
-     * @param string $eventType
-     * @param object $handler
-     */
-    public function detach(string $eventType, object $handler): void;
-
-    /**
-     * Removes all events from the EventsManager
-     *
-     * @param string|null $type
-     */
-    public function detachAll(string | null $type = null): void;
-
-    /**
-     * Fires an event in the events manager causing the active listeners to be
-     * notified about it
-     *
-     * @param string     $eventType
-     * @param object     $source
-     * @param mixed|null $data
-     * @param bool       $cancelable
-     *
-     * @return mixed
-     */
-    public function fire(
-        string $eventType,
-        object $source,
-        mixed $data = null,
-        bool $cancelable = true
-    );
-
-    /**
-     * Returns all the attached listeners of a certain type
-     *
-     * @param string $type
-     *
-     * @return array<array-key, mixed>
-     */
-    public function getListeners(string $type): array;
-
-    /**
-     * Check whether certain type of event has listeners
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function hasListeners(string $type): bool;
 }

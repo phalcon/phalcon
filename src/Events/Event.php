@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Events;
 
+use Phalcon\Contracts\Events\Stoppable;
+use Phalcon\Events\Exceptions\EventNotCancelable;
+
 /**
  * Phalcon\Events\Event
  *
@@ -28,7 +31,7 @@ namespace Phalcon\Events;
  * }
  * ```
  */
-class Event implements EventInterface
+class Event implements EventInterface, Stoppable
 {
     /**
      * Is event propagation stopped?
@@ -56,7 +59,7 @@ class Event implements EventInterface
     /**
      * @return mixed
      */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
@@ -94,6 +97,17 @@ class Event implements EventInterface
     }
 
     /**
+     * Returns whether propagation must stop. PSR-14 alias backed by the same
+     * `stopped` flag as `isStopped()`; calling `stop()` flips both.
+     *
+     * @return bool
+     */
+    public function isPropagationStopped(): bool
+    {
+        return $this->stopped;
+    }
+
+    /**
      * Check whether the event is currently stopped.
      *
      * @return bool
@@ -110,7 +124,7 @@ class Event implements EventInterface
      *
      * @return EventInterface
      */
-    public function setData($data = null): EventInterface
+    public function setData(mixed $data = null): EventInterface
     {
         $this->data = $data;
 
@@ -141,12 +155,12 @@ class Event implements EventInterface
      * ```
      *
      * @return EventInterface
-     * @throws Exception
+     * @throws EventNotCancelable
      */
     public function stop(): EventInterface
     {
         if (true !== $this->cancelable) {
-            throw new Exception('Trying to cancel a non-cancelable event');
+            throw new EventNotCancelable();
         }
 
         $this->stopped = true;

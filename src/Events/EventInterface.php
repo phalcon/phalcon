@@ -13,70 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Events;
 
+use Phalcon\Contracts\Events\Event as EventContract;
+
 /**
  * Phalcon\Events\EventInterface
  *
- * Interface for Phalcon\Events\Event class
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Events\Event} instead.
  */
-interface EventInterface
+interface EventInterface extends EventContract
 {
-    /**
-     * Gets event data
-     *
-     * @return mixed
-     */
-    public function getData();
-
-    /**
-     * Gets event source
-     *
-     * @return object|null
-     */
-    public function getSource(): object | null;
-
-    /**
-     * Gets event type
-     *
-     * @return mixed
-     */
-    public function getType(): mixed;
-
-    /**
-     * Check whether the event is cancelable
-     *
-     * @return bool
-     */
-    public function isCancelable(): bool;
-
-    /**
-     * Check whether the event is currently stopped
-     *
-     * @return bool
-     */
-    public function isStopped(): bool;
-
-    /**
-     * Sets event data
-     *
-     * @param mixed|null $data
-     *
-     * @return EventInterface
-     */
-    public function setData($data = null): EventInterface;
-
-    /**
-     * Sets event type
-     *
-     * @param string $type
-     *
-     * @return EventInterface
-     */
-    public function setType(string $type): EventInterface;
-
-    /**
-     * Stops the event preventing propagation
-     *
-     * @return EventInterface
-     */
-    public function stop(): EventInterface;
 }
