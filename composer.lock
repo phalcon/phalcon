@@ -1404,12 +1404,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "5e499c0ac71c7b152eb12b4ae6a0ca35bc986764"
+                "reference": "b1a9a4365204a882570b1e841e0d1bd28dd53f3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/5e499c0ac71c7b152eb12b4ae6a0ca35bc986764",
-                "reference": "5e499c0ac71c7b152eb12b4ae6a0ca35bc986764",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/b1a9a4365204a882570b1e841e0d1bd28dd53f3f",
+                "reference": "b1a9a4365204a882570b1e841e0d1bd28dd53f3f",
                 "shasum": ""
             },
             "require": {
@@ -1471,7 +1471,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-06-06T18:08:32+00:00"
+            "time": "2026-06-07T00:06:56+00:00"
         },
         {
             "name": "phalcon/volt",
