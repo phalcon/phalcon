@@ -225,28 +225,27 @@ class Crypt implements CryptInterface
             $iv
         );
 
-        /**
-         * The variable below keeps the string (not unpadded). It will be used
-         * to compare the hash if we use a digest (signed)
-         */
-        $padded = $decrypted;
-
-        $decrypted = $this->decryptGetUnpadded(
-            $mode,
-            $blockSize,
-            $decrypted
-        );
-
         if (true === $this->useSigning) {
             /**
              * Checks on the decrypted message digest using the HMAC method.
+             * The check runs against the padded plaintext, before unpadding,
+             * and uses hash_equals() so that the comparison is constant-time.
              */
-            if ($digest !== hash_hmac($hashAlgorithm, $padded, $decryptKey, true)) {
+            if (
+                true !== hash_equals(
+                    hash_hmac($hashAlgorithm, $decrypted, $decryptKey, true),
+                    $digest
+                )
+            ) {
                 throw new Mismatch("Hash does not match.");
             }
         }
 
-        return $decrypted;
+        return $this->decryptGetUnpadded(
+            $mode,
+            $blockSize,
+            $decrypted
+        );
     }
 
     /**

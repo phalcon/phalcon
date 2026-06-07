@@ -23,6 +23,7 @@
 
 ### Fixed
 
+- Fixed `Phalcon\Encryption\Crypt::decrypt()` to verify the HMAC tag with the constant-time `hash_equals()` instead of the identity operator, removing an observable timing discrepancy in the tag comparison (CWE-208, CWE-347) that could be used to forge an accepted tag byte-by-byte. The tag is now also verified before the decrypted text is unpadded, and truncated tags are rejected by the unequal-length path of `hash_equals()`. Affects `decrypt()` and `decryptBase64()` on signed payloads (`useSigning`, the default), including encrypted cookies via `Phalcon\Http\Cookie::getValue()`
 - Fixed `Phalcon\Mvc\Model::getChangedFields()` / `hasChanged()` flagging every null-valued column of a freshly-loaded row as changed [#CP-17042](https://github.com/phalcon/cphalcon/issues/17042)
 - Fixed `Phalcon\Mvc\Model::getUpdatedFields()` flagging unchanged null-valued columns as updated [#CP-17042](https://github.com/phalcon/cphalcon/issues/17042)
 - Fixed `Phalcon\Forms\Form::clear()` leaving a previously-bound `null` field value in the data array instead of unsetting it before reassigning the element default [#CP-17042](https://github.com/phalcon/cphalcon/issues/17042)
