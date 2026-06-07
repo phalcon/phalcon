@@ -61,7 +61,7 @@
     "pds/composer-script-names": "^1.0",
     "pds/skeleton": "^1.0",
     "phalcon/phql": "1.0.x-dev",
-    "phalcon/volt": "dev-master",
+    "phalcon/volt": "1.0.x-dev",
     "phpbench/phpbench": "^1.4",
     "phpstan/phpstan": "^2.2",
     "phpunit/phpunit": "^10.5",

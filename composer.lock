@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f68897f0a74eeec9d84efd2ce279963a",
+    "content-hash": "a79adb47a28e77f2bd46877e14b120bf",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1475,7 +1475,7 @@
         },
         {
             "name": "phalcon/volt",
-            "version": "dev-master",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
@@ -1502,7 +1502,6 @@
             "suggest": {
                 "phalcon/phalcon": "The Phalcon framework this module integrates with"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "files": [
