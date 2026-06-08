@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Internal;
 
 use Phalcon\Auth\Exception;
-use Phalcon\Contracts\Container\Service\Collection;
 
 /**
  * Internal option-parsing helpers shared by adapter / guard fromOptions()
@@ -61,33 +60,6 @@ final class Options
         return $value;
     }
 
-    /**
-     * @template T of object
-     *
-     * @phpstan-param class-string<T> $serviceId
-     *
-     * @phpstan-return T
-     *
-     * @throws Exception
-     */
-    public static function resolveService(
-        Collection $container,
-        string $serviceId,
-        string $context
-    ): object {
-        if (!$container->has($serviceId)) {
-            throw new Exception(
-                sprintf(
-                    "Auth %s requires service '%s' to be bound in the container",
-                    $context,
-                    $serviceId
-                )
-            );
-        }
-
-        /** @var T */
-        return $container->get($serviceId);
-    }
 
     /**
      * @param array<string, mixed> $options

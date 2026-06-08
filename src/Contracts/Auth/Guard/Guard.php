@@ -19,6 +19,7 @@ namespace Phalcon\Contracts\Auth\Guard;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Container\Service\Collection;
+use Phalcon\Di\DiInterface;
 
 /**
  * @phpstan-import-type AuthCredentials from Adapter
@@ -31,11 +32,16 @@ interface Guard
      * application config; each implementation resolves the framework
      * services it needs from the container.
      *
-     * @param array<string, mixed> $options
+     * The container is Container-first: pass a Phalcon\Container\Container.
+     * The legacy Phalcon\Di\Di is also supported with provisions - its
+     * service definitions must be pre-registered (no autowiring).
+     *
+     * @param Collection|DiInterface $container
+     * @param array<string, mixed>   $options
      */
     public static function fromOptions(
         Adapter $adapter,
-        Collection $container,
+        $container,
         array $options
     ): static;
 

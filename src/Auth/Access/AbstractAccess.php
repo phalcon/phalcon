@@ -17,10 +17,11 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Access;
 
 use Phalcon\Contracts\Auth\Access\Access;
-use Phalcon\Contracts\Auth\Manager;
+use Phalcon\Contracts\Auth\Guard\Guard;
 
 /**
  * @phpstan-import-type ForwardTarget from Access
+ * @phpstan-import-type AccessContext from Access
  */
 abstract class AbstractAccess implements Access
 {
@@ -33,11 +34,6 @@ abstract class AbstractAccess implements Access
      * @var list<string>
      */
     protected array $onlyActions = [];
-
-    public function __construct(
-        protected Manager $manager
-    ) {
-    }
 
     /**
      * @return list<string>
@@ -55,9 +51,12 @@ abstract class AbstractAccess implements Access
         return $this->onlyActions;
     }
 
-    public function isAllowed(string $actionName): bool
+    /**
+     * @phpstan-param AccessContext $context
+     */
+    public function isAllowed(Guard $guard, string $actionName, array $context = []): bool
     {
-        $allowed = $this->allowedIf();
+        $allowed = $this->allowedIf($guard);
 
         if (!empty($this->exceptActions)) {
             return $allowed || in_array($actionName, $this->exceptActions, true);
@@ -93,4 +92,9 @@ abstract class AbstractAccess implements Access
     {
         $this->onlyActions = $onlyActions;
     }
+
+    /**
+     * Whether the gate's base condition holds for the given identity.
+     */
+    abstract protected function allowedIf(Guard $guard): bool;
 }

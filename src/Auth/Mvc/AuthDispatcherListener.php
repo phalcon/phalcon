@@ -37,7 +37,12 @@ class AuthDispatcherListener extends AbstractAuthDispatcherListener
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher): bool
     {
         return $this->enforce(
-            (string) $dispatcher->getActionName(),
+            (string)$dispatcher->getActionName(),
+            [
+                'handler' => $dispatcher->getControllerName(),
+                'module'  => $dispatcher->getModuleName(),
+                'params'  => $dispatcher->getParams(),
+            ],
             fn (array $target) => $dispatcher->forward($target),
         );
     }

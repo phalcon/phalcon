@@ -24,6 +24,7 @@ use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\Guard\Guard;
 use Phalcon\Contracts\Container\Service\Collection;
+use Phalcon\Di\DiInterface;
 use Phalcon\Encryption\Security;
 
 /**
@@ -88,7 +89,7 @@ class ManagerFactory
 
     public function __construct(
         protected readonly Security $hasher,
-        protected readonly Collection $container,
+        protected readonly Collection | DiInterface $container,
         ?AdapterLocator $adapterLocator = null,
         ?GuardLocator $guardLocator = null,
         ?AccessLocator $accessLocator = null,

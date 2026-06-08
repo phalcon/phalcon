@@ -59,8 +59,7 @@ class Manager implements ManagerContract
             );
         }
 
-        $class              = $this->accessFactory->getClass($accessName);
-        $this->activeAccess = new $class($this);
+        $this->activeAccess = $this->accessFactory->newInstance($accessName);
 
         return $this;
     }

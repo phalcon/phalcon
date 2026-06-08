@@ -19,6 +19,7 @@ namespace Phalcon\Auth\Guard;
 use Phalcon\Auth\Exception;
 use Phalcon\Auth\Exceptions\DoesNotImplement;
 use Phalcon\Auth\Guard\Config\SessionGuardConfig;
+use Phalcon\Auth\Internal\ContainerResolver;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
@@ -27,7 +28,6 @@ use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Auth\Guard\BasicAuth;
 use Phalcon\Contracts\Auth\Guard\GuardStateful;
 use Phalcon\Contracts\Auth\RememberToken;
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\Response\CookiesInterface;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
@@ -52,9 +52,12 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         parent::__construct($adapter, $config);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public static function fromOptions(
         Adapter $adapter,
-        Collection $container,
+        $container,
         array $options
     ): static {
         $config = new SessionGuardConfig(
@@ -65,9 +68,36 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
         return new static(
             $adapter,
-            Options::resolveService($container, RequestInterface::class, 'Session guard'),
-            Options::resolveService($container, CookiesInterface::class, 'Session guard'),
-            Options::resolveService($container, SessionManagerInterface::class, 'Session guard'),
+            ContainerResolver::requireService(
+                $container,
+                ContainerResolver::serviceCandidates(
+                    $options,
+                    'request',
+                    RequestInterface::class,
+                    'request'
+                ),
+                'Session guard'
+            ),
+            ContainerResolver::requireService(
+                $container,
+                ContainerResolver::serviceCandidates(
+                    $options,
+                    'cookies',
+                    CookiesInterface::class,
+                    'cookies'
+                ),
+                'Session guard'
+            ),
+            ContainerResolver::requireService(
+                $container,
+                ContainerResolver::serviceCandidates(
+                    $options,
+                    'session',
+                    SessionManagerInterface::class,
+                    'session'
+                ),
+                'Session guard'
+            ),
             $config,
         );
     }

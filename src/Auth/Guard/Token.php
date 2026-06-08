@@ -17,10 +17,10 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Guard;
 
 use Phalcon\Auth\Guard\Config\TokenGuardConfig;
+use Phalcon\Auth\Internal\ContainerResolver;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthUser;
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Http\RequestInterface;
 
 /**
@@ -38,14 +38,26 @@ class Token extends AbstractGuard
         parent::__construct($adapter, $config);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     public static function fromOptions(
         Adapter $adapter,
-        Collection $container,
+        $container,
         array $options
     ): static {
         return new static(
             $adapter,
-            Options::resolveService($container, RequestInterface::class, 'Token guard'),
+            ContainerResolver::requireService(
+                $container,
+                ContainerResolver::serviceCandidates(
+                    $options,
+                    'request',
+                    RequestInterface::class,
+                    'request'
+                ),
+                'Token guard'
+            ),
             new TokenGuardConfig(
                 Options::requireString($options, 'inputKey', 'token guard'),
                 Options::requireString($options, 'storageKey', 'token guard')
