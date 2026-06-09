@@ -26,10 +26,12 @@ use Phalcon\Db\Exceptions\MaterializedViewsNotSupported;
 use Phalcon\Db\Exceptions\MissingDefinitionKey;
 use Phalcon\Db\Exceptions\ReturningNotSupported;
 use Phalcon\Db\Exceptions\ReturningRequiresColumn;
+use Phalcon\Db\Exceptions\UnsupportedOperator;
 use Phalcon\Support\Settings;
 
 use function explode;
 use function implode;
+use function in_array;
 use function is_array;
 use function is_string;
 use function range;
@@ -52,6 +54,20 @@ abstract class Dialect implements DialectInterface
      * @var string
      */
     protected string $escapeChar;
+    /**
+     * Dialect-specific operators that a concrete dialect must opt into via
+     * $supportedOperators; using one elsewhere throws.
+     *
+     * @var array
+     */
+    protected array $guardedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
+    /**
+     * Subset of $guardedOperators that this dialect emits. Overridden per
+     * dialect.
+     *
+     * @var array
+     */
+    protected array $supportedOperators = [];
 
     /**
      * Generate SQL to create a new savepoint
@@ -1038,6 +1054,15 @@ abstract class Dialect implements DialectInterface
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
+        $operator = $expression["op"];
+
+        if (
+            in_array($operator, $this->guardedOperators) &&
+            !in_array($operator, $this->supportedOperators)
+        ) {
+            throw new UnsupportedOperator($operator);
+        }
+
         $left = $this->getSqlExpression(
             $expression["left"],
             $escapeChar,
@@ -1050,7 +1075,7 @@ abstract class Dialect implements DialectInterface
             $bindCounts
         );
 
-        return $left . " " . $expression["op"] . " " . $right;
+        return $left . " " . $operator . " " . $right;
     }
 
     /**
