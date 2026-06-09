@@ -25,7 +25,7 @@ env:
   LC_ALL: en_US.UTF-8
 
   # PHP extensions required by Composer
-  EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, pcov, sqlite3, yaml, redis
+  EXTENSIONS: apcu, gettext, gd, igbinary, imagick, intl, json, mbstring, msgpack, memcached, pcov, sqlite3, yaml, redis, :memcache, openssl
 
 permissions: { }
 
@@ -43,23 +43,17 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      fail-fast: true
-      matrix:
-        php:
-          - '8.1'
-          - '8.2'
-          - '8.3'
-          - '8.4'
-          - '8.5'
-
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          token: ${{ github.token }}
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: '8.5'
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=/tmp
           tools: pecl
@@ -70,7 +64,7 @@ jobs:
       - name: Install development dependencies with Composer
         uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
         with:
-          composer-options: "--prefer-dist"
+          composer-options: "--prefer-dist --ignore-platform-reqs"
 
       - name: "PHPCS"
         run: composer cs
@@ -111,6 +105,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          token: ${{ github.token }}
 
       - name: "Setup platform specific environment"
         shell: pwsh
@@ -146,7 +144,7 @@ jobs:
           extensions: ${{ env.EXTENSIONS }}
           ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
           tools: pecl, phpize, php-config, composer:v2
-          coverage: xdebug
+          coverage: pcov
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PHALCON_PATH: ext
@@ -157,25 +155,28 @@ jobs:
       - name: "Install development dependencies with Composer"
         uses: "ramsey/composer-install@v4"
         with:
-          composer-options: "--prefer-dist"
+          composer-options: "--prefer-dist --ignore-platform-reqs"
 
       - name: "Setup Tests"
         shell: bash
         run: |
           if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
+            ./resources/linux-setup-locales.sh
           fi
 
           cp tests/support/_config/.env.default .env
+          php bin/generate-db-schemas.php
 
       - name: "Run Unit Tests"
         run: composer test-unit-coverage
 
       - name: Upload coverage file artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
         with:
           name: "unit-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
+          retention-days: 7
 
   db-mysql-tests:
     name: MySQL tests
@@ -183,16 +184,20 @@ jobs:
     permissions:
       contents: read # to fetch code (actions/checkout)
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     needs:
       - phpcs
 
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         php:
           - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
 
     services:
       mysql:
@@ -209,6 +214,94 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      redis:
+        image: redis:8-alpine
+        ports:
+          - "6379:6379"
+      memcached:
+        image: memcached:1.6-alpine
+        ports:
+          - "11211:11211"
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          token: ${{ github.token }}
+
+      - name: Setup platform specific environment
+        shell: pwsh
+        run: git config --global core.autocrlf false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          tools: pecl, phpize, php-config, composer:v2
+          coverage: pcov
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PHALCON_PATH: ext
+
+      - name: Validate composer
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Install development dependencies with Composer
+        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        with:
+          composer-options: "--prefer-dist --ignore-platform-reqs"
+
+      - name: Setup Tests
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ./resources/linux-setup-locales.sh
+          fi
+
+          cp tests/support/_config/.env.default .env
+          php bin/generate-db-schemas.php
+
+      - name: Run Database Tests (MySQL)
+        env:
+          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DATA_MYSQL_USER: root
+          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+        run: composer test-db-mysql-coverage
+
+      - name: Upload coverage file artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: "db-mysql-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
+          retention-days: 7
+
+  db-postgres-tests:
+    name: PostgreSQL tests
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
+    runs-on: ubuntu-latest
+
+    needs:
+      - phpcs
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    services:
       postgres:
         image: postgres:18-alpine
         ports:
@@ -233,6 +326,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          token: ${{ github.token }}
 
       - name: Setup platform specific environment
         shell: pwsh
@@ -243,9 +340,9 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+          ini-values: apc.enable_cli=on, session.save_path=/tmp
           tools: pecl, phpize, php-config, composer:v2
-          coverage: xdebug
+          coverage: pcov
         env:
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PHALCON_PATH: ext
@@ -256,180 +353,117 @@ jobs:
       - name: Install development dependencies with Composer
         uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
         with:
-          composer-options: "--prefer-dist"
+          composer-options: "--prefer-dist --ignore-platform-reqs"
 
       - name: Setup Tests
         shell: bash
         run: |
           if [ "${{ runner.os }}" = "Linux" ]; then
-            ./config/ci/linux-setup-locales.sh
+            ./resources/linux-setup-locales.sh
           fi
 
           cp tests/support/_config/.env.default .env
           php bin/generate-db-schemas.php
 
-      - name: Run Database Tests (MySQL)
+      - name: Run Database Tests (Postgres)
         env:
-          DATA_MYSQL_PORT: ${{ job.services.mysql.ports['3306'] }}
-          DATA_MYSQL_USER: root
           DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-        run: composer test-db-mysql-coverage
+        run: composer test-db-pgsql-coverage
 
       - name: Upload coverage file artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
         with:
-          name: "db-mysql-${{ matrix.php }}.coverage"
+          name: "db-postgres-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
+          retention-days: 7
 
-  #  db-postgres-tests:
-  #    name: PostgreSQL tests
-  #
-  #    permissions:
-  #      contents: read # to fetch code (actions/checkout)
-  #
-  #    runs-on: ubuntu-24.04
-  #
-  #    strategy:
-  #      fail-fast: true
-  #      matrix:
-  #        php:
-  #          - '8.1'
-  #
-  #    services:
-  #      postgres:
-  #        image: postgres:18-alpine
-  #        ports:
-  #          - "5432:5432"
-  #        env:
-  #          POSTGRES_USER: phalcon
-  #          POSTGRES_PASSWORD: secret
-  #          POSTGRES_DB: phalcon
-  #        options: >-
-  #          --health-cmd pg_isready
-  #          --health-interval 10s
-  #          --health-timeout 5s
-  #          --health-retries 5
-  #      redis:
-  #        image: redis:8-alpine
-  #        ports:
-  #          - "6379:6379"
-  #      memcached:
-  #        image: memcached:1.6-alpine
-  #        ports:
-  #          - "11211:11211"
-  #
-  #    steps:
-  #      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-  #
-  #      - name: "Setup platform specific environment"
-  #        shell: pwsh
-  #        run: git config --global core.autocrlf false
-  #
-  #      - name: "Setup PHP"
-  #        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
-  #        with:
-  #          php-version: ${{ matrix.php }}
-  #          extensions: ${{ env.EXTENSIONS }}
-  #          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-  #          tools: pecl, phpize, php-config, composer:v2
-  #          coverage: xdebug
-  #        env:
-  #          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #          PHALCON_PATH: ext
-  #
-  #      - name: "Validate composer"
-  #        run: composer validate --no-check-all --no-check-publish
-  #
-  #      - name: "Install development dependencies with Composer"
-  #        uses: "ramsey/composer-install@v2"
-  #        with:
-  #          composer-options: "--prefer-dist"
-  #
-  #      - name: "Setup Tests"
-  #        shell: bash
-  #        run: |
-  #          if [ "${{ runner.os }}" = "Linux" ]; then
-  #            ./config/ci/linux-setup-locales.sh
-  #          fi
-  #
-  #          cp tests/support/_config/.env.default .env
-  #          vendor/bin/codecept build
-  #
-  #      - name: "Run Database Tests (PostgreSQL)"
-  #        env:
-  #          DATA_POSTGRES_USER: phalcon
-  #          DATA_POSTGRES_PASS: secret
-  #          DATA_POSTGRES_PORT: ${{ job.services.postgres.ports['5432'] }}
-  #          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
-  #          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
-  #        run: vendor/bin/codecept run --coverage-xml=coverage.xml --ext DotReporter database --env pgsql -g pgsql
-  #
-  #      - name: "Upload coverage file artifact"
-  #        uses: "actions/upload-artifact@v7"
-  #        with:
-  #          name: "db-postgres-${{ matrix.php }}.coverage"
-  #          path: "tests/_output/coverage.xml"
+  db-sqlite-tests:
+    name: SQLite tests
 
-#  db-sqlite-tests:
-#    name: SQLite tests
-#
-#    permissions:
-#      contents: read # to fetch code (actions/checkout)
-#
-#    runs-on: ubuntu-24.04
-#
-#    strategy:
-#      fail-fast: true
-#      matrix:
-#        php:
-#          - '8.1'
-#
-#    steps:
-#      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-#
-#      - name: "Setup platform specific environment"
-#        shell: pwsh
-#        run: git config --global core.autocrlf false
-#
-#      - name: "Setup PHP"
-#        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
-#        with:
-#          php-version: ${{ matrix.php }}
-#          extensions: ${{ env.EXTENSIONS }}
-#          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
-#          tools: pecl, phpize, php-config, composer:v2
-#          coverage: xdebug
-#        env:
-#          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          PHALCON_PATH: ext
-#
-#      - name: "Validate composer"
-#        run: composer validate --no-check-all --no-check-publish
-#
-#      - name: "Install development dependencies with Composer"
-#        uses: "ramsey/composer-install@v4"
-#        with:
-#          composer-options: "--prefer-dist"
-#
-#      - name: "Setup Tests"
-#        shell: bash
-#        run: |
-#          if [ "${{ runner.os }}" = "Linux" ]; then
-#            ./config/ci/linux-setup-locales.sh
-#          fi
-#
-#          cp tests/support/_config/.env.default .env
-#          php tests/support/_config/generate-db-schemas.php
-#
-#      - name: "Run Database Tests (SQLite)"
-#        run: composer test-db-sqlite-coverage
-#
-#      - name: "Upload coverage file artifact"
-#        uses: "actions/upload-artifact@v7"
-#        with:
-#          name: "db-sqlite-${{ matrix.php }}.coverage"
-#          path: "tests/_output/coverage.xml"
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
+    runs-on: ubuntu-latest
+
+    needs:
+      - phpcs
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    services:
+      redis:
+        image: redis:8-alpine
+        ports:
+          - "6379:6379"
+      memcached:
+        image: memcached:1.6-alpine
+        ports:
+          - "11211:11211"
+
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          token: ${{ github.token }}
+
+      - name: Setup platform specific environment
+        shell: pwsh
+        run: git config --global core.autocrlf false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          tools: pecl, phpize, php-config, composer:v2
+          coverage: pcov
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PHALCON_PATH: ext
+
+      - name: Validate composer
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Install development dependencies with Composer
+        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        with:
+          composer-options: "--prefer-dist --ignore-platform-reqs"
+
+      - name: Setup Tests
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ./resources/linux-setup-locales.sh
+          fi
+
+          cp tests/support/_config/.env.default .env
+          php bin/generate-db-schemas.php
+
+      - name: Run Database Tests (SQLite)
+        env:
+          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+        run: composer test-db-sqlite-coverage
+
+      - name: Upload coverage file artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: "db-sqlite-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.xml"
+          retention-days: 7
 
   upload-coverage:
     name: Upload coverage
@@ -443,14 +477,16 @@ jobs:
       - phpcs
       - unit-tests
       - db-mysql-tests
-#      - "db-postgres-tests"
-#      - "db-sqlite-tests"
+      - db-postgres-tests
+      - db-sqlite-tests
 
     steps:
       - name: Checkout
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
+          token: ${{ github.token }}
 
       - name: Create directory for coverage files
         run: mkdir -p cv
@@ -462,12 +498,26 @@ jobs:
 
       - name: Display structure of downloaded files
         run: |
-          mv cv/db-mysql-8.1.coverage/coverage.xml  cv/01.xml
-          mv cv/unit-8.1.coverage/coverage.xml      cv/02.xml
-          mv cv/unit-8.2.coverage/coverage.xml      cv/03.xml
-          mv cv/unit-8.3.coverage/coverage.xml      cv/04.xml
-          mv cv/unit-8.4.coverage/coverage.xml      cv/05.xml
-          mv cv/unit-8.5.coverage/coverage.xml      cv/06.xml
+          mv cv/unit-8.1.coverage/coverage.xml         cv/01.xml
+          mv cv/unit-8.2.coverage/coverage.xml         cv/02.xml
+          mv cv/unit-8.3.coverage/coverage.xml         cv/03.xml
+          mv cv/unit-8.4.coverage/coverage.xml         cv/04.xml
+          mv cv/unit-8.5.coverage/coverage.xml         cv/05.xml
+          mv cv/db-mysql-8.1.coverage/coverage.xml     cv/06.xml
+          mv cv/db-mysql-8.2.coverage/coverage.xml     cv/07.xml
+          mv cv/db-mysql-8.3.coverage/coverage.xml     cv/08.xml
+          mv cv/db-mysql-8.4.coverage/coverage.xml     cv/09.xml
+          mv cv/db-mysql-8.5.coverage/coverage.xml     cv/10.xml
+          mv cv/db-postgres-8.1.coverage/coverage.xml  cv/11.xml
+          mv cv/db-postgres-8.2.coverage/coverage.xml  cv/12.xml
+          mv cv/db-postgres-8.3.coverage/coverage.xml  cv/13.xml
+          mv cv/db-postgres-8.4.coverage/coverage.xml  cv/14.xml
+          mv cv/db-postgres-8.5.coverage/coverage.xml  cv/15.xml
+          mv cv/db-sqlite-8.1.coverage/coverage.xml    cv/16.xml
+          mv cv/db-sqlite-8.2.coverage/coverage.xml    cv/17.xml
+          mv cv/db-sqlite-8.3.coverage/coverage.xml    cv/18.xml
+          mv cv/db-sqlite-8.4.coverage/coverage.xml    cv/19.xml
+          mv cv/db-sqlite-8.5.coverage/coverage.xml    cv/20.xml
           ls -la cv/
 
 
@@ -476,7 +526,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          files: cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
+          files: cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml,cv/07.xml,cv/08.xml,cv/09.xml,cv/10.xml,cv/11.xml,cv/12.xml,cv/13.xml,cv/14.xml,cv/15.xml,cv/16.xml,cv/17.xml,cv/18.xml,cv/19.xml,cv/20.xml
           fail_ci_if_error: false
 
       - name: Official SonarQube Scan
@@ -488,16 +538,5 @@ jobs:
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml
+            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml,cv/07.xml,cv/08.xml,cv/09.xml,cv/10.xml,cv/11.xml,cv/12.xml,cv/13.xml,cv/14.xml,cv/15.xml,cv/16.xml,cv/17.xml,cv/18.xml,cv/19.xml,cv/20.xml
             -Dsonar.verbose=true
-
-
-#      - name: "Display structure of downloaded files"
-#        run: |
-#          mv cv/db-mysql-8.1.coverage/coverage.xml  cv/01.xml
-#          mv cv/unit-8.1.coverage/coverage.xml      cv/02.xml
-#          mv cv/unit-8.2.coverage/coverage.xml      cv/03.xml
-#          mv cv/unit-8.3.coverage/coverage.xml      cv/04.xml
-#          mv cv/unit-8.4.coverage/coverage.xml      cv/05.xml
-#          mv cv/unit-8.5.coverage/coverage.xml      cv/06.xml
-#          ls -la cv/
