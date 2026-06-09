@@ -18,6 +18,8 @@ use Phalcon\Contracts\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
+use Phalcon\Db\Exceptions\InvalidWkb;
+use Phalcon\Db\Geometry\WkbParser;
 use Phalcon\Db\RawValue;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\Di;
@@ -1229,6 +1231,14 @@ abstract class Model extends AbstractInjectionAware implements
                     Column::TYPE_DOUBLE,
                     Column::TYPE_FLOAT       => (float)$value,
                     Column::TYPE_BOOLEAN     => (bool)$value,
+                    Column::TYPE_GEOMETRY,
+                    Column::TYPE_POINT,
+                    Column::TYPE_LINESTRING,
+                    Column::TYPE_POLYGON,
+                    Column::TYPE_MULTIPOINT,
+                    Column::TYPE_MULTILINESTRING,
+                    Column::TYPE_MULTIPOLYGON,
+                    Column::TYPE_GEOMETRYCOLLECTION => self::castSpatial($value),
                     default                  => $value,
                 };
             } else {
@@ -1290,6 +1300,15 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         return $instance;
+    }
+
+    private static function castSpatial(mixed $value): mixed
+    {
+        try {
+            return (new WkbParser())->parse((string) $value);
+        } catch (InvalidWkb) {
+            return $value;
+        }
     }
 
     /**
