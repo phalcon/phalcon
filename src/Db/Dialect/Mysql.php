@@ -720,7 +720,8 @@ class Mysql extends Dialect
         return "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
             . "TABLES.ENGINE AS engine,"
-            . "TABLES.TABLE_COLLATION AS table_collation "
+            . "TABLES.TABLE_COLLATION AS table_collation,"
+            . "TABLES.TABLE_COMMENT AS table_comment "
             . "FROM INFORMATION_SCHEMA.TABLES WHERE "
             . "TABLES.TABLE_SCHEMA = " . $this->getMysqlSchemaString($schemaName) . " "
             . "AND TABLES.TABLE_NAME = '" . $tableName . "'";

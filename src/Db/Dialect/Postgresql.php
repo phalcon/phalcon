@@ -236,8 +236,9 @@ class Postgresql extends Dialect
         }
 
         $tableName = $this->prepareTable($tableName, $schemaName);
-        $options   = $definition["options"] ?? [];
-        $temporary = $options["temporary"] ?? "";
+        $options      = $definition["options"] ?? [];
+        $tableComment = $options["TABLE_COMMENT"] ?? "";
+        $temporary    = $options["temporary"] ?? "";
         $temporary = empty($temporary) ? "" : " TEMPORARY";
         /**
          * Create a temporary or normal table
@@ -293,7 +294,7 @@ class Postgresql extends Dialect
                     . ".\""
                     . $column->getName()
                     . "\" IS '"
-                    . $column->getComment()
+                    . str_replace("'", "''", $column->getComment())
                     . "';";
             }
         }
@@ -378,6 +379,14 @@ class Postgresql extends Dialect
         $sql .= implode(",\n\t", $createLines) . "\n)";
         if (isset($definition["options"])) {
             $sql .= " " . $this->getTableOptions($definition);
+        }
+
+        if (!empty($tableComment)) {
+            $indexSqlAfterCreate .= " COMMENT ON TABLE "
+                . $tableName
+                . " IS '"
+                . str_replace("'", "''", $tableComment)
+                . "';";
         }
 
         $sql .= ";" . $indexSqlAfterCreate;
@@ -1082,7 +1091,7 @@ class Postgresql extends Dialect
                 . ".\""
                 . $column->getName()
                 . "\" IS '"
-                . $column->getComment()
+                . str_replace("'", "''", $column->getComment())
                 . "';";
         }
 
@@ -1262,7 +1271,16 @@ class Postgresql extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        return "";
+        $sql = "SELECT obj_description(c.oid, 'pg_class') AS table_comment "
+            . "FROM pg_class c "
+            . "JOIN pg_namespace n ON n.oid = c.relnamespace "
+            . "WHERE c.relname = '" . $tableName . "' AND ";
+
+        if (!empty($schemaName)) {
+            return $sql . "n.nspname = '" . $schemaName . "'";
+        }
+
+        return $sql . "n.nspname = current_schema()";
     }
 
     /**

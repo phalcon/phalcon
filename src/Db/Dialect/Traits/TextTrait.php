@@ -464,6 +464,14 @@ trait TextTrait
             $tableNameOptions[] = 'COLLATE=' . $tableNameCollation;
         }
 
+        /**
+         * Check if there is a TABLE_COMMENT option
+         */
+        $tableComment = $options['TABLE_COMMENT'] ?? '';
+        if (!empty($tableComment)) {
+            $tableNameOptions[] = "COMMENT='" . str_replace("'", "''", $tableComment) . "'";
+        }
+
         return implode(' ', $tableNameOptions);
     }
 
