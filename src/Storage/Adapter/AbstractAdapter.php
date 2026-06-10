@@ -132,6 +132,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function decrement(string $key, int $value = 1): false | int
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $this->fireManagerEvent($this->eventType . ":beforeDecrement", $key);
 
         $result = $this->doDecrement($key, $value);
@@ -150,6 +152,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function delete(string $key): bool
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $this->fireManagerEvent($this->eventType . ":beforeDelete", $key);
 
         $result = $this->doDelete($key);
@@ -168,6 +172,13 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function deleteMultiple(array $keys): bool
     {
+        $filteredKeys = [];
+        foreach ($keys as $key) {
+            $filteredKeys[] = $this->getKeyWithoutPrefix($key);
+        }
+
+        $keys = $filteredKeys;
+
         $this->fireManagerEvent($this->eventType . ":beforeDeleteMultiple", $keys);
 
         $result = $this->doDeleteMultiple($keys);
@@ -187,6 +198,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function get(string $key, mixed $defaultValue = null): mixed
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $this->fireManagerEvent($this->eventType . ":beforeGet", $key);
 
         $result = $this->doGet($key, $defaultValue);
@@ -264,6 +277,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function has(string $key): bool
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $this->fireManagerEvent($this->eventType . ":beforeHas", $key);
 
         $result = $this->doHas($key);
@@ -283,6 +298,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function increment(string $key, int $value = 1): false | int
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $this->fireManagerEvent($this->eventType . ":beforeIncrement", $key);
 
         $result = $this->doIncrement($key, $value);
@@ -307,6 +324,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function set(string $key, mixed $value, mixed $ttl = null): bool
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $this->fireManagerEvent($this->eventType . ":beforeSet", $key);
 
         $result = $this->doSet($key, $value, $ttl);
@@ -446,6 +465,23 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Check if the key has the prefix and remove it, otherwise just return the
+     * key unaltered
+     *
+     * @param string $key
+     *
+     * @return string
+     */
+    protected function getKeyWithoutPrefix(string $key): string
+    {
+        if (str_starts_with($key, $this->prefix)) {
+            return substr($key, strlen($this->prefix));
+        }
+
+        return $key;
+    }
+
+    /**
      * Returns the key requested, prefixed
      *
      * @param string $key
@@ -454,7 +490,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     protected function getPrefixedKey(mixed $key): string
     {
-        return $this->prefix . ((string)$key);
+        return $this->prefix . $this->getKeyWithoutPrefix((string)$key);
     }
 
     /**

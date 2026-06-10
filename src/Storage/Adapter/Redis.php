@@ -138,6 +138,8 @@ class Redis extends AbstractAdapter
      */
     public function setForever(string $key, mixed $data): bool
     {
+        $key = $this->getKeyWithoutPrefix($key);
+
         $result = $this->getAdapter()
                        ->set($key, $this->getSerializedData($data))
         ;

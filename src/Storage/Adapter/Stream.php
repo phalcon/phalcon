@@ -363,23 +363,6 @@ class Stream extends AbstractAdapter
     }
 
     /**
-     * Check if the key has the prefix and remove it, otherwise just return the
-     * key unaltered
-     *
-     * @param string $key
-     *
-     * @return string
-     */
-    private function getKeyWithoutPrefix(string $key): string
-    {
-        if (str_starts_with($key, $this->prefix)) {
-            return substr($key, strlen($this->prefix));
-        }
-
-        return $key;
-    }
-
-    /**
      * Gets the file contents and returns an array or an error if something
      * went wrong
      *
