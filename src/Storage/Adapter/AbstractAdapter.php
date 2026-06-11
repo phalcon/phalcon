@@ -85,6 +85,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     protected SerializerInterface | null $serializer;
 
     /**
+     * Whether a leading prefix is stripped from incoming keys before the
+     * adapter prefix is applied. Disable when keys are externally
+     * generated identifiers that may legitimately start with the prefix
+     * text (e.g. session ids).
+     *
+     * @var bool
+     */
+    protected bool $stripPrefix = true;
+
+    /**
      * AbstractAdapter constructor.
      *
      * @param SerializerFactory $serializerFactory
@@ -100,6 +110,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         $this->defaultSerializer = mb_strtolower(($options['defaultSerializer']) ?? 'php');
         $this->lifetime          = $options['lifetime'] ?? 3600;
         $this->serializer        = $options['serializer'] ?? null;
+        $this->stripPrefix       = (bool) ($options['stripPrefix'] ?? true);
 
         if (isset($options['prefix'])) {
             $this->prefix = $options['prefix'];
@@ -109,7 +120,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             $options['defaultSerializer'],
             $options['lifetime'],
             $options['serializer'],
-            $options['prefix']
+            $options['prefix'],
+            $options['stripPrefix']
         );
 
         $this->options = $options;
@@ -466,7 +478,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Check if the key has the prefix and remove it, otherwise just return the
-     * key unaltered
+     * key unaltered. When the `stripPrefix` option is `false` the key is
+     * always returned unaltered.
      *
      * @param string $key
      *
@@ -474,7 +487,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     protected function getKeyWithoutPrefix(string $key): string
     {
-        if (str_starts_with($key, $this->prefix)) {
+        if ($this->stripPrefix && str_starts_with($key, $this->prefix)) {
             return substr($key, strlen($this->prefix));
         }
 

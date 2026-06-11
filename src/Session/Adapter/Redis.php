@@ -38,7 +38,13 @@ class Redis extends AbstractAdapter
      */
     public function __construct(AdapterFactory $factory, array $options = [])
     {
-        $options['prefix'] = $options['prefix'] ?? 'sess-reds-';
-        $this->adapter     = $factory->newInstance('redis', $options);
+        /**
+         * Session ids are externally generated and never carry the storage
+         * prefix; disable prefix stripping so an id that happens to start
+         * with the prefix text cannot collide with another session
+         */
+        $options['prefix']      = $options['prefix'] ?? 'sess-reds-';
+        $options['stripPrefix'] = $options['stripPrefix'] ?? false;
+        $this->adapter          = $factory->newInstance('redis', $options);
     }
 }

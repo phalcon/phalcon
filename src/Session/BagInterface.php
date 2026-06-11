@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
-use Phalcon\Di\InjectionAwareInterface;
-
 /**
  * Interface for Phalcon\Session\Bag
  */
-interface BagInterface extends InjectionAwareInterface
+interface BagInterface
 {
     /**
      * @param string $element

@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Session;
 
 use InvalidArgumentException;
-use Phalcon\Di\InjectionAwareInterface;
 use SessionHandlerInterface;
 
 /**
  * Interface for the Phalcon\Session\Manager
  */
-interface ManagerInterface extends InjectionAwareInterface
+interface ManagerInterface
 {
     public const SESSION_ACTIVE   = 2;
     public const SESSION_DISABLED = 0;

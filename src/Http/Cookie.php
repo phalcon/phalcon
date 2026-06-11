@@ -106,20 +106,9 @@ class Cookie extends AbstractInjectionAware implements
      */
     public function delete(): void
     {
-        if (
-            null !== $this->container &&
-            true === $this->container->has('session')
-        ) {
-            /** @var SessionManagerInterface $session */
-            if ($this->container instanceof DiInterface) {
-                $session = $this->container->getShared('session');
-            } else {
-                $session = $this->container->get('session');
-            }
-
-            if (true === $session->exists()) {
-                $session->remove(self::COOKIE_PREFIX . $this->name);
-            }
+        $session = $this->getStartedSession();
+        if (null !== $session) {
+            $session->remove(self::COOKIE_PREFIX . $this->name);
         }
 
         $this->value = null;
@@ -321,29 +310,18 @@ class Cookie extends AbstractInjectionAware implements
     public function restore(): CookieInterface
     {
         if (true !== $this->isRestored) {
-            if (
-                null !== $this->container &&
-                true === $this->container->has('session')
-            ) {
-                /** @var SessionManagerInterface $session */
-                if ($this->container instanceof DiInterface) {
-                    $session = $this->container->getShared('session');
-                } else {
-                    $session = $this->container->get('session');
-                }
+            $session = $this->getStartedSession();
+            if (null !== $session) {
+                $definition = $session->get(
+                    self::COOKIE_PREFIX . $this->name
+                );
 
-                if (true === $session->exists()) {
-                    $definition = $session->get(
-                        self::COOKIE_PREFIX . $this->name
-                    );
-
-                    $this->expire   = $definition['expire'] ?? $this->expire;
-                    $this->domain   = $definition['domain'] ?? $this->domain;
-                    $this->path     = $definition['path'] ?? $this->path;
-                    $this->secure   = $definition['secure'] ?? $this->secure;
-                    $this->httpOnly = $definition['httpOnly'] ?? $this->httpOnly;
-                    $this->options  = $definition['options'] ?? $this->options;
-                }
+                $this->expire   = $definition['expire'] ?? $this->expire;
+                $this->domain   = $definition['domain'] ?? $this->domain;
+                $this->path     = $definition['path'] ?? $this->path;
+                $this->secure   = $definition['secure'] ?? $this->secure;
+                $this->httpOnly = $definition['httpOnly'] ?? $this->httpOnly;
+                $this->options  = $definition['options'] ?? $this->options;
             }
 
             $this->isRestored = true;
@@ -378,19 +356,9 @@ class Cookie extends AbstractInjectionAware implements
         /**
          * The definition is stored in session
          */
-        if (
-            !empty($definition) &&
-            null !== $this->container &&
-            true === $this->container->has('session')
-        ) {
-            /** @var SessionManagerInterface $session */
-            if ($this->container instanceof DiInterface) {
-                $session = $this->container->getShared('session');
-            } else {
-                $session = $this->container->get('session');
-            }
-
-            if (true === $session->exists()) {
+        if (!empty($definition)) {
+            $session = $this->getStartedSession();
+            if (null !== $session) {
                 $session->set(self::COOKIE_PREFIX . $this->name, $definition);
             }
         }
@@ -629,5 +597,34 @@ class Cookie extends AbstractInjectionAware implements
         $options['httponly'] = $options['httponly'] ?? $this->httpOnly;
 
         return $options;
+    }
+
+    /**
+     * Returns the session manager from the container when the service is
+     * available and the session has been started; `null` otherwise
+     *
+     * @return SessionManagerInterface|null
+     */
+    private function getStartedSession(): SessionManagerInterface | null
+    {
+        if (
+            null === $this->container ||
+            true !== $this->container->has('session')
+        ) {
+            return null;
+        }
+
+        /** @var SessionManagerInterface $session */
+        if ($this->container instanceof DiInterface) {
+            $session = $this->container->getShared('session');
+        } else {
+            $session = $this->container->get('session');
+        }
+
+        if (true !== $session->exists()) {
+            return null;
+        }
+
+        return $session;
     }
 }

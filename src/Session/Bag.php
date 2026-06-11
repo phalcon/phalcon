@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Support\Collection;
 
@@ -33,7 +34,7 @@ use function is_array;
  * @property string           $name
  * @property ManagerInterface $session;
  */
-class Bag extends Collection implements BagInterface
+class Bag extends Collection implements BagInterface, InjectionAwareInterface
 {
     use InjectionAwareTrait;
 
@@ -53,9 +54,16 @@ class Bag extends Collection implements BagInterface
      */
     public function __construct(ManagerInterface $session, string $name)
     {
-        $this->session   = $session;
-        $this->name      = $name;
-        $this->container = $session->getDI();
+        $this->session = $session;
+        $this->name    = $name;
+
+        /**
+         * `getDI()` is not part of ManagerInterface; capture the container
+         * only when the manager provides one
+         */
+        if (method_exists($session, 'getDI')) {
+            $this->container = $session->getDI();
+        }
 
         $data = $session->get($name);
         if (!is_array($data)) {
