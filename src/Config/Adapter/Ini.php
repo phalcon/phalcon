@@ -121,6 +121,12 @@ class Ini extends Config
      * We have to cast values manually because parse_ini_file() has a poor
      * implementation.
      *
+     * Note: this casting is an ini-format compensation and is deliberately
+     * specific to this adapter. Ini files carry untyped strings, so
+     * `on/yes/true`, `off/no/false`, `null` and numeric strings are decoded
+     * here. The json, yaml and php adapters receive natively typed values
+     * from their parsers and perform no casting.
+     *
      * @param mixed $ini
      *
      * @return array|float|int|mixed|string|null
@@ -190,7 +196,7 @@ class Ini extends Config
     protected function parseIniString(string $path, $value): array
     {
         $value    = $this->cast($value);
-        $position = strpos($path, '.');
+        $position = strpos($path, Config::DEFAULT_PATH_DELIMITER);
 
         if (false === $position) {
             return [

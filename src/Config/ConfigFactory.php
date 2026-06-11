@@ -24,7 +24,6 @@ use Phalcon\Config\Exceptions\MissingFileExtension;
 use Phalcon\Traits\Factory\FactoryTrait;
 
 use function is_string;
-use function lcfirst;
 use function pathinfo;
 use function strtolower;
 
@@ -89,21 +88,19 @@ class ConfigFactory
         $filePath = $configArray['filePath'];
 
         if (empty(pathinfo($filePath, PATHINFO_EXTENSION))) {
-            $filePath .= '.' . lcfirst($adapter);
+            $filePath .= '.' . $adapter;
         }
 
-        if ('ini' === $adapter) {
-            return $this->newInstance(
-                $adapter,
-                $filePath,
-                $configArray['mode'] ?? INI_SCANNER_RAW
-            );
-        } elseif ('yaml' === $adapter) {
-            return $this->newInstance(
-                $adapter,
-                $filePath,
-                $configArray['callbacks'] ?? null
-            );
+        $aliases = $this->getAdapterAliases();
+        $adapter = $aliases[$adapter] ?? $adapter;
+
+        $spec = $this->getExtraArguments();
+
+        if (isset($spec[$adapter]) && null !== $spec[$adapter]['option']) {
+            $param = $configArray[$spec[$adapter]['option']]
+                ?? $spec[$adapter]['default'];
+
+            return $this->newInstance($adapter, $filePath, $param);
         }
 
         return $this->newInstance($adapter, $filePath);
@@ -125,30 +122,30 @@ class ConfigFactory
         array | string | int | null $params = null
     ): ConfigInterface {
         $definition = $this->getService($name);
+        $arguments  = [$fileName];
+        $spec       = $this->getExtraArguments();
 
-        switch ($definition) {
-            case Grouped::class:
-                /** @var Grouped $config */
-                $config = new $definition($fileName, $params ?? 'php');
-                break;
-            case Ini::class:
-                /** @var string|null $params */
-                $mode = null === $params ? INI_SCANNER_RAW : $params;
-                /** @var Ini $config */
-                $config = new $definition($fileName, $mode);
-                break;
-            case Yaml::class:
-                /** @var array<string, callable>|null $params */
-                /** @var Yaml $config */
-                $config = new $definition($fileName, $params);
-                break;
-            default:
-                /** @var ConfigInterface $config */
-                $config = new $definition($fileName);
-                break;
+        if (null !== $params && isset($spec[$name])) {
+            $arguments[] = $params;
         }
 
+        /** @var ConfigInterface $config */
+        $config = new $definition(...$arguments);
+
         return $config;
+    }
+
+    /**
+     * Adapter name aliases resolved by `load()` (file extensions that map
+     * to a registered adapter)
+     *
+     * @return array<string, string>
+     */
+    protected function getAdapterAliases(): array
+    {
+        return [
+            'yml' => 'yaml',
+        ];
     }
 
     /**
@@ -157,6 +154,22 @@ class ConfigFactory
     protected function getExceptionClass(): string
     {
         return Exception::class;
+    }
+
+    /**
+     * Adapters accepting an extra constructor argument, with the config
+     * option carrying it and its default value. Single source for the
+     * parameter-forwarding knowledge used by `load()` and `newInstance()`.
+     *
+     * @return array<string, array{option: string|null, default: mixed}>
+     */
+    protected function getExtraArguments(): array
+    {
+        return [
+            'grouped' => ['option' => null, 'default' => null],
+            'ini'     => ['option' => 'mode', 'default' => INI_SCANNER_RAW],
+            'yaml'    => ['option' => 'callbacks', 'default' => null],
+        ];
     }
 
     /**

@@ -77,14 +77,23 @@ class Grouped extends Config
     /**
      * Grouped constructor.
      *
-     * @param array  $arrayConfig
-     * @param string $defaultAdapter
+     * @param array              $arrayConfig
+     * @param string             $defaultAdapter
+     * @param ConfigFactory|null $factory        Factory used to load file
+     *                                           based fragments; a default
+     *                                           one is created when not
+     *                                           provided
      *
      * @throws Exception
      */
-    public function __construct(array $arrayConfig, string $defaultAdapter = 'php')
-    {
+    public function __construct(
+        array $arrayConfig,
+        string $defaultAdapter = 'php',
+        ConfigFactory | null $factory = null
+    ) {
         parent::__construct();
+
+        $configFactory = $factory ?? new ConfigFactory();
 
         foreach ($arrayConfig as $configName) {
             $configInstance = $configName;
@@ -99,7 +108,7 @@ class Grouped extends Config
             if (is_string($configName)) {
                 if ('' === $defaultAdapter) {
                     $this->merge(
-                        (new ConfigFactory())->load($configName)
+                        $configFactory->load($configName)
                     );
 
                     continue;
@@ -126,7 +135,7 @@ class Grouped extends Config
                 continue;
             }
 
-            $configInstance = (new ConfigFactory())->load($configInstance);
+            $configInstance = $configFactory->load($configInstance);
 
             $this->merge($configInstance);
         }

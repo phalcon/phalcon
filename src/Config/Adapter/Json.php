@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
+use Phalcon\Config\Exceptions\CannotLoadConfigFile;
 use Phalcon\Support\Helper\Json\Decode;
 
+use function basename;
 use function file_get_contents;
 
 /**
@@ -44,14 +46,19 @@ class Json extends Config
      * Json constructor.
      *
      * @param string $filePath
+     *
+     * @throws CannotLoadConfigFile
      */
     public function __construct(string $filePath)
     {
+        $content = file_get_contents($filePath);
+
+        if (false === $content) {
+            throw new CannotLoadConfigFile(basename($filePath));
+        }
+
         parent::__construct(
-            (new Decode())->__invoke(
-                file_get_contents($filePath),
-                true
-            )
+            (new Decode())->__invoke($content, true)
         );
     }
 }

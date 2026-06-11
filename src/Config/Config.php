@@ -199,6 +199,27 @@ class Config extends Collection implements ConfigInterface
     }
 
     /**
+     * Builds a new collection with the given data, carrying over the
+     * configuration of the current one. Clone-based instead of
+     * constructor-based: adapter subclasses (Ini, Json, Php, Yaml, Grouped)
+     * define file-loading constructors that are incompatible with the
+     * parent's `(array $data, ...)` signature, so `filter()`, `map()`,
+     * `sort()` and `where()` would otherwise fail on any adapter instance.
+     *
+     * @param array<int|string, mixed> $data
+     *
+     * @return static
+     */
+    protected function cloneEmpty(array $data = []): static
+    {
+        $copy = clone $this;
+
+        $copy->replace($data);
+
+        return $copy;
+    }
+
+    /**
      * Performs a merge recursively
      *
      * @param array<array-key, mixed> $source
@@ -228,18 +249,32 @@ class Config extends Collection implements ConfigInterface
     /**
      * Sets the collection data
      *
+     * Array values become nested Config objects carrying the `insensitive`,
+     * `strictNull` and `type` flags of this instance. The `type` guard is
+     * applied to leaf values only - arrays are not validated themselves;
+     * the nested Config validates its own leaves.
+     *
      * @param mixed $element
      * @param mixed $value
      */
     protected function setData(mixed $element, mixed $value): void
     {
+        if (!is_array($value)) {
+            $this->validateType($value);
+        }
+
         $element = (string)$element;
         $key     = ($this->insensitive) ? mb_strtolower($element) : $element;
 
         $this->lowerKeys[$key] = $element;
 
         if (is_array($value)) {
-            $this->data[$element] = new Config($value, $this->insensitive);
+            $this->data[$element] = new Config(
+                $value,
+                $this->insensitive,
+                $this->strictNull,
+                $this->type
+            );
 
             return;
         }
