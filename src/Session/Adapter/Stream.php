@@ -201,6 +201,33 @@ class Stream extends Noop
     }
 
     /**
+     * Refresh the session file modification time without changing its data
+     *
+     * @param string $id
+     * @param string $data
+     *
+     * @return bool
+     */
+    public function updateTimestamp(string $id, string $data): bool
+    {
+        $name = $this->path . $this->getPrefixedName($id);
+
+        return touch($name);
+    }
+
+    /**
+     * Validate the session id (used when strict mode is enabled)
+     *
+     * @param string $id
+     *
+     * @return bool
+     */
+    public function validateId(string $id): bool
+    {
+        return $this->phpFileExists($this->path . $this->getPrefixedName($id));
+    }
+
+    /**
      * @param string $id
      * @param string $data
      *
