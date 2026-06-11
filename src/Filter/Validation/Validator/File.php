@@ -15,6 +15,7 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation\AbstractValidatorComposite;
 use Phalcon\Filter\Validation\Validator\File\MimeType;
+use Phalcon\Filter\Validation\Validator\File\Resolution\AspectRatio;
 use Phalcon\Filter\Validation\Validator\File\Resolution\Equal as EqualResolution;
 use Phalcon\Filter\Validation\Validator\File\Resolution\Max as MaxResolution;
 use Phalcon\Filter\Validation\Validator\File\Resolution\Min as MinResolution;
@@ -117,6 +118,8 @@ class File extends AbstractValidatorComposite
      *                       'messageMinResolution'   => '',
      *                       'equalResolution'        => '1000x1000',
      *                       'messageEqualResolution' => '',
+     *                       'aspectRatio'            => '16x9',
+     *                       'messageAspectRatio'     => '',
      *                       'allowEmpty'             => false,
      *                       'messageFileEmpty'       => '',
      *                       'messageIniSize'         => '',
@@ -137,6 +140,7 @@ class File extends AbstractValidatorComposite
             ->processFileResolutionEqual($options, $fileEmpty, $iniSize, $valid)
             ->processFileResolutionMax($options, $fileEmpty, $iniSize, $valid)
             ->processFileResolutionMin($options, $fileEmpty, $iniSize, $valid)
+            ->processFileResolutionAspectRatio($options, $fileEmpty, $iniSize, $valid)
         ;
 
         unset(
@@ -156,7 +160,9 @@ class File extends AbstractValidatorComposite
             $options["includedMinResolution"],
             $options["messageMinResolution"],
             $options["equalResolution"],
-            $options["messageEqualResolution"]
+            $options["messageEqualResolution"],
+            $options["aspectRatio"],
+            $options["messageAspectRatio"]
         );
 
         parent::__construct($options);
@@ -181,6 +187,39 @@ class File extends AbstractValidatorComposite
                 [
                     "types"   => $options["allowedTypes"],
                     "message" => $options["messageType"] ?? null,
+                ]
+            );
+
+            $this->processSettings(
+                $validator,
+                $fileEmpty,
+                $iniSize,
+                $valid
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array  $options
+     * @param string $fileEmpty
+     * @param string $iniSize
+     * @param string $valid
+     *
+     * @return File
+     */
+    private function processFileResolutionAspectRatio(
+        array $options,
+        string $fileEmpty,
+        string $iniSize,
+        string $valid
+    ): File {
+        if (isset($options["aspectRatio"])) {
+            $validator = new AspectRatio(
+                [
+                    "ratio"   => $options["aspectRatio"],
+                    "message" => $options["messageAspectRatio"] ?? null,
                 ]
             );
 
