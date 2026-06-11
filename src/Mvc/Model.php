@@ -1727,14 +1727,10 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         /**
-         * Create/Get the current database connection
+         * We need to check if the record exists. Use the write connection
+         * to prevent replica lag
          */
-        $readConnection = $this->getReadConnection();
-
-        /**
-         * We need to check if the record exists
-         */
-        $exists = $this->has($metaData, $readConnection);
+        $exists = $this->has($metaData, $writeConnection);
 
         if ($exists) {
             $this->operationMade = self::OP_UPDATE;
@@ -3779,7 +3775,7 @@ abstract class Model extends AbstractInjectionAware implements
         if ($this->dirtyState) {
             $metaData = $this->getModelsMetaData();
 
-            if (!$this->has($metaData, $this->getReadConnection())) {
+            if (!$this->has($metaData, $this->getWriteConnection())) {
                 $this->errorMessages = [
                     new Message(
                         "Record cannot be updated because it does not exist",
