@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function filter_var;
 
 use const FILTER_FLAG_ALLOW_FRACTION;
@@ -21,7 +23,7 @@ use const FILTER_SANITIZE_NUMBER_FLOAT;
 /**
  * Sanitizes a value to float
  */
-class FloatVal
+class FloatVal implements Sanitizer
 {
     /**
      * @param mixed $input The text to sanitize

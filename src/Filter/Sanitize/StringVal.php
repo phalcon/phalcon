@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function htmlspecialchars;
 
 /**
  * Sanitizes a value to string
  */
-class StringVal
+class StringVal implements Sanitizer
 {
     /**
      * @param string $input The text to sanitize

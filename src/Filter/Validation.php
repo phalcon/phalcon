@@ -694,18 +694,22 @@ class Validation extends Injectable implements ValidationInterface
             $allowEmpty = $validator->getOption("allowEmpty", false);
 
             if ($allowEmpty) {
+                /**
+                 * The `allowEmpty` rule is owned by the validator
+                 * (AbstractValidator::isAllowEmpty() or an override)
+                 */
                 if (true === method_exists($validator, "isAllowEmpty")) {
                     return $validator->isAllowEmpty($this, $field);
                 }
 
+                /**
+                 * Compatibility path for validators implementing
+                 * ValidatorInterface without extending AbstractValidator
+                 */
                 $value = $this->getValue($field);
 
                 if (is_array($allowEmpty)) {
-                    if (in_array($value, $allowEmpty, true)) {
-                        return true;
-                    }
-
-                    return false;
+                    return in_array($value, $allowEmpty, true);
                 }
 
                 return empty($value);

@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function ucfirst;
 
 /**
  * Sanitizes a value to ucfirst
  */
-class UpperFirst
+class UpperFirst implements Sanitizer
 {
     /**
      * @param string $input The text to sanitize

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function filter_var;
 
 use const FILTER_FLAG_EMAIL_UNICODE;
@@ -21,7 +23,7 @@ use const FILTER_SANITIZE_EMAIL;
 /**
  * Sanitizes an email string
  */
-class Email
+class Email implements Sanitizer
 {
     /**
      * @param mixed $input The text to sanitize

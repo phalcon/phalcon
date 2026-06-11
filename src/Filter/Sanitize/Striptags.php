@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function strip_tags;
 
 /**
  * Sanitizes a value striptags
  */
-class Striptags
+class Striptags implements Sanitizer
 {
     /**
      * @param string $input The text to sanitize

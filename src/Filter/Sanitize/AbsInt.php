@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function abs;
 use function filter_var;
 use function intval;
@@ -22,7 +24,7 @@ use const FILTER_SANITIZE_NUMBER_INT;
 /**
  * Sanitizes a value to absolute integer
  */
-class AbsInt
+class AbsInt implements Sanitizer
 {
     /**
      * @param mixed $input The text to sanitize

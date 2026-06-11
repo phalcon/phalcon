@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function function_exists;
 use function mb_convert_case;
 use function strtolower;
@@ -21,7 +23,7 @@ use function utf8_decode;
 /**
  * Sanitizes a value to lowercase
  */
-class Lower
+class Lower implements Sanitizer
 {
     /**
      * @param string $input The text to sanitize

@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 /**
  * Phalcon\Filter\Sanitize\IP
  *
  * Sanitizes a value to an ip address or CIDR range
  */
-class Ip
+class Ip implements Sanitizer
 {
     /**
      * @param string $input

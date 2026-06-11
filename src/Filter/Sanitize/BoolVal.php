@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function in_array;
 use function is_bool;
 use function is_int;
@@ -23,7 +25,7 @@ use function trim;
 /**
  * Sanitizes a value to boolean
  */
-class BoolVal
+class BoolVal implements Sanitizer
 {
     /**
      * @param mixed $input The text to sanitize

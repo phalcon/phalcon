@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function str_replace;
 
 /**
  * Sanitizes a value replacing parts of a string
  */
-class Replace
+class Replace implements Sanitizer
 {
     /**
      * @param string[]|string $input

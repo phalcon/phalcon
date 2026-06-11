@@ -95,21 +95,7 @@ abstract class AbstractValidator implements ValidatorInterface
             return $defaultValue;
         }
 
-        $value = $this->options[$key];
-
-        /*
-         * If we have `attribute` as a key, it means it is a Uniqueness
-         * validator, we can have here multiple fields, so we need to check it
-         */
-        if (
-            "attribute" === $key &&
-            is_array($value) &&
-            isset($value[$key])
-        ) {
-            return $value[$key];
-        }
-
-        return $value;
+        return $this->options[$key];
     }
 
     /**
@@ -155,6 +141,23 @@ abstract class AbstractValidator implements ValidatorInterface
     public function hasOption(string $key): bool
     {
         return isset($this->options[$key]);
+    }
+
+    /**
+     * Checks whether the field can be considered empty and therefore
+     * skipped, honoring the `allowEmpty` option (boolean flag, list of
+     * empty values, or per-field map).
+     *
+     * @param Validation $validation
+     * @param string     $field
+     *
+     * @return bool
+     */
+    public function isAllowEmpty(Validation $validation, string $field): bool
+    {
+        $value = $validation->getValue($field);
+
+        return $this->allowEmpty($field, $value);
     }
 
     /**

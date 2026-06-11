@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function preg_replace;
 
 /**
  * Sanitizes a value to an alpha value
  */
-class Alpha
+class Alpha implements Sanitizer
 {
     /**
      * @param string[]|string $input The text to sanitize

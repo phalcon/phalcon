@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Sanitize;
 
+use Phalcon\Contracts\Filter\Sanitizer;
+
 use function filter_var;
 
 use const FILTER_SANITIZE_URL;
@@ -20,7 +22,7 @@ use const FILTER_SANITIZE_URL;
 /**
  * Sanitizes a value url
  */
-class Url
+class Url implements Sanitizer
 {
     /**
      * @param mixed $input The text to sanitize
