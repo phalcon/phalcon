@@ -446,9 +446,21 @@ class Di extends stdClass implements DiInterface
          */
         $name = $this->resolveAlias($name);
 
-        unset($this->aliases[$name]);
         unset($this->services[$name]);
         unset($this->sharedInstances[$name]);
+
+        /**
+         * Remove any alias that resolves, directly or through a chain, to
+         * the removed service
+         */
+        $aliases = $this->aliases;
+        foreach ($this->aliases as $alias => $target) {
+            if ($name === $this->resolveAlias($target)) {
+                unset($aliases[$alias]);
+            }
+        }
+
+        $this->aliases = $aliases;
     }
 
     /**
