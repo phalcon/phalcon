@@ -205,7 +205,10 @@ class Application extends AbstractApplication
              * A module definition must be an array or an object
              */
             if (!is_array($module) && !is_object($module)) {
-                throw new InvalidModuleDefinition();
+                throw new InvalidModuleDefinition(
+                    $moduleName,
+                    "The module definition must be an array or an object"
+                );
             }
 
             /**
@@ -245,7 +248,10 @@ class Application extends AbstractApplication
                  * A module definition object, can be a Closure instance
                  */
                 if (!($module instanceof Closure)) {
-                    throw new InvalidModuleDefinition();
+                    throw new InvalidModuleDefinition(
+                        $moduleName,
+                        "The module definition object must be a Closure"
+                    );
                 }
 
                 $moduleObject = call_user_func_array(
@@ -257,7 +263,11 @@ class Application extends AbstractApplication
             }
 
             /**
-             * Calling afterStartModule event
+             * The "afterStartModule" event is a notification fired once the
+             * module has started. Its return value is intentionally ignored:
+             * the module is already booted, so handling cannot be cancelled
+             * here. (Phalcon\Cli\Console still honors a `false` return for
+             * backward compatibility; the two are unified in the next major.)
              */
             $this->fireManagerEvent("application:afterStartModule", $moduleObject);
         }

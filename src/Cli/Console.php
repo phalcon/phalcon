@@ -112,7 +112,10 @@ class Console extends AbstractApplication
              * A module definition must be an array or an object
              */
             if (!is_array($module) && !is_object($module)) {
-                throw new InvalidModuleDefinition();
+                throw new InvalidModuleDefinition(
+                    $moduleName,
+                    "The module definition must be an array or an object"
+                );
             }
 
             /**
@@ -152,7 +155,10 @@ class Console extends AbstractApplication
                  * A module definition object, can be a Closure instance
                  */
                 if (!($module instanceof Closure)) {
-                    throw new InvalidModuleDefinition();
+                    throw new InvalidModuleDefinition(
+                        $moduleName,
+                        "The module definition object must be a Closure"
+                    );
                 }
 
                 $moduleObject = call_user_func_array(
@@ -163,6 +169,13 @@ class Console extends AbstractApplication
                 );
             }
 
+            /**
+             * The "afterStartModule" event is fired once the module has
+             * started. Unlike Phalcon\Mvc\Application - where the return value
+             * is a notification only - Console honors a `false` return and
+             * aborts handling. This divergence is retained for backward
+             * compatibility and is unified in the next major version.
+             */
             if (false === $this->fireManagerEvent("console:afterStartModule", $moduleObject)) {
                 return false;
             }
