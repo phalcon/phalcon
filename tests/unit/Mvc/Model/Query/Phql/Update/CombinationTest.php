@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Update;
 
-use Phalcon\Mvc\Model\Query\Lang;
+use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class CombinationTest extends AbstractUnitTestCase
@@ -86,7 +86,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -119,7 +119,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -166,7 +166,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -217,7 +217,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -260,7 +260,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -303,7 +303,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -342,7 +342,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -398,7 +398,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -454,7 +454,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -498,7 +498,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -552,7 +552,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -596,7 +596,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -646,7 +646,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -717,7 +717,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -776,7 +776,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -854,7 +854,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -933,7 +933,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -1005,7 +1005,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -1077,7 +1077,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -1172,7 +1172,7 @@ final class CombinationTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

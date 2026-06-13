@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Insert;
 
-use Phalcon\Mvc\Model\Query\Lang;
+use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class Combination extends AbstractUnitTestCase
@@ -58,7 +58,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -121,7 +121,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -158,7 +158,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -196,7 +196,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -251,7 +251,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -297,7 +297,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -360,7 +360,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -397,7 +397,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -442,7 +442,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 
@@ -479,7 +479,7 @@ final class Combination extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         $this->assertSame($expected, $actual);
     }
 }

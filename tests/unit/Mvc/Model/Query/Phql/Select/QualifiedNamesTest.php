@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Select;
 
-use Phalcon\Mvc\Model\Query\Lang;
+use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class QualifiedNamesTest extends AbstractUnitTestCase
@@ -41,7 +41,7 @@ final class QualifiedNamesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -75,7 +75,7 @@ final class QualifiedNamesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -114,7 +114,7 @@ final class QualifiedNamesTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

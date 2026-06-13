@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Select;
 
-use Phalcon\Mvc\Model\Query\Lang;
+use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ForUpdateTest extends AbstractUnitTestCase
@@ -43,7 +43,7 @@ final class ForUpdateTest extends AbstractUnitTestCase
             'forUpdate' => true,
 
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -84,7 +84,7 @@ final class ForUpdateTest extends AbstractUnitTestCase
             'forUpdate' => true,
 
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

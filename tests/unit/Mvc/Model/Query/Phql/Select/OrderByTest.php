@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Select;
 
-use Phalcon\Mvc\Model\Query\Lang;
+use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class OrderByTest extends AbstractUnitTestCase
@@ -74,7 +74,7 @@ final class OrderByTest extends AbstractUnitTestCase
                 'name' => 'inv_cst_id',
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -108,7 +108,7 @@ final class OrderByTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -143,7 +143,7 @@ final class OrderByTest extends AbstractUnitTestCase
                 'sort'   => 327,
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -178,7 +178,7 @@ final class OrderByTest extends AbstractUnitTestCase
                 'sort'   => 328,
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -222,7 +222,7 @@ final class OrderByTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
@@ -274,7 +274,7 @@ final class OrderByTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = Lang::parsePhql($source);
+        $actual   = (new Parser())->parse($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }
