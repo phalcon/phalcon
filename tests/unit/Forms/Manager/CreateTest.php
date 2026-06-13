@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Manager;
 
 use Phalcon\Forms\Form;
-use Phalcon\Forms\FormsLocator;
 use Phalcon\Forms\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
 use stdClass;
@@ -27,7 +26,7 @@ final class CreateTest extends AbstractUnitTestCase
      */
     public function testFormsManagerCreate(): void
     {
-        $manager = new Manager(new FormsLocator());
+        $manager = new Manager();
 
         $loginForm = $manager->create('login');
 
@@ -47,7 +46,7 @@ final class CreateTest extends AbstractUnitTestCase
      */
     public function testFormsManagerCreateWithEntity(): void
     {
-        $manager = new Manager(new FormsLocator());
+        $manager = new Manager();
 
         $entity = new stdClass();
 

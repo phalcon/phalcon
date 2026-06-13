@@ -131,7 +131,7 @@ class Web implements Provider
         $services->bind(UrlInterface::class, Url::class);
         $services->setAlias(UrlInterface::class, 'url');
 
-        // --- FQCN bindings (set + alias) — no unique interface available ---
+        // --- FQCN bindings (set + alias) - no unique interface available ---
 
         $services->set(AccessLocator::class, static function (Collection $c): AccessLocator {
             return new AccessLocator($c);

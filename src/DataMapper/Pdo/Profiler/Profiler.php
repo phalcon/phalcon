@@ -18,87 +18,86 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo\Profiler;
 
-use InvalidArgumentException;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 use Phalcon\Logger\Enum;
-use Phalcon\Traits\Php\JsonTrait;
-use Psr\Log\LoggerInterface;
+use Phalcon\Logger\LoggerInterface;
+use Phalcon\Support\Helper\Json\Encode;
 
-use function json_encode;
-
-use const PHP_EOL;
+use function hrtime;
 
 /**
  * Sends query profiles to a logger.
  */
 class Profiler implements ProfilerInterface
 {
-    use JsonTrait;
+    /**
+     * @var bool
+     */
+    protected bool $active = false;
 
     /**
-     * @var array<array-key, mixed>
+     * @var array
      */
     protected array $context = [];
 
     /**
-     * @var bool
-     */
-    protected bool $isActive = false;
-
-    /**
      * @var string
      */
-    protected string $logFormat = "M: {method} ({duration}s)"
-    . PHP_EOL
-    . "S: {statement}"
-    . PHP_EOL
-    . "V: {values}"
-    . PHP_EOL
-    . "B: {backtrace}";
+    protected string $logFormat = "";
 
     /**
-     * @var int
+     * @var int|string
      */
-    protected int $logLevel = Enum::DEBUG;
+    protected int | string $logLevel = 0;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
+     * @var Encode
+     */
+    private Encode $encode;
 
     /**
      * Constructor.
      *
-     * @param LoggerInterface|null $logger
+     * @param LoggerInterface $logger
      */
-    public function __construct(
-        protected LoggerInterface | null $logger = null
-    ) {
+    public function __construct(?LoggerInterface $logger = null)
+    {
+        if ($logger === null) {
+            $logger = new MemoryLogger();
+        }
+
+        $this->logFormat = "{method} ({duration}s): {statement} {backtrace}";
+        $this->logLevel  = Enum::DEBUG;
+        $this->logger    = $logger;
+        $this->encode    = new Encode();
     }
 
     /**
-     *
      * Finishes and logs a profile entry.
      *
-     * @param string|null           $statement
-     * @param array<string, string> $values
-     *
-     * @return void
+     * @param string $statement
+     * @param array  $values
      */
-    public function finish(string | null $statement = null, array $values = []): void
+    public function finish(?string $statement = null, array $values = []): void
     {
-        if (true === $this->isActive) {
+        if ($this->active) {
             $ex     = new Exception();
             $finish = hrtime(true);
 
-            $this->context["backtrace"] = '';//$ex->getTraceAsString();
-            $this->context["duration"]  = ($finish - $this->context["start"]) / 1e+9;
+            $this->context["backtrace"] = $ex->getTraceAsString();
+            $this->context["duration"]  = $finish - $this->context["start"];
             $this->context["finish"]    = $finish;
             $this->context["statement"] = $statement;
             $this->context["values"]    = empty($values)
                 ? ""
-                : $this->encode($values);
+                : $this->encode->__invoke($values);
 
-            $this->logger?->log(
-                $this->logLevel,
-                $this->logFormat,
-                $this->context
-            );
+            $this->logger->log($this->logLevel, $this->logFormat, $this->context);
 
             $this->context = [];
         }
@@ -115,23 +114,23 @@ class Profiler implements ProfilerInterface
     }
 
     /**
-     * Returns the level at which to log profile messages.
+     * Returns the underlying logger instance.
      *
-     * @return int
+     * @return LoggerInterface
      */
-    public function getLogLevel(): int
+    public function getLogger(): LoggerInterface
     {
-        return $this->logLevel;
+        return $this->logger;
     }
 
     /**
-     * Returns the underlying logger instance.
+     * Returns the level at which to log profile messages.
      *
-     * @return LoggerInterface|null
+     * @return string
      */
-    public function getLogger(): LoggerInterface | null
+    public function getLogLevel(): string
     {
-        return $this->logger;
+        return (string)$this->logLevel;
     }
 
     /**
@@ -141,7 +140,7 @@ class Profiler implements ProfilerInterface
      */
     public function isActive(): bool
     {
-        return $this->isActive;
+        return $this->active;
     }
 
     /**
@@ -153,7 +152,7 @@ class Profiler implements ProfilerInterface
      */
     public function setActive(bool $active): ProfilerInterface
     {
-        $this->isActive = $active;
+        $this->active = $active;
 
         return $this;
     }
@@ -175,11 +174,11 @@ class Profiler implements ProfilerInterface
     /**
      * Level at which to log profile messages.
      *
-     * @param int $logLevel
+     * @param string $logLevel
      *
      * @return ProfilerInterface
      */
-    public function setLogLevel(int $logLevel): ProfilerInterface
+    public function setLogLevel(string $logLevel): ProfilerInterface
     {
         $this->logLevel = $logLevel;
 
@@ -193,40 +192,11 @@ class Profiler implements ProfilerInterface
      */
     public function start(string $method): void
     {
-        if (true === $this->isActive) {
+        if ($this->active) {
             $this->context = [
                 "method" => $method,
                 "start"  => hrtime(true),
             ];
         }
-    }
-
-    /**
-     * @param mixed $data
-     * @param int   $options
-     * @param int   $depth
-     *
-     * @return string
-     * @todo This will be removed when traits are introduced
-     *
-     */
-    private function encode(
-        mixed $data,
-        int $options = 0,
-        int $depth = 512
-    ): string {
-        /**
-         * Clear any errors
-         */
-        json_encode(null);
-        $encoded = $this->phpJsonEncode($data, $options, $depth);
-
-        if (false === $encoded) {
-            throw new InvalidArgumentException(
-                "json_encode error: " . json_last_error_msg()
-            );
-        }
-
-        return $encoded;
     }
 }

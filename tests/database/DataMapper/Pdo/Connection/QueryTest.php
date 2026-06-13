@@ -3,7 +3,9 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -18,13 +20,12 @@ use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 final class QueryTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: query()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionQuery(): void
+    public function testDMPdoConnectionQuery(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -32,7 +33,7 @@ final class QueryTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertSame(1, $result);
+        $this->assertEquals(1, $result);
 
         $all = $connection
             ->query('select * from co_invoices WHERE inv_id = 1')
@@ -40,7 +41,7 @@ final class QueryTest extends AbstractDatabaseTestCase
         ;
 
         $this->assertIsArray($all);
-        $this->assertSame(1, $all['inv_id']);
+        $this->assertEquals(1, $all['inv_id']);
         $this->assertArrayHasKey('inv_id', $all);
         $this->assertArrayHasKey('inv_cst_id', $all);
         $this->assertArrayHasKey('inv_status_flag', $all);

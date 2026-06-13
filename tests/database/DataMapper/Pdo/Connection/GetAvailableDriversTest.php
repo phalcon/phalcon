@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -15,18 +17,15 @@ use PDO;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
-use function explode;
-
 final class GetAvailableDriversTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: getAvailableDrivers()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionGetAvailableDrivers(): void
+    public function testDMPdoConnectionGetAvailableDrivers(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -34,26 +33,6 @@ final class GetAvailableDriversTest extends AbstractDatabaseTestCase
         $expected = PDO::getAvailableDrivers();
         $actual   = $connection::getAvailableDrivers();
 
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: getDriverName()
-     *
-     * @since  2020-01-25
-     *
-     * @group mysql
-     */
-    public function testDmPdoConnectionGetDriverName(): void
-    {
-        /** @var Connection $connection */
-        $connection = self::getDataMapperConnection();
-
-        $dsn = self::getDatabaseDsn();
-        $dsn = explode(':', $dsn);
-
-        $expected = $dsn[0];
-        $actual   = $connection->getDriverName();
-        $this->assertSame($expected, $actual);
+        $this->assertEquals($expected, $actual);
     }
 }

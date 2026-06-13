@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -18,19 +20,17 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class GetSetAttributeTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection ::
-     * getAttribute()/setAttribute()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionGetSetAttribute(): void
+    public function testDMPdoConnectionGetSetAttribute(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $this->assertSame(
+        $this->assertEquals(
             PDO::ERRMODE_EXCEPTION,
             $connection->getAttribute(PDO::ATTR_ERRMODE)
         );
@@ -40,7 +40,7 @@ final class GetSetAttributeTest extends AbstractDatabaseTestCase
             PDO::ERRMODE_WARNING
         );
 
-        $this->assertSame(
+        $this->assertEquals(
             PDO::ERRMODE_WARNING,
             $connection->getAttribute(PDO::ATTR_ERRMODE)
         );

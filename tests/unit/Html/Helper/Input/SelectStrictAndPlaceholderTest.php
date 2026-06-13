@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Helper\Input;
 
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\Helper\Input\Select;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -19,14 +20,15 @@ final class SelectStrictAndPlaceholderTest extends AbstractUnitTestCase
 {
     public function testSelectLooseMatchesAcrossTypesByDefault(): void
     {
-        $select = new Select(new Escaper());
+        $select = new Select(new Escaper(), new Doctype());
         $select('x', null, []);
-        $select->selected('1');
-        $select->add('First', '1');
+        $select->selected('1');         // stored as string
+        $select->add('First', '1');    // string value - matches loose
         $select->add('Second', '2');
 
         $rendered = (string) $select;
 
+        // option 1 is selected
         $this->assertMatchesRegularExpression(
             '/<option[^>]*value="1"[^>]*selected="selected"/',
             $rendered
@@ -35,7 +37,7 @@ final class SelectStrictAndPlaceholderTest extends AbstractUnitTestCase
 
     public function testSelectLooseMatchesIntStringRoundTrip(): void
     {
-        $select = new Select(new Escaper());
+        $select = new Select(new Escaper(), new Doctype());
         $select('x', null, []);
         $select->selected('0');
         $select->add('Zero', '0');
@@ -55,10 +57,11 @@ final class SelectStrictAndPlaceholderTest extends AbstractUnitTestCase
 
     public function testSelectStrictRejectsTypeMismatch(): void
     {
-        $select = new Select(new Escaper());
+        $select = new Select(new Escaper(), new Doctype());
         $select->strict();
         $select('x', null, []);
         $select->selected('1');
+        // add() takes string $value - even with strict, identical strings match
         $select->add('One', '1');
 
         $rendered = (string) $select;
@@ -71,7 +74,7 @@ final class SelectStrictAndPlaceholderTest extends AbstractUnitTestCase
 
     public function testPlaceholderRendersDisabledSelectedFirstOption(): void
     {
-        $select = new Select(new Escaper());
+        $select = new Select(new Escaper(), new Doctype());
         $select('x', null, []);
         $select->placeholder('Choose…');
         $select->add('First', '1');

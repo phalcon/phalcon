@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -21,21 +23,18 @@ use function spl_object_hash;
 final class GetSetWriteTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator ::
-     * getWrite()/setWrite()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionLocatorGetSetWrite(): void
+    public function testDMPdoConnectionLocatorGetSetWrite(): void
     {
+        $master  = self::getDataMapperConnection();
         $write1  = self::getDataMapperConnection();
         $write2  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            function () {
-                return self::getDataMapperConnection();
-            },
+            $master,
             [],
             [
                 "write1" => function () use ($write1) {
@@ -47,84 +46,26 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
             ]
         );
 
-        $expected = spl_object_hash($write1);
-        $actual   = spl_object_hash($locator->getWrite("write1"));
-        $this->assertSame($expected, $actual);
+        $actual = $locator->getWrite("write1");
+        $this->assertEquals(spl_object_hash($write1), spl_object_hash($actual));
 
-        $expected = spl_object_hash($write2);
-        $actual   = spl_object_hash($locator->getWrite("write2"));
-        $this->assertSame($expected, $actual);
+        $actual = $locator->getWrite("write2");
+        $this->assertEquals(spl_object_hash($write2), spl_object_hash($actual));
     }
 
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getWrite() -
-     * empty
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionLocatorGetWriteEmpty(): void
-    {
-        $master  = self::getDataMapperConnection();
-        $locator = new ConnectionLocator(
-            function () use ($master) {
-                return $master;
-            }
-        );
-
-        $expected = spl_object_hash($master);
-        $actual   = spl_object_hash($locator->getWrite("write1"));
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getWrite() -
-     * exception
-     *
-     * @since  2020-01-25
-     *
-     * @group mysql
-     */
-    public function testDmPdoConnectionLocatorGetWriteException(): void
-    {
-        $this->expectException(ConnectionNotFound::class);
-        $this->expectExceptionMessage("Connection not found: write:unknown");
-
-        $master  = self::getDataMapperConnection();
-        $write1  = self::getDataMapperConnection();
-        $locator = new ConnectionLocator(
-            function () use ($master) {
-                return $master;
-            },
-            [],
-            [
-                "write1" => function () use ($write1) {
-                    return $write1;
-                },
-            ]
-        );
-
-        $locator->getWrite("unknown");
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Pdo\ConnectionLocator :: getWrite() -
-     * random
-     *
-     * @since  2020-01-25
-     *
-     * @group mysql
-     */
-    public function testDmPdoConnectionLocatorGetWriteRandom(): void
+    public function testDMPdoConnectionLocatorGetWriteRandom(): void
     {
         $master  = self::getDataMapperConnection();
         $write1  = self::getDataMapperConnection();
         $write2  = self::getDataMapperConnection();
         $locator = new ConnectionLocator(
-            function () use ($master) {
-                return $master;
-            },
+            $master,
             [],
             [
                 "write1" => function () use ($write1) {
@@ -143,5 +84,46 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
 
         $actual = $locator->getWrite();
         $this->assertTrue(in_array(spl_object_hash($actual), $hashes));
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-25
+     *
+     * @group mysql
+     */
+    public function testDMPdoConnectionLocatorGetWriteEmpty(): void
+    {
+        $master  = self::getDataMapperConnection();
+        $locator = new ConnectionLocator($master);
+
+        $actual = $locator->getWrite("write1");
+        $this->assertEquals(spl_object_hash($master), spl_object_hash($actual));
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-25
+     *
+     * @group mysql
+     */
+    public function testDMPdoConnectionLocatorGetWriteException(): void
+    {
+        $this->expectException(ConnectionNotFound::class);
+        $this->expectExceptionMessage("Connection not found: write:unknown");
+
+        $master  = self::getDataMapperConnection();
+        $write1  = self::getDataMapperConnection();
+        $locator = new ConnectionLocator(
+            $master,
+            [],
+            [
+                "write1" => function () use ($write1) {
+                    return $write1;
+                },
+            ]
+        );
+
+        $locator->getWrite("unknown");
     }
 }

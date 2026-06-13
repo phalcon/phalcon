@@ -85,7 +85,10 @@ final class SetMultipleTest extends AbstractUnitTestCase
      */
     public function testCacheCacheSetMultipleExceptionNotTraversable(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'The keys need to be an array or instance of Traversable'
+        );
 
         $serializer = new SerializerFactory();
         $factory    = new AdapterFactory($serializer);

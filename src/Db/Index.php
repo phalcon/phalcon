@@ -68,7 +68,7 @@ class Index implements IndexInterface
 
     /**
      * Whether to build the index without taking a strong lock that blocks
-     * writes — emits `CONCURRENTLY` between `INDEX` and the index name on
+     * writes - emits `CONCURRENTLY` between `INDEX` and the index name on
      * PostgreSQL. MySQL and SQLite ignore the flag.
      *
      * @var bool
@@ -77,7 +77,7 @@ class Index implements IndexInterface
 
     /**
      * Per-column sort directions (`ASC` / `DESC`). Empty array means
-     * "emit no per-column direction" — preserves the legacy plain
+     * "emit no per-column direction" - preserves the legacy plain
      * `(col1, col2)` rendering.
      *
      * @var array

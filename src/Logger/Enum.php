@@ -26,5 +26,6 @@ class Enum
     public const ERROR     = 3;
     public const INFO      = 6;
     public const NOTICE    = 5;
+    public const TRACE     = 9;
     public const WARNING   = 4;
 }

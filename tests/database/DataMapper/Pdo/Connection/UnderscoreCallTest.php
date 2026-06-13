@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -14,18 +16,36 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 use BadMethodCallException;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
-use Phalcon\Tests\Support\DataMapper\Pdo\ConnectionFixture;
+use Phalcon\Tests\Database\DataMapper\Fake\FakeConnection;
 
 final class UnderscoreCallTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: __call() - exception
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionUnderscoreCallException(): void
+    public function testDMPdoConnectionUnderscoreCall(): void
+    {
+        /** @var Connection $connection */
+        $connection = new FakeConnection(
+            self::getDatabaseDsn(),
+            self::getDatabaseUsername(),
+            self::getDatabasePassword()
+        );
+
+        $actual = $connection->callMe('blondie');
+        $this->assertEquals('blondie', $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-25
+     *
+     * @group mysql
+     */
+    public function testDMPdoConnectionUnderscoreCallException(): void
     {
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage(

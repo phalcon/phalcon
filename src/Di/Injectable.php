@@ -102,7 +102,7 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
 
         /**
          * Accessing the persistent property will create a session bag on any class.
-         * Di supports passing constructor args; Container does not — class name omitted.
+         * Di supports passing constructor args; Container does not - class name omitted.
          */
         if ('persistent' === $propertyName) {
             if ($container instanceof DiInterface) {

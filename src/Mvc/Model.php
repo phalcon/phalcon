@@ -1281,7 +1281,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Models that keep snapshots store the original data in t.
          * At hydration both snapshot and oldSnapshot are the same
-         * "as fetched" baseline — reuse the column-mapped result of
+         * "as fetched" baseline - reuse the column-mapped result of
          * setSnapshotData() instead of running the column-map walk
          * a second time. PHP's COW lets the two refs share memory
          * until one is mutated by save().

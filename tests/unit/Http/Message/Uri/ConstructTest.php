@@ -81,7 +81,7 @@ final class ConstructTest extends AbstractUnitTestCase
 
     /**
      * Tests Phalcon\Http\Message\Uri :: __toString() - path with double slash, no
-     * authority — must reduce to single slash per RFC 3986
+     * authority - must reduce to single slash per RFC 3986
      *
      * @return void
      *

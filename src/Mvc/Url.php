@@ -507,9 +507,9 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * Replaces placeholders in a route pattern with values from $replacements.
      *
      * Supports three placeholder styles:
-     *   {name}   — named (curly-brace) placeholders
-     *   (...)    — positional (parentheses) placeholders
-     *   :word    — colon-prefixed placeholders
+     *   {name}   - named (curly-brace) placeholders
+     *   (...)    - positional (parentheses) placeholders
+     *   :word    - colon-prefixed placeholders
      *
      * Port of the C function phalcon_replace_paths() from ext/phalcon/mvc/url/utils.c.
      *

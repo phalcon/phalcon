@@ -430,7 +430,7 @@ class Mysql extends PdoAdapter
                     break;
 
                 /**
-                 * Spatial types — order matters: detect the multi-* and
+                 * Spatial types - order matters: detect the multi-* and
                  * geometrycollection variants before the bare names.
                  */
                 case str_starts_with($columnType, "multipoint"):
@@ -544,7 +544,7 @@ class Mysql extends PdoAdapter
              * Detect a generated/computed column. `EXTRA` contains
              * `VIRTUAL GENERATED` or `STORED GENERATED`; a non-generated
              * column with `DEFAULT CURRENT_TIMESTAMP` reports
-             * `DEFAULT_GENERATED` — match the specific tokens to avoid
+             * `DEFAULT_GENERATED` - match the specific tokens to avoid
              * the false positive.
              */
             if (

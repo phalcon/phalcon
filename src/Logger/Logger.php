@@ -48,4 +48,22 @@ class Logger extends AbstractLogger implements LoggerInterface
 
         $this->addMessage($levelName, $message, $context);
     }
+
+    /**
+     * Extra-verbose diagnostic output.
+     *
+     * Use for high-frequency, fine-grained events such as raw socket frames,
+     * HTTP response bodies, or internal state transitions that are too noisy
+     * for DEBUG.
+     *
+     * @param string|Stringable $message
+     * @param array             $context
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function trace(string | Stringable $message, array $context = []): void
+    {
+        $this->addMessage(Enum::TRACE, $message, $context);
+    }
 }

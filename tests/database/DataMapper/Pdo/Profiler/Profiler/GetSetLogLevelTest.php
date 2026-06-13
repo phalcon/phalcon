@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -13,31 +15,28 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\Logger\Enum;
-use Phalcon\Logger\LogLevel;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class GetSetLogLevelTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler ::
-     * getLogLevel()/setLogLevel()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoProfilerProfilerGetSetLogLevel(): void
+    public function testDMPdoProfilerProfilerGetSetLogLevel(): void
     {
         $profiler = new Profiler();
 
-        $this->assertSame(
+        $this->assertEquals(
             Enum::DEBUG,
             $profiler->getLogLevel()
         );
 
-        $profiler->setLogLevel(Enum::INFO);
-        $this->assertSame(
-            Enum::INFO,
+        $profiler->setLogLevel('info');
+        $this->assertEquals(
+            'info',
             $profiler->getLogLevel()
         );
     }

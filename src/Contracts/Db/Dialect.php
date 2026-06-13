@@ -21,7 +21,7 @@ use Phalcon\Db\ReferenceInterface;
 /**
  * Canonical contract for Phalcon\Db dialects.
  *
- * @todo v7 — these will become required interface members. They are
+ * @todo v7 - these will become required interface members. They are
  *            omitted from the v5 line to avoid breaking third-party
  *            implementors:
  *              - addCheck()                : string
@@ -35,7 +35,7 @@ use Phalcon\Db\ReferenceInterface;
 interface Dialect
 {
     /**
-     * No row-lock modifier — the default behavior for `forUpdate()`.
+     * No row-lock modifier - the default behavior for `forUpdate()`.
      */
     public const LOCK_NONE = '';
 

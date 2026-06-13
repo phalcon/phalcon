@@ -3,7 +3,9 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -20,11 +22,12 @@ use stdClass;
 final class FetchObjectTest extends AbstractDatabaseTestCase
 {
     /**
-     * Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject() - ctor
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
+     *
+     * @group mysql
      */
-    public function connectionFetchObjectCtor(): void
+    public function testDMPdoConnectionFetchObject(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -32,7 +35,35 @@ final class FetchObjectTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertSame(1, $result);
+        $this->assertEquals(1, $result);
+
+        $all = $connection->fetchObject(
+            'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
+            [
+                0 => 1,
+            ]
+        );
+
+        $this->assertInstanceOf(stdClass::class, $all);
+        $this->assertEquals(1, $all->inv_id);
+        $this->assertEquals(101, $all->inv_total);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-25
+     *
+     * @group mysql
+     */
+    public function testConnectionFetchObjectCtor(): void
+    {
+        /** @var Connection $connection */
+        $connection = self::getDataMapperConnection();
+        $migration  = new InvoicesMigration(self::getConnection());
+        $migration->clear();
+
+        $result = $migration->insert(1, 1, 1, null, 101);
+        $this->assertEquals(1, $result);
 
         $all = $connection->fetchObject(
             'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
@@ -46,37 +77,8 @@ final class FetchObjectTest extends AbstractDatabaseTestCase
         );
 
         $this->assertInstanceOf(Resultset::class, $all);
-        $this->assertSame('vader', $all->calculated);
-        $this->assertSame(1, $all->inv_id);
-        $this->assertSame(101.0, $all->inv_total);
-    }
-
-    /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchObject()
-     *
-     * @since  2020-01-25
-     *
-     * @group mysql
-     */
-    public function testDmPdoConnectionFetchObject(): void
-    {
-        /** @var Connection $connection */
-        $connection = self::getDataMapperConnection();
-        $migration  = new InvoicesMigration(self::getConnection());
-        $migration->clear();
-
-        $result = $migration->insert(1, 1, 1, null, 101);
-        $this->assertSame(1, $result);
-
-        $all = $connection->fetchObject(
-            'select inv_id, inv_total from co_invoices WHERE inv_id = ?',
-            [
-                0 => 1,
-            ]
-        );
-
-        $this->assertInstanceOf(stdClass::class, $all);
-        $this->assertSame(1, $all->inv_id);
-        $this->assertSame(101.0, $all->inv_total);
+        $this->assertEquals('vader', $all->calculated);
+        $this->assertEquals(1, $all->inv_id);
+        $this->assertEquals(101, $all->inv_total);
     }
 }

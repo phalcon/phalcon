@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -17,14 +19,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class IsSetActiveTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler ::
-     * isActive()/setActive()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoProfilerProfilerIsSetActive(): void
+    public function testDMPdoProfilerProfilerIsSetActive(): void
     {
         $profiler = new Profiler();
 

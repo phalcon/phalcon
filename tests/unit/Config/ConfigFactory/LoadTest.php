@@ -131,7 +131,10 @@ final class LoadTest extends AbstractUnitTestCase
      */
     public function testConfigFactoryLoadExceptionInvalidType(): void
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Config must be array or Phalcon\Config\Config object'
+        );
 
         (new ConfigFactory())->load(false);
     }

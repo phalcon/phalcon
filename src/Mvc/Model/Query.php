@@ -3461,7 +3461,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             if (!is_string($preparedAlias)) {
                 /**
                  * If the best alias is the model name, lowercase the first
-                 * letter — but keep fully-qualified namespaced names verbatim
+                 * letter - but keep fully-qualified namespaced names verbatim
                  * so `readAttribute(Model::class)` matches downstream.
                  */
                 if ($columnDomain == $modelName) {

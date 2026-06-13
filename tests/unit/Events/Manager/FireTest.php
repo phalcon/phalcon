@@ -108,7 +108,7 @@ final class FireTest extends AbstractUnitTestCase
         });
 
         $data = new EmptyEventObject();
-        // Fire with no colon and an object $data — delegates to dispatch()
+        // Fire with no colon and an object $data - delegates to dispatch()
         $manager->fire('psr14event', new stdClass(), $data);
 
         $this->assertTrue($called);

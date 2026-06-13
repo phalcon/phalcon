@@ -35,6 +35,6 @@ final class SetTypeTest extends AbstractUnitTestCase
         $result = $helper('x_name');
 
         $expected = '<input type="email" id="x_name" name="x_name">';
-        $this->assertSame($expected, (string) $result);
+        $this->assertSame($expected, (string)$result);
     }
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Html\Helper\Input;
 
 use Phalcon\Html\Escaper;
+use Phalcon\Html\Exception;
 use Phalcon\Html\Helper\Doctype;
 use Phalcon\Html\Helper\Input\Generic;
 use Phalcon\Html\Helper\Input\Textarea;
@@ -23,9 +24,6 @@ use function sprintf;
 final class UnderscoreInvokeTest extends AbstractUnitTestCase
 {
     /**
-     * Returns [typeString => [serviceName, typeString]] pairs used to
-     * instantiate a Generic helper and verify rendering across all input types.
-     *
      * @return array
      */
     public static function getClasses(): array
@@ -128,7 +126,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
             }
 
             $expected = sprintf($render, $className);
-            $actual   = (string) $result;
+            $actual   = (string)$result;
             $this->assertSame($expected, $actual);
 
             $doctype(Doctype::XHTML5);
@@ -140,7 +138,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
             }
 
             $expected = sprintf($renderXhtml, $className);
-            $actual   = (string) $result;
+            $actual   = (string)$result;
             $this->assertSame($expected, $actual);
 
             /**
@@ -156,19 +154,19 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
             }
 
             $expected = sprintf($render, $className);
-            $actual   = (string) $result;
+            $actual   = (string)$result;
             $this->assertSame($expected, $actual);
 
             $doctype(Doctype::XHTML5);
 
-            $result = $locator($name, $value, $attributes);
+            $result  = $locator($name, $value, $attributes);
 
             if (null !== $newValue) {
                 $result->setValue($newValue);
             }
 
             $expected = sprintf($renderXhtml, $className);
-            $actual   = (string) $result;
+            $actual   = (string)$result;
             $this->assertSame($expected, $actual);
         }
     }
@@ -194,7 +192,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
 
         $expected = '<textarea id="x_name" name="x_name" cols="10" rows="5">' .
             'test text area</textarea>';
-        $actual   = (string) $result;
+        $actual   = (string)$result;
         $this->assertSame($expected, $actual);
 
         $factory = new TagFactory($escaper);
@@ -208,7 +206,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
             ]
         );
 
-        $actual = (string) $result;
+        $actual = (string)$result;
         $this->assertSame($expected, $actual);
     }
 }

@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -18,25 +20,24 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class GetSetProfilerTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: getProfiler()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionGetProfiler(): void
+    public function testDMPdoConnectionGetProfiler(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
-        $actual = $connection->getProfiler();
-        $this->assertNull($actual);
+        $this->assertInstanceOf(
+            Profiler::class,
+            $connection->getProfiler()
+        );
 
         $profiler = new Profiler();
         $connection->setProfiler($profiler);
 
-        $expected = $profiler;
-        $actual   = $connection->getProfiler();
-        $this->assertSame($expected, $actual);
+        $this->assertSame($profiler, $connection->getProfiler());
     }
 }

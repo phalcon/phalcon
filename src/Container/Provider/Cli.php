@@ -102,7 +102,7 @@ class Cli implements Provider
         $services->bind(TransactionManagerInterface::class, TransactionManager::class);
         $services->setAlias(TransactionManagerInterface::class, 'transactionManager');
 
-        // --- FQCN bindings (set + alias) — no unique interface available ---
+        // --- FQCN bindings (set + alias) - no unique interface available ---
 
         $services->set(AccessLocator::class, static function (Collection $c): AccessLocator {
             return new AccessLocator($c);

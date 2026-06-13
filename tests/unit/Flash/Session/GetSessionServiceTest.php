@@ -49,8 +49,7 @@ final class GetSessionServiceTest extends AbstractUnitTestCase
      */
     public function testFlashSessionGetSessionServiceReturnsService(): void
     {
-        $session = $this->container->get('session');
-        $this->container->setShared('session', $session);
+        $session = $this->container->getShared('session');
         $session->start();
 
         $flash = new Session();

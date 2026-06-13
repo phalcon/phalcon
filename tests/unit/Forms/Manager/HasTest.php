@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Forms\Manager;
 
 use Phalcon\Forms\Form;
-use Phalcon\Forms\FormsLocator;
 use Phalcon\Forms\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -26,7 +25,7 @@ final class HasTest extends AbstractUnitTestCase
      */
     public function testFormsManagerHas(): void
     {
-        $manager = new Manager(new FormsLocator());
+        $manager = new Manager();
 
         $this->assertFalse(
             $manager->has('login')

@@ -21,21 +21,65 @@ namespace Phalcon\DataMapper\Pdo\Profiler;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Enum;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LoggerTrait;
+use Phalcon\Logger\LoggerInterface;
 use Stringable;
 
+use function strtr;
+
 /**
- * A naive memory-based logger.
+ * A memory-based logger.
  */
 class MemoryLogger implements LoggerInterface
 {
-    use LoggerTrait;
-
     /**
-     * @var array<array-key, string>
+     * @var array
      */
     protected array $messages = [];
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function alert(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::ALERT, $message, $context);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function critical(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::CRITICAL, $message, $context);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function debug(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::DEBUG, $message, $context);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function emergency(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::EMERGENCY, $message, $context);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function error(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::ERROR, $message, $context);
+    }
 
     /**
      * Returns an adapter from the stack
@@ -61,8 +105,6 @@ class MemoryLogger implements LoggerInterface
 
     /**
      * Returns the log level
-     *
-     * @return int
      */
     public function getLogLevel(): int
     {
@@ -72,7 +114,7 @@ class MemoryLogger implements LoggerInterface
     /**
      * Returns the logged messages.
      *
-     * @return array<array-key, string>
+     * @return array
      */
     public function getMessages(): array
     {
@@ -88,24 +130,56 @@ class MemoryLogger implements LoggerInterface
     }
 
     /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function info(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::INFO, $message, $context);
+    }
+
+    /**
      * Logs a message.
      *
-     * @param mixed                    $level
-     * @param string|Stringable        $message
-     * @param array<array-key, string> $context
-     *
-     * @return void
+     * @param mixed             $level
+     * @param string|Stringable $message
+     * @param array             $context
      */
-    public function log(
-        mixed $level,
-        string | Stringable $message,
-        array $context = []
-    ): void {
+    public function log($level, string | Stringable $message, array $context = []): void
+    {
         $replace = [];
-        foreach ($context as $key => $item) {
-            $replace["{" . $key . "}"] = $item;
+
+        foreach ($context as $key => $value) {
+            $replace["{" . $key . "}"] = $value;
         }
 
         $this->messages[] = strtr((string)$message, $replace);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function notice(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::NOTICE, $message, $context);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function trace(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::TRACE, $message, $context);
+    }
+
+    /**
+     * @param string|Stringable $message
+     * @param mixed[]           $context
+     */
+    public function warning(string | Stringable $message, array $context = []): void
+    {
+        $this->log(Enum::WARNING, $message, $context);
     }
 }

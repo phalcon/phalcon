@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -18,20 +20,19 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class DebugInfoTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: __debugInfo()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionDebugInfo(): void
+    public function testDMPdoConnectionDebugInfo(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
 
         $expected = [
             'arguments' => [
-                $this->getDatabaseDsn(),
+                self::getDatabaseDsn(),
                 '****',
                 '****',
                 [
@@ -40,6 +41,6 @@ final class DebugInfoTest extends AbstractDatabaseTestCase
                 [],
             ],
         ];
-        $this->assertSame($expected, $connection->__debugInfo());
+        $this->assertEquals($expected, $connection->__debugInfo());
     }
 }

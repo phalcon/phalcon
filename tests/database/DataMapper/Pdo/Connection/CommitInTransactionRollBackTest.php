@@ -3,7 +3,9 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -21,14 +23,13 @@ use function uniqid;
 final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection ::
-     * commit()/inTransaction()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
+     * @group sqlite
      */
-    public function testDmPdoConnectionCommitInTransaction(): void
+    public function testDMPdoConnectionCommitInTransaction(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -42,7 +43,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
         $date  = date('Y-m-d H:i:s');
         $sql   = "insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, "
             . "inv_title, inv_total, inv_created_at) values ("
-            . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
+            . "{$invId}, 1, 1, \"{$title}\", 102, \"{$date}\")";
 
         $result = $connection->exec($sql);
         $this->assertSame(1, $result);
@@ -66,13 +67,13 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: rollBack()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
+     * @group sqlite
      */
-    public function testDmPdoConnectionRollBack(): void
+    public function testDMPdoConnectionRollBack(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -86,7 +87,7 @@ final class CommitInTransactionRollBackTest extends AbstractDatabaseTestCase
         $date  = date('Y-m-d H:i:s');
         $sql   = "insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, "
             . "inv_title, inv_total, inv_created_at) values ("
-            . "{$invId}, 1, 1, '{$title}', 102, '{$date}')";
+            . "{$invId}, 1, 1, \"{$title}\", 102, \"{$date}\")";
 
         $result = $connection->exec($sql);
         $this->assertSame(1, $result);

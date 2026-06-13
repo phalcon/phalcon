@@ -5,7 +5,7 @@
  *
  * (c) Phalcon Team <team@phalcon.io>
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -24,9 +24,9 @@ final class ArrayDataTest extends AbstractUnitTestCase
      */
     public function testGetOptionsReturnsFlatArray(): void
     {
-        $data = new ArrayData(['1' => 'Ferrari', '2' => 'Ford']);
+        $data     = new ArrayData(['1' => 'Ferrari', '2' => 'Ford']);
         $expected = ['1' => 'Ferrari', '2' => 'Ford'];
-        $actual = $data->getOptions();
+        $actual   = $data->getOptions();
         $this->assertSame($expected, $actual);
     }
 
@@ -38,9 +38,9 @@ final class ArrayDataTest extends AbstractUnitTestCase
     {
         $input = [
             'Group A' => ['1' => 'Ferrari', '2' => 'Ford'],
-            '3' => 'Toyota'
+            '3'       => 'Toyota',
         ];
-        $data = new ArrayData($input);
+        $data   = new ArrayData($input);
         $actual = $data->getOptions();
         $this->assertSame($input, $actual);
     }

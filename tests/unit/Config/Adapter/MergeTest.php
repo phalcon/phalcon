@@ -31,7 +31,8 @@ final class MergeTest extends AbstractUnitTestCase
     {
         $config = $this->getConfig($adapter);
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid data type for merge.');
 
         $config->merge(false);
     }

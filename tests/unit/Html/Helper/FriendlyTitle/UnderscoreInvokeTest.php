@@ -29,35 +29,35 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
                 'Hello World',
                 '-',
                 true,
-                [],
+                null,
             ],
             [
                 'Hello-World',
                 'Hello World',
                 '-',
                 false,
-                [],
+                null,
             ],
             [
                 'hello_world',
                 'Hello World',
                 '_',
                 true,
-                [],
+                null,
             ],
             [
                 'hello-and-world',
                 'Hello & World',
                 '-',
                 true,
-                [],
+                null,
             ],
             [
                 'hello-world',
                 'Héllo Wörld',
                 '-',
                 true,
-                [],
+                null,
             ],
             [
                 'hello-world',
@@ -87,7 +87,7 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
         string $text,
         string $separator,
         bool $lowercase,
-        array|string $replace
+        mixed $replace
     ): void {
         $escaper = new Escaper();
         $helper  = new FriendlyTitle($escaper);

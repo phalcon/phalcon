@@ -33,14 +33,14 @@ final class SerializeTest extends AbstractUnitTestCase
 
         $attributes = new Attributes($data);
 
-        $this->assertSame(
-            serialize([
+        $expected = serialize(
+            [
                 'data'        => $data,
                 'insensitive' => true,
                 'strictNull'  => false,
                 'type'        => null,
-            ]),
-            $attributes->serialize()
+            ]
         );
+        $this->assertSame($expected, $attributes->serialize());
     }
 }

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Select;
 
-use Phalcon\Phql\Parser;
+use Phalcon\Mvc\Model\Query\Lang;
 use Phalcon\Tests\AbstractUnitTestCase;
 
 final class BracketsWithEscapedNameTest extends AbstractUnitTestCase
@@ -52,7 +52,7 @@ final class BracketsWithEscapedNameTest extends AbstractUnitTestCase
                 ],
             ],
         ];
-        $actual   = (new Parser())->parse($source);
+        $actual   = Lang::parsePhql($source);
         unset($actual['id']);
         $this->assertSame($expected, $actual);
     }

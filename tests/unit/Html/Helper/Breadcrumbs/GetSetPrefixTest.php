@@ -104,6 +104,8 @@ final class GetSetPrefixTest extends AbstractUnitTestCase
             ->add('List')
         ;
 
+        // url->get('/') with baseUri '/myapp/' → '/myapp/' (double-slash removed)
+        // url->get('/invoices') with baseUri '/myapp/' → '/myapp/invoices'
         $expected = "
 <nav>
     <ol>

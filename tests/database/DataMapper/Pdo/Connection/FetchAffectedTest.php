@@ -3,7 +3,9 @@
 /**
  * This file is part of the Phalcon Framework.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
 
@@ -18,13 +20,12 @@ use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 final class FetchAffectedTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: fetchAffected()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionFetchAffected(): void
+    public function testDMPdoConnectionFetchAffected(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -32,17 +33,17 @@ final class FetchAffectedTest extends AbstractDatabaseTestCase
         $migration->clear();
 
         $result = $migration->insert(1);
-        $this->assertSame(1, $result);
+        $this->assertEquals(1, $result);
         $result = $migration->insert(2);
-        $this->assertSame(1, $result);
+        $this->assertEquals(1, $result);
         $result = $migration->insert(3);
-        $this->assertSame(1, $result);
+        $this->assertEquals(1, $result);
         $result = $migration->insert(4);
-        $this->assertSame(1, $result);
+        $this->assertEquals(1, $result);
 
         $all = $connection->fetchAffected(
             'delete from co_invoices'
         );
-        $this->assertSame(4, $all);
+        $this->assertEquals(4, $all);
     }
 }

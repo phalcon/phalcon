@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -22,13 +24,12 @@ use function uniqid;
 final class LastInsertIdTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: lastInsertId()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionLastInsertId(): void
+    public function testDMPdoConnectionLastInsertId(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -37,7 +38,7 @@ final class LastInsertIdTest extends AbstractDatabaseTestCase
 
         $template = 'insert into co_invoices (inv_id, inv_cst_id, inv_status_flag, '
             . 'inv_title, inv_total, inv_created_at) values ('
-            . "%id%, 1, 1, '%title%', %total%, '%now%')";
+            . '%id%, 1, 1, "%title%", %total%, "%now%")';
 
         $sql = str_replace(
             [
@@ -56,7 +57,7 @@ final class LastInsertIdTest extends AbstractDatabaseTestCase
         );
 
         $result = $connection->exec($sql);
-        $this->assertSame(1, $result);
-        $this->assertSame(2, (int)$connection->lastInsertId());
+        $this->assertEquals(1, $result);
+        $this->assertEquals(2, $connection->lastInsertId());
     }
 }

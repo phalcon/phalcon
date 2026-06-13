@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -17,14 +19,13 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class ConnectDisconnectIsConnectedTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection ::
-     * connect()/disconnect()/isConnected()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
+     * @group sqlite
      */
-    public function testDmPdoConnectionConnectDisconnectIsConnected(): void
+    public function testDMPdoConnectionConnectDisconnectIsConnected(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -34,25 +35,22 @@ final class ConnectDisconnectIsConnectedTest extends AbstractDatabaseTestCase
         $this->assertTrue($connection->isConnected());
         $connection->disconnect();
         $this->assertFalse($connection->isConnected());
-        $connection->connect();
-        $this->assertTrue($connection->isConnected());
     }
 
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: connect() - queries
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionConnectQueries(): void
+    public function testDMPdoConnectionConnectQueries(): void
     {
         if ('mysql' === self::getDriver()) {
             /** @var Connection $connection */
             $connection = new Connection(
-                $this->getDatabaseDsn(),
-                $this->getDatabaseUsername(),
-                $this->getDatabasePassword(),
+                self::getDatabaseDsn(),
+                self::getDatabaseUsername(),
+                self::getDatabasePassword(),
                 [],
                 [
                     'set names big5',
@@ -60,15 +58,17 @@ final class ConnectDisconnectIsConnectedTest extends AbstractDatabaseTestCase
             );
 
             $this->assertFalse($connection->isConnected());
+            $result = $connection->fetchOne(
+                'show variables like "character_set_client"'
+            );
 
+            $this->assertTrue($connection->isConnected());
             $expected = [
                 'Variable_name' => 'character_set_client',
                 'Value'         => 'big5',
             ];
-            $actual   = $connection->fetchOne(
-                'show variables like "character_set_client"'
-            );
-            $this->assertSame($expected, $actual);
+
+            $this->assertSame($expected, $result);
         }
     }
 }

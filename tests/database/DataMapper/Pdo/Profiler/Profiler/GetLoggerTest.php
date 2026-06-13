@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -18,24 +20,23 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class GetLoggerTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Profiler\Profiler :: getLogger()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoProfilerProfilerGetLogger(): void
+    public function testDMPdoProfilerProfilerGetLogger(): void
     {
         $profile = new Profiler();
         $logger  = $profile->getLogger();
 
-        $this->assertNull($logger);
+        $this->assertInstanceOf(MemoryLogger::class, $logger);
 
         $newLogger = new MemoryLogger();
         $profile   = new Profiler($newLogger);
 
         $logger = $profile->getLogger();
         $this->assertInstanceOf(MemoryLogger::class, $logger);
-        $this->assertSame($newLogger, $logger);
+        $this->assertEquals($newLogger, $logger);
     }
 }

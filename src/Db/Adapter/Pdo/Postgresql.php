@@ -505,7 +505,7 @@ class Postgresql extends PdoAdapter
                     break;
 
                 /**
-                 * Range types — order matters: more-specific names first
+                 * Range types - order matters: more-specific names first
                  * (`tstzrange` before `tsrange`, etc.).
                  */
                 case str_contains($columnType, "int4range"):

@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo\Profiler;
 
-use Psr\Log\LoggerInterface;
+use Phalcon\Logger\LoggerInterface;
 
 /**
  * Interface to send query profiles to a logger.
@@ -28,12 +28,10 @@ interface ProfilerInterface
     /**
      * Finishes and logs a profile entry.
      *
-     * @param string|null          $statement
-     * @param array<string, mixed> $values
-     *
-     * @return void
+     * @param string $statement
+     * @param array  $values
      */
-    public function finish(string | null $statement = null, array $values = []): void;
+    public function finish(?string $statement = null, array $values = []): void;
 
     /**
      * Returns the log message format string, with placeholders.
@@ -43,18 +41,18 @@ interface ProfilerInterface
     public function getLogFormat(): string;
 
     /**
-     * Returns the level at which to log profile messages.
-     *
-     * @return int
-     */
-    public function getLogLevel(): int;
-
-    /**
      * Returns the underlying logger instance.
      *
-     * @return LoggerInterface|null
+     * @return LoggerInterface
      */
-    public function getLogger(): LoggerInterface | null;
+    public function getLogger(): LoggerInterface;
+
+    /**
+     * Returns the level at which to log profile messages.
+     *
+     * @return string
+     */
+    public function getLogLevel(): string;
 
     /**
      * Returns true if logging is active.
@@ -84,12 +82,12 @@ interface ProfilerInterface
     /**
      * Level at which to log profile messages.
      *
-     * @param int $logLevel
+     * @param string $logLevel
      *
      * @return ProfilerInterface
      *
      */
-    public function setLogLevel(int $logLevel): ProfilerInterface;
+    public function setLogLevel(string $logLevel): ProfilerInterface;
 
     /**
      * Starts a profile entry.

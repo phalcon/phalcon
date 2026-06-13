@@ -15,6 +15,7 @@ namespace Phalcon\Logger;
 
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
+use Stringable;
 
 /**
  * Interface for Phalcon based logger objects.
@@ -52,4 +53,14 @@ interface LoggerInterface extends PsrLoggerInterface
      * @return string
      */
     public function getName(): string;
+
+    /**
+     * Extra-verbose diagnostic output.
+     *
+     * @param string|Stringable $message
+     * @param array             $context
+     *
+     * @return void
+     */
+    public function trace(string | Stringable $message, array $context = []): void;
 }

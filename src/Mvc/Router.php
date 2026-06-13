@@ -84,7 +84,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Number of alternatives per combined-regex chunk. Empirically derived
-     * (FastRoute uses ~10) — keeps each chunk below PCRE's optimizer cliff.
+     * (FastRoute uses ~10) - keeps each chunk below PCRE's optimizer cliff.
      */
     public const REGEX_CHUNK_SIZE = 10;
 
@@ -100,7 +100,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Pre-merged per-method candidate buckets in attach order. For each HTTP
      * method seen on any registered route, the bucket contains the
      * method-specific routes followed by the "*" (no-constraint) routes.
-     * The "*" key itself holds only the no-constraint routes — used when the
+     * The "*" key itself holds only the no-constraint routes - used when the
      * request method has no specific bucket.
      *
      * @var array
@@ -286,7 +286,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Shadow-detection map. If staticShadowedByMethod[method][uri] is set,
      * the static URI in that bucket is shadowed by a later-attached regex
-     * route — the fast path MUST NOT be used; fall through to the dynamic
+     * route - the fast path MUST NOT be used; fall through to the dynamic
      * loop so the regex wins (reverse-iteration semantics).
      *
      * @var array

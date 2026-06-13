@@ -241,7 +241,7 @@ final class LoadFromConfigTest extends AbstractUnitTestCase
     public function testLoadFromConfigRejectsNonArrayNonConfig(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/ConfigInterface\|array/');
+        $this->expectExceptionMessageMatches('/requires an array or Phalcon/');
 
         (new Router(false))->loadFromConfig('a string');
     }

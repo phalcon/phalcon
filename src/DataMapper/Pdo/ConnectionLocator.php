@@ -18,57 +18,64 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo;
 
+use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
 
 use function array_rand;
-use function is_callable;
+use function call_user_func;
 
 /**
  * Manages Connection instances for default, read, and write connections.
  */
-class ConnectionLocator
+class ConnectionLocator implements ConnectionLocatorInterface
 {
     /**
-     * @var callable
+     * A default Connection connection factory/instance.
+     *
+     * @var ConnectionInterface
      */
-    protected mixed $master;
+    protected ConnectionInterface $master;
+
+    /**
+     * A registry of Connection "read" factories/instances.
+     *
+     * @var array
+     */
+    protected array $read = [];
+
+    /**
+     * A registry of Connection "write" factories/instances.
+     *
+     * @var array
+     */
+    protected array $write = [];
 
     /**
      * A collection of resolved instances
+     *
+     * @var array
      */
     private array $instances = [];
 
     /**
      * Constructor.
      *
-     * @param callable                      $master
-     * @param array<string, callable|mixed> $read
-     * @param array<string, callable|mixed> $write
-     *
-     * @throws ConnectionNotFound
+     * @param ConnectionInterface $master
+     * @param array               $read
+     * @param array               $write
      */
     public function __construct(
-        callable $master,
-        protected array $read = [],
-        protected array $write = []
+        ConnectionInterface $master,
+        array $read = [],
+        array $write = []
     ) {
         $this->setMaster($master);
 
         foreach ($read as $name => $callableObject) {
-            if (!is_callable($callableObject)) {
-                throw new ConnectionNotFound(
-                    "Read connection [$name] must be a callable"
-                );
-            }
             $this->setRead($name, $callableObject);
         }
 
         foreach ($write as $name => $callableObject) {
-            if (!is_callable($callableObject)) {
-                throw new ConnectionNotFound(
-                    "Write connection [$name] must be a callable"
-                );
-            }
             $this->setWrite($name, $callableObject);
         }
     }
@@ -76,16 +83,11 @@ class ConnectionLocator
     /**
      * Returns the default connection object.
      *
-     * @return Connection
+     * @return ConnectionInterface
      */
-    public function getMaster(): Connection
+    public function getMaster(): ConnectionInterface
     {
-        if (!isset($this->instances["master"])) {
-            $master                    = $this->master;
-            $this->instances["master"] = $master();
-        }
-
-        return $this->instances["master"];
+        return $this->master;
     }
 
     /**
@@ -95,10 +97,10 @@ class ConnectionLocator
      *
      * @param string $name
      *
-     * @return Connection
+     * @return ConnectionInterface
      * @throws ConnectionNotFound
      */
-    public function getRead(string $name = ""): Connection
+    public function getRead(string $name = ""): ConnectionInterface
     {
         return $this->getConnection("read", $name);
     }
@@ -110,45 +112,24 @@ class ConnectionLocator
      *
      * @param string $name
      *
-     * @return Connection
+     * @return ConnectionInterface
      * @throws ConnectionNotFound
      */
-    public function getWrite(string $name = ""): Connection
+    public function getWrite(string $name = ""): ConnectionInterface
     {
         return $this->getConnection("write", $name);
     }
 
     /**
-     * @param mixed $argument
-     * @param mixed ...$arguments
-     *
-     * @return static
-     * @throws ConnectionNotFound
-     */
-    public static function new(mixed $argument, mixed ...$arguments): static
-    {
-        if ($argument instanceof Connection) {
-            $defaultFactory = function () use ($argument) {
-                return $argument;
-            };
-
-            return new static($defaultFactory);
-        }
-
-        return new static(Connection::factory($argument, ...$arguments));
-    }
-
-    /**
      * Sets the default connection factory.
      *
-     * @param callable $callableObject
+     * @param ConnectionInterface $callable
      *
-     * @return ConnectionLocator
+     * @return static
      */
-    public function setMaster(callable $callableObject): static
+    public function setMaster(ConnectionInterface $callableObject): static
     {
         $this->master = $callableObject;
-        unset($this->instances["master"]);
 
         return $this;
     }
@@ -157,9 +138,9 @@ class ConnectionLocator
      * Sets a read connection factory by name.
      *
      * @param string   $name
-     * @param callable $callableObject
+     * @param callable $callable
      *
-     * @return ConnectionLocator
+     * @return static
      */
     public function setRead(
         string $name,
@@ -174,9 +155,9 @@ class ConnectionLocator
      * Sets a write connection factory by name.
      *
      * @param string   $name
-     * @param callable $callableObject
+     * @param callable $callable
      *
-     * @return ConnectionLocator
+     * @return static
      */
     public function setWrite(
         string $name,
@@ -193,14 +174,16 @@ class ConnectionLocator
      * @param string $type
      * @param string $name
      *
-     * @return Connection
+     * @return ConnectionInterface
      * @throws ConnectionNotFound
      */
     protected function getConnection(
         string $type,
         string $name = ""
-    ): Connection {
+    ): ConnectionInterface {
         $collection = $this->{$type};
+        $requested  = $name;
+        $instances  = $this->instances;
 
         /**
          * No collection returns the master
@@ -212,7 +195,9 @@ class ConnectionLocator
         /**
          * If the requested name is empty, get a random connection
          */
-        $requested = $name ?: array_rand($collection);
+        if ("" === $requested) {
+            $requested = array_rand($collection);
+        }
 
         /**
          * If the connection name does not exist, send an exception back
@@ -230,10 +215,11 @@ class ConnectionLocator
          */
         $instanceName = $type . "-" . $requested;
 
-        if (!isset($this->instances[$instanceName])) {
-            $this->instances[$instanceName] = $collection[$requested]();
+        if (!isset($instances[$instanceName])) {
+            $instances[$instanceName] = call_user_func($collection[$requested]);
+            $this->instances          = $instances;
         }
 
-        return $this->instances[$instanceName];
+        return $instances[$instanceName];
     }
 }

@@ -18,16 +18,17 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo;
 
-use InvalidArgumentException;
 use PDO;
 use Phalcon\DataMapper\Pdo\Connection\AbstractConnection;
+use Phalcon\DataMapper\Pdo\Exception\DriverNotSupported;
+use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
+
+use function explode;
 
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
- *
- * @method int|false exec(string $statement = '')
  */
 class Connection extends AbstractConnection
 {
@@ -42,55 +43,53 @@ class Connection extends AbstractConnection
      * This overrides the parent so that it can take connection attributes as a
      * constructor parameter, and set them after connection.
      *
-     * @param PDO|string               $dsnPdo
-     * @param string|null              $username
-     * @param string|null              $password
-     * @param array<int, int>          $options
-     * @param array<array-key, string> $queries
-     * @param ProfilerInterface|null   $profiler
+     * @param string            $dsn
+     * @param string            $username
+     * @param string            $password
+     * @param array             $options
+     * @param array             $queries
+     * @param ProfilerInterface $profiler
      */
     public function __construct(
-        PDO | string $dsnPdo,
-        string | null $username = null,
-        string | null $password = null,
+        string $dsn,
+        ?string $username = null,
+        ?string $password = null,
         array $options = [],
         array $queries = [],
-        ProfilerInterface | null $profiler = null
+        ?ProfilerInterface $profiler = null
     ) {
-        if ($dsnPdo instanceof PDO) {
-            $this->pdo = $dsnPdo;
-        } else {
-            $parts     = explode(":", $dsnPdo);
-            $available = [
-                "mysql"  => true,
-                "pgsql"  => true,
-                "sqlite" => true,
-                "mssql"  => true,
-            ];
+        $parts     = explode(":", $dsn);
+        $available = [
+            "mysql"  => true,
+            "pgsql"  => true,
+            "sqlite" => true,
+            "mssql"  => true,
+        ];
 
-            if (!isset($available[$parts[0]])) {
-                throw new InvalidArgumentException(
-                    "Driver not supported [" . $parts[0] . "]"
-                );
-            }
-
-
-            // if no error mode is specified, use exceptions
-            if (!isset($options[PDO::ATTR_ERRMODE])) {
-                $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
-            }
-
-            // Arguments store
-            $this->arguments = [
-                $dsnPdo,
-                $username,
-                $password,
-                $options,
-                $queries,
-            ];
+        if (!isset($available[$parts[0]])) {
+            throw new DriverNotSupported($parts[0]);
         }
 
-        $this->profiler = $profiler;
+        // if no error mode is specified, use exceptions
+        if (!isset($options[PDO::ATTR_ERRMODE])) {
+            $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+        }
+
+        // Arguments store
+        $this->arguments = [
+            $dsn,
+            $username,
+            $password,
+            $options,
+            $queries,
+        ];
+
+        // Create a new profiler if none has been passed
+        if ($profiler === null) {
+            $profiler = new Profiler();
+        }
+
+        $this->setProfiler($profiler);
     }
 
     /**
@@ -113,19 +112,22 @@ class Connection extends AbstractConnection
 
     /**
      * Connects to the database.
-     *
-     * @return void
      */
     public function connect(): void
     {
         if (!$this->pdo) {
             // connect
-            $this->profileStart(__METHOD__);
+            $this->profiler->start(__FUNCTION__);
 
-            [$dsn, $username, $password, $options, $queries] = $this->arguments;
+            $dsn      = $this->arguments[0];
+            $username = $this->arguments[1];
+            $password = $this->arguments[2];
+            $options  = $this->arguments[3];
+            $queries  = $this->arguments[4];
+
             $this->pdo = new PDO($dsn, $username, $password, $options);
 
-            $this->profileFinish();
+            $this->profiler->finish();
 
             // connection-time queries
             foreach ($queries as $query) {
@@ -136,38 +138,13 @@ class Connection extends AbstractConnection
 
     /**
      * Disconnects from the database.
-     *
-     * @return void
      */
     public function disconnect(): void
     {
+        $this->profiler->start(__FUNCTION__);
+
         $this->pdo = null;
-    }
 
-    /**
-     * @param mixed ...$arguments
-     *
-     * @return callable
-     */
-    public static function factory(mixed ...$arguments): callable
-    {
-        return fn() => static::new(...$arguments);
-    }
-
-    /**
-     * @param mixed ...$arguments
-     *
-     * @return Connection
-     */
-    public static function new(mixed ...$arguments): Connection
-    {
-        $dsn = $arguments[0] ?? '';
-        if (is_string($dsn) && empty($dsn)) {
-            throw new InvalidArgumentException(
-                "DSN cannot be empty"
-            );
-        }
-
-        return new static(...$arguments);
+        $this->profiler->finish();
     }
 }

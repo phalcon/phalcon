@@ -333,6 +333,7 @@ abstract class AbstractLogger
             Enum::NOTICE    => LogLevel::NOTICE,
             Enum::WARNING   => LogLevel::WARNING,
             Enum::CUSTOM    => 'custom',
+            Enum::TRACE     => 'trace',
         ];
     }
 }

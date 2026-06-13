@@ -269,7 +269,7 @@ class Mysql extends Dialect
          * adapter loop continues to read by ordinal index:
          *   0:Field, 1:Type, 2:Collation, 3:Null, 4:Key, 5:Default, 6:Extra,
          *   7:Privileges, 8:Comment
-         * Position 9 — GenerationExpression — is appended for the generated
+         * Position 9 - GenerationExpression - is appended for the generated
          * column round-trip.
          */
         return "SELECT COLUMN_NAME AS `Field`, COLUMN_TYPE AS `Type`, "
@@ -661,7 +661,7 @@ class Mysql extends Dialect
 
     /**
      * MySQL does not support the SQL-standard `ON CONFLICT DO UPDATE`
-     * upsert syntax — it has its own `INSERT ... ON DUPLICATE KEY UPDATE`.
+     * upsert syntax - it has its own `INSERT ... ON DUPLICATE KEY UPDATE`.
      *
      * @param string $sqlQuery
      * @param array  $conflictColumns

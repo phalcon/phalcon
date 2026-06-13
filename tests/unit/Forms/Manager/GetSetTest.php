@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Forms\Manager;
 
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Form;
-use Phalcon\Forms\FormsLocator;
 use Phalcon\Forms\Manager;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -30,7 +29,7 @@ final class GetSetTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("There is no form with name='login'");
 
-        $manager   = new Manager(new FormsLocator());
+        $manager   = new Manager();
         $loginForm = $manager->get('login');
     }
 
@@ -40,7 +39,7 @@ final class GetSetTest extends AbstractUnitTestCase
      */
     public function testFormsManagerGetSet(): void
     {
-        $manager = new Manager(new FormsLocator());
+        $manager = new Manager();
 
         $loginForm = new Form();
 

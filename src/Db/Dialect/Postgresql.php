@@ -1332,7 +1332,7 @@ class Postgresql extends Dialect
         $defaultValue = $column->getDefault();
 
         /**
-         * RawValue defaults are emitted verbatim — this is how the caller
+         * RawValue defaults are emitted verbatim - this is how the caller
          * signals an SQL expression (e.g. `gen_random_uuid()`, a function
          * call, or any other dialect-specific expression).
          */

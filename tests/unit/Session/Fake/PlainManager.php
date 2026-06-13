@@ -77,7 +77,7 @@ final class PlainManager implements ManagerInterface
         return $value;
     }
 
-    public function getAdapter(): ?SessionHandlerInterface
+    public function getAdapter(): SessionHandlerInterface | null
     {
         return $this->adapter;
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Flash\Direct;
 
 use Phalcon\Flash\Direct;
+use Phalcon\Flash\Exception;
 use Phalcon\Html\Escaper;
 use Phalcon\Tests\AbstractUnitTestCase;
 
@@ -64,5 +65,20 @@ final class OutputMessageTest extends AbstractUnitTestCase
 
         $actual = $flash->$type($source);
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testFlashDirectOutputMessageException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'The message must be an array or a string'
+        );
+
+        $flash = new Direct(new Escaper());
+        $flash->outputMessage('success', false);
     }
 }

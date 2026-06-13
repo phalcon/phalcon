@@ -45,7 +45,7 @@ final class CoverageGapsTest extends AbstractUnitTestCase
 
     /**
      * Hostname route in the main loop with HTTP_HOST mismatching the
-     * constraint — route is skipped.
+     * constraint - route is skipped.
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-21
@@ -82,7 +82,7 @@ final class CoverageGapsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Hostname route with empty HTTP_HOST (CLI-like environment) — continue.
+     * Hostname route with empty HTTP_HOST (CLI-like environment) - continue.
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-21
@@ -157,7 +157,7 @@ final class CoverageGapsTest extends AbstractUnitTestCase
         $router->handle('/widgets/7');
 
         $params = $router->getParams();
-        // The non-scalar 'extra' position is skipped — but stays in $parts
+        // The non-scalar 'extra' position is skipped - but stays in $parts
         // (the foreach `continue` doesn't unset it).
         $this->assertSame(['nested' => 'value'], $params['extra']);
     }
@@ -177,6 +177,24 @@ final class CoverageGapsTest extends AbstractUnitTestCase
         $router->handle('?foo=bar');
 
         $this->assertSame('home', $router->getControllerName());
+    }
+
+    /**
+     * Path entry with a non-string key triggers Exception. Routes with a
+     * paths array that has an integer key reach the throw in handle().
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-21
+     */
+    public function testWrongPathsKeyThrows(): void
+    {
+        $router = $this->getRouter(false);
+        $router->add('/x/(\d+)', [0 => 'broken']);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Wrong key in paths: 0');
+
+        $router->handle('/x/42');
     }
 
     /**
@@ -314,13 +332,13 @@ final class CoverageGapsTest extends AbstractUnitTestCase
         unset($_GET['_url']);
         $router->handle('');
 
-        // Default route does not match "/" alone, so no match — but the
+        // Default route does not match "/" alone, so no match - but the
         // codepath through getRewriteUri returning "/" is exercised.
         $this->assertFalse($router->wasMatched());
     }
 
     /**
-     * setUriSource is a setter — exercise it for coverage.
+     * setUriSource is a setter - exercise it for coverage.
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-21
@@ -526,7 +544,7 @@ final class CoverageGapsTest extends AbstractUnitTestCase
 
     /**
      * extractNamedParams: a placeholder whose first character is non-alpha
-     * is rejected — the `{1bad}` literal is kept verbatim in the route.
+     * is rejected - the `{1bad}` literal is kept verbatim in the route.
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-21

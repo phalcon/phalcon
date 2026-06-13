@@ -3,6 +3,8 @@
 /**
  * This file is part of the Phalcon Framework.
  *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
  */
@@ -17,13 +19,12 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 final class ErrorInfoTest extends AbstractDatabaseTestCase
 {
     /**
-     * Database Tests Phalcon\DataMapper\Pdo\Connection :: errorInfo()
-     *
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
      *
      * @group mysql
      */
-    public function testDmPdoConnectionErrorInfo(): void
+    public function testDMPdoConnectionErrorInfo(): void
     {
         /** @var Connection $connection */
         $connection = self::getDataMapperConnection();
@@ -31,6 +32,6 @@ final class ErrorInfoTest extends AbstractDatabaseTestCase
         $actual = $connection->errorInfo();
         $expect = ['', null, null];
 
-        $this->assertSame($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 }

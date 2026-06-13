@@ -19,8 +19,8 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Pdo\Exception;
 
 /**
- * Could not disconnect; e.g., because its PDO connection was created
- * externally and then injected.
+ * ExtendedPdo could not disconnect; e.g., because its PDO connection was
+ * created externally and then injected.
  */
 class CannotDisconnect extends Exception
 {
