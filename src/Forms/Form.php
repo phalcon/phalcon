@@ -200,6 +200,15 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             throw new NoFormElements();
         }
 
+        /**
+         * Check if there is a method 'beforeBind'
+         */
+        if (true === method_exists($this, "beforeBind")) {
+            if (false === $this->{"beforeBind"}($data, $entity)) {
+                return $this;
+            }
+        }
+
         if (empty($whitelist)) {
             $whitelist = $this->whitelist;
         }
@@ -301,6 +310,13 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
         $this->data         = $assignData;
         $this->filteredData = $filteredData;
+
+        /**
+         * Check if there is a method 'afterBind'
+         */
+        if (true === method_exists($this, "afterBind")) {
+            $this->{"afterBind"}($entity);
+        }
 
         return $this;
     }
