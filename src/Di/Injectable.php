@@ -115,8 +115,11 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
         }
 
         /**
-         * Fallback to the PHP userland if the cache is not available.
-         * Di uses getShared() for property caching; Container::get() is always shared.
+         * Resolve the service through the container. Only cache it on the
+         * object when the property is already declared on the class. This way
+         * dynamic services (e.g. request, response) are re-resolved on each
+         * access and reflect updates to the service definition, while declared
+         * component properties keep being populated as before.
          */
         if (true === $container->has($propertyName)) {
             if ($container instanceof DiInterface) {
@@ -125,7 +128,9 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
                 $service = $container->get($propertyName);
             }
 
-            $this->$propertyName = $service;
+            if (property_exists($this, $propertyName)) {
+                $this->$propertyName = $service;
+            }
 
             return $service;
         }
