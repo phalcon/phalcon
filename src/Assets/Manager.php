@@ -305,7 +305,7 @@ class Manager implements InjectionAwareInterface
     public function get(string $name): Collection
     {
         if (!isset($this->collections[$name])) {
-            throw new CollectionNotFound();
+            throw new CollectionNotFound($name);
         }
 
         return $this->collections[$name];
@@ -466,7 +466,7 @@ class Manager implements InjectionAwareInterface
                  * We need a valid final target path
                  */
                 if (empty($targetPath)) {
-                    throw new InvalidAssetTargetPath($sourcePath);
+                    throw new InvalidAssetTargetPath($asset->getPath());
                 }
 
                 $filterNeeded = $this->isFilterNeeded($asset, $targetPath, $sourcePath, $filterNeeded);
@@ -509,47 +509,19 @@ class Manager implements InjectionAwareInterface
                 $content = $asset->getContent($completeSourcePath);
 
                 /**
-                 * Check if the asset must be filtered
+                 * Apply the collection filters; the asset opts in via its own
+                 * filter flag
                  */
-                $mustFilter = $asset->getFilter();
+                $mustFilter      = $asset->getFilter();
+                $filteredContent = $this->applyFilters($content, $filters, $mustFilter);
 
                 /**
-                 * Only filter the asset if it's marked as 'filterable'
+                 * Update the joined filtered content
                  */
-                if (true === $mustFilter) {
-                    foreach ($filters as $filter) {
-                        /**
-                         * Filters must be valid objects
-                         */
-                        if (!is_object($filter)) {
-                            throw new InvalidFilter();
-                        }
-
-                        /**
-                         * Calls the method 'filter' which must return a
-                         * filtered version of the content
-                         */
-                        $filteredContent = $filter->filter($content);
-                        $content         = $filteredContent;
-                    }
-
-                    /**
-                     * Update the joined filtered content
-                     */
-                    if (true === $join) {
-                        $filteredJoinedContent .= $filteredContent;
-                        if ($asset->getType() !== $typeCss) {
-                            $filteredJoinedContent .= ';';
-                        }
-                    }
-                } else {
-                    /**
-                     * Update the joined filtered content
-                     */
-                    if (true === $join) {
-                        $filteredJoinedContent .= $content;
-                    } else {
-                        $filteredContent = $content;
+                if (true === $join) {
+                    $filteredJoinedContent .= $filteredContent;
+                    if (true === $mustFilter && $asset->getType() !== $typeCss) {
+                        $filteredJoinedContent .= ';';
                     }
                 }
 
@@ -651,21 +623,12 @@ class Manager implements InjectionAwareInterface
             foreach ($codes as $code) {
                 $attributes = $code->getAttributes();
                 $content    = $code->getContent();
-                /** @var FilterInterface $filter */
-                foreach ($filters as $filter) {
-                    /**
-                     * Filters must be valid objects
-                     */
-                    if (!is_object($filter)) {
-                        throw new InvalidFilter();
-                    }
 
-                    /**
-                     * Calls the method 'filter' which must return a filtered
-                     * version of the content
-                     */
-                    $content = $filter->filter($content);
-                }
+                /**
+                 * Apply the collection filters. The per-code filter flag is
+                 * intentionally not honored here to preserve current behavior.
+                 */
+                $content = $this->applyFilters($content, $filters, true);
 
                 if (true === $join) {
                     $joinedContent .= $content;
@@ -800,6 +763,45 @@ class Manager implements InjectionAwareInterface
         $this->implicitOutput = $implicitOutput;
 
         return $this;
+    }
+
+    /**
+     * Applies the collection filters to the content. Filtering only happens
+     * when `$mustFilter` is true; every filter must be a `FilterInterface`
+     * instance.
+     *
+     * @param string $content
+     * @param array  $filters
+     * @param bool   $mustFilter
+     *
+     * @return string
+     * @throws InvalidFilter
+     */
+    private function applyFilters(
+        string $content,
+        array $filters,
+        bool $mustFilter = true
+    ): string {
+        if (true !== $mustFilter) {
+            return $content;
+        }
+
+        foreach ($filters as $filter) {
+            /**
+             * Filters must be valid FilterInterface instances
+             */
+            if (!($filter instanceof FilterInterface)) {
+                throw new InvalidFilter();
+            }
+
+            /**
+             * Calls the method 'filter' which must return a filtered version
+             * of the content
+             */
+            $content = $filter->filter($content);
+        }
+
+        return $content;
     }
 
     /**

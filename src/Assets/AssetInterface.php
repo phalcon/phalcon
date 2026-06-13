@@ -13,63 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
+use Phalcon\Contracts\Assets\Asset as AssetContract;
+
 /**
- * Interface for custom Phalcon\Assets resources
+ * Phalcon\Assets\AssetInterface
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Assets\Asset} instead.
  */
-interface AssetInterface
+interface AssetInterface extends AssetContract
 {
-    /**
-     * Gets the asset's key.
-     *
-     * @return string
-     */
-    public function getAssetKey(): string;
-
-    /**
-     * Gets extra HTML attributes.
-     *
-     * @return array<string, string>|null
-     */
-    public function getAttributes(): array | null;
-
-    /**
-     * Gets if the asset must be filtered or not.
-     *
-     * @return bool
-     */
-    public function getFilter(): bool;
-
-    /**
-     * Gets the asset's type.
-     *
-     * @return string
-     */
-    public function getType(): string;
-
-    /**
-     * Sets extra HTML attributes.
-     *
-     * @param array<string, string> $attributes
-     *
-     * @return AssetInterface
-     */
-    public function setAttributes(array $attributes): AssetInterface;
-
-    /**
-     * Sets if the asset must be filtered or not.
-     *
-     * @param bool $filter
-     *
-     * @return AssetInterface
-     */
-    public function setFilter(bool $filter): AssetInterface;
-
-    /**
-     * Sets the asset's type.
-     *
-     * @param string $type
-     *
-     * @return AssetInterface
-     */
-    public function setType(string $type): AssetInterface;
 }

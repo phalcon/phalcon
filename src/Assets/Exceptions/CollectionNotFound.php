@@ -17,8 +17,14 @@ use Phalcon\Assets\Exception;
 
 class CollectionNotFound extends Exception
 {
-    public function __construct()
+    public function __construct(string $name = "")
     {
-        parent::__construct("The collection does not exist in the manager");
+        $message = "The collection does not exist in the manager";
+
+        if ($name !== "") {
+            $message = "The collection '" . $name . "' does not exist in the manager";
+        }
+
+        parent::__construct($message);
     }
 }

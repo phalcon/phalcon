@@ -415,13 +415,8 @@ class Collection implements Countable, IteratorAggregate
     public function has(AssetInterface $asset): bool
     {
         $key = $asset->getAssetKey();
-        foreach ($this->assets as $storedAsset) {
-            if ($key === $storedAsset->getAssetKey()) {
-                return true;
-            }
-        }
 
-        return false;
+        return isset($this->assets[$key]);
     }
 
     /**
