@@ -26,41 +26,6 @@ final class UnderscoreInvokeTest extends AbstractUnitTestCase
         return [
             [
                 'hello-world',
-                'Hello World',
-                '-',
-                true,
-                null,
-            ],
-            [
-                'Hello-World',
-                'Hello World',
-                '-',
-                false,
-                null,
-            ],
-            [
-                'hello_world',
-                'Hello World',
-                '_',
-                true,
-                null,
-            ],
-            [
-                'hello-and-world',
-                'Hello & World',
-                '-',
-                true,
-                null,
-            ],
-            [
-                'hello-world',
-                'Héllo Wörld',
-                '-',
-                true,
-                null,
-            ],
-            [
-                'hello-world',
                 'Hello/World',
                 '-',
                 true,

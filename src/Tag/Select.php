@@ -188,7 +188,7 @@ abstract class Select
         $escaper = BaseTag::getEscaperService();
 
         foreach ($data as $optionValue => $optionText) {
-            $escaped = $escaper->htmlAttr((string)$optionValue);
+            $escaped = $escaper->escapeHtmlAttr((string)$optionValue);
 
             if (is_array($optionText)) {
                 $code .= "\t<optgroup label=\""
