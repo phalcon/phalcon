@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Db\Event;
 
 use Phalcon\Db\Event\ModelEventNameEnum;
-use Phalcon\Db\Event\UnknownEventTypeException;
+use Phalcon\Events\UnknownEventTypeException;
 use Phalcon\Tests\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
