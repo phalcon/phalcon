@@ -19,6 +19,7 @@ namespace Phalcon\Auth;
 use Phalcon\Auth\Access\AccessLocator;
 use Phalcon\Auth\Adapter\AdapterLocator;
 use Phalcon\Auth\Guard\GuardLocator;
+use Phalcon\Auth\Internal\Options;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
@@ -117,10 +118,13 @@ class ManagerFactory
         $guards = $config['guards'] ?? [];
 
         foreach ($guards as $name => $gconf) {
-            $adapter = $this->buildAdapter($this->adapterLocator, $gconf['adapter']);
+            $adapter = $this->buildAdapter(
+                $this->adapterLocator,
+                Options::requireArray($gconf, 'adapter', "guard '" . $name . "'")
+            );
             $guard   = $this->buildGuard(
                 $this->guardLocator,
-                $gconf['type'],
+                Options::requireString($gconf, 'type', "guard '" . $name . "'"),
                 $adapter,
                 $gconf['options'] ?? []
             );
@@ -147,7 +151,7 @@ class ManagerFactory
      */
     protected function buildAdapter(AdapterLocator $locator, array $cfg): Adapter
     {
-        $name = $cfg['name'];
+        $name = Options::requireString($cfg, 'name', 'adapter');
 
         if (!$locator->has($name)) {
             throw new Exception(sprintf("Unknown auth adapter '%s'", $name));

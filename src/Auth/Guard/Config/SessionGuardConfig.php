@@ -28,9 +28,16 @@ use Phalcon\Auth\Exceptions\ConfigRequiresNonEmptyValue;
  */
 class SessionGuardConfig extends AbstractGuardConfig
 {
+    /**
+     * Default remember-me cookie lifetime, in seconds (365 days).
+     */
+    public const DEFAULT_REMEMBER_TTL = 31536000;
+
     private readonly string $name;
 
     private readonly string $rememberName;
+
+    private readonly int $rememberTtl;
 
     /**
      * @throws Exception
@@ -39,6 +46,7 @@ class SessionGuardConfig extends AbstractGuardConfig
         ?string $suffix = null,
         ?string $name = null,
         ?string $rememberName = null,
+        ?int $rememberTtl = null,
     ) {
         $this->validateNonEmpty('suffix', $suffix);
         $this->validateNonEmpty('name', $name);
@@ -46,6 +54,7 @@ class SessionGuardConfig extends AbstractGuardConfig
 
         $this->name         = $name ?? $this->derive('auth', $suffix);
         $this->rememberName = $rememberName ?? $this->derive('remember', $suffix);
+        $this->rememberTtl  = $rememberTtl ?? self::DEFAULT_REMEMBER_TTL;
 
         if ($this->name === $this->rememberName) {
             throw new Exception(
@@ -62,6 +71,11 @@ class SessionGuardConfig extends AbstractGuardConfig
     public function getRememberName(): string
     {
         return $this->rememberName;
+    }
+
+    public function getRememberTtl(): int
+    {
+        return $this->rememberTtl;
     }
 
     private function derive(string $prefix, ?string $suffix): string

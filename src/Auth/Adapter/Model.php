@@ -102,6 +102,10 @@ class Model extends AbstractAdapter implements RememberAdapter
             return null;
         }
 
+        if ($found !== null && !($found instanceof AuthUser)) {
+            throw new DoesNotImplement('User model', 'AuthUser');
+        }
+
         /** @var AuthUser $found */
         return $found;
     }
@@ -120,6 +124,10 @@ class Model extends AbstractAdapter implements RememberAdapter
 
         if ($found === false) {
             return null;
+        }
+
+        if ($found !== null && !($found instanceof AuthUser)) {
+            throw new DoesNotImplement('User model', 'AuthUser');
         }
 
         /** @var AuthUser $found */

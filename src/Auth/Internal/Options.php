@@ -45,6 +45,25 @@ final class Options
     /**
      * @param array<string, mixed> $options
      *
+     * @return array<string, mixed>
+     * @throws Exception
+     */
+    public static function requireArray(array $options, string $key, string $context): array
+    {
+        $value = $options[$key] ?? null;
+
+        if (!is_array($value) || empty($value)) {
+            throw new Exception(
+                sprintf("Auth %s requires '%s' to be a non-empty array", $context, $key)
+            );
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     *
      * @throws Exception
      */
     public static function requireString(array $options, string $key, string $context): string
