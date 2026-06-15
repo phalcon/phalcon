@@ -1037,14 +1037,33 @@ class Builder implements BuilderInterface, InjectionAwareInterface
                         continue;
                     }
 
-                    if (str_contains($orderItem, " ")) {
-                        $itemExplode  = explode(" ", $orderItem);
-                        $orderItems[] = $this->autoescape($itemExplode[0]) . " " . $itemExplode[1];
+                    /**
+                     * For cases 'ORDER BY column ASC' and complex expressions
+                     */
+                    $itemTrimmed       = trim($orderItem);
+                    $lastSpacePosition = strrpos($itemTrimmed, " ");
+
+                    if (false !== $lastSpacePosition) {
+                        $perhapsExpression = trim(substr($itemTrimmed, 0, $lastSpacePosition));
+                        $perhapsDirection  = rtrim(substr($itemTrimmed, $lastSpacePosition + 1));
+
+                        if (
+                            strcasecmp($perhapsDirection, "desc") === 0 ||
+                            strcasecmp($perhapsDirection, "asc") === 0
+                        ) {
+                            if (!str_contains($perhapsExpression, " ")) {
+                                $perhapsExpression = $this->autoescape($perhapsExpression);
+                            }
+
+                            $orderItems[] = $perhapsExpression . " " . $perhapsDirection;
+                        } else {
+                            $orderItems[] = $itemTrimmed;
+                        }
 
                         continue;
                     }
 
-                    $orderItems[] = $this->autoescape($orderItem);
+                    $orderItems[] = $this->autoescape($itemTrimmed);
                 }
 
                 $phql .= " ORDER BY " . implode(", ", $orderItems);

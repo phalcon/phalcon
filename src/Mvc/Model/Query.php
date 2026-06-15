@@ -2323,6 +2323,96 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     break;
 
+                case Opcode::OP_MATCHES->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "@@",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_CONTAINS->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "@>",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_CONTAINED->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "<@",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_OVERLAPS->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "&&",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_CONCAT->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "||",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_JSON_GET->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "->",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_JSON_GET_TEXT->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "->>",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_JSON_PATH->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "#>",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
+                case Opcode::OP_JSON_PATH_TEXT->value:
+                    $exprReturn = [
+                        "type"  => "binary-op",
+                        "op"    => "#>>",
+                        "left"  => $left,
+                        "right" => $right,
+                    ];
+
+                    break;
+
                 default:
                     throw new UnknownPhqlExpressionType((string) $exprType);
             }
@@ -3349,6 +3439,14 @@ class Query implements QueryInterface, InjectionAwareInterface
         ];
 
         /**
+         * Forward the JOINs (if any) so the related records are filtered by
+         * the joined models too (UPDATE/DELETE ... JOIN support)
+         */
+        if (isset($intermediate["joins"])) {
+            $selectIr["joins"] = $intermediate["joins"];
+        }
+
+        /**
          * Check if a WHERE clause was specified
          */
         if (isset($intermediate["where"])) {
@@ -4311,6 +4409,8 @@ class Query implements QueryInterface, InjectionAwareInterface
         $sqlTables                 = [];
         $sqlModels                 = [];
         $sqlAliases                = [];
+        $sqlAliasesModels          = [];
+        $sqlModelsAliases          = [];
         $sqlAliasesModelsInstances = [];
 
         if (!isset($tables[0])) {
@@ -4347,12 +4447,16 @@ class Query implements QueryInterface, InjectionAwareInterface
             if (isset($table["alias"])) {
                 $alias                             = $table["alias"];
                 $sqlAliases[$alias]                = $alias;
+                $sqlAliasesModels[$alias]          = $modelName;
+                $sqlModelsAliases[$modelName]      = $alias;
                 $completeSource[]                  = $alias;
                 $sqlTables[]                       = $completeSource;
                 $sqlAliasesModelsInstances[$alias] = $model;
                 $models[$alias]                    = $modelName;
             } else {
                 $sqlAliases[$modelName]                = $source;
+                $sqlAliasesModels[$modelName]          = $modelName;
+                $sqlModelsAliases[$modelName]          = $modelName;
                 $sqlAliasesModelsInstances[$modelName] = $model;
                 $sqlTables[]                           = $source;
                 $models[$modelName]                    = $source;
@@ -4368,7 +4472,22 @@ class Query implements QueryInterface, InjectionAwareInterface
         $this->models                    = $models;
         $this->modelsInstances           = $modelsInstances;
         $this->sqlAliases                = $sqlAliases;
+        $this->sqlAliasesModels          = $sqlAliasesModels;
+        $this->sqlModelsAliases          = $sqlModelsAliases;
         $this->sqlAliasesModelsInstances = $sqlAliasesModelsInstances;
+
+        /**
+         * Process the JOINs (if any) before resolving the SET and WHERE
+         * expressions so that columns belonging to the joined models can be
+         * resolved. The joined models are registered as aliases/sources but
+         * are never added to "models", so the update still targets a single
+         * model.
+         */
+        $sqlJoins = [];
+
+        if (isset($update["joins"])) {
+            $sqlJoins = $this->getJoins($update);
+        }
 
         $sqlFields = [];
         $sqlValues = [];
@@ -4396,6 +4515,10 @@ class Query implements QueryInterface, InjectionAwareInterface
             "fields" => $sqlFields,
             "values" => $sqlValues,
         ];
+
+        if (count($sqlJoins)) {
+            $sqlUpdate["joins"] = $sqlJoins;
+        }
 
         if (isset($ast["where"])) {
             $sqlUpdate["where"] = $this->getExpression($ast["where"]);

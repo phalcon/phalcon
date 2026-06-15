@@ -210,6 +210,14 @@ abstract class Model extends AbstractInjectionAware implements
     protected array $snapshot = [];
 
     /**
+     * Per-save many-to-many sync overrides, keyed by lowercased relation
+     * alias (or "*" wildcard) => bool. Cleared after each save().
+     *
+     * @var array
+     */
+    protected array $syncRelated = [];
+
+    /**
      * @var TransactionInterface|null
      */
     protected TransactionInterface | null $transaction = null;
@@ -587,7 +595,10 @@ abstract class Model extends AbstractInjectionAware implements
 
                         unset($this->related[$lowerProperty]);
 
-                        if (!empty($related)) {
+                        if (
+                            !empty($related) ||
+                            $relation->getType() === Relation::HAS_MANY_THROUGH
+                        ) {
                             $this->dirtyRelated[$lowerProperty] = $related;
                             $this->dirtyState                   = self::DIRTY_STATE_TRANSIENT;
                         } else {
@@ -1714,6 +1725,8 @@ abstract class Model extends AbstractInjectionAware implements
             $hasRelatedToSave &&
             $this->preSaveRelatedRecords($writeConnection, $relatedToSave, $visited) === false
         ) {
+            $this->syncRelated = [];
+
             return false;
         }
 
@@ -1758,6 +1771,8 @@ abstract class Model extends AbstractInjectionAware implements
             if ($hasRelatedToSave) {
                 $writeConnection->rollback(false);
             }
+
+            $this->syncRelated = [];
 
             /**
              * Throw exceptions on failed saves?
@@ -1857,6 +1872,8 @@ abstract class Model extends AbstractInjectionAware implements
             $this->modelsManager->clearReusableObjects();
             $this->fireEvent("afterSave");
         }
+
+        $this->syncRelated = [];
 
         return $success;
     }
@@ -3403,6 +3420,56 @@ abstract class Model extends AbstractInjectionAware implements
 
 
         $this->snapshot = $snapshot;
+    }
+
+    /**
+     * Marks one or more many-to-many relationships to be synchronized (or not)
+     * on the next save() call, overriding the relation's `sync` option for that
+     * save only. The flag is cleared after save().
+     *
+     * When syncing is enabled, intermediate rows for related records no longer
+     * present in the assigned array are deleted.
+     *
+     *```php
+     * // Sync only the "tags" relationship on this save
+     * $post->setSync("tags")->save();
+     *
+     * // Sync every many-to-many relationship on this save
+     * $post->setSync()->save();
+     *
+     * // Disable syncing for every relationship on this save
+     * $post->setSync("*", false)->save();
+     *
+     * // Disable syncing for specific relationships on this save
+     * $post->setSync(["tags", "categories"], false)->save();
+     *```
+     *
+     * @param string|array|null $elements
+     * @param bool              $enabled
+     *
+     * @return ModelInterface
+     */
+    public function setSync(
+        mixed $elements = null,
+        bool $enabled = true
+    ): ModelInterface {
+        if ($elements === null || $elements === "*") {
+            $this->syncRelated["*"] = $enabled;
+
+            return $this;
+        }
+
+        if (is_array($elements)) {
+            foreach ($elements as $alias) {
+                $this->syncRelated[strtolower($alias)] = $enabled;
+            }
+
+            return $this;
+        }
+
+        $this->syncRelated[strtolower($elements)] = $enabled;
+
+        return $this;
     }
 
     /**
@@ -5883,6 +5950,19 @@ abstract class Model extends AbstractInjectionAware implements
                     $placeholders                 = [];
                     $conditions                   = [];
                     $columnCount                  = 0;
+                    $keptKeys                     = [];
+
+                    /**
+                     * Resolve sync behavior: per-save override (specific alias,
+                     * then "*" wildcard) wins over the relation's `sync` option.
+                     */
+                    $doSync = (bool) $relation->getOption("sync");
+
+                    if (isset($this->syncRelated[$name])) {
+                        $doSync = (bool) $this->syncRelated[$name];
+                    } elseif (isset($this->syncRelated["*"])) {
+                        $doSync = (bool) $this->syncRelated["*"];
+                    }
 
                     /**
                      * Always check for existing intermediate models
@@ -6027,6 +6107,69 @@ abstract class Model extends AbstractInjectionAware implements
                             $connection->rollback($nesting);
 
                             return false;
+                        }
+
+                        /**
+                         * Track the referenced key of each kept record so that
+                         * sync can delete the intermediate rows left behind.
+                         */
+                        if ($doSync) {
+                            if (is_array($referencedFields)) {
+                                $keepKey = "";
+
+                                foreach ($referencedFields as $columnA) {
+                                    $keepKey .= $recordAfter->readAttribute($columnA) . "|";
+                                }
+                            } else {
+                                $keepKey = (string) $recordAfter->readAttribute($referencedFields);
+                            }
+
+                            $keptKeys[$keepKey] = true;
+                        }
+                    }
+
+                    /**
+                     * Sync: remove intermediate rows for records that are no
+                     * longer present in the assigned array. Only applies to
+                     * many-to-many (HAS_MANY_THROUGH).
+                     */
+                    if (
+                        $doSync &&
+                        $relation->getType() === Relation::HAS_MANY_THROUGH
+                    ) {
+                        $intermediateModel = $manager->load(
+                            $intermediateModelName
+                        );
+
+                        $existingRecords = $intermediateModel->find(
+                            [
+                                implode(" AND ", $conditions),
+                                "bind" => $placeholders,
+                            ]
+                        );
+
+                        foreach ($existingRecords as $existingRecord) {
+                            if (is_array($intermediateReferencedFields)) {
+                                $keepKey = "";
+
+                                foreach ($intermediateReferencedFields as $columnB) {
+                                    $keepKey .= $existingRecord->readAttribute($columnB) . "|";
+                                }
+                            } else {
+                                $keepKey = (string) $existingRecord->readAttribute(
+                                    $intermediateReferencedFields
+                                );
+                            }
+
+                            if (!isset($keptKeys[$keepKey])) {
+                                if (!$existingRecord->delete()) {
+                                    $this->appendMessagesFrom($existingRecord);
+
+                                    $connection->rollback($nesting);
+
+                                    return false;
+                                }
+                            }
                         }
                     }
                 } else {
