@@ -16,7 +16,6 @@ namespace Phalcon\Translate\Adapter;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\InvalidDataType;
 use Phalcon\Translate\Exceptions\MissingContent;
-use Phalcon\Translate\Exceptions\KeyNotFound;
 use Phalcon\Translate\InterpolatorFactory;
 
 use function is_array;
@@ -35,11 +34,6 @@ class NativeArray extends AbstractAdapter
      * @var array<string, string>
      */
     private array $translate = [];
-
-    /**
-     * @var bool
-     */
-    private bool $triggerError = false;
 
     /**
      * NativeArray constructor.
@@ -64,8 +58,7 @@ class NativeArray extends AbstractAdapter
             throw new InvalidDataType();
         }
 
-        $this->triggerError = (bool)($options['triggerError'] ?? false);
-        $this->translate    = $options['content'];
+        $this->translate = $options['content'];
     }
 
     /**
@@ -78,23 +71,6 @@ class NativeArray extends AbstractAdapter
     public function has(string $index): bool
     {
         return isset($this->translate[$index]);
-    }
-
-    /**
-     * Whenever a key is not found this method will be called
-     *
-     * @param string $index
-     *
-     * @return string
-     * @throws KeyNotFound
-     */
-    public function notFound(string $index): string
-    {
-        if (true === $this->triggerError) {
-            throw new KeyNotFound($index);
-        }
-
-        return $index;
     }
 
     /**

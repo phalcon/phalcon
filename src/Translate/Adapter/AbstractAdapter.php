@@ -16,7 +16,9 @@ namespace Phalcon\Translate\Adapter;
 use ArrayAccess;
 use Exception as BaseException;
 use Phalcon\Translate\Exceptions\ImmutableObject;
+use Phalcon\Translate\Exceptions\KeyNotFound;
 use Phalcon\Translate\InterpolatorFactory;
+use Phalcon\Translate\Interpolator\InterpolatorInterface;
 
 /**
  * @psalm-type TOptions array{
@@ -35,6 +37,16 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     protected string $defaultInterpolator = '';
 
     /**
+     * @var InterpolatorInterface | null
+     */
+    protected InterpolatorInterface | null $interpolator = null;
+
+    /**
+     * @var bool
+     */
+    protected bool $triggerError = false;
+
+    /**
      * AbstractAdapter constructor.
      *
      * @param TOptions            $options
@@ -44,6 +56,7 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
         array $options = []
     ) {
         $this->defaultInterpolator = $options['defaultInterpolator'] ?? 'associativeArray';
+        $this->triggerError        = (bool)($options['triggerError'] ?? false);
     }
 
     /**
@@ -56,6 +69,23 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     public function _(string $translateKey, array $placeholders = []): string
     {
         return $this->query($translateKey, $placeholders);
+    }
+
+    /**
+     * Whenever a key is not found this method will be called
+     *
+     * @param string $index
+     *
+     * @return string
+     * @throws KeyNotFound
+     */
+    public function notFound(string $index): string
+    {
+        if (true === $this->triggerError) {
+            throw new KeyNotFound($index);
+        }
+
+        return $index;
     }
 
     /**
@@ -135,9 +165,13 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
         string $translation,
         array $placeholders = []
     ): string {
-        $interpolator = $this->interpolatorFactory->newInstance($this->defaultInterpolator);
+        if (null === $this->interpolator) {
+            $this->interpolator = $this->interpolatorFactory->newInstance(
+                $this->defaultInterpolator
+            );
+        }
 
-        return $interpolator->replacePlaceholders(
+        return $this->interpolator->replacePlaceholders(
             $translation,
             $placeholders
         );

@@ -85,7 +85,7 @@ class Csv extends AbstractAdapter
      */
     public function query(string $translateKey, array $placeholders = []): string
     {
-        $translation = $this->translate[$translateKey] ?? $translateKey;
+        $translation = $this->translate[$translateKey] ?? $this->notFound($translateKey);
 
         return $this->replacePlaceholders($translation, $placeholders);
     }
@@ -102,6 +102,9 @@ class Csv extends AbstractAdapter
 
     /**
      * Load translations from file
+     *
+     * Lines whose first column begins with a `#` are treated as comments
+     * and skipped.
      *
      * @param string $file
      * @param int    $length
