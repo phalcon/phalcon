@@ -2671,7 +2671,10 @@ class Compiler implements InjectionAwareInterface
              */
             switch ($type) {
                 case Opcode::RAW_FRAGMENT->value:
-                    $compilation .= $statement["value"];
+                    if (isset($statement["value"])) {
+                        $compilation .= $statement["value"];
+                    }
+
                     break;
 
                 case Opcode::IF->value:
