@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Forms;
 
 use Phalcon\Forms\Element\Select;
-use Phalcon\Forms\Exception;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
+use Phalcon\Tag\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\SelectMigration;
 use Phalcon\Tests\Support\Models\Select as SelectModel;
@@ -85,7 +85,7 @@ final class SelectTest extends AbstractDatabaseTestCase
         $element->setTagFactory(new TagFactory(new Escaper()));
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("The 'using' parameter is required for resultset options");
+        $this->expectExceptionMessage("The 'using' parameter is required");
 
         $element->render();
     }
