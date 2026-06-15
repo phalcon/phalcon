@@ -63,7 +63,9 @@ class QueryBuilder extends AbstractAdapter
     protected Builder $builder;
 
     /**
-     * Columns for count query if builder has having
+     * Column list used only for COUNT rewriting when the builder carries a
+     * HAVING or GROUP BY clause. It supplies the columns for the subquery
+     * that counts the grouped/having result set and is ignored otherwise.
      *
      * @var array|string|null
      */
@@ -71,6 +73,11 @@ class QueryBuilder extends AbstractAdapter
 
     /**
      * Phalcon\Paginator\Adapter\QueryBuilder
+     *
+     * The `columns` option is not a projection for the paginated rows; it is
+     * consumed solely by the total-count rewrite when the builder has a
+     * HAVING or GROUP BY clause (it becomes the column list of the counting
+     * subquery). It has no effect on plain queries.
      *
      * @param array $config = [
      *                      'limit' => 10,

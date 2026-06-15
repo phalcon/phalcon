@@ -23,6 +23,7 @@ use Phalcon\Paginator\RepositoryInterface;
 use function array_column;
 use function array_pop;
 use function count;
+use function is_numeric;
 use function is_string;
 
 /**
@@ -215,7 +216,16 @@ class QueryBuilderCursor extends AbstractAdapter
         if (count($items) > $limit) {
             array_pop($items);
 
-            $lastItem   = $items[count($items) - 1];
+            $lastItem = $items[count($items) - 1];
+
+            /**
+             * A non-numeric cursor value (e.g. a UUID column) would cast to 0
+             * and silently terminate pagination, so reject it explicitly.
+             */
+            if (!is_numeric($lastItem[$this->cursorColumn])) {
+                throw new InvalidCursorColumn();
+            }
+
             $nextCursor = (int) $lastItem[$this->cursorColumn];
         } else {
             $nextCursor = 0;

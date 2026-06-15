@@ -51,9 +51,6 @@ class NativeArray extends AbstractAdapter
      */
     public function paginate(): RepositoryInterface
     {
-        /**
-         * TODO: Rewrite the whole method!
-         */
         $items = $this->config["data"];
 
         if (!is_array($items)) {

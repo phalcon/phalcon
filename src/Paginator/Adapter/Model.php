@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
+use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\RepositoryInterface;
 
 use function call_user_func;
@@ -86,6 +87,24 @@ use function is_object;
  */
 class Model extends AbstractAdapter
 {
+    /**
+     * Phalcon\Paginator\Adapter\Model constructor
+     *
+     * @param array $config = [
+     *     'model'  => null,
+     *     'limit'  => 10,
+     *     'page'   => 1
+     * ]
+     */
+    public function __construct(array $config)
+    {
+        if (!isset($config["model"])) {
+            throw new MissingRequiredParameter("model");
+        }
+
+        parent::__construct($config);
+    }
+
     /**
      * Returns a slice of the resultset to show in the pagination
      *
