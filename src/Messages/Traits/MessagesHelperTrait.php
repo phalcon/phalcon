@@ -125,7 +125,7 @@ trait MessagesHelperTrait
      */
     public function offsetSet($offset, $message): void
     {
-        if (!is_object($message)) {
+        if (!($message instanceof MessageInterface)) {
             throw new MessageNotObject();
         }
 

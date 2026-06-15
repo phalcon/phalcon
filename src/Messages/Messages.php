@@ -13,24 +13,27 @@ declare(strict_types=1);
 
 namespace Phalcon\Messages;
 
-use ArrayAccess;
-use Countable;
-use Iterator;
 use JsonSerializable;
+use Phalcon\Contracts\Messages\Messages as MessagesContract;
 use Phalcon\Messages\Exceptions\MessagesNotIterable;
 use Phalcon\Messages\Traits\MessagesHelperTrait;
 use Phalcon\Support\Traits\JsonTrait;
+use Traversable;
 
 use function array_merge;
 use function is_array;
-use function is_object;
 
 /**
- * Class Messages
- *
  * Represents a collection of messages
+ *
+ * Messages are stored and iterated by integer position. An entry added under a
+ * string key through the ArrayAccess interface (for example
+ * `$messages["database"] = $message`) stays reachable by that offset but is not
+ * visited during iteration (`foreach`), which walks the integer sequence only.
+ * Use the append methods (`appendMessage()` / `appendMessages()`) when entries
+ * must take part in iteration.
  */
-class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
+class Messages implements MessagesContract, JsonSerializable
 {
     use JsonTrait;
     use MessagesHelperTrait;
@@ -74,7 +77,7 @@ class Messages implements ArrayAccess, Countable, Iterator, JsonSerializable
      */
     public function appendMessages($messages): void
     {
-        if (!is_array($messages) && !is_object($messages)) {
+        if (!is_array($messages) && !($messages instanceof Traversable)) {
             throw new MessagesNotIterable();
         }
 
