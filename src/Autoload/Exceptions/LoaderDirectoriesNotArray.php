@@ -17,10 +17,14 @@ use Phalcon\Autoload\Exception;
 
 class LoaderDirectoriesNotArray extends Exception
 {
-    public function __construct()
+    public function __construct(string $name = "")
     {
-        parent::__construct(
-            "The directories parameter is not a string or array"
-        );
+        $message = "The directories parameter is not a string or array";
+
+        if ("" !== $name) {
+            $message .= " for the '" . $name . "' namespace";
+        }
+
+        parent::__construct($message);
     }
 }

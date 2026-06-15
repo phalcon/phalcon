@@ -1050,16 +1050,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.6",
+            "version": "v3.95.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "804e6c9488a836ccb4a34984c6415ac56dc6554c"
+                "reference": "4fa4102a5617acae53f804f7c81475aaa2d6e813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/804e6c9488a836ccb4a34984c6415ac56dc6554c",
-                "reference": "804e6c9488a836ccb4a34984c6415ac56dc6554c",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/4fa4102a5617acae53f804f7c81475aaa2d6e813",
+                "reference": "4fa4102a5617acae53f804f7c81475aaa2d6e813",
                 "shasum": ""
             },
             "require": {
@@ -1143,7 +1143,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.6"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.7"
             },
             "funding": [
                 {
@@ -1151,7 +1151,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-13T13:24:51+00:00"
+            "time": "2026-06-13T17:51:53+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1401,12 +1401,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "b1a9a4365204a882570b1e841e0d1bd28dd53f3f"
+                "reference": "446cc3c2b26870b8015f4f2aa8313b87f52fb470"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/b1a9a4365204a882570b1e841e0d1bd28dd53f3f",
-                "reference": "b1a9a4365204a882570b1e841e0d1bd28dd53f3f",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/446cc3c2b26870b8015f4f2aa8313b87f52fb470",
+                "reference": "446cc3c2b26870b8015f4f2aa8313b87f52fb470",
                 "shasum": ""
             },
             "require": {
@@ -1468,7 +1468,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-06-07T00:06:56+00:00"
+            "time": "2026-06-15T01:14:39+00:00"
         },
         {
             "name": "phalcon/volt",
@@ -1476,12 +1476,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "e8f10a567e28a2efa585c40c767acc494825020c"
+                "reference": "4ac76f083c23c518b1cf2f947f46c74a2dae8965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/e8f10a567e28a2efa585c40c767acc494825020c",
-                "reference": "e8f10a567e28a2efa585c40c767acc494825020c",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/4ac76f083c23c518b1cf2f947f46c74a2dae8965",
+                "reference": "4ac76f083c23c518b1cf2f947f46c74a2dae8965",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1551,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-06-10T18:48:40+00:00"
+            "time": "2026-06-15T01:14:05+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -4035,16 +4035,16 @@
         },
         {
             "name": "seld/jsonlint",
-            "version": "1.12.0",
+            "version": "1.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/jsonlint.git",
-                "reference": "d95c42df9c4a713ca1d4a45b37f0416dee1ea73a"
+                "reference": "9a90eb5d32d5a500296bf43f946d60246444d5f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/d95c42df9c4a713ca1d4a45b37f0416dee1ea73a",
-                "reference": "d95c42df9c4a713ca1d4a45b37f0416dee1ea73a",
+                "url": "https://api.github.com/repos/Seldaek/jsonlint/zipball/9a90eb5d32d5a500296bf43f946d60246444d5f7",
+                "reference": "9a90eb5d32d5a500296bf43f946d60246444d5f7",
                 "shasum": ""
             },
             "require": {
@@ -4083,7 +4083,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/jsonlint/issues",
-                "source": "https://github.com/Seldaek/jsonlint/tree/1.12.0"
+                "source": "https://github.com/Seldaek/jsonlint/tree/1.12.1"
             },
             "funding": [
                 {
@@ -4095,7 +4095,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-11T13:43:55+00:00"
+            "time": "2026-06-12T11:32:29+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

@@ -107,6 +107,11 @@ class Loader
     protected array $namespaces = [];
 
     /**
+     * @var int
+     */
+    protected int $nestingLevel = 0;
+
+    /**
      * Loader constructor.
      */
     public function __construct(bool $isDebug = false)
@@ -186,8 +191,8 @@ class Loader
     ): static {
         $nsSeparator  = '\\';
         $dirSeparator = DIRECTORY_SEPARATOR;
+        $directories  = $this->checkDirectories($directories, $dirSeparator, $namespace);
         $namespace    = trim($namespace, $nsSeparator) . $nsSeparator;
-        $directories  = $this->checkDirectories($directories, $dirSeparator);
 
         // initialize the namespace prefix array if needed
         if (!isset($this->namespaces[$namespace])) {
@@ -214,40 +219,49 @@ class Loader
      */
     public function autoload(string $className): bool
     {
-        $this->debug = [];
+        /**
+         * Reset the debug trail only on the outermost call. A "require_once"
+         * routinely triggers a nested autoload (a class extending a not yet
+         * loaded parent); resetting on a nested call would clobber the trail
+         * of the outer call mid-flight.
+         */
+        if (0 === $this->nestingLevel) {
+            $this->debug = [];
+        }
+
+        $this->nestingLevel++;
+        $result = true;
+
         $this->addDebug("Loading: " . $className);
         $this->fireManagerEvent(self::EVENT_BEFORE_CHECK_CLASS, $className);
 
-        if (true === $this->autoloadCheckClasses($className)) {
-            return true;
+        if (true !== $this->autoloadCheckClasses($className)) {
+            $this->addDebug("Class: 404: " . $className);
+
+            if (true !== $this->autoloadCheckNamespaces($className)) {
+                $this->addDebug("Namespace: 404: " . $className);
+
+                if (
+                    true !== $this->autoloadCheckDirectories(
+                        $this->directories,
+                        $className,
+                        true
+                    )
+                ) {
+                    $this->addDebug("Directories: 404: " . $className);
+                    $this->fireManagerEvent(self::EVENT_AFTER_CHECK_CLASS, $className);
+
+                    /**
+                     * Cannot find the class
+                     */
+                    $result = false;
+                }
+            }
         }
 
-        $this->addDebug("Class: 404: " . $className);
+        $this->nestingLevel--;
 
-        if (true === $this->autoloadCheckNamespaces($className)) {
-            return true;
-        }
-
-        $this->addDebug("Namespace: 404: " . $className);
-
-        if (
-            true === $this->autoloadCheckDirectories(
-                $this->directories,
-                $className,
-                true
-            )
-        ) {
-            return true;
-        }
-
-        $this->addDebug("Directories: 404: " . $className);
-
-        $this->fireManagerEvent(self::EVENT_AFTER_CHECK_CLASS, $className);
-
-        /**
-         * Cannot find the class, return false
-         */
-        return false;
+        return $result;
     }
 
     /**
@@ -341,10 +355,7 @@ class Loader
         foreach ($this->files as $file) {
             $this->fireManagerEvent(self::EVENT_BEFORE_CHECK_PATH, $file);
 
-            if (true === $this->requireFile($file)) {
-                $this->foundPath = $file;
-                $this->fireManagerEvent(self::EVENT_PATH_FOUND, $file);
-            }
+            $this->requireFile($file);
         }
     }
 
@@ -493,14 +504,11 @@ class Loader
      */
     public function setNamespaces(array $namespaces, bool $merge = false): static
     {
-        $dirSeparator = DIRECTORY_SEPARATOR;
-
         if (true !== $merge) {
             $this->namespaces = [];
         }
 
         foreach ($namespaces as $name => $directories) {
-            $directories = $this->checkDirectories($directories, $dirSeparator);
             $this->addNamespace($name, $directories);
         }
 
@@ -552,6 +560,8 @@ class Loader
          * Check if the file specified even exists
          */
         if (false !== call_user_func($this->fileCheckingCallback, $file)) {
+            $this->foundPath = $file;
+
             /**
              * Call 'pathFound' event
              */
@@ -624,12 +634,14 @@ class Loader
     {
         if (isset($this->classes[$className])) {
             $filePath = $this->classes[$className];
-            $this->fireManagerEvent(self::EVENT_PATH_FOUND, $filePath);
 
-            $this->requireFile($filePath);
-            $this->addDebug("Class: load: " . $filePath);
+            $this->fireManagerEvent(self::EVENT_BEFORE_CHECK_PATH, $filePath);
 
-            return true;
+            if (true === $this->requireFile($filePath)) {
+                $this->addDebug("Class: load: " . $filePath);
+
+                return true;
+            }
         }
 
         return false;
@@ -692,16 +704,11 @@ class Loader
      */
     private function autoloadCheckNamespaces(string $className): bool
     {
-        $nsSeparator = "\\";
         foreach ($this->namespaces as $prefix => $directories) {
             if (true !== $this->toStartsWith($className, $prefix)) {
                 continue;
             }
 
-            /**
-             * Append the namespace separator to the prefix
-             */
-            $prefix   = rtrim($prefix, $nsSeparator) . $nsSeparator;
             $fileName = substr($className, strlen($prefix));
 
             if (true === $this->autoloadCheckDirectories($directories, $fileName)) {
@@ -721,15 +728,17 @@ class Loader
      *
      * @param TStrings|string $directories
      * @param string          $dirSeparator
+     * @param string          $name
      *
      * @return TStrings
      */
     private function checkDirectories(
         mixed $directories,
-        string $dirSeparator
+        string $dirSeparator,
+        string $name = ""
     ): array {
         if (!is_string($directories) && !is_array($directories)) {
-            throw new Exceptions\LoaderDirectoriesNotArray();
+            throw new Exceptions\LoaderDirectoriesNotArray($name);
         }
 
         if (is_string($directories)) {
