@@ -22,9 +22,7 @@
     "matthiasmullie/minify": "^1.3",
     "payload-interop/payload-interop": "^1.0",
     "phalcon/traits": "^3.0",
-    "psr/container": "^2.0",
-    "psr/event-dispatcher": "^1.0",
-    "psr/simple-cache": "^3.0"
+    "psr/event-dispatcher": "^1.0"
   },
   "suggest": {
     "ext-apcu": "to use Cache\\Adapter\\Apcu, Storage\\Adapter\\Apcu",

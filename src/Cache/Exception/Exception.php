@@ -13,11 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache\Exception;
 
-use Psr\SimpleCache\InvalidArgumentException;
-
 /**
  * Exceptions thrown in Phalcon\Cache will use this class
  */
-class Exception extends \Exception implements InvalidArgumentException
+class Exception extends \Exception
 {
 }

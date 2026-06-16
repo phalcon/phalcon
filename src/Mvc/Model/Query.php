@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\Model;
 
 use PDOException;
 use Phalcon\Cache\CacheInterface;
+use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
@@ -78,7 +79,6 @@ use Phalcon\Mvc\ModelInterface;
 use Phalcon\Phql\Parser;
 use Phalcon\Phql\Scanner\Opcode;
 use Phalcon\Support\Settings;
-use Psr\SimpleCache\InvalidArgumentException;
 
 use function array_merge;
 use function class_exists;

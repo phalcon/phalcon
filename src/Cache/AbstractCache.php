@@ -16,10 +16,8 @@ namespace Phalcon\Cache;
 use DateInterval;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Redis;
-use Phalcon\Cache\Exception\CacheKeysNotIterable;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Cache\Exception\InvalidArgumentException;
-use Phalcon\Cache\Exception\InvalidCacheKey;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface;
@@ -55,6 +53,32 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     }
 
     /**
+     * Fetches a value from the cache.
+     *
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    abstract public function get(string $key, mixed $default = null): mixed;
+
+    /**
+     * Persists data in the cache, uniquely referenced by a key with an
+     * optional expiration TTL time.
+     *
+     * @param string                $key
+     * @param mixed                 $value
+     * @param null|int|DateInterval $ttl
+     *
+     * @return bool
+     */
+    abstract public function set(
+        string $key,
+        mixed $value,
+        null | int | DateInterval $ttl = null
+    ): bool;
+
+    /**
      * Checks the key. If it contains invalid characters an exception is thrown
      *
      * @param string $key
@@ -64,7 +88,9 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     protected function checkKey(string $key): void
     {
         if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
-            throw new InvalidCacheKey();
+            $exceptionClass = $this->getExceptionClass();
+
+            throw new $exceptionClass("The key contains invalid characters");
         }
     }
 
@@ -78,7 +104,11 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     protected function checkKeys(mixed $keys): void
     {
         if (!is_array($keys) && !($keys instanceof Traversable)) {
-            throw new CacheKeysNotIterable();
+            $exceptionClass = $this->getExceptionClass();
+
+            throw new $exceptionClass(
+                "The keys need to be an array or instance of Traversable"
+            );
         }
     }
 

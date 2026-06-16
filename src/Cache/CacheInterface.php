@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
-use Psr\SimpleCache\CacheInterface as PsrCacheInterface;
+use Phalcon\Contracts\Cache\Cache as CacheContract;
 
 /**
  * Interface for Phalcon\Cache\Cache
- * Extends PSR-16 CacheInterface for compatibility.
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Cache\Cache} instead.
  */
-interface CacheInterface extends PsrCacheInterface
+interface CacheInterface extends CacheContract
 {
 }

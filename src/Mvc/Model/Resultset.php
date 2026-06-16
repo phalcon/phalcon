@@ -26,7 +26,6 @@ use Phalcon\Mvc\Model\Exceptions\InvalidResultsetCacheService;
 use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
-use Psr\SimpleCache\CacheInterface;
 use SeekableIterator;
 use Serializable;
 
@@ -100,9 +99,9 @@ abstract class Resultset implements
     protected mixed $activeRow = null;
 
     /**
-     * @var CacheInterface|null
+     * @var mixed
      */
-    protected CacheInterface | null $cache = null;
+    protected mixed $cache = null;
 
     /**
      * @var int
@@ -177,7 +176,10 @@ abstract class Resultset implements
          * Update the related cache if any
          */
         if ($cache !== null) {
-            if (!$cache instanceof CacheInterface) {
+            if (
+                !is_a($cache, 'Phalcon\\Cache\\CacheInterface') &&
+                !is_a($cache, 'Psr\\SimpleCache\\CacheInterface')
+            ) {
                 throw new InvalidResultsetCacheService();
             }
 
