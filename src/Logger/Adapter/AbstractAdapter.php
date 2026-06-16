@@ -150,6 +150,13 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Closes the logger
+     *
+     * @return bool
+     */
+    abstract public function close(): bool;
+
+    /**
      * Commit the internal transaction
      *
      * @return AdapterInterface
