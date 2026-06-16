@@ -27,6 +27,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Messages\Message;
+use Phalcon\Logger\LoggerInterface;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\Mvc\Model\Criteria;
@@ -74,7 +75,6 @@ use Phalcon\Support\Settings;
 use Phalcon\Traits\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 use Psr\EventDispatcher\StoppableEventInterface;
-use Psr\Log\LoggerInterface;
 use Serializable;
 use Throwable;
 
@@ -2360,7 +2360,7 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Resolves an optional PSR-3 logger from the container. Returns null when
+     * Resolves an optional logger from the container. Returns null when
      * no logger service is registered: logging model-event dispatch errors is
      * best-effort and must not abort the operation. The container's get()
      * throws on a missing service, so has() is checked first.

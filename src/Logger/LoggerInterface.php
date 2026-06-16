@@ -14,15 +14,68 @@ declare(strict_types=1);
 namespace Phalcon\Logger;
 
 use Phalcon\Logger\Adapter\AdapterInterface;
-use Psr\Log\LoggerInterface as PsrLoggerInterface;
-use Stringable;
 
 /**
  * Interface for Phalcon based logger objects.
- * Extends PSR-3 LoggerInterface for compatibility.
  */
-interface LoggerInterface extends PsrLoggerInterface
+interface LoggerInterface
 {
+    /**
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function alert(string $message, array $context = []): void;
+
+    /**
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function critical(string $message, array $context = []): void;
+
+    /**
+     * Detailed debug information.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function debug(string $message, array $context = []): void;
+
+    /**
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function emergency(string $message, array $context = []): void;
+
+    /**
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function error(string $message, array $context = []): void;
+
     /**
      * Returns an adapter from the stack
      *
@@ -55,12 +108,62 @@ interface LoggerInterface extends PsrLoggerInterface
     public function getName(): string;
 
     /**
-     * Extra-verbose diagnostic output.
+     * Interesting events.
      *
-     * @param string|Stringable $message
-     * @param array             $context
+     * Example: User logs in, SQL logs.
+     *
+     * @param string $message
+     * @param array  $context
      *
      * @return void
      */
-    public function trace(string | Stringable $message, array $context = []): void;
+    public function info(string $message, array $context = []): void;
+
+    /**
+     * Logs with an arbitrary level.
+     *
+     * An unknown level (a typo or an unmapped value) is not rejected; it maps
+     * to the CUSTOM level and is logged, rather than raising an exception.
+     *
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function log(mixed $level, string $message, array $context = []): void;
+
+    /**
+     * Normal but significant events.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function notice(string $message, array $context = []): void;
+
+    /**
+     * Extra-verbose diagnostic output.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function trace(string $message, array $context = []): void;
+
+    /**
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array  $context
+     *
+     * @return void
+     */
+    public function warning(string $message, array $context = []): void;
 }

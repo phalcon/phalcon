@@ -20,7 +20,6 @@ use Phalcon\Logger\Exceptions\AdapterNotFound;
 use Phalcon\Logger\Exceptions\NoAdaptersConfigured;
 use Phalcon\Time\Clock\ClockInterface;
 use Phalcon\Time\Clock\SystemClock;
-use Psr\Log\LogLevel;
 
 use function array_diff_key;
 use function array_flip;
@@ -392,14 +391,14 @@ abstract class AbstractLogger
     protected function getLevels(): array
     {
         return [
-            Enum::ALERT     => LogLevel::ALERT,
-            Enum::CRITICAL  => LogLevel::CRITICAL,
-            Enum::DEBUG     => LogLevel::DEBUG,
-            Enum::EMERGENCY => LogLevel::EMERGENCY,
-            Enum::ERROR     => LogLevel::ERROR,
-            Enum::INFO      => LogLevel::INFO,
-            Enum::NOTICE    => LogLevel::NOTICE,
-            Enum::WARNING   => LogLevel::WARNING,
+            Enum::ALERT     => 'alert',
+            Enum::CRITICAL  => 'critical',
+            Enum::DEBUG     => 'debug',
+            Enum::EMERGENCY => 'emergency',
+            Enum::ERROR     => 'error',
+            Enum::INFO      => 'info',
+            Enum::NOTICE    => 'notice',
+            Enum::WARNING   => 'warning',
             Enum::CUSTOM    => 'custom',
             Enum::TRACE     => 'trace',
         ];
