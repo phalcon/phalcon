@@ -47,6 +47,18 @@ use const IMAGETYPE_GIF;
  *     echo "success";
  * }
  *```
+ *
+ * Capabilities:
+ *
+ * | Aspect              | Support                                        |
+ * |---------------------|------------------------------------------------|
+ * | Load formats        | Whatever the linked ImageMagick build supports |
+ * | Render/save formats | Whatever the linked ImageMagick build supports |
+ * | Backend-only API    | liquidRescale(), setResourceLimit()            |
+ *
+ * Visual semantics differ from the Gd adapter: blur() maps the radius to a
+ * blur sigma, while sharpen and reflection use ImageMagick's own scales.
+ * Switching the factory backend can change the rendered output.
  */
 class Imagick extends AbstractAdapter
 {
@@ -73,7 +85,13 @@ class Imagick extends AbstractAdapter
     protected int $version = 0;
 
     /**
-     * Constructor
+     * Loads an image from a file, or creates a blank canvas.
+     *
+     * When the file exists it is loaded. When the file does not exist and both
+     * a width and a height are supplied, a blank transparent canvas is created
+     * instead - its realpath, mime and type then describe a PNG canvas rather
+     * than the named file. Prefer Imagick::create() for the canvas case; this
+     * dual mode is slated for removal in the next major version.
      *
      * @param string   $file
      * @param int|null $width
@@ -147,6 +165,22 @@ class Imagick extends AbstractAdapter
             $this->image->clear();
             $this->image->destroy();
         }
+    }
+
+    /**
+     * Creates a blank transparent canvas of the given dimensions, without the
+     * load-or-create ambiguity of the constructor.
+     *
+     * @param int $width
+     * @param int $height
+     *
+     * @return AbstractAdapter
+     * @throws Exception
+     * @throws ImagickException
+     */
+    public static function create(int $width, int $height): AbstractAdapter
+    {
+        return new self("", $width, $height);
     }
 
     /**
@@ -377,24 +411,24 @@ class Imagick extends AbstractAdapter
     /**
      * Composite one image onto another
      *
-     * @param AdapterInterface $image
+     * @param AdapterInterface $mask
      *
      * @return void
      * @throws Exception
      * @throws ImagickException
      */
-    protected function processMask(AdapterInterface $image): void
+    protected function processMask(AdapterInterface $mask): void
     {
-        $mask = new ImagickNative();
+        $image = new ImagickNative();
 
-        $mask->readImageBlob($image->render());
+        $image->readImageBlob($mask->render());
         $this->image->setIteratorIndex(0);
 
         while (true) {
             $this->image->setImageMatte(true);
 
             $return = $this->image->compositeImage(
-                $mask,
+                $image,
                 self::COMPOSITE_DSTIN,
                 0,
                 0
@@ -409,8 +443,8 @@ class Imagick extends AbstractAdapter
             }
         }
 
-        $mask->clear();
-        $mask->destroy();
+        $image->clear();
+        $image->destroy();
     }
 
     /**
@@ -850,7 +884,7 @@ class Imagick extends AbstractAdapter
     /**
      * Add Watermark
      *
-     * @param AdapterInterface $image
+     * @param AdapterInterface $watermark
      * @param int              $offsetX
      * @param int              $offsetY
      * @param int              $opacity
@@ -860,16 +894,16 @@ class Imagick extends AbstractAdapter
      * @throws ImagickException
      */
     protected function processWatermark(
-        AdapterInterface $image,
+        AdapterInterface $watermark,
         int $offsetX,
         int $offsetY,
         int $opacity
     ): void {
-        $opacity   = $opacity / 100;
-        $watermark = new ImagickNative();
+        $opacity = $opacity / 100;
+        $image   = new ImagickNative();
 
-        $watermark->readImageBlob($image->render());
-        $watermark->evaluateImage(
+        $image->readImageBlob($watermark->render());
+        $image->evaluateImage(
             self::EVALUATE_MULTIPLY,
             $opacity,
             self::CHANNEL_ALPHA
@@ -879,7 +913,7 @@ class Imagick extends AbstractAdapter
 
         while (true) {
             $return = $this->image->compositeImage(
-                $watermark,
+                $image,
                 self::COMPOSITE_OVER,
                 $offsetX,
                 $offsetY
@@ -894,8 +928,8 @@ class Imagick extends AbstractAdapter
             }
         }
 
-        $watermark->clear();
-        $watermark->destroy();
+        $image->clear();
+        $image->destroy();
     }
 
     /**

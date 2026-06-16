@@ -15,14 +15,15 @@ namespace Phalcon\Image\Adapter;
 
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
+use Phalcon\Image\Exceptions\InvalidColor;
 use Phalcon\Image\Exceptions\MissingDimensions;
 use Phalcon\Image\Exceptions\MissingHeight;
 use Phalcon\Image\Exceptions\MissingWidth;
-use ValueError;
 
 use function array_map;
 use function max;
 use function pathinfo;
+use function preg_match;
 use function preg_replace;
 use function round;
 use function str_split;
@@ -94,7 +95,7 @@ abstract class AbstractAdapter implements AdapterInterface
         string $color,
         int $opacity = 100
     ): AdapterInterface {
-        $colors = $this->getColors($color);
+        $colors = $this->parseColor($color);
 
         $this->processBackground($colors[0], $colors[1], $colors[2], $opacity);
 
@@ -228,6 +229,11 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Composite one image onto another
+     *
+     * The mask is read through its public render() output rather than its
+     * internal handle, so a mask created with a different backend composites
+     * correctly. The cost is one encode/decode round trip per call, which is
+     * worth knowing inside loops.
      *
      * @param AdapterInterface $mask
      *
@@ -451,7 +457,7 @@ abstract class AbstractAdapter implements AdapterInterface
     ): AdapterInterface {
         $opacity = $this->checkHighLow($opacity);
 
-        $colors = $this->getColors($color);
+        $colors = $this->parseColor($color);
 
         $this->processText(
             $text,
@@ -470,6 +476,11 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Add a watermark to an image with the specified opacity
+     *
+     * The watermark is read through its public render() output rather than its
+     * internal handle, so a watermark created with a different backend
+     * composites correctly. The cost is one encode/decode round trip per call,
+     * which is worth knowing inside loops.
      *
      * @param AdapterInterface $watermark
      * @param int              $offsetX
@@ -728,30 +739,34 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Parses a hex color ("#rgb", "rgb", "#rrggbb" or "rrggbb") into an array
+     * of three integer channels [red, green, blue].
+     *
      * @param string $color
      *
      * @return array
-     * @throws Exception
+     * @throws InvalidColor
      */
-    private function getColors(string $color): array
+    private function parseColor(string $color): array
     {
-        try {
-            if (
-                strlen($color) > 1 &&
-                str_starts_with($color, "#")
-            ) {
-                $color = substr($color, 1);
-            }
-
-            if (strlen($color) === 3) {
-                $color = preg_replace("/./", "$0$0", $color);
-            }
-
-            $split = str_split($color, 2);
-
-            return array_map("hexdec", $split);
-        } catch (ValueError) {
-            throw new Exception("Cannot calculate color");
+        if (
+            strlen($color) > 1 &&
+            substr($color, 0, 1) === "#"
+        ) {
+            $color = substr($color, 1);
         }
+
+        if (strlen($color) === 3) {
+            $color = preg_replace("/./", "$0$0", $color);
+        }
+
+        if (1 !== preg_match("/^[0-9a-fA-F]{6}$/", $color)) {
+            throw new InvalidColor($color);
+        }
+
+        return array_map(
+            "hexdec",
+            str_split($color, 2)
+        );
     }
 }
