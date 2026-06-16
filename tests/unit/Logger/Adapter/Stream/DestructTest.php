@@ -23,13 +23,14 @@ use Phalcon\Tests\AbstractUnitTestCase;
 use function date_default_timezone_get;
 use function file_get_contents;
 
-final class CloseTest extends AbstractUnitTestCase
+final class DestructTest extends AbstractUnitTestCase
 {
     /**
+     * @issue  https://github.com/phalcon/cphalcon/issues/17155
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
+     * @since  2026-06-15
      */
-    public function testLoggerAdapterStreamClose(): void
+    public function testLoggerAdapterStreamDestructCommitsOpenTransaction(): void
     {
         $fileName   = $this->getNewFileName('log', 'log');
         $outputPath = logsDir();
@@ -43,10 +44,15 @@ final class CloseTest extends AbstractUnitTestCase
             Enum::DEBUG,
             $datetime
         );
-        $adapter->process($item);
 
-        $actual = $adapter->close();
-        $this->assertTrue($actual);
+        $adapter->begin();
+        $adapter->add($item);
+
+        /**
+         * Destruction with an open transaction auto-commits, flushing the
+         * queued items instead of throwing.
+         */
+        unset($adapter);
 
         $this->assertFileExists($outputPath . $fileName);
 

@@ -20,6 +20,12 @@ class Enum
 {
     public const ALERT     = 2;
     public const CRITICAL  = 1;
+    /**
+     * Default threshold and fallback sink. It sits between DEBUG (7) and
+     * TRACE (9) in the ordering, so the default log level excludes TRACE.
+     * It is also the fallback for unknown message levels and invalid
+     * setLogLevel() values.
+     */
     public const CUSTOM    = 8;
     public const DEBUG     = 7;
     public const EMERGENCY = 0;

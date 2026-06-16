@@ -32,6 +32,8 @@ use Phalcon\Http\RequestInterface;
 use Phalcon\Http\Response\CookiesInterface;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
 use Phalcon\Support\Helper\Json\Encode;
+use Phalcon\Time\Clock\ClockInterface;
+use Phalcon\Time\Clock\SystemClock;
 
 /**
  * @phpstan-import-type AuthCredentials from Adapter
@@ -40,6 +42,7 @@ use Phalcon\Support\Helper\Json\Encode;
  */
 class Session extends AbstractGuard implements GuardStateful, BasicAuth
 {
+    protected ClockInterface $clock;
     protected bool $viaRemember = false;
 
     public function __construct(
@@ -48,7 +51,14 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         protected CookiesInterface $cookies,
         protected SessionManagerInterface $session,
         SessionGuardConfig $config = new SessionGuardConfig(),
+        ClockInterface | null $clock = null,
     ) {
+        if (null === $clock) {
+            $clock = SystemClock::fromUTC();
+        }
+
+        $this->clock = $clock;
+
         parent::__construct($adapter, $config);
     }
 
@@ -365,7 +375,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         $this->cookies->set(
             $this->getRememberName(),
             $payload,
-            time() + $this->config->getRememberTtl()
+            $this->clock->now()->getTimestamp() + $this->config->getRememberTtl()
         );
     }
 

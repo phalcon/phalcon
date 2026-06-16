@@ -74,12 +74,14 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Destructor cleanup
      *
-     * @throws Exception
+     * Throwing from a destructor is fatal during script shutdown, so an open
+     * transaction is auto-committed here (flushing the queued items) rather
+     * than throwing.
      */
     public function __destruct()
     {
         if ($this->inTransaction) {
-            throw new TransactionAlreadyActive();
+            $this->commit();
         }
 
         $this->close();
@@ -132,9 +134,16 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Start a transaction
+     *
+     * @return AdapterInterface
+     * @throws TransactionAlreadyActive
      */
     public function begin(): AdapterInterface
     {
+        if ($this->inTransaction) {
+            throw new TransactionAlreadyActive();
+        }
+
         $this->inTransaction = true;
 
         return $this;

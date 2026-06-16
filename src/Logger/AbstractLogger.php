@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger;
 
-use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exceptions\AdapterNotFound;
 use Phalcon\Logger\Exceptions\NoAdaptersConfigured;
+use Phalcon\Time\Clock\ClockInterface;
+use Phalcon\Time\Clock\SystemClock;
 use Psr\Log\LogLevel;
 
 use function array_diff_key;
@@ -55,6 +56,13 @@ abstract class AbstractLogger
     protected array $adapters = [];
 
     /**
+     * Clock used to timestamp log items
+     *
+     * @var ClockInterface
+     */
+    protected ClockInterface $clock;
+
+    /**
      * The excluded adapters for this log process
      *
      * @var array
@@ -81,13 +89,17 @@ abstract class AbstractLogger
      *                                    for logging (default [])
      * @param DateTimeZone|null $timezone Timezone. If omitted,
      *                                    date_Default_timezone_get() is used
+     * @param ClockInterface|null $clock    Clock used to timestamp log items.
+     *                                      Defaults to a SystemClock on the
+     *                                      resolved timezone.
      *
      * @throws Exception
      */
     public function __construct(
         protected string $name,
         array $adapters = [],
-        DateTimeZone | null $timezone = null
+        DateTimeZone | null $timezone = null,
+        ClockInterface | null $clock = null
     ) {
         if (null == $timezone) {
             $defaultTimezone = date_default_timezone_get();
@@ -98,6 +110,12 @@ abstract class AbstractLogger
         }
 
         $this->timezone = $timezone;
+
+        if (null === $clock) {
+            $clock = new SystemClock($timezone);
+        }
+
+        $this->clock = $clock;
 
         $this->setAdapters($adapters);
     }
@@ -113,6 +131,36 @@ abstract class AbstractLogger
     public function addAdapter(string $name, AdapterInterface $adapter): static
     {
         $this->adapters[$name] = $adapter;
+
+        return $this;
+    }
+
+    /**
+     * Starts a transaction on every (non-excluded) adapter in the stack.
+     *
+     * @return AbstractLogger
+     */
+    public function begin(): static
+    {
+        $collection = array_diff_key($this->adapters, $this->excluded);
+        foreach ($collection as $adapter) {
+            $adapter->begin();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Commits the transaction on every (non-excluded) adapter in the stack.
+     *
+     * @return AbstractLogger
+     */
+    public function commit(): static
+    {
+        $collection = array_diff_key($this->adapters, $this->excluded);
+        foreach ($collection as $adapter) {
+            $adapter->commit();
+        }
 
         return $this;
     }
@@ -210,6 +258,21 @@ abstract class AbstractLogger
     }
 
     /**
+     * Rolls back the transaction on every (non-excluded) adapter in the stack.
+     *
+     * @return AbstractLogger
+     */
+    public function rollback(): static
+    {
+        $collection = array_diff_key($this->adapters, $this->excluded);
+        foreach ($collection as $adapter) {
+            $adapter->rollback();
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the adapters stack overriding what is already there
      *
      * @param array $adapters An array of adapters
@@ -224,7 +287,11 @@ abstract class AbstractLogger
     }
 
     /**
-     * Sets the adapters stack overriding what is already there
+     * Sets the minimum log level for the logger.
+     *
+     * An unknown level is not rejected: it is stored as CUSTOM, which sits
+     * between DEBUG and TRACE in the ordering, so the threshold becomes
+     * "everything except TRACE".
      *
      * @param int $level
      *
@@ -267,7 +334,7 @@ abstract class AbstractLogger
                 $message,
                 $levelName,
                 $level,
-                new DateTimeImmutable('now', $this->timezone),
+                $this->clock->now(),
                 $context
             );
 
@@ -276,19 +343,20 @@ abstract class AbstractLogger
              */
             $collection = array_diff_key($this->adapters, $this->excluded);
             foreach ($collection as $adapter) {
-                $method = 'process';
                 if (true === $adapter->inTransaction()) {
-                    $method = 'add';
+                    $adapter->add($item);
+                } else {
+                    $adapter->process($item);
                 }
-
-                $adapter->$method($item);
             }
-
-            /**
-             * Clear the excluded array since we made the call now
-             */
-            $this->excluded = [];
         }
+
+        /**
+         * Clear the excluded array since we made the call now. This runs
+         * regardless of the level filter so a filtered-out message cannot
+         * leave the exclusion armed for the next call.
+         */
+        $this->excluded = [];
 
         return true;
     }

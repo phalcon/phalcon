@@ -16,6 +16,7 @@ namespace Phalcon\Encryption\Security\JWT;
 use Phalcon\Encryption\Security\JWT\Signer\SignerInterface;
 use Phalcon\Encryption\Security\JWT\Token\Enum;
 use Phalcon\Encryption\Security\JWT\Token\Token;
+use Phalcon\Time\Clock\ClockInterface;
 
 /**
  * Class Validator
@@ -35,14 +36,25 @@ class Validator
     /**
      * Validator constructor.
      *
-     * @param Token $token
-     * @param int   $timeShift
+     * @param Token               $token
+     * @param int                 $timeShift Legacy clock-skew offset in seconds
+     *                                       added to validated timestamps.
+     *                                       Prefer injecting a ClockInterface
+     *                                       for testable time; retained for BC.
+     * @param ClockInterface|null $clock     Clock used to read "now" at
+     *                                       construction. Defaults to the
+     *                                       system wall clock (time()).
      */
     public function __construct(
         private Token $token,
-        private readonly int $timeShift = 0
+        private readonly int $timeShift = 0,
+        ClockInterface | null $clock = null
     ) {
-        $now          = time();
+        $now = time();
+        if (null !== $clock) {
+            $now = $clock->now()->getTimestamp();
+        }
+
         $this->claims = [
             Enum::AUDIENCE        => null,
             Enum::EXPIRATION_TIME => $now,
