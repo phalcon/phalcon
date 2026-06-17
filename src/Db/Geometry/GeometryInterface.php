@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Geometry;
 
-interface GeometryInterface
+use Phalcon\Contracts\Db\Geometry\Geometry as GeometryContract;
+
+/**
+ * Phalcon\Db\Geometry\GeometryInterface
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Db\Geometry\Geometry} instead.
+ */
+interface GeometryInterface extends GeometryContract
 {
-    public function getSrid(): int;
-
-    public function getType(): int;
-
-    public function toWkt(): string;
 }

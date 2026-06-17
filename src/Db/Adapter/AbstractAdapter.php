@@ -20,6 +20,7 @@ use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\CannotInsertWithoutData;
 use Phalcon\Db\Exceptions\IncompleteBindTypes;
+use Phalcon\Db\Exceptions\InvalidDialectClass;
 use Phalcon\Db\Exceptions\InvalidWhereConditions;
 use Phalcon\Db\Exceptions\NestedTransactionChangeBlocked;
 use Phalcon\Db\Exceptions\SavepointsNotSupported;
@@ -147,6 +148,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *                          'dsn'          => null,
      *                          'charset'      => 'utf8mb4'
      *                          ]
+     *
+     * Note: the `options` key is forwarded to the static `setup()` method,
+     * which writes process-global settings affecting every connection in the
+     * process. See `setup()`.
      */
     public function __construct(array $descriptor)
     {
@@ -167,6 +172,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         if (is_string($dialectClass)) {
             $this->dialect = new $dialectClass();
         } elseif (is_object($dialectClass)) {
+            if (!($dialectClass instanceof DialectInterface)) {
+                throw new InvalidDialectClass(get_class($dialectClass));
+            }
+
             $this->dialect = $dialectClass;
         }
 
@@ -355,6 +364,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * DELETE FROM `robots` WHERE `id` = 101
      * ```
      *
+     * Warning! If $whereCondition is string it not escaped.
+     *
      * @param array|string $tableName
      * @param string|null  $whereCondition
      * @param array        $placeholders
@@ -388,6 +399,13 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *     $connection->describeIndexes("robots_parts")
      * );
      *```
+     *
+     * This base implementation consumes the dialect's `describeIndexes()` SQL
+     * as `FETCH_NUM` rows by position: column index 2 is the index key name and
+     * column index 4 is the indexed column name. A custom dialect's
+     * `describeIndexes()` SQL must emit columns in that order, or a custom
+     * adapter must override this method. All bundled adapters except PostgreSQL
+     * override it.
      *
      * @param string $tableName
      * @param string $schemaName
@@ -430,6 +448,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *     $connection->describeReferences("robots_parts")
      * );
      *```
+     *
+     * This base implementation consumes the dialect's `describeReferences()`
+     * SQL as `FETCH_NUM` rows by position: index 1 is the local column, index 2
+     * the constraint name, index 3 the referenced schema, index 4 the
+     * referenced table, and index 5 the referenced column. A custom dialect's
+     * `describeReferences()` SQL must emit columns in that order, or a custom
+     * adapter must override this method. Every bundled adapter (MySQL,
+     * PostgreSQL, SQLite) overrides it, so this base implementation has no
+     * in-tree caller and effectively assumes the PostgreSQL row shape.
      *
      * @param string $tableName
      * @param string $schemaName
@@ -1001,26 +1028,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * string "null", everything else is passed as "?"
          */
         foreach ($values as $position => $value) {
-            if ($value instanceof RawValue) {
-                $placeholders[] = (string)$value;
-            } else {
-                if (is_object($value)) {
-                    $value = (string)$value;
-                }
+            $placeholder = $this->buildValuePlaceholder($value, $position, $dataTypes);
 
-                if (null === $value) {
-                    $placeholders[] = "null";
-                } else {
-                    $placeholders[] = "?";
-                    $insertValues[] = $value;
+            $placeholders[] = $placeholder["placeholder"];
 
-                    if (!empty($dataTypes)) {
-                        if (!isset($dataTypes[$position])) {
-                            throw new IncompleteBindTypes();
-                        }
+            if ($placeholder["bind"]) {
+                $insertValues[] = $placeholder["value"];
 
-                        $bindDataTypes[] = $dataTypes[$position];
-                    }
+                if ($placeholder["hasBindType"]) {
+                    $bindDataTypes[] = $placeholder["bindType"];
                 }
             }
         }
@@ -1449,7 +1465,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Check whether the database system support the DEFAULT
      * keyword (SQLite does not support it)
      *
-     * @deprecated Will re removed in the next version
+     * @deprecated Will be removed in a future major release.
      */
     public function supportsDefaultValue(): bool
     {
@@ -1475,8 +1491,13 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string | null $schemaName = null
     ): bool {
         $exists = $this->dialect->tableExists($tableName, $schemaName);
+        $result = $this->fetchOne($exists, Enum::FETCH_NUM);
 
-        return $this->fetchOne($exists, Enum::FETCH_NUM)[0] > 0;
+        if (!is_array($result) || !isset($result[0])) {
+            return false;
+        }
+
+        return $result[0] > 0;
     }
 
     /**
@@ -1497,13 +1518,19 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string $tableName,
         string | null $schemaName = null
     ): array {
-        $options = $this->dialect->tableOptions($tableName, $schemaName);
+        $sql = $this->dialect->tableOptions($tableName, $schemaName);
 
-        if (empty($options)) {
+        if (empty($sql)) {
             return [];
         }
 
-        return $this->fetchAll($options)[0];
+        $options = $this->fetchAll($sql);
+
+        if (!isset($options[0])) {
+            return [];
+        }
+
+        return $options[0];
     }
 
     /**
@@ -1572,28 +1599,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
             $field        = $fields[$position];
             $escapedField = $this->escapeIdentifier($field);
+            $placeholder  = $this->buildValuePlaceholder($value, $position, $dataTypes);
 
-            if ($value instanceof RawValue) {
-                $placeholders[] = $escapedField . " = " . $value;
-            } else {
-                if (is_object($value)) {
-                    $value = (string)$value;
-                }
+            $placeholders[] = $escapedField . " = " . $placeholder["placeholder"];
 
-                if (null === $value) {
-                    $placeholders[] = $escapedField . " = null";
-                } else {
-                    $updateValues[] = $value;
+            if ($placeholder["bind"]) {
+                $updateValues[] = $placeholder["value"];
 
-                    if (!empty($dataTypes)) {
-                        if (!isset($dataTypes[$position])) {
-                            throw new IncompleteBindTypes();
-                        }
-
-                        $bindDataTypes[] = $dataTypes[$position];
-                    }
-
-                    $placeholders[] = $escapedField . " = ?";
+                if ($placeholder["hasBindType"]) {
+                    $bindDataTypes[] = $placeholder["bindType"];
                 }
             }
         }
@@ -1756,12 +1770,90 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Enables/disables options in the Database component
+     * Enables/disables options in the Database component.
+     *
+     * The flags are stored as process-global `Phalcon\Support\Settings`
+     * (`db.escape_identifiers`, `db.force_casting`) and therefore affect every
+     * connection in the process at once, last-writer-wins. Call this once at
+     * bootstrap; it is not per-connection configuration. Because the
+     * constructor calls `setup()` whenever a descriptor carries an `options`
+     * key, constructing one adapter with `options` can change the SQL another,
+     * already-configured connection generates.
      *
      * @param array $options
      */
     public static function setup(array $options): void
     {
         \Phalcon\Db\AbstractDb::setup($options);
+    }
+
+    /**
+     * Builds the SQL value fragment for a single INSERT/UPDATE value, shared by
+     * insert() and update(). RawValue instances are inlined as raw SQL, objects
+     * are cast via __toString, null becomes the literal "null", and every other
+     * value becomes a "?" placeholder.
+     *
+     * The bound value and bind type are returned for the caller to collect. The
+     * returned array has:
+     *
+     *  - "placeholder": the SQL fragment ("null", "?", or an inlined RawValue)
+     *  - "bind":        whether "value" must be bound
+     *  - "value":       the value to bind (when "bind" is true)
+     *  - "hasBindType": whether "bindType" must be collected
+     *  - "bindType":    the bind type to collect (when applicable)
+     *
+     * @param mixed      $value
+     * @param int|string $position
+     * @param array      $dataTypes
+     *
+     * @return array
+     */
+    private function buildValuePlaceholder(
+        mixed $value,
+        int | string $position,
+        array $dataTypes
+    ): array {
+        if ($value instanceof RawValue) {
+            return [
+                "placeholder" => (string) $value,
+                "bind"        => false,
+                "value"       => null,
+                "hasBindType" => false,
+                "bindType"    => null,
+            ];
+        }
+
+        if (is_object($value)) {
+            $value = (string) $value;
+        }
+
+        if (null === $value) {
+            return [
+                "placeholder" => "null",
+                "bind"        => false,
+                "value"       => null,
+                "hasBindType" => false,
+                "bindType"    => null,
+            ];
+        }
+
+        $hasBindType = !empty($dataTypes);
+        $bindType    = null;
+
+        if ($hasBindType) {
+            if (!isset($dataTypes[$position])) {
+                throw new IncompleteBindTypes();
+            }
+
+            $bindType = $dataTypes[$position];
+        }
+
+        return [
+            "placeholder" => "?",
+            "bind"        => true,
+            "value"       => $value,
+            "hasBindType" => $hasBindType,
+            "bindType"    => $bindType,
+        ];
     }
 }

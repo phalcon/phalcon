@@ -162,7 +162,11 @@ interface Dialect
     ): string;
 
     /**
-     * Generates SQL to query indexes on a table
+     * Generates SQL to query indexes on a table.
+     *
+     * The base adapter consumes the result as `FETCH_NUM` rows by position:
+     * column index 2 must be the index key name and column index 4 the indexed
+     * column name.
      *
      * @param string      $tableName
      * @param string|null $schemaName
@@ -175,7 +179,12 @@ interface Dialect
     ): string;
 
     /**
-     * Generates SQL to query foreign keys on a table
+     * Generates SQL to query foreign keys on a table.
+     *
+     * The base adapter consumes the result as `FETCH_NUM` rows by position:
+     * index 1 the local column, index 2 the constraint name, index 3 the
+     * referenced schema, index 4 the referenced table, and index 5 the
+     * referenced column.
      *
      * @param string      $tableName
      * @param string|null $schemaName

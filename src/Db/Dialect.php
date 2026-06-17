@@ -961,6 +961,53 @@ abstract class Dialect implements DialectInterface
     }
 
     /**
+     * Checks whether the platform supports the full `ALTER TABLE` matrix:
+     * modifying existing columns and adding or dropping foreign keys, primary
+     * keys, and check constraints. SQLite returns false - those operations
+     * throw a dedicated `Sqlite*NotSupported` exception there (basic
+     * `ADD COLUMN` remains available).
+     *
+     * @return bool
+     */
+    public function supportsAlterTable(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the platform supports materialized views. Only PostgreSQL
+     * returns true; `createMaterializedView()` throws on the other dialects.
+     *
+     * @return bool
+     */
+    public function supportsMaterializedViews(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Checks whether the platform supports the `ON CONFLICT (...) DO UPDATE`
+     * upsert clause. MySQL returns false; `onConflictUpdate()` throws there.
+     *
+     * @return bool
+     */
+    public function supportsOnConflictUpdate(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the platform supports the `RETURNING` clause. MySQL
+     * returns false; `returning()` throws there.
+     *
+     * @return bool
+     */
+    public function supportsReturning(): bool
+    {
+        return false;
+    }
+
+    /**
      * Checks the column type and if not string it returns the type reference
      *
      * @param ColumnInterface $column

@@ -679,6 +679,17 @@ class Mysql extends Dialect
     }
 
     /**
+     * MySQL does not support the SQL-standard `ON CONFLICT (...) DO UPDATE`
+     * upsert clause; `onConflictUpdate()` throws.
+     *
+     * @return bool
+     */
+    public function supportsOnConflictUpdate(): bool
+    {
+        return false;
+    }
+
+    /**
      * Generates SQL checking for the existence of a schema.table
      *
      * ```php

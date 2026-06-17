@@ -889,6 +889,28 @@ class Sqlite extends Dialect
     }
 
     /**
+     * SQLite cannot modify existing columns or add/drop foreign keys, primary
+     * keys, or check constraints through `ALTER TABLE`; those operations throw
+     * a dedicated `Sqlite*NotSupported` exception.
+     *
+     * @return bool
+     */
+    public function supportsAlterTable(): bool
+    {
+        return false;
+    }
+
+    /**
+     * SQLite (3.35+) supports the `RETURNING` clause.
+     *
+     * @return bool
+     */
+    public function supportsReturning(): bool
+    {
+        return true;
+    }
+
+    /**
      * Generates SQL checking for the existence of a schema.table
      *
      * ```php

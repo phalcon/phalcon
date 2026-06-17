@@ -1161,6 +1161,26 @@ class Postgresql extends Dialect
     }
 
     /**
+     * PostgreSQL supports materialized views (`CREATE MATERIALIZED VIEW`).
+     *
+     * @return bool
+     */
+    public function supportsMaterializedViews(): bool
+    {
+        return true;
+    }
+
+    /**
+     * PostgreSQL supports the `RETURNING` clause.
+     *
+     * @return bool
+     */
+    public function supportsReturning(): bool
+    {
+        return true;
+    }
+
+    /**
      * Generates SQL to create a materialized view.
      *
      * @param string      $viewName
