@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Flash;
 
 use Phalcon\Flash\Exceptions\SessionServiceUnavailable;
+use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface;
 
 /**
@@ -31,6 +32,28 @@ class Session extends AbstractFlash
      * @var string
      */
     public const SESSION_KEY = "_flashMessages";
+
+    /**
+     * @var string
+     */
+    protected string $sessionKey = '';
+
+    /**
+     * Session constructor.
+     *
+     * @param EscaperInterface|null $escaper
+     * @param ManagerInterface|null $session
+     * @param string|null           $sessionKey
+     */
+    public function __construct(
+        EscaperInterface | null $escaper = null,
+        ManagerInterface | null $session = null,
+        string | null $sessionKey = null
+    ) {
+        parent::__construct($escaper, $session);
+
+        $this->sessionKey = null !== $sessionKey ? $sessionKey : self::SESSION_KEY;
+    }
 
     /**
      * Clear messages in the session messenger
@@ -139,7 +162,15 @@ class Session extends AbstractFlash
             $this->outputMessage($type, $message);
         }
 
-        parent::clear();
+        /**
+         * `output()` is an echo API. With implicit flush enabled the messages
+         * have been echoed, so the accumulation buffer can be cleared. With it
+         * disabled, `outputMessage()` has filled the buffer instead - do not
+         * destroy it, leave the rendered messages reachable via `getMessages()`.
+         */
+        if (true === $this->implicitFlush) {
+            parent::clear();
+        }
     }
 
     /**
@@ -154,7 +185,7 @@ class Session extends AbstractFlash
     protected function getSessionMessages(bool $remove, string | null $type = null): array
     {
         $session  = $this->getSessionService();
-        $messages = $session->get(self::SESSION_KEY);
+        $messages = $session->get($this->sessionKey);
 
         /**
          * Session might be empty
@@ -168,7 +199,7 @@ class Session extends AbstractFlash
                 $returnMessages = $messages[$type];
                 if (true === $remove) {
                     unset($messages[$type]);
-                    $session->set(self::SESSION_KEY, $messages);
+                    $session->set($this->sessionKey, $messages);
                 }
 
                 return $returnMessages;
@@ -178,7 +209,7 @@ class Session extends AbstractFlash
         }
 
         if (true === $remove) {
-            $session->remove(self::SESSION_KEY);
+            $session->remove($this->sessionKey);
         }
 
         return $messages;
@@ -196,7 +227,7 @@ class Session extends AbstractFlash
     {
         $session = $this->getSessionService();
 
-        $session->set(self::SESSION_KEY, $messages);
+        $session->set($this->sessionKey, $messages);
 
         return $messages;
     }
