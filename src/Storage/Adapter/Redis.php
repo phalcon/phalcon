@@ -23,6 +23,7 @@ use Phalcon\Storage\SerializerFactory;
 use Redis as RedisService;
 use RedisException;
 
+use function array_merge;
 use function constant;
 use function defined;
 use function is_bool;
@@ -33,6 +34,13 @@ use function substr;
 
 /**
  * Redis adapter
+ *
+ * Capabilities:
+ * - Counters: native atomic (incrBy()/decrBy()).
+ * - getKeys(): non-blocking SCAN iteration.
+ * - Serializers: Phalcon-side, or backend-native via OPT_SERIALIZER. Native
+ *   serializers change the bytes at rest and are not interchangeable with
+ *   Phalcon-side serializers.
  */
 class Redis extends AbstractAdapter
 {
@@ -109,7 +117,11 @@ class Redis extends AbstractAdapter
     }
 
     /**
-     * Stores data in the adapter
+     * Returns all the keys stored
+     *
+     * SCAN replaces the blocking KEYS command. SCAN_NOPREFIX keeps the prefix
+     * handling explicit: the physical prefix is matched and returned unchanged,
+     * so getFilteredKeys() sees exactly what KEYS produced.
      *
      * @param string $prefix
      *
@@ -118,11 +130,18 @@ class Redis extends AbstractAdapter
      */
     public function getKeys(string $prefix = ''): array
     {
-        return $this->getFilteredKeys(
-            $this->getAdapter()
-                 ->keys('*'),
-            $prefix
-        );
+        $adapter  = $this->getAdapter();
+        $iterator = null;
+        $keys     = [];
+        $pattern  = $this->prefix . '*';
+
+        $adapter->setOption(RedisService::OPT_SCAN, RedisService::SCAN_NOPREFIX);
+
+        while (false !== ($scanKeys = $adapter->scan($iterator, $pattern))) {
+            $keys = array_merge($keys, $scanKeys);
+        }
+
+        return $this->getFilteredKeys($keys, $prefix);
     }
 
     /**

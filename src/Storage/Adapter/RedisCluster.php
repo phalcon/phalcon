@@ -24,7 +24,13 @@ use function defined;
 use function mb_strtolower;
 
 /**
- * Redis adapter
+ * RedisCluster adapter
+ *
+ * Capabilities (in addition to Redis):
+ * - Counters: native atomic (incrBy()/decrBy()).
+ * - getKeys(): blocking KEYS across all master nodes (per-node SCAN is left to
+ *   the redesign); clear() flushes every master.
+ * - Serializers: Phalcon-side, or backend-native via OPT_SERIALIZER.
  *
  * @property array $options
  */
@@ -137,6 +143,26 @@ class RedisCluster extends Redis
         return $this->adapter;
     }
 
+    /**
+     * Returns all the keys stored
+     *
+     * RedisCluster::scan() iterates one node at a time, so the blocking KEYS
+     * command is retained here (phpredis routes it across the masters). The
+     * per-node SCAN migration is left to the storage redesign.
+     *
+     * @param string $prefix
+     *
+     * @return array
+     * @throws ClusterConnectionFailed|SupportException
+     */
+    public function getKeys(string $prefix = ''): array
+    {
+        return $this->getFilteredKeys(
+            $this->getAdapter()
+                 ->keys('*'),
+            $prefix
+        );
+    }
 
     protected function getDefaultOptions($options): array
     {

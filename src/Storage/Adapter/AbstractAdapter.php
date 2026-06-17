@@ -23,6 +23,7 @@ use Phalcon\Storage\SerializerFactory;
 
 use function is_object;
 use function mb_strtolower;
+use function method_exists;
 
 /**
  * Class AbstractAdapter
@@ -400,7 +401,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     protected function doGet(string $key, mixed $defaultValue = null): mixed
     {
-        if (true !== $this->has($key)) {
+        if (true !== $this->doHas($key)) {
             return $defaultValue;
         }
 
@@ -563,7 +564,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         if (null !== $this->serializer) {
             $this->serializer->unserialize($content);
 
-            if (true !== $this->serializer->isSuccess()) {
+            if (
+                true === method_exists($this->serializer, 'isSuccess') &&
+                true !== $this->serializer->isSuccess()
+            ) {
                 return $defaultValue;
             }
 

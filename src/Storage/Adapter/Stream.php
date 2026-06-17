@@ -43,6 +43,12 @@ use const LOCK_SH;
 /**
  * Stream adapter
  *
+ * Capabilities:
+ * - Counters: read-modify-write (doHas()/doGet()/doSet()); not atomic and racy
+ *   across concurrent processes.
+ * - getKeys(): recursive directory traversal; cost grows with the entry count.
+ * - Serializers: Phalcon-side only.
+ *
  * @phpstan-type TOptions array{
  *     storageDir?: string,
  *     defaultSerializer?: string,
@@ -177,14 +183,14 @@ class Stream extends AbstractAdapter
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
-        if (true !== $this->has($key)) {
+        if (true !== $this->doHas($key)) {
             return false;
         }
 
-        $data = $this->get($key);
+        $data = $this->doGet($key);
         $data = (int)$data - $value;
 
-        $result = $this->set($key, $data);
+        $result = $this->doSet($key, $data);
         if (false !== $result) {
             $result = $data;
         }
@@ -201,7 +207,7 @@ class Stream extends AbstractAdapter
      */
     protected function doDelete(string $key): bool
     {
-        if (true !== $this->has($key)) {
+        if (true !== $this->doHas($key)) {
             return false;
         }
 
@@ -271,14 +277,14 @@ class Stream extends AbstractAdapter
      */
     protected function doIncrement(string $key, int $value = 1): false | int
     {
-        if (true !== $this->has($key)) {
+        if (true !== $this->doHas($key)) {
             return false;
         }
 
-        $data = $this->get($key);
+        $data = $this->doGet($key);
         $data = (int)$data + $value;
 
-        $result = $this->set($key, $data);
+        $result = $this->doSet($key, $data);
         if (false !== $result) {
             $result = $data;
         }
