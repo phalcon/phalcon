@@ -1,0 +1,206 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Contracts\Dispatcher;
+
+/**
+ * Canonical contract for Phalcon\Dispatcher\AbstractDispatcher.
+ *
+ * Note: The deprecated `getParam()`/`getParams()`/`hasParam()`/`setParam()`/
+ * `setParams()` spellings are still declared for backwards compatibility and
+ * are scheduled to be removed in the next major version in favor of their
+ * `*Parameter` counterparts.
+ */
+interface Dispatcher
+{
+    /**
+     * Dispatches a handle action taking into account the routing parameters
+     *
+     * @return mixed|bool
+     */
+    public function dispatch();
+
+    /**
+     * Forwards the execution flow to another controller/action
+     *
+     * @param array $forward
+     *
+     * @return void
+     */
+    public function forward(array $forward): void;
+
+    /**
+     * Gets last dispatched action name
+     *
+     * @return string
+     */
+    public function getActionName(): string;
+
+    /**
+     * Gets the default action suffix
+     *
+     * @return string
+     */
+    public function getActionSuffix(): string;
+
+    /**
+     * Gets the default handler suffix
+     *
+     * @return string
+     */
+    public function getHandlerSuffix(): string;
+
+    /**
+     * Gets a param by its name or numeric index
+     *
+     * @param string|int        $param
+     * @param string|array|null $filters
+     *
+     * @return mixed
+     * @deprecated Use getParameter() instead
+     *
+     * Note: This signature omits the `$defaultValue` argument the
+     * implementation accepts; the two will be aligned in the next major
+     * version.
+     */
+    public function getParam(string | int $param, string | array | null $filters = null): mixed;
+
+    /**
+     * Gets a param by its name or numeric index
+     *
+     * @param string|int        $param
+     * @param string|array|null $filters
+     *
+     * @return mixed
+     */
+    public function getParameter(string | int $param, string | array | null $filters = null): mixed;
+
+    /**
+     * Gets action params
+     */
+    public function getParameters(): array;
+
+    /**
+     * Gets action params
+     *
+     * @deprecated Use getParameters() instead
+     */
+    public function getParams(): array;
+
+    /**
+     * Returns value returned by the latest dispatched action
+     */
+    public function getReturnedValue(): mixed;
+
+    /**
+     * Check if a param exists
+     *
+     * @param string|int $param
+     *
+     * @return bool
+     * @deprecated Use hasParameter() instead
+     */
+    public function hasParam(string | int $param): bool;
+
+    /**
+     * Checks if the dispatch loop is finished or has more pendent
+     * controllers/tasks to dispatch
+     *
+     * @return bool
+     */
+    public function isFinished(): bool;
+
+    /**
+     * Sets the action name to be dispatched
+     *
+     * @param string $actionName
+     *
+     * @return void
+     */
+    public function setActionName(string $actionName): void;
+
+    /**
+     * Sets the default action suffix
+     *
+     * @param string $actionSuffix
+     *
+     * @return void
+     */
+    public function setActionSuffix(string $actionSuffix): void;
+
+    /**
+     * Sets the default action name
+     *
+     * @param string $actionName
+     *
+     * @return void
+     */
+    public function setDefaultAction(string $actionName): void;
+
+    /**
+     * Sets the default namespace
+     *
+     * @param string $defaultNamespace
+     *
+     * @return void
+     */
+    public function setDefaultNamespace(string $defaultNamespace): void;
+
+    /**
+     * Sets the default suffix for the handler
+     *
+     * @param string $handlerSuffix
+     *
+     * @return void
+     */
+    public function setHandlerSuffix(string $handlerSuffix): void;
+
+    /**
+     * Sets the module name which the application belongs to
+     *
+     * @param string $moduleName
+     *
+     * @return void
+     */
+    public function setModuleName(string | null $moduleName = null): void;
+
+    /**
+     * Sets the namespace which the controller belongs to
+     *
+     * @param string $namespaceName
+     *
+     * @return void
+     */
+    public function setNamespaceName(string $namespaceName): void;
+
+    /**
+     * Set a param by its name or numeric index
+     *
+     * @param string|int $param
+     * @param mixed      $value
+     *
+     * @return void
+     * @deprecated Use setParameter() instead
+     */
+    public function setParam(string | int $param, mixed $value): void;
+
+    /**
+     * Sets action params to be dispatched
+     *
+     * @param array $parameters
+     *
+     * @return void
+     * @deprecated Use setParameters() instead
+     */
+    public function setParams(array $parameters): void;
+}

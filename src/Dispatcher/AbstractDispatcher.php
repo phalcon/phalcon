@@ -45,6 +45,31 @@ use function ucfirst;
  * This is the base class for Phalcon\Mvc\Dispatcher and Phalcon\Cli\Dispatcher.
  * This class can't be instantiated directly, you can use it to create your own
  * dispatchers.
+ *
+ * ## Error protocol
+ *
+ * Subclasses (including third-party ones) MUST implement the two abstract
+ * error hooks {@see throwDispatchException()} and {@see handleException()}.
+ * The dispatch loop calls them on every error/exception path; a subclass that
+ * omits them cannot be loaded.
+ *
+ * ## Hook channels
+ *
+ * A single lifecycle point can be intercepted through three independent
+ * channels. For any given point they run in this order:
+ *
+ * 1. **Events-manager listener** - e.g. `dispatch:beforeExecuteRoute`. A
+ *    listener returning `false` cancels; calling `forward()` re-enters the
+ *    loop; throwing routes through {@see handleException()}.
+ * 2. **Duck-typed handler method** - e.g. a `beforeExecuteRoute()` method on
+ *    the controller/task itself (presence is cached per class). Same
+ *    `false` / `forward()` cancellation semantics as the event.
+ * 3. **`dispatch:beforeCallAction` observer** - fired by
+ *    {@see callActionMethod()} with a `Phalcon\Support\Collection` carrying
+ *    the mutable keys `handler`, `action` and `params`. Listeners may rewrite
+ *    those keys to change *what* gets invoked; the substituted callable is
+ *    re-validated before the call. `dispatch:afterCallAction` receives the
+ *    same Collection plus a `result` key.
  */
 abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
 {
@@ -195,14 +220,11 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             null !== $this->eventsManager &&
             $this->eventsManager instanceof ManagerInterface
         ) {
-            $observer = $this->getDI()->get(
-                Collection::class,
-                [[
-                    "handler" => $handler,
-                    "action"  => $actionMethod,
-                    "params"  => $params,
-                ]]
-            );
+            $observer = new Collection([
+                "handler" => $handler,
+                "action"  => $actionMethod,
+                "params"  => $params,
+            ]);
 
             $this->eventsManager->fire(
                 "dispatch:beforeCallAction",
@@ -213,6 +235,24 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             $altHandler = $observer->get("handler");
             $altAction  = $observer->get("action");
             $altParams  = $observer->get("params", [], "array");
+
+            /**
+             * The `dispatch:beforeCallAction` observer may replace the handler
+             * and/or the action (see the hook-channel notes on this class). The
+             * loop's own `is_callable()` check ran against the original pair, so
+             * re-validate the (possibly mutated) callable here. A substituted,
+             * non-existent target then fails through the dispatcher's own
+             * EXCEPTION_ACTION_NOT_FOUND channel instead of producing a raw
+             * call_user_func_array() fatal.
+             */
+            if (!is_callable([$altHandler, $altAction])) {
+                $this->throwDispatchException(
+                    "Action '" . $this->actionName . "' was not found on handler '" . $this->handlerName . "'",
+                    PhalconException::EXCEPTION_ACTION_NOT_FOUND
+                );
+
+                return false;
+            }
         }
 
         $result = call_user_func_array(
@@ -527,6 +567,19 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 );
             }
 
+            /**
+             * Calling afterBinding
+             *
+             * Note: Unlike every other lifecycle hook, the `afterBinding` event
+             * and method blocks deliberately have no try/catch. Exceptions
+             * raised here are intended to bypass `handleException()` (and the
+             * `dispatch:beforeException` channel) and bubble straight up: at
+             * this point binding has already mutated the parameters and the
+             * action is about to run, so swallowing/forwarding from a binding
+             * listener is intentionally not supported. The only honored signals
+             * are returning `false` (cancel) and `forward()` (`finished` flips
+             * to `false`). This asymmetry is by design, not an oversight.
+             */
             if ($hasEventsManager) {
                 if ($eventsManager->fire("dispatch:afterBinding", $this) === false) {
                     continue;
@@ -835,7 +888,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param mixed             $defaultValue
      *
      * @return mixed
-     * @todo remove this in future versions
+     * @deprecated Use getParameter() instead
+     *
+     * Note: The interface declares `getParam($param, $filters = null)` without
+     * the `$defaultValue` argument, so code typed against `DispatcherInterface`
+     * cannot use the default-value feature. This signature drift is intentional
+     * for now; the interface and implementation will be aligned in the next
+     * major version.
      */
     public function getParam(
         string | int $param,
@@ -885,7 +944,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Gets action params
      *
      * @return array
-     * @todo remove this in future versions
+     * @deprecated Use getParameters() instead
      */
     public function getParams(): array
     {
@@ -900,6 +959,36 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     public function getParameters(): array
     {
         return $this->params;
+    }
+
+    /**
+     * Gets previous dispatched action name
+     *
+     * @return string
+     */
+    public function getPreviousActionName(): string
+    {
+        return $this->previousActionName;
+    }
+
+    /**
+     * Gets previous dispatched handler name
+     *
+     * @return string
+     */
+    public function getPreviousHandlerName(): string
+    {
+        return $this->previousHandlerName;
+    }
+
+    /**
+     * Gets previous dispatched namespace name
+     *
+     * @return string
+     */
+    public function getPreviousNamespaceName(): string
+    {
+        return $this->previousNamespaceName;
     }
 
     /**
@@ -918,7 +1007,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param string|int $param
      *
      * @return bool
-     * @todo deprecate this in the future
+     * @deprecated Use hasParameter() instead
      */
     public function hasParam(string | int $param): bool
     {
@@ -1066,7 +1155,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param mixed      $value
      *
      * @return void
-     * @todo deprecate this in the future
+     * @deprecated Use setParameter() instead
      */
     public function setParam(string | int $param, mixed $value): void
     {
@@ -1092,7 +1181,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param array $params
      *
      * @return void
-     * @todo deprecate this in the future
+     * @deprecated Use setParameters() instead
      */
     public function setParams(array $params): void
     {
