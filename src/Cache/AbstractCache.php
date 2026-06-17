@@ -27,6 +27,15 @@ use Traversable;
 /**
  * This component offers caching capabilities for your application.
  * Phalcon\Cache implements PSR-16.
+ *
+ * Event layering: cache operations can emit `cache:*` events from two layers.
+ * This facade fires `cache:before*`/`cache:after*` around each operation, and
+ * the underlying `Storage` adapter (whose `eventType` is `"cache"`) also fires
+ * `cache:before*`/`cache:after*` for the same operation. If an events manager
+ * is wired into both the facade and the adapter, a single call emits the event
+ * twice (once from each object). Wire the manager into one layer only; the
+ * facade is the supported source for cache-level events (it also emits the
+ * multi-key `cache:*Multiple` events).
  */
 abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 {
@@ -87,7 +96,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function checkKey(string $key): void
     {
-        if (preg_match("/[^A-Za-z0-9-_.]/", $key)) {
+        if ("" === $key || preg_match("/[^A-Za-z0-9-_.]/", $key)) {
             $exceptionClass = $this->getExceptionClass();
 
             throw new $exceptionClass("The key contains invalid characters");
@@ -136,9 +145,9 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      */
     protected function doDelete(string $key): bool
     {
-        $this->fire("cache:beforeDelete", $key);
-
         $this->checkKey($key);
+
+        $this->fire("cache:beforeDelete", $key);
 
         $result = $this->adapter->delete($key);
 
@@ -228,18 +237,46 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
         $this->fire("cache:beforeGetMultiple", $keys);
 
         if ($this->adapter instanceof Redis) {
-            $results    = $this->adapter->getAdapter()->mget($keys);
+            /**
+             * Validate every key and collect them into an array (this also
+             * handles Traversable inputs), so mget() and array_combine() below
+             * receive arrays instead of throwing a TypeError.
+             *
+             * NOTE: incoming keys are not routed through the adapter's key
+             * policy here - getKeyWithoutPrefix() is protected on the Storage
+             * adapter, so an already-prefixed key is prefixed again by the
+             * phpredis OPT_PREFIX and misses. Resolving that needs the
+             * batch-capability redesign noted in the modularity review.
+             */
+            $keysArray = [];
+            /** @var string $element */
+            foreach ($keys as $element) {
+                $this->checkKey($element);
+                $keysArray[] = $element;
+            }
+
             $serializer = $this->adapter->getSerializer();
+            $results    = $this->adapter->getAdapter()->mget($keysArray);
             $results    = array_map(
                 function ($element) use ($serializer, $default) {
+                    if (false === $element) {
+                        return $default;
+                    }
+
                     $serializer->unserialize($element);
-                    return false === $element
-                        ? $default
-                        : $serializer->getData();
+
+                    if (
+                        true === method_exists($serializer, "isSuccess") &&
+                        true !== $serializer->isSuccess()
+                    ) {
+                        return $default;
+                    }
+
+                    return $serializer->getData();
                 },
                 $results
             );
-            $results    = array_combine($keys, $results);
+            $results    = array_combine($keysArray, $results);
         } else {
             $results = [];
             /** @var string $element */
@@ -334,7 +371,12 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     {
         $this->checkKeys($values);
 
-        $this->fire("cache:beforeSetMultiple", array_keys((array)$values));
+        $keys = array_keys((array)$values);
+        foreach ($keys as $key) {
+            $this->checkKey($key);
+        }
+
+        $this->fire("cache:beforeSetMultiple", $keys);
 
         $result = true;
         /**
@@ -347,7 +389,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
             }
         }
 
-        $this->fire("cache:afterSetMultiple", array_keys((array)$values));
+        $this->fire("cache:afterSetMultiple", $keys);
 
         return $result;
     }
