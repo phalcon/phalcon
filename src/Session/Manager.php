@@ -16,6 +16,7 @@ namespace Phalcon\Session;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Session\Exceptions\InvalidSessionAdapter;
+use Phalcon\Session\Exceptions\InvalidSessionId;
 use Phalcon\Session\Exceptions\InvalidSessionName;
 use Phalcon\Session\Exceptions\SessionAlreadyStarted;
 use Phalcon\Session\Exceptions\SessionModificationDenied;
@@ -303,12 +304,17 @@ class Manager implements InjectionAwareInterface, ManagerInterface
      * @param string $sessionId
      *
      * @return ManagerInterface
+     * @throws InvalidSessionId
      * @throws SessionAlreadyStarted
      */
     public function setId(string $sessionId): ManagerInterface
     {
         if (true === $this->exists()) {
             throw new SessionAlreadyStarted();
+        }
+
+        if (!preg_match('/^[a-zA-Z0-9,-]+$/D', $sessionId)) {
+            throw new InvalidSessionId();
         }
 
         session_id($sessionId);
@@ -332,7 +338,10 @@ class Manager implements InjectionAwareInterface, ManagerInterface
             throw new SessionModificationDenied();
         }
 
-        if (!preg_match('/^[\p{L}\p{N}_-]+$/u', $name)) {
+        if (
+            !preg_match('/^[\p{L}\p{N}_-]+$/u', $name) ||
+            preg_match('/^[0-9]+$/', $name)
+        ) {
             throw new InvalidSessionName();
         }
 
