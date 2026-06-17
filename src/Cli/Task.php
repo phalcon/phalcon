@@ -42,6 +42,10 @@ use function method_exists;
  *     }
  * }
  *```
+ *
+ * Action methods receive the routed parameters as positional arguments,
+ * followed by any CLI options the dispatcher collected (appended as trailing
+ * arguments). Declare optional trailing parameters to read those options.
  */
 class Task extends Injectable implements TaskInterface, EventsAwareInterface
 {

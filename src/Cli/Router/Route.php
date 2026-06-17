@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Cli\Router;
 
+use Phalcon\Cli\Router\Exceptions\BeforeMatchNotCallable;
 use Phalcon\Cli\Router\Exceptions\InvalidRoutePaths;
 use Phalcon\Traits\Helper\Str\UncamelizeTrait;
 
@@ -24,6 +25,7 @@ use function array_values;
 use function explode;
 use function implode;
 use function is_array;
+use function is_callable;
 use function is_string;
 use function str_replace;
 use function str_split;
@@ -118,12 +120,16 @@ class Route implements RouteInterface
      * The developer can implement any arbitrary conditions here
      * If the callback returns false the route is treated as not matched
      *
-     * @param callable $callback
+     * @param mixed $callback
      *
      * @return RouteInterface
      */
-    public function beforeMatch(callable $callback): RouteInterface
+    public function beforeMatch(mixed $callback): RouteInterface
     {
+        if (!is_callable($callback)) {
+            throw new BeforeMatchNotCallable($this->pattern);
+        }
+
         $this->beforeMatch = $callback;
 
         return $this;
@@ -188,7 +194,13 @@ class Route implements RouteInterface
     }
 
     /**
-     * Set the routing delimiter
+     * Set the routing delimiter.
+     *
+     * This sets a process-global delimiter that each route captures at
+     * construction time. Configure it once during bootstrap, before any routes
+     * are created: routes built before and after a change keep their own
+     * delimiter, and `Console::setArgument()` reads the current value when it
+     * parses arguments.
      *
      * @param string $delimiter
      *
@@ -506,7 +518,7 @@ class Route implements RouteInterface
                     $namespaceName = implode("\\", $taskNameArray);
 
                     if (empty($realClassName)) {
-                        throw new InvalidRoutePaths();
+                        throw new InvalidRoutePaths($pattern);
                     }
 
                     // Update the namespace
@@ -530,7 +542,7 @@ class Route implements RouteInterface
         }
 
         if (!is_array($routePaths)) {
-            throw new InvalidRoutePaths();
+            throw new InvalidRoutePaths($pattern);
         }
 
         /**
@@ -584,7 +596,11 @@ class Route implements RouteInterface
     }
 
     /**
-     * Resets the internal route id generator
+     * Resets the internal route id generator.
+     *
+     * Intended for test isolation only. The router keys its route map by the
+     * route id, so resetting the sequence while a router still holds routes
+     * makes newly created routes overwrite existing entries.
      *
      * @return void
      */

@@ -17,8 +17,14 @@ use Phalcon\Cli\Router\Exception;
 
 class InvalidRoutePaths extends Exception
 {
-    public function __construct()
+    public function __construct(string $route = '')
     {
-        parent::__construct('The route contains invalid paths');
+        $message = 'The route contains invalid paths';
+
+        if ('' !== $route) {
+            $message .= " ('" . $route . "')";
+        }
+
+        parent::__construct($message);
     }
 }

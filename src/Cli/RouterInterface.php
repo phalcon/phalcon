@@ -113,13 +113,19 @@ interface RouterInterface
     public function getTaskName(): string;
 
     /**
-     * Handles routing information received from the rewrite engine
+     * Handles routing information received from the rewrite engine.
+     *
+     * When `arguments` is a string, it is matched against the registered
+     * routes. When it is an array, matching is bypassed entirely: the array is
+     * treated as the already-resolved module/task/action/params, so
+     * `wasMatched()` stays false and `getMatchedRoute()` returns null even
+     * though routing succeeded.
      *
      * @param array|string $arguments
      *
-     * @return void
+     * @return RouterInterface
      */
-    public function handle(array | string $arguments = []): void;
+    public function handle(array | string $arguments = []): RouterInterface;
 
     /**
      * Sets the default action name

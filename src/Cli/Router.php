@@ -218,7 +218,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * Returns processed extra params
      *
      * @return array
-     * @todo deprecate this in future versions
+     * @deprecated Use {@see getParameters()} instead.
      */
     public function getParams(): array
     {
@@ -281,10 +281,10 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @param array|string $arguments
      *
-     * @return void
+     * @return RouterInterface
      * @throws Exception
      */
-    public function handle(array | string $arguments = []): void
+    public function handle(array | string $arguments = []): RouterInterface
     {
         $routeFound         = false;
         $parts              = [];
@@ -318,7 +318,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                          * Check first if the callback is callable
                          */
                         if (!is_callable($beforeMatch)) {
-                            throw new BeforeMatchNotCallable();
+                            throw new BeforeMatchNotCallable($route->getPattern());
                         }
 
                         /**
@@ -410,7 +410,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                 $this->action     = $this->defaultAction;
                 $this->parameters = $this->defaultParams;
 
-                return;
+                return $this;
             }
         } else {
             $parts = $arguments;
@@ -468,6 +468,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
         $this->task       = $taskName;
         $this->action     = $actionName;
         $this->parameters = $params;
+
+        return $this;
     }
 
     /**

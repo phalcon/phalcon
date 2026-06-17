@@ -69,6 +69,10 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
     /**
      * Calls the action method.
      *
+     * The CLI options collected by the dispatcher are appended to the
+     * positional `parameters` before the call, so a task action receives any
+     * options as trailing arguments after its declared parameters.
+     *
      * @param mixed  $handler
      * @param string $actionMethod
      * @param array  $parameters
