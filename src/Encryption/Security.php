@@ -44,14 +44,29 @@ class Security extends AbstractInjectionAware implements SecurityContract
     public const CRYPT_ARGON2ID   = 11;
     public const CRYPT_BCRYPT     = 0;
     public const CRYPT_DEFAULT    = 0;
+    /**
+     * @deprecated Not implemented; resolves to bcrypt. To be removed.
+     */
     public const CRYPT_BLOWFISH   = 4;
     public const CRYPT_BLOWFISH_A = 5;
     public const CRYPT_BLOWFISH_X = 6;
+    /**
+     * @deprecated Not implemented; resolves to bcrypt. To be removed.
+     */
     public const CRYPT_BLOWFISH_Y = 7;
+    /**
+     * @deprecated Not implemented; resolves to bcrypt. To be removed.
+     */
     public const CRYPT_EXT_DES    = 2;
+    /**
+     * @deprecated Weak legacy algorithm. To be removed.
+     */
     public const CRYPT_MD5        = 3;
     public const CRYPT_SHA256     = 8;
     public const CRYPT_SHA512     = 9;
+    /**
+     * @deprecated Not implemented; resolves to bcrypt. To be removed.
+     */
     public const CRYPT_STD_DES    = 1;
 
     /**
@@ -417,6 +432,9 @@ class Security extends AbstractInjectionAware implements SecurityContract
     /**
      * Creates a password hash using bcrypt with a pseudo random salt
      *
+     * Any `defaultHash` value that is not explicitly handled (including the
+     * deprecated, unimplemented constants) resolves to bcrypt.
+     *
      * @param string $password
      * @param array  $options
      *
@@ -481,11 +499,11 @@ class Security extends AbstractInjectionAware implements SecurityContract
         /**
          * This is using password_hash
          *
-         * We will not provide a "salt" but let PHP calculate it.
+         * We will not provide a "salt" but let PHP calculate it. The caller's
+         * options are preserved (e.g. Argon2 `memory_cost`, `time_cost`,
+         * `threads`); only the validated `cost` is merged in.
          */
-        $options = [
-            "cost" => $cost
-        ];
+        $options["cost"] = $cost;
 
         $algorithm = $this->processAlgorithm();
         $arguments = $this->processArgonOptions($options);

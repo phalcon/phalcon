@@ -67,6 +67,7 @@ class PadFactory
     public function padNumberToService(int $number): string
     {
         $map = [
+            Crypt::PADDING_DEFAULT        => "noop",
             Crypt::PADDING_ANSI_X_923     => "ansi",
             Crypt::PADDING_ISO_10126      => "iso10126",
             Crypt::PADDING_ISO_IEC_7816_4 => "isoiek",
@@ -75,7 +76,15 @@ class PadFactory
             Crypt::PADDING_ZERO           => "zero",
         ];
 
-        return $map[$number] ?? "noop";
+        if (true !== isset($map[$number])) {
+            $exceptionClass = $this->getExceptionClass();
+
+            throw new $exceptionClass(
+                "Unknown padding constant " . $number
+            );
+        }
+
+        return $map[$number];
     }
 
     /**
@@ -97,6 +106,7 @@ class PadFactory
             "isoiek"   => IsoIek::class,
             "noop"     => Noop::class,
             "pjcs7"    => Pkcs7::class,
+            "pkcs7"    => Pkcs7::class,
             "space"    => Space::class,
             "zero"     => Zero::class,
         ];
