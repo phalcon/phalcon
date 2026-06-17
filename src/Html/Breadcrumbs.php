@@ -70,6 +70,10 @@ class Breadcrumbs
      * $breadcrumbs->add("Users");
      * ```
      *
+     * Crumbs are stored keyed by their link, so adding two crumbs that share
+     * the same link - including two link-less crumbs, which share the empty
+     * string key - keeps only the last one.
+     *
      * @param string $label
      * @param string $link
      *
@@ -132,11 +136,20 @@ class Breadcrumbs
      */
     public function render(): string
     {
-        $output   = [];
         $elements = $this->elements;
-        $template = $this->template;
-        $urls     = array_keys($elements);
-        $lastUrl  = end($urls);
+
+        /**
+         * Nothing to render - guard against end([]) returning false and
+         * indexing $elements[false]
+         */
+        if (empty($elements)) {
+            return '';
+        }
+
+        $output    = [];
+        $template  = $this->template;
+        $urls      = array_keys($elements);
+        $lastUrl   = end($urls);
         $lastLabel = $elements[$lastUrl];
 
         unset($elements[$lastUrl]);

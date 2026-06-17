@@ -16,6 +16,7 @@ namespace Phalcon\Html\Link\Serializer;
 use function implode;
 use function is_array;
 use function is_bool;
+use function str_replace;
 
 /**
  * Class Phalcon\Http\Link\Serializer\Header
@@ -54,13 +55,13 @@ class Header implements SerializerInterface
             foreach ($attributes as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $subValue) {
-                        $parts[] = $key . '="' . $subValue . '"';
+                        $parts[] = $key . '="' . $this->quote((string) $subValue) . '"';
                     }
                     continue;
                 }
 
                 if (!is_bool($value)) {
-                    $parts[] = $key . '="' . $value . '"';
+                    $parts[] = $key . '="' . $this->quote((string) $value) . '"';
                     continue;
                 }
 
@@ -80,5 +81,19 @@ class Header implements SerializerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Escapes a quoted-string attribute value per RFC 8288 section 3: a
+     * backslash and a double quote are each prefixed with a backslash so the
+     * value cannot terminate or corrupt the header field.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private function quote(string $value): string
+    {
+        return str_replace(['\\', '"'], ['\\\\', '\\"'], $value);
     }
 }
