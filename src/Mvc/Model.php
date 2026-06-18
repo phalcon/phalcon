@@ -1044,6 +1044,10 @@ abstract class Model extends AbstractInjectionAware implements
             return (float)$result;
         }
 
+        if ($result === null) {
+            return 0.0;
+        }
+
         return $result;
     }
 
@@ -3643,7 +3647,15 @@ abstract class Model extends AbstractInjectionAware implements
     {
         $result = self::groupResult("SUM", "sumatory", $parameters);
 
-        return is_string($result) ? (float)$result : $result;
+        if (is_string($result)) {
+            return (float)$result;
+        }
+
+        if ($result === null) {
+            return 0.0;
+        }
+
+        return $result;
     }
 
     /**
