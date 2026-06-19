@@ -17,6 +17,7 @@ use Phalcon\Traits\Helper\Str\LowerTrait;
 
 use function array_keys;
 use function array_values;
+use function is_array;
 use function is_string;
 use function preg_replace;
 use function str_replace;
@@ -35,7 +36,7 @@ class Friendly
      * @param string       $text
      * @param string       $separator
      * @param bool         $lowercase
-     * @param array|string $replace
+     * @param mixed|null   $replace
      *
      * @return string
      */
@@ -43,10 +44,12 @@ class Friendly
         string $text,
         string $separator = '-',
         bool $lowercase = true,
-        array | string $replace = []
+        mixed $replace = null
     ): string {
         if (is_string($replace)) {
             $replace = [$replace];
+        } elseif (!is_array($replace)) {
+            $replace = [];
         }
 
         $matrix = $this->getMatrix($replace);

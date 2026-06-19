@@ -46,7 +46,7 @@ class FriendlyTitle extends AbstractHelper
      * @param string       $text
      * @param string       $separator
      * @param bool         $lowercase
-     * @param array|string $replace
+     * @param mixed|null   $replace
      *
      * @return string
      */
@@ -54,7 +54,7 @@ class FriendlyTitle extends AbstractHelper
         string $text,
         string $separator = '-',
         bool $lowercase = true,
-        array|string $replace = []
+        mixed $replace = null
     ): string {
         try {
             return ($this->friendly)($text, $separator, $lowercase, $replace);

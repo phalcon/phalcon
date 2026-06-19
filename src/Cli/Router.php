@@ -131,7 +131,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
             );
 
             $this->add(
-                "#^(?::delimiter)?([a-zA-Z0-9\\_\\-]+):delimiter([a-zA-Z0-9\\.\\_]+)(:delimiter.*)*$#",
+                "#^(?::delimiter)?([a-zA-Z0-9\\_\\-]+):delimiter([a-zA-Z0-9\\.\\_]+)(:delimiter.*)?$#",
                 [
                     "task"   => 1,
                     "action" => 2,

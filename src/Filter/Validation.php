@@ -27,6 +27,7 @@ use function array_filter;
 use function in_array;
 use function is_array;
 use function is_object;
+use function is_string;
 use function method_exists;
 use function property_exists;
 
@@ -205,6 +206,15 @@ class Validation extends Injectable implements ValidationInterface
         }
 
         foreach ($data as $field => $value) {
+            /**
+             * Skip numeric (integer) keys; entity setters and properties are
+             * always string-named, so camelize() would fail on them. See
+             * cphalcon issue #17173.
+             */
+            if (!is_string($field)) {
+                continue;
+            }
+
             /**
              * Check if the field is in the whitelist
              */

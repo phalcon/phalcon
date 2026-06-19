@@ -177,7 +177,7 @@ class Route implements RouteInterface
                 "/:controller" => $idPattern,
                 "/:namespace"  => $idPattern,
                 "/:action"     => $idPattern,
-                "/:params"     => "(/.*)*",
+                "/:params"     => "(/.*)?",
                 "/:int"        => "/([0-9]+)",
             ];
 
