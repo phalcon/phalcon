@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Select;
 use Phalcon\Phql\Parser;
 use Phalcon\Tests\AbstractUnitTestCase;
 
-final class LiteralsTests extends AbstractUnitTestCase
+final class LiteralsTest extends AbstractUnitTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
