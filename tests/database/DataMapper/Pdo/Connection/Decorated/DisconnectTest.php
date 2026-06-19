@@ -17,14 +17,16 @@ use PDO;
 use Phalcon\DataMapper\Pdo\Connection\Decorated;
 use Phalcon\DataMapper\Pdo\Exception\CannotDisconnect;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class DisconnectTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionDecoratedDisconnect(): void
     {

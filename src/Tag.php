@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon;
 
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Html\Escaper\EscaperInterface;
@@ -64,9 +63,9 @@ class Tag
     /**
      * DI Container
      *
-     * @var DiInterface|Collection|null
+     * @var DiInterface|null
      */
-    protected static DiInterface | Collection | null $container = null;
+    protected static DiInterface | null $container = null;
 
     /**
      * Pre-assigned values for components
@@ -353,9 +352,9 @@ class Tag
     /**
      * Internally gets the request dispatcher
      *
-     * @return DiInterface|Collection
+     * @return DiInterface
      */
-    public static function getDI(): DiInterface | Collection
+    public static function getDI(): DiInterface
     {
         if (null === self::$container) {
             self::$container = Di::getDefault();
@@ -1120,11 +1119,11 @@ class Tag
     /**
      * Sets the dependency injector container.
      *
-     * @param DiInterface|Collection $container
+     * @param DiInterface $container
      *
      * @return void
      */
-    public static function setDI(DiInterface | Collection $container): void
+    public static function setDI(DiInterface $container): void
     {
         self::$container = $container;
     }

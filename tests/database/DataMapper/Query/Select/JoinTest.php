@@ -16,14 +16,16 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Select;
 use PDO;
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class JoinTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQuerySelectJoinLeft(): void
     {
@@ -45,8 +47,6 @@ final class JoinTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQuerySelectJoinRight(): void
     {
@@ -68,8 +68,6 @@ final class JoinTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQuerySelectJoinInner(): void
     {
@@ -91,8 +89,6 @@ final class JoinTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQuerySelectJoinNatural(): void
     {
@@ -114,8 +110,6 @@ final class JoinTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQuerySelectJoinWithBind(): void
     {

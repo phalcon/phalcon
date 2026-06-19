@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 
 /**
@@ -24,18 +23,18 @@ interface ModuleDefinitionInterface
     /**
      * Registers an autoloader related to the module
      *
-     * @param DiInterface|Collection|null $container
+     * @param DiInterface|null $container
      *
      * @return void
      */
-    public function registerAutoloaders(DiInterface | Collection | null $container = null);
+    public function registerAutoloaders(DiInterface | null $container = null);
 
     /**
      * Registers services related to the module
      *
-     * @param DiInterface|Collection $container
+     * @param DiInterface $container
      *
      * @return void
      */
-    public function registerServices(DiInterface | Collection $container);
+    public function registerServices(DiInterface $container);
 }

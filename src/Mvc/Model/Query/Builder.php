@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
@@ -157,11 +156,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * Phalcon\Mvc\Model\Query\Builder constructor
      *
      * @param array|string|null            $params
-     * @param DiInterface|Collection|null  $container
+     * @param DiInterface|null  $container
      */
     public function __construct(
         array | string | null $params = null,
-        DiInterface | Collection | null $container = null
+        DiInterface | null $container = null
     ) {
         if (is_array($params)) {
             /**
@@ -661,9 +660,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface|Collection
+     * @return DiInterface
      */
-    public function getDI(): DiInterface | Collection
+    public function getDI(): DiInterface
     {
         return $this->container;
     }
@@ -1730,11 +1729,11 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Sets the DependencyInjector container
      *
-     * @param object $container
+     * @param DiInterface $container
      *
      * @return void
      */
-    public function setDI(object $container): void
+    public function setDI(DiInterface $container): void
     {
         $this->container = $container;
     }

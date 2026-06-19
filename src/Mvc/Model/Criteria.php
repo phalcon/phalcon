@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
@@ -341,7 +340,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Builds a Phalcon\Mvc\Model\Criteria based on an input array like $_POST
      *
-     * @param DiInterface|Collection $container
+     * @param DiInterface $container
      * @param string                 $modelName
      * @param array                  $data
      * @param string                 $operator
@@ -349,7 +348,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @return CriteriaInterface
      */
     public static function fromInput(
-        DiInterface | Collection $container,
+        DiInterface $container,
         string $modelName,
         array $data,
         string $operator = "AND"
@@ -443,9 +442,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface|Collection
+     * @return DiInterface
      */
-    public function getDI(): DiInterface | Collection
+    public function getDI(): DiInterface
     {
         return $this->params["di"];
     }
@@ -896,11 +895,11 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Sets the DependencyInjector container
      *
-     * @param object $container
+     * @param DiInterface $container
      *
      * @return void
      */
-    public function setDI(object $container): void
+    public function setDI(DiInterface $container): void
     {
         $this->params["di"] = $container;
     }

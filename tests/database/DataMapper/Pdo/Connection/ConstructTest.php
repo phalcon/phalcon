@@ -16,14 +16,16 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Connection;
 use InvalidArgumentException;
 use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class ConstructTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionConstruct(): void
     {
@@ -36,8 +38,6 @@ final class ConstructTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionConstructException(): void
     {

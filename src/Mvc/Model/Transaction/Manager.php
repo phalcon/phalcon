@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Transaction;
 
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
@@ -180,9 +179,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Returns the dependency injection container
      *
-     * @return DiInterface|Collection|null
+     * @return DiInterface|null
      */
-    public function getDI(): DiInterface | Collection | null
+    public function getDI(): DiInterface | null
     {
         return $this->container;
     }
@@ -318,11 +317,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Sets the dependency injection container
      *
-     * @param object $container
+     * @param DiInterface $container
      *
      * @return void
      */
-    public function setDI(object $container): void
+    public function setDI(DiInterface $container): void
     {
         $this->container = $container;
     }

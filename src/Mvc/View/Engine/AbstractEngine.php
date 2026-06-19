@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
@@ -32,11 +31,11 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
      * Phalcon\Mvc\View\Engine constructor
      *
      * @param ViewBaseInterface    $view
-     * @param DiInterface|Collection|null $container
+     * @param DiInterface|null $container
      */
     public function __construct(
         protected ViewBaseInterface $view,
-        DiInterface | Collection | null $container = null
+        DiInterface | null $container = null
     ) {
         $this->container = $container;
     }

@@ -17,16 +17,18 @@ use Phalcon\DataMapper\Pdo\Connection;
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
+use PHPUnit\Framework\Attributes\Group;
 
 use function uniqid;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class GetLastInsertIdTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQueryInsertGetLastInsertId(): void
     {
@@ -71,8 +73,6 @@ final class GetLastInsertIdTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQueryInsertGetLastInsertIdReal(): void
     {
@@ -103,7 +103,7 @@ final class GetLastInsertIdTest extends AbstractDatabaseTestCase
 
         $sql           = 'SELECT inv_id '
             . 'FROM co_invoices '
-            . 'WHERE inv_title = "' . $name . '"';
+            . "WHERE inv_title = '" . $name . "'";
         $result        = $connection->fetchOne($sql);
         $existingInvId = $result['inv_id'];
 

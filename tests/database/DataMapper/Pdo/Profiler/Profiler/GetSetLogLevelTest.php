@@ -16,14 +16,16 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\Logger\Enum;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class GetSetLogLevelTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoProfilerProfilerGetSetLogLevel(): void
     {

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
 use Phalcon\Annotations\Parser\Collection;
-use Phalcon\Contracts\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
@@ -28,13 +27,13 @@ class Annotations implements StrategyInterface
 {
     /**
      * @param ModelInterface                  $model
-     * @param DiInterface|ServiceCollection   $container
+     * @param DiInterface   $container
      *
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
      * @throws Exception
      */
-    public function getColumnMaps(ModelInterface $model, DiInterface | ServiceCollection $container): array
+    public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
         $propertiesAnnotations = $this->getProperties($model, $container);
 
@@ -83,13 +82,13 @@ class Annotations implements StrategyInterface
 
     /**
      * @param ModelInterface                  $model
-     * @param DiInterface|ServiceCollection   $container
+     * @param DiInterface   $container
      *
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
      * @throws Exception
      */
-    public function getMetaData(ModelInterface $model, DiInterface | ServiceCollection $container): array
+    public function getMetaData(ModelInterface $model, DiInterface $container): array
     {
         $propertiesAnnotations = $this->getProperties($model, $container);
 
@@ -281,12 +280,12 @@ class Annotations implements StrategyInterface
 
     /**
      * @param ModelInterface                  $model
-     * @param DiInterface|ServiceCollection   $container
+     * @param DiInterface   $container
      *
      * @return Collection[]
      * @throws Exception
      */
-    private function getProperties(ModelInterface $model, DiInterface | ServiceCollection $container): array
+    private function getProperties(ModelInterface $model, DiInterface $container): array
     {
         if (false === is_object($container)) {
             throw new InvalidContainer();

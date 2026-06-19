@@ -16,14 +16,16 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Bind;
 use PDO;
 use Phalcon\DataMapper\Query\Bind;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class RemoveTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQueryBindRemove(): void
     {

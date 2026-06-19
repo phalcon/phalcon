@@ -16,7 +16,6 @@ namespace Phalcon\Mvc;
 use ArrayAccess;
 use Closure;
 use Phalcon\Cache\Adapter\AdapterInterface;
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Injectable;
@@ -136,9 +135,9 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Phalcon\Mvc\Micro constructor
      *
-     * @param DiInterface|Collection|null $container
+     * @param DiInterface|null $container
      */
-    public function __construct(DiInterface | Collection | null $container = null)
+    public function __construct(DiInterface | null $container = null)
     {
         if (null !== $container) {
             $this->setDi($container);

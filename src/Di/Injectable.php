@@ -54,9 +54,9 @@ use stdClass;
  *
  * @property AnnotationsMemory|AnnotationsAdapterInterface $annotations
  * @property AssetsManager                                 $assets
- * @property object|null                                   $container
+ * @property DiInterface|null                              $container
  * @property DbAdapterInterface                            $db
- * @property object|null                                   $di
+ * @property DiInterface|null                              $di
  * @property Cookies|CookiesInterface                      $cookies
  * @property Crypt|CryptInterface                          $crypt
  * @property EventsManager|EventsManagerInterface          $eventsManager
@@ -88,7 +88,7 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
      *
      * @param string $propertyName
      *
-     * @return mixed|object|void
+     * @return mixed
      */
     public function __get(string $propertyName)
     {
@@ -101,15 +101,16 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
         }
 
         /**
-         * Accessing the persistent property will create a session bag on any class.
-         * Di supports passing constructor args; Container does not - class name omitted.
+         * Accessing the persistent property will create a session bag on any class
          */
         if ('persistent' === $propertyName) {
-            if ($container instanceof DiInterface) {
-                $this->persistent = $container->get('sessionBag', [get_class($this)]);
-            } else {
-                $this->persistent = $container->get('sessionBag');
-            }
+            $this->persistent = $container->get(
+                'sessionBag',
+                [
+                    get_class($this),
+                    $container,
+                ]
+            );
 
             return $this->persistent;
         }
@@ -122,11 +123,7 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
          * component properties keep being populated as before.
          */
         if (true === $container->has($propertyName)) {
-            if ($container instanceof DiInterface) {
-                $service = $container->getShared($propertyName);
-            } else {
-                $service = $container->get($propertyName);
-            }
+            $service = $container->getShared($propertyName);
 
             if (property_exists($this, $propertyName)) {
                 $this->$propertyName = $service;
@@ -139,6 +136,8 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
          * A notice is shown if the property is not defined and isn't a valid service
          */
         trigger_error('Access to undefined property ' . $propertyName);
+
+        return null;
     }
 
     /**
@@ -152,7 +151,7 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): object | null
+    public function getDI(): DiInterface | null
     {
         if (null === $this->container) {
             $this->container = Di::getDefault();

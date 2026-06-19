@@ -17,13 +17,58 @@ use Phalcon\Cli\Router;
 use Phalcon\Cli\Router\Exception;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class HandleTest extends AbstractUnitTestCase
 {
     /**
-     * @dataProvider getExamplesDelimiter
-     *
+     * @issue  https://github.com/phalcon/cphalcon/security/advisories/GHSA-x7rj-f32v-7jjg
+     * @author https://github.com/nikkoenggaliano
+     * @since  2026-06-18
      */
+    public function testCliRouterHandleParamsNoCatastrophicBacktracking(): void
+    {
+        Route::reset();
+        Route::delimiter('/');
+
+        $router = new Router();
+
+        /**
+         * The default :task/:action/:params route still splits a multi-segment
+         * trailing path into individual parameters.
+         */
+        $router->handle('/products/show/1/2/3');
+
+        $this->assertSame('products', $router->getTaskName());
+        $this->assertSame('show', $router->getActionName());
+        $this->assertSame(['1', '2', '3'], $router->getParams());
+
+        /**
+         * Take the compiled pattern of the default :params route and match a
+         * crafted argument string: a long run of delimiters followed by an
+         * unmatchable byte. The previous (:delimiter.*)* was a nested quantifier
+         * that exhausted pcre.backtrack_limit on such input, while
+         * (:delimiter.*)? matches in linear time, so preg_match() completes
+         * without a PCRE error.
+         */
+        $pattern = '';
+
+        foreach ($router->getRoutes() as $route) {
+            if (str_contains($route->getCompiledPattern(), '(/.*)')) {
+                $pattern = $route->getCompiledPattern();
+
+                break;
+            }
+        }
+
+        $this->assertNotSame('', $pattern);
+
+        preg_match($pattern, '/a/a' . str_repeat('/', 50) . "\n\n");
+
+        $this->assertSame(PREG_NO_ERROR, preg_last_error());
+    }
+
+    #[DataProvider('getExamplesDelimiter')]
     public function testCliRouterHandleRouterDelimiter(
         string $uri,
         string $module,
@@ -65,10 +110,7 @@ final class HandleTest extends AbstractUnitTestCase
         $route = $router->add('route3', 'MyApp\\Tasks\\::show');
     }
 
-    /**
-     * @dataProvider getExamplesRouterParams
-     *
-     */
+    #[DataProvider('getExamplesRouterParams')]
     public function testCliRouterHandleRouterParams(
         string $uri,
         string $module,
@@ -599,11 +641,10 @@ final class HandleTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getExamplesRouterHandle
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13
      */
+    #[DataProvider('getExamplesRouterHandle')]
     public function testCliRouterHandle(
         array $uri,
         string $module,
@@ -623,10 +664,7 @@ final class HandleTest extends AbstractUnitTestCase
         );
     }
 
-    /**
-     * @dataProvider getExamplesRouter
-     *
-     */
+    #[DataProvider('getExamplesRouter')]
     public function testCliRouterHandleRouter(
         string $uri,
         string $module,

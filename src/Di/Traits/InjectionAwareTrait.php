@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Di\Traits;
 
+use Phalcon\Di\DiInterface;
+
 /**
  * This abstract class offers common access to the DI in a class
  *
@@ -29,12 +31,12 @@ trait InjectionAwareTrait
      *
      * @var object|null
      */
-    protected object | null $container = null;
+    protected DiInterface | null $container = null;
 
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): object | null
+    public function getDI(): DiInterface | null
     {
         return $this->container;
     }
@@ -42,7 +44,7 @@ trait InjectionAwareTrait
     /**
      * Sets the dependency injector
      */
-    public function setDI(object $container): void
+    public function setDI(DiInterface $container): void
     {
         $this->container = $container;
     }

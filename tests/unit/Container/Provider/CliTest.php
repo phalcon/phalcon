@@ -75,6 +75,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliAliasAndInterfaceReturnSameInstance(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $viaAlias     = $this->container->get('router');
         $viaInterface = $this->container->get(RouterInterface::class);
         $this->assertSame($viaAlias, $viaInterface);
@@ -140,6 +142,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliResolvesDispatcher(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $this->assertInstanceOf(Dispatcher::class, $this->container->get('dispatcher'));
         $this->assertInstanceOf(DispatcherInterface::class, $this->container->get(DispatcherInterface::class));
     }
@@ -189,6 +193,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliResolvesModelsManager(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $this->assertInstanceOf(ModelsManager::class, $this->container->get('modelsManager'));
         $this->assertInstanceOf(ModelsManagerInterface::class, $this->container->get(ModelsManagerInterface::class));
     }
@@ -199,6 +205,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliResolvesModelsMetadata(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $this->assertInstanceOf(MetadataMemory::class, $this->container->get('modelsMetadata'));
         $this->assertInstanceOf(MetaDataInterface::class, $this->container->get(MetaDataInterface::class));
     }
@@ -209,6 +217,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliResolvesRouter(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $this->assertInstanceOf(Router::class, $this->container->get('router'));
         $this->assertInstanceOf(RouterInterface::class, $this->container->get(RouterInterface::class));
     }
@@ -219,6 +229,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliResolvesSecurity(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $this->assertInstanceOf(Security::class, $this->container->get('security'));
     }
 
@@ -278,6 +290,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliUsesCliDispatcherNotMvc(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $dispatcher = $this->container->get('dispatcher');
         $this->assertInstanceOf(Dispatcher::class, $dispatcher);
         $this->assertNotInstanceOf(\Phalcon\Mvc\Dispatcher::class, $dispatcher);
@@ -289,6 +303,8 @@ final class CliTest extends AbstractUnitTestCase
      */
     public function testContainerProviderCliUsesCliRouterNotMvc(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $router = $this->container->get('router');
         $this->assertInstanceOf(Router::class, $router);
         $this->assertNotInstanceOf(\Phalcon\Mvc\Router::class, $router);

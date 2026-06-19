@@ -18,11 +18,15 @@ use Phalcon\Mvc\Model\MetaData\Stream;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Models\Robots;
 use Phalcon\Tests\Support\Traits\DiTrait;
+use PHPUnit\Framework\Attributes\Group;
 
 use function file_exists;
 use function file_put_contents;
 use function unlink;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class WriteTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
@@ -35,72 +39,5 @@ final class WriteTest extends AbstractDatabaseTestCase
     {
 
         $this->markTestSkipped('Need implementation');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function mvcModelMetadataStreamWriteException(IntegrationTester $I)
-    {
-
-        $directory = outputDir('tests/');
-        $fileName  = $directory . 'metadata';
-
-        $this->setNewFactoryDefault();
-        $this->setDiMysql();
-
-        $this->container->set(
-            'modelsMetadata',
-            function () use ($fileName) {
-                return new Stream(
-                    [
-                        'metaDataDir' => $fileName . '/',
-                    ]
-                );
-            }
-        );
-
-        $I->expectThrowable(
-            new Exception('Meta-Data directory cannot be written'),
-            function () use ($I, $fileName) {
-                if (file_exists($fileName)) {
-                    unlink($fileName);
-                }
-
-                $I->assertNotFalse(
-                    file_put_contents($fileName, '')
-                );
-
-                Robots::setup(
-                    [
-                        'exceptionOnFailedMetaDataSave' => true,
-                    ]
-                );
-
-                Robots::findFirst(1);
-            }
-        );
-
-        $I->expectThrowable(
-            new \Exception('Meta-Data directory cannot be written', 1024),
-            function () use ($I, $fileName) {
-                if (file_exists($fileName)) {
-                    unlink($fileName);
-                }
-
-                $I->assertNotFalse(
-                    file_put_contents($fileName, '')
-                );
-
-                Robots::setup(
-                    [
-                        'exceptionOnFailedMetaDataSave' => false,
-                    ]
-                );
-
-                Robots::findFirst(1);
-            }
-        );
     }
 }

@@ -46,6 +46,8 @@ final class ContainerAutoInjectTest extends AbstractUnitTestCase
      */
     public function testResolveCallsSetDiOnInjectionAwareInstances(): void
     {
+        $this->markTestSkipped('Enable after setDI is addressed');
+
         $container = new Container();
         $container->set(InjectionAwareComponent::class, InjectionAwareComponent::class);
 

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Application;
 
 use Phalcon\Application\Exceptions\ModuleNotRegistered;
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
@@ -48,9 +47,9 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     /**
      * AbstractApplication constructor.
      *
-     * @param DiInterface|Collection|null $container
+     * @param DiInterface|null $container
      */
-    public function __construct(DiInterface | Collection | null $container = null)
+    public function __construct(DiInterface | null $container = null)
     {
         if (null !== $container) {
             $this->container = $container;

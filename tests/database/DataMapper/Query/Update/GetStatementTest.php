@@ -16,16 +16,18 @@ namespace Phalcon\Tests\Database\DataMapper\Query\Update;
 use PDO;
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 use function sprintf;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class GetStatementTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20
-     *
-     * @group mysql
      */
     public function testDMQueryUpdateGetStatement(): void
     {

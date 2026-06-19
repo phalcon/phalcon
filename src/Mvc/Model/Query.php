@@ -16,7 +16,6 @@ namespace Phalcon\Mvc\Model;
 use PDOException;
 use Phalcon\Cache\CacheInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -274,14 +273,14 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Phalcon\Mvc\Model\Query constructor
      *
      * @param string|null                  $phql
-     * @param DiInterface|Collection|null  $container
+     * @param DiInterface|null  $container
      * @param array                        $options
      *
      * @throws Exception
      */
     public function __construct(
         protected string | null $phql = null,
-        DiInterface | Collection | null $container = null,
+        DiInterface | null $container = null,
         array $options = []
     ) {
         if (null !== $container) {
@@ -746,12 +745,12 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Sets the dependency injection container
      *
-     * @param object $container
+     * @param DiInterface $container
      *
      * @return void
      * @throws Exception
      */
-    public function setDI(object $container): void
+    public function setDI(DiInterface $container): void
     {
         if ($container instanceof DiInterface) {
             $manager = $container->getShared("modelsManager");

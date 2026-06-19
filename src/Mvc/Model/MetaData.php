@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
-use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\MetaData\Exceptions\CorruptedMetaData;
@@ -114,9 +113,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     protected array $columnMap = [];
 
     /**
-     * @var object|null
+     * @var DiInterface|null
      */
-    protected object | null $container = null;
+    protected DiInterface | null $container = null;
 
     /**
      * @var array
@@ -296,10 +295,10 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface|Collection
+     * @return DiInterface
      * @throws Exception
      */
-    public function getDI(): DiInterface | Collection
+    public function getDI(): DiInterface
     {
         $this->checkContainer(
             Exception::class,

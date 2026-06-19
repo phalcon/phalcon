@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use JsonSerializable;
-use Phalcon\Contracts\Container\Service\Collection as ServiceCollection;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
@@ -256,14 +255,14 @@ abstract class Model extends AbstractInjectionAware implements
      * Phalcon\Mvc\Model constructor
      *
      * @param array|null                     $data
-     * @param DiInterface|ServiceCollection|null $container
+     * @param DiInterface|null $container
      * @param ManagerInterface|null          $modelsManager
      *
      * @throws Exception
      */
     final public function __construct(
         array | null $data = null,
-        DiInterface | ServiceCollection | null $container = null,
+        DiInterface | null $container = null,
         ManagerInterface | null $modelsManager = null
     ) {
         /**
@@ -3047,11 +3046,11 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Create a criteria for a specific model
      *
-     * @param DiInterface|ServiceCollection|null $container
+     * @param DiInterface|null $container
      *
      * @return CriteriaInterface
      */
-    public static function query(DiInterface | ServiceCollection | null $container = null): CriteriaInterface
+    public static function query(DiInterface | null $container = null): CriteriaInterface
     {
         /**
          * Use the global dependency injector if there is no one defined

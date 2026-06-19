@@ -16,17 +16,19 @@ namespace Phalcon\Tests\Database\DataMapper\Pdo\ConnectionLocator;
 use Phalcon\DataMapper\Pdo\ConnectionLocator;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use PHPUnit\Framework\Attributes\Group;
 
 use function in_array;
 use function spl_object_hash;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class GetSetWriteTest extends AbstractDatabaseTestCase
 {
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionLocatorGetSetWrite(): void
     {
@@ -56,8 +58,6 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionLocatorGetWriteRandom(): void
     {
@@ -89,8 +89,6 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionLocatorGetWriteEmpty(): void
     {
@@ -104,8 +102,6 @@ final class GetSetWriteTest extends AbstractDatabaseTestCase
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25
-     *
-     * @group mysql
      */
     public function testDMPdoConnectionLocatorGetWriteException(): void
     {

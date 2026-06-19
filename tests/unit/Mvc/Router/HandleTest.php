@@ -21,7 +21,10 @@ use Phalcon\Mvc\Router\Route;
 use Phalcon\Tests\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use Phalcon\Tests\Unit\Mvc\Fake\RouterTrait;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+#[BackupGlobals(true)]
 final class HandleTest extends AbstractUnitTestCase
 {
     use DiTrait;
@@ -98,10 +101,7 @@ final class HandleTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @dataProvider groupsProvider
-     *
-     */
+    #[DataProvider('groupsProvider')]
     public function testMvcRouterHandleGroups(
         string $route,
         string $module,
@@ -185,6 +185,49 @@ final class HandleTest extends AbstractUnitTestCase
         $expected = ['56'];
         $actual   = $router->getParams();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/cphalcon/security/advisories/GHSA-x7rj-f32v-7jjg
+     * @author https://github.com/nikkoenggaliano
+     * @since  2026-06-18
+     */
+    public function testMvcRouterHandleParamsNoCatastrophicBacktracking(): void
+    {
+        $router = $this->getRouter();
+
+        /**
+         * The default /:controller/:action/:params route still splits a
+         * multi-segment trailing path into individual parameters.
+         */
+        $router->handle('/products/show/1/2/3');
+
+        $this->assertSame('products', $router->getControllerName());
+        $this->assertSame('show', $router->getActionName());
+        $this->assertSame(['1', '2', '3'], $router->getParams());
+
+        /**
+         * Take the compiled pattern of the default :params route and match a
+         * crafted URI: a long run of slashes followed by an unmatchable byte.
+         * The previous (/.*)* was a nested quantifier that exhausted
+         * pcre.backtrack_limit on such input, while (/.*)? matches in linear
+         * time, so preg_match() completes without a PCRE error.
+         */
+        $pattern = '';
+
+        foreach ($router->getRoutes() as $route) {
+            if (str_contains($route->getCompiledPattern(), '(/.*)')) {
+                $pattern = $route->getCompiledPattern();
+
+                break;
+            }
+        }
+
+        $this->assertNotSame('', $pattern);
+
+        preg_match($pattern, '/a/a' . str_repeat('/', 50) . "\n\n");
+
+        $this->assertSame(PREG_NO_ERROR, preg_last_error());
     }
 
     /**
@@ -278,12 +321,11 @@ final class HandleTest extends AbstractUnitTestCase
     }
 
     /**
-     * @dataProvider getUrlsWithColons
-     *
      * @issue        https://github.com/phalcon/cphalcon/issues/16741
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2025-04-04
      */
+    #[DataProvider('getUrlsWithColons')]
     public function testMvcRouterHandleWithColons(string $url): void
     {
         $this->setNewFactoryDefault();
