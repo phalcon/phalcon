@@ -121,11 +121,12 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      */
     public function testSupportDebugRenderHtmlWithBacktrace(): void
     {
+        $key = uniqid('var-');
         $exception = new Exception('exception message', 1234);
         $debug = new Debug();
         $debug->setShowBackTrace(true);
         $server = $_SERVER;
-        $_SERVER['DATA_DEBUG_TEST'] = 'test';
+        $_SERVER[$key] = uniqid('val-');
 
         $actual = $debug->renderHtml($exception);
 
@@ -138,7 +139,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
         $this->assertStringContainsString("data-tab='files'", $actual);
         $this->assertStringContainsString("data-tab='memory'", $actual);
 
-        $this->assertStringContainsString('DATA_DEBUG_TEST', $actual);
+        $this->assertStringContainsString($key, $actual);
     }
 
     /**
@@ -147,15 +148,16 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      */
     public function testSupportDebugRenderHtmlWithBacktraceAndBlacklist(): void
     {
+        $key = uniqid('var-');
         $exception = new Exception('exception message', 1234);
         $debug = new Debug();
         $server = $_SERVER;
-        $_SERVER['DATA_DEBUG_TEST'] = 'test';
+        $_SERVER[$key] = uniqid('val-');
 
         $debug->setShowBackTrace(true);
         $debug->setBlacklist(
             [
-                'server' => ['DATA_DEBUG_TEST'],
+                'server' => [$key],
             ],
         );
 
@@ -164,7 +166,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 
         $this->assertStringContainsString(self::TABS, $actual);
         $this->assertStringContainsString("data-tab='server'", $actual);
-        $this->assertStringNotContainsString('DATA_DEBUG_TEST', $actual);
+        $this->assertStringNotContainsString($key, $actual);
     }
 
     /**
@@ -173,15 +175,16 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      */
     public function testSupportDebugRenderHtmlWithRequestBlacklist(): void
     {
+        $key = uniqid('var-');
         $exception = new Exception('exception message', 1234);
         $debug = new Debug();
         $request = $_REQUEST;
-        $_REQUEST['DATA_REQUEST_TEST'] = 'test';
+        $_REQUEST[$key] = uniqid('val-');
 
         $debug->setShowBackTrace(true);
         $debug->setBlacklist(
             [
-                'request' => ['DATA_REQUEST_TEST'],
+                'request' => [$key],
             ],
         );
 
@@ -189,7 +192,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
         $_REQUEST = $request;
 
         $this->assertStringContainsString(self::TABS, $actual);
-        $this->assertStringNotContainsString('DATA_REQUEST_TEST', $actual);
+        $this->assertStringNotContainsString($key, $actual);
     }
 
     /**
@@ -198,13 +201,15 @@ final class RenderHtmlTest extends AbstractUnitTestCase
      */
     public function testSupportDebugRenderHtmlWithDebugVar(): void
     {
+        $value = uniqid('var-');
         $exception = new Exception('exception message', 1234);
         $debug = new Debug();
         $debug->setShowBackTrace(true);
-        $debug->debugVar('my debug variable');
+        $debug->debugVar($value);
 
         $actual = $debug->renderHtml($exception);
 
         $this->assertStringContainsString("id='variables'", $actual);
+        $this->assertStringContainsString($value, $actual);
     }
 }
