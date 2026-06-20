@@ -292,13 +292,13 @@ class Dump implements TemplateAware
                 . '(<span style="%style%">%count%</span>) (',
             'arrayKey'                => '[<span style="%style%">%key%</span>] => ',
             'objectHeader'            => '<b style="%style%">Object</b> %class%',
-            'objectExtends'           => ' <b style="%style%">extends</b> {parent}',
+            'objectExtends'           => ' <b style="%style%">extends</b> %parent%',
             'objectProperty'          => '-><span style="%style%">%key%</span> '
                 . '(<span style="%style%">%type%</span>) = ',
             'objectMethods'           => "%class% <b style=\"%style%\">methods</b>: "
                 . "(<span style=\"%style%\">%count%</span>) (\n",
-            'objectMethod'            => "-><span style=\"%style%\">:method</span>();\n",
-            'objectMethodConstructor' => "-><span style=\"%style%\">:method</span>(); "
+            'objectMethod'            => "-><span style=\"%style%\">%method%</span>();\n",
+            'objectMethodConstructor' => "-><span style=\"%style%\">%method%</span>(); "
                 . "[<b style=\"%style%\">constructor</b>]\n",
             default                   => '',
         };

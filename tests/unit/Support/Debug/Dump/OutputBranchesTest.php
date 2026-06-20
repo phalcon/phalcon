@@ -29,6 +29,17 @@ final class OutputBranchesTest extends AbstractUnitTestCase
         $this->assertStringContainsString('[already listed]', $actual);
     }
 
+    public function testResolvesParentClassAndMethodNames(): void
+    {
+        $actual = (new Dump())->variable(new SampleMethods());
+
+        $this->assertStringContainsString('extends', $actual);
+        $this->assertStringContainsString('ClassProperties', $actual);
+        $this->assertStringContainsString('sample', $actual);
+        $this->assertStringNotContainsString('{parent}', $actual);
+        $this->assertStringNotContainsString(':method', $actual);
+    }
+
     public function testBoolean(): void
     {
         $dump = new Dump();
