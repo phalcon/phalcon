@@ -24,6 +24,7 @@
     "ext-imagick": "to use Image\\Adapter\\Imagick",
     "ext-memcached": "to use Cache\\Adapter\\Libmemcached, Session\\Adapter\\Libmemcached, Storage\\Adapter\\Libmemcached",
     "ext-openssl": "to use Encryption\\Crypt",
+    "ext-pcntl": "to use signal-based graceful shutdown in Queue\\Consumer\\Worker",
     "ext-redis": "to use Cache\\Adapter\\Redis, Session\\Adapter\\Redis, Storage\\Adapter\\Redis",
     "ext-yaml": "to use Config\\Adapter\\Yaml"
   },
