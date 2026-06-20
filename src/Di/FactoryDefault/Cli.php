@@ -27,6 +27,7 @@ use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
+use Phalcon\Queue\QueueFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
@@ -82,6 +83,7 @@ class Cli extends FactoryDefault
             'helper'             => new Service(HelperFactory::class, true),
             'modelsManager'      => new Service(ModelsManager::class, true),
             'modelsMetadata'     => new Service(MetadataMemory::class, true),
+            'queueFactory'       => new Service(QueueFactory::class, true),
             'router'             => new Service(Router::class, true),
             'security'           => new Service(Security::class, true),
             'settings'           => new Service(Settings::class, true),

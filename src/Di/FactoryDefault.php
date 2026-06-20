@@ -35,6 +35,7 @@ use Phalcon\Mvc\Model\MetaData\Memory as MetadataManager;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
+use Phalcon\Queue\QueueFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
@@ -60,6 +61,7 @@ use Phalcon\Support\Settings;
  * @property HelperFactory      $helper
  * @property ModelsManager      $modelsManager
  * @property MetadataManager    $modelsMetadata
+ * @property QueueFactory       $queueFactory
  * @property Request            $request
  * @property Response           $response
  * @property Router             $router
@@ -131,6 +133,7 @@ class FactoryDefault extends Di
             'modelsEventFactory' => new Service(Factory::class, true),
             'modelsManager'      => new Service(ModelsManager::class, true),
             'modelsMetadata'     => new Service(MetadataManager::class, true),
+            'queueFactory'       => new Service(QueueFactory::class, true),
             'request'            => new Service(Request::class, true),
             'response'           => new Service(Response::class, true),
             'router'             => new Service(Router::class, true),
