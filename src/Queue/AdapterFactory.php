@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Queue;
 
 use Phalcon\Contracts\Queue\ConnectionFactory as ConnectionFactoryInterface;
+use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConnectionFactory;
 use Phalcon\Queue\Adapter\Memory\MemoryConnectionFactory;
 use Phalcon\Queue\Adapter\Redis\RedisConnectionFactory;
 use Phalcon\Queue\Adapter\Stream\StreamConnectionFactory;
@@ -46,16 +47,17 @@ class AdapterFactory
     }
 
     /**
-     * Returns the available adapters. Beanstalk is added in its phase.
+     * Returns the available adapters.
      *
      * @return string[]
      */
     protected function getServices(): array
     {
         return [
-            'memory' => MemoryConnectionFactory::class,
-            'redis'  => RedisConnectionFactory::class,
-            'stream' => StreamConnectionFactory::class,
+            'beanstalk' => BeanstalkConnectionFactory::class,
+            'memory'    => MemoryConnectionFactory::class,
+            'redis'     => RedisConnectionFactory::class,
+            'stream'    => StreamConnectionFactory::class,
         ];
     }
 }
