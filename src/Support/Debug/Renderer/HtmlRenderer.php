@@ -480,21 +480,21 @@ class HtmlRenderer implements Renderer
         if (null !== $item->getClassName()) {
             $name = $this->escapeString($item->getClassName());
             $link = $item->getClassLink();
-            $cls  = (null !== $link)
+            $classHtml = (null !== $link)
                 ? $this->toInterpolate($this->getTemplate('link'), ['url' => $link, 'name' => $name])
                 : $name;
 
-            $html .= "<span class='cls'>" . $cls . "</span>";
+            $html .= "<span class='cls'>" . $classHtml . "</span>";
             $html .= "<span class='op'>" . (string)$item->getType() . "</span>";
         }
 
         $fnName = $this->escapeString($item->getFunctionName());
         $fnLink = $item->getFunctionLink();
-        $fn     = (null !== $fnLink)
+        $functionHtml = (null !== $fnLink)
             ? $this->toInterpolate($this->getTemplate('link'), ['url' => $fnLink, 'name' => $fnName])
             : $fnName;
 
-        $html .= "<span class='fn'>" . $fn . "</span>";
+        $html .= "<span class='fn'>" . $functionHtml . "</span>";
 
         if (true === $item->hasArgs()) {
             $arguments = [];
