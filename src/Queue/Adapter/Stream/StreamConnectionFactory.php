@@ -27,14 +27,8 @@ use function sys_get_temp_dir;
  */
 class StreamConnectionFactory implements ConnectionFactoryInterface
 {
-    /**
-     * @var array
-     */
-    protected array $options = [];
-
-    public function __construct(array $options = [])
+    public function __construct(protected array $options = [])
     {
-        $this->options = $options;
     }
 
     public function createContext(): ContextInterface

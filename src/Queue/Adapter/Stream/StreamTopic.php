@@ -20,11 +20,8 @@ use Phalcon\Contracts\Queue\Topic as TopicInterface;
  */
 class StreamTopic implements TopicInterface
 {
-    protected string $topicName = "";
-
-    public function __construct(string $topicName)
+    public function __construct(protected string $topicName)
     {
-        $this->topicName = $topicName;
     }
 
     public function getTopicName(): string

@@ -23,13 +23,8 @@ use Phalcon\Queue\Adapter\AbstractConsumer;
  */
 class MemoryConsumer extends AbstractConsumer
 {
-    protected MemoryContext $context;
-    protected QueueInterface $queue;
-
-    public function __construct(MemoryContext $context, QueueInterface $queue)
+    public function __construct(protected MemoryContext $context, protected QueueInterface $queue)
     {
-        $this->context = $context;
-        $this->queue   = $queue;
     }
 
     /**

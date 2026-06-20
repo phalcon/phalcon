@@ -29,11 +29,8 @@ use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
  */
 class MemoryProducer implements ProducerInterface
 {
-    protected MemoryContext $context;
-
-    public function __construct(MemoryContext $context)
+    public function __construct(protected MemoryContext $context)
     {
-        $this->context = $context;
     }
 
     public function getDeliveryDelay(): ?int

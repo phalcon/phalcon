@@ -19,17 +19,19 @@ namespace Phalcon\Queue\Consumer;
  */
 class WorkerOptions
 {
-    protected int $jitter = 0;
-    protected int $maxMemory = 0;
-    protected int $maxMessages = 0;
-    protected int $maxSeconds = 0;
-
-    public function __construct(int $maxMessages = 0, int $maxSeconds = 0, int $maxMemory = 0, int $jitter = 0)
-    {
-        $this->maxMessages = $maxMessages;
-        $this->maxSeconds  = $maxSeconds;
-        $this->maxMemory   = $maxMemory;
-        $this->jitter      = $jitter;
+    /**
+     * @param int $maxMessages Maximum number of messages to process (0 = no limit).
+     * @param int $maxSeconds  Maximum run time in seconds (0 = no limit).
+     * @param int $maxMemory   Memory ceiling in megabytes (0 = no limit).
+     * @param int $jitter      Seconds added to maxSeconds (randomised per worker),
+     *                         so a pool does not restart in lockstep.
+     */
+    public function __construct(
+        protected int $maxMessages = 0,
+        protected int $maxSeconds = 0,
+        protected int $maxMemory = 0,
+        protected int $jitter = 0
+    ) {
     }
 
     public function getJitter(): int

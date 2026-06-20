@@ -20,11 +20,8 @@ use Phalcon\Contracts\Queue\Queue as QueueInterface;
  */
 class StreamQueue implements QueueInterface
 {
-    protected string $queueName = "";
-
-    public function __construct(string $queueName)
+    public function __construct(protected string $queueName)
     {
-        $this->queueName = $queueName;
     }
 
     public function getQueueName(): string

@@ -27,7 +27,6 @@ use function usleep;
  */
 class StreamSubscriptionConsumer implements SubscriptionConsumerInterface
 {
-    protected StreamContext $context;
     protected int $pollInterval = 200;
 
     /**
@@ -37,9 +36,8 @@ class StreamSubscriptionConsumer implements SubscriptionConsumerInterface
      */
     protected array $subscriptions = [];
 
-    public function __construct(StreamContext $context)
+    public function __construct(protected StreamContext $context)
     {
-        $this->context = $context;
     }
 
     public function consume(int $timeout = 0): void

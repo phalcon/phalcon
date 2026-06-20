@@ -23,13 +23,11 @@ use Phalcon\Queue\Adapter\AbstractConsumer;
  */
 class StreamConsumer extends AbstractConsumer
 {
-    protected StreamContext $context;
-    protected QueueInterface $queue;
-
-    public function __construct(StreamContext $context, QueueInterface $queue, int $pollInterval = 200)
-    {
-        $this->context      = $context;
-        $this->queue        = $queue;
+    public function __construct(
+        protected StreamContext $context,
+        protected QueueInterface $queue,
+        int $pollInterval = 200
+    ) {
         $this->pollInterval = $pollInterval;
     }
 

@@ -29,11 +29,8 @@ use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
  */
 class StreamProducer implements ProducerInterface
 {
-    protected StreamContext $context;
-
-    public function __construct(StreamContext $context)
+    public function __construct(protected StreamContext $context)
     {
-        $this->context = $context;
     }
 
     public function getDeliveryDelay(): ?int

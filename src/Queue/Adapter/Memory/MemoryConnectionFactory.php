@@ -21,7 +21,7 @@ use Phalcon\Contracts\Queue\Context as ContextInterface;
  */
 class MemoryConnectionFactory implements ConnectionFactoryInterface
 {
-    public function __construct(array $options = [])
+    public function __construct(protected array $options = [])
     {
     }
 

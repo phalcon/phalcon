@@ -41,13 +41,11 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
      * @var array
      */
     protected array $bindings = [];
-    protected ContextInterface $context;
     protected int $pollInterval = 200;
     protected bool $shouldStop = false;
 
-    public function __construct(ContextInterface $context)
+    public function __construct(protected ContextInterface $context)
     {
-        $this->context = $context;
     }
 
     public function bind(QueueInterface $queue, ProcessorInterface $processor): QueueConsumer

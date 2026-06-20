@@ -27,7 +27,6 @@ use function usleep;
  */
 class MemorySubscriptionConsumer implements SubscriptionConsumerInterface
 {
-    protected MemoryContext $context;
     protected int $pollInterval = 200;
 
     /**
@@ -37,9 +36,8 @@ class MemorySubscriptionConsumer implements SubscriptionConsumerInterface
      */
     protected array $subscriptions = [];
 
-    public function __construct(MemoryContext $context)
+    public function __construct(protected MemoryContext $context)
     {
-        $this->context = $context;
     }
 
     public function consume(int $timeout = 0): void

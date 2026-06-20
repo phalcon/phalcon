@@ -62,13 +62,11 @@ use const PHP_EOL;
  */
 class StreamContext implements ContextInterface
 {
-    protected int $pollInterval = 200;
     protected string $storageDir = "";
 
-    public function __construct(string $storageDir, int $pollInterval = 200)
+    public function __construct(string $storageDir, protected int $pollInterval = 200)
     {
-        $this->storageDir   = rtrim($storageDir, "/") . "/";
-        $this->pollInterval = $pollInterval;
+        $this->storageDir = rtrim($storageDir, "/") . "/";
     }
 
     public function close(): void

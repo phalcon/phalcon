@@ -22,15 +22,11 @@ use Phalcon\Contracts\Queue\Queue as QueueInterface;
  */
 class BoundProcessor
 {
-    protected ConsumerInterface $consumer;
-    protected ProcessorInterface $processor;
-    protected QueueInterface $queue;
-
-    public function __construct(QueueInterface $queue, ProcessorInterface $processor, ConsumerInterface $consumer)
-    {
-        $this->queue     = $queue;
-        $this->processor = $processor;
-        $this->consumer  = $consumer;
+    public function __construct(
+        protected QueueInterface $queue,
+        protected ProcessorInterface $processor,
+        protected ConsumerInterface $consumer
+    ) {
     }
 
     public function getConsumer(): ConsumerInterface

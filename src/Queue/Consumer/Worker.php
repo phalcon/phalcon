@@ -29,13 +29,11 @@ use function time;
  */
 class Worker
 {
-    protected QueueConsumer $consumer;
     protected WorkerOptions $options;
 
-    public function __construct(QueueConsumer $consumer, ?WorkerOptions $options = null)
+    public function __construct(protected QueueConsumer $consumer, ?WorkerOptions $options = null)
     {
-        $this->consumer = $consumer;
-        $this->options  = $options ?? new WorkerOptions();
+        $this->options = $options ?? new WorkerOptions();
     }
 
     /**
