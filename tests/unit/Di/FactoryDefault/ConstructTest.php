@@ -35,6 +35,7 @@ use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
+use Phalcon\Queue\QueueFactory;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
@@ -114,6 +115,10 @@ final class ConstructTest extends AbstractUnitTestCase
                 Memory::class,
             ],
             [
+                'queueFactory',
+                QueueFactory::class,
+            ],
+            [
                 'request',
                 Request::class,
             ],
@@ -160,7 +165,7 @@ final class ConstructTest extends AbstractUnitTestCase
     {
         $container = new FactoryDefault();
 
-        $expected = 24;
+        $expected = 25;
         $actual   = count($container->getServices());
         $this->assertSame($expected, $actual);
     }
