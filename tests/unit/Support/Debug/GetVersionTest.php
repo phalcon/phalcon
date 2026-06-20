@@ -33,8 +33,7 @@ final class GetVersionTest extends AbstractUnitTestCase
                . $version->getPart(Version::VERSION_MEDIUM) . "/";
         $versionString = $version->get();
 
-        $expected = "<a class='version-badge' href='{$link}' target='_new'>"
-            . "Framework <b>{$versionString}</b></a>";
+        $expected = "<a class='version-badge' href='{$link}' target='_new'><b>v{$versionString}</b></a>";
 
         $actual = $debug->getVersion();
         $this->assertSame($expected, $actual);

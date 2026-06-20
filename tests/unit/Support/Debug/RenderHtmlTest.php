@@ -44,6 +44,7 @@ final class RenderHtmlTest extends AbstractUnitTestCase
             . $version->getPart(Version::VERSION_MEDIUM) . "/";
         $uri           = "https://assets.phalcon.io/debug/6.0.x/";
         $php           = PHP_VERSION;
+        $logo          = "https://assets.phalcon.io/phalcon/images/svg/logo--tablet.svg";
 
         $expected = "<!DOCTYPE html>
 <html lang='en' data-theme='light'>
@@ -58,11 +59,11 @@ final class RenderHtmlTest extends AbstractUnitTestCase
 <body>
 <div class='wrap'>
     <div class='masthead'>
-        <div class='brand'><span class='logo'>P</span><span>Phalcon Debug</span></div>
+        <div class='brand'><img class='logo' src='{$logo}' alt='Phalcon' /><span>Phalcon Debug</span></div>
         <div class='actions-top'>
             <button class='btn' data-action='copy-trace'>Copy trace</button>
             <button class='btn' data-action='toggle-theme' title='Toggle theme'>Theme</button>
-            <a class='version-badge' href='{$link}' target='_new'>Framework <b>{$versionString}</b></a>
+            <a class='version-badge' href='{$link}' target='_new'><b>v{$versionString}</b></a>
         </div>
     </div>
     <div class='error-card'>
