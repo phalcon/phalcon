@@ -358,7 +358,7 @@ class Sqlite extends PdoAdapter
                     0 !== strcasecmp($field[4], "null")
                 ) {
                     $definition["default"] = preg_replace(
-                        "/^'|'$/",
+                        "/(?:^')|(?:'$)/",
                         "",
                         $field[4]
                     );
