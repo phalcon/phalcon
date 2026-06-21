@@ -79,9 +79,9 @@ class BeanstalkConnection
         }
 
         if ($this->persistent) {
-            $connection = pfsockopen($this->host, $this->port);
+            $connection = @pfsockopen($this->host, $this->port);
         } else {
-            $connection = fsockopen($this->host, $this->port);
+            $connection = @fsockopen($this->host, $this->port);
         }
 
         if (!is_resource($connection)) {
