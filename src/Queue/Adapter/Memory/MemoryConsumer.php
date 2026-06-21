@@ -32,8 +32,9 @@ use Phalcon\Queue\Adapter\AbstractConsumer;
  */
 class MemoryConsumer extends AbstractConsumer
 {
-    public function __construct(protected MemoryContext $context, protected QueueInterface $queue)
+    public function __construct(protected MemoryContext $context, QueueInterface $queue)
     {
+        $this->queue = $queue;
     }
 
     /**
@@ -41,11 +42,6 @@ class MemoryConsumer extends AbstractConsumer
      */
     public function acknowledge(MessageInterface $message): void
     {
-    }
-
-    public function getQueue(): QueueInterface
-    {
-        return $this->queue;
     }
 
     public function receiveNoWait(): ?MessageInterface

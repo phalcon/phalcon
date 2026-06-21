@@ -34,9 +34,10 @@ class StreamConsumer extends AbstractConsumer
 {
     public function __construct(
         protected StreamContext $context,
-        protected QueueInterface $queue,
+        QueueInterface $queue,
         int $pollInterval = 200
     ) {
+        $this->queue        = $queue;
         $this->pollInterval = $pollInterval;
     }
 
@@ -45,11 +46,6 @@ class StreamConsumer extends AbstractConsumer
      */
     public function acknowledge(MessageInterface $message): void
     {
-    }
-
-    public function getQueue(): QueueInterface
-    {
-        return $this->queue;
     }
 
     public function receiveNoWait(): ?MessageInterface

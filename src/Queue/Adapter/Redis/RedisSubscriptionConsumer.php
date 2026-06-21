@@ -22,77 +22,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Queue\Adapter\Redis;
 
-use Phalcon\Contracts\Queue\Consumer as ConsumerInterface;
-use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
-
-use function call_user_func;
-use function microtime;
-use function usleep;
+use Phalcon\Queue\Adapter\AbstractSubscriptionConsumer;
 
 /**
- * Consumes from several Redis queues at once, round-robin polling each
- * subscribed consumer and dispatching messages to its callback. A callback
- * returning false stops consumption.
+ * Consumes from several Redis queues at once. The round-robin poll loop lives
+ * in AbstractSubscriptionConsumer.
  */
-class RedisSubscriptionConsumer implements SubscriptionConsumerInterface
+class RedisSubscriptionConsumer extends AbstractSubscriptionConsumer
 {
     /**
-     * Subscriptions keyed by queue name: [consumer, callback].
-     *
-     * @var array
+     * The context is retained for transports that may later need it for a
+     * native multi-queue receive; the shared poll loop does not use it.
      */
-    protected array $subscriptions = [];
-
-    public function __construct(
-        protected RedisContext $context,
-        protected int $pollInterval = 200
-    ) {
-    }
-
-    public function consume(int $timeout = 0): void
+    public function __construct(protected RedisContext $context, int $pollInterval = 200)
     {
-        if (empty($this->subscriptions)) {
-            return;
-        }
-
-        $sleep     = $this->pollInterval * 1000;
-        $startTime = (int) (microtime(true) * 1000);
-
-        while (true) {
-            foreach ($this->subscriptions as $subscription) {
-                $consumer = $subscription[0];
-                $callback = $subscription[1];
-                $message  = $consumer->receiveNoWait();
-
-                if ($message !== null) {
-                    $result = call_user_func($callback, $message, $consumer);
-
-                    if ($result === false) {
-                        return;
-                    }
-                }
-            }
-
-            if ($timeout > 0 && ((int) (microtime(true) * 1000)) - $startTime >= $timeout) {
-                return;
-            }
-
-            usleep($sleep);
-        }
-    }
-
-    public function subscribe(ConsumerInterface $consumer, callable $callback): void
-    {
-        $this->subscriptions[$consumer->getQueue()->getQueueName()] = [$consumer, $callback];
-    }
-
-    public function unsubscribe(ConsumerInterface $consumer): void
-    {
-        unset($this->subscriptions[$consumer->getQueue()->getQueueName()]);
-    }
-
-    public function unsubscribeAll(): void
-    {
-        $this->subscriptions = [];
+        $this->pollInterval = $pollInterval;
     }
 }

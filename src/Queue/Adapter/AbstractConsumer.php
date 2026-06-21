@@ -40,10 +40,14 @@ use function usleep;
 abstract class AbstractConsumer implements ConsumerInterface
 {
     protected int $pollInterval = 200;
+    protected QueueInterface $queue;
 
     abstract public function acknowledge(MessageInterface $message): void;
 
-    abstract public function getQueue(): QueueInterface;
+    public function getQueue(): QueueInterface
+    {
+        return $this->queue;
+    }
 
     public function receive(int $timeout = 0): ?MessageInterface
     {

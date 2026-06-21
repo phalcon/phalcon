@@ -47,8 +47,10 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
 
     public function __construct(
         protected BeanstalkConnection $connection,
-        protected QueueInterface $queue
+        QueueInterface $queue
     ) {
+        $this->queue = $queue;
+
         $tube = $queue->getQueueName();
 
         $connection->watchTube($tube);
@@ -61,11 +63,6 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
     public function acknowledge(MessageInterface $message): void
     {
         $this->connection->deleteJob($this->resolveJobId($message));
-    }
-
-    public function getQueue(): QueueInterface
-    {
-        return $this->queue;
     }
 
     public function receive(int $timeout = 0): ?MessageInterface
@@ -114,7 +111,7 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
             return null;
         }
 
-        $data = unserialize((string) $job[1]);
+        $data = unserialize((string) $job[1], ["allowed_classes" => false]);
 
         if (!is_array($data)) {
             return null;

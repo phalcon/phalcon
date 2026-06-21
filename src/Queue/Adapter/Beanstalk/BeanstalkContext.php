@@ -30,6 +30,8 @@ use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
 use Phalcon\Contracts\Queue\Topic as TopicInterface;
+use Phalcon\Queue\Adapter\GenericQueue;
+use Phalcon\Queue\Adapter\GenericTopic;
 use Phalcon\Queue\Exceptions\InvalidDestinationException;
 
 use function uniqid;
@@ -85,7 +87,7 @@ class BeanstalkContext implements ContextInterface
 
     public function createQueue(string $queueName): QueueInterface
     {
-        return new BeanstalkQueue($queueName);
+        return new GenericQueue($queueName);
     }
 
     public function createSubscriptionConsumer(): SubscriptionConsumerInterface
@@ -95,12 +97,12 @@ class BeanstalkContext implements ContextInterface
 
     public function createTemporaryQueue(): QueueInterface
     {
-        return new BeanstalkQueue(uniqid("phalcon_queue_", true));
+        return new GenericQueue(uniqid("phalcon_queue_", true));
     }
 
     public function createTopic(string $topicName): TopicInterface
     {
-        return new BeanstalkTopic($topicName);
+        return new GenericTopic($topicName);
     }
 
     /**

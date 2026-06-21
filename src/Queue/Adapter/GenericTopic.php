@@ -20,21 +20,23 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Queue\Adapter\Redis;
+namespace Phalcon\Queue\Adapter;
 
-use Phalcon\Contracts\Queue\Queue as QueueInterface;
+use Phalcon\Contracts\Queue\Topic as TopicInterface;
 
 /**
- * A named Redis queue destination.
+ * A named topic destination shared by every transport. A topic name is the
+ * only knowledge a destination carries, so the adapters need no transport
+ * specific subclass.
  */
-class RedisQueue implements QueueInterface
+class GenericTopic implements TopicInterface
 {
-    public function __construct(protected string $queueName)
+    public function __construct(protected string $topicName)
     {
     }
 
-    public function getQueueName(): string
+    public function getTopicName(): string
     {
-        return $this->queueName;
+        return $this->topicName;
     }
 }

@@ -37,8 +37,9 @@ class RedisConsumer extends AbstractConsumer
 {
     public function __construct(
         protected RedisContext $context,
-        protected QueueInterface $queue
+        QueueInterface $queue
     ) {
+        $this->queue = $queue;
     }
 
     /**
@@ -46,11 +47,6 @@ class RedisConsumer extends AbstractConsumer
      */
     public function acknowledge(MessageInterface $message): void
     {
-    }
-
-    public function getQueue(): QueueInterface
-    {
-        return $this->queue;
     }
 
     public function receive(int $timeout = 0): ?MessageInterface

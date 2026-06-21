@@ -20,14 +20,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Queue\Adapter\Memory;
+namespace Phalcon\Queue\Adapter;
 
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 
 /**
- * A named in-process queue destination.
+ * A named queue destination shared by every transport. A queue name is the
+ * only knowledge a destination carries, so the adapters need no transport
+ * specific subclass.
  */
-class MemoryQueue implements QueueInterface
+class GenericQueue implements QueueInterface
 {
     public function __construct(protected string $queueName)
     {

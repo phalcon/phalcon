@@ -24,6 +24,7 @@ namespace Phalcon\Queue\Adapter\Beanstalk;
 
 use Phalcon\Queue\Exceptions\Exception;
 
+use function array_keys;
 use function explode;
 use function fclose;
 use function feof;
@@ -49,6 +50,15 @@ class BeanstalkConnection
      * @var resource|null
      */
     protected $connection = null;
+    protected string $usedTube = "default";
+
+    /**
+     * Tubes currently on the watch list, keyed by tube name. A fresh
+     * connection watches "default".
+     *
+     * @var array<string, bool>
+     */
+    protected array $watchedTubes = ["default" => true];
 
     public function __construct(
         protected string $host = "127.0.0.1",
@@ -92,6 +102,8 @@ class BeanstalkConnection
 
         $this->connection = $connection;
 
+        $this->restoreSession();
+
         return $connection;
     }
 
@@ -128,7 +140,13 @@ class BeanstalkConnection
     {
         $this->write("ignore " . $tube);
 
-        return ($this->readStatus()[0] ?? "") === "WATCHING";
+        $result = ($this->readStatus()[0] ?? "") === "WATCHING";
+
+        if ($result) {
+            unset($this->watchedTubes[$tube]);
+        }
+
+        return $result;
     }
 
     /**
@@ -266,7 +284,13 @@ class BeanstalkConnection
     {
         $this->write("use " . $tube);
 
-        return ($this->readStatus()[0] ?? "") === "USING";
+        $result = ($this->readStatus()[0] ?? "") === "USING";
+
+        if ($result) {
+            $this->usedTube = $tube;
+        }
+
+        return $result;
     }
 
     /**
@@ -276,7 +300,13 @@ class BeanstalkConnection
     {
         $this->write("watch " . $tube);
 
-        return ($this->readStatus()[0] ?? "") === "WATCHING";
+        $result = ($this->readStatus()[0] ?? "") === "WATCHING";
+
+        if ($result) {
+            $this->watchedTubes[$tube] = true;
+        }
+
+        return $result;
     }
 
     /**
@@ -293,5 +323,30 @@ class BeanstalkConnection
         $packet = $data . "\r\n";
 
         return fwrite($connection, $packet, strlen($packet));
+    }
+
+    /**
+     * Re-issues the use/watch/ignore commands after a reconnect so a new
+     * socket resumes the tube selection the caller established. A fresh
+     * connection only uses and watches "default".
+     */
+    private function restoreSession(): void
+    {
+        if ($this->usedTube !== "default") {
+            $this->write("use " . $this->usedTube);
+            $this->readStatus();
+        }
+
+        foreach (array_keys($this->watchedTubes) as $tube) {
+            if ($tube !== "default") {
+                $this->write("watch " . $tube);
+                $this->readStatus();
+            }
+        }
+
+        if (!isset($this->watchedTubes["default"])) {
+            $this->write("ignore default");
+            $this->readStatus();
+        }
     }
 }

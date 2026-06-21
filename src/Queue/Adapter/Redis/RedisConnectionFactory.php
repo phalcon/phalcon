@@ -25,12 +25,17 @@ namespace Phalcon\Queue\Adapter\Redis;
 use Phalcon\Contracts\Queue\ConnectionFactory as ConnectionFactoryInterface;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Queue\Exceptions\Exception;
-use Redis as RedisService;
+use Phalcon\Storage\Adapter\Redis as StorageRedis;
+use Phalcon\Storage\Exception as StorageException;
+use Phalcon\Storage\SerializerFactory;
 
-use function sprintf;
+use function array_merge;
 
 /**
- * Connects to a Redis server (ext-redis) and builds a RedisContext.
+ * Connects to a Redis server (ext-redis) and builds a RedisContext. The
+ * connection (connect/pconnect, auth, database select) is delegated to
+ * Phalcon\Storage\Adapter\Redis so the queue reuses the framework's hardened
+ * connection handling instead of re-implementing it.
  *
  * Options:
  *   - host:         server host (default 127.0.0.1).
@@ -52,37 +57,35 @@ class RedisConnectionFactory implements ConnectionFactoryInterface
     public function createContext(): ContextInterface
     {
         $options      = $this->options;
-        $host         = (string) ($options["host"] ?? "127.0.0.1");
-        $port         = (int) ($options["port"] ?? 6379);
-        $timeout      = (float) ($options["timeout"] ?? 0.0);
-        $persistent   = (bool) ($options["persistent"] ?? false);
-        $persistentId = (string) ($options["persistentId"] ?? "");
-        $auth         = $options["auth"] ?? "";
-        $index        = (int) ($options["index"] ?? 0);
         $prefix       = (string) ($options["prefix"] ?? "phalcon_queue:");
         $pollInterval = (int) ($options["pollInterval"] ?? 200);
 
-        $redis = new RedisService();
+        /**
+         * Disable the cache adapter's own key prefix and serializer so the
+         * queue keeps full control of its keys and message payloads; otherwise
+         * keys would be double-prefixed and payloads double-encoded. The
+         * adapter also performs authentication and database selection, so none
+         * of that is repeated here.
+         */
+        $adapter = new StorageRedis(
+            new SerializerFactory(),
+            array_merge(
+                $options,
+                [
+                    "prefix"            => "",
+                    "defaultSerializer" => "none",
+                ]
+            )
+        );
 
-        if ($persistent) {
-            $parameter = !empty($persistentId) ? $persistentId : "persistentId" . $index;
-            $result    = $redis->pconnect($host, $port, $timeout, $parameter);
-        } else {
-            $result = $redis->connect($host, $port, $timeout);
-        }
-
-        if (!$result) {
-            throw new Exception(
-                sprintf("Could not connect to the Redis server [%s:%s]", $host, $port)
-            );
-        }
-
-        if (!empty($auth) && true !== $redis->auth($auth)) {
-            throw new Exception("Failed to authenticate with the Redis server");
-        }
-
-        if ($index > 0 && true !== $redis->select($index)) {
-            throw new Exception("Failed to select the Redis database index");
+        /**
+         * Surface connect/auth/select failures as a queue exception so every
+         * adapter honours the QueueThrowable contract.
+         */
+        try {
+            $redis = $adapter->getAdapter();
+        } catch (StorageException $exception) {
+            throw new Exception($exception->getMessage(), (int) $exception->getCode(), $exception);
         }
 
         return new RedisContext($redis, $prefix, $pollInterval);
