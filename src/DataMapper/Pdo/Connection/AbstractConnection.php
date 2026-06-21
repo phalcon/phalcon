@@ -20,9 +20,11 @@ namespace Phalcon\DataMapper\Pdo\Connection;
 
 use BadMethodCallException;
 use PDO;
+use PDOException;
 use PDOStatement;
 use Phalcon\DataMapper\Pdo\Exception\UnknownDriverMethod;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
+use Throwable;
 
 use function array_merge;
 use function call_user_func_array;
@@ -34,6 +36,7 @@ use function is_array;
 use function is_bool;
 use function is_int;
 use function method_exists;
+use function str_contains;
 
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
@@ -41,6 +44,14 @@ use function method_exists;
  */
 abstract class AbstractConnection implements ConnectionInterface
 {
+    /**
+     * Whether to transparently reconnect and retry once when a statement fails
+     * because the connection was lost. Opt-in; off by default.
+     *
+     * @var bool
+     */
+    protected bool $autoReconnect = false;
+
     /**
      * @var PDO|null
      */
@@ -50,6 +61,15 @@ abstract class AbstractConnection implements ConnectionInterface
      * @var ProfilerInterface
      */
     protected ProfilerInterface $profiler;
+
+    /**
+     * Current transaction nesting level. Tracked locally rather than via
+     * PDO::inTransaction() because some drivers report a broken connection as
+     * being "in transaction".
+     *
+     * @var int
+     */
+    protected int $transactionLevel = 0;
 
     /**
      * Proxies to PDO methods created for specific drivers; in particular,
@@ -97,6 +117,8 @@ abstract class AbstractConnection implements ConnectionInterface
 
         $this->profiler->finish();
 
+        $this->transactionLevel++;
+
         return $result;
     }
 
@@ -115,6 +137,10 @@ abstract class AbstractConnection implements ConnectionInterface
 
         $this->profiler->finish();
 
+        if ($this->transactionLevel > 0) {
+            $this->transactionLevel--;
+        }
+
         return $result;
     }
 
@@ -127,6 +153,21 @@ abstract class AbstractConnection implements ConnectionInterface
      * Disconnects from the database.
      */
     abstract public function disconnect(): void;
+
+    /**
+     * Ensures the connection is alive, reconnecting in place if it is not.
+     * disconnect() is required first because connect() is idempotent and will
+     * not rebuild a dead-but-present handle.
+     *
+     * @return void
+     */
+    public function ensureConnection(): void
+    {
+        if (!$this->ping()) {
+            $this->disconnect();
+            $this->connect();
+        }
+    }
 
     /**
      * Gets the most recent error code.
@@ -165,7 +206,17 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->connect();
         $this->profiler->start(__FUNCTION__);
 
-        $affectedRows = $this->pdo->exec($statement);
+        try {
+            $affectedRows = $this->pdo->exec($statement);
+        } catch (PDOException $exception) {
+            if (!$this->canReconnect($exception)) {
+                throw $exception;
+            }
+
+            $this->reconnect();
+
+            $affectedRows = $this->pdo->exec($statement);
+        }
 
         $this->profiler->finish($statement);
 
@@ -425,6 +476,16 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
+     * Returns whether transparent auto-reconnect is enabled.
+     *
+     * @return bool
+     */
+    public function getAutoReconnect(): bool
+    {
+        return $this->autoReconnect;
+    }
+
+    /**
      * Return the driver name
      *
      * @return string
@@ -561,16 +622,42 @@ abstract class AbstractConnection implements ConnectionInterface
 
         $this->profiler->start(__FUNCTION__);
 
-        $sth = $this->prepare($statement);
-        foreach ($values as $name => $value) {
-            $this->performBind($sth, $name, $value);
-        }
+        try {
+            $sth = $this->performStatement($statement, $values);
+        } catch (PDOException $exception) {
+            if (!$this->canReconnect($exception)) {
+                throw $exception;
+            }
 
-        $sth->execute();
+            $this->reconnect();
+
+            $sth = $this->performStatement($statement, $values);
+        }
 
         $this->profiler->finish($statement, $values);
 
         return $sth;
+    }
+
+    /**
+     * Checks whether the underlying connection is still alive by issuing a
+     * trivial query. Returns false if there is no handle or the probe fails.
+     *
+     * @return bool
+     */
+    public function ping(): bool
+    {
+        if (null === $this->pdo) {
+            return false;
+        }
+
+        try {
+            $this->pdo->query("SELECT 1");
+        } catch (Throwable) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -589,7 +676,17 @@ abstract class AbstractConnection implements ConnectionInterface
 
         $this->profiler->start(__FUNCTION__);
 
-        $sth = $this->pdo->prepare($statement, $options);
+        try {
+            $sth = $this->pdo->prepare($statement, $options);
+        } catch (PDOException $exception) {
+            if (!$this->canReconnect($exception)) {
+                throw $exception;
+            }
+
+            $this->reconnect();
+
+            $sth = $this->pdo->prepare($statement, $options);
+        }
 
         $this->profiler->finish($sth->queryString);
 
@@ -611,13 +708,19 @@ abstract class AbstractConnection implements ConnectionInterface
 
         $this->profiler->start(__FUNCTION__);
 
-        $sth = call_user_func_array(
-            [
-                $this->pdo,
-                "query",
-            ],
-            func_get_args()
-        );
+        $arguments = func_get_args();
+
+        try {
+            $sth = call_user_func_array([$this->pdo, "query"], $arguments);
+        } catch (PDOException $exception) {
+            if (!$this->canReconnect($exception)) {
+                throw $exception;
+            }
+
+            $this->reconnect();
+
+            $sth = call_user_func_array([$this->pdo, "query"], $arguments);
+        }
 
         $this->profiler->finish($sth->queryString);
 
@@ -674,6 +777,10 @@ abstract class AbstractConnection implements ConnectionInterface
 
         $this->profiler->finish();
 
+        if ($this->transactionLevel > 0) {
+            $this->transactionLevel--;
+        }
+
         return $result;
     }
 
@@ -690,6 +797,20 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->connect();
 
         return $this->pdo->setAttribute($attribute, $value);
+    }
+
+    /**
+     * Enables or disables transparent auto-reconnect on a lost connection.
+     *
+     * @param bool $autoReconnect
+     *
+     * @return static
+     */
+    public function setAutoReconnect(bool $autoReconnect): static
+    {
+        $this->autoReconnect = $autoReconnect;
+
+        return $this;
     }
 
     /**
@@ -780,5 +901,105 @@ abstract class AbstractConnection implements ConnectionInterface
             ],
             $parameters
         );
+    }
+
+    /**
+     * Recognizes a lost ("gone away") connection. Detection is driver-agnostic:
+     * the driver name is not queried because the underlying connection may be
+     * dead by this point. The MySQL error codes and PostgreSQL SQLSTATEs do not
+     * overlap, so all known signatures are checked unconditionally.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    protected function isConnectionError(Throwable $exception): bool
+    {
+        if ($exception instanceof PDOException) {
+            $errorInfo = $exception->errorInfo;
+            if (isset($errorInfo[1])) {
+                $driverCode = (int)$errorInfo[1];
+
+                if (2006 === $driverCode || 2013 === $driverCode) {
+                    return true;
+                }
+            }
+        }
+
+        $sqlState = (string)$exception->getCode();
+        if (
+            "08003" === $sqlState
+            || "08006" === $sqlState
+            || "57P01" === $sqlState
+            || "57P02" === $sqlState
+            || "57P03" === $sqlState
+        ) {
+            return true;
+        }
+
+        $message = $exception->getMessage();
+
+        return str_contains($message, "server has gone away")
+            || str_contains($message, "Lost connection")
+            || str_contains($message, "server closed the connection unexpectedly")
+            || str_contains($message, "no connection to the server");
+    }
+
+    /**
+     * Whether a failed statement may be transparently retried after
+     * reconnecting. Only when auto-reconnect is on, a handle exists, we are
+     * not in a transaction, and the failure is a recognized connection loss.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    private function canReconnect(Throwable $exception): bool
+    {
+        if (false === $this->autoReconnect) {
+            return false;
+        }
+
+        if (null === $this->pdo) {
+            return false;
+        }
+
+        if (0 !== $this->transactionLevel) {
+            return false;
+        }
+
+        return $this->isConnectionError($exception);
+    }
+
+    /**
+     * Prepares, binds, and executes a statement, returning the PDOStatement.
+     *
+     * @param string $statement
+     * @param array  $values
+     *
+     * @return PDOStatement
+     */
+    private function performStatement(string $statement, array $values): PDOStatement
+    {
+        $sth = $this->prepare($statement);
+        foreach ($values as $name => $value) {
+            $this->performBind($sth, $name, $value);
+        }
+
+        $sth->execute();
+
+        return $sth;
+    }
+
+    /**
+     * Drops the dead handle and rebuilds it. disconnect() first is required
+     * because connect() is idempotent.
+     *
+     * @return void
+     */
+    private function reconnect(): void
+    {
+        $this->disconnect();
+        $this->connect();
     }
 }

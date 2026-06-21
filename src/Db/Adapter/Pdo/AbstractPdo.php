@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db\Adapter\Pdo;
 
 use PDO;
+use PDOException;
 use PDOStatement;
 use Phalcon\Db\Adapter\AbstractAdapter;
 use Phalcon\Db\Column;
@@ -26,6 +27,7 @@ use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Support\Settings;
+use Throwable;
 
 use function array_merge;
 use function implode;
@@ -63,6 +65,14 @@ abstract class AbstractPdo extends AbstractAdapter
      * @var int
      */
     protected int $affectedRows = 0;
+
+    /**
+     * Whether to transparently reconnect and retry once when a query fails
+     * because the connection was lost. Opt-in; off by default.
+     *
+     * @var bool
+     */
+    protected bool $autoReconnect = false;
 
     /**
      * PDO Handler
@@ -309,6 +319,10 @@ abstract class AbstractPdo extends AbstractAdapter
             $options[PDO::ATTR_PERSISTENT] = (bool)$descriptor["persistent"];
         }
 
+        if (isset($descriptor["autoReconnect"])) {
+            $this->autoReconnect = (bool)$descriptor["autoReconnect"];
+        }
+
         // Set PDO to throw exceptions when an error is encountered.
         $options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 
@@ -327,6 +341,7 @@ abstract class AbstractPdo extends AbstractAdapter
             $descriptor["dialectClass"],
             $descriptor["options"],
             $descriptor["dsn"],
+            $descriptor["autoReconnect"],
         );
 
         /**
@@ -430,6 +445,18 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Ensures the connection is alive, reconnecting in place if it is not.
+     *
+     * @return void
+     */
+    public function ensureConnection(): void
+    {
+        if (!$this->ping()) {
+            $this->connect();
+        }
+    }
+
+    /**
      * Sends SQL statements to the database server returning the success state.
      * Use this method only when the SQL statement sent to the server does not
      * return any rows
@@ -482,20 +509,24 @@ abstract class AbstractPdo extends AbstractAdapter
 
         $this->prepareRealSql($sqlStatement, $bindParams);
 
-        if (!empty($bindParams)) {
-            $statement = $this->pdo->prepare($sqlStatement);
-
-            if (false !== $statement) {
-                $newStatement = $this->executePrepared(
-                    $statement,
-                    $bindParams,
-                    $bindTypes
-                );
-
-                $affectedRows = $newStatement->rowCount();
+        try {
+            $affectedRows = $this->executeStatement(
+                $sqlStatement,
+                $bindParams,
+                $bindTypes
+            );
+        } catch (PDOException $exception) {
+            if (!$this->canReconnect($exception)) {
+                throw $exception;
             }
-        } else {
-            $affectedRows = $this->pdo->exec($sqlStatement);
+
+            $this->handleConnectionLost();
+
+            $affectedRows = $this->executeStatement(
+                $sqlStatement,
+                $bindParams,
+                $bindTypes
+            );
         }
 
         /**
@@ -610,6 +641,16 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Returns whether transparent auto-reconnect is enabled.
+     *
+     * @return bool
+     */
+    public function getAutoReconnect(): bool
+    {
+        return $this->autoReconnect;
+    }
+
+    /**
      * Return the error info, if any
      *
      * @return array
@@ -690,6 +731,27 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Checks whether the underlying connection is still alive by issuing a
+     * trivial query. Returns false if there is no handle or the probe fails.
+     *
+     * @return bool
+     */
+    public function ping(): bool
+    {
+        if (null === $this->pdo) {
+            return false;
+        }
+
+        try {
+            $this->pdo->query("SELECT 1");
+        } catch (Throwable) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns a PDO prepared statement to be executed with 'executePrepared'
      *
      *```php
@@ -767,14 +829,19 @@ abstract class AbstractPdo extends AbstractAdapter
         $params = (!empty($bindParams)) ? $bindParams : [];
         $types  = (!empty($bindTypes)) ? $bindTypes : [];
 
-        $statement = $this->pdo->prepare($sqlStatement);
-        if (false === $statement) {
-            throw new CannotPrepareStatement();
-        }
-
         $this->prepareRealSql($sqlStatement, $bindParams);
 
-        $statement = $this->executePrepared($statement, $params, $types);
+        try {
+            $statement = $this->queryStatement($sqlStatement, $params, $types);
+        } catch (PDOException $exception) {
+            if (!$this->canReconnect($exception)) {
+                throw $exception;
+            }
+
+            $this->handleConnectionLost();
+
+            $statement = $this->queryStatement($sqlStatement, $params, $types);
+        }
 
         /**
          * Execute the afterQuery event if an EventsManager is available
@@ -865,9 +932,37 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Enables or disables transparent auto-reconnect on a lost connection.
+     *
+     * @param bool $autoReconnect
+     *
+     * @return static
+     */
+    public function setAutoReconnect(bool $autoReconnect): static
+    {
+        $this->autoReconnect = $autoReconnect;
+
+        return $this;
+    }
+
+    /**
      * Returns PDO adapter DSN defaults as a key-value map.
      */
     abstract protected function getDsnDefaults(): array;
+
+    /**
+     * Recognizes whether an exception represents a lost ("gone away")
+     * connection. The base adapter cannot know driver specifics, so it
+     * returns false; concrete adapters override this.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    protected function isConnectionError(Throwable $exception): bool
+    {
+        return false;
+    }
 
     /**
      * Constructs the SQL statement (with parameters)
@@ -901,5 +996,98 @@ abstract class AbstractPdo extends AbstractAdapter
         }
 
         $this->realSqlStatement = $result;
+    }
+
+    /**
+     * Whether a failed query may be transparently retried after reconnecting.
+     * Only when auto-reconnect is on, we are not in a transaction, and the
+     * failure is a recognized connection loss.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    private function canReconnect(Throwable $exception): bool
+    {
+        if (false === $this->autoReconnect) {
+            return false;
+        }
+
+        if (0 !== $this->transactionLevel) {
+            return false;
+        }
+
+        return $this->isConnectionError($exception);
+    }
+
+    /**
+     * Runs the actual write against PDO and returns the affected-rows count
+     * (or the raw exec() return for unprepared statements).
+     *
+     * @param string $sqlStatement
+     * @param array  $bindParams
+     * @param array  $bindTypes
+     *
+     * @return int|false
+     */
+    private function executeStatement(
+        string $sqlStatement,
+        array $bindParams,
+        array $bindTypes
+    ): int | false {
+        $affectedRows = 0;
+
+        if (!empty($bindParams)) {
+            $statement = $this->pdo->prepare($sqlStatement);
+
+            if (false !== $statement) {
+                $newStatement = $this->executePrepared(
+                    $statement,
+                    $bindParams,
+                    $bindTypes
+                );
+
+                $affectedRows = $newStatement->rowCount();
+            }
+        } else {
+            $affectedRows = $this->pdo->exec($sqlStatement);
+        }
+
+        return $affectedRows;
+    }
+
+    /**
+     * Notifies listeners that the connection was lost and re-establishes it.
+     *
+     * @return void
+     */
+    private function handleConnectionLost(): void
+    {
+        $this->fireManagerEvent("db:connectionLost");
+
+        $this->connect();
+    }
+
+    /**
+     * Prepares and executes a read statement, returning the live PDOStatement.
+     *
+     * @param string $sqlStatement
+     * @param array  $params
+     * @param array  $types
+     *
+     * @return PDOStatement
+     * @throws CannotPrepareStatement
+     */
+    private function queryStatement(
+        string $sqlStatement,
+        array $params,
+        array $types
+    ): PDOStatement {
+        $statement = $this->pdo->prepare($sqlStatement);
+        if (false === $statement) {
+            throw new CannotPrepareStatement();
+        }
+
+        return $this->executePrepared($statement, $params, $types);
     }
 }

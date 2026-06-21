@@ -27,6 +27,7 @@ use Throwable;
 use function explode;
 use function is_string;
 use function preg_replace;
+use function str_contains;
 use function strcasecmp;
 use function strlen;
 use function trigger_error;
@@ -797,5 +798,34 @@ class Postgresql extends PdoAdapter
     protected function getDsnDefaults(): array
     {
         return [];
+    }
+
+    /**
+     * Recognizes a PostgreSQL connection-loss failure by SQLSTATE
+     * (connection exception class 08, or admin/crash shutdown 57P0x) with a
+     * message fallback.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    protected function isConnectionError(Throwable $exception): bool
+    {
+        $sqlState = (string)$exception->getCode();
+
+        if (
+            "08003" === $sqlState
+            || "08006" === $sqlState
+            || "57P01" === $sqlState
+            || "57P02" === $sqlState
+            || "57P03" === $sqlState
+        ) {
+            return true;
+        }
+
+        $message = $exception->getMessage();
+
+        return str_contains($message, "server closed the connection unexpectedly")
+            || str_contains($message, "no connection to the server");
     }
 }

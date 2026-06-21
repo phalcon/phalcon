@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db\Adapter\Pdo;
 
 use PDO;
+use PDOException;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo as PdoAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
@@ -24,8 +25,10 @@ use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+use Throwable;
 
 use function preg_match;
+use function str_contains;
 use function str_starts_with;
 use function strtolower;
 use function substr;
@@ -772,5 +775,32 @@ class Mysql extends PdoAdapter
         return [
             "charset" => "utf8mb4",
         ];
+    }
+
+    /**
+     * Recognizes a MySQL "server has gone away" / "Lost connection" failure
+     * by the driver error code (2006 / 2013) with a message fallback.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    protected function isConnectionError(Throwable $exception): bool
+    {
+        if ($exception instanceof PDOException) {
+            $errorInfo = $exception->errorInfo;
+            if (isset($errorInfo[1])) {
+                $driverCode = (int)$errorInfo[1];
+
+                if (2006 === $driverCode || 2013 === $driverCode) {
+                    return true;
+                }
+            }
+        }
+
+        $message = $exception->getMessage();
+
+        return str_contains($message, "server has gone away")
+            || str_contains($message, "Lost connection");
     }
 }
