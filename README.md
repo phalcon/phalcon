@@ -1,16 +1,21 @@
 # Phalcon Framework
 
+[![Latest Version][packagist-version-badge]][packagist-version-link]
+[![PHP Version][php-version-badge]][packagist-version-link]
+[![Total Downloads][packagist-downloads-badge]][packagist-downloads-link]
+[![License][license-badge]][license-link]
+
 [![Phalcon CI][phalcon-ci-badge]][phalcon-ci-link]
-[![PDS Skeleton](https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square)](https://github.com/php-pds/skeleton)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=phalcon_phalcon)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=coverage)](https://sonarcloud.io/summary/new_code?id=phalcon_phalcon)
+[![Quality Gate Status][sonar-quality-badge]][sonar-link]
+[![Coverage][sonar-coverage-badge]][sonar-link]
+[![PDS Skeleton][pds-skeleton-badge]][pds-skeleton-link]
 
-[![Discord][discord-badge]](https://phalcon.io/discord)
-[![Contributors][contributors-badge]](https://github.com/phalcon/phalcon/graphs/contributors)
-[![OpenCollective][oc-backers-badge]](#backers)
-[![OpenCollective][oc-sponsors-badge]](#sponsors)
+[![Discord][discord-badge]][discord-link]
+[![Contributors][contributors-badge]][contributors-link]
+[![OpenCollective Backers][oc-backers-badge]][backers-link]
+[![OpenCollective Sponsors][oc-sponsors-badge]][sponsors-link]
 
-Phalcon is an open source, full-stack web framework for PHP, focused on high
+Phalcon is an open-source, full-stack web framework for PHP, focused on high
 performance, low overhead and a clean, expressive API.
 
 > [!IMPORTANT]
@@ -33,7 +38,7 @@ Windows.
 * PHP `>= 8.1 < 9.0`
 * `ext-fileinfo`, `ext-json`, `ext-mbstring`, `ext-pdo`, `ext-xml`
 
-Optional extensions enable additional adapters:
+Optional extensions enable additional adapters and features:
 
 | Extension       | Used by                                                                                      |
 |-----------------|----------------------------------------------------------------------------------------------|
@@ -43,6 +48,7 @@ Optional extensions enable additional adapters:
 | `ext-imagick`   | `Image\Adapter\Imagick`                                                                      |
 | `ext-memcached` | `Cache\Adapter\Libmemcached`, `Session\Adapter\Libmemcached`, `Storage\Adapter\Libmemcached` |
 | `ext-openssl`   | `Encryption\Crypt`                                                                           |
+| `ext-pcntl`     | `Queue\Consumer\Worker`                                                                      |
 | `ext-redis`     | `Cache\Adapter\Redis`, `Session\Adapter\Redis`, `Storage\Adapter\Redis`                      |
 | `ext-yaml`      | `Config\Adapter\Yaml`                                                                        |
 
@@ -98,7 +104,7 @@ composer cs                 # PHP_CodeSniffer (PSR-12)
 ### General
 * [Contributing to Phalcon](CONTRIBUTING.md)
 * [Official Documentation](https://docs.phalcon.io/)
-* [Incubator](https://phalcon.io/incubator) - Community driven plugins and classes extending the framework
+* [Incubator](https://phalcon.io/incubator) — community-driven plugins and classes that extend the framework
 
 ### Support
 * [Discussions](https://phalcon.io/discussions)
@@ -116,7 +122,7 @@ composer cs                 # PHP_CodeSniffer (PSR-12)
 Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://opencollective.com/phalcon#sponsor)]
 
 <a href="https://opencollective.com/phalcon/#contributors">
-<img src="https://opencollective.com/phalcon/tiers/sponsors.svg?avatarHeight=48&width=800" alt="OpenCollective Contributors">
+<img src="https://opencollective.com/phalcon/tiers/sponsors.svg?avatarHeight=48&width=800" alt="OpenCollective Sponsors">
 </a>
 
 ## Backers
@@ -124,24 +130,43 @@ Become a sponsor and get your logo on our README on GitHub with a link to your s
 Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/phalcon#backer)]
 
 <a href="https://opencollective.com/phalcon/#contributors">
-<img src="https://opencollective.com/phalcon/tiers/backers.svg?avatarHeight=48&width=800&height=200" alt="OpenCollective Contributors">
+<img src="https://opencollective.com/phalcon/tiers/backers.svg?avatarHeight=48&width=800&height=200" alt="OpenCollective Backers">
 </a>
 
-![Alt](https://repobeats.axiom.co/api/embed/2d73e3d230f4a39aa8e144feb6083f1d2c38faec.svg "Repobeats analytics image")
+![Repobeats analytics image](https://repobeats.axiom.co/api/embed/2d73e3d230f4a39aa8e144feb6083f1d2c38faec.svg "Repobeats analytics image")
 
 ## License
 
-Phalcon is open source software licensed under the MIT License.
+Phalcon is open-source software licensed under the MIT License.
 
-Copyright © 2020-present, The Phalcon PHP Framework.
+Copyright © 2020–present, The Phalcon PHP Framework.
 
-See the [LICENSE](LICENSE) file for more.
+See the [LICENSE](LICENSE) file for details.
 
-<!-- External links should be here -->
-[phalcon-ci-badge]:    https://github.com/phalcon/phalcon/actions/workflows/main.yml/badge.svg?branch=v6.0.x
-[phalcon-ci-link]:     https://github.com/phalcon/phalcon/actions/workflows/main.yml
+<!-- Badges: package -->
+[packagist-version-badge]:   https://img.shields.io/packagist/v/phalcon/phalcon?include_prereleases&style=flat-square
+[packagist-version-link]:    https://packagist.org/packages/phalcon/phalcon
+[packagist-downloads-badge]: https://img.shields.io/packagist/dt/phalcon/phalcon?style=flat-square
+[packagist-downloads-link]:  https://packagist.org/packages/phalcon/phalcon/stats
+[php-version-badge]:          https://img.shields.io/packagist/php-v/phalcon/phalcon?style=flat-square
+[license-badge]:             https://img.shields.io/github/license/phalcon/phalcon?style=flat-square
+[license-link]:              LICENSE
 
-[discord-badge]:       https://img.shields.io/discord/310910488152375297?label=Discord&logo=discord&style=flat-square
-[contributors-badge]:  https://img.shields.io/github/contributors/phalcon/phalcon?style=flat-square
-[oc-backers-badge]:    https://img.shields.io/opencollective/backers/phalcon?style=flat-square
-[oc-sponsors-badge]:   https://img.shields.io/opencollective/sponsors/phalcon?style=flat-square
+<!-- Badges: quality & build -->
+[phalcon-ci-badge]:          https://github.com/phalcon/phalcon/actions/workflows/main.yml/badge.svg?branch=v6.0.x
+[phalcon-ci-link]:           https://github.com/phalcon/phalcon/actions/workflows/main.yml
+[sonar-quality-badge]:       https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=alert_status
+[sonar-coverage-badge]:      https://sonarcloud.io/api/project_badges/measure?project=phalcon_phalcon&metric=coverage
+[sonar-link]:                https://sonarcloud.io/summary/new_code?id=phalcon_phalcon
+[pds-skeleton-badge]:        https://img.shields.io/badge/pds-skeleton-blue.svg?style=flat-square
+[pds-skeleton-link]:         https://github.com/php-pds/skeleton
+
+<!-- Badges: community -->
+[discord-badge]:             https://img.shields.io/discord/310910488152375297?label=Discord&logo=discord&style=flat-square
+[discord-link]:              https://phalcon.io/discord
+[contributors-badge]:        https://img.shields.io/github/contributors/phalcon/phalcon?style=flat-square
+[contributors-link]:         https://github.com/phalcon/phalcon/graphs/contributors
+[oc-backers-badge]:          https://img.shields.io/opencollective/backers/phalcon?style=flat-square
+[oc-sponsors-badge]:         https://img.shields.io/opencollective/sponsors/phalcon?style=flat-square
+[backers-link]:              #backers
+[sponsors-link]:             #sponsors
