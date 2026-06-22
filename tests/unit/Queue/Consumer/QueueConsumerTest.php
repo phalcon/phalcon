@@ -26,6 +26,36 @@ use RuntimeException;
 
 final class QueueConsumerTest extends AbstractUnitTestCase
 {
+    public function testAfterReceiveFiresOnlyWhenAMessageArrives(): void
+    {
+        $context = (new MemoryConnectionFactory())->createContext();
+        $queue   = $context->createQueue('jobs');
+
+        $received = 0;
+        $manager  = new Manager();
+        $manager->attach(
+            'queue',
+            function ($event) use (&$received) {
+                if ($event->getType() === 'afterReceive') {
+                    $received++;
+                }
+            }
+        );
+
+        $consumer = new QueueConsumer($context);
+        $consumer->setEventsManager($manager);
+        $consumer->bind($queue, $this->collectingProcessor());
+
+        // Empty queue: afterReceive must not fire.
+        $consumer->consumeOnce();
+        $this->assertSame(0, $received);
+
+        // One message: afterReceive fires exactly once.
+        $context->createProducer()->send($queue, $context->createMessage('payload'));
+        $consumer->consumeOnce();
+        $this->assertSame(1, $received);
+    }
+
     public function testProcessorExceptionRejectsAndFiresEvent(): void
     {
         $context = (new MemoryConnectionFactory())->createContext();
@@ -76,6 +106,25 @@ final class QueueConsumerTest extends AbstractUnitTestCase
         $consumer->consumeOnce();
 
         $this->assertSame(['payload', 'payload'], $processor->seen);
+    }
+
+    public function testWorkerMaxMessagesCountsMessagesAcrossBindings(): void
+    {
+        $context  = (new MemoryConnectionFactory())->createContext();
+        $queueOne = $context->createQueue('queue-one');
+        $queueTwo = $context->createQueue('queue-two');
+        $producer = $context->createProducer();
+
+        $producer->send($queueOne, $context->createMessage('one'));
+        $producer->send($queueTwo, $context->createMessage('two'));
+
+        $consumer = new QueueConsumer($context);
+        $consumer->bind($queueOne, $this->collectingProcessor());
+        $consumer->bind($queueTwo, $this->collectingProcessor());
+
+        $processed = (new Worker($consumer, new WorkerOptions(maxMessages: 2, maxSeconds: 2)))->run();
+
+        $this->assertSame(2, $processed);
     }
 
     public function testWorkerProcessesUpToMaxMessages(): void
