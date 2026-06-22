@@ -23,25 +23,22 @@ declare(strict_types=1);
 namespace Phalcon\Queue\Adapter\Memory;
 
 use Phalcon\Contracts\Queue\Consumer as ConsumerInterface;
-use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
-use Phalcon\Contracts\Queue\Topic as TopicInterface;
-use Phalcon\Queue\Adapter\GenericQueue;
-use Phalcon\Queue\Adapter\GenericTopic;
-use Phalcon\Queue\Exceptions\InvalidDestinationException;
+use Phalcon\Queue\Adapter\AbstractContext;
+use Phalcon\Queue\Adapter\PointToPointStorage;
 
 use function array_shift;
-use function uniqid;
 
 /**
  * In-process transport session. Owns the named FIFO queues that this
- * context's producers and consumers share.
+ * context's producers and consumers share. The named queue/topic factories and
+ * temporary-queue handling come from AbstractContext.
  */
-class MemoryContext implements ContextInterface
+class MemoryContext extends AbstractContext implements PointToPointStorage
 {
     /**
      * Named queues: queue name => list of messages (FIFO).
@@ -52,18 +49,16 @@ class MemoryContext implements ContextInterface
 
     public function close(): void
     {
+        $this->purgeTemporaryQueues();
+
         $this->queues = [];
     }
 
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        if (!($destination instanceof QueueInterface)) {
-            throw new InvalidDestinationException(
-                "The Memory transport can only consume from a Queue destination"
-            );
-        }
+        $queue = $this->assertQueueDestination($destination, "consume from");
 
-        return new MemoryConsumer($this, $destination);
+        return new MemoryConsumer($this, $queue);
     }
 
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
@@ -76,24 +71,9 @@ class MemoryContext implements ContextInterface
         return new MemoryProducer($this);
     }
 
-    public function createQueue(string $queueName): QueueInterface
-    {
-        return new GenericQueue($queueName);
-    }
-
     public function createSubscriptionConsumer(): SubscriptionConsumerInterface
     {
         return new MemorySubscriptionConsumer($this);
-    }
-
-    public function createTemporaryQueue(): QueueInterface
-    {
-        return new GenericQueue(uniqid("phalcon_queue_", true));
-    }
-
-    public function createTopic(string $topicName): TopicInterface
-    {
-        return new GenericTopic($topicName);
     }
 
     /**
@@ -121,5 +101,10 @@ class MemoryContext implements ContextInterface
     public function pushMessage(string $queueName, MessageInterface $message): void
     {
         $this->queues[$queueName][] = $message;
+    }
+
+    protected function getTransportName(): string
+    {
+        return "Memory";
     }
 }

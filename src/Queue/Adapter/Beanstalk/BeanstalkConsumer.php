@@ -26,10 +26,9 @@ use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\VisibilityAware;
 use Phalcon\Queue\Adapter\AbstractConsumer;
+use Phalcon\Queue\Adapter\MessageEnvelope;
 
 use function intdiv;
-use function is_array;
-use function unserialize;
 
 /**
  * Receives messages from a single Beanstalkd tube over its own connection.
@@ -111,15 +110,23 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
             return null;
         }
 
-        $data = unserialize((string) $job[1], ["allowed_classes" => false]);
+        $message = MessageEnvelope::decode(
+            (string) $job[1],
+            static function (string $body, array $properties, array $headers) use ($job): BeanstalkMessage {
+                $message = new BeanstalkMessage($body, $properties, $headers);
+                $message->setJobId($job[0]);
 
-        if (!is_array($data)) {
-            return null;
+                return $message;
+            }
+        );
+
+        if ($message === null) {
+            /**
+             * The job is already reserved; bury it so the poison payload does
+             * not stay reserved (and invisible) until its time-to-run expires.
+             */
+            $this->connection->buryJob($job[0], self::DEFAULT_PRIORITY);
         }
-
-        $message = new BeanstalkMessage($data["body"], $data["properties"], $data["headers"]);
-
-        $message->setJobId($job[0]);
 
         return $message;
     }

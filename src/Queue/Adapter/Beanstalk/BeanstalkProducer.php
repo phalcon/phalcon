@@ -25,18 +25,15 @@ namespace Phalcon\Queue\Adapter\Beanstalk;
 use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
-use Phalcon\Contracts\Queue\Queue as QueueInterface;
-use Phalcon\Queue\Exceptions\InvalidDestinationException;
-use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
-
-use function serialize;
+use Phalcon\Queue\Adapter\AbstractProducer;
+use Phalcon\Queue\Adapter\MessageEnvelope;
 
 /**
  * Sends messages to a Beanstalkd tube. Delivery delay (rounded down to whole
  * seconds) and message priority are supported natively; Beanstalkd has no
- * message expiry, so time to live is not.
+ * message expiry, so time to live is not (handled by AbstractProducer).
  */
-class BeanstalkProducer implements ProducerInterface
+class BeanstalkProducer extends AbstractProducer
 {
     /**
      * Default Beanstalkd priority (0 = most urgent).
@@ -60,32 +57,16 @@ class BeanstalkProducer implements ProducerInterface
         return $this->priority;
     }
 
-    public function getTimeToLive(): ?int
-    {
-        return null;
-    }
-
     public function send(DestinationInterface $destination, MessageInterface $message): void
     {
-        if (!($destination instanceof QueueInterface)) {
-            throw new InvalidDestinationException(
-                "The Beanstalk transport can only send to a Queue destination"
-            );
-        }
+        $queue = $this->assertQueueDestination($destination, "send to");
 
-        $payload = serialize(
-            [
-                "body"       => $message->getBody(),
-                "properties" => $message->getProperties(),
-                "headers"    => $message->getHeaders(),
-            ]
-        );
-
+        $payload  = MessageEnvelope::encode($message);
         $priority = $this->priority ?? self::DEFAULT_PRIORITY;
         $delay    = $this->deliveryDelay === null ? 0 : (int) ($this->deliveryDelay / 1000);
 
         $this->context->putMessage(
-            $destination->getQueueName(),
+            $queue->getQueueName(),
             $payload,
             $priority,
             $delay,
@@ -107,14 +88,8 @@ class BeanstalkProducer implements ProducerInterface
         return $this;
     }
 
-    public function setTimeToLive(mixed $timeToLive = null): ProducerInterface
+    protected function getTransportName(): string
     {
-        if ($timeToLive !== null) {
-            throw new TimeToLiveNotSupportedException(
-                "The Beanstalk transport does not support a time to live"
-            );
-        }
-
-        return $this;
+        return "Beanstalk";
     }
 }

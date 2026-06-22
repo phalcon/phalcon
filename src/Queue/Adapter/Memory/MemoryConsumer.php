@@ -22,37 +22,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Queue\Adapter\Memory;
 
-use Phalcon\Contracts\Queue\Message as MessageInterface;
-use Phalcon\Contracts\Queue\Queue as QueueInterface;
-use Phalcon\Queue\Adapter\AbstractConsumer;
+use Phalcon\Queue\Adapter\AbstractPollingConsumer;
 
 /**
- * Receives messages from a single in-process queue. `receive()` is the
- * polling loop inherited from AbstractConsumer.
+ * Receives messages from a single in-process queue. All behavior comes from
+ * AbstractPollingConsumer; the blocking `receive()` is the polling loop from
+ * AbstractConsumer.
  */
-class MemoryConsumer extends AbstractConsumer
+class MemoryConsumer extends AbstractPollingConsumer
 {
-    public function __construct(protected MemoryContext $context, QueueInterface $queue)
-    {
-        $this->queue = $queue;
-    }
-
-    /**
-     * No-op: a received message has already been removed from the queue.
-     */
-    public function acknowledge(MessageInterface $message): void
-    {
-    }
-
-    public function receiveNoWait(): ?MessageInterface
-    {
-        return $this->context->popMessage($this->queue->getQueueName());
-    }
-
-    public function reject(MessageInterface $message, bool $requeue = false): void
-    {
-        if ($requeue) {
-            $this->context->pushMessage($this->queue->getQueueName(), $message);
-        }
-    }
 }

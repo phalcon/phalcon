@@ -28,20 +28,8 @@ class ModelAdapterConfig extends AbstractAdapterConfig
         string $model,
         protected readonly string $idColumn = 'id',
     ) {
-        if ($model === '') {
-            throw new ConfigRequiresNonEmptyValue(
-                'Model adapter',
-                'model',
-                ' class name'
-            );
-        }
-
-        if ($idColumn === '') {
-            throw new ConfigRequiresNonEmptyValue(
-                'Model adapter',
-                'idColumn'
-            );
-        }
+        ConfigRequiresNonEmptyValue::assert($model, 'Model adapter', 'model', ' class name');
+        ConfigRequiresNonEmptyValue::assert($idColumn, 'Model adapter', 'idColumn');
 
         parent::__construct($model);
     }

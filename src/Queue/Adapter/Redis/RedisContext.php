@@ -23,27 +23,22 @@ declare(strict_types=1);
 namespace Phalcon\Queue\Adapter\Redis;
 
 use Phalcon\Contracts\Queue\Consumer as ConsumerInterface;
-use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
-use Phalcon\Contracts\Queue\Topic as TopicInterface;
-use Phalcon\Queue\Adapter\GenericQueue;
-use Phalcon\Queue\Adapter\GenericTopic;
-use Phalcon\Queue\Exceptions\InvalidDestinationException;
+use Phalcon\Queue\Adapter\AbstractContext;
+use Phalcon\Queue\Adapter\MessageEnvelope;
 use Redis as RedisService;
 
 use function count;
 use function is_array;
 use function is_string;
 use function microtime;
-use function serialize;
 use function strpos;
 use function substr;
 use function uniqid;
-use function unserialize;
 
 /**
  * Redis transport session (ext-redis). Each queue is a Redis list; messages
@@ -51,7 +46,7 @@ use function unserialize;
  * Delayed messages live in a companion sorted set (`<key>:delayed`) scored by
  * their due time in milliseconds, and are promoted into the list once due.
  */
-class RedisContext implements ContextInterface
+class RedisContext extends AbstractContext
 {
     public function __construct(
         protected RedisService $redis,
@@ -80,17 +75,14 @@ class RedisContext implements ContextInterface
 
     public function close(): void
     {
+        $this->purgeTemporaryQueues();
     }
 
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        if (!($destination instanceof QueueInterface)) {
-            throw new InvalidDestinationException(
-                "The Redis transport can only consume from a Queue destination"
-            );
-        }
+        $queue = $this->assertQueueDestination($destination, "consume from");
 
-        return new RedisConsumer($this, $destination);
+        return new RedisConsumer($this, $queue);
     }
 
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
@@ -103,24 +95,9 @@ class RedisContext implements ContextInterface
         return new RedisProducer($this);
     }
 
-    public function createQueue(string $queueName): QueueInterface
-    {
-        return new GenericQueue($queueName);
-    }
-
     public function createSubscriptionConsumer(): SubscriptionConsumerInterface
     {
         return new RedisSubscriptionConsumer($this, $this->pollInterval);
-    }
-
-    public function createTemporaryQueue(): QueueInterface
-    {
-        return new GenericQueue(uniqid("phalcon_queue_", true));
-    }
-
-    public function createTopic(string $topicName): TopicInterface
-    {
-        return new GenericTopic($topicName);
     }
 
     /**
@@ -156,7 +133,7 @@ class RedisContext implements ContextInterface
      */
     public function pushMessage(string $queueName, MessageInterface $message, int $delay = 0): void
     {
-        $payload = $this->serializeMessage($message);
+        $payload = MessageEnvelope::encode($message);
 
         if ($delay > 0) {
             $score  = $this->now() + $delay;
@@ -168,6 +145,11 @@ class RedisContext implements ContextInterface
         }
 
         $this->redis->lPush($this->listKey($queueName), $payload);
+    }
+
+    protected function getTransportName(): string
+    {
+        return "Redis";
     }
 
     private function delayedKey(string $queueName): string
@@ -210,25 +192,12 @@ class RedisContext implements ContextInterface
         }
     }
 
-    private function serializeMessage(MessageInterface $message): string
-    {
-        return serialize(
-            [
-                "body"       => $message->getBody(),
-                "properties" => $message->getProperties(),
-                "headers"    => $message->getHeaders(),
-            ]
-        );
-    }
-
     private function unserializeMessage(string $payload): ?MessageInterface
     {
-        $data = unserialize($payload, ["allowed_classes" => false]);
-
-        if (!is_array($data)) {
-            return null;
-        }
-
-        return new RedisMessage($data["body"], $data["properties"], $data["headers"]);
+        return MessageEnvelope::decode(
+            $payload,
+            static fn (string $body, array $properties, array $headers): RedisMessage
+                => new RedisMessage($body, $properties, $headers)
+        );
     }
 }

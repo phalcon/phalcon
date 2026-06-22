@@ -87,12 +87,10 @@ class Worker
                 break;
             }
 
-            if ($this->consumer->consumeOnce()) {
-                $processed++;
+            $processed += $this->consumer->consumeOnce();
 
-                if ($maxMessages > 0 && $processed >= $maxMessages) {
-                    break;
-                }
+            if ($maxMessages > 0 && $processed >= $maxMessages) {
+                break;
             }
 
             if ($deadline > 0 && time() >= $deadline) {

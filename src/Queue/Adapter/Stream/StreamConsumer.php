@@ -22,41 +22,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Queue\Adapter\Stream;
 
-use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
-use Phalcon\Queue\Adapter\AbstractConsumer;
+use Phalcon\Queue\Adapter\AbstractPollingConsumer;
+use Phalcon\Queue\Adapter\PointToPointStorage;
 
 /**
- * Receives messages from a single filesystem queue. `receive()` is the
- * polling loop inherited from AbstractConsumer.
+ * Receives messages from a single filesystem queue. Behavior comes from
+ * AbstractPollingConsumer; the blocking `receive()` is the polling loop from
+ * AbstractConsumer, driven by the configured poll interval.
  */
-class StreamConsumer extends AbstractConsumer
+class StreamConsumer extends AbstractPollingConsumer
 {
-    public function __construct(
-        protected StreamContext $context,
-        QueueInterface $queue,
-        int $pollInterval = 200
-    ) {
-        $this->queue        = $queue;
+    public function __construct(PointToPointStorage $context, QueueInterface $queue, int $pollInterval = 200)
+    {
+        parent::__construct($context, $queue);
+
         $this->pollInterval = $pollInterval;
-    }
-
-    /**
-     * No-op: a received message has already been removed from the queue file.
-     */
-    public function acknowledge(MessageInterface $message): void
-    {
-    }
-
-    public function receiveNoWait(): ?MessageInterface
-    {
-        return $this->context->popMessage($this->queue->getQueueName());
-    }
-
-    public function reject(MessageInterface $message, bool $requeue = false): void
-    {
-        if ($requeue) {
-            $this->context->pushMessage($this->queue->getQueueName(), $message);
-        }
     }
 }

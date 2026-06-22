@@ -91,9 +91,14 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
         $this->end();
     }
 
-    public function consumeOnce(): bool
+    /**
+     * Polls every bound queue once, dispatching any messages found. Returns
+     * the number of messages processed in this pass, so callers (the Worker)
+     * can apply a message-count limit across several bound queues.
+     */
+    public function consumeOnce(): int
     {
-        $handled = false;
+        $processed = 0;
 
         foreach ($this->bindings as $binding) {
             if ($this->fireManagerEvent(Events::BEFORE_RECEIVE, $binding) === false) {
@@ -103,24 +108,26 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
             $consumer = $binding->getConsumer();
             $message  = $consumer->receiveNoWait();
 
+            if ($message === null) {
+                continue;
+            }
+
             if ($this->fireManagerEvent(Events::AFTER_RECEIVE, $message) === false) {
                 $this->shouldStop = true;
 
-                return $handled;
+                return $processed;
             }
 
-            if ($message !== null) {
-                $this->process($binding, $message);
+            $this->process($binding, $message);
 
-                $handled = true;
-            }
+            $processed++;
         }
 
-        if (!$handled) {
+        if ($processed === 0) {
             usleep($this->pollInterval * 1000);
         }
 
-        return $handled;
+        return $processed;
     }
 
     public function end(): void
