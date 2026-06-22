@@ -1146,7 +1146,7 @@ abstract class Model extends AbstractInjectionAware implements
         // Change the dirty state to persistent
         $instance->setDirtyState($dirtyState);
 
-        $disableSetters = (bool) Settings::get("orm.disable_assign_setters");
+        $callSetters = (bool) Settings::get("orm.call_setters_on_hydration");
 
         $localMethods = [
             "setConnectionService"      => 1,
@@ -1175,7 +1175,7 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             if (!is_array($columnMap)) {
-                if (!$disableSetters) {
+                if ($callSetters) {
                     $setter = "set" . self::staticToCamelize($key);
                     if (
                         method_exists($instance, $setter) &&
@@ -1225,7 +1225,7 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             if (!is_array($attribute)) {
-                if (!$disableSetters) {
+                if ($callSetters) {
                     $setter = "set" . self::staticToCamelize($attribute);
                     if (
                         method_exists($instance, $setter) &&
@@ -1288,7 +1288,7 @@ abstract class Model extends AbstractInjectionAware implements
             $attributeName = $attribute[0];
             $data[$key]    = $castValue;
 
-            if (!$disableSetters) {
+            if ($callSetters) {
                 $setter = "set" . self::staticToCamelize($attributeName);
                 if (
                     method_exists($instance, $setter) &&

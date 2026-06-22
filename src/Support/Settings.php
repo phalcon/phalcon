@@ -45,6 +45,7 @@ class Settings
         'db.escape_identifiers'                 => true,
         'db.force_casting'                      => false,
         'form.strict_entity_property_check'     => false,
+        'orm.call_setters_on_hydration'         => false,
         'orm.case_insensitive_column_map'       => false,
         'orm.cast_last_insert_id_to_int'        => false,
         'orm.cast_on_hydrate'                   => false,
@@ -123,6 +124,7 @@ class Settings
             case 'db.escape_identifiers':
             case 'db.force_casting':
             case 'form.strict_entity_property_check':
+            case 'orm.call_setters_on_hydration':
             case 'orm.case_insensitive_column_map':
             case 'orm.cast_last_insert_id_to_int':
             case 'orm.cast_on_hydrate':
