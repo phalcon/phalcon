@@ -25,16 +25,14 @@ namespace Phalcon\Queue\Adapter\Redis;
 use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
-use Phalcon\Contracts\Queue\Queue as QueueInterface;
-use Phalcon\Queue\Exceptions\InvalidDestinationException;
-use Phalcon\Queue\Exceptions\PriorityNotSupportedException;
-use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
+use Phalcon\Queue\Adapter\AbstractProducer;
 
 /**
  * Sends messages to a Redis queue. Delivery delay is supported (via the
- * delayed sorted set); priority and time to live are not.
+ * delayed sorted set); priority and time to live are not (handled by
+ * AbstractProducer).
  */
-class RedisProducer implements ProducerInterface
+class RedisProducer extends AbstractProducer
 {
     protected ?int $deliveryDelay = null;
 
@@ -47,27 +45,12 @@ class RedisProducer implements ProducerInterface
         return $this->deliveryDelay;
     }
 
-    public function getPriority(): ?int
-    {
-        return null;
-    }
-
-    public function getTimeToLive(): ?int
-    {
-        return null;
-    }
-
     public function send(DestinationInterface $destination, MessageInterface $message): void
     {
-        if (!($destination instanceof QueueInterface)) {
-            throw new InvalidDestinationException(
-                "The Redis transport can only send to a Queue destination"
-            );
-        }
-
+        $queue = $this->assertQueueDestination($destination, "send to");
         $delay = $this->deliveryDelay ?? 0;
 
-        $this->context->pushMessage($destination->getQueueName(), $message, $delay);
+        $this->context->pushMessage($queue->getQueueName(), $message, $delay);
     }
 
     public function setDeliveryDelay(mixed $deliveryDelay = null): ProducerInterface
@@ -77,25 +60,8 @@ class RedisProducer implements ProducerInterface
         return $this;
     }
 
-    public function setPriority(mixed $priority = null): ProducerInterface
+    protected function getTransportName(): string
     {
-        if ($priority !== null) {
-            throw new PriorityNotSupportedException(
-                "The Redis transport does not support message priority"
-            );
-        }
-
-        return $this;
-    }
-
-    public function setTimeToLive(mixed $timeToLive = null): ProducerInterface
-    {
-        if ($timeToLive !== null) {
-            throw new TimeToLiveNotSupportedException(
-                "The Redis transport does not support a time to live"
-            );
-        }
-
-        return $this;
+        return "Redis";
     }
 }

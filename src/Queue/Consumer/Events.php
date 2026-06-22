@@ -29,10 +29,10 @@ namespace Phalcon\Queue\Consumer;
 class Events
 {
     public const AFTER_END           = "queue:afterEnd";
-    public const AFTER_PROCESS        = "queue:afterProcess";
-    public const AFTER_RECEIVE        = "queue:afterReceive";
-    public const BEFORE_PROCESS       = "queue:beforeProcess";
-    public const BEFORE_RECEIVE       = "queue:beforeReceive";
-    public const BEFORE_START         = "queue:beforeStart";
-    public const PROCESSOR_EXCEPTION  = "queue:processorException";
+    public const AFTER_PROCESS       = "queue:afterProcess";
+    public const AFTER_RECEIVE       = "queue:afterReceive";
+    public const BEFORE_PROCESS      = "queue:beforeProcess";
+    public const BEFORE_RECEIVE      = "queue:beforeReceive";
+    public const BEFORE_START        = "queue:beforeStart";
+    public const PROCESSOR_EXCEPTION = "queue:processorException";
 }

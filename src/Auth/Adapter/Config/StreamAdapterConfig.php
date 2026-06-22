@@ -28,13 +28,7 @@ class StreamAdapterConfig extends AbstractAdapterConfig
         protected readonly string $file,
         ?string $model = null,
     ) {
-        if ($file === '') {
-            throw new ConfigRequiresNonEmptyValue(
-                'Stream adapter',
-                'file',
-                ' path'
-            );
-        }
+        ConfigRequiresNonEmptyValue::assert($file, 'Stream adapter', 'file', ' path');
 
         parent::__construct($model);
     }

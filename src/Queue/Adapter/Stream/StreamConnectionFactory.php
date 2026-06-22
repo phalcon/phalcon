@@ -31,7 +31,8 @@ use function sys_get_temp_dir;
  * Builds a StreamContext.
  *
  * Options:
- *   - storageDir:   directory holding the queue files (default: system temp).
+ *   - storageDir:   directory holding the queue files (default: a private
+ *                   "phalcon_queue" subdirectory of the system temp dir).
  *   - pollInterval: milliseconds between consumer poll attempts (default 200).
  */
 class StreamConnectionFactory implements ConnectionFactoryInterface
@@ -42,7 +43,7 @@ class StreamConnectionFactory implements ConnectionFactoryInterface
 
     public function createContext(): ContextInterface
     {
-        $storageDir = $this->options["storageDir"] ?? sys_get_temp_dir();
+        $storageDir = $this->options["storageDir"] ?? sys_get_temp_dir() . "/phalcon_queue";
         $pollInterval = (int) ($this->options["pollInterval"] ?? 200);
 
         return new StreamContext($storageDir, $pollInterval);

@@ -88,12 +88,6 @@ class SessionGuardConfig extends AbstractGuardConfig
      */
     private function validateNonEmpty(string $param, ?string $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
-        if ($value === '') {
-            throw new ConfigRequiresNonEmptyValue('Session guard', $param);
-        }
+        ConfigRequiresNonEmptyValue::assert($value, 'Session guard', $param);
     }
 }

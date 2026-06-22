@@ -23,16 +23,14 @@ declare(strict_types=1);
 namespace Phalcon\Queue\Adapter\Stream;
 
 use Phalcon\Contracts\Queue\Consumer as ConsumerInterface;
-use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
-use Phalcon\Contracts\Queue\Topic as TopicInterface;
-use Phalcon\Queue\Adapter\GenericQueue;
-use Phalcon\Queue\Adapter\GenericTopic;
-use Phalcon\Queue\Exceptions\InvalidDestinationException;
+use Phalcon\Queue\Adapter\AbstractContext;
+use Phalcon\Queue\Adapter\MessageEnvelope;
+use Phalcon\Queue\Adapter\PointToPointStorage;
 
 use function array_filter;
 use function array_shift;
@@ -48,17 +46,16 @@ use function fopen;
 use function ftruncate;
 use function fwrite;
 use function implode;
-use function is_array;
 use function is_dir;
+use function md5;
 use function mkdir;
 use function preg_replace;
 use function rewind;
 use function rtrim;
-use function serialize;
 use function stream_get_contents;
-use function uniqid;
+use function strlen;
+use function substr;
 use function unlink;
-use function unserialize;
 
 use const FILE_APPEND;
 use const LOCK_EX;
@@ -71,7 +68,7 @@ use const PHP_EOL;
  * per line, stored as base64(serialize([...])) so bodies with newlines are
  * safe.
  */
-class StreamContext implements ContextInterface
+class StreamContext extends AbstractContext implements PointToPointStorage
 {
     protected string $storageDir = "";
 
@@ -82,17 +79,14 @@ class StreamContext implements ContextInterface
 
     public function close(): void
     {
+        $this->purgeTemporaryQueues();
     }
 
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        if (!($destination instanceof QueueInterface)) {
-            throw new InvalidDestinationException(
-                "The Stream transport can only consume from a Queue destination"
-            );
-        }
+        $queue = $this->assertQueueDestination($destination, "consume from");
 
-        return new StreamConsumer($this, $destination, $this->pollInterval);
+        return new StreamConsumer($this, $queue, $this->pollInterval);
     }
 
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
@@ -105,24 +99,9 @@ class StreamContext implements ContextInterface
         return new StreamProducer($this);
     }
 
-    public function createQueue(string $queueName): QueueInterface
-    {
-        return new GenericQueue($queueName);
-    }
-
     public function createSubscriptionConsumer(): SubscriptionConsumerInterface
     {
         return new StreamSubscriptionConsumer($this, $this->pollInterval);
-    }
-
-    public function createTemporaryQueue(): QueueInterface
-    {
-        return new GenericQueue(uniqid("phalcon_queue_", true));
-    }
-
-    public function createTopic(string $topicName): TopicInterface
-    {
-        return new GenericTopic($topicName);
     }
 
     /**
@@ -162,19 +141,23 @@ class StreamContext implements ContextInterface
         $line      = array_shift($lines);
         $remaining = count($lines) > 0 ? implode(PHP_EOL, $lines) . PHP_EOL : "";
 
-        ftruncate($pointer, 0);
+        /**
+         * Write the surviving messages back before shortening the file, so an
+         * interruption can never leave the queue empty (truncate-then-write
+         * would). At worst a stale trailing line remains, which the next pop
+         * discards as unparseable.
+         */
         rewind($pointer);
         fwrite($pointer, $remaining);
+        ftruncate($pointer, strlen($remaining));
         flock($pointer, LOCK_UN);
         fclose($pointer);
 
-        $data = unserialize(base64_decode($line), ["allowed_classes" => false]);
-
-        if (!is_array($data)) {
-            return null;
-        }
-
-        return new StreamMessage($data["body"], $data["properties"], $data["headers"]);
+        return MessageEnvelope::decode(
+            (string) base64_decode($line),
+            static fn (string $body, array $properties, array $headers): StreamMessage
+                => new StreamMessage($body, $properties, $headers)
+        );
     }
 
     public function purgeQueue(QueueInterface $queue): void
@@ -196,26 +179,33 @@ class StreamContext implements ContextInterface
 
         $this->ensureDir();
 
-        $data = [
-            "body"       => $message->getBody(),
-            "properties" => $message->getProperties(),
-            "headers"    => $message->getHeaders(),
-        ];
-
-        $line = base64_encode(serialize($data)) . PHP_EOL;
+        $line = base64_encode(MessageEnvelope::encode($message)) . PHP_EOL;
 
         file_put_contents($filepath, $line, FILE_APPEND | LOCK_EX);
+    }
+
+    protected function getTransportName(): string
+    {
+        return "Stream";
     }
 
     private function ensureDir(): void
     {
         if (!is_dir($this->storageDir)) {
-            mkdir($this->storageDir, 0777, true);
+            mkdir($this->storageDir, 0700, true);
         }
     }
 
+    /**
+     * Maps a queue name to its file. A short hash of the original name is
+     * appended so distinct names that sanitize to the same string (for example
+     * "a.b" and "a:b") never share a file.
+     */
     private function getFilepath(string $queueName): string
     {
-        return $this->storageDir . preg_replace("/[^a-zA-Z0-9_-]/", "_", $queueName) . ".queue";
+        return $this->storageDir
+            . preg_replace("/[^a-zA-Z0-9_-]/", "_", $queueName)
+            . "-" . substr(md5($queueName), 0, 8)
+            . ".queue";
     }
 }
