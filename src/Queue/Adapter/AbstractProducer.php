@@ -30,18 +30,14 @@ use Phalcon\Queue\Exceptions\PriorityNotSupportedException;
 use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
 
 /**
- * Shared producer base. Provides the capability-negation defaults every
- * transport repeats: each scheduling feature (delivery delay, priority, time
- * to live) reports "not set" and rejects any non-null value with the matching
- * typed exception. A transport that supports a feature overrides just those
- * two accessors. The destination check shared by every `send()` comes from
- * QueueDestinationGuard; concrete producers implement only `send()` and the
- * transport name.
+ * Shared producer base. Defaults every optional capability (delivery delay,
+ * priority, time to live) to "unsupported": the getter returns null and the
+ * setter throws the matching exception for any non-null value. A concrete
+ * producer overrides only the capabilities its transport actually supports,
+ * and implements `send()`.
  */
 abstract class AbstractProducer implements ProducerInterface
 {
-    use QueueDestinationGuard;
-
     public function getDeliveryDelay(): ?int
     {
         return null;
@@ -62,9 +58,7 @@ abstract class AbstractProducer implements ProducerInterface
     public function setDeliveryDelay(mixed $deliveryDelay = null): ProducerInterface
     {
         if ($deliveryDelay !== null) {
-            throw new DeliveryDelayNotSupportedException(
-                "The " . $this->getTransportName() . " transport does not support a delivery delay"
-            );
+            throw new DeliveryDelayNotSupportedException();
         }
 
         return $this;
@@ -73,9 +67,7 @@ abstract class AbstractProducer implements ProducerInterface
     public function setPriority(mixed $priority = null): ProducerInterface
     {
         if ($priority !== null) {
-            throw new PriorityNotSupportedException(
-                "The " . $this->getTransportName() . " transport does not support message priority"
-            );
+            throw new PriorityNotSupportedException();
         }
 
         return $this;
@@ -84,9 +76,7 @@ abstract class AbstractProducer implements ProducerInterface
     public function setTimeToLive(mixed $timeToLive = null): ProducerInterface
     {
         if ($timeToLive !== null) {
-            throw new TimeToLiveNotSupportedException(
-                "The " . $this->getTransportName() . " transport does not support a time to live"
-            );
+            throw new TimeToLiveNotSupportedException();
         }
 
         return $this;

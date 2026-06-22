@@ -27,4 +27,8 @@ namespace Phalcon\Queue\Exceptions;
  */
 class TimeToLiveNotSupportedException extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct("The transport does not support a message time to live");
+    }
 }

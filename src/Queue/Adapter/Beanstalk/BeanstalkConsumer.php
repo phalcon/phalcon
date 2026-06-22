@@ -110,29 +110,22 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
             return null;
         }
 
-        $message = MessageEnvelope::decode(
-            (string) $job[1],
-            static function (string $body, array $properties, array $headers) use ($job): BeanstalkMessage {
-                $message = new BeanstalkMessage($body, $properties, $headers);
-                $message->setJobId($job[0]);
+        $data = MessageEnvelope::decode((string) $job[1]);
 
-                return $message;
-            }
-        );
-
-        if ($message === null) {
-            /**
-             * The job is already reserved; bury it so the poison payload does
-             * not stay reserved (and invisible) until its time-to-run expires.
-             */
-            $this->connection->buryJob($job[0], self::DEFAULT_PRIORITY);
+        if ($data === null) {
+            return null;
         }
+
+        $message = new BeanstalkMessage((string) $data["body"], $data["properties"], $data["headers"]);
+
+        $message->setJobId($job[0]);
 
         return $message;
     }
 
     /**
-     * Resolves a message's Beanstalkd job id.
+     * Resolves a message's Beanstalkd job id. The Message interface does not
+     * declare getJobId(), so the concrete BeanstalkMessage is required.
      */
     private function resolveJobId(MessageInterface $message): string
     {

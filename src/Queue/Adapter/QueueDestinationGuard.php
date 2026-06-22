@@ -28,29 +28,21 @@ use Phalcon\Queue\Exceptions\InvalidDestinationException;
 
 /**
  * Shared "destination must be a queue" guard. Producers (on send) and contexts
- * (on createConsumer) both reject any non-queue destination with the same
- * typed exception; this trait keeps that single rule in one place. The $action
- * verb ("send to", "consume from") tailors the message to the caller.
+ * (on createConsumer) both reject any non-queue destination with the same typed
+ * exception; this keeps that single rule in one place. The `action` verb
+ * ("send to", "consume from") tailors the message to the caller.
  */
-trait QueueDestinationGuard
+class QueueDestinationGuard
 {
     /**
-     * Ensures the destination is a queue, returning it narrowed to
-     * QueueInterface. Throws for any other destination (for example a topic).
+     * Throws InvalidDestinationException unless the destination is a queue.
+     *
+     * @phpstan-assert QueueInterface $destination
      */
-    protected function assertQueueDestination(DestinationInterface $destination, string $action): QueueInterface
+    public static function assertQueue(DestinationInterface $destination, string $action): void
     {
         if (!($destination instanceof QueueInterface)) {
-            throw new InvalidDestinationException(
-                "The " . $this->getTransportName() . " transport can only " . $action . " a Queue destination"
-            );
+            throw new InvalidDestinationException($action);
         }
-
-        return $destination;
     }
-
-    /**
-     * Human-readable transport name used in the exception message.
-     */
-    abstract protected function getTransportName(): string;
 }

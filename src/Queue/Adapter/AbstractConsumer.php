@@ -27,7 +27,6 @@ use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 
 use function microtime;
-use function min;
 use function usleep;
 
 /**
@@ -62,18 +61,8 @@ abstract class AbstractConsumer implements ConsumerInterface
                 return $message;
             }
 
-            if ($timeout > 0) {
-                $remaining = $timeout - (((int) (microtime(true) * 1000)) - $startTime);
-
-                if ($remaining <= 0) {
-                    return null;
-                }
-
-                // Never sleep past the deadline, so a timeout finer than the
-                // poll interval is still honored.
-                usleep(min($sleep, $remaining * 1000));
-
-                continue;
+            if ($timeout > 0 && (((int) (microtime(true) * 1000)) - $startTime) >= $timeout) {
+                return null;
             }
 
             usleep($sleep);

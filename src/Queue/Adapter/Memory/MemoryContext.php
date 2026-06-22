@@ -29,48 +29,61 @@ use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
 use Phalcon\Queue\Adapter\AbstractContext;
-use Phalcon\Queue\Adapter\PointToPointStorage;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 
 use function array_shift;
 
 /**
- * In-process transport session. Owns the named FIFO queues that this
- * context's producers and consumers share. The named queue/topic factories and
- * temporary-queue handling come from AbstractContext.
+ * In-process transport session. Owns the named FIFO queues that this context's
+ * producers and consumers share. The destination factories (createQueue /
+ * createTopic / createTemporaryQueue) come from AbstractContext.
  */
-class MemoryContext extends AbstractContext implements PointToPointStorage
+class MemoryContext extends AbstractContext
 {
     /**
      * Named queues: queue name => list of messages (FIFO).
      *
-     * @var array
+     * @var array<string, list<MessageInterface>>
      */
     protected array $queues = [];
 
+    /**
+     * Closes the context and drops every stored message.
+     */
     public function close(): void
     {
-        $this->purgeTemporaryQueues();
-
         $this->queues = [];
     }
 
+    /**
+     * Creates a consumer for the given queue destination.
+     */
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        $queue = $this->assertQueueDestination($destination, "consume from");
+        QueueDestinationGuard::assertQueue($destination, "consume from");
 
-        return new MemoryConsumer($this, $queue);
+        return new MemoryConsumer($this, $destination);
     }
 
+    /**
+     * Creates a message.
+     */
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
     {
         return new MemoryMessage($body, $properties, $headers);
     }
 
+    /**
+     * Creates a producer.
+     */
     public function createProducer(): ProducerInterface
     {
         return new MemoryProducer($this);
     }
 
+    /**
+     * Creates a subscription consumer.
+     */
     public function createSubscriptionConsumer(): SubscriptionConsumerInterface
     {
         return new MemorySubscriptionConsumer($this);
@@ -89,6 +102,9 @@ class MemoryContext extends AbstractContext implements PointToPointStorage
         return array_shift($this->queues[$queueName]);
     }
 
+    /**
+     * Removes all messages from the given queue.
+     */
     public function purgeQueue(QueueInterface $queue): void
     {
         $this->queues[$queue->getQueueName()] = [];
@@ -101,10 +117,5 @@ class MemoryContext extends AbstractContext implements PointToPointStorage
     public function pushMessage(string $queueName, MessageInterface $message): void
     {
         $this->queues[$queueName][] = $message;
-    }
-
-    protected function getTransportName(): string
-    {
-        return "Memory";
     }
 }

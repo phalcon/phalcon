@@ -30,7 +30,7 @@ use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
 use Phalcon\Queue\Adapter\AbstractContext;
 use Phalcon\Queue\Adapter\MessageEnvelope;
-use Phalcon\Queue\Adapter\PointToPointStorage;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 
 use function array_filter;
 use function array_shift;
@@ -47,15 +47,11 @@ use function ftruncate;
 use function fwrite;
 use function implode;
 use function is_dir;
-use function md5;
 use function mkdir;
 use function preg_replace;
 use function rewind;
 use function rtrim;
 use function stream_get_contents;
-use function strlen;
-use function substr;
-use function unlink;
 
 use const FILE_APPEND;
 use const LOCK_EX;
@@ -66,9 +62,9 @@ use const PHP_EOL;
  * Filesystem transport session. Each queue is one append-only file under the
  * configured directory; cross-process safety comes from flock. One message
  * per line, stored as base64(serialize([...])) so bodies with newlines are
- * safe.
+ * safe. The destination factories come from AbstractContext.
  */
-class StreamContext extends AbstractContext implements PointToPointStorage
+class StreamContext extends AbstractContext
 {
     protected string $storageDir = "";
 
@@ -79,14 +75,13 @@ class StreamContext extends AbstractContext implements PointToPointStorage
 
     public function close(): void
     {
-        $this->purgeTemporaryQueues();
     }
 
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        $queue = $this->assertQueueDestination($destination, "consume from");
+        QueueDestinationGuard::assertQueue($destination, "consume from");
 
-        return new StreamConsumer($this, $queue, $this->pollInterval);
+        return new StreamConsumer($this, $destination, $this->pollInterval);
     }
 
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
@@ -128,7 +123,7 @@ class StreamContext extends AbstractContext implements PointToPointStorage
             return null;
         }
 
-        $contents = stream_get_contents($pointer);
+        $contents = (string) stream_get_contents($pointer);
         $lines    = array_filter(explode(PHP_EOL, $contents));
 
         if (empty($lines)) {
@@ -138,26 +133,22 @@ class StreamContext extends AbstractContext implements PointToPointStorage
             return null;
         }
 
-        $line      = array_shift($lines);
+        $line      = (string) array_shift($lines);
         $remaining = count($lines) > 0 ? implode(PHP_EOL, $lines) . PHP_EOL : "";
 
-        /**
-         * Write the surviving messages back before shortening the file, so an
-         * interruption can never leave the queue empty (truncate-then-write
-         * would). At worst a stale trailing line remains, which the next pop
-         * discards as unparseable.
-         */
+        ftruncate($pointer, 0);
         rewind($pointer);
         fwrite($pointer, $remaining);
-        ftruncate($pointer, strlen($remaining));
         flock($pointer, LOCK_UN);
         fclose($pointer);
 
-        return MessageEnvelope::decode(
-            (string) base64_decode($line),
-            static fn (string $body, array $properties, array $headers): StreamMessage
-                => new StreamMessage($body, $properties, $headers)
-        );
+        $data = MessageEnvelope::decode((string) base64_decode($line));
+
+        if ($data === null) {
+            return null;
+        }
+
+        return new StreamMessage((string) $data["body"], $data["properties"], $data["headers"]);
     }
 
     public function purgeQueue(QueueInterface $queue): void
@@ -184,28 +175,17 @@ class StreamContext extends AbstractContext implements PointToPointStorage
         file_put_contents($filepath, $line, FILE_APPEND | LOCK_EX);
     }
 
-    protected function getTransportName(): string
-    {
-        return "Stream";
-    }
-
     private function ensureDir(): void
     {
         if (!is_dir($this->storageDir)) {
-            mkdir($this->storageDir, 0700, true);
+            mkdir($this->storageDir, 0777, true);
         }
     }
 
-    /**
-     * Maps a queue name to its file. A short hash of the original name is
-     * appended so distinct names that sanitize to the same string (for example
-     * "a.b" and "a:b") never share a file.
-     */
     private function getFilepath(string $queueName): string
     {
         return $this->storageDir
             . preg_replace("/[^a-zA-Z0-9_-]/", "_", $queueName)
-            . "-" . substr(md5($queueName), 0, 8)
             . ".queue";
     }
 }

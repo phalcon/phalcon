@@ -26,11 +26,12 @@ use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Queue\Adapter\AbstractProducer;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 
 /**
  * Sends messages to a Redis queue. Delivery delay is supported (via the
- * delayed sorted set); priority and time to live are not (handled by
- * AbstractProducer).
+ * delayed sorted set); priority and time to live are not (the defaults from
+ * AbstractProducer reject them).
  */
 class RedisProducer extends AbstractProducer
 {
@@ -47,10 +48,11 @@ class RedisProducer extends AbstractProducer
 
     public function send(DestinationInterface $destination, MessageInterface $message): void
     {
-        $queue = $this->assertQueueDestination($destination, "send to");
+        QueueDestinationGuard::assertQueue($destination, "send to");
+
         $delay = $this->deliveryDelay ?? 0;
 
-        $this->context->pushMessage($queue->getQueueName(), $message, $delay);
+        $this->context->pushMessage($destination->getQueueName(), $message, $delay);
     }
 
     public function setDeliveryDelay(mixed $deliveryDelay = null): ProducerInterface
@@ -58,10 +60,5 @@ class RedisProducer extends AbstractProducer
         $this->deliveryDelay = $deliveryDelay === null ? null : (int) $deliveryDelay;
 
         return $this;
-    }
-
-    protected function getTransportName(): string
-    {
-        return "Redis";
     }
 }

@@ -32,18 +32,18 @@ use function unserialize;
  * Encodes and decodes the {body, properties, headers} envelope shared by every
  * transport that persists a message as a serialized string (Stream, Redis,
  * Beanstalk). Centralizes the wire shape, the object-injection-safe
- * `allowed_classes => false` guard, and the missing-key defaults so each
- * adapter only supplies its own concrete message factory.
+ * `allowed_classes => false` guard, and the missing-key defaults, so each
+ * adapter only supplies its own concrete message factory around `decode()`.
  */
-final class MessageEnvelope
+class MessageEnvelope
 {
     /**
-     * Decodes a payload into a message via the supplied factory, or null when
-     * the payload is not a valid envelope.
+     * Decodes a serialized payload into a normalized {body, properties,
+     * headers} array, or null when the payload is not a valid envelope.
      *
-     * @param callable(string, array, array): MessageInterface $factory
+     * @return array{body: mixed, properties: array, headers: array}|null
      */
-    public static function decode(string $payload, callable $factory): ?MessageInterface
+    public static function decode(string $payload): ?array
     {
         $data = unserialize($payload, ["allowed_classes" => false]);
 
@@ -51,15 +51,31 @@ final class MessageEnvelope
             return null;
         }
 
-        return $factory(
-            $data["body"] ?? "",
-            $data["properties"] ?? [],
-            $data["headers"] ?? []
-        );
+        $body       = "";
+        $properties = [];
+        $headers    = [];
+
+        if (isset($data["body"])) {
+            $body = $data["body"];
+        }
+
+        if (isset($data["properties"])) {
+            $properties = $data["properties"];
+        }
+
+        if (isset($data["headers"])) {
+            $headers = $data["headers"];
+        }
+
+        return [
+            "body"       => $body,
+            "properties" => $properties,
+            "headers"    => $headers,
+        ];
     }
 
     /**
-     * Encodes a message into its serialized envelope.
+     * Serializes a message into its wire envelope.
      */
     public static function encode(MessageInterface $message): string
     {

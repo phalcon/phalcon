@@ -25,11 +25,12 @@ namespace Phalcon\Queue\Adapter\Memory;
 use Phalcon\Contracts\Queue\Destination as DestinationInterface;
 use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Queue\Adapter\AbstractProducer;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 
 /**
  * Sends messages into an in-process queue. The Memory transport delivers
- * immediately and in-process, so delivery delay, priority and time to live
- * are not supported (handled by AbstractProducer).
+ * immediately and in-process, so delivery delay, priority and time to live are
+ * not supported (the defaults from AbstractProducer reject them).
  */
 class MemoryProducer extends AbstractProducer
 {
@@ -39,13 +40,8 @@ class MemoryProducer extends AbstractProducer
 
     public function send(DestinationInterface $destination, MessageInterface $message): void
     {
-        $queue = $this->assertQueueDestination($destination, "send to");
+        QueueDestinationGuard::assertQueue($destination, "send to");
 
-        $this->context->pushMessage($queue->getQueueName(), $message);
-    }
-
-    protected function getTransportName(): string
-    {
-        return "Memory";
+        $this->context->pushMessage($destination->getQueueName(), $message);
     }
 }

@@ -29,53 +29,35 @@ use Phalcon\Contracts\Queue\Topic as TopicInterface;
 use function uniqid;
 
 /**
- * Shared context base. A destination only ever carries a name, so the named
- * queue/topic factories and the temporary-queue bookkeeping are identical for
- * every transport and live here. Concrete contexts implement the transport
- * specific parts (consumers, producers, messages, purge, close) and call
- * purgeTemporaryQueues() from their close(). The queue-destination guard used
- * by createConsumer comes from QueueDestinationGuard.
+ * Shared transport-session base. Every transport builds the same destination
+ * value objects (GenericQueue / GenericTopic) and the same uniquely named
+ * temporary queue, so those factories live here once. Concrete contexts
+ * implement the transport-specific factories (consumer, producer, message,
+ * subscription consumer) and the storage operations.
  */
 abstract class AbstractContext implements ContextInterface
 {
-    use QueueDestinationGuard;
-
     /**
-     * Names of temporary queues created by this context, purged on close().
-     *
-     * @var string[]
+     * Creates a queue destination by name.
      */
-    protected array $temporaryQueues = [];
-
     public function createQueue(string $queueName): QueueInterface
     {
         return new GenericQueue($queueName);
     }
 
+    /**
+     * Creates a uniquely named temporary queue.
+     */
     public function createTemporaryQueue(): QueueInterface
     {
-        $queueName = uniqid("phalcon_queue_", true);
-
-        $this->temporaryQueues[] = $queueName;
-
-        return new GenericQueue($queueName);
-    }
-
-    public function createTopic(string $topicName): TopicInterface
-    {
-        return new GenericTopic($topicName);
+        return new GenericQueue(uniqid("phalcon_queue_", true));
     }
 
     /**
-     * Purges and forgets every temporary queue this context created. Concrete
-     * contexts call this from close().
+     * Creates a topic destination by name.
      */
-    protected function purgeTemporaryQueues(): void
+    public function createTopic(string $topicName): TopicInterface
     {
-        foreach ($this->temporaryQueues as $queueName) {
-            $this->purgeQueue(new GenericQueue($queueName));
-        }
-
-        $this->temporaryQueues = [];
+        return new GenericTopic($topicName);
     }
 }

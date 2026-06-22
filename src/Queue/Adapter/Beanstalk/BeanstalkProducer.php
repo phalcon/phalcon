@@ -27,11 +27,13 @@ use Phalcon\Contracts\Queue\Message as MessageInterface;
 use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Queue\Adapter\AbstractProducer;
 use Phalcon\Queue\Adapter\MessageEnvelope;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 
 /**
  * Sends messages to a Beanstalkd tube. Delivery delay (rounded down to whole
  * seconds) and message priority are supported natively; Beanstalkd has no
- * message expiry, so time to live is not (handled by AbstractProducer).
+ * message expiry, so time to live is not (the default from AbstractProducer
+ * rejects it).
  */
 class BeanstalkProducer extends AbstractProducer
 {
@@ -59,14 +61,14 @@ class BeanstalkProducer extends AbstractProducer
 
     public function send(DestinationInterface $destination, MessageInterface $message): void
     {
-        $queue = $this->assertQueueDestination($destination, "send to");
+        QueueDestinationGuard::assertQueue($destination, "send to");
 
         $payload  = MessageEnvelope::encode($message);
         $priority = $this->priority ?? self::DEFAULT_PRIORITY;
         $delay    = $this->deliveryDelay === null ? 0 : (int) ($this->deliveryDelay / 1000);
 
         $this->context->putMessage(
-            $queue->getQueueName(),
+            $destination->getQueueName(),
             $payload,
             $priority,
             $delay,
@@ -86,10 +88,5 @@ class BeanstalkProducer extends AbstractProducer
         $this->priority = $priority === null ? null : (int) $priority;
 
         return $this;
-    }
-
-    protected function getTransportName(): string
-    {
-        return "Beanstalk";
     }
 }

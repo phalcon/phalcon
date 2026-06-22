@@ -29,12 +29,14 @@ use Phalcon\Contracts\Queue\Producer as ProducerInterface;
 use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
 use Phalcon\Queue\Adapter\AbstractContext;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 
 /**
  * Beanstalkd transport session. A queue maps to a Beanstalkd tube. Producers
  * share the context connection (`use` + `put`); each consumer owns its own
  * connection, because Beanstalkd only lets the reserving connection delete,
- * release, bury or touch a job.
+ * release, bury or touch a job. The destination factories come from
+ * AbstractContext.
  */
 class BeanstalkContext extends AbstractContext
 {
@@ -51,8 +53,6 @@ class BeanstalkContext extends AbstractContext
 
     public function close(): void
     {
-        $this->purgeTemporaryQueues();
-
         if ($this->connection !== null) {
             $this->connection->disconnect();
 
@@ -62,9 +62,9 @@ class BeanstalkContext extends AbstractContext
 
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        $queue = $this->assertQueueDestination($destination, "consume from");
+        QueueDestinationGuard::assertQueue($destination, "consume from");
 
-        return new BeanstalkConsumer($this->newConnection(), $queue);
+        return new BeanstalkConsumer($this->newConnection(), $destination);
     }
 
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
@@ -124,11 +124,6 @@ class BeanstalkContext extends AbstractContext
 
         $connection->useTube($tube);
         $connection->put($payload, $priority, $delay, $ttr);
-    }
-
-    protected function getTransportName(): string
-    {
-        return "Beanstalk";
     }
 
     /**

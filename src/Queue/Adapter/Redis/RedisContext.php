@@ -30,6 +30,7 @@ use Phalcon\Contracts\Queue\Queue as QueueInterface;
 use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterface;
 use Phalcon\Queue\Adapter\AbstractContext;
 use Phalcon\Queue\Adapter\MessageEnvelope;
+use Phalcon\Queue\Adapter\QueueDestinationGuard;
 use Redis as RedisService;
 
 use function count;
@@ -44,7 +45,8 @@ use function uniqid;
  * Redis transport session (ext-redis). Each queue is a Redis list; messages
  * are LPUSHed on send and RPOP/BRPOPed on receive, giving FIFO delivery.
  * Delayed messages live in a companion sorted set (`<key>:delayed`) scored by
- * their due time in milliseconds, and are promoted into the list once due.
+ * their due time in milliseconds, and are promoted into the list once due. The
+ * destination factories come from AbstractContext.
  */
 class RedisContext extends AbstractContext
 {
@@ -67,7 +69,7 @@ class RedisContext extends AbstractContext
         $result = $this->redis->brPop([$this->listKey($queueName)], $timeout);
 
         if (is_array($result) && count($result) >= 2) {
-            return $this->unserializeMessage((string) $result[1]);
+            return $this->buildMessage((string) $result[1]);
         }
 
         return null;
@@ -75,14 +77,13 @@ class RedisContext extends AbstractContext
 
     public function close(): void
     {
-        $this->purgeTemporaryQueues();
     }
 
     public function createConsumer(DestinationInterface $destination): ConsumerInterface
     {
-        $queue = $this->assertQueueDestination($destination, "consume from");
+        QueueDestinationGuard::assertQueue($destination, "consume from");
 
-        return new RedisConsumer($this, $queue);
+        return new RedisConsumer($this, $destination);
     }
 
     public function createMessage(string $body = "", array $properties = [], array $headers = []): MessageInterface
@@ -115,7 +116,7 @@ class RedisContext extends AbstractContext
             return null;
         }
 
-        return $this->unserializeMessage($payload);
+        return $this->buildMessage($payload);
     }
 
     public function purgeQueue(QueueInterface $queue): void
@@ -147,9 +148,15 @@ class RedisContext extends AbstractContext
         $this->redis->lPush($this->listKey($queueName), $payload);
     }
 
-    protected function getTransportName(): string
+    private function buildMessage(string $payload): ?MessageInterface
     {
-        return "Redis";
+        $data = MessageEnvelope::decode($payload);
+
+        if ($data === null) {
+            return null;
+        }
+
+        return new RedisMessage((string) $data["body"], $data["properties"], $data["headers"]);
     }
 
     private function delayedKey(string $queueName): string
@@ -190,14 +197,5 @@ class RedisContext extends AbstractContext
                 $this->redis->lPush($listKey, $payload);
             }
         }
-    }
-
-    private function unserializeMessage(string $payload): ?MessageInterface
-    {
-        return MessageEnvelope::decode(
-            $payload,
-            static fn (string $body, array $properties, array $headers): RedisMessage
-                => new RedisMessage($body, $properties, $headers)
-        );
     }
 }

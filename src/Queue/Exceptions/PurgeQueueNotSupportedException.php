@@ -27,4 +27,8 @@ namespace Phalcon\Queue\Exceptions;
  */
 class PurgeQueueNotSupportedException extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct("The transport does not support purging a queue");
+    }
 }
