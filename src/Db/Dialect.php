@@ -747,7 +747,7 @@ abstract class Dialect implements DialectInterface
         if (is_array($number)) {
             $sqlQuery .= " LIMIT " . $number[0];
 
-            if (isset($number[1]) && strlen($number[1])) {
+            if (isset($number[1]) && strlen((string) $number[1])) {
                 $sqlQuery .= " OFFSET " . $number[1];
             }
 
