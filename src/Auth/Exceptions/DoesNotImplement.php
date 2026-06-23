@@ -29,4 +29,31 @@ class DoesNotImplement extends Exception
             $type . " does not implement '" . $name . "'"
         );
     }
+
+    /**
+     * Throws when $value is not an instance of $interface. Keeps the
+     * "must implement" guard shared across adapters, guards and the manager
+     * in one place.
+     *
+     * @template TExpected of object
+     *
+     * @param mixed                   $value
+     * @param class-string<TExpected> $interface
+     * @param string                  $type
+     * @param string                  $name
+     *
+     * @phpstan-assert TExpected $value
+     *
+     * @throws self
+     */
+    public static function assert(
+        mixed $value,
+        string $interface,
+        string $type,
+        string $name
+    ): void {
+        if (!($value instanceof $interface)) {
+            throw new self($type, $name);
+        }
+    }
 }
