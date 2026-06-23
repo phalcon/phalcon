@@ -30,6 +30,7 @@ use Phalcon\Acl\Exceptions\RoleNotFoundException;
 use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
+use Phalcon\Contracts\Acl\Adapter\Adapter;
 use Phalcon\Events\Exception as EventsException;
 use ReflectionClass;
 use ReflectionException;
@@ -52,12 +53,12 @@ use const E_USER_WARNING;
 /**
  * Manages ACL lists in memory
  *
- * @phpstan-import-type TComponent from AdapterInterface
- * @phpstan-import-type TRole from AdapterInterface
- * @phpstan-import-type TRoleToInherit from AdapterInterface
- * @phpstan-import-type TAccessList from AdapterInterface
- * @phpstan-import-type TRoleName from AdapterInterface
- * @phpstan-import-type TComponentName from AdapterInterface
+ * @phpstan-import-type TComponent from Adapter
+ * @phpstan-import-type TRole from Adapter
+ * @phpstan-import-type TRoleToInherit from Adapter
+ * @phpstan-import-type TAccessList from Adapter
+ * @phpstan-import-type TRoleName from Adapter
+ * @phpstan-import-type TComponentName from Adapter
  */
 class Memory extends AbstractAdapter
 {
@@ -144,7 +145,12 @@ class Memory extends AbstractAdapter
      */
     public function __construct()
     {
+        $this->access          = [];
+        $this->components      = [];
         $this->componentsNames = ["*" => true];
+        $this->functions       = [];
+        $this->roleInherits    = [];
+        $this->roles           = [];
         $this->accessList      = ["*!*" => true];
     }
 
@@ -234,7 +240,7 @@ class Memory extends AbstractAdapter
         }
 
         foreach ($accessList as $accessName) {
-            $accessKey = $componentName . '!' . $accessName;
+            $accessKey = $this->buildAccessKey($componentName, $accessName);
             if (!isset($this->accessList[$accessKey])) {
                 $this->accessList[$accessKey] = true;
             }
@@ -403,6 +409,9 @@ class Memory extends AbstractAdapter
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
      *
+     * A `*` role is an eager snapshot: it expands to the roles that exist when
+     * `allow()` is called, so roles added afterwards do not inherit the grant.
+     *
      * ```php
      * // Allow access to guests to search on customers
      * $acl->allow("guests", "customers", "search");
@@ -413,8 +422,9 @@ class Memory extends AbstractAdapter
      * // Allow access to any role to browse on products
      * $acl->allow("*", "products", "browse");
      *
-     * // Allow access to any role to browse on any component
-     * $acl->allow("*", "*", "browse");
+     * // Allow access to any role to perform any action on any component
+     * $acl->allow("*", "*", "*");
+     * ```
      *
      * @param string               $roleName
      * @param string               $componentName
@@ -448,6 +458,9 @@ class Memory extends AbstractAdapter
     /**
      * Deny access to a role on a component. You can use `*` as wildcard
      *
+     * A `*` role is an eager snapshot: it expands to the roles that exist when
+     * `deny()` is called, so roles added afterwards do not inherit the rule.
+     *
      * ```php
      * // Deny access to guests to search on customers
      * $acl->deny("guests", "customers", "search");
@@ -458,8 +471,8 @@ class Memory extends AbstractAdapter
      * // Deny access to any role to browse on products
      * $acl->deny("*", "products", "browse");
      *
-     * // Deny access to any role to browse on any component
-     * $acl->deny("*", "*", "browse");
+     * // Deny access to any role to perform any action on any component
+     * $acl->deny("*", "*", "*");
      * ```
      *
      * @param string               $roleName
@@ -508,7 +521,7 @@ class Memory extends AbstractAdapter
 
         /** @var array<string> $localAccess */
         foreach ($localAccess as $accessName) {
-            $accessKey = $componentName . '!' . $accessName;
+            $accessKey = $this->buildAccessKey($componentName, $accessName);
             if (isset($this->accessList[$accessKey])) {
                 unset($this->accessList[$accessKey]);
             }
@@ -532,6 +545,12 @@ class Memory extends AbstractAdapter
     }
 
     /**
+     * Returns the last composite key used to acquire access.
+     *
+     * @deprecated Relies on the internal "role!component!access" encoding,
+     *             which will be removed in v7. Use getActiveRole(),
+     *             getActiveComponent() and getActiveAccess() instead.
+     *
      * @return string|null
      */
     public function getActiveKey(): string | null
@@ -622,30 +641,17 @@ class Memory extends AbstractAdapter
         $haveAccess      = null;
         $funcAccess      = null;
         $roleObject      = null;
-        $hasComponent    = false;
-        $hasRole         = false;
 
-        if (is_object($roleName)) {
-            if ($roleName instanceof RoleAwareInterface) {
-                $roleObject = $roleName;
-                $roleName   = $roleName->getRoleName();
-            } elseif ($roleName instanceof RoleInterface) {
-                $roleName = $roleName->getName();
-            } else {
-                throw new InvalidRoleImplementation();
-            }
+        if ($roleName instanceof RoleAwareInterface) {
+            $roleObject = $roleName;
         }
 
-        if (is_object($componentName)) {
-            if ($componentName instanceof ComponentAwareInterface) {
-                $componentObject = $componentName;
-                $componentName   = $componentName->getComponentName();
-            } elseif ($componentName instanceof ComponentInterface) {
-                $componentName = $componentName->getName();
-            } else {
-                throw new InvalidComponentImplementation();
-            }
+        if ($componentName instanceof ComponentAwareInterface) {
+            $componentObject = $componentName;
         }
+
+        $roleName      = $this->toRoleName($roleName);
+        $componentName = $this->toComponentName($componentName);
 
         $this->activeRole      = $roleName;
         $this->activeComponent = $componentName;
@@ -655,7 +661,12 @@ class Memory extends AbstractAdapter
 
         $this->activeFunctionCustomArgumentsCount = 0;
 
-        if (false === $this->fireManagerEvent('acl:beforeCheckAccess', $this)) {
+        $beforeData = [
+            'role'      => $roleName,
+            'component' => $componentName,
+            'access'    => $access,
+        ];
+        if (false === $this->fireManagerEvent('acl:beforeCheckAccess', $beforeData)) {
             return false;
         }
 
@@ -679,7 +690,15 @@ class Memory extends AbstractAdapter
          * Check in the inherits roles
          */
         $this->accessGranted = $haveAccess ?? Enum::DENY;
-        $this->fireManagerEvent('acl:afterCheckAccess', $this);
+        $this->fireManagerEvent(
+            'acl:afterCheckAccess',
+            [
+                'role'      => $roleName,
+                'component' => $componentName,
+                'access'    => $access,
+                'granted'   => $this->accessGranted,
+            ]
+        );
 
         $this->activeKey      = $accessKey;
         $this->activeFunction = $funcAccess;
@@ -689,7 +708,7 @@ class Memory extends AbstractAdapter
              * Change activeKey to most narrow if there was no access for any
              * patterns found
              */
-            $this->activeKey = $roleName . '!' . $componentName . '!' . $access;
+            $this->activeKey = $this->buildKey($roleName, $componentName, $access);
 
             return $this->defaultAccess === Enum::ALLOW;
         }
@@ -698,138 +717,15 @@ class Memory extends AbstractAdapter
          * If we have funcAccess then do all the checks for it
          */
         if (is_callable($funcAccess)) {
-            $reflectionFunction   = new ReflectionFunction($funcAccess);
-            $reflectionParameters = $reflectionFunction->getParameters();
-            $parameterNumber      = count($reflectionParameters);
-
-            /**
-             * No parameters, just return haveAccess and call function without
-             * array
-             */
-            if (0 === $parameterNumber) {
-                return $haveAccess == Enum::ALLOW && call_user_func(
-                    $funcAccess
-                );
-            }
-
-            $parametersForFunction      = [];
-            $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
-            $userParametersSizeShouldBe = $parameterNumber;
-            foreach ($reflectionParameters as $reflectionParameter) {
-                /** @var ReflectionNamedType $reflectionType */
-                $reflectionType   = $reflectionParameter->getType();
-                $parameterToCheck = $reflectionParameter->getName();
-
-                if (null !== $reflectionType && $reflectionType instanceof ReflectionNamedType) {
-                    /** @var class-string $className */
-                    $className       = $reflectionType->getName();
-                    $reflectionClass = new ReflectionClass($className);
-
-                    // roleObject is this class
-                    if (
-                        null !== $roleObject &&
-                        true === $reflectionClass->isInstance($roleObject) &&
-                        true !== $hasRole
-                    ) {
-                        $hasRole                 = true;
-                        $parametersForFunction[] = $roleObject;
-                        $userParametersSizeShouldBe--;
-
-                        continue;
-                    }
-
-                    // componentObject is this class
-                    if (
-                        null !== $componentObject &&
-                        true === $reflectionClass->isInstance(
-                            $componentObject
-                        ) &&
-                        true !== $hasComponent
-                    ) {
-                        $hasComponent            = true;
-                        $parametersForFunction[] = $componentObject;
-                        $userParametersSizeShouldBe--;
-
-                        continue;
-                    }
-
-                    /**
-                     * This is some user defined class, check if his parameter
-                     * is instance of it
-                     */
-                    if (
-                        isset($parameters[$parameterToCheck]) &&
-                        is_object($parameters[$parameterToCheck]) &&
-                        true !== $reflectionClass->isInstance(
-                            $parameters[$parameterToCheck]
-                        )
-                    ) {
-                        throw new ParameterTypeMismatch(
-                            'Your passed parameter does not have the ' .
-                            'same class as the parameter in defined function ' .
-                            'when checking if ' . $roleName . ' can ' . $access .
-                            ' ' . $componentName . '. Class passed: ' .
-                            get_class($parameters[$parameterToCheck]) .
-                            ' , Class in defined function: ' .
-                            $reflectionClass->getName() . '.'
-                        );
-                    }
-                }
-
-                if (isset($parameters[$parameterToCheck])) {
-                    /**
-                     * We can't check type of ReflectionParameter in PHP 5.x so
-                     * we just add it as it is
-                     */
-                    $parametersForFunction[] = $parameters[$parameterToCheck];
-                }
-            }
-
-            $this->activeFunctionCustomArgumentsCount = $userParametersSizeShouldBe;
-
-            if (is_array($parameters) && count($parameters) > $userParametersSizeShouldBe) {
-                trigger_error(
-                    "Number of parameters in array is higher than " .
-                    "the number of parameters in defined function when checking if '" .
-                    $roleName . "' can '" . $access . "' '" . $componentName .
-                    "'. Extra parameters will be ignored.",
-                    E_USER_WARNING
-                );
-            }
-
-            // We dont have any parameters so check default action
-            if (empty($parametersForFunction)) {
-                if ($numberOfRequiredParameters > 0) {
-                    trigger_error(
-                        "You did not provide any parameters when '" .
-                        $roleName . "' can '" . $access .
-                        "' '" . $componentName .
-                        "'. We will use default action when no arguments."
-                    );
-
-                    return $haveAccess == Enum::ALLOW &&
-                        $this->noArgumentsDefaultAction == Enum::ALLOW;
-                }
-
-                /**
-                 * Number of required parameters == 0 so call funcAccess without
-                 * any arguments
-                 */
-                return $haveAccess == Enum::ALLOW &&
-                    call_user_func($funcAccess);
-            }
-
-            // Check necessary parameters
-            if (count($parametersForFunction) >= $numberOfRequiredParameters) {
-                return $haveAccess == Enum::ALLOW &&
-                    call_user_func_array($funcAccess, $parametersForFunction);
-            }
-
-            // We don't have enough parameters
-            throw new MissingFunctionParameters(
-                "You did not provide all necessary parameters for the " .
-                "defined function when checking if '" . $roleName . "' can '" .
-                $access . "' for '" . $componentName . "'."
+            return $this->invokeRule(
+                $funcAccess,
+                $haveAccess,
+                $parameters,
+                $roleObject,
+                $componentObject,
+                $roleName,
+                $componentName,
+                $access
             );
         }
 
@@ -893,13 +789,18 @@ class Memory extends AbstractAdapter
         $this->checkExists($this->roles, $roleName, 'Role');
         $this->checkExists($this->componentsNames, $componentName, 'Component');
 
+        $accessList = $this->accessList;
+
         if (is_array($access)) {
             foreach ($access as $accessName) {
-                $this->checkExistsInAccessList($componentName, $accessName);
+                $accessKey = $this->buildAccessKey($componentName, $accessName);
+                if (!isset($accessList[$accessKey])) {
+                    throw new AccessRuleNotFound($accessName, $componentName);
+                }
             }
 
             foreach ($access as $accessName) {
-                $accessKey                = $roleName . '!' . $componentName . '!' . $accessName;
+                $accessKey                = $this->buildKey($roleName, $componentName, $accessName);
                 $this->access[$accessKey] = $action;
                 if (null !== $function) {
                     $this->functions[$accessKey] = $function;
@@ -907,15 +808,34 @@ class Memory extends AbstractAdapter
             }
         } else {
             if ('*' !== $access) {
-                $this->checkExistsInAccessList($componentName, $access);
+                $accessKey = $this->buildAccessKey($componentName, $access);
+                if (!isset($accessList[$accessKey])) {
+                    throw new AccessRuleNotFound($access, $componentName);
+                }
             }
 
-            $accessKey                = $roleName . '!' . $componentName . '!' . $access;
+            $accessKey                = $this->buildKey($roleName, $componentName, $access);
             $this->access[$accessKey] = $action;
             if (null !== $function) {
                 $this->functions[$accessKey] = $function;
             }
         }
+    }
+
+    /**
+     * Builds the `<component>!<access>` access-list key
+     */
+    private function buildAccessKey(string $componentName, string $access): string
+    {
+        return $componentName . '!' . $access;
+    }
+
+    /**
+     * Builds the `<role>!<component>!<access>` rule key
+     */
+    private function buildKey(string $roleName, string $componentName, string $access): string
+    {
+        return $roleName . '!' . $componentName . '!' . $access;
     }
 
     /**
@@ -1020,19 +940,216 @@ class Memory extends AbstractAdapter
     }
 
     /**
-     * @param string $componentName
-     * @param string $accessName
+     * Invokes a callable rule, binding the role/component/user objects to the
+     * closure parameters by type and enforcing its arity.
      *
-     * @return void
-     * @throws Exception
+     * @param callable                      $funcAccess
+     * @param int                           $haveAccess
+     * @param array<int|string, mixed>|null $parameters
+     * @param object|null                   $roleObject
+     * @param object|null                   $componentObject
+     * @param string                        $roleName
+     * @param string                        $componentName
+     * @param string                        $access
+     *
+     * @return bool
+     * @throws ParameterTypeMismatch
+     * @throws MissingFunctionParameters
+     * @throws ReflectionException
      */
-    private function checkExistsInAccessList(
+    private function invokeRule(
+        callable $funcAccess,
+        int $haveAccess,
+        ?array $parameters,
+        ?object $roleObject,
+        ?object $componentObject,
+        string $roleName,
         string $componentName,
-        string $accessName
-    ): void {
-        $accessKey = $componentName . '!' . $accessName;
-        if (!isset($this->accessList[$accessKey])) {
-            throw new AccessRuleNotFound($accessName, $componentName);
+        string $access
+    ): bool {
+        $hasComponent = false;
+        $hasRole      = false;
+
+        $reflectionFunction   = new ReflectionFunction($funcAccess);
+        $reflectionParameters = $reflectionFunction->getParameters();
+        $parameterNumber      = count($reflectionParameters);
+
+        /**
+         * No parameters, just return haveAccess and call function without
+         * array
+         */
+        if (0 === $parameterNumber) {
+            return $haveAccess == Enum::ALLOW && call_user_func(
+                $funcAccess
+            );
         }
+
+        $parametersForFunction      = [];
+        $numberOfRequiredParameters = $reflectionFunction->getNumberOfRequiredParameters();
+        $userParametersSizeShouldBe = $parameterNumber;
+        foreach ($reflectionParameters as $reflectionParameter) {
+            /** @var ReflectionNamedType $reflectionType */
+            $reflectionType   = $reflectionParameter->getType();
+            $parameterToCheck = $reflectionParameter->getName();
+
+            if (null !== $reflectionType && $reflectionType instanceof ReflectionNamedType) {
+                /** @var class-string $className */
+                $className       = $reflectionType->getName();
+                $reflectionClass = new ReflectionClass($className);
+
+                // roleObject is this class
+                if (
+                    null !== $roleObject &&
+                    true === $reflectionClass->isInstance($roleObject) &&
+                    true !== $hasRole
+                ) {
+                    $hasRole                 = true;
+                    $parametersForFunction[] = $roleObject;
+                    $userParametersSizeShouldBe--;
+
+                    continue;
+                }
+
+                // componentObject is this class
+                if (
+                    null !== $componentObject &&
+                    true === $reflectionClass->isInstance(
+                        $componentObject
+                    ) &&
+                    true !== $hasComponent
+                ) {
+                    $hasComponent            = true;
+                    $parametersForFunction[] = $componentObject;
+                    $userParametersSizeShouldBe--;
+
+                    continue;
+                }
+
+                /**
+                 * This is some user defined class, check if his parameter
+                 * is instance of it
+                 */
+                if (
+                    isset($parameters[$parameterToCheck]) &&
+                    is_object($parameters[$parameterToCheck]) &&
+                    true !== $reflectionClass->isInstance(
+                        $parameters[$parameterToCheck]
+                    )
+                ) {
+                    throw new ParameterTypeMismatch(
+                        'Your passed parameter does not have the ' .
+                        'same class as the parameter in defined function ' .
+                        'when checking if ' . $roleName . ' can ' . $access .
+                        ' ' . $componentName . '. Class passed: ' .
+                        get_class($parameters[$parameterToCheck]) .
+                        ' , Class in defined function: ' .
+                        $reflectionClass->getName() . '.'
+                    );
+                }
+            }
+
+            if (isset($parameters[$parameterToCheck])) {
+                /**
+                 * We can't check type of ReflectionParameter in PHP 5.x so
+                 * we just add it as it is
+                 */
+                $parametersForFunction[] = $parameters[$parameterToCheck];
+            }
+        }
+
+        $this->activeFunctionCustomArgumentsCount = $userParametersSizeShouldBe;
+
+        if (is_array($parameters) && count($parameters) > $userParametersSizeShouldBe) {
+            trigger_error(
+                "Number of parameters in array is higher than " .
+                "the number of parameters in defined function when checking if '" .
+                $roleName . "' can '" . $access . "' '" . $componentName .
+                "'. Extra parameters will be ignored.",
+                E_USER_WARNING
+            );
+        }
+
+        // We dont have any parameters so check default action
+        if (empty($parametersForFunction)) {
+            if ($numberOfRequiredParameters > 0) {
+                trigger_error(
+                    "You did not provide any parameters when '" .
+                    $roleName . "' can '" . $access .
+                    "' '" . $componentName .
+                    "'. We will use default action when no arguments."
+                );
+
+                return $haveAccess == Enum::ALLOW &&
+                    $this->noArgumentsDefaultAction == Enum::ALLOW;
+            }
+
+            /**
+             * Number of required parameters == 0 so call funcAccess without
+             * any arguments
+             */
+            return $haveAccess == Enum::ALLOW &&
+                call_user_func($funcAccess);
+        }
+
+        // Check necessary parameters
+        if (count($parametersForFunction) >= $numberOfRequiredParameters) {
+            return $haveAccess == Enum::ALLOW &&
+                call_user_func_array($funcAccess, $parametersForFunction);
+        }
+
+        // We don't have enough parameters
+        throw new MissingFunctionParameters(
+            "You did not provide all necessary parameters for the " .
+            "defined function when checking if '" . $roleName . "' can '" .
+            $access . "' for '" . $componentName . "'."
+        );
+    }
+
+    /**
+     * Resolves a component identifier (object or string) to its name
+     *
+     * @phpstan-param TComponentName $component
+     *
+     * @throws InvalidComponentImplementation
+     */
+    private function toComponentName(mixed $component): string
+    {
+        if (is_object($component)) {
+            if ($component instanceof ComponentAwareInterface) {
+                return $component->getComponentName();
+            }
+
+            if ($component instanceof ComponentInterface) {
+                return $component->getName();
+            }
+
+            throw new InvalidComponentImplementation();
+        }
+
+        return $component;
+    }
+
+    /**
+     * Resolves a role identifier (object or string) to its name
+     *
+     * @phpstan-param TRoleName $role
+     *
+     * @throws InvalidRoleImplementation
+     */
+    private function toRoleName(mixed $role): string
+    {
+        if (is_object($role)) {
+            if ($role instanceof RoleAwareInterface) {
+                return $role->getRoleName();
+            }
+
+            if ($role instanceof RoleInterface) {
+                return $role->getName();
+            }
+
+            throw new InvalidRoleImplementation();
+        }
+
+        return $role;
     }
 }

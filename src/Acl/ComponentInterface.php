@@ -13,29 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl;
 
+use Phalcon\Contracts\Acl\Component as ComponentContract;
+
 /**
  * Interface for Phalcon\Acl\Component
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Acl\Component} instead.
  */
-interface ComponentInterface
+interface ComponentInterface extends ComponentContract
 {
-    /**
-     * Magic method __toString
-     *
-     * @return string
-     */
-    public function __toString(): string;
-
-    /**
-     * Returns component description
-     *
-     * @return string
-     */
-    public function getDescription(): string | null;
-
-    /**
-     * Returns the component name
-     *
-     * @return string
-     */
-    public function getName(): string;
 }
