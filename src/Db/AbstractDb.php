@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
-use function ini_set;
+use Phalcon\Support\Settings;
 
 /**
  * Phalcon\Db and its related classes provide a simple SQL database interface
@@ -69,8 +69,8 @@ abstract class AbstractDb
          * Enables/Disables globally the escaping of SQL identifiers
          */
         if (isset($options["escapeSqlIdentifiers"])) {
-            ini_set(
-                "phalcon.db.escape_identifiers",
+            Settings::set(
+                "db.escape_identifiers",
                 $options["escapeSqlIdentifiers"]
             );
         }
@@ -79,7 +79,7 @@ abstract class AbstractDb
          * Force cast bound values in the PHP userland
          */
         if (isset($options["forceCasting"])) {
-            ini_set("phalcon.db.force_casting", $options["forceCasting"]);
+            Settings::set("db.force_casting", $options["forceCasting"]);
         }
     }
 }

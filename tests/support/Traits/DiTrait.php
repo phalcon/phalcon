@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Support\Traits;
 
 use PDO;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
+use Phalcon\Annotations\Annotations;
 use Phalcon\Cache\Adapter\Libmemcached as StorageLibmemcached;
 use Phalcon\Cache\Adapter\Stream as StorageStream;
 use Phalcon\Cache\AdapterFactory;
@@ -204,7 +205,7 @@ trait DiTrait
     {
         switch ($service) {
             case 'annotations':
-                return new AnnotationsMemory(new SerializerFactory());
+                return new Annotations(new AnnotationsMemory(new SerializerFactory()));
             case 'cliFactoryDefault':
                 return new CliFactoryDefault();
             case 'console':
