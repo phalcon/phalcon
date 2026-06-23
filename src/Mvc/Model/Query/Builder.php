@@ -680,9 +680,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Return the models who makes part of the query
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getFrom(): array | string
+    public function getFrom(): array | string | null
     {
         return $this->models;
     }
@@ -1164,9 +1164,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Return the conditions for the query
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getWhere(): array | string
+    public function getWhere(): array | string | null
     {
         return $this->conditions;
     }

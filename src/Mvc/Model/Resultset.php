@@ -24,6 +24,7 @@ use Phalcon\Mvc\Model\Exceptions\CursorIsImmutable;
 use Phalcon\Mvc\Model\Exceptions\IndexNotInCursor;
 use Phalcon\Mvc\Model\Exceptions\InvalidResultsetCacheService;
 use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
+use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 use SeekableIterator;
@@ -422,9 +423,9 @@ abstract class Resultset implements
     /**
      * Get last row in the resultset
      *
-     * @return ModelInterface|null
+     * @return ModelInterface|Row|null
      */
-    public function getLast(): ModelInterface | null
+    public function getLast(): ModelInterface | Row | null
     {
         $count = $this->count;
 
