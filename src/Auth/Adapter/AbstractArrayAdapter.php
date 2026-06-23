@@ -106,9 +106,12 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
         if ($modelClass !== null) {
             $instance = new $modelClass();
 
-            if (!($instance instanceof AuthUserContract)) {
-                throw new DoesNotImplement('User model', 'AuthUser');
-            }
+            DoesNotImplement::assert(
+                $instance,
+                AuthUserContract::class,
+                'User model',
+                'AuthUser'
+            );
 
             if (method_exists($instance, 'assign')) {
                 $instance->assign($row);
