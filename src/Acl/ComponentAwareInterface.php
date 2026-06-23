@@ -13,13 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl;
 
+use Phalcon\Contracts\Acl\ComponentAware as ComponentAwareContract;
+
 /**
  * Interface for ACL Component aware objects
+ *
+ * @psalm-suppress DeprecatedInterface
+ * @deprecated Will be removed in a future major release.
+ *             Use {@see \Phalcon\Contracts\Acl\ComponentAware} instead.
  */
-interface ComponentAwareInterface
+interface ComponentAwareInterface extends ComponentAwareContract
 {
-    /**
-     * Returns component name
-     */
-    public function getComponentName(): string;
 }
