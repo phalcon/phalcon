@@ -62,7 +62,7 @@ jobs:
           PHALCON_PATH: ext
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -157,7 +157,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: "Install development dependencies with Composer"
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -254,7 +254,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -355,7 +355,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -441,7 +441,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
