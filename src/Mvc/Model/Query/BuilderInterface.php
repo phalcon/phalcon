@@ -185,9 +185,9 @@ interface BuilderInterface
     /**
      * Return the models who makes part of the query
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getFrom(): array | string;
+    public function getFrom(): array | string | null;
 
     /**
      * Returns the GROUP BY clause
@@ -255,9 +255,9 @@ interface BuilderInterface
     /**
      * Return the conditions for the query
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getWhere(): array | string;
+    public function getWhere(): array | string | null;
 
     /**
      * Sets a GROUP BY clause

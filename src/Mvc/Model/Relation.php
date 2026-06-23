@@ -76,9 +76,9 @@ class Relation implements RelationInterface
     /**
      * Returns the foreign key configuration
      *
-     * @return array|false|string
+     * @return array|bool|string
      */
-    public function getForeignKey(): array | false | string
+    public function getForeignKey(): array | bool | string
     {
         if (isset($this->options["foreignKey"]) && !empty($this->options["foreignKey"])) {
             return $this->options["foreignKey"];

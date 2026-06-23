@@ -11,6 +11,9 @@
 
 namespace Phalcon\Tests\Support\Models\Boutique;
 
+use Phalcon\Annotations\Models\MetaData\Column;
+use Phalcon\Annotations\Models\MetaData\Identity;
+use Phalcon\Annotations\Models\MetaData\Primary;
 use Phalcon\Mvc\Model;
 
 class Robots extends Model
@@ -22,36 +25,45 @@ class Robots extends Model
      * @Identity
      * @Column(type="integer", nullable=false)
      */
+    #[Primary]
+    #[Identity]
+    #[Column(type: 'integer', nullable: false)]
     public $id;
 
     /**
      * @Column(type="string", length=70, nullable=false)
      */
+    #[Column(type: 'string', length: 70, nullable: false)]
     public $name;
 
     /**
      * @Column(type="string", length=32, nullable=false, default='mechanical')
      */
+    #[Column(type: 'string', length: 32, nullable: false, default: 'mechanical')]
     public $type;
 
     /**
      * @Column(type="integer", nullable=false, default=1900)
      */
+    #[Column(type: 'integer', nullable: false, default: 1900)]
     public $year;
 
     /**
      * @Column(type="datetime", nullable=false)
      */
+    #[Column(type: 'datetime', nullable: false)]
     public $datetime;
 
     /**
      * @Column(type="datetime", nullable=true)
      */
+    #[Column(type: 'datetime', nullable: true)]
     public $deleted;
 
     /**
      * @Column(type="text", nullable=false)
      */
+    #[Column(type: 'text', nullable: false)]
     protected $text;
 
     /**
