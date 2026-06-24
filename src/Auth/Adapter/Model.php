@@ -92,12 +92,18 @@ class Model extends AbstractAdapter implements RememberAdapter
             return null;
         }
 
-        return $this->findFirstAsAuthUser(
+        $found = $this->findFirstAsAuthUser(
             [
                 'conditions' => implode(' AND ', $conditions),
                 'bind'       => $bind,
             ]
         );
+
+        if ($found === null) {
+            $this->burnHash();
+        }
+
+        return $found;
     }
 
     public function retrieveById(int | string $id): ?AuthUser

@@ -55,6 +55,8 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
             }
         }
 
+        $this->burnHash();
+
         return null;
     }
 
@@ -132,7 +134,9 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
     abstract protected function loadUsers(): array;
 
     /**
-     * Strict per-key match of a row against credentials, skipping 'password'.
+     * Per-key match of a row against credentials, skipping 'password'. Values
+     * are compared as strings so typed row values (e.g. int id, bool active)
+     * match the string input that arrives from an HTTP request.
      *
      * @phpstan-param AuthUserRow     $row
      * @phpstan-param AuthCredentials $credentials
@@ -144,7 +148,7 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
                 continue;
             }
 
-            if (!isset($row[$key]) || $row[$key] !== $value) {
+            if (!isset($row[$key]) || (string) $row[$key] !== (string) $value) {
                 return false;
             }
         }
