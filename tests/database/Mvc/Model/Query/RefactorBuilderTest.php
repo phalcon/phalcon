@@ -17,14 +17,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class RefactorBuilderTest extends AbstractDatabaseTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
-    public function testShouldSaveToUseComplexSnapshotCache(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -39,7 +31,7 @@ final class RefactorBuilderTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testIssue701(): void
+    public function testConstructorConditions(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -57,7 +49,15 @@ final class RefactorBuilderTest extends AbstractDatabaseTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testConstructorConditions(): void
+    public function testIssue701(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-02
+     */
+    public function testShouldSaveToUseComplexSnapshotCache(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }

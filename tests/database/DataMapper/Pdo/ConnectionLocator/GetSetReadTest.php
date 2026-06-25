@@ -26,63 +26,6 @@ use function spl_object_hash;
 #[Group('sqlite')]
 final class GetSetReadTest extends AbstractDatabaseTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-25
-     */
-    public function testDMPdoConnectionLocatorGetSetRead(): void
-    {
-        $master  = self::getDataMapperConnection();
-        $read1   = self::getDataMapperConnection();
-        $read2   = self::getDataMapperConnection();
-        $locator = new ConnectionLocator(
-            $master,
-            [
-                "read1" => function () use ($read1) {
-                    return $read1;
-                },
-                "read2" => function () use ($read2) {
-                    return $read2;
-                },
-            ]
-        );
-
-        $actual = $locator->getRead("read1");
-        $this->assertEquals(spl_object_hash($read1), spl_object_hash($actual));
-
-        $actual = $locator->getRead("read2");
-        $this->assertEquals(spl_object_hash($read2), spl_object_hash($actual));
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-01-25
-     */
-    public function testDMPdoConnectionLocatorGetReadRandom(): void
-    {
-        $master  = self::getDataMapperConnection();
-        $read1   = self::getDataMapperConnection();
-        $read2   = self::getDataMapperConnection();
-        $locator = new ConnectionLocator(
-            $master,
-            [
-                "read1" => function () use ($read1) {
-                    return $read1;
-                },
-                "read2" => function () use ($read2) {
-                    return $read2;
-                },
-            ]
-        );
-
-        $hashes = [
-            spl_object_hash($read1),
-            spl_object_hash($read2),
-        ];
-
-        $actual = $locator->getRead();
-        $this->assertTrue(in_array(spl_object_hash($actual), $hashes));
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -118,5 +61,62 @@ final class GetSetReadTest extends AbstractDatabaseTestCase
         );
 
         $locator->getRead("unknown");
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-25
+     */
+    public function testDMPdoConnectionLocatorGetReadRandom(): void
+    {
+        $master  = self::getDataMapperConnection();
+        $read1   = self::getDataMapperConnection();
+        $read2   = self::getDataMapperConnection();
+        $locator = new ConnectionLocator(
+            $master,
+            [
+                "read1" => function () use ($read1) {
+                    return $read1;
+                },
+                "read2" => function () use ($read2) {
+                    return $read2;
+                },
+            ]
+        );
+
+        $hashes = [
+            spl_object_hash($read1),
+            spl_object_hash($read2),
+        ];
+
+        $actual = $locator->getRead();
+        $this->assertTrue(in_array(spl_object_hash($actual), $hashes));
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-01-25
+     */
+    public function testDMPdoConnectionLocatorGetSetRead(): void
+    {
+        $master  = self::getDataMapperConnection();
+        $read1   = self::getDataMapperConnection();
+        $read2   = self::getDataMapperConnection();
+        $locator = new ConnectionLocator(
+            $master,
+            [
+                "read1" => function () use ($read1) {
+                    return $read1;
+                },
+                "read2" => function () use ($read2) {
+                    return $read2;
+                },
+            ]
+        );
+
+        $actual = $locator->getRead("read1");
+        $this->assertEquals(spl_object_hash($read1), spl_object_hash($actual));
+
+        $actual = $locator->getRead("read2");
+        $this->assertEquals(spl_object_hash($read2), spl_object_hash($actual));
     }
 }

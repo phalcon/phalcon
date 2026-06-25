@@ -24,6 +24,12 @@ final class GetAttributesTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
 
+    public function setUp(): void
+    {
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
+    }
+
     /**
      * @return array[]
      */
@@ -43,12 +49,6 @@ final class GetAttributesTest extends AbstractDatabaseTestCase
                 'metadataLibmemcached',
             ],
         ];
-    }
-
-    public function setUp(): void
-    {
-        $this->setNewFactoryDefault();
-        $this->setDatabase();
     }
 
     /**

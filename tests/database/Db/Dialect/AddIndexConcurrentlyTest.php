@@ -22,6 +22,29 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class AddIndexConcurrentlyTest extends AbstractDatabaseTestCase
 {
+
+    /**
+     * MySQL - has no CONCURRENTLY concept; the flag must not leak.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-05-15
+     */
+    #[Group('mysql')]
+    public function testDbDialectMysqlAddIndexIgnoresConcurrently(): void
+    {
+        $dialect = new Mysql();
+        $index   = new Index(
+            'idx_email',
+            [
+                'columns'      => ['email'],
+                'concurrently' => true,
+            ]
+        );
+
+        $actual = $dialect->addIndex('table', 'schema', $index);
+
+        $this->assertStringNotContainsString('CONCURRENTLY', $actual);
+    }
     /**
      * PostgreSQL - emits `CONCURRENTLY` between `INDEX` and the name.
      *
@@ -56,29 +79,6 @@ final class AddIndexConcurrentlyTest extends AbstractDatabaseTestCase
     {
         $dialect = new Postgresql();
         $index   = new Index('idx_email', ['email']);
-
-        $actual = $dialect->addIndex('table', 'schema', $index);
-
-        $this->assertStringNotContainsString('CONCURRENTLY', $actual);
-    }
-
-    /**
-     * MySQL - has no CONCURRENTLY concept; the flag must not leak.
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-05-15
-     */
-    #[Group('mysql')]
-    public function testDbDialectMysqlAddIndexIgnoresConcurrently(): void
-    {
-        $dialect = new Mysql();
-        $index   = new Index(
-            'idx_email',
-            [
-                'columns'      => ['email'],
-                'concurrently' => true,
-            ]
-        );
 
         $actual = $dialect->addIndex('table', 'schema', $index);
 

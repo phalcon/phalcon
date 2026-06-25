@@ -20,24 +20,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class ConstructTest extends AbstractDatabaseTestCase
 {
-    /**
-     * Tests Phalcon\Db\RawValue :: __construct()
-     *
-     * @author       Sid Roberts <https://github.com/SidRoberts>
-     * @since        2019-04-17
-     */
-    #[Group('mysql')]
-    #[Group('pgsql')]
-    #[Group('sqlite')]
-    #[DataProvider('valueProvider')]
-    public function testDbRawvalueConstruct(
-        mixed $value,
-        string $expected
-    ): void {
-        $rawValue = new RawValue($value);
-
-        $this->assertEquals($expected, $rawValue->getValue());
-    }
 
     public static function valueProvider(): array
     {
@@ -62,5 +44,23 @@ final class ConstructTest extends AbstractDatabaseTestCase
                 "''",
             ],
         ];
+    }
+    /**
+     * Tests Phalcon\Db\RawValue :: __construct()
+     *
+     * @author       Sid Roberts <https://github.com/SidRoberts>
+     * @since        2019-04-17
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    #[DataProvider('valueProvider')]
+    public function testDbRawvalueConstruct(
+        mixed $value,
+        string $expected
+    ): void {
+        $rawValue = new RawValue($value);
+
+        $this->assertEquals($expected, $rawValue->getValue());
     }
 }
