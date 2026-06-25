@@ -20,17 +20,6 @@ use Phalcon\Tests\Unit\Mvc\Dispatcher\Helper\BaseDispatcher;
 
 class GetParamTest extends BaseDispatcher
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2018-11-13
-     */
-    public function testMvcDispatcherGetParam(): void
-    {
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->setParams(['id' => 42]);
-        $this->assertSame(42, $dispatcher->getParam('id'));
-        $this->assertNull($dispatcher->getParam('nonexistent'));
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -50,5 +39,16 @@ class GetParamTest extends BaseDispatcher
 
         // Non-empty filters + null container → throwDispatchException at L943
         $dispatcher->getParameter('key', 'string');
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2018-11-13
+     */
+    public function testMvcDispatcherGetParam(): void
+    {
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->setParams(['id' => 42]);
+        $this->assertSame(42, $dispatcher->getParam('id'));
+        $this->assertNull($dispatcher->getParam('nonexistent'));
     }
 }

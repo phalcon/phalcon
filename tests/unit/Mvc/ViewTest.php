@@ -17,13 +17,27 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ViewTest extends AbstractUnitTestCase
 {
+
     /**
-     * Tests using partials with the mix Twig with PHP Engines
+     * Tests View::disableLevel
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2013-01-07
+     * @since  2026-04-02
      */
-    public function testOverrideLayout(): void
+    public function testDisableLevels(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+
+    /**
+     * Tests params view scope
+     *
+     * @issue  https://github.com/phalcon/cphalcon/issues/12648
+     * @issue  https://github.com/phalcon/cphalcon/pull/13288
+     * @author Wojciech Ślawski <jurigag@gmail.com>
+     * @since  2017-03-17
+     */
+    public function testIssue12648(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -38,14 +52,13 @@ final class ViewTest extends AbstractUnitTestCase
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
-
     /**
-     * Tests View::render
+     * Tests using partials with the mix Twig with PHP Engines
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2012-03-05
+     * @since  2013-01-07
      */
-    public function testStandardRender(): void
+    public function testOverrideLayout(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -73,12 +86,12 @@ final class ViewTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests View::disableLevel
+     * Tests View::render
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
+     * @since  2012-03-05
      */
-    public function testDisableLevels(): void
+    public function testStandardRender(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -90,19 +103,6 @@ final class ViewTest extends AbstractUnitTestCase
      * @since  2026-04-02
      */
     public function testViewOptions(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * Tests params view scope
-     *
-     * @issue  https://github.com/phalcon/cphalcon/issues/12648
-     * @issue  https://github.com/phalcon/cphalcon/pull/13288
-     * @author Wojciech Ślawski <jurigag@gmail.com>
-     * @since  2017-03-17
-     */
-    public function testIssue12648(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }

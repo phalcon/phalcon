@@ -39,15 +39,6 @@ final class RefactorMicroTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testMicroMiddlewareSimple(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
     public function testMicroMiddlewareClasses(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
@@ -57,7 +48,7 @@ final class RefactorMicroTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testMicroStopMiddlewareOnBeforeClasses(): void
+    public function testMicroMiddlewareSimple(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -67,6 +58,15 @@ final class RefactorMicroTest extends AbstractUnitTestCase
      * @since  2026-04-02
      */
     public function testMicroStopMiddlewareOnAfterAndFinishClasses(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-02
+     */
+    public function testMicroStopMiddlewareOnBeforeClasses(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }

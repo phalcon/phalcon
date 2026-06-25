@@ -30,7 +30,7 @@ final class RefactorViewEnginesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldWorkWithMustacheEngine(): void
+    public function testShouldWorkMixPhpMustacheEngines(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -48,24 +48,6 @@ final class RefactorViewEnginesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldWorkMixPhpTwigEnginesPartial(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
-    public function testShouldWorkWithTwigEngine(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
     public function testShouldWorkMixPhpTwigEngines(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
@@ -75,7 +57,25 @@ final class RefactorViewEnginesTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldWorkMixPhpMustacheEngines(): void
+    public function testShouldWorkMixPhpTwigEnginesPartial(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-02
+     */
+    public function testShouldWorkWithMustacheEngine(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-02
+     */
+    public function testShouldWorkWithTwigEngine(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }

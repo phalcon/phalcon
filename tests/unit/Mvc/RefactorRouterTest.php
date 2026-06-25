@@ -17,11 +17,12 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class RefactorRouterTest extends AbstractUnitTestCase
 {
+
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testUsingRouteConverters(): void
+    public function testAddingRouteByUsingShortPaths(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -30,7 +31,16 @@ final class RefactorRouterTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testUsingCallbacksBeforeMatchRoute(): void
+    public function testShouldMatchWithGotRouterParam(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-02
+     */
+    public function testShouldMatchWithHostnameRegexWithHostPort111(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -57,24 +67,6 @@ final class RefactorRouterTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldMatchWithGotRouterParam(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
-    public function testAddingRouteByUsingShortPaths(): void
-    {
-        $this->markTestSkipped('Needs review - tocheck after migration');
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-02
-     */
     public function testShouldMathWithHostnameRegex(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
@@ -84,7 +76,7 @@ final class RefactorRouterTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldMatchWithHostnameRegexWithHostPort111(): void
+    public function testShouldReturnCorrectController(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
@@ -93,7 +85,15 @@ final class RefactorRouterTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02
      */
-    public function testShouldReturnCorrectController(): void
+    public function testUsingCallbacksBeforeMatchRoute(): void
+    {
+        $this->markTestSkipped('Needs review - tocheck after migration');
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-02
+     */
+    public function testUsingRouteConverters(): void
     {
         $this->markTestSkipped('Needs review - tocheck after migration');
     }
