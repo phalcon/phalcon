@@ -113,8 +113,6 @@ class Enum
     public const PHVOLT_T_MUL            = 42; //'*';
     public const PHVOLT_T_MUL_ASSIGN     = 283;
     public const PHVOLT_T_NOT            = 33; //'!';
-    public const PHVOLT_T_NOTEQUALS      = 273;
-    public const PHVOLT_T_NOTIDENTICAL   = 275;
     public const PHVOLT_T_NOT_IN         = 367;
     public const PHVOLT_T_NOT_ISEMPTY    = 392;
     public const PHVOLT_T_NOT_ISEVEN     = 393;
@@ -123,6 +121,8 @@ class Enum
     public const PHVOLT_T_NOT_ISODD      = 394;
     public const PHVOLT_T_NOT_ISSCALAR   = 396;
     public const PHVOLT_T_NOT_ISSET      = 362;
+    public const PHVOLT_T_NOTEQUALS      = 273;
+    public const PHVOLT_T_NOTIDENTICAL   = 275;
     public const PHVOLT_T_NULL           = 261;
     public const PHVOLT_T_NUMERIC        = 383;
     public const PHVOLT_T_ODD            = 382;

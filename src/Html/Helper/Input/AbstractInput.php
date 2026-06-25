@@ -31,15 +31,15 @@ use function array_merge;
  */
 abstract class AbstractInput extends AbstractHelper
 {
-    /**
-     * @var string
-     */
-    protected string $type = 'text';
 
     /**
      * @var array
      */
     protected array $attributes = [];
+    /**
+     * @var string
+     */
+    protected string $type = 'text';
 
     /**
      * @param string      $name

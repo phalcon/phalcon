@@ -25,15 +25,6 @@ namespace Phalcon\Cli\Router;
  */
 interface RouteInterface
 {
-    /**
-     * Replaces placeholders from pattern returning a valid PCRE regular
-     * expression
-     *
-     * @param string $pattern
-     *
-     * @return string
-     */
-    public function compilePattern(string $pattern): string;
 
     /**
      * Set the routing delimiter
@@ -45,18 +36,34 @@ interface RouteInterface
     public static function delimiter(string $delimiter);
 
     /**
-     * Returns the route's pattern
-     *
-     * @return string
-     */
-    public function getCompiledPattern(): string;
-
-    /**
      * Get routing delimiter
      *
      * @return string
      */
     public static function getDelimiter(): string;
+
+    /**
+     * Resets the internal route id generator
+     *
+     * @return void
+     */
+    public static function reset(): void;
+    /**
+     * Replaces placeholders from pattern returning a valid PCRE regular
+     * expression
+     *
+     * @param string $pattern
+     *
+     * @return string
+     */
+    public function compilePattern(string $pattern): string;
+
+    /**
+     * Returns the route's pattern
+     *
+     * @return string
+     */
+    public function getCompiledPattern(): string;
 
     /**
      * Returns the route's description
@@ -109,13 +116,6 @@ interface RouteInterface
      * @return void
      */
     public function reConfigure(string $pattern, array | string $paths = []): void;
-
-    /**
-     * Resets the internal route id generator
-     *
-     * @return void
-     */
-    public static function reset(): void;
 
     /**
      * Sets the route's description

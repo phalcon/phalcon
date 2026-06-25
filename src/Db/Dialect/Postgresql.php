@@ -46,6 +46,25 @@ class Postgresql extends Dialect
     protected array $supportedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
 
     /**
+     * Generates SQL to add a CHECK constraint to an existing table.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return string
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): string {
+        return "ALTER TABLE "
+            . $this->prepareTable($tableName, $schemaName)
+            . ' ADD ' . $this->getCheckClause($check, '"');
+    }
+
+    /**
      * Generates SQL to add a column to a table
      *
      * @param string          $tableName
@@ -81,25 +100,6 @@ class Postgresql extends Dialect
         $sql .= " NULL";
 
         return $sql;
-    }
-
-    /**
-     * Generates SQL to add a CHECK constraint to an existing table.
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return string
-     */
-    public function addCheck(
-        string $tableName,
-        string $schemaName,
-        CheckInterface $check
-    ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . ' ADD ' . $this->getCheckClause($check, '"');
     }
 
     /**
@@ -214,6 +214,30 @@ class Postgresql extends Dialect
             . "_PRIMARY\" PRIMARY KEY ("
             . $this->getColumnList($index->getColumns())
             . ")";
+    }
+
+    /**
+     * Generates SQL to create a materialized view.
+     *
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function createMaterializedView(
+        string $viewName,
+        array $definition,
+        ?string $schemaName = null
+    ): string {
+        if (!isset($definition['sql'])) {
+            throw new MissingDefinitionKey("sql");
+        }
+
+        return 'CREATE MATERIALIZED VIEW '
+            . $this->prepareTable($viewName, $schemaName)
+            . ' AS ' . $definition['sql'];
     }
 
     /**
@@ -547,6 +571,27 @@ class Postgresql extends Dialect
     }
 
     /**
+     * Generates SQL to delete a CHECK constraint from a table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return string
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): string {
+        return "ALTER TABLE "
+            . $this->prepareTable($tableName, $schemaName)
+            . " DROP CONSTRAINT \""
+            . $checkName
+            . "\"";
+    }
+
+    /**
      * Generates SQL to delete a column from a table
      *
      * @param string $tableName
@@ -589,27 +634,6 @@ class Postgresql extends Dialect
     }
 
     /**
-     * Generates SQL to delete a CHECK constraint from a table.
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return string
-     */
-    public function dropCheck(
-        string $tableName,
-        string $schemaName,
-        string $checkName
-    ): string {
-        return "ALTER TABLE "
-            . $this->prepareTable($tableName, $schemaName)
-            . " DROP CONSTRAINT \""
-            . $checkName
-            . "\"";
-    }
-
-    /**
      * Generates SQL to delete an index from a table
      *
      * @param string $tableName
@@ -624,6 +648,29 @@ class Postgresql extends Dialect
         string $indexName
     ): string {
         return "DROP INDEX \"" . $indexName . "\"";
+    }
+
+    /**
+     * Generates SQL to drop a materialized view.
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return string
+     */
+    public function dropMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $ifExists = true
+    ): string {
+        $view = $this->prepareTable($viewName, $schemaName);
+
+        if ($ifExists) {
+            return 'DROP MATERIALIZED VIEW IF EXISTS ' . $view;
+        }
+
+        return 'DROP MATERIALIZED VIEW ' . $view;
     }
 
     /**
@@ -1121,20 +1168,26 @@ class Postgresql extends Dialect
     }
 
     /**
-     * Returns a SQL modified a shared lock statement. For now this method
-     * returns the original query
+     * Generates SQL to refresh a materialized view.
      *
-     * @param string $sqlQuery
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $concurrent
      *
      * @return string
      */
-    public function sharedLock(string $sqlQuery, string $modifier = ''): string
-    {
-        if ($modifier !== '') {
-            return $sqlQuery . ' FOR SHARE ' . $modifier;
+    public function refreshMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $concurrent = false
+    ): string {
+        $view = $this->prepareTable($viewName, $schemaName);
+
+        if ($concurrent) {
+            return 'REFRESH MATERIALIZED VIEW CONCURRENTLY ' . $view;
         }
 
-        return $sqlQuery . ' FOR SHARE';
+        return 'REFRESH MATERIALIZED VIEW ' . $view;
     }
 
     /**
@@ -1161,6 +1214,23 @@ class Postgresql extends Dialect
     }
 
     /**
+     * Returns a SQL modified a shared lock statement. For now this method
+     * returns the original query
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
+     */
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
+    {
+        if ($modifier !== '') {
+            return $sqlQuery . ' FOR SHARE ' . $modifier;
+        }
+
+        return $sqlQuery . ' FOR SHARE';
+    }
+
+    /**
      * PostgreSQL supports materialized views (`CREATE MATERIALIZED VIEW`).
      *
      * @return bool
@@ -1178,76 +1248,6 @@ class Postgresql extends Dialect
     public function supportsReturning(): bool
     {
         return true;
-    }
-
-    /**
-     * Generates SQL to create a materialized view.
-     *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function createMaterializedView(
-        string $viewName,
-        array $definition,
-        ?string $schemaName = null
-    ): string {
-        if (!isset($definition['sql'])) {
-            throw new MissingDefinitionKey("sql");
-        }
-
-        return 'CREATE MATERIALIZED VIEW '
-            . $this->prepareTable($viewName, $schemaName)
-            . ' AS ' . $definition['sql'];
-    }
-
-    /**
-     * Generates SQL to drop a materialized view.
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
-     */
-    public function dropMaterializedView(
-        string $viewName,
-        ?string $schemaName = null,
-        bool $ifExists = true
-    ): string {
-        $view = $this->prepareTable($viewName, $schemaName);
-
-        if ($ifExists) {
-            return 'DROP MATERIALIZED VIEW IF EXISTS ' . $view;
-        }
-
-        return 'DROP MATERIALIZED VIEW ' . $view;
-    }
-
-    /**
-     * Generates SQL to refresh a materialized view.
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $concurrent
-     *
-     * @return string
-     */
-    public function refreshMaterializedView(
-        string $viewName,
-        ?string $schemaName = null,
-        bool $concurrent = false
-    ): string {
-        $view = $this->prepareTable($viewName, $schemaName);
-
-        if ($concurrent) {
-            return 'REFRESH MATERIALIZED VIEW CONCURRENTLY ' . $view;
-        }
-
-        return 'REFRESH MATERIALIZED VIEW ' . $view;
     }
 
     /**

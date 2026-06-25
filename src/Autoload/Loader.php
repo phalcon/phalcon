@@ -345,6 +345,16 @@ class Loader
     }
 
     /**
+     * returns isRegistered
+     *
+     * @return bool
+     */
+    public function isRegistered(): bool
+    {
+        return $this->isRegistered;
+    }
+
+    /**
      * Checks if a file exists and then adds the file by doing virtual require
      *
      * @return void
@@ -513,16 +523,6 @@ class Loader
         }
 
         return $this;
-    }
-
-    /**
-     * returns isRegistered
-     *
-     * @return bool
-     */
-    public function isRegistered(): bool
-    {
-        return $this->isRegistered;
     }
 
     /**

@@ -61,11 +61,6 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @var array
      */
-    protected array $whitelist = [];
-
-    /**
-     * @var array
-     */
     protected array $labels = [];
 
     /**
@@ -86,6 +81,11 @@ class Validation extends Injectable implements ValidationInterface
      * @var array
      */
     protected array $values = [];
+
+    /**
+     * @var array
+     */
+    protected array $whitelist = [];
 
     /**
      * Phalcon\Filter\Validation constructor
@@ -241,6 +241,18 @@ class Validation extends Injectable implements ValidationInterface
         }
 
         return $this;
+    }
+
+    /**
+     * Verify if validation fails by verifying if there are messages in the current validation
+     */
+    public function fails(): bool
+    {
+        if ($this->messages->count() > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -661,18 +673,6 @@ class Validation extends Injectable implements ValidationInterface
         }
 
         return $this->messages;
-    }
-
-    /**
-     * Verify if validation fails by verifying if there are messages in the current validation
-     */
-    public function fails(): bool
-    {
-        if ($this->messages->count() > 0) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

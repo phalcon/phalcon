@@ -428,6 +428,18 @@ abstract class AbstractPdo extends AbstractAdapter
     }
 
     /**
+     * Ensures the connection is alive, reconnecting in place if it is not.
+     *
+     * @return void
+     */
+    public function ensureConnection(): void
+    {
+        if (!$this->ping()) {
+            $this->connect();
+        }
+    }
+
+    /**
      * Escapes a value to avoid SQL injections according to the active charset
      * in the connection
      *
@@ -442,18 +454,6 @@ abstract class AbstractPdo extends AbstractAdapter
     public function escapeString(string $input): string
     {
         return $this->pdo->quote($input);
-    }
-
-    /**
-     * Ensures the connection is alive, reconnecting in place if it is not.
-     *
-     * @return void
-     */
-    public function ensureConnection(): void
-    {
-        if (!$this->ping()) {
-            $this->connect();
-        }
     }
 
     /**

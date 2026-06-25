@@ -812,6 +812,22 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     }
 
     /**
+     * Generate the label of an element added to the form including HTML
+     *
+     * @param string $name
+     * @param array  $attributes
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function label(string $name, array $attributes = []): string
+    {
+        $element = $this->get($name);
+
+        return $element->label($attributes);
+    }
+
+    /**
      * Loads elements into the form from a Schema source.
      *
      * Each definition in the schema must have at least 'type' and 'name'.
@@ -855,22 +871,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         }
 
         return $this;
-    }
-
-    /**
-     * Generate the label of an element added to the form including HTML
-     *
-     * @param string $name
-     * @param array  $attributes
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function label(string $name, array $attributes = []): string
-    {
-        $element = $this->get($name);
-
-        return $element->label($attributes);
     }
 
     /**

@@ -52,16 +52,6 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     }
 
     /**
-     * Returns the current adapter
-     *
-     * @return AdapterInterface
-     */
-    public function getAdapter(): AdapterInterface
-    {
-        return $this->adapter;
-    }
-
-    /**
      * Fetches a value from the cache.
      *
      * @param string $key
@@ -70,6 +60,16 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @return mixed
      */
     abstract public function get(string $key, mixed $default = null): mixed;
+
+    /**
+     * Returns the current adapter
+     *
+     * @return AdapterInterface
+     */
+    public function getAdapter(): AdapterInterface
+    {
+        return $this->adapter;
+    }
 
     /**
      * Persists data in the cache, uniquely referenced by a key with an

@@ -83,18 +83,6 @@ trait PhpApcuTrait
     }
 
     /**
-     * @param string $pattern
-     *
-     * @return APCUIterator|bool
-     *
-     * @link https://php.net/manual/en/class.apcuiterator.php
-     */
-    protected function phpApcuIterator(string $pattern): APCUIterator | bool
-    {
-        return new APCUIterator($pattern);
-    }
-
-    /**
      * @param string    $key
      * @param int       $step
      * @param bool|null $success
@@ -111,6 +99,18 @@ trait PhpApcuTrait
         int $ttl = 0
     ): false | int {
         return apcu_inc($key, $step, $success, $ttl);
+    }
+
+    /**
+     * @param string $pattern
+     *
+     * @return APCUIterator|bool
+     *
+     * @link https://php.net/manual/en/class.apcuiterator.php
+     */
+    protected function phpApcuIterator(string $pattern): APCUIterator | bool
+    {
+        return new APCUIterator($pattern);
     }
 
     /**

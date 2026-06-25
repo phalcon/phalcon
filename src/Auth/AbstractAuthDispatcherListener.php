@@ -40,12 +40,6 @@ abstract class AbstractAuthDispatcherListener
     }
 
     /**
-     * Returns the kind label used by AccessDenied (e.g. 'task', 'action',
-     * 'route').
-     */
-    abstract protected function getActionType(): string;
-
-    /**
      * Runs the access check for the given action name. Returns true when
      * the dispatch should proceed, false when a forward was issued, and
      * throws when access is denied without a redirect target.
@@ -83,4 +77,10 @@ abstract class AbstractAuthDispatcherListener
 
         throw new AccessDenied($this->getActionType(), $actionName);
     }
+
+    /**
+     * Returns the kind label used by AccessDenied (e.g. 'task', 'action',
+     * 'route').
+     */
+    abstract protected function getActionType(): string;
 }

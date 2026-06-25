@@ -32,6 +32,11 @@ use function substr;
  */
 class Route implements RouteInterface
 {
+
+    /**
+     * @mixed $int
+     */
+    protected static int $uniqueId = 0;
     /**
      * @mixed $callable|null
      */
@@ -97,11 +102,6 @@ class Route implements RouteInterface
     protected string $routeId = "";
 
     /**
-     * @mixed $int
-     */
-    protected static int $uniqueId = 0;
-
-    /**
      * Phalcon\Mvc\Router\Route constructor
      *
      * @param string            $pattern
@@ -127,6 +127,101 @@ class Route implements RouteInterface
         // TODO: Add a function that increase static members
         $this->routeId  = (string)$uniqueId;
         self::$uniqueId = $uniqueId + 1;
+    }
+
+    /**
+     * Returns routePaths
+     *
+     * @param array|string|null $paths
+     *
+     * @return array
+     * @throws Exception
+     */
+    public static function getRoutePaths(array | string | null $paths = null): array
+    {
+        if ($paths === null) {
+            $paths = [];
+        }
+
+        if (is_string($paths)) {
+            $moduleName     = null;
+            $controllerName = null;
+            $actionName     = null;
+
+            // Explode the short paths using the :: separator
+            $parts = explode("::", $paths);
+
+            // Create the array paths dynamically
+            switch (count($parts)) {
+                case 3:
+                    $moduleName     = $parts[0];
+                    $controllerName = $parts[1];
+                    $actionName     = $parts[2];
+                    break;
+
+                case 2:
+                    $controllerName = $parts[0];
+                    $actionName     = $parts[1];
+                    break;
+
+                case 1:
+                    $controllerName = $parts[0];
+                    break;
+            }
+
+            $routePaths = [];
+
+            // Process module name
+            if ($moduleName !== null) {
+                $routePaths["module"] = $moduleName;
+            }
+
+            // Process controller name
+            if ($controllerName !== null) {
+                // Check if we need to obtain the namespace
+                if (str_contains($controllerName, "\\")) {
+                    $controllerNameArray = explode("\\", $controllerName);
+
+                    // Extract the real class name from the namespaced class
+                    $realClassName = array_pop($controllerNameArray);
+
+                    // Extract the namespace from the namespaced class
+                    $namespaceName = implode("\\", $controllerNameArray);
+
+                    // Update the namespace
+                    if ($namespaceName) {
+                        $routePaths["namespace"] = $namespaceName;
+                    }
+                } else {
+                    $realClassName = $controllerName;
+                }
+
+                $routePaths["controller"] = $realClassName;
+            }
+
+            // Process action name
+            if ($actionName !== null) {
+                $routePaths["action"] = $actionName;
+            }
+        } else {
+            $routePaths = $paths;
+        }
+
+        if (!is_array($routePaths)) {
+            throw new InvalidRoutePaths();
+        }
+
+        return $routePaths;
+    }
+
+    /**
+     * Resets the internal route id generator
+     *
+     * @return void
+     */
+    public static function reset(): void
+    {
+        self::$uniqueId = 0;
     }
 
     /**
@@ -534,91 +629,6 @@ class Route implements RouteInterface
     }
 
     /**
-     * Returns routePaths
-     *
-     * @param array|string|null $paths
-     *
-     * @return array
-     * @throws Exception
-     */
-    public static function getRoutePaths(array | string | null $paths = null): array
-    {
-        if ($paths === null) {
-            $paths = [];
-        }
-
-        if (is_string($paths)) {
-            $moduleName     = null;
-            $controllerName = null;
-            $actionName     = null;
-
-            // Explode the short paths using the :: separator
-            $parts = explode("::", $paths);
-
-            // Create the array paths dynamically
-            switch (count($parts)) {
-                case 3:
-                    $moduleName     = $parts[0];
-                    $controllerName = $parts[1];
-                    $actionName     = $parts[2];
-                    break;
-
-                case 2:
-                    $controllerName = $parts[0];
-                    $actionName     = $parts[1];
-                    break;
-
-                case 1:
-                    $controllerName = $parts[0];
-                    break;
-            }
-
-            $routePaths = [];
-
-            // Process module name
-            if ($moduleName !== null) {
-                $routePaths["module"] = $moduleName;
-            }
-
-            // Process controller name
-            if ($controllerName !== null) {
-                // Check if we need to obtain the namespace
-                if (str_contains($controllerName, "\\")) {
-                    $controllerNameArray = explode("\\", $controllerName);
-
-                    // Extract the real class name from the namespaced class
-                    $realClassName = array_pop($controllerNameArray);
-
-                    // Extract the namespace from the namespaced class
-                    $namespaceName = implode("\\", $controllerNameArray);
-
-                    // Update the namespace
-                    if ($namespaceName) {
-                        $routePaths["namespace"] = $namespaceName;
-                    }
-                } else {
-                    $realClassName = $controllerName;
-                }
-
-                $routePaths["controller"] = $realClassName;
-            }
-
-            // Process action name
-            if ($actionName !== null) {
-                $routePaths["action"] = $actionName;
-            }
-        } else {
-            $routePaths = $paths;
-        }
-
-        if (!is_array($routePaths)) {
-            throw new InvalidRoutePaths();
-        }
-
-        return $routePaths;
-    }
-
-    /**
      * Allows to set a callback to handle the request directly in the route
      *
      *```php
@@ -691,16 +701,6 @@ class Route implements RouteInterface
          * Update the route's paths
          */
         $this->paths = $routePaths;
-    }
-
-    /**
-     * Resets the internal route id generator
-     *
-     * @return void
-     */
-    public static function reset(): void
-    {
-        self::$uniqueId = 0;
     }
 
     /**

@@ -40,6 +40,11 @@ use function mb_strtolower;
  */
 class Debug
 {
+
+    /**
+     * @var bool
+     */
+    protected static bool $isActive = false;
     /**
      * @var array
      */
@@ -54,11 +59,6 @@ class Debug
      * @var bool
      */
     protected bool $hideDocumentRoot = false;
-
-    /**
-     * @var bool
-     */
-    protected static bool $isActive = false;
 
     /**
      * @var Renderer

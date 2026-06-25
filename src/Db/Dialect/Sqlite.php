@@ -56,6 +56,24 @@ class Sqlite extends Dialect
     protected array $supportedOperators = ["||", "->", "->>"];
 
     /**
+     * SQLite cannot ALTER an existing table to add a CHECK constraint.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): string {
+        throw new SqliteAlterCheckNotSupported();
+    }
+
+    /**
      * Generates SQL to add a column to a table
      *
      * @param string          $tableName
@@ -116,24 +134,6 @@ class Sqlite extends Dialect
         ReferenceInterface $reference
     ): string {
         throw new SqliteAlterForeignKeyNotSupported();
-    }
-
-    /**
-     * SQLite cannot ALTER an existing table to add a CHECK constraint.
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function addCheck(
-        string $tableName,
-        string $schemaName,
-        CheckInterface $check
-    ): string {
-        throw new SqliteAlterCheckNotSupported();
     }
 
     /**
@@ -441,6 +441,24 @@ class Sqlite extends Dialect
     }
 
     /**
+     * SQLite cannot DROP a CHECK constraint from an existing table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): string {
+        throw new SqliteDropCheckNotSupported();
+    }
+
+    /**
      * Generates SQL to delete a column from a table
      *
      * @param string $tableName
@@ -459,24 +477,6 @@ class Sqlite extends Dialect
             . $this->prepareTable($tableName, $schemaName)
             . ' DROP COLUMN "'
             . $columnName . '"';
-    }
-
-    /**
-     * SQLite cannot DROP a CHECK constraint from an existing table.
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return string
-     * @throws Exception
-     */
-    public function dropCheck(
-        string $tableName,
-        string $schemaName,
-        string $checkName
-    ): string {
-        throw new SqliteDropCheckNotSupported();
     }
 
     /**
@@ -853,19 +853,6 @@ class Sqlite extends Dialect
     }
 
     /**
-     * Returns a SQL modified a shared lock statement. For now this method
-     * returns the original query
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
-     */
-    public function sharedLock(string $sqlQuery, string $modifier = ''): string
-    {
-        return $sqlQuery;
-    }
-
-    /**
      * Appends a `RETURNING` clause to the supplied INSERT/UPDATE/DELETE
      * statement. SQLite 3.35+.
      *
@@ -886,6 +873,19 @@ class Sqlite extends Dialect
         }
 
         return $sqlQuery . ' RETURNING ' . $this->getColumnList($columns);
+    }
+
+    /**
+     * Returns a SQL modified a shared lock statement. For now this method
+     * returns the original query
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
+     */
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
+    {
+        return $sqlQuery;
     }
 
     /**

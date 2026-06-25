@@ -233,18 +233,6 @@ class Transaction implements TransactionInterface
     }
 
     /**
-     * Sets flag to rollback on abort the HTTP connection
-     *
-     * @param bool $rollbackOnAbort
-     *
-     * @return void
-     */
-    public function setRollbackOnAbort(bool $rollbackOnAbort): void
-    {
-        $this->rollbackOnAbort = $rollbackOnAbort;
-    }
-
-    /**
      * Sets object which generates rollback action
      *
      * @param ModelInterface $record
@@ -254,6 +242,18 @@ class Transaction implements TransactionInterface
     public function setRollbackedRecord(ModelInterface $record): void
     {
         $this->rollbackRecord = $record;
+    }
+
+    /**
+     * Sets flag to rollback on abort the HTTP connection
+     *
+     * @param bool $rollbackOnAbort
+     *
+     * @return void
+     */
+    public function setRollbackOnAbort(bool $rollbackOnAbort): void
+    {
+        $this->rollbackOnAbort = $rollbackOnAbort;
     }
 
     /**

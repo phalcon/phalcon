@@ -34,6 +34,13 @@ namespace Phalcon\Support;
  */
 class Settings
 {
+
+    /**
+     * PHP-level overrides. Keys stored here take priority over ini_get().
+     *
+     * @var array
+     */
+    protected static array $overrides = [];
     /**
      * Hardcoded defaults - mirror of the C extension's compiled-in global
      * defaults. Used as the final fallback when ini_get() returns false
@@ -67,13 +74,6 @@ class Settings
     ];
 
     /**
-     * PHP-level overrides. Keys stored here take priority over ini_get().
-     *
-     * @var array
-     */
-    protected static array $overrides = [];
-
-    /**
      * Returns the value of a known setting.
      *
      * Resolution order:
@@ -103,6 +103,17 @@ class Settings
         }
 
         return self::$defaults[$key] ?? null;
+    }
+
+    /**
+     * Clears all PHP-level overrides, restoring get() to return ini_get()
+     * fallback values (as configured in php.ini or .htaccess).
+     *
+     * @return void
+     */
+    public static function reset(): void
+    {
+        self::$overrides = [];
     }
 
     /**
@@ -149,16 +160,5 @@ class Settings
             default:
                 break;
         }
-    }
-
-    /**
-     * Clears all PHP-level overrides, restoring get() to return ini_get()
-     * fallback values (as configured in php.ini or .htaccess).
-     *
-     * @return void
-     */
-    public static function reset(): void
-    {
-        self::$overrides = [];
     }
 }

@@ -187,6 +187,21 @@ interface MessageInterface
     public function withHeader(string $name, $value): MessageInterface;
 
     /**
+     * Return an instance without the specified header.
+     *
+     * Header resolution MUST be done without case-sensitivity.
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that removes
+     * the named header.
+     *
+     * @param string $name Case-insensitive header field name to remove.
+     *
+     * @return static
+     */
+    public function withoutHeader(string $name): MessageInterface;
+
+    /**
      * Return an instance with the specified HTTP protocol version.
      *
      * The version string MUST contain only the HTTP version number (e.g.,
@@ -201,19 +216,4 @@ interface MessageInterface
      * @return MessageInterface
      */
     public function withProtocolVersion(string $version): MessageInterface;
-
-    /**
-     * Return an instance without the specified header.
-     *
-     * Header resolution MUST be done without case-sensitivity.
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return an instance that removes
-     * the named header.
-     *
-     * @param string $name Case-insensitive header field name to remove.
-     *
-     * @return static
-     */
-    public function withoutHeader(string $name): MessageInterface;
 }

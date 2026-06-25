@@ -21,17 +21,17 @@ interface PasswordSecurity
         int $maxPassLength = 0
     ): bool;
 
+    public function getDefaultHash(): int;
+
+    public function getHashInformation(string $hash): array;
+
+    public function getWorkFactor(): int;
+
     public function hash(string $password, array $options = []): string;
 
     public function isLegacyHash(string $passwordHash): bool;
 
-    public function getHashInformation(string $hash): array;
-
-    public function getDefaultHash(): int;
-
     public function setDefaultHash(int $defaultHash): Security;
-
-    public function getWorkFactor(): int;
 
     public function setWorkFactor(int $workFactor): Security;
 }

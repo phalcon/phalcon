@@ -49,13 +49,13 @@ class ServiceDefinition
      * @var array<array-key, mixed>
      */
     protected array $arguments = [];
-
-    protected object|null $container = null;
     protected string|null $className = null;
     /**
      * @var array
      */
     protected array $constructorArgs = [];
+
+    protected object|null $container = null;
     /**
      * @var array<array-key, callable>
      */
@@ -350,20 +350,6 @@ class ServiceDefinition
     }
 
     /**
-     * Set the container
-     *
-     * @param object $container
-     *
-     * @return $this
-     */
-    public function setContainer(object $container): static
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
-    /**
      * Set a class
      *
      * @param string $className
@@ -375,6 +361,20 @@ class ServiceDefinition
     {
         $this->checkFrozen();
         $this->className = $className;
+
+        return $this;
+    }
+
+    /**
+     * Set the container
+     *
+     * @param object $container
+     *
+     * @return $this
+     */
+    public function setContainer(object $container): static
+    {
+        $this->container = $container;
 
         return $this;
     }

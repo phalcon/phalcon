@@ -19,8 +19,6 @@ use Phalcon\Forms\Element\Date;
 use Phalcon\Forms\Element\ElementInterface;
 use Phalcon\Forms\Element\Email;
 use Phalcon\Forms\Element\File;
-use Phalcon\Forms\Exceptions\FormNotInLocator;
-use Phalcon\Forms\Exceptions\UnknownFormElementType;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Numeric;
 use Phalcon\Forms\Element\Password;
@@ -30,6 +28,8 @@ use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
+use Phalcon\Forms\Exceptions\FormNotInLocator;
+use Phalcon\Forms\Exceptions\UnknownFormElementType;
 
 /**
  * A closure-based registry for named forms and element type factories.
@@ -82,53 +82,6 @@ class FormsLocator
     }
 
     // -----------------------------------------------------------------------
-    // Element registry
-    // -----------------------------------------------------------------------
-
-    /**
-     * Returns the factory callable for the given element type.
-     *
-     * @param string $type
-     *
-     * @return callable  fn(string $name, array $options, array $attributes): ElementInterface
-     * @throws Exception
-     */
-    public function getElement(string $type): callable
-    {
-        if (!isset($this->elements[$type])) {
-            throw new UnknownFormElementType($type);
-        }
-
-        return $this->elements[$type];
-    }
-
-    /**
-     * Checks whether an element type is registered.
-     *
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function hasElement(string $type): bool
-    {
-        return isset($this->elements[$type]);
-    }
-
-    /**
-     * Registers or replaces an element type factory.
-     *
-     * The callable must accept (string $name, array $options, array $attributes)
-     * and return an ElementInterface instance.
-     *
-     * @param string   $type
-     * @param callable $factory
-     */
-    public function setElement(string $type, callable $factory): void
-    {
-        $this->elements[$type] = $factory;
-    }
-
-    // -----------------------------------------------------------------------
     // Form registry
     // -----------------------------------------------------------------------
 
@@ -157,6 +110,27 @@ class FormsLocator
         return $this->instances[$name] ??= ($this->factories[$name])(null);
     }
 
+    // -----------------------------------------------------------------------
+    // Element registry
+    // -----------------------------------------------------------------------
+
+    /**
+     * Returns the factory callable for the given element type.
+     *
+     * @param string $type
+     *
+     * @return callable  fn(string $name, array $options, array $attributes): ElementInterface
+     * @throws Exception
+     */
+    public function getElement(string $type): callable
+    {
+        if (!isset($this->elements[$type])) {
+            throw new UnknownFormElementType($type);
+        }
+
+        return $this->elements[$type];
+    }
+
     /**
      * Checks whether a named form factory is registered.
      *
@@ -167,6 +141,18 @@ class FormsLocator
     public function has(string $name): bool
     {
         return isset($this->factories[$name]);
+    }
+
+    /**
+     * Checks whether an element type is registered.
+     *
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function hasElement(string $type): bool
+    {
+        return isset($this->elements[$type]);
     }
 
     /**
@@ -183,6 +169,20 @@ class FormsLocator
     {
         unset($this->instances[$name]);
         $this->factories[$name] = $factory;
+    }
+
+    /**
+     * Registers or replaces an element type factory.
+     *
+     * The callable must accept (string $name, array $options, array $attributes)
+     * and return an ElementInterface instance.
+     *
+     * @param string   $type
+     * @param callable $factory
+     */
+    public function setElement(string $type, callable $factory): void
+    {
+        $this->elements[$type] = $factory;
     }
 
     // -----------------------------------------------------------------------

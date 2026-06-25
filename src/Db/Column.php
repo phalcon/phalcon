@@ -104,14 +104,29 @@ class Column implements ColumnInterface
     public const TYPE_BOOLEAN = 8;
 
     /**
+     * PostgreSQL `BYTEA` binary type
+     */
+    public const TYPE_BYTEA = 30;
+
+    /**
      * Char abstract data type
      */
     public const TYPE_CHAR = 5;
 
     /**
+     * PostgreSQL `CIDR` network-address type
+     */
+    public const TYPE_CIDR = 32;
+
+    /**
      * Date abstract data type
      */
     public const TYPE_DATE = 1;
+
+    /**
+     * PostgreSQL `DATERANGE` range-of-date type
+     */
+    public const TYPE_DATERANGE = 39;
 
     /**
      * Datetime abstract data type
@@ -139,6 +154,31 @@ class Column implements ColumnInterface
     public const TYPE_FLOAT = 7;
 
     /**
+     * Spatial `GEOMETRY` base type (MySQL 5.7+; PostgreSQL + PostGIS)
+     */
+    public const TYPE_GEOMETRY = 40;
+
+    /**
+     * Spatial `GEOMETRYCOLLECTION` type
+     */
+    public const TYPE_GEOMETRYCOLLECTION = 47;
+
+    /**
+     * PostgreSQL `INET` IPv4/IPv6 address type
+     */
+    public const TYPE_INET = 31;
+
+    /**
+     * PostgreSQL `INT4RANGE` range-of-integer type
+     */
+    public const TYPE_INT4RANGE = 34;
+
+    /**
+     * PostgreSQL `INT8RANGE` range-of-bigint type
+     */
+    public const TYPE_INT8RANGE = 35;
+
+    /**
      * Int abstract data type
      */
     public const TYPE_INTEGER = 0;
@@ -154,6 +194,11 @@ class Column implements ColumnInterface
     public const TYPE_JSONB = 16;
 
     /**
+     * Spatial `LINESTRING` type
+     */
+    public const TYPE_LINESTRING = 42;
+
+    /**
      * Longblob abstract data type
      */
     public const TYPE_LONGBLOB = 13;
@@ -162,6 +207,11 @@ class Column implements ColumnInterface
      * Longtext abstract data type
      */
     public const TYPE_LONGTEXT = 24;
+
+    /**
+     * PostgreSQL `MACADDR` MAC-address type
+     */
+    public const TYPE_MACADDR = 33;
 
     /**
      * Mediumblob abstract data type
@@ -177,6 +227,36 @@ class Column implements ColumnInterface
      * Mediumtext abstract data type
      */
     public const TYPE_MEDIUMTEXT = 23;
+
+    /**
+     * Spatial `MULTILINESTRING` type
+     */
+    public const TYPE_MULTILINESTRING = 45;
+
+    /**
+     * Spatial `MULTIPOINT` type
+     */
+    public const TYPE_MULTIPOINT = 44;
+
+    /**
+     * Spatial `MULTIPOLYGON` type
+     */
+    public const TYPE_MULTIPOLYGON = 46;
+
+    /**
+     * PostgreSQL `NUMRANGE` range-of-numeric type
+     */
+    public const TYPE_NUMRANGE = 36;
+
+    /**
+     * Spatial `POINT` type
+     */
+    public const TYPE_POINT = 41;
+
+    /**
+     * Spatial `POLYGON` type
+     */
+    public const TYPE_POLYGON = 43;
 
     /**
      * Smallint abstract data type
@@ -214,6 +294,16 @@ class Column implements ColumnInterface
     public const TYPE_TINYTEXT = 25;
 
     /**
+     * PostgreSQL `TSRANGE` range-of-timestamp (without time zone) type
+     */
+    public const TYPE_TSRANGE = 37;
+
+    /**
+     * PostgreSQL `TSTZRANGE` range-of-timestamp (with time zone) type
+     */
+    public const TYPE_TSTZRANGE = 38;
+
+    /**
      * UUID abstract data type
      */
     public const TYPE_UUID = 29;
@@ -227,96 +317,6 @@ class Column implements ColumnInterface
      * Varchar abstract data type
      */
     public const TYPE_VARCHAR = 2;
-
-    /**
-     * PostgreSQL `BYTEA` binary type
-     */
-    public const TYPE_BYTEA = 30;
-
-    /**
-     * PostgreSQL `INET` IPv4/IPv6 address type
-     */
-    public const TYPE_INET = 31;
-
-    /**
-     * PostgreSQL `CIDR` network-address type
-     */
-    public const TYPE_CIDR = 32;
-
-    /**
-     * PostgreSQL `MACADDR` MAC-address type
-     */
-    public const TYPE_MACADDR = 33;
-
-    /**
-     * PostgreSQL `INT4RANGE` range-of-integer type
-     */
-    public const TYPE_INT4RANGE = 34;
-
-    /**
-     * PostgreSQL `INT8RANGE` range-of-bigint type
-     */
-    public const TYPE_INT8RANGE = 35;
-
-    /**
-     * PostgreSQL `NUMRANGE` range-of-numeric type
-     */
-    public const TYPE_NUMRANGE = 36;
-
-    /**
-     * PostgreSQL `TSRANGE` range-of-timestamp (without time zone) type
-     */
-    public const TYPE_TSRANGE = 37;
-
-    /**
-     * PostgreSQL `TSTZRANGE` range-of-timestamp (with time zone) type
-     */
-    public const TYPE_TSTZRANGE = 38;
-
-    /**
-     * PostgreSQL `DATERANGE` range-of-date type
-     */
-    public const TYPE_DATERANGE = 39;
-
-    /**
-     * Spatial `GEOMETRY` base type (MySQL 5.7+; PostgreSQL + PostGIS)
-     */
-    public const TYPE_GEOMETRY = 40;
-
-    /**
-     * Spatial `POINT` type
-     */
-    public const TYPE_POINT = 41;
-
-    /**
-     * Spatial `LINESTRING` type
-     */
-    public const TYPE_LINESTRING = 42;
-
-    /**
-     * Spatial `POLYGON` type
-     */
-    public const TYPE_POLYGON = 43;
-
-    /**
-     * Spatial `MULTIPOINT` type
-     */
-    public const TYPE_MULTIPOINT = 44;
-
-    /**
-     * Spatial `MULTILINESTRING` type
-     */
-    public const TYPE_MULTILINESTRING = 45;
-
-    /**
-     * Spatial `MULTIPOLYGON` type
-     */
-    public const TYPE_MULTIPOLYGON = 46;
-
-    /**
-     * Spatial `GEOMETRYCOLLECTION` type
-     */
-    public const TYPE_GEOMETRYCOLLECTION = 47;
 
     /**
      * Column Position

@@ -20,6 +20,24 @@ use ArrayAccess;
  */
 interface DiInterface extends ArrayAccess
 {
+
+    /**
+     * Return the last DI created
+     */
+    public static function getDefault(): object | null;
+
+    /**
+     * Resets the internal default DI
+     */
+    public static function reset(): void;
+
+    /**
+     * Set a default dependency injection container to be obtained into static
+     * methods
+     *
+     * @param object $container
+     */
+    public static function setDefault(object $container): void;
     /**
      * Attempts to register a service in the services container
      * Only is successful if a service hasn't been registered previously
@@ -47,11 +65,6 @@ interface DiInterface extends ArrayAccess
      * @return mixed
      */
     public function get(string $name, array | null $parameters = null): mixed;
-
-    /**
-     * Return the last DI created
-     */
-    public static function getDefault(): object | null;
 
     /**
      * Returns a service definition without resolving
@@ -133,11 +146,6 @@ interface DiInterface extends ArrayAccess
     public function removeShared(string $name): void;
 
     /**
-     * Resets the internal default DI
-     */
-    public static function reset(): void;
-
-    /**
      * Registers a service in the services container
      *
      * @param string $name
@@ -151,14 +159,6 @@ interface DiInterface extends ArrayAccess
         $definition,
         bool $shared = false
     ): ServiceInterface;
-
-    /**
-     * Set a default dependency injection container to be obtained into static
-     * methods
-     *
-     * @param object $container
-     */
-    public static function setDefault(object $container): void;
 
     /**
      * Sets a service using a raw Phalcon\Di\Service definition

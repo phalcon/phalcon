@@ -45,6 +45,25 @@ class Mysql extends Dialect
     protected array $supportedOperators = ["->", "->>"];
 
     /**
+     * Generates SQL to add a CHECK constraint to an existing table.
+     * Enforced by MySQL 8.0.16+.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return string
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): string {
+        return $this->alter($tableName, $schemaName)
+            . ' ADD ' . $this->getCheckClause($check, '`');
+    }
+
+    /**
      * Generates SQL to add a column to a table
      *
      * @param string          $tableName
@@ -127,25 +146,6 @@ class Mysql extends Dialect
         }
 
         return $sql;
-    }
-
-    /**
-     * Generates SQL to add a CHECK constraint to an existing table.
-     * Enforced by MySQL 8.0.16+.
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return string
-     */
-    public function addCheck(
-        string $tableName,
-        string $schemaName,
-        CheckInterface $check
-    ): string {
-        return $this->alter($tableName, $schemaName)
-            . ' ADD ' . $this->getCheckClause($check, '`');
     }
 
     /**
@@ -642,24 +642,6 @@ class Mysql extends Dialect
     }
 
     /**
-     * Returns a SQL modified with a LOCK IN SHARE MODE clause
-     *
-     *```php
-     * $sql = $dialect->sharedLock("SELECT * FROM robots");
-     *
-     * echo $sql; // SELECT * FROM robots LOCK IN SHARE MODE
-     *```
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
-     */
-    public function sharedLock(string $sqlQuery, string $modifier = ''): string
-    {
-        return $sqlQuery . " LOCK IN SHARE MODE";
-    }
-
-    /**
      * MySQL does not support the SQL-standard `ON CONFLICT DO UPDATE`
      * upsert syntax - it has its own `INSERT ... ON DUPLICATE KEY UPDATE`.
      *
@@ -676,6 +658,24 @@ class Mysql extends Dialect
         array $updateColumns
     ): string {
         throw new MysqlOnConflictNotSupported();
+    }
+
+    /**
+     * Returns a SQL modified with a LOCK IN SHARE MODE clause
+     *
+     *```php
+     * $sql = $dialect->sharedLock("SELECT * FROM robots");
+     *
+     * echo $sql; // SELECT * FROM robots LOCK IN SHARE MODE
+     *```
+     *
+     * @param string $sqlQuery
+     *
+     * @return string
+     */
+    public function sharedLock(string $sqlQuery, string $modifier = ''): string
+    {
+        return $sqlQuery . " LOCK IN SHARE MODE";
     }
 
     /**

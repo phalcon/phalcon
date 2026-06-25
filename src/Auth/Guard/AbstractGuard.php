@@ -44,16 +44,6 @@ abstract class AbstractGuard implements Guard
     ) {
     }
 
-    /**
-     * Returns the guard configuration object.
-     *
-     * @phpstan-return TConfig
-     */
-    public function getConfig(): GuardConfig
-    {
-        return $this->config;
-    }
-
     public function check(): bool
     {
         return $this->user() !== null;
@@ -62,6 +52,16 @@ abstract class AbstractGuard implements Guard
     public function getAdapter(): Adapter
     {
         return $this->adapter;
+    }
+
+    /**
+     * Returns the guard configuration object.
+     *
+     * @phpstan-return TConfig
+     */
+    public function getConfig(): GuardConfig
+    {
+        return $this->config;
     }
 
     public function getLastUserAttempted(): ?AuthUser

@@ -123,10 +123,6 @@ use function call_user_func_array;
  */
 class TagFactory
 {
-    /**
-     * @var Doctype
-     */
-    private readonly Doctype $doctype;
 
     /**
      * @var array
@@ -137,6 +133,10 @@ class TagFactory
      * @var array
      */
     protected array $instances = [];
+    /**
+     * @var Doctype
+     */
+    private readonly Doctype $doctype;
 
     /**
      * TagFactory constructor.

@@ -30,29 +30,6 @@ use Phalcon\Mvc\Model\TransactionInterface;
  */
 interface ModelInterface
 {
-    /**
-     * Appends a customized message on the validation process
-     *
-     * @param MessageInterface $message
-     *
-     * @return ModelInterface
-     */
-    public function appendMessage(MessageInterface $message): ModelInterface;
-
-    /**
-     * Assigns values to a model from an array
-     *
-     * @param array      $data
-     * @param mixed|null $whiteList
-     * @param mixed|null $dataColumnMap
-     *
-     * @return ModelInterface
-     */
-    public function assign(
-        array $data,
-        mixed $whiteList = null,
-        mixed $dataColumnMap = null
-    ): ModelInterface;
 
     /**
      * Allows to calculate the average value on a column matching the specified
@@ -129,22 +106,6 @@ interface ModelInterface
     public static function count(mixed $parameters = null): int | ResultsetInterface;
 
     /**
-     * Inserts a model instance. If the instance already exists in the
-     * persistence it will throw an exception. Returning true on success or
-     * false otherwise.
-     *
-     * @return bool
-     */
-    public function create(): bool;
-
-    /**
-     * Deletes a model instance. Returning true on success or false otherwise.
-     *
-     * @return bool
-     */
-    public function delete(): bool;
-
-    /**
      * Allows to query a set of records that match the specified conditions.
      *
      * This is one of four ways to express a query against a model, each with an
@@ -175,6 +136,85 @@ interface ModelInterface
      * @return T|ModelInterface|Row|null
      */
     public static function findFirst(mixed $parameters = null);
+
+    /**
+     * Allows to get the maximum value of a column that match the specified
+     * conditions
+     *
+     * @param mixed|null $parameters
+     *
+     * @return mixed
+     */
+    public static function maximum(mixed $parameters = null): mixed;
+
+    /**
+     * Allows to get the minimum value of a column that match the specified
+     * conditions
+     *
+     * @param mixed|null $parameters
+     *
+     * @return mixed
+     */
+    public static function minimum(mixed $parameters = null): mixed;
+
+    /**
+     * Create a criteria for a specific model
+     *
+     * @param DiInterface|null $container
+     *
+     * @return CriteriaInterface
+     */
+    public static function query(
+        DiInterface | null $container = null
+    ): CriteriaInterface;
+
+    /**
+     * Allows to calculate a sum on a column that match the specified conditions
+     *
+     * @param mixed|null $parameters
+     *
+     * @return ResultsetInterface|float
+     */
+    public static function sum(mixed $parameters = null): ResultsetInterface | float;
+    /**
+     * Appends a customized message on the validation process
+     *
+     * @param MessageInterface $message
+     *
+     * @return ModelInterface
+     */
+    public function appendMessage(MessageInterface $message): ModelInterface;
+
+    /**
+     * Assigns values to a model from an array
+     *
+     * @param array      $data
+     * @param mixed|null $whiteList
+     * @param mixed|null $dataColumnMap
+     *
+     * @return ModelInterface
+     */
+    public function assign(
+        array $data,
+        mixed $whiteList = null,
+        mixed $dataColumnMap = null
+    ): ModelInterface;
+
+    /**
+     * Inserts a model instance. If the instance already exists in the
+     * persistence it will throw an exception. Returning true on success or
+     * false otherwise.
+     *
+     * @return bool
+     */
+    public function create(): bool;
+
+    /**
+     * Deletes a model instance. Returning true on success or false otherwise.
+     *
+     * @return bool
+     */
+    public function delete(): bool;
 
     /**
      * Fires an event, implicitly calls behaviors and listeners in the events
@@ -281,37 +321,6 @@ interface ModelInterface
     public function getWriteConnectionService(): string;
 
     /**
-     * Allows to get the maximum value of a column that match the specified
-     * conditions
-     *
-     * @param mixed|null $parameters
-     *
-     * @return mixed
-     */
-    public static function maximum(mixed $parameters = null): mixed;
-
-    /**
-     * Allows to get the minimum value of a column that match the specified
-     * conditions
-     *
-     * @param mixed|null $parameters
-     *
-     * @return mixed
-     */
-    public static function minimum(mixed $parameters = null): mixed;
-
-    /**
-     * Create a criteria for a specific model
-     *
-     * @param DiInterface|null $container
-     *
-     * @return CriteriaInterface
-     */
-    public static function query(
-        DiInterface | null $container = null
-    ): CriteriaInterface;
-
-    /**
      * Refreshes the model attributes re-querying the record from the database
      *
      * @return ModelInterface
@@ -407,15 +416,6 @@ interface ModelInterface
      * @return void
      */
     public function skipOperation(bool $skip): void;
-
-    /**
-     * Allows to calculate a sum on a column that match the specified conditions
-     *
-     * @param mixed|null $parameters
-     *
-     * @return ResultsetInterface|float
-     */
-    public static function sum(mixed $parameters = null): ResultsetInterface | float;
 
     /**
      * Updates a model instance. If the instance does not exist in the

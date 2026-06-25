@@ -130,29 +130,6 @@ class Filter implements FilterInterface
     }
 
     /**
-     * Get a service. If it is not in the mapper array, create a new object,
-     * set it and then return it.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     * @throws Exception
-     */
-    public function get(string $name): mixed
-    {
-        if (!isset($this->mapper[$name])) {
-            throw new FilterNotRegistered($name);
-        }
-
-        if (!isset($this->services[$name])) {
-            $definition            = $this->mapper[$name];
-            $this->services[$name] = $this->createInstance($definition);
-        }
-
-        return $this->services[$name];
-    }
-
-    /**
      * Returns the default sanitizer name to class map. This is the single
      * source for the built-in sanitizer registry: when adding a sanitizer,
      * add its `FILTER_*` constant and its entry here.
@@ -185,6 +162,29 @@ class Filter implements FilterInterface
             self::FILTER_UPPERWORDS  => UpperWords::class,
             self::FILTER_URL         => Url::class,
         ];
+    }
+
+    /**
+     * Get a service. If it is not in the mapper array, create a new object,
+     * set it and then return it.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function get(string $name): mixed
+    {
+        if (!isset($this->mapper[$name])) {
+            throw new FilterNotRegistered($name);
+        }
+
+        if (!isset($this->services[$name])) {
+            $definition            = $this->mapper[$name];
+            $this->services[$name] = $this->createInstance($definition);
+        }
+
+        return $this->services[$name];
     }
 
     /**
