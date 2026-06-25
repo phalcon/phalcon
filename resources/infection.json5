@@ -1,9 +1,19 @@
 {
     "$schema": "../vendor/infection/infection/resources/schema.json",
-    "source": { "directories": ["src/Logger"] },
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
     "tmpDir": "../tests/_output/infection",
-    "logs": { "text": "../tests/_output/infection/logger.log" },
-    "mutators": { "@default": true },
+    "logs": {
+        "text": "../tests/_output/infection/infection.log"
+    },
+    "mutators": {
+        "@default": true
+    },
     "testFramework": "phpunit",
-    "phpUnit": { "configDir": "." }
+    "phpUnit": {
+        "configDir": "."
+    }
 }

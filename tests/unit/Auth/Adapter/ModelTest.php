@@ -26,6 +26,8 @@ use Phalcon\Tests\Unit\Auth\Fake\FakeAuthUserModel;
 use Phalcon\Tests\Unit\Auth\Fake\FakeAuthUserNoRemember;
 use Phalcon\Tests\Unit\Auth\Fake\FakeNotAuthUserModel;
 
+use function strlen;
+
 final class ModelTest extends AbstractUnitTestCase
 {
     private Model $adapter;
@@ -68,6 +70,7 @@ final class ModelTest extends AbstractUnitTestCase
         $token = $this->adapter->createRememberToken($user);
 
         $this->assertNotEmpty($token->getToken());
+        $this->assertSame(60, strlen($token->getToken()));
         $this->assertArrayHasKey($token->getToken(), $user->rememberTokens);
     }
 

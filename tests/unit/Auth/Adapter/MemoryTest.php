@@ -97,6 +97,34 @@ final class MemoryTest extends AbstractUnitTestCase
         $this->assertSame(1, $user->getAuthIdentifier());
     }
 
+    public function testRetrieveByCredentialsChecksFieldsAfterPasswordKey(): void
+    {
+        $adapter = new Memory(
+            $this->security,
+            new MemoryAdapterConfig([
+                [
+                    'id'       => 1,
+                    'email'    => 'alice@example.com',
+                    'password' => $this->hashedPassword,
+                ],
+            ])
+        );
+
+        /**
+         * 'password' precedes 'email' in the credentials; the password key is
+         * skipped (not used to short-circuit the loop), so the mismatching
+         * email is still checked and the lookup misses.
+         */
+        $user = $adapter->retrieveByCredentials(
+            [
+                'password' => 'whatever',
+                'email'    => 'nobody@example.com',
+            ]
+        );
+
+        $this->assertNull($user);
+    }
+
     public function testRetrieveByCredentialsIgnoresPasswordKeyInLookup(): void
     {
         $adapter = new Memory(
