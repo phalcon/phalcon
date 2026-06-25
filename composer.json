@@ -58,7 +58,8 @@
     "phpunit/phpunit": "^10.5",
     "predis/predis": "^3.4",
     "squizlabs/php_codesniffer": "^4.0",
-    "vlucas/phpdotenv": "^5.6"
+    "vlucas/phpdotenv": "^5.6",
+    "infection/infection": "^0.29.8"
   },
   "scripts": {
     "analyze": "vendor/bin/phpstan analyse -c resources/phpstan.neon --memory-limit 1024M",
@@ -91,5 +92,8 @@
     ]
   },
   "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
   }
 }
