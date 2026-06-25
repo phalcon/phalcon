@@ -64,6 +64,24 @@ final class GetMultipleTest extends AbstractUnitTestCase
 
     /**
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-14
+     */
+    #[RequiresPhpExtension('apcu')]
+    public function testCacheCacheGetMultipleInvalidKey(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The key contains invalid characters');
+
+        $serializer = new SerializerFactory();
+        $factory    = new AdapterFactory($serializer);
+        $instance   = $factory->newInstance('apcu');
+
+        $adapter = new Cache($instance);
+        $adapter->getMultiple(['valid-key', 'invalid key!']);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     #[RequiresPhpExtension('redis')]
@@ -101,23 +119,5 @@ final class GetMultipleTest extends AbstractUnitTestCase
         ];
         $actual   = $adapter->getMultiple([$key1, $key2, 'unknown'], 'default-unknown');
         $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-14
-     */
-    #[RequiresPhpExtension('apcu')]
-    public function testCacheCacheGetMultipleInvalidKey(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The key contains invalid characters');
-
-        $serializer = new SerializerFactory();
-        $factory    = new AdapterFactory($serializer);
-        $instance   = $factory->newInstance('apcu');
-
-        $adapter = new Cache($instance);
-        $adapter->getMultiple(['valid-key', 'invalid key!']);
     }
 }

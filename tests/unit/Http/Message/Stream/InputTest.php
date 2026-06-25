@@ -18,20 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class InputTest extends AbstractUnitTestCase
 {
-    /**
-     * Tests Phalcon\Http\Message\Stream\Input :: isWritable()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamInputIsWritable(): void
-    {
-        $input = new Input();
-
-        $this->assertFalse($input->isWritable());
-    }
 
     /**
      * Tests Phalcon\Http\Message\Stream\Input :: getContents()
@@ -68,6 +54,36 @@ final class InputTest extends AbstractUnitTestCase
         $second = $input->getContents();
         $this->assertSame($first, $second);
     }
+    /**
+     * Tests Phalcon\Http\Message\Stream\Input :: isWritable()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamInputIsWritable(): void
+    {
+        $input = new Input();
+
+        $this->assertFalse($input->isWritable());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream\Input :: read()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamInputRead(): void
+    {
+        $input = new Input();
+
+        $data = $input->read(8192);
+        $this->assertIsString($data);
+    }
 
     /**
      * Tests Phalcon\Http\Message\Stream\Input :: __toString()
@@ -103,21 +119,5 @@ final class InputTest extends AbstractUnitTestCase
         // __toString should return cached data (eof branch)
         $result = (string) $input;
         $this->assertIsString($result);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream\Input :: read()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamInputRead(): void
-    {
-        $input = new Input();
-
-        $data = $input->read(8192);
-        $this->assertIsString($data);
     }
 }

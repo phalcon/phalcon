@@ -17,6 +17,45 @@ use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 final class RequestTest extends AbstractHttpBase
 {
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2014-10-04
+     */
+    public function testHttpRequestInputGet(): void
+    {
+        $request = $this->getRequestObject();
+
+        // hasQuery empty
+        $this->assertFalse($request->hasQuery('test'));
+
+        // hasQuery not empty
+        $_GET['test'] = 1;
+        $this->assertTrue($request->hasQuery('test'));
+        unset($_GET['test']);
+
+        // getQuery empty
+        $this->assertEmpty($request->getQuery('test'));
+
+        // getQuery not empty
+        $_GET['test'] = 1;
+        $this->assertSame(1, $request->getQuery('test'));
+        unset($_GET['test']);
+
+        // getQuery sanitized
+        $_GET['test'] = 'lol<';
+        $expected     = 'lol&lt;';
+        $actual       = $request->getQuery('test', 'string');
+        unset($_GET['test']);
+        $this->assertSame($expected, $actual);
+
+        // getQuery sanitized array filter
+        $_GET['test'] = 'lol<';
+        $expected     = 'lol&lt;';
+        $actual       = $request->getQuery('test', ['string']);
+        unset($_GET['test']);
+        $this->assertSame($expected, $actual);
+    }
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-04
@@ -60,45 +99,6 @@ final class RequestTest extends AbstractHttpBase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-04
      */
-    public function testHttpRequestInputGet(): void
-    {
-        $request = $this->getRequestObject();
-
-        // hasQuery empty
-        $this->assertFalse($request->hasQuery('test'));
-
-        // hasQuery not empty
-        $_GET['test'] = 1;
-        $this->assertTrue($request->hasQuery('test'));
-        unset($_GET['test']);
-
-        // getQuery empty
-        $this->assertEmpty($request->getQuery('test'));
-
-        // getQuery not empty
-        $_GET['test'] = 1;
-        $this->assertSame(1, $request->getQuery('test'));
-        unset($_GET['test']);
-
-        // getQuery sanitized
-        $_GET['test'] = 'lol<';
-        $expected     = 'lol&lt;';
-        $actual       = $request->getQuery('test', 'string');
-        unset($_GET['test']);
-        $this->assertSame($expected, $actual);
-
-        // getQuery sanitized array filter
-        $_GET['test'] = 'lol<';
-        $expected     = 'lol&lt;';
-        $actual       = $request->getQuery('test', ['string']);
-        unset($_GET['test']);
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2014-10-04
-     */
     public function testHttpRequestInputRequest(): void
     {
         $request = $this->getRequestObject();
@@ -132,6 +132,28 @@ final class RequestTest extends AbstractHttpBase
         $actual           = $request->get('test', ['string']);
         unset($_REQUEST['test']);
         $this->assertSame($expected, $actual);
+    }
+
+    public function testRequestGetQuery(): void
+    {
+        $_REQUEST = $_GET = $_POST = [
+            'id'    => 1,
+            'num'   => 'a1a',
+            'age'   => 'aa',
+            'phone' => '',
+        ];
+
+        $functions = ['get', 'getQuery', 'getPost'];
+
+        foreach ($functions as $function) {
+            $request = $this->getRequestObject();
+
+            $this->assertSame(1, $request->$function('id', 'int', 100));
+            $this->assertSame(1, $request->$function('num', 'int', 100));
+            $this->assertEmpty($request->$function('age', 'int', 100));
+            $this->assertEmpty($request->$function('phone', 'int', 100));
+            $this->assertSame(100, $request->$function('phone', 'int', 100, true));
+        }
     }
 
     /**
@@ -180,27 +202,5 @@ final class RequestTest extends AbstractHttpBase
         $expected = null;
         $actual   = $request->getPost('unknown-key', 'string', null, true, true);
         $this->assertSame($expected, $actual);
-    }
-
-    public function testRequestGetQuery(): void
-    {
-        $_REQUEST = $_GET = $_POST = [
-            'id'    => 1,
-            'num'   => 'a1a',
-            'age'   => 'aa',
-            'phone' => '',
-        ];
-
-        $functions = ['get', 'getQuery', 'getPost'];
-
-        foreach ($functions as $function) {
-            $request = $this->getRequestObject();
-
-            $this->assertSame(1, $request->$function('id', 'int', 100));
-            $this->assertSame(1, $request->$function('num', 'int', 100));
-            $this->assertEmpty($request->$function('age', 'int', 100));
-            $this->assertEmpty($request->$function('phone', 'int', 100));
-            $this->assertSame(100, $request->$function('phone', 'int', 100, true));
-        }
     }
 }

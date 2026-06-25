@@ -259,6 +259,21 @@ final class SetArgumentTest extends AbstractUnitTestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testCliConsoleSetArgumentNonString(): void
+    {
+        $console = new CliConsole(new DiFactoryDefault());
+
+        // Integer argument - not a string, covers the else branch
+        $actual = $console->setArgument([42], false, false);
+
+        // setArgument() returns $this
+        $this->assertSame($console, $actual);
+    }
+
     #[DataProvider('getExamplesRouter')]
     public function testCliConsoleSetArgumentRouter(
         array $argument,
@@ -341,20 +356,5 @@ final class SetArgumentTest extends AbstractUnitTestCase
         $expected = $returnedValue;
         $actual   = $dispatcher->getReturnedValue();
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testCliConsoleSetArgumentNonString(): void
-    {
-        $console = new CliConsole(new DiFactoryDefault());
-
-        // Integer argument - not a string, covers the else branch
-        $actual = $console->setArgument([42], false, false);
-
-        // setArgument() returns $this
-        $this->assertSame($console, $actual);
     }
 }

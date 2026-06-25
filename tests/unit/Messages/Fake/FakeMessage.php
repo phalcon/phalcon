@@ -17,20 +17,6 @@ use Phalcon\Messages\MessageInterface;
 
 class FakeMessage implements MessageInterface
 {
-    /**
-     * @var string
-     */
-    protected string $message;
-
-    /**
-     * @var string
-     */
-    protected string $field;
-
-    /**
-     * @var string
-     */
-    protected string $type;
 
     /**
      * @var int
@@ -38,9 +24,23 @@ class FakeMessage implements MessageInterface
     protected int $code;
 
     /**
+     * @var string
+     */
+    protected string $field;
+    /**
+     * @var string
+     */
+    protected string $message;
+
+    /**
      * @var array
      */
     protected array $metaData = [];
+
+    /**
+     * @var string
+     */
+    protected string $type;
 
     /**
      * Phalcon\Messages\Message constructor

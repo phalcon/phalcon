@@ -21,6 +21,54 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class OperationsTest extends AbstractUnitTestCase
 {
+
+    /**
+     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - invalid stream
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUploadedFileConstructInvalidStreamThrows(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid stream or file passed');
+        new UploadedFile(12345, null, 0);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - with filename
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUploadedFileConstructWithFilename(): void
+    {
+        $uploaded = new UploadedFile('php://memory', null, 0);
+
+        $this->assertNull($uploaded->getSize());
+        $this->assertNotNull($uploaded->getStream());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - with resource
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUploadedFileConstructWithResource(): void
+    {
+        $resource = fopen('php://memory', 'r+b');
+        $uploaded = new UploadedFile($resource, null, 0);
+
+        $this->assertNull($uploaded->getSize());
+        $this->assertNotNull($uploaded->getStream());
+    }
     /**
      * Tests Phalcon\Http\Message\UploadedFile :: __construct() - with stream
      *
@@ -42,68 +90,28 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - with resource
+     * Tests Phalcon\Http\Message\UploadedFile :: getStream() - already moved
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUploadedFileConstructWithResource(): void
+    public function testHttpMessageUploadedFileGetStreamAlreadyMovedThrows(): void
     {
-        $resource = fopen('php://memory', 'r+b');
-        $uploaded = new UploadedFile($resource, null, 0);
+        $stream2  = new Stream('php://memory', 'r+b');
+        $stream2->write('content');
+        $tmpFile   = sys_get_temp_dir() . '/phalcon_test_' . uniqid() . '.txt';
+        $uploaded2 = new UploadedFile($stream2, null, 0);
+        $uploaded2->moveTo($tmpFile);
 
-        $this->assertNull($uploaded->getSize());
-        $this->assertNotNull($uploaded->getStream());
-    }
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The file has already been moved');
+        $uploaded2->getStream();
 
-    /**
-     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - with filename
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUploadedFileConstructWithFilename(): void
-    {
-        $uploaded = new UploadedFile('php://memory', null, 0);
-
-        $this->assertNull($uploaded->getSize());
-        $this->assertNotNull($uploaded->getStream());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - invalid stream
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUploadedFileConstructInvalidStreamThrows(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid stream or file passed');
-        new UploadedFile(12345, null, 0);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - invalid error
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUploadedFileInvalidErrorThrows(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid error');
-        new UploadedFile($stream, null, 9);
+        if (file_exists($tmpFile)) {
+            unlink($tmpFile);
+        }
     }
 
     /**
@@ -124,38 +132,20 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\UploadedFile :: moveTo() - invalid target throws
+     * Tests Phalcon\Http\Message\UploadedFile :: __construct() - invalid error
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUploadedFileMoveToInvalidTargetThrows(): void
+    public function testHttpMessageUploadedFileInvalidErrorThrows(): void
     {
-        $stream   = new Stream('php://memory', 'r+b');
-        $uploaded = new UploadedFile($stream, null, 0);
+        $stream = new Stream('php://memory', 'r+b');
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Target folder is empty string');
-        $uploaded->moveTo('');
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\UploadedFile :: moveTo() - error throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUploadedFileMoveToWithErrorThrows(): void
-    {
-        $stream   = new Stream('php://memory', 'r+b');
-        $uploaded = new UploadedFile($stream, null, UPLOAD_ERR_NO_FILE);
-
-        $this->expectException(RuntimeException::class);
-        $uploaded->moveTo('/some/target/path.txt');
+        $this->expectExceptionMessage('Invalid error');
+        new UploadedFile($stream, null, 9);
     }
 
     /**
@@ -201,27 +191,37 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\UploadedFile :: getStream() - already moved
+     * Tests Phalcon\Http\Message\UploadedFile :: moveTo() - invalid target throws
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUploadedFileGetStreamAlreadyMovedThrows(): void
+    public function testHttpMessageUploadedFileMoveToInvalidTargetThrows(): void
     {
-        $stream2  = new Stream('php://memory', 'r+b');
-        $stream2->write('content');
-        $tmpFile   = sys_get_temp_dir() . '/phalcon_test_' . uniqid() . '.txt';
-        $uploaded2 = new UploadedFile($stream2, null, 0);
-        $uploaded2->moveTo($tmpFile);
+        $stream   = new Stream('php://memory', 'r+b');
+        $uploaded = new UploadedFile($stream, null, 0);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Target folder is empty string');
+        $uploaded->moveTo('');
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\UploadedFile :: moveTo() - error throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUploadedFileMoveToWithErrorThrows(): void
+    {
+        $stream   = new Stream('php://memory', 'r+b');
+        $uploaded = new UploadedFile($stream, null, UPLOAD_ERR_NO_FILE);
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The file has already been moved');
-        $uploaded2->getStream();
-
-        if (file_exists($tmpFile)) {
-            unlink($tmpFile);
-        }
+        $uploaded->moveTo('/some/target/path.txt');
     }
 }

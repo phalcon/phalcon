@@ -20,6 +20,26 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class OperationsTest extends AbstractUnitTestCase
 {
+
+    /**
+     * Tests Phalcon\Http\Message\Headers :: checkHeaderHost() - without port
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageHeadersCheckHeaderHostWithoutPort(): void
+    {
+        $headers = new Headers();
+        $headers->set('host', ['example.com']);
+
+        $uri    = new Uri('https://newhost.com/path');
+        $result = $headers->checkHeaderHost($headers, $uri);
+
+        $host = $result->get('Host');
+        $this->assertSame(['newhost.com'], $host);
+    }
     /**
      * Tests Phalcon\Http\Message\Headers :: checkHeaderHost() - with port
      *
@@ -41,26 +61,6 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Headers :: checkHeaderHost() - without port
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageHeadersCheckHeaderHostWithoutPort(): void
-    {
-        $headers = new Headers();
-        $headers->set('host', ['example.com']);
-
-        $uri    = new Uri('https://newhost.com/path');
-        $result = $headers->checkHeaderHost($headers, $uri);
-
-        $host = $result->get('Host');
-        $this->assertSame(['newhost.com'], $host);
-    }
-
-    /**
      * Tests Phalcon\Http\Message\Headers :: checkHeaderName() - invalid throws
      *
      * @return void
@@ -75,24 +75,6 @@ final class OperationsTest extends AbstractUnitTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid header name');
         $headers->checkHeaderName('Invalid Header Name');
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Headers :: checkHeaderValue() - invalid
-     * non-string throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageHeadersCheckHeaderValueNonStringThrows(): void
-    {
-        $headers = new Headers();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid header value');
-        $headers->checkHeaderValue(new \stdClass());
     }
 
     /**
@@ -111,6 +93,24 @@ final class OperationsTest extends AbstractUnitTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid header value');
         $headers->checkHeaderValue("value\x00invalid");
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Headers :: checkHeaderValue() - invalid
+     * non-string throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageHeadersCheckHeaderValueNonStringThrows(): void
+    {
+        $headers = new Headers();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid header value');
+        $headers->checkHeaderValue(new \stdClass());
     }
 
     /**
@@ -133,6 +133,23 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Http\Message\Headers :: processHeaders() - invalid throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageHeadersProcessHeadersInvalidThrows(): void
+    {
+        $headers = new Headers();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Headers needs to be either an array or an instance');
+        $headers->processHeaders('invalid-string');
+    }
+
+    /**
      * Tests Phalcon\Http\Message\Headers :: processHeaders() - with Headers
      * instance
      *
@@ -150,22 +167,5 @@ final class OperationsTest extends AbstractUnitTestCase
         $result  = $headers->processHeaders($source);
 
         $this->assertSame($source, $result);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Headers :: processHeaders() - invalid throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageHeadersProcessHeadersInvalidThrows(): void
-    {
-        $headers = new Headers();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Headers needs to be either an array or an instance');
-        $headers->processHeaders('invalid-string');
     }
 }

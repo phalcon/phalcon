@@ -23,18 +23,6 @@ use Phalcon\Tests\Unit\Forms\Fake\FakeFormCustomValue;
  */
 final class GetValueTest extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testFormsFormGetValueForbiddenNameReturnsNull(): void
-    {
-        $form = new Form();
-        $form->add(new Text('action'));
-
-        $actual = $form->getValue('action');
-        $this->assertNull($actual);
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -47,5 +35,17 @@ final class GetValueTest extends AbstractUnitTestCase
 
         $actual = $form->getValue('username');
         $this->assertSame('custom-username', $actual);
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testFormsFormGetValueForbiddenNameReturnsNull(): void
+    {
+        $form = new Form();
+        $form->add(new Text('action'));
+
+        $actual = $form->getValue('action');
+        $this->assertNull($actual);
     }
 }

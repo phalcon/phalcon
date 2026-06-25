@@ -22,10 +22,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
  */
 abstract class AbstractContextConformanceTestCase extends AbstractUnitTestCase
 {
-    /**
-     * Returns a fresh Context for the adapter under test.
-     */
-    abstract protected function createContext(): ContextInterface;
 
     public function testMessagesAreDeliveredInFifoOrder(): void
     {
@@ -109,4 +105,8 @@ abstract class AbstractContextConformanceTestCase extends AbstractUnitTestCase
         $this->assertNotNull($message);
         $this->assertSame('payload', $message->getBody());
     }
+    /**
+     * Returns a fresh Context for the adapter under test.
+     */
+    abstract protected function createContext(): ContextInterface;
 }

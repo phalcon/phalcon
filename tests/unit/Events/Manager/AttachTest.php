@@ -22,6 +22,24 @@ use stdClass;
 
 final class AttachTest extends AbstractUnitTestCase
 {
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testEventsManagerAttachArrayEventType(): void
+    {
+        $manager = new Manager();
+        $called  = false;
+
+        $manager->attach(['ab', 'beforeAction'], function () use (&$called) {
+            $called = true;
+        });
+
+        $manager->fire('ab:beforeAction', new stdClass());
+
+        $this->assertTrue($called);
+    }
     /**
      * @author @author Kamil Skowron <kamil@hedonsoftware.com>
      * @since  2020-09-09
@@ -80,23 +98,5 @@ final class AttachTest extends AbstractUnitTestCase
         $expected = TwoListener::class;
         $actual   = $logListeners[0];
         $this->assertInstanceOf($expected, $actual);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testEventsManagerAttachArrayEventType(): void
-    {
-        $manager = new Manager();
-        $called  = false;
-
-        $manager->attach(['ab', 'beforeAction'], function () use (&$called) {
-            $called = true;
-        });
-
-        $manager->fire('ab:beforeAction', new stdClass());
-
-        $this->assertTrue($called);
     }
 }

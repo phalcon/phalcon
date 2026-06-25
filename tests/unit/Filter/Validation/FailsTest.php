@@ -22,20 +22,6 @@ use PHPUnit\Framework\Attributes\Test;
 
 final class FailsTest extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2025-08-02
-     */
-    public function testFilterValidationFailsTrue(): void
-    {
-        $email      = new Email();
-
-        $validation = new Validation();
-
-        $validation->add('email', $email);
-        $this->assertNotEmpty($validation->validate(['email' => 'test@-example.com']));
-        $this->assertTrue($validation->fails());
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -50,5 +36,19 @@ final class FailsTest extends AbstractUnitTestCase
         $validation->add('email', $email);
         $validation->validate(['email' => 'user@example.com']);
         $this->assertFalse($validation->fails());
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2025-08-02
+     */
+    public function testFilterValidationFailsTrue(): void
+    {
+        $email      = new Email();
+
+        $validation = new Validation();
+
+        $validation->add('email', $email);
+        $this->assertNotEmpty($validation->validate(['email' => 'test@-example.com']));
+        $this->assertTrue($validation->fails());
     }
 }

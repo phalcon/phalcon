@@ -23,43 +23,17 @@ use function method_exists;
 
 final class ComponentManagerTest extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEventsComponentManager(): void
-    {
-        $manager   = new Manager();
-        $component = new ComponentWithEvents();
-
-        $actual = method_exists($component, 'getEventsManager');
-        $this->assertTrue($actual);
-        $actual = method_exists($component, 'setEventsManager');
-        $this->assertTrue($actual);
-
-        $component->setEventsManager($manager);
-        $actual = $component->getEventsManager();
-        $this->assertSame($manager, $actual);
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testEventsAwareTraitSetEventsManagerRegistersWithContainer(): void
+    public function testEventsAwareTraitFireManagerEventNoManagerReturnsTrue(): void
     {
-        $di         = new Di();
-        $manager    = new Manager();
-        $dispatcher = new CliDispatcher();
-        $dispatcher->setDI($di);
+        $component = new ComponentFireManager();
 
-        $dispatcher->setEventsManager($manager);
-
-        // The manager is stored in the dispatcher
-        $this->assertSame($manager, $dispatcher->getEventsManager());
-
-        // The manager is also registered in the DI container
-        $this->assertSame($manager, $di->get('eventsManager'));
+        $result = $component->callFireManagerEvent('test:action');
+        $this->assertTrue($result);
     }
 
     /**
@@ -96,11 +70,11 @@ final class ComponentManagerTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testEventsAwareTraitFireManagerEventNoManagerReturnsTrue(): void
+    public function testEventsAwareTraitFirePsrEventNoManagerReturnsTrue(): void
     {
         $component = new ComponentFireManager();
 
-        $result = $component->callFireManagerEvent('test:action');
+        $result = $component->callFirePsrEvent(new PsrEventObject());
         $this->assertTrue($result);
     }
 
@@ -130,11 +104,37 @@ final class ComponentManagerTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testEventsAwareTraitFirePsrEventNoManagerReturnsTrue(): void
+    public function testEventsAwareTraitSetEventsManagerRegistersWithContainer(): void
     {
-        $component = new ComponentFireManager();
+        $di         = new Di();
+        $manager    = new Manager();
+        $dispatcher = new CliDispatcher();
+        $dispatcher->setDI($di);
 
-        $result = $component->callFirePsrEvent(new PsrEventObject());
-        $this->assertTrue($result);
+        $dispatcher->setEventsManager($manager);
+
+        // The manager is stored in the dispatcher
+        $this->assertSame($manager, $dispatcher->getEventsManager());
+
+        // The manager is also registered in the DI container
+        $this->assertSame($manager, $di->get('eventsManager'));
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testEventsComponentManager(): void
+    {
+        $manager   = new Manager();
+        $component = new ComponentWithEvents();
+
+        $actual = method_exists($component, 'getEventsManager');
+        $this->assertTrue($actual);
+        $actual = method_exists($component, 'setEventsManager');
+        $this->assertTrue($actual);
+
+        $component->setEventsManager($manager);
+        $actual = $component->getEventsManager();
+        $this->assertSame($manager, $actual);
     }
 }

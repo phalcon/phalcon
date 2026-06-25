@@ -19,19 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class Version5Test extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
-     */
-    public function testEncryptionSecurityUuidVersion5Format(): void
-    {
-        $uuid = new Version5(UuidInterface::NAMESPACE_DNS, 'phalcon.io');
-
-        $this->assertMatchesRegularExpression(
-            '/^[a-f0-9]{8}-[a-f0-9]{4}-5[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/',
-            (string) $uuid
-        );
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -67,5 +54,18 @@ final class Version5Test extends AbstractUnitTestCase
         $uuid2 = new Version5(UuidInterface::NAMESPACE_URL, 'phalcon.io');
 
         $this->assertNotSame((string) $uuid1, (string) $uuid2);
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-29
+     */
+    public function testEncryptionSecurityUuidVersion5Format(): void
+    {
+        $uuid = new Version5(UuidInterface::NAMESPACE_DNS, 'phalcon.io');
+
+        $this->assertMatchesRegularExpression(
+            '/^[a-f0-9]{8}-[a-f0-9]{4}-5[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/',
+            (string) $uuid
+        );
     }
 }

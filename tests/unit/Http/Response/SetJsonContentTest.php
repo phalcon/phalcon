@@ -24,18 +24,6 @@ use const JSON_HEX_TAG;
 
 final class SetJsonContentTest extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpResponseSetJsonContentEncodeErrorThrows(): void
-    {
-        $response = new Response();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('json_encode error');
-        $response->setJsonContent(NAN);
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -68,5 +56,17 @@ final class SetJsonContentTest extends AbstractUnitTestCase
         $expected = json_encode($content, JSON_HEX_TAG);
         $actual   = $response->getContent();
         $this->assertSame($expected, $actual);
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpResponseSetJsonContentEncodeErrorThrows(): void
+    {
+        $response = new Response();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('json_encode error');
+        $response->setJsonContent(NAN);
     }
 }

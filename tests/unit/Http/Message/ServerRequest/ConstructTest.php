@@ -21,6 +21,28 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequest :: withAttribute() /
+     * getAttribute() / withoutAttribute()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageServerRequestAttributes(): void
+    {
+        $request = new ServerRequest('GET', 'https://example.com');
+
+        $withAttr = $request->withAttribute('user', 'john');
+        $this->assertSame('john', $withAttr->getAttribute('user'));
+        $this->assertSame('default', $withAttr->getAttribute('missing', 'default'));
+        $this->assertSame(['user' => 'john'], $withAttr->getAttributes());
+
+        $withoutAttr = $withAttr->withoutAttribute('user');
+        $this->assertNull($withoutAttr->getAttribute('user'));
+    }
     /**
      * Tests Phalcon\Http\Message\ServerRequest :: __construct() - basic
      *
@@ -61,22 +83,6 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\ServerRequest :: withQueryParams()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageServerRequestWithQueryParams(): void
-    {
-        $request    = new ServerRequest('GET', 'https://example.com');
-        $newRequest = $request->withQueryParams(['page' => '2']);
-
-        $this->assertSame(['page' => '2'], $newRequest->getQueryParams());
-    }
-
-    /**
      * Tests Phalcon\Http\Message\ServerRequest :: withParsedBody()
      *
      * @return void
@@ -93,25 +99,53 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\ServerRequest :: withAttribute() /
-     * getAttribute() / withoutAttribute()
+     * Tests Phalcon\Http\Message\ServerRequest :: withParsedBody() - invalid
+     * value throws
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageServerRequestAttributes(): void
+    public function testHttpMessageServerRequestWithParsedBodyInvalidThrows(): void
     {
-        $request = new ServerRequest('GET', 'https://example.com');
+        $request = new ServerRequest('POST', 'https://example.com');
 
-        $withAttr = $request->withAttribute('user', 'john');
-        $this->assertSame('john', $withAttr->getAttribute('user'));
-        $this->assertSame('default', $withAttr->getAttribute('missing', 'default'));
-        $this->assertSame(['user' => 'john'], $withAttr->getAttributes());
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The method expects null, an array or an object');
+        $request->withParsedBody('invalid-string');
+    }
 
-        $withoutAttr = $withAttr->withoutAttribute('user');
-        $this->assertNull($withoutAttr->getAttribute('user'));
+    /**
+     * Tests Phalcon\Http\Message\ServerRequest :: withQueryParams()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageServerRequestWithQueryParams(): void
+    {
+        $request    = new ServerRequest('GET', 'https://example.com');
+        $newRequest = $request->withQueryParams(['page' => '2']);
+
+        $this->assertSame(['page' => '2'], $newRequest->getQueryParams());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\ServerRequest :: withServerParams()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageServerRequestWithServerParams(): void
+    {
+        $params  = ['REQUEST_METHOD' => 'GET', 'SERVER_NAME' => 'localhost'];
+        $request = new ServerRequest('GET', 'https://example.com', $params);
+
+        $this->assertSame($params, $request->getServerParams());
     }
 
     /**
@@ -149,40 +183,6 @@ final class ConstructTest extends AbstractUnitTestCase
 
         $this->expectException(InvalidArgumentException::class);
         $request->withUploadedFiles(['file' => 'not-an-uploaded-file']);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequest :: withServerParams()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageServerRequestWithServerParams(): void
-    {
-        $params  = ['REQUEST_METHOD' => 'GET', 'SERVER_NAME' => 'localhost'];
-        $request = new ServerRequest('GET', 'https://example.com', $params);
-
-        $this->assertSame($params, $request->getServerParams());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\ServerRequest :: withParsedBody() - invalid
-     * value throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageServerRequestWithParsedBodyInvalidThrows(): void
-    {
-        $request = new ServerRequest('POST', 'https://example.com');
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The method expects null, an array or an object');
-        $request->withParsedBody('invalid-string');
     }
 
     /**

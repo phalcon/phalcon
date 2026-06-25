@@ -18,41 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class EmailTest extends AbstractUnitTestCase
 {
-    /**
-     * @author n[oO]ne <lominum@protonmail.com>
-     * @since  2024-08-19
-     */
-    public function testFilterValidationValidatorEmailValidEmail(): void
-    {
-        $validation = new Validation();
-        $validation->add('email', new Validation\Validator\Email());
-
-        $this->assertEmpty($validation->validate(['email' => 'test@example.com']));
-    }
-
-    /**
-     * @author n[oO]ne <lominum@protonmail.com>
-     * @since  2024-08-19
-     */
-    public function testFilterValidationValidatorEmailInvalidEmail(): void
-    {
-        $validation = new Validation();
-        $validation->add('email', new Validation\Validator\Email());
-
-        $this->assertNotEmpty($validation->validate(['email' => 'test@-example.com']));
-    }
-
-    /**
-     * @author n[oO]ne <lominum@protonmail.com>
-     * @since  2024-08-19
-     */
-    public function testFilterValidationValidatorEmailWithoutUTF8Success(): void
-    {
-        $validation = new Validation();
-        $validation->add('email', new Validation\Validator\Email());
-
-        $this->assertEmpty($validation->validate(['email' => 'test@example.com']));
-    }
 
     /**
      * @author n[oO]ne <lominum@protonmail.com>
@@ -76,6 +41,41 @@ final class EmailTest extends AbstractUnitTestCase
         $validation->add('email', new Validation\Validator\Email(['allowEmpty' => true]));
 
         $this->assertEmpty($validation->validate(['email' => '']));
+    }
+
+    /**
+     * @author n[oO]ne <lominum@protonmail.com>
+     * @since  2024-08-19
+     */
+    public function testFilterValidationValidatorEmailInvalidEmail(): void
+    {
+        $validation = new Validation();
+        $validation->add('email', new Validation\Validator\Email());
+
+        $this->assertNotEmpty($validation->validate(['email' => 'test@-example.com']));
+    }
+    /**
+     * @author n[oO]ne <lominum@protonmail.com>
+     * @since  2024-08-19
+     */
+    public function testFilterValidationValidatorEmailValidEmail(): void
+    {
+        $validation = new Validation();
+        $validation->add('email', new Validation\Validator\Email());
+
+        $this->assertEmpty($validation->validate(['email' => 'test@example.com']));
+    }
+
+    /**
+     * @author n[oO]ne <lominum@protonmail.com>
+     * @since  2024-08-19
+     */
+    public function testFilterValidationValidatorEmailWithoutUTF8Success(): void
+    {
+        $validation = new Validation();
+        $validation->add('email', new Validation\Validator\Email());
+
+        $this->assertEmpty($validation->validate(['email' => 'test@example.com']));
     }
 
     /**

@@ -26,36 +26,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class CreateTest extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-18
-     */
-    public function testDbEventFactoryCreateReturnsNullForUnknownEvent(): void
-    {
-        $factory = new Factory();
-        $model   = $this->createMock(Model::class);
-
-        $result = $factory->create('unknownEvent', $model);
-
-        $this->assertNull($result);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-18
-     */
-    public function testDbEventFactoryCreateReturnsCorrectEventClass(): void
-    {
-        $factory = new Factory();
-        $model   = $this->createMock(Model::class);
-
-        $this->assertInstanceOf(AfterCreateEvent::class, $factory->create('afterCreate', $model));
-        $this->assertInstanceOf(AfterDeleteEvent::class, $factory->create('afterDelete', $model));
-        $this->assertInstanceOf(AfterSaveEvent::class, $factory->create('afterSave', $model));
-        $this->assertInstanceOf(BeforeCreateEvent::class, $factory->create('beforeCreate', $model));
-        $this->assertInstanceOf(BeforeDeleteEvent::class, $factory->create('beforeDelete', $model));
-        $this->assertInstanceOf(BeforeSaveEvent::class, $factory->create('beforeSave', $model));
-    }
 
     /**
      * @author Phalcon Team <team@phalcon.io>
@@ -84,6 +54,36 @@ final class CreateTest extends AbstractUnitTestCase
         $event = $factory->create('afterCreate', $model);
 
         $this->assertSame($model, $event->model);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-18
+     */
+    public function testDbEventFactoryCreateReturnsCorrectEventClass(): void
+    {
+        $factory = new Factory();
+        $model   = $this->createMock(Model::class);
+
+        $this->assertInstanceOf(AfterCreateEvent::class, $factory->create('afterCreate', $model));
+        $this->assertInstanceOf(AfterDeleteEvent::class, $factory->create('afterDelete', $model));
+        $this->assertInstanceOf(AfterSaveEvent::class, $factory->create('afterSave', $model));
+        $this->assertInstanceOf(BeforeCreateEvent::class, $factory->create('beforeCreate', $model));
+        $this->assertInstanceOf(BeforeDeleteEvent::class, $factory->create('beforeDelete', $model));
+        $this->assertInstanceOf(BeforeSaveEvent::class, $factory->create('beforeSave', $model));
+    }
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-04-18
+     */
+    public function testDbEventFactoryCreateReturnsNullForUnknownEvent(): void
+    {
+        $factory = new Factory();
+        $model   = $this->createMock(Model::class);
+
+        $result = $factory->create('unknownEvent', $model);
+
+        $this->assertNull($result);
     }
 
     /**
