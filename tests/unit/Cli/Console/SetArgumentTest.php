@@ -274,6 +274,52 @@ final class SetArgumentTest extends AbstractUnitTestCase
         $this->assertSame($console, $actual);
     }
 
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testCliConsoleSetArgumentParsesDoubleDashOptions(): void
+    {
+        $di      = new DiFactoryDefault();
+        $console = new CliConsole($di);
+
+        $di->setShared(
+            'router',
+            function () {
+                $router = new Router(true);
+
+                return $router;
+            }
+        );
+
+        /** @var Dispatcher $dispatcher */
+        $dispatcher = $di->getShared('dispatcher');
+        $dispatcher->setDefaultNamespace('Phalcon\Tests\Support\Tasks');
+
+        $console->setArgument(
+            [
+                'php',
+                // Trailing space asserts the flag name is trimmed
+                '--last ',
+                // Spaces around '=' assert the key and value are trimmed
+                '--country = usa',
+                'main',
+                'arguments',
+                'a',
+                'b',
+            ]
+        )
+                ->handle()
+        ;
+
+        $expected = [
+            'last'    => true,
+            'country' => 'usa',
+        ];
+        $actual   = $dispatcher->getOptions();
+        $this->assertSame($expected, $actual);
+    }
+
     #[DataProvider('getExamplesRouter')]
     public function testCliConsoleSetArgumentRouter(
         array $argument,
