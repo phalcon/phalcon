@@ -1,8 +1,8 @@
 {
     "$schema": "../vendor/infection/infection/resources/schema.json",
-    "source": { "directories": ["src/Filter"] },
+    "source": { "directories": ["src"] },
     "tmpDir": "../tests/_output/infection",
-    "logs": { "text": "../tests/_output/infection/filter.log" },
+    "logs": { "text": "../tests/_output/infection/infection.log" },
     "mutators": { "@default": true },
     "testFramework": "phpunit",
     "phpUnit": { "configDir": "." }
