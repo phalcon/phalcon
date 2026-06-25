@@ -22,7 +22,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class GeometryWktTest extends AbstractUnitTestCase
 {
-
     public function testGeometryCollectionWkt(): void
     {
         $gc = new GeometryCollection([new Point(1.0, 2.0)]);

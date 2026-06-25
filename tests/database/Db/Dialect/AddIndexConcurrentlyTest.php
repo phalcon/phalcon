@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class AddIndexConcurrentlyTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - has no CONCURRENTLY concept; the flag must not leak.
      *

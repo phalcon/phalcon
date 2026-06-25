@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('sqlite')]
 final class LevelsTest extends AbstractDatabaseTestCase
 {
-
     public static function providerLevels(): array
     {
         return [

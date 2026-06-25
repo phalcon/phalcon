@@ -34,7 +34,6 @@ namespace Phalcon\Support;
  */
 class Settings
 {
-
     /**
      * PHP-level overrides. Keys stored here take priority over ini_get().
      *

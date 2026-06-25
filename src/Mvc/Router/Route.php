@@ -32,7 +32,6 @@ use function substr;
  */
 class Route implements RouteInterface
 {
-
     /**
      * @mixed $int
      */

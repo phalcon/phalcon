@@ -21,7 +21,6 @@ use PHPUnit\Framework\Attributes\BackupGlobals;
 #[BackupGlobals(true)]
 final class ReportBuilderTest extends AbstractUnitTestCase
 {
-
     public function testBuildFragmentForUnreadableFile(): void
     {
         $builder = new ReportBuilder();

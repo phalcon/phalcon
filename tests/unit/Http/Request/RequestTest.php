@@ -17,7 +17,6 @@ use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 final class RequestTest extends AbstractHttpBase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2014-10-04

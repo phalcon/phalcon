@@ -26,7 +26,6 @@ use function spl_object_hash;
 #[Group('sqlite')]
 final class GetSetReadTest extends AbstractDatabaseTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25

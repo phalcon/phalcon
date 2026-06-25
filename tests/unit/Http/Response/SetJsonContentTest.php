@@ -24,7 +24,6 @@ use const JSON_HEX_TAG;
 
 final class SetJsonContentTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2019-12-07

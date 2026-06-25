@@ -30,7 +30,6 @@ use Phalcon\Mvc\Model\TransactionInterface;
  */
 interface ModelInterface
 {
-
     /**
      * Allows to calculate the average value on a column matching the specified
      * conditions

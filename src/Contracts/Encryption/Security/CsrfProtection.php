@@ -15,7 +15,6 @@ namespace Phalcon\Contracts\Encryption\Security;
 
 interface CsrfProtection
 {
-
     public function checkToken(
         string | null $tokenKey = null,
         string | null $tokenValue = null,

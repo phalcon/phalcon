@@ -28,7 +28,6 @@ use stdClass;
 
 final class FormsLocatorTest extends AbstractUnitTestCase
 {
-
     // -----------------------------------------------------------------------
     // Element registry
     // -----------------------------------------------------------------------

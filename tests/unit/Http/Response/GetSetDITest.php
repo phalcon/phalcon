@@ -20,7 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class GetSetDITest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01

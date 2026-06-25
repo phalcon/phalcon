@@ -27,7 +27,6 @@ use function env;
 #[Group('sqlite')]
 final class FetchOneTest extends AbstractDatabaseTestCase
 {
-
     public static function providerFetchOneBindTypes(): array
     {
         $data = [

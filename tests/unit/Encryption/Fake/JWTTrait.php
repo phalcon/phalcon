@@ -18,7 +18,6 @@ use Phalcon\Encryption\Security\JWT\Token\Token;
 
 trait JWTTrait
 {
-
     /**
      * @param string $builderClass
      * @param string $signerClass

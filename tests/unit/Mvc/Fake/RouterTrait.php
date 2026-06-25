@@ -20,7 +20,6 @@ use Phalcon\Mvc\Router\Route;
 
 trait RouterTrait
 {
-
     /**
      * Add method and return route
      *

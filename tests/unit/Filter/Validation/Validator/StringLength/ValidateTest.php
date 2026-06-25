@@ -23,7 +23,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ValidateTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2013-03-09

@@ -20,7 +20,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class GetDirectionsTest extends AbstractDatabaseTestCase
 {
-
     /**
      * Definition-array `directions` is stored verbatim.
      *

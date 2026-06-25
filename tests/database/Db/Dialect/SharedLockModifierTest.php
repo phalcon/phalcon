@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class SharedLockModifierTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - modifier is silently ignored (legacy `LOCK IN SHARE MODE`
      * does not support `NOWAIT` / `SKIP LOCKED`).

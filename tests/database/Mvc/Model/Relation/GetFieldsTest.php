@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class GetFieldsTest extends AbstractDatabaseTestCase
 {
-
     /**
      * @author Sid Roberts <https://github.com/SidRoberts>
      * @since  2019-04-18

@@ -20,7 +20,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class IsGeneratedTest extends AbstractDatabaseTestCase
 {
-
     /**
      * Tests Phalcon\Db\Column :: throws when `autoIncrement` and `generated`
      * are both provided.

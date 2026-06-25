@@ -20,7 +20,6 @@ use stdClass;
 
 final class LocatorTest extends AbstractUnitTestCase
 {
-
     public function testLoadFormLocatorCachesFormWithoutEntity(): void
     {
         $locator = new FormsLocator();

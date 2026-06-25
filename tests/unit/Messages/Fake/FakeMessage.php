@@ -17,7 +17,6 @@ use Phalcon\Messages\MessageInterface;
 
 class FakeMessage implements MessageInterface
 {
-
     /**
      * @var int
      */

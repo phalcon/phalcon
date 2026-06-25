@@ -22,7 +22,6 @@ use stdClass;
 
 final class AttachTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01

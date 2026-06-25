@@ -21,7 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
-
     /**
      * Tests Phalcon\Http\Message\ServerRequest :: withAttribute() /
      * getAttribute() / withoutAttribute()

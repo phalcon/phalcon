@@ -23,6 +23,7 @@ use function env;
 final class DropForeignKeyTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
+
     private const CHILD  = 'co_scratch_dropfk_child';
     private const FK     = 'co_scratch_dropfk_fk';
 

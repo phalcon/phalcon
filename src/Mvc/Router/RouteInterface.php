@@ -18,7 +18,6 @@ namespace Phalcon\Mvc\Router;
  */
 interface RouteInterface
 {
-
     /**
      * Resets the internal route id generator
      *

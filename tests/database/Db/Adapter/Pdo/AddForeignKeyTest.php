@@ -24,6 +24,7 @@ use function env;
 final class AddForeignKeyTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
+
     private const CHILD  = 'co_scratch_addfk_child';
 
     private const PARENT = 'co_scratch_addfk_parent';

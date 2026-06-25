@@ -27,7 +27,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class FormTest extends AbstractUnitTestCase
 {
-
     /**
      * @issue  https://github.com/phalcon/cphalcon/issues/11135
      * @issue  https://github.com/phalcon/cphalcon/issues/3167

@@ -21,7 +21,6 @@ use stdClass;
 
 final class BeforeFireTest extends AbstractUnitTestCase
 {
-
     public function testBeforeFireFalseAbortsDispatch(): void
     {
         $manager        = new DeferredManager();

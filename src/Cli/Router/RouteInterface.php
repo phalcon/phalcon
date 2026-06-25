@@ -25,7 +25,6 @@ namespace Phalcon\Cli\Router;
  */
 interface RouteInterface
 {
-
     /**
      * Set the routing delimiter
      *

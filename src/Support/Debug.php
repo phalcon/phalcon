@@ -40,7 +40,6 @@ use function mb_strtolower;
  */
 class Debug
 {
-
     /**
      * @var bool
      */

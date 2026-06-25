@@ -19,7 +19,6 @@ use stdClass;
 
 final class ValidateTypeTest extends AbstractCollectionTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-12

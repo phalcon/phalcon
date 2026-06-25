@@ -20,7 +20,6 @@ use Phalcon\Tests\Unit\Events\Manager\Fake\SimpleSubscriber;
 
 final class GetSubscribersTest extends AbstractUnitTestCase
 {
-
     public function testGetSubscribersDoesNotIncludeRemoved(): void
     {
         $manager          = new Manager();

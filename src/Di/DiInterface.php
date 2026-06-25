@@ -20,7 +20,6 @@ use ArrayAccess;
  */
 interface DiInterface extends ArrayAccess
 {
-
     /**
      * Return the last DI created
      */

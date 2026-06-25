@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class InputTest extends AbstractUnitTestCase
 {
-
     /**
      * Tests Phalcon\Http\Message\Stream\Input :: getContents()
      *

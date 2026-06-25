@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class ReturningTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - throws (no RETURNING construct).
      *

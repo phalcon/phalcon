@@ -23,7 +23,6 @@ use Phalcon\Tests\Unit\Forms\Fake\FakeFormCustomValue;
  */
 final class GetValueTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01

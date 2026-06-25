@@ -31,7 +31,6 @@ use function array_merge;
  */
 abstract class AbstractInput extends AbstractHelper
 {
-
     /**
      * @var array
      */

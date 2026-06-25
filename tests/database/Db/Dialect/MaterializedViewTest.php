@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class MaterializedViewTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - throws on each materialized-view method.
      *

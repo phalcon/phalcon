@@ -20,7 +20,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class ConstructTest extends AbstractDatabaseTestCase
 {
-
     public static function valueProvider(): array
     {
         return [

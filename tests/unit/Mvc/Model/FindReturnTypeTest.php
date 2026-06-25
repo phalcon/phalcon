@@ -21,7 +21,6 @@ use ReflectionNamedType;
 
 final class FindReturnTypeTest extends AbstractUnitTestCase
 {
-
     /**
      * `findFirst()` keeps its historical loose return type (`var|null`,
      * compiled to no explicit type with a nullable docblock) since it has

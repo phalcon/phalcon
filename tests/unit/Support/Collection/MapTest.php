@@ -17,7 +17,6 @@ use Phalcon\Support\Collection;
 
 final class MapTest extends AbstractCollectionTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-12

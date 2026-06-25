@@ -21,7 +21,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 final class HandleTest extends AbstractUnitTestCase
 {
-
     /**
      * @return array[]
      */

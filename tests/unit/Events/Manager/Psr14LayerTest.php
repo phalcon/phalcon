@@ -9,7 +9,6 @@ use Phalcon\Tests\Unit\Events\Fake\EmptyEventObject;
 
 final class Psr14LayerTest extends AbstractUnitTestCase
 {
-
     public function testAllListenersCalledWithoutCancel(): void
     {
         $manager = new Manager();

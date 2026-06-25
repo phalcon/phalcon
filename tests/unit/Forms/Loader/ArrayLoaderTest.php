@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ArrayLoaderTest extends AbstractUnitTestCase
 {
-
     public function testLoadPassesThroughExtraKeys(): void
     {
         $definition = [

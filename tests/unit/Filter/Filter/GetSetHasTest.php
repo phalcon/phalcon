@@ -20,7 +20,6 @@ use Phalcon\Tests\Support\Service\HelloService;
 
 final class GetSetHasTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

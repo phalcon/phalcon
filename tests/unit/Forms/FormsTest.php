@@ -27,7 +27,6 @@ use Phalcon\Tests\Support\Forms\ContactFormSettersGetters;
 
 final class FormsTest extends AbstractUnitTestCase
 {
-
     public function testElementAppendMessage(): void
     {
         $element = new Select('test-select');

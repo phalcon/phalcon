@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class AddColumnDefaultExpressionTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - CURRENT_TIMESTAMP string remains unquoted (legacy whitelist).
      *

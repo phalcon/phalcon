@@ -26,7 +26,6 @@ use PDOStatement;
  */
 interface PdoInterface
 {
-
     /**
      * Return an array of available PDO drivers (empty array if none available)
      *

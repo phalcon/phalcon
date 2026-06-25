@@ -19,7 +19,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class IsInvisibleTest extends AbstractDatabaseTestCase
 {
-
     /**
      * Tests Phalcon\Db\Column :: isInvisible() - explicit `false` is honored.
      *

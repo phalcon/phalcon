@@ -19,7 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class HasSharedTest extends AbstractUnitTestCase
 {
-
     /**
      * @issue https://github.com/phalcon/cphalcon/issues/13440
      */

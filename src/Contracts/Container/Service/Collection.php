@@ -39,7 +39,6 @@ use Phalcon\Contracts\Container\Ioc\IocContainer;
 
 interface Collection extends IocContainer
 {
-
     // Our additions - Container-specific
     public function bind(string $interfaceName, string $concrete): ServiceDefinition;
     public function callableGet(string $name): Closure;

@@ -20,6 +20,7 @@ use PHPUnit\Framework\Attributes\Group;
 final class DropIndexTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
+
     private const INDEX = 'co_scratch_dropindex_name_idx';
 
     private const TABLE = 'co_scratch_dropindex';

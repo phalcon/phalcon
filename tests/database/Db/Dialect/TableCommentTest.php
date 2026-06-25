@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class TableCommentTest extends AbstractDatabaseTestCase
 {
-
     #[Group('mysql')]
     public function testMysqlCreateTableComment(): void
     {

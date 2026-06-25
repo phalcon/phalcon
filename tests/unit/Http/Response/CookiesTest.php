@@ -23,7 +23,6 @@ use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
 final class CookiesTest extends AbstractHttpBase
 {
-
     /**
      * @author limx <715557344@qq.com>
      */

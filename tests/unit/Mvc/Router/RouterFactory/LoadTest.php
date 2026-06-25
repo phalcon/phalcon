@@ -22,7 +22,6 @@ use TypeError;
 
 final class LoadTest extends AbstractUnitTestCase
 {
-
     public function testLoadAcceptsConfigObject(): void
     {
         $config = new Config([

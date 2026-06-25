@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class JsonLoaderTest extends AbstractUnitTestCase
 {
-
     public function testLoadEmptyArray(): void
     {
         $schema = new JsonLoader('[]');

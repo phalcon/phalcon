@@ -22,7 +22,6 @@ use stdClass;
 
 final class DispatchTest extends AbstractUnitTestCase
 {
-
     public function testDispatchByArrayNameResolvesPlainObjectMethod(): void
     {
         $listener = new NamedListener();

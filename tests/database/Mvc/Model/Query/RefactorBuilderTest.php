@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 
 final class RefactorBuilderTest extends AbstractDatabaseTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-02

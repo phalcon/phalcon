@@ -19,7 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class StatusTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-06-06

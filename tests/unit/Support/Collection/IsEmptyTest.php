@@ -17,7 +17,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 final class IsEmptyTest extends AbstractCollectionTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-05-11

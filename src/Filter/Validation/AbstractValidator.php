@@ -30,7 +30,6 @@ use function is_string;
  */
 abstract class AbstractValidator implements ValidatorInterface
 {
-
     /**
      * @var array
      */

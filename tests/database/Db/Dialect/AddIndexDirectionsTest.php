@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class AddIndexDirectionsTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - empty directions array preserves legacy plain rendering.
      *

@@ -23,7 +23,6 @@ use stdClass;
 
 final class ValidateTest extends AbstractUnitTestCase
 {
-
     /**
      * @author n[oO]ne <lominum@protonmail.com>
      * @since  2024-08-19

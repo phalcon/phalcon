@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class AddColumnGeneratedTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL STORED.
      *

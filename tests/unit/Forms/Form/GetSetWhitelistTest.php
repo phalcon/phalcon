@@ -20,7 +20,6 @@ use stdClass;
 
 final class GetSetWhitelistTest extends AbstractUnitTestCase
 {
-
     public function testBindUsesFormWhitelistWhenNoWhitelistArgument(): void
     {
         $form = new Form();

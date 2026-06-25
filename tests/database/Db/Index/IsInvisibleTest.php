@@ -20,7 +20,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class IsInvisibleTest extends AbstractDatabaseTestCase
 {
-
     /**
      * Definition-array with `columns` not an array throws.
      *

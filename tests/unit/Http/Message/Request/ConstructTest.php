@@ -20,7 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
-
     /**
      * Tests Phalcon\Http\Message\Request :: getBody() / withBody()
      *

@@ -23,7 +23,6 @@ use Phalcon\Tests\Unit\Events\Manager\Fake\SimpleSubscriber;
 
 final class AddSubscriberTest extends AbstractUnitTestCase
 {
-
     public function testAddSubscriberMethodPriorityForm(): void
     {
         $manager = new Manager();

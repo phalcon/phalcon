@@ -25,7 +25,6 @@ use stdClass;
 #[Group('sqlite')]
 final class FetchObjectTest extends AbstractDatabaseTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-25

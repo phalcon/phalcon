@@ -20,7 +20,6 @@ use Phalcon\Tests\Unit\Events\Manager\Fake\SimpleSubscriber;
 
 final class RemoveSubscriberTest extends AbstractUnitTestCase
 {
-
     public function testRemoveSubscriberDetachesMultiListenerForm(): void
     {
         $manager         = new Manager();

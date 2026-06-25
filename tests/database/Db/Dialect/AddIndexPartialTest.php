@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class AddIndexPartialTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - has no partial-index feature; the WHERE predicate is ignored.
      *

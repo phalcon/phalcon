@@ -19,7 +19,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
-
     public function testNewInstanceCanDisableDefaultRoutes(): void
     {
         $router = (new RouterFactory())->newInstance(false);

@@ -46,7 +46,6 @@ namespace Phalcon\Contracts\Container\Ioc;
  */
 interface IocContainer
 {
-
     /**
      * Returns an instance of the `$serviceName`.
      *

@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class EmailTest extends AbstractUnitTestCase
 {
-
     /**
      * @author n[oO]ne <lominum@protonmail.com>
      * @since  2024-08-19

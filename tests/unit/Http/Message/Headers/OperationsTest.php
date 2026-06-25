@@ -20,7 +20,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class OperationsTest extends AbstractUnitTestCase
 {
-
     /**
      * Tests Phalcon\Http\Message\Headers :: checkHeaderHost() - without port
      *

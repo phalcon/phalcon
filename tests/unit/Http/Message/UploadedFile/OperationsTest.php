@@ -21,7 +21,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class OperationsTest extends AbstractUnitTestCase
 {
-
     /**
      * Tests Phalcon\Http\Message\UploadedFile :: __construct() - invalid stream
      *

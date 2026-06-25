@@ -23,7 +23,6 @@ use Phalcon\Tests\Support\Tasks\OnConstructTask;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2018-11-13

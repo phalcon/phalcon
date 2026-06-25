@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Group;
 
 final class OnConflictUpdateTest extends AbstractDatabaseTestCase
 {
-
     /**
      * MySQL - throws (its `ON DUPLICATE KEY UPDATE` is different).
      *

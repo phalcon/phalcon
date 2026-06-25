@@ -22,7 +22,6 @@ use Phalcon\Tests\Support\Modules\Frontend\Module as FrontendModule;
 
 final class RegisterModulesTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @author Nathan Edwards <https://github.com/npfedwards>

@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class BacktraceItemTest extends AbstractUnitTestCase
 {
-
     public function testDefaultsForMinimalFrame(): void
     {
         $item = new BacktraceItem('closure');

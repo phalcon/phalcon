@@ -22,7 +22,6 @@ use PHPUnit\Framework\Attributes\Test;
 
 final class FailsTest extends AbstractUnitTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2025-08-02

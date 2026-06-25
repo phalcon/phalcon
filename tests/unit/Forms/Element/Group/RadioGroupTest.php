@@ -18,7 +18,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class RadioGroupTest extends AbstractUnitTestCase
 {
-
     // -----------------------------------------------------------------------
     // Attributes
     // -----------------------------------------------------------------------

@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('sqlite')]
 final class JoinTest extends AbstractDatabaseTestCase
 {
-
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-01-20

@@ -22,7 +22,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
  */
 abstract class AbstractContextConformanceTestCase extends AbstractUnitTestCase
 {
-
     public function testMessagesAreDeliveredInFifoOrder(): void
     {
         $context  = $this->createContext();

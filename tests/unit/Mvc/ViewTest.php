@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractUnitTestCase;
 
 final class ViewTest extends AbstractUnitTestCase
 {
-
     /**
      * Tests View::disableLevel
      *

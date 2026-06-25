@@ -17,7 +17,6 @@ use Phalcon\Mvc\Model;
 
 class FakeSelect extends Model
 {
-
     public function getId(): mixed
     {
         return $this->sel_id;
