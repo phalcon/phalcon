@@ -57,6 +57,7 @@ use Phalcon\Mvc\Model\Exceptions\RelationRequiresObjectOrArray;
 use Phalcon\Mvc\Model\Exceptions\SnapshotsDisabled;
 use Phalcon\Mvc\Model\Exceptions\StaticMethodRequiresOneArgument;
 use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
+use Phalcon\Mvc\Model\Hydration\CloneResultMapHydrate;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\QueryInterface;
@@ -1147,70 +1148,12 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $columnMap,
         int $hydrationMode
     ) {
-        /**
-         * If there is no column map and the hydration mode is arrays return the
-         * data as it is
-         */
-        if (!is_array($columnMap) && $hydrationMode == Resultset::HYDRATE_ARRAYS) {
-            return $data;
-        }
-
-        /**
-         * Create the destination object
-         */
-        $hydrateArray = [];
-
-        foreach ($data as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-
-            if (is_array($columnMap)) {
-                // Try to find case-insensitive key variant
-                if (
-                    !isset($columnMap[$key]) &&
-                    Settings::get("orm.case_insensitive_column_map")
-                ) {
-                    $key = self::caseInsensitiveColumnMap($columnMap, $key);
-                }
-
-                /**
-                 * Every field must be part of the column map
-                 */
-                if (!isset($columnMap[$key])) {
-                    if (!Settings::get("orm.ignore_unknown_columns")) {
-                        /**
-                         * @todo unless we pass the model name in the function
-                         *       we cannot tell what model has this problem
-                         */
-                        throw new ColumnNotInMap($key, get_called_class());
-                    }
-
-                    continue;
-                } else {
-                    $attribute = $columnMap[$key];
-                }
-
-                /**
-                 * Attribute can store info about his type
-                 */
-                if (is_array($attribute)) {
-                    $attributeName = $attribute[0];
-                } else {
-                    $attributeName = $attribute;
-                }
-
-                $hydrateArray[$attributeName] = $value;
-            } else {
-                $hydrateArray[$key] = $value;
-            }
-        }
-
-        if ($hydrationMode != Resultset::HYDRATE_ARRAYS) {
-            return (object)$hydrateArray;
-        }
-
-        return $hydrateArray;
+        return CloneResultMapHydrate::cloneResultMapHydrate(
+            $data,
+            $columnMap,
+            $hydrationMode,
+            get_called_class()
+        );
     }
 
     /**
