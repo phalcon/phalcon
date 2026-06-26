@@ -23,139 +23,139 @@ namespace Phalcon\Http\Enums;
  */
 enum HttpStatusEnum: int
 {
-    // Informational 1xx
-    // Information - RFC 7231, 6.2.1
-    case Continue = 100;
-    // Information - RFC 7231, 6.2.2
-    case SwitchingProtocols = 101;
-    // Information - RFC 2518, 10.1
-    case Processing = 102;            // RFC2518
-    case EarlyHints = 103;
-
-    // Successful 2xx
-    // Success - RFC 7231, 6.3.1
-    case OK = 200;
-    // Success - RFC 7231, 6.3.2
-    case Created = 201;
     // Success - RFC 7231, 6.3.3
     case Accepted = 202;
-    // Success - RFC 7231, 6.3.4
-    case NonAuthoritativeInformation = 203;
-    // Success - RFC 7231, 6.3.5
-    case NoContent = 204;
-    // Success - RFC 7231, 6.3.6
-    case ResetContent = 205;
-    // Success - RFC 7233, 4.1
-    case PartialContent = 206;
-    // Success - RFC 4918, 11.1
-    case MultiStatus = 207;
     // Success - RFC 5842, 7.1
     case AlreadyReported = 208;
-    // Success - RFC 3229, 10.4.1
-    case ImUsed = 226;
-
-    // Redirection 3xx
-    // Redirection - RFC 7231, 6.4.1
-    case MultipleChoices = 300;
-    // Redirection - RFC 7231, 6.4.2
-    case MovedPermanently = 301;
-    // Redirection - RFC 7231, 6.4.3
-    case Found = 302;
-    // Redirection - RFC 7231, 6.4.4
-    case SeeOther = 303;
-    // Redirection - RFC 7232, 4.1
-    case NotModified = 304;
-    // Redirection - RFC 7231, 6.4.5
-    case UseProxy = 305;
-    // Redirection - RFC 7231, 6.4.6 (Deprecated)
-    case Reserved = 306;              // Switch Proxy
-    // Redirection - RFC 7231, 6.4.7
-    case TemporaryRedirect = 307;
-    // Redirection - RFC 7538, 3
-    case PermanentRedirect = 308;
+    // Server Error - RFC 7231, 6.6.3
+    case BadGateway = 502;
 
     // Client Errors 4xx
     // Client Error - RFC 7231, 6.5.1
     case BadRequest = 400;
-    // Client Error - RFC 7235, 3.1
-    case Unauthorized = 401;
-    // Client Error - RFC 7231, 6.5.2
-    case PaymentRequired = 402;
-    // Client Error - RFC 7231, 6.5.3
-    case Forbidden = 403;
-    // Client Error - RFC 7231, 6.5.4
-    case NotFound = 404;
-    // Client Error - RFC 7231, 6.5.5
-    case MethodNotAllowed = 405;
-    // Client Error - RFC 7231, 6.5.6
-    case NotAcceptable = 406;
-    // Client Error - RFC 7235, 3.2
-    case ProxyAuthenticationRequired = 407;
-    // Client Error - RFC 7231, 6.5.7
-    case RequestTimeout = 408;
     // Client Error - RFC 7231, 6.5.8
     case Conflict = 409;
-    // Client Error - RFC 7231, 6.5.9
-    case Gone = 410;
-    // Client Error - RFC 7231, 6.5.10
-    case LengthRequired = 411;
-    // Client Error - RFC 7232, 4.2
-    case PreconditionFailed = 412;
-    // Client Error - RFC 7231, 6.5.11
-    case PayloadTooLarge = 413;
-    // Client Error - RFC 7231, 6.5.12
-    case UriTooLong = 414;
-    // Client Error - RFC 7231, 6.5.13
-    case UnsupportedMediaType = 415;
-    // Client Error - RFC 7233, 4.4
-    case RangeNotSatisfiable = 416;
+    // Informational 1xx
+    // Information - RFC 7231, 6.2.1
+    case Continue = 100;
+    // Success - RFC 7231, 6.3.2
+    case Created = 201;
+    case EarlyHints = 103;
     // Client Error - RFC 7231, 6.5.14
     case ExpectationFailed = 417;
-    // Client Error - RFC 7168, 2.3.3
-    case ImATeapot          = 418;
-    case MisdirectedRequest = 421;
-    // Client Error - RFC 4918, 11.2
-    case UnprocessableEntity = 422;
-    // Client Error - RFC 4918, 11.3
-    case Locked = 423;
     // Client Error - RFC 4918, 11.4
     case FailedDependency = 424;
-
-    case TooEarly = 425;
-    // Client Error - RFC 7231, 6.5.15
-    case UpgradeRequired = 426;
-    // Client Error - RFC 6585, 3
-    case PreconditionRequired = 428;
-    // Client Error - RFC 6585, 4
-    case TooManyRequests = 429;
-    // Client Error - RFC 6585, 5
-    case RequestHeaderFieldsTooLarge = 431;
-    // Client Error - RFC 7725, 3
-    case UnavailableForLegalReasons = 451;
+    // Client Error - RFC 7231, 6.5.3
+    case Forbidden = 403;
+    // Redirection - RFC 7231, 6.4.3
+    case Found = 302;
+    // Server Error - RFC 7231, 6.6.5
+    case GatewayTimeout = 504;
+    // Client Error - RFC 7231, 6.5.9
+    case Gone = 410;
+    // Client Error - RFC 7168, 2.3.3
+    case ImATeapot          = 418;
+    // Success - RFC 3229, 10.4.1
+    case ImUsed = 226;
+    // Server Error - RFC 4918, 11.5
+    case InsufficientStorage = 507;
 
     // Server Errors 5xx
     // Server Error - RFC 7231, 6.6.1
     case InternalServerError = 500;
-    // Server Error - RFC 7231, 6.6.2
-    case NotImplemented = 501;
-    // Server Error - RFC 7231, 6.6.3
-    case BadGateway = 502;
-    // Server Error - RFC 7231, 6.6.4
-    case ServiceUnavailable = 503;
-    // Server Error - RFC 7231, 6.6.5
-    case GatewayTimeout = 504;
-    // Server Error - RFC 7231, 6.6.6
-    case VersionNotSupported = 505;
-    // Server Error - RFC 2295, 8.1
-    case VariantAlsoNegotiates = 506;
-    // Server Error - RFC 4918, 11.5
-    case InsufficientStorage = 507;
+    // Client Error - RFC 7231, 6.5.10
+    case LengthRequired = 411;
+    // Client Error - RFC 4918, 11.3
+    case Locked = 423;
     // Server Error - RFC 5842, 7.2
     case LoopDetected = 508;
-    // Server Error - RFC 2774, 7
-    case NotExtended = 510;
+    // Client Error - RFC 7231, 6.5.5
+    case MethodNotAllowed = 405;
+    case MisdirectedRequest = 421;
+    // Redirection - RFC 7231, 6.4.2
+    case MovedPermanently = 301;
+
+    // Redirection 3xx
+    // Redirection - RFC 7231, 6.4.1
+    case MultipleChoices = 300;
+    // Success - RFC 4918, 11.1
+    case MultiStatus = 207;
     // Server Error - RFC 6585, 6
     case NetworkAuthenticationRequired = 511;
+    // Success - RFC 7231, 6.3.5
+    case NoContent = 204;
+    // Success - RFC 7231, 6.3.4
+    case NonAuthoritativeInformation = 203;
+    // Client Error - RFC 7231, 6.5.6
+    case NotAcceptable = 406;
+    // Server Error - RFC 2774, 7
+    case NotExtended = 510;
+    // Client Error - RFC 7231, 6.5.4
+    case NotFound = 404;
+    // Server Error - RFC 7231, 6.6.2
+    case NotImplemented = 501;
+    // Redirection - RFC 7232, 4.1
+    case NotModified = 304;
+
+    // Successful 2xx
+    // Success - RFC 7231, 6.3.1
+    case OK = 200;
+    // Success - RFC 7233, 4.1
+    case PartialContent = 206;
+    // Client Error - RFC 7231, 6.5.11
+    case PayloadTooLarge = 413;
+    // Client Error - RFC 7231, 6.5.2
+    case PaymentRequired = 402;
+    // Redirection - RFC 7538, 3
+    case PermanentRedirect = 308;
+    // Client Error - RFC 7232, 4.2
+    case PreconditionFailed = 412;
+    // Client Error - RFC 6585, 3
+    case PreconditionRequired = 428;
+    // Information - RFC 2518, 10.1
+    case Processing = 102;            // RFC2518
+    // Client Error - RFC 7235, 3.2
+    case ProxyAuthenticationRequired = 407;
+    // Client Error - RFC 7233, 4.4
+    case RangeNotSatisfiable = 416;
+    // Client Error - RFC 6585, 5
+    case RequestHeaderFieldsTooLarge = 431;
+    // Client Error - RFC 7231, 6.5.7
+    case RequestTimeout = 408;
+    // Redirection - RFC 7231, 6.4.6 (Deprecated)
+    case Reserved = 306;              // Switch Proxy
+    // Success - RFC 7231, 6.3.6
+    case ResetContent = 205;
+    // Redirection - RFC 7231, 6.4.4
+    case SeeOther = 303;
+    // Server Error - RFC 7231, 6.6.4
+    case ServiceUnavailable = 503;
+    // Information - RFC 7231, 6.2.2
+    case SwitchingProtocols = 101;
+    // Redirection - RFC 7231, 6.4.7
+    case TemporaryRedirect = 307;
+
+    case TooEarly = 425;
+    // Client Error - RFC 6585, 4
+    case TooManyRequests = 429;
+    // Client Error - RFC 7235, 3.1
+    case Unauthorized = 401;
+    // Client Error - RFC 7725, 3
+    case UnavailableForLegalReasons = 451;
+    // Client Error - RFC 4918, 11.2
+    case UnprocessableEntity = 422;
+    // Client Error - RFC 7231, 6.5.13
+    case UnsupportedMediaType = 415;
+    // Client Error - RFC 7231, 6.5.15
+    case UpgradeRequired = 426;
+    // Client Error - RFC 7231, 6.5.12
+    case UriTooLong = 414;
+    // Redirection - RFC 7231, 6.4.5
+    case UseProxy = 305;
+    // Server Error - RFC 2295, 8.1
+    case VariantAlsoNegotiates = 506;
+    // Server Error - RFC 7231, 6.6.6
+    case VersionNotSupported = 505;
 
 
     public function text(): string

@@ -22,18 +22,17 @@ use TypeError;
 
 final class LoadTest extends AbstractUnitTestCase
 {
-    public function testLoadFromArrayWithoutDefaultRoutes(): void
+    public function testLoadAcceptsConfigObject(): void
     {
-        $router = (new RouterFactory())->load([
+        $config = new Config([
             'defaultRoutes' => false,
             'routes'        => [
                 ['method' => 'get', 'pattern' => '/about', 'paths' => 'About::index'],
             ],
         ]);
 
-        $this->assertInstanceOf(Router::class, $router);
+        $router = (new RouterFactory())->load($config);
         $this->assertCount(1, $router->getRoutes());
-        $this->assertSame('/about', $router->getRoutes()[0]->getPattern());
     }
 
     public function testLoadFromArrayDefaultsToDefaultRoutesTrue(): void
@@ -46,18 +45,18 @@ final class LoadTest extends AbstractUnitTestCase
 
         $this->assertCount(3, $router->getRoutes());
     }
-
-    public function testLoadAcceptsConfigObject(): void
+    public function testLoadFromArrayWithoutDefaultRoutes(): void
     {
-        $config = new Config([
+        $router = (new RouterFactory())->load([
             'defaultRoutes' => false,
             'routes'        => [
                 ['method' => 'get', 'pattern' => '/about', 'paths' => 'About::index'],
             ],
         ]);
 
-        $router = (new RouterFactory())->load($config);
+        $this->assertInstanceOf(Router::class, $router);
         $this->assertCount(1, $router->getRoutes());
+        $this->assertSame('/about', $router->getRoutes()[0]->getPattern());
     }
 
     public function testLoadRejectsNonArrayNonConfig(): void

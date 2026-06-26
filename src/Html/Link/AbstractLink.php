@@ -155,20 +155,6 @@ abstract class AbstractLink
      *
      * @return $this
      */
-    protected function doWithRel(string $key): self
-    {
-        $newInstance = clone $this;
-
-        $newInstance->rels->set($key, true);
-
-        return $newInstance;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return $this
-     */
     protected function doWithoutAttribute(string $key): self
     {
         $newInstance = clone $this;
@@ -188,6 +174,20 @@ abstract class AbstractLink
         $newInstance = clone $this;
 
         $newInstance->rels->remove($key);
+
+        return $newInstance;
+    }
+
+    /**
+     * @param string $key
+     *
+     * @return $this
+     */
+    protected function doWithRel(string $key): self
+    {
+        $newInstance = clone $this;
+
+        $newInstance->rels->set($key, true);
 
         return $newInstance;
     }

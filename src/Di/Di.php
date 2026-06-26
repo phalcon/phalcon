@@ -75,18 +75,18 @@ class Di extends stdClass implements DiInterface
     use EventsAwareTrait;
 
     /**
-     * List of service aliases
-     *
-     * @var array<string, string>
-     */
-    protected array $aliases = [];
-
-    /**
      * Latest DI build
      *
      * @var object|null
      */
     protected static object | null $defaultContainer = null;
+
+    /**
+     * List of service aliases
+     *
+     * @var array<string, string>
+     */
+    protected array $aliases = [];
     /**
      * List of registered services
      *
@@ -147,6 +147,39 @@ class Di extends stdClass implements DiInterface
         }
 
         $this->throwUndefinedMethod($method);
+    }
+
+    /**
+     * Return the latest DI created
+     *
+     * @return object|null
+     */
+    public static function getDefault(): object | null
+    {
+        return self::$defaultContainer;
+    }
+
+    /**
+     * Resets the internal default DI
+     *
+     * @return void
+     */
+    public static function reset(): void
+    {
+        self::$defaultContainer = null;
+    }
+
+    /**
+     * Set a default dependency injection container to be obtained into static
+     * methods
+     *
+     * @param object $container
+     *
+     * @return void
+     */
+    public static function setDefault(object $container): void
+    {
+        self::$defaultContainer = $container;
     }
 
     /**
@@ -269,16 +302,6 @@ class Di extends stdClass implements DiInterface
     public function getAlias(string $name): string
     {
         return $this->aliases[$name] ?? '';
-    }
-
-    /**
-     * Return the latest DI created
-     *
-     * @return object|null
-     */
-    public static function getDefault(): object | null
-    {
-        return self::$defaultContainer;
     }
 
     /**
@@ -491,16 +514,6 @@ class Di extends stdClass implements DiInterface
     }
 
     /**
-     * Resets the internal default DI
-     *
-     * @return void
-     */
-    public static function reset(): void
-    {
-        self::$defaultContainer = null;
-    }
-
-    /**
      * Registers a service in the services container
      *
      * @param string $name
@@ -556,19 +569,6 @@ class Di extends stdClass implements DiInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Set a default dependency injection container to be obtained into static
-     * methods
-     *
-     * @param object $container
-     *
-     * @return void
-     */
-    public static function setDefault(object $container): void
-    {
-        self::$defaultContainer = $container;
     }
 
     /**

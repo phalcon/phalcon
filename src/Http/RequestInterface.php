@@ -125,13 +125,6 @@ interface RequestInterface
     public function getDigestAuth(): array;
 
     /**
-     * Return the web page that refers active request. ie: https://phalcon.io
-     *
-     * @return string
-     */
-    public function getHTTPReferer(): string;
-
-    /**
      * Return the HTTP header from request data
      *
      * @param string $header
@@ -195,6 +188,13 @@ interface RequestInterface
      * @return string
      */
     public function getHttpHost(): string;
+
+    /**
+     * Return the web page that refers active request. ie: https://phalcon.io
+     *
+     * @return string
+     */
+    public function getHTTPReferer(): string;
 
     /**
      * Return the decoded JSON HTTP raw request body
@@ -362,6 +362,20 @@ interface RequestInterface
     public function getServerName(): string;
 
     /**
+     * Return the attached files as Phalcon\Http\Request\FileInterface
+     * compatible instances
+     *
+     * @param bool $onlySuccessful
+     * @param bool $namedKeys
+     *
+     * @return array
+     */
+    public function getUploadedFiles(
+        bool $onlySuccessful = false,
+        bool $namedKeys = false
+    ): array;
+
+    /**
      * Return the HTTP URI which request has been made to
      *
      *```php
@@ -377,20 +391,6 @@ interface RequestInterface
      * @return string
      */
     public function getURI(bool $onlyPath = false): string;
-
-    /**
-     * Return the attached files as Phalcon\Http\Request\FileInterface
-     * compatible instances
-     *
-     * @param bool $onlySuccessful
-     * @param bool $namedKeys
-     *
-     * @return array
-     */
-    public function getUploadedFiles(
-        bool $onlySuccessful = false,
-        bool $namedKeys = false
-    ): array;
 
     /**
      * Return the HTTP user agent used to make the request

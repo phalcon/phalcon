@@ -41,6 +41,10 @@ use function mb_strtolower;
 class Debug
 {
     /**
+     * @var bool
+     */
+    protected static bool $isActive = false;
+    /**
      * @var array
      */
     protected array $blacklist = ["request" => [], "server" => []];
@@ -54,11 +58,6 @@ class Debug
      * @var bool
      */
     protected bool $hideDocumentRoot = false;
-
-    /**
-     * @var bool
-     */
-    protected static bool $isActive = false;
 
     /**
      * @var Renderer

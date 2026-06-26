@@ -81,6 +81,13 @@ abstract class AbstractSeries extends AbstractHelper
     }
 
     /**
+     * Returns the tag name.
+     *
+     * @return string
+     */
+    abstract protected function getTag(): string;
+
+    /**
      * Appends an entry to the store, optionally at a specific integer
      * position. When `$pos` is negative the entry is pushed onto the next
      * available auto-increment slot. When `$pos` is non-negative the entry
@@ -106,11 +113,4 @@ abstract class AbstractSeries extends AbstractHelper
 
         $this->store[$key] = $entry;
     }
-
-    /**
-     * Returns the tag name.
-     *
-     * @return string
-     */
-    abstract protected function getTag(): string;
 }

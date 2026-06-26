@@ -253,28 +253,6 @@ trait MessageTrait
     }
 
     /**
-     * Return an instance with the specified HTTP protocol version.
-     *
-     * The version string MUST contain only the HTTP version number (e.g.,
-     * '1.1', '1.0').
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return an instance that has the
-     * new protocol version.
-     *
-     * @param string $version
-     *
-     * @return MessageInterface
-     */
-    public function withProtocolVersion(string $version): MessageInterface
-    {
-        $copy = clone $this;
-        $copy->protocolVersion = $this->processProtocol($version);
-
-        return $copy;
-    }
-
-    /**
      * Return an instance without the specified header.
      *
      * Header resolution MUST be done without case-sensitivity.
@@ -295,6 +273,28 @@ trait MessageTrait
 
         $copy = clone $this;
         $copy->headers = $headers;
+
+        return $copy;
+    }
+
+    /**
+     * Return an instance with the specified HTTP protocol version.
+     *
+     * The version string MUST contain only the HTTP version number (e.g.,
+     * '1.1', '1.0').
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new protocol version.
+     *
+     * @param string $version
+     *
+     * @return MessageInterface
+     */
+    public function withProtocolVersion(string $version): MessageInterface
+    {
+        $copy = clone $this;
+        $copy->protocolVersion = $this->processProtocol($version);
 
         return $copy;
     }

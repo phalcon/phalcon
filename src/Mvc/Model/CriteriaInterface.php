@@ -202,20 +202,6 @@ interface CriteriaInterface
     public function having(mixed $having): CriteriaInterface;
 
     /**
-     * Appends an IN condition to the current conditions
-     *
-     *```php
-     * $criteria->inWhere("id", [1, 2, 3]);
-     *```
-     *
-     * @param string $expr
-     * @param array  $values
-     *
-     * @return CriteriaInterface
-     */
-    public function inWhere(string $expr, array $values): CriteriaInterface;
-
-    /**
      * Adds an INNER join to the query
      *
      *```php
@@ -246,6 +232,20 @@ interface CriteriaInterface
         mixed $conditions = null,
         mixed $alias = null
     ): CriteriaInterface;
+
+    /**
+     * Appends an IN condition to the current conditions
+     *
+     *```php
+     * $criteria->inWhere("id", [1, 2, 3]);
+     *```
+     *
+     * @param string $expr
+     * @param array  $values
+     *
+     * @return CriteriaInterface
+     */
+    public function inWhere(string $expr, array $values): CriteriaInterface;
 
     /**
      * Adds a LEFT join to the query
@@ -314,6 +314,15 @@ interface CriteriaInterface
     public function notInWhere(string $expr, array $values): CriteriaInterface;
 
     /**
+     * Adds the order-by parameter to the criteria
+     *
+     * @param string $orderColumns
+     *
+     * @return CriteriaInterface
+     */
+    public function orderBy(string $orderColumns): CriteriaInterface;
+
+    /**
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string     $conditions
@@ -327,15 +336,6 @@ interface CriteriaInterface
         array | null $bindParams = null,
         array | null $bindTypes = null
     ): CriteriaInterface;
-
-    /**
-     * Adds the order-by parameter to the criteria
-     *
-     * @param string $orderColumns
-     *
-     * @return CriteriaInterface
-     */
-    public function orderBy(string $orderColumns): CriteriaInterface;
 
     /**
      * Adds a RIGHT join to the query

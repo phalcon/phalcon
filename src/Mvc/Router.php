@@ -108,23 +108,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     protected array $candidatesByMethod = [];
 
     /**
-     * Single-source per-route metadata cache. One entry per route, keyed
-     * by the route's intrinsic id. Replaces the previous per-method-bucket
-     * replication of metadata arrays. Built once in rebuildMethodIndex().
-     *
-     * Shape: routeMeta[routeId] = [
-     *     "pattern":     string,
-     *     "isRegex":     bool,
-     *     "hostname":    string|null,
-     *     "hostRegex":   string|null,
-     *     "beforeMatch": callable|null
-     *   ]
-     *
-     * @var array
-     */
-    protected array $routeMeta = [];
-
-    /**
      * Combined PCRE pattern per method bucket (chunked list of strings).
      * Each chunk uses (?|...) branch reset and (*:N) mark labels. Built
      * only when the bucket has no hostname routes and all patterns are
@@ -268,6 +251,23 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * @var bool
      */
     protected bool $removeExtraSlashes = false;
+
+    /**
+     * Single-source per-route metadata cache. One entry per route, keyed
+     * by the route's intrinsic id. Replaces the previous per-method-bucket
+     * replication of metadata arrays. Built once in rebuildMethodIndex().
+     *
+     * Shape: routeMeta[routeId] = [
+     *     "pattern":     string,
+     *     "isRegex":     bool,
+     *     "hostname":    string|null,
+     *     "hostRegex":   string|null,
+     *     "beforeMatch": callable|null
+     *   ]
+     *
+     * @var array
+     */
+    protected array $routeMeta = [];
 
     /**
      * @var array
@@ -667,27 +667,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * Removes all the pre-defined routes
-     *
-     * @return void
-     */
-    public function clear(): void
-    {
-        $this->routes                 = [];
-        $this->methodRoutes           = [];
-        $this->candidatesByMethod     = [];
-        $this->routeMeta              = [];
-        $this->staticByMethod         = [];
-        $this->staticShadowedByMethod = [];
-        $this->hostnameByMethod       = [];
-        $this->hostnameLessByMethod   = [];
-        $this->combinedRegexByMethod  = [];
-        $this->combinedRegexDisabled  = [];
-        $this->combinedRegexMarkMap   = [];
-        $this->methodRoutesDirty      = true;
-    }
-
-    /**
      * Produces a pure-data array describing every piece of state needed
      * to reconstruct this router. The returned array is var_export-able
      * (no objects, no closures). Used by dumpDispatcher() and by
@@ -793,115 +772,24 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * Inverse of buildDispatcherDump(). Reconstructs every Route from the
-     * scalar `routes` entries (preserving subclass and routeId), restores
-     * every index, and marks the indexes clean so handle() skips rebuild.
-     *
-     * @param array $dump
+     * Removes all the pre-defined routes
      *
      * @return void
-     *
-     * @throws Exception
      */
-    public function loadDispatcherFromArray(array $dump): void
+    public function clear(): void
     {
-        if (!isset($dump["version"])) {
-            throw new Exception("Router cache is missing 'version' field");
-        }
-
-        $dumpVersion = (int) $dump["version"];
-
-        if ($dumpVersion !== 1) {
-            throw new Exception(
-                "Router cache version " . $dumpVersion
-                . " is not supported (this build supports version 1)"
-            );
-        }
-
-        if (!isset($dump["routes"])) {
-            throw new Exception("Router cache is missing 'routes' field");
-        }
-
-        $rebuiltRoutes = [];
-
-        foreach ($dump["routes"] as $routeData) {
-            $routeClass = $routeData["class"];
-            $route      = new $routeClass(
-                $routeData["pattern"],
-                $routeData["paths"],
-                $routeData["methods"]
-            );
-
-            if ($routeData["hostname"] !== null) {
-                $route->setHostname($routeData["hostname"]);
-            }
-
-            if ($routeData["name"] !== null) {
-                $route->setName($routeData["name"]);
-            }
-
-            $route->setRouteId($routeData["id"]);
-
-            $beforeMatch = $routeData["beforeMatch"];
-            if ($beforeMatch !== null) {
-                $route->beforeMatch($beforeMatch);
-            }
-
-            $converters = $routeData["converters"];
-            if (is_array($converters)) {
-                foreach ($converters as $convName => $converter) {
-                    $route->convert($convName, $converter);
-                }
-            }
-
-            $rebuiltRoutes[] = $route;
-        }
-
-        $this->routes = $rebuiltRoutes;
-
-        $methodRoutesRehydrated = [];
-        foreach ($dump["methodRoutes"] as $innerKey => $innerVal) {
-            $mostInnerArr = [];
-            foreach ($innerVal as $scalarIdx) {
-                $mostInnerArr[] = $this->routes[$scalarIdx];
-            }
-            $methodRoutesRehydrated[$innerKey] = $mostInnerArr;
-        }
-
-        $candidatesRehydrated = [];
-        foreach ($dump["candidatesByMethod"] as $innerKey => $innerVal) {
-            $mostInnerArr = [];
-            foreach ($innerVal as $scalarIdx) {
-                $mostInnerArr[] = $this->routes[$scalarIdx];
-            }
-            $candidatesRehydrated[$innerKey] = $mostInnerArr;
-        }
-
-        $staticRehydrated = [];
-        foreach ($dump["staticByMethod"] as $innerKey => $innerVal) {
-            $staticRehydrated[$innerKey] = [];
-            foreach ($innerVal as $scalarSubKey => $mostInnerVal) {
-                $mostInnerArr = [];
-                foreach ($mostInnerVal as $scalarIdx) {
-                    $mostInnerArr[] = $this->routes[$scalarIdx];
-                }
-                $staticRehydrated[$innerKey][$scalarSubKey] = $mostInnerArr;
-            }
-        }
-
-        $this->methodRoutes           = $methodRoutesRehydrated;
-        $this->candidatesByMethod     = $candidatesRehydrated;
-        $this->staticByMethod         = $staticRehydrated;
-        $this->staticShadowedByMethod = $dump["staticShadowedByMethod"];
-        $this->hostnameByMethod       = $dump["hostnameByMethod"];
-        $this->hostnameLessByMethod   = $dump["hostnameLessByMethod"];
-        $this->combinedRegexByMethod  = $dump["combinedRegexByMethod"];
-        $this->combinedRegexDisabled  = $dump["combinedRegexDisabled"];
-        $this->combinedRegexMarkMap   = $dump["combinedRegexMarkMap"];
-        $this->routeMeta              = $dump["routeMeta"];
-        $this->keyRouteIds            = [];
-        $this->keyRouteNames          = [];
-        $this->methodRoutesDirty      = false;
+        $this->routes                 = [];
+        $this->methodRoutes           = [];
+        $this->candidatesByMethod     = [];
+        $this->routeMeta              = [];
+        $this->staticByMethod         = [];
+        $this->staticShadowedByMethod = [];
+        $this->hostnameByMethod       = [];
+        $this->hostnameLessByMethod   = [];
+        $this->combinedRegexByMethod  = [];
+        $this->combinedRegexDisabled  = [];
+        $this->combinedRegexMarkMap   = [];
+        $this->methodRoutesDirty      = true;
     }
 
     /**
@@ -929,69 +817,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             unlink($tmpPath);
             throw new Exception("Failed to commit router cache: " . $path);
         }
-    }
-
-    /**
-     * File-shaped helper around loadDispatcherFromArray(). Includes the
-     * file (opcache-friendly) and forwards the return value.
-     *
-     * @param string $path
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
-    public function loadDispatcher(string $path): void
-    {
-        if (!file_exists($path)) {
-            throw new Exception("Router cache not found: " . $path);
-        }
-
-        $dump = require $path;
-
-        if (!is_array($dump)) {
-            throw new Exception(
-                "Router cache is corrupt or invalid (expected array, got "
-                . gettype($dump) . "): " . $path
-            );
-        }
-
-        $this->loadDispatcherFromArray($dump);
-    }
-
-    /**
-     * Cache-instance convenience wrapper. On cache hit, restores the
-     * dispatcher immediately. On miss, defers cache population until the
-     * next handle() completes - at which point buildDispatcherDump() is
-     * written to the cache key.
-     *
-     * @param CacheAdapterInterface $cache
-     * @param string                $key
-     *
-     * @return void
-     *
-     * @throws Exception
-     */
-    public function useCache(
-        CacheAdapterInterface $cache,
-        string $key = "phalcon.router.dispatcher"
-    ): void {
-        if ($cache->has($key)) {
-            $stored = $cache->get($key);
-
-            if (!is_array($stored)) {
-                throw new Exception(
-                    "Router cache value at key '" . $key . "' is not an array"
-                );
-            }
-
-            $this->loadDispatcherFromArray($stored);
-
-            return;
-        }
-
-        $this->pendingCache    = $cache;
-        $this->pendingCacheKey = $key;
     }
 
     /**
@@ -1697,6 +1522,146 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
+     * File-shaped helper around loadDispatcherFromArray(). Includes the
+     * file (opcache-friendly) and forwards the return value.
+     *
+     * @param string $path
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function loadDispatcher(string $path): void
+    {
+        if (!file_exists($path)) {
+            throw new Exception("Router cache not found: " . $path);
+        }
+
+        $dump = require $path;
+
+        if (!is_array($dump)) {
+            throw new Exception(
+                "Router cache is corrupt or invalid (expected array, got "
+                . gettype($dump) . "): " . $path
+            );
+        }
+
+        $this->loadDispatcherFromArray($dump);
+    }
+
+    /**
+     * Inverse of buildDispatcherDump(). Reconstructs every Route from the
+     * scalar `routes` entries (preserving subclass and routeId), restores
+     * every index, and marks the indexes clean so handle() skips rebuild.
+     *
+     * @param array $dump
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function loadDispatcherFromArray(array $dump): void
+    {
+        if (!isset($dump["version"])) {
+            throw new Exception("Router cache is missing 'version' field");
+        }
+
+        $dumpVersion = (int) $dump["version"];
+
+        if ($dumpVersion !== 1) {
+            throw new Exception(
+                "Router cache version " . $dumpVersion
+                . " is not supported (this build supports version 1)"
+            );
+        }
+
+        if (!isset($dump["routes"])) {
+            throw new Exception("Router cache is missing 'routes' field");
+        }
+
+        $rebuiltRoutes = [];
+
+        foreach ($dump["routes"] as $routeData) {
+            $routeClass = $routeData["class"];
+            $route      = new $routeClass(
+                $routeData["pattern"],
+                $routeData["paths"],
+                $routeData["methods"]
+            );
+
+            if ($routeData["hostname"] !== null) {
+                $route->setHostname($routeData["hostname"]);
+            }
+
+            if ($routeData["name"] !== null) {
+                $route->setName($routeData["name"]);
+            }
+
+            $route->setRouteId($routeData["id"]);
+
+            $beforeMatch = $routeData["beforeMatch"];
+            if ($beforeMatch !== null) {
+                $route->beforeMatch($beforeMatch);
+            }
+
+            $converters = $routeData["converters"];
+            if (is_array($converters)) {
+                foreach ($converters as $convName => $converter) {
+                    $route->convert($convName, $converter);
+                }
+            }
+
+            $rebuiltRoutes[] = $route;
+        }
+
+        $this->routes = $rebuiltRoutes;
+
+        $methodRoutesRehydrated = [];
+        foreach ($dump["methodRoutes"] as $innerKey => $innerVal) {
+            $mostInnerArr = [];
+            foreach ($innerVal as $scalarIdx) {
+                $mostInnerArr[] = $this->routes[$scalarIdx];
+            }
+            $methodRoutesRehydrated[$innerKey] = $mostInnerArr;
+        }
+
+        $candidatesRehydrated = [];
+        foreach ($dump["candidatesByMethod"] as $innerKey => $innerVal) {
+            $mostInnerArr = [];
+            foreach ($innerVal as $scalarIdx) {
+                $mostInnerArr[] = $this->routes[$scalarIdx];
+            }
+            $candidatesRehydrated[$innerKey] = $mostInnerArr;
+        }
+
+        $staticRehydrated = [];
+        foreach ($dump["staticByMethod"] as $innerKey => $innerVal) {
+            $staticRehydrated[$innerKey] = [];
+            foreach ($innerVal as $scalarSubKey => $mostInnerVal) {
+                $mostInnerArr = [];
+                foreach ($mostInnerVal as $scalarIdx) {
+                    $mostInnerArr[] = $this->routes[$scalarIdx];
+                }
+                $staticRehydrated[$innerKey][$scalarSubKey] = $mostInnerArr;
+            }
+        }
+
+        $this->methodRoutes           = $methodRoutesRehydrated;
+        $this->candidatesByMethod     = $candidatesRehydrated;
+        $this->staticByMethod         = $staticRehydrated;
+        $this->staticShadowedByMethod = $dump["staticShadowedByMethod"];
+        $this->hostnameByMethod       = $dump["hostnameByMethod"];
+        $this->hostnameLessByMethod   = $dump["hostnameLessByMethod"];
+        $this->combinedRegexByMethod  = $dump["combinedRegexByMethod"];
+        $this->combinedRegexDisabled  = $dump["combinedRegexDisabled"];
+        $this->combinedRegexMarkMap   = $dump["combinedRegexMarkMap"];
+        $this->routeMeta              = $dump["routeMeta"];
+        $this->keyRouteIds            = [];
+        $this->keyRouteNames          = [];
+        $this->methodRoutesDirty      = false;
+    }
+
+    /**
      * Loads routes from an array or Phalcon\Config\Config instance.
      *
      * ```php
@@ -1977,6 +1942,41 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $this->uriSource = $uriSource;
 
         return $this;
+    }
+
+    /**
+     * Cache-instance convenience wrapper. On cache hit, restores the
+     * dispatcher immediately. On miss, defers cache population until the
+     * next handle() completes - at which point buildDispatcherDump() is
+     * written to the cache key.
+     *
+     * @param CacheAdapterInterface $cache
+     * @param string                $key
+     *
+     * @return void
+     *
+     * @throws Exception
+     */
+    public function useCache(
+        CacheAdapterInterface $cache,
+        string $key = "phalcon.router.dispatcher"
+    ): void {
+        if ($cache->has($key)) {
+            $stored = $cache->get($key);
+
+            if (!is_array($stored)) {
+                throw new Exception(
+                    "Router cache value at key '" . $key . "' is not an array"
+                );
+            }
+
+            $this->loadDispatcherFromArray($stored);
+
+            return;
+        }
+
+        $this->pendingCache    = $cache;
+        $this->pendingCacheKey = $key;
     }
 
     /**

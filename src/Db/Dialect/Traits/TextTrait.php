@@ -136,6 +136,20 @@ trait TextTrait
     }
 
     /**
+     * @param Column $column
+     *
+     * @return string
+     */
+    protected function checkColumnIsAutoIncrement(Column $column): string
+    {
+        if ($column->isGenerated()) {
+            return '';
+        }
+
+        return $column->isAutoIncrement() ? ' AUTO_INCREMENT' : '';
+    }
+
+    /**
      * Emits the GENERATED ALWAYS AS (...) VIRTUAL|STORED clause. Wraps the
      * shared dialect helper for trait users.
      *
@@ -159,20 +173,6 @@ trait TextTrait
     protected function checkColumnIsInvisible(Column $column): string
     {
         return $column->isInvisible() ? ' INVISIBLE' : '';
-    }
-
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
-    protected function checkColumnIsAutoIncrement(Column $column): string
-    {
-        if ($column->isGenerated()) {
-            return '';
-        }
-
-        return $column->isAutoIncrement() ? ' AUTO_INCREMENT' : '';
     }
 
     /**
@@ -344,6 +344,29 @@ trait TextTrait
     }
 
     /**
+     * Returns the list of CONSTRAINT ... CHECK (...) lines for createTable.
+     * Uses the dialect's escape character via the shared getCheckClause()
+     * helper.
+     *
+     * @param array $definition
+     *
+     * @return array
+     */
+    protected function getTableChecks(array $definition): array
+    {
+        if (!isset($definition['checks'])) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($definition['checks'] as $check) {
+            $result[] = $this->getCheckClause($check, $this->escapeChar ?? '`');
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array $definition
      *
      * @return array
@@ -399,29 +422,6 @@ trait TextTrait
 
                 $result[] = $indexSql;
             }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Returns the list of CONSTRAINT ... CHECK (...) lines for createTable.
-     * Uses the dialect's escape character via the shared getCheckClause()
-     * helper.
-     *
-     * @param array $definition
-     *
-     * @return array
-     */
-    protected function getTableChecks(array $definition): array
-    {
-        if (!isset($definition['checks'])) {
-            return [];
-        }
-
-        $result = [];
-        foreach ($definition['checks'] as $check) {
-            $result[] = $this->getCheckClause($check, $this->escapeChar ?? '`');
         }
 
         return $result;

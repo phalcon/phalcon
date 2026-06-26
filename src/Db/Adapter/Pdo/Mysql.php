@@ -63,6 +63,36 @@ class Mysql extends PdoAdapter
     protected string $type = "mysql";
 
     /**
+     * Adds a foreign key to a table
+     *
+     * @param string             $tableName
+     * @param string             $schemaName
+     * @param ReferenceInterface $reference
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function addForeignKey(
+        string $tableName,
+        string $schemaName,
+        ReferenceInterface $reference
+    ): bool {
+        $foreignKeyCheck = $this->prepare($this->dialect->getForeignKeyChecks());
+
+        if (true !== $foreignKeyCheck->execute()) {
+            throw new MissingForeignKeyChecks();
+        }
+
+        return $this->execute(
+            $this->dialect->addForeignKey(
+                $tableName,
+                $schemaName,
+                $reference
+            )
+        );
+    }
+
+    /**
      * Constructor for Phalcon\Db\Adapter\Pdo
      *
      * @param array $descriptor = [
@@ -99,36 +129,6 @@ class Mysql extends PdoAdapter
         }
 
         parent::connect($descriptor);
-    }
-
-    /**
-     * Adds a foreign key to a table
-     *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function addForeignKey(
-        string $tableName,
-        string $schemaName,
-        ReferenceInterface $reference
-    ): bool {
-        $foreignKeyCheck = $this->prepare($this->dialect->getForeignKeyChecks());
-
-        if (true !== $foreignKeyCheck->execute()) {
-            throw new MissingForeignKeyChecks();
-        }
-
-        return $this->execute(
-            $this->dialect->addForeignKey(
-                $tableName,
-                $schemaName,
-                $reference
-            )
-        );
     }
 
     /**

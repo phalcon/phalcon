@@ -177,16 +177,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     }
 
     /**
-     * Returns the dependency injection container
-     *
-     * @return DiInterface|null
-     */
-    public function getDI(): DiInterface | null
-    {
-        return $this->container;
-    }
-
-    /**
      * Returns the database service used to isolate the transaction
      *
      * @return string
@@ -194,6 +184,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     public function getDbService(): string
     {
         return $this->service;
+    }
+
+    /**
+     * Returns the dependency injection container
+     *
+     * @return DiInterface|null
+     */
+    public function getDI(): DiInterface | null
+    {
+        return $this->container;
     }
 
     /**
@@ -315,18 +315,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     }
 
     /**
-     * Sets the dependency injection container
-     *
-     * @param DiInterface $container
-     *
-     * @return void
-     */
-    public function setDI(DiInterface $container): void
-    {
-        $this->container = $container;
-    }
-
-    /**
      * Sets the database service used to run the isolated transactions
      *
      * @param string $service
@@ -338,6 +326,18 @@ class Manager implements ManagerInterface, InjectionAwareInterface
         $this->service = $service;
 
         return $this;
+    }
+
+    /**
+     * Sets the dependency injection container
+     *
+     * @param DiInterface $container
+     *
+     * @return void
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
     }
 
     /**

@@ -12,12 +12,12 @@
 namespace Phalcon\Encryption;
 
 use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
-use Phalcon\Di\DiInterface;
 use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Http\RequestInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Encryption\Security\Exception;
 use Phalcon\Encryption\Security\Exceptions\UnknownHashAlgorithm;
 use Phalcon\Encryption\Security\Random;
+use Phalcon\Http\RequestInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 use ValueError;
 
@@ -43,7 +43,6 @@ class Security extends AbstractInjectionAware implements SecurityContract
     public const CRYPT_ARGON2I    = 10;
     public const CRYPT_ARGON2ID   = 11;
     public const CRYPT_BCRYPT     = 0;
-    public const CRYPT_DEFAULT    = 0;
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
@@ -54,6 +53,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
     public const CRYPT_BLOWFISH_Y = 7;
+    public const CRYPT_DEFAULT    = 0;
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
@@ -300,22 +300,6 @@ class Security extends AbstractInjectionAware implements SecurityContract
     }
 
     /**
-     * Returns the value of the CSRF token in session
-     *
-     * @return string|null
-     */
-    public function getSessionToken(): string | null
-    {
-        $session = $this->getLocalService("session");
-
-        if ($session) {
-            return $session->get($this->tokenValueSessionId);
-        }
-
-        return null;
-    }
-
-    /**
      * Generate a >22-length pseudo random string to be used as salt for
      * passwords
      *
@@ -339,6 +323,22 @@ class Security extends AbstractInjectionAware implements SecurityContract
         }
 
         return $safeBytes;
+    }
+
+    /**
+     * Returns the value of the CSRF token in session
+     *
+     * @return string|null
+     */
+    public function getSessionToken(): string | null
+    {
+        $session = $this->getLocalService("session");
+
+        if ($session) {
+            return $session->get($this->tokenValueSessionId);
+        }
+
+        return null;
     }
 
     /**

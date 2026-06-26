@@ -1019,35 +1019,6 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
-     * Gets HTTP URI which request has been made to
-     *
-     *```php
-     * // Returns /some/path?with=queryParams
-     * $uri = $request->getURI();
-     *
-     * // Returns /some/path
-     * $uri = $request->getURI(true);
-     *```
-     *
-     * @param bool $onlyPath If true, query part will be omitted
-     *
-     * @return string
-     */
-    public function getURI(bool $onlyPath = false): string
-    {
-        $requestURI = $this->getServer("REQUEST_URI");
-        if (null === $requestURI) {
-            return '';
-        }
-
-        if (true === $onlyPath) {
-            $requestURI = explode('?', $requestURI)[0];
-        }
-
-        return $requestURI;
-    }
-
-    /**
      * Gets attached files as Phalcon\Http\Request\File instances
      *
      * @param bool $onlySuccessful
@@ -1112,6 +1083,35 @@ class Request extends AbstractInjectionAware implements
         }
 
         return $files;
+    }
+
+    /**
+     * Gets HTTP URI which request has been made to
+     *
+     *```php
+     * // Returns /some/path?with=queryParams
+     * $uri = $request->getURI();
+     *
+     * // Returns /some/path
+     * $uri = $request->getURI(true);
+     *```
+     *
+     * @param bool $onlyPath If true, query part will be omitted
+     *
+     * @return string
+     */
+    public function getURI(bool $onlyPath = false): string
+    {
+        $requestURI = $this->getServer("REQUEST_URI");
+        if (null === $requestURI) {
+            return '';
+        }
+
+        if (true === $onlyPath) {
+            $requestURI = explode('?', $requestURI)[0];
+        }
+
+        return $requestURI;
     }
 
     /**

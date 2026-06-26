@@ -1274,30 +1274,6 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     }
 
     /**
-     * Appends an IN condition to the current WHERE conditions
-     *
-     *```php
-     * $builder->inWhere(
-     *     "id",
-     *     [1, 2, 3]
-     * );
-     *```
-     *
-     * @param string $expr
-     * @param array  $values
-     * @param string $operator
-     *
-     * @return BuilderInterface
-     */
-    public function inWhere(
-        string $expr,
-        array $values,
-        string $operator = BuilderInterface::OPERATOR_AND
-    ): BuilderInterface {
-        return $this->conditionIn("Where", $operator, $expr, $values);
-    }
-
-    /**
      * Adds an INNER join to the query
      *
      *```php
@@ -1334,6 +1310,30 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         $this->joins[] = [$model, $conditions, $alias, "INNER"];
 
         return $this;
+    }
+
+    /**
+     * Appends an IN condition to the current WHERE conditions
+     *
+     *```php
+     * $builder->inWhere(
+     *     "id",
+     *     [1, 2, 3]
+     * );
+     *```
+     *
+     * @param string $expr
+     * @param array  $values
+     * @param string $operator
+     *
+     * @return BuilderInterface
+     */
+    public function inWhere(
+        string $expr,
+        array $values,
+        string $operator = BuilderInterface::OPERATOR_AND
+    ): BuilderInterface {
+        return $this->conditionIn("Where", $operator, $expr, $values);
     }
 
     /**
@@ -1562,6 +1562,26 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     }
 
     /**
+     * Sets an ORDER BY condition clause
+     *
+     *```php
+     * $builder->orderBy("Robots.name");
+     * $builder->orderBy(["1", "Robots.name"]);
+     * $builder->orderBy(["Robots.name DESC"]);
+     *```
+     *
+     * @param array|string|null $orderBy
+     *
+     * @return BuilderInterface
+     */
+    public function orderBy(array | string | null $orderBy): BuilderInterface
+    {
+        $this->order = $orderBy;
+
+        return $this;
+    }
+
+    /**
      * Appends a condition to the current HAVING conditions clause using an OR operator
      *
      *```php
@@ -1628,26 +1648,6 @@ class Builder implements BuilderInterface, InjectionAwareInterface
         }
 
         return $this->where($conditions, $bindParams, $bindTypes);
-    }
-
-    /**
-     * Sets an ORDER BY condition clause
-     *
-     *```php
-     * $builder->orderBy("Robots.name");
-     * $builder->orderBy(["1", "Robots.name"]);
-     * $builder->orderBy(["Robots.name DESC"]);
-     *```
-     *
-     * @param array|string|null $orderBy
-     *
-     * @return BuilderInterface
-     */
-    public function orderBy(array | string | null $orderBy): BuilderInterface
-    {
-        $this->order = $orderBy;
-
-        return $this;
     }
 
     /**

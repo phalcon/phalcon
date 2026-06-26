@@ -54,55 +54,18 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Response :: withStatus()
+     * Tests Phalcon\Http\Message\Response :: __construct() - invalid body throws
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageResponseWithStatus(): void
+    public function testHttpMessageResponseConstructInvalidBodyThrows(): void
     {
-        $response    = new Response();
-        $newResponse = $response->withStatus(201, 'Created');
-
-        $this->assertNotSame($response, $newResponse);
-        $this->assertSame(201, $newResponse->getStatusCode());
-        $this->assertSame('Created', $newResponse->getReasonPhrase());
-        $this->assertSame(200, $response->getStatusCode());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withStatus() - invalid code throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageResponseWithStatusInvalidThrows(): void
-    {
-        $response = new Response();
-
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Invalid status code '99'");
-        $response->withStatus(99);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withStatus() - custom phrase
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageResponseWithStatusCustomPhrase(): void
-    {
-        $response    = new Response();
-        $newResponse = $response->withStatus(200, 'Custom OK');
-
-        $this->assertSame('Custom OK', $newResponse->getReasonPhrase());
+        $this->expectExceptionMessage('Invalid stream passed as a parameter');
+        new Response(12345);
     }
 
     /**
@@ -155,73 +118,6 @@ final class ConstructTest extends AbstractUnitTestCase
 
         $newResponse = $response->withBody($stream);
         $this->assertSame('hello', (string) $newResponse->getBody());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: __construct() - invalid body throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageResponseConstructInvalidBodyThrows(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid stream passed as a parameter');
-        new Response(12345);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withProtocolVersion()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageResponseWithProtocolVersion(): void
-    {
-        $response    = new Response();
-        $newResponse = $response->withProtocolVersion('2.0');
-
-        $this->assertSame('2.0', $newResponse->getProtocolVersion());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withProtocolVersion() - invalid
-     * version throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageResponseWithProtocolVersionInvalidThrows(): void
-    {
-        $response = new Response();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unsupported protocol');
-        $response->withProtocolVersion('4.0');
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Response :: withProtocolVersion() - empty
-     * version throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageResponseWithProtocolVersionEmptyThrows(): void
-    {
-        $response = new Response();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid protocol value');
-        $response->withProtocolVersion('');
     }
 
     /**
@@ -292,5 +188,109 @@ final class ConstructTest extends AbstractUnitTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid header value');
         $response->withHeader('Content-Type', "value\x00invalid");
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Response :: withProtocolVersion()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageResponseWithProtocolVersion(): void
+    {
+        $response    = new Response();
+        $newResponse = $response->withProtocolVersion('2.0');
+
+        $this->assertSame('2.0', $newResponse->getProtocolVersion());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Response :: withProtocolVersion() - empty
+     * version throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageResponseWithProtocolVersionEmptyThrows(): void
+    {
+        $response = new Response();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid protocol value');
+        $response->withProtocolVersion('');
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Response :: withProtocolVersion() - invalid
+     * version throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageResponseWithProtocolVersionInvalidThrows(): void
+    {
+        $response = new Response();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported protocol');
+        $response->withProtocolVersion('4.0');
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Response :: withStatus()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageResponseWithStatus(): void
+    {
+        $response    = new Response();
+        $newResponse = $response->withStatus(201, 'Created');
+
+        $this->assertNotSame($response, $newResponse);
+        $this->assertSame(201, $newResponse->getStatusCode());
+        $this->assertSame('Created', $newResponse->getReasonPhrase());
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Response :: withStatus() - custom phrase
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageResponseWithStatusCustomPhrase(): void
+    {
+        $response    = new Response();
+        $newResponse = $response->withStatus(200, 'Custom OK');
+
+        $this->assertSame('Custom OK', $newResponse->getReasonPhrase());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Response :: withStatus() - invalid code throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageResponseWithStatusInvalidThrows(): void
+    {
+        $response = new Response();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid status code '99'");
+        $response->withStatus(99);
     }
 }

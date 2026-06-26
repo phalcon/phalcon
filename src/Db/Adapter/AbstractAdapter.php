@@ -187,6 +187,43 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Enables/disables options in the Database component.
+     *
+     * The flags are stored as process-global `Phalcon\Support\Settings`
+     * (`db.escape_identifiers`, `db.force_casting`) and therefore affect every
+     * connection in the process at once, last-writer-wins. Call this once at
+     * bootstrap; it is not per-connection configuration. Because the
+     * constructor calls `setup()` whenever a descriptor carries an `options`
+     * key, constructing one adapter with `options` can change the SQL another,
+     * already-configured connection generates.
+     *
+     * @param array $options
+     */
+    public static function setup(array $options): void
+    {
+        \Phalcon\Db\AbstractDb::setup($options);
+    }
+
+    /**
+     * Adds a CHECK constraint to a table.
+     *
+     * @param string         $tableName
+     * @param string         $schemaName
+     * @param CheckInterface $check
+     *
+     * @return bool
+     */
+    public function addCheck(
+        string $tableName,
+        string $schemaName,
+        CheckInterface $check
+    ): bool {
+        return $this->execute(
+            $this->dialect->addCheck($tableName, $schemaName, $check)
+        );
+    }
+
+    /**
      * Adds a column to a table
      *
      * @param string          $tableName
@@ -274,6 +311,29 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                 $tableName,
                 $schemaName,
                 $index
+            )
+        );
+    }
+
+    /**
+     * Creates a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param array       $definition
+     * @param string|null $schemaName
+     *
+     * @return bool
+     */
+    public function createMaterializedView(
+        string $viewName,
+        array $definition,
+        ?string $schemaName = null
+    ): bool {
+        return $this->execute(
+            $this->dialect->createMaterializedView(
+                $viewName,
+                $definition,
+                $schemaName
             )
         );
     }
@@ -509,6 +569,25 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Drops a CHECK constraint from a table.
+     *
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $checkName
+     *
+     * @return bool
+     */
+    public function dropCheck(
+        string $tableName,
+        string $schemaName,
+        string $checkName
+    ): bool {
+        return $this->execute(
+            $this->dialect->dropCheck($tableName, $schemaName, $checkName)
+        );
+    }
+
+    /**
      * Drops a column from a table
      *
      * @param string $tableName
@@ -573,6 +652,29 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                 $tableName,
                 $schemaName,
                 $indexName
+            )
+        );
+    }
+
+    /**
+     * Drops a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $ifExists
+     *
+     * @return bool
+     */
+    public function dropMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $ifExists = true
+    ): bool {
+        return $this->execute(
+            $this->dialect->dropMaterializedView(
+                $viewName,
+                $schemaName,
+                $ifExists
             )
         );
     }
@@ -1229,6 +1331,51 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
+     * Appends an ON CONFLICT (...) DO UPDATE SET col = excluded.col upsert
+     * clause to the supplied INSERT statement.
+     *
+     * @param string $sqlQuery
+     * @param array  $conflictColumns
+     * @param array  $updateColumns
+     *
+     * @return string
+     */
+    public function onConflictUpdate(
+        string $sqlQuery,
+        array $conflictColumns,
+        array $updateColumns
+    ): string {
+        return $this->dialect->onConflictUpdate(
+            $sqlQuery,
+            $conflictColumns,
+            $updateColumns
+        );
+    }
+
+    /**
+     * Refreshes a materialized view (PostgreSQL only).
+     *
+     * @param string      $viewName
+     * @param string|null $schemaName
+     * @param bool        $concurrent
+     *
+     * @return bool
+     */
+    public function refreshMaterializedView(
+        string $viewName,
+        ?string $schemaName = null,
+        bool $concurrent = false
+    ): bool {
+        return $this->execute(
+            $this->dialect->refreshMaterializedView(
+                $viewName,
+                $schemaName,
+                $concurrent
+            )
+        );
+    }
+
+    /**
      * Releases given savepoint
      *
      * @param string $name
@@ -1245,6 +1392,19 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         }
 
         return $this->execute($this->dialect->releaseSavepoint($name));
+    }
+
+    /**
+     * Appends a RETURNING clause to an INSERT/UPDATE/DELETE statement.
+     *
+     * @param string $sqlQuery
+     * @param array  $columns
+     *
+     * @return string
+     */
+    public function returning(string $sqlQuery, array $columns): string
+    {
+        return $this->dialect->returning($sqlQuery, $columns);
     }
 
     /**
@@ -1309,145 +1469,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Adds a CHECK constraint to a table.
+     * Check whether the database system support the DEFAULT
+     * keyword (SQLite does not support it)
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return bool
+     * @deprecated Will be removed in a future major release.
      */
-    public function addCheck(
-        string $tableName,
-        string $schemaName,
-        CheckInterface $check
-    ): bool {
-        return $this->execute(
-            $this->dialect->addCheck($tableName, $schemaName, $check)
-        );
-    }
-
-    /**
-     * Drops a CHECK constraint from a table.
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return bool
-     */
-    public function dropCheck(
-        string $tableName,
-        string $schemaName,
-        string $checkName
-    ): bool {
-        return $this->execute(
-            $this->dialect->dropCheck($tableName, $schemaName, $checkName)
-        );
-    }
-
-    /**
-     * Appends an ON CONFLICT (...) DO UPDATE SET col = excluded.col upsert
-     * clause to the supplied INSERT statement.
-     *
-     * @param string $sqlQuery
-     * @param array  $conflictColumns
-     * @param array  $updateColumns
-     *
-     * @return string
-     */
-    public function onConflictUpdate(
-        string $sqlQuery,
-        array $conflictColumns,
-        array $updateColumns
-    ): string {
-        return $this->dialect->onConflictUpdate(
-            $sqlQuery,
-            $conflictColumns,
-            $updateColumns
-        );
-    }
-
-    /**
-     * Appends a RETURNING clause to an INSERT/UPDATE/DELETE statement.
-     *
-     * @param string $sqlQuery
-     * @param array  $columns
-     *
-     * @return string
-     */
-    public function returning(string $sqlQuery, array $columns): string
+    public function supportsDefaultValue(): bool
     {
-        return $this->dialect->returning($sqlQuery, $columns);
-    }
-
-    /**
-     * Creates a materialized view (PostgreSQL only).
-     *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return bool
-     */
-    public function createMaterializedView(
-        string $viewName,
-        array $definition,
-        ?string $schemaName = null
-    ): bool {
-        return $this->execute(
-            $this->dialect->createMaterializedView(
-                $viewName,
-                $definition,
-                $schemaName
-            )
-        );
-    }
-
-    /**
-     * Drops a materialized view (PostgreSQL only).
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return bool
-     */
-    public function dropMaterializedView(
-        string $viewName,
-        ?string $schemaName = null,
-        bool $ifExists = true
-    ): bool {
-        return $this->execute(
-            $this->dialect->dropMaterializedView(
-                $viewName,
-                $schemaName,
-                $ifExists
-            )
-        );
-    }
-
-    /**
-     * Refreshes a materialized view (PostgreSQL only).
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $concurrent
-     *
-     * @return bool
-     */
-    public function refreshMaterializedView(
-        string $viewName,
-        ?string $schemaName = null,
-        bool $concurrent = false
-    ): bool {
-        return $this->execute(
-            $this->dialect->refreshMaterializedView(
-                $viewName,
-                $schemaName,
-                $concurrent
-            )
-        );
+        return true;
     }
 
     /**
@@ -1459,17 +1488,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function supportSequences(): bool
     {
         return false;
-    }
-
-    /**
-     * Check whether the database system support the DEFAULT
-     * keyword (SQLite does not support it)
-     *
-     * @deprecated Will be removed in a future major release.
-     */
-    public function supportsDefaultValue(): bool
-    {
-        return true;
     }
 
     /**
@@ -1767,24 +1785,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         if (true !== $this->dialect->supportsSavePoints()) {
             throw new SavepointsNotSupported();
         }
-    }
-
-    /**
-     * Enables/disables options in the Database component.
-     *
-     * The flags are stored as process-global `Phalcon\Support\Settings`
-     * (`db.escape_identifiers`, `db.force_casting`) and therefore affect every
-     * connection in the process at once, last-writer-wins. Call this once at
-     * bootstrap; it is not per-connection configuration. Because the
-     * constructor calls `setup()` whenever a descriptor carries an `options`
-     * key, constructing one adapter with `options` can change the SQL another,
-     * already-configured connection generates.
-     *
-     * @param array $options
-     */
-    public static function setup(array $options): void
-    {
-        \Phalcon\Db\AbstractDb::setup($options);
     }
 
     /**

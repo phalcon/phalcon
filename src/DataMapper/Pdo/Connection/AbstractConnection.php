@@ -103,6 +103,16 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
+     * Return an array of available PDO drivers (empty array if none available)
+     *
+     * @return array
+     */
+    public static function getAvailableDrivers(): array
+    {
+        return PDO::getAvailableDrivers();
+    }
+
+    /**
      * Begins a transaction. If the profiler is enabled, the operation will
      * be recorded.
      *
@@ -463,16 +473,6 @@ abstract class AbstractConnection implements ConnectionInterface
         $this->connect();
 
         return $this->pdo->getAttribute($attribute);
-    }
-
-    /**
-     * Return an array of available PDO drivers (empty array if none available)
-     *
-     * @return array
-     */
-    public static function getAvailableDrivers(): array
-    {
-        return PDO::getAvailableDrivers();
     }
 
     /**
@@ -862,48 +862,6 @@ abstract class AbstractConnection implements ConnectionInterface
     }
 
     /**
-     * Bind a value using the proper PDO::PARAM_* type.
-     *
-     * @param \PDOStatement $statement
-     * @param mixed         $name
-     * @param mixed         $arguments
-     */
-    protected function performBind(
-        PDOStatement $statement,
-        $name,
-        $arguments
-    ): void {
-        $key = $name;
-        if (is_int($key)) {
-            $key = $key + 1;
-        }
-
-        if (is_array($arguments)) {
-            if (isset($arguments[1])) {
-                $type = $arguments[1];
-            } else {
-                $type = PDO::PARAM_STR;
-            }
-
-            if ($type === PDO::PARAM_BOOL && is_bool($arguments[0])) {
-                $arguments[0] = $arguments[0] ? "1" : "0";
-            }
-
-            $parameters = array_merge([$key], $arguments);
-        } else {
-            $parameters = [$key, $arguments];
-        }
-
-        call_user_func_array(
-            [
-                $statement,
-                "bindValue",
-            ],
-            $parameters
-        );
-    }
-
-    /**
      * Recognizes a lost ("gone away") connection. Detection is driver-agnostic:
      * the driver name is not queried because the underlying connection may be
      * dead by this point. The MySQL error codes and PostgreSQL SQLSTATEs do not
@@ -943,6 +901,48 @@ abstract class AbstractConnection implements ConnectionInterface
             || str_contains($message, "Lost connection")
             || str_contains($message, "server closed the connection unexpectedly")
             || str_contains($message, "no connection to the server");
+    }
+
+    /**
+     * Bind a value using the proper PDO::PARAM_* type.
+     *
+     * @param \PDOStatement $statement
+     * @param mixed         $name
+     * @param mixed         $arguments
+     */
+    protected function performBind(
+        PDOStatement $statement,
+        $name,
+        $arguments
+    ): void {
+        $key = $name;
+        if (is_int($key)) {
+            $key = $key + 1;
+        }
+
+        if (is_array($arguments)) {
+            if (isset($arguments[1])) {
+                $type = $arguments[1];
+            } else {
+                $type = PDO::PARAM_STR;
+            }
+
+            if ($type === PDO::PARAM_BOOL && is_bool($arguments[0])) {
+                $arguments[0] = $arguments[0] ? "1" : "0";
+            }
+
+            $parameters = array_merge([$key], $arguments);
+        } else {
+            $parameters = [$key, $arguments];
+        }
+
+        call_user_func_array(
+            [
+                $statement,
+                "bindValue",
+            ],
+            $parameters
+        );
     }
 
     /**

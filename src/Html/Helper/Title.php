@@ -47,12 +47,12 @@ class Title extends AbstractHelper
     /**
      * @var string
      */
-    protected string $title = '';
+    protected string $separator = '';
 
     /**
      * @var string
      */
-    protected string $separator = '';
+    protected string $title = '';
 
     /**
      * Sets the separator and returns the object back
@@ -127,6 +127,23 @@ class Title extends AbstractHelper
     }
 
     /**
+     * Prepends text to current document title
+     *
+     * @param string $text
+     * @param bool   $raw
+     *
+     * @return static
+     */
+    public function prepend(string $text, bool $raw = false): static
+    {
+        $text = $raw ? $text : $this->escaper->html($text);
+
+        array_unshift($this->prepend, $text);
+
+        return $this;
+    }
+
+    /**
      * Sets the title
      *
      * @param string $text
@@ -154,23 +171,6 @@ class Title extends AbstractHelper
     public function setSeparator(string $separator, bool $raw = false): static
     {
         $this->separator = $raw ? $separator : $this->escaper->html($separator);
-
-        return $this;
-    }
-
-    /**
-     * Prepends text to current document title
-     *
-     * @param string $text
-     * @param bool   $raw
-     *
-     * @return static
-     */
-    public function prepend(string $text, bool $raw = false): static
-    {
-        $text = $raw ? $text : $this->escaper->html($text);
-
-        array_unshift($this->prepend, $text);
 
         return $this;
     }

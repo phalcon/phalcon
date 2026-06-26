@@ -293,22 +293,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
-     * Returns the DependencyInjector container
-     *
-     * @return DiInterface
-     * @throws Exception
-     */
-    public function getDI(): DiInterface
-    {
-        $this->checkContainer(
-            Exception::class,
-            'internal services'
-        );
-
-        return $this->container;
-    }
-
-    /**
      * Returns attributes and their data types
      *
      *```php
@@ -384,6 +368,22 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         }
 
         throw new CorruptedMetaData();
+    }
+
+    /**
+     * Returns the DependencyInjector container
+     *
+     * @return DiInterface
+     * @throws Exception
+     */
+    public function getDI(): DiInterface
+    {
+        $this->checkContainer(
+            Exception::class,
+            'internal services'
+        );
+
+        return $this->container;
     }
 
     /**

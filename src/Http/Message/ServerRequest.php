@@ -280,6 +280,28 @@ class ServerRequest extends AbstractRequest implements
     }
 
     /**
+     * Return an instance that removes the specified derived request attribute.
+     *
+     * This method allows removing a single derived request attribute as
+     * described in getAttributes().
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that removes
+     * the attribute.
+     *
+     * @param string $name
+     *
+     * @return ServerRequest
+     */
+    public function withoutAttribute(string $name): ServerRequest
+    {
+        $attributes = clone $this->attributes;
+        $attributes->remove($name);
+
+        return $this->cloneInstance($attributes, "attributes");
+    }
+
+    /**
      * Return an instance with the specified body parameters.
      *
      * These MAY be injected during instantiation.
@@ -368,28 +390,6 @@ class ServerRequest extends AbstractRequest implements
         $this->checkUploadedFiles($uploadedFiles);
 
         return $this->cloneInstance($uploadedFiles, "uploadedFiles");
-    }
-
-    /**
-     * Return an instance that removes the specified derived request attribute.
-     *
-     * This method allows removing a single derived request attribute as
-     * described in getAttributes().
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return an instance that removes
-     * the attribute.
-     *
-     * @param string $name
-     *
-     * @return ServerRequest
-     */
-    public function withoutAttribute(string $name): ServerRequest
-    {
-        $attributes = clone $this->attributes;
-        $attributes->remove($name);
-
-        return $this->cloneInstance($attributes, "attributes");
     }
 
     /**
