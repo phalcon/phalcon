@@ -18,7 +18,7 @@ namespace Phalcon\Contracts\Acl\Adapter;
  * whole-policy snapshot (coarse granularity).
  *
  * NOTE: callable (closure) rules registered via allow()/deny() are NOT
- * persisted — closures are not serializable. Re-register them in code after
+ * persisted - closures are not serializable. Re-register them in code after
  * load(). The static rule set and role inheritance are persisted in full.
  */
 interface Persistable

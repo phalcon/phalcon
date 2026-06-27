@@ -21,7 +21,7 @@ performance, low overhead and a clean, expressive API.
 > [!IMPORTANT]
 > This repository is the **pure PHP** implementation of Phalcon (v6). Unlike
 > [cphalcon](https://github.com/phalcon/cphalcon), it is **not** a C extension:
-> there is nothing to compile and no PECL/PIE installation required — just add it
+> there is nothing to compile and no PECL/PIE installation required - just add it
 > to your project with Composer. Phalcon v6 is currently in **alpha**; APIs may
 > change before the stable release.
 
@@ -30,7 +30,7 @@ A big thank you to [our Backers](https://opencollective.com/phalcon#backer); you
 ## Getting Started
 
 Phalcon is written in plain PHP with portability in mind, so it runs anywhere a
-supported PHP runtime is available — GNU/Linux, FreeBSD, macOS and Microsoft
+supported PHP runtime is available - GNU/Linux, FreeBSD, macOS and Microsoft
 Windows.
 
 ## Requirements
@@ -104,7 +104,7 @@ composer cs                 # PHP_CodeSniffer (PSR-12)
 ### General
 * [Contributing to Phalcon](CONTRIBUTING.md)
 * [Official Documentation](https://docs.phalcon.io/)
-* [Incubator](https://phalcon.io/incubator) — community-driven plugins and classes that extend the framework
+* [Incubator](https://phalcon.io/incubator) - community-driven plugins and classes that extend the framework
 
 ### Support
 * [Discussions](https://phalcon.io/discussions)
