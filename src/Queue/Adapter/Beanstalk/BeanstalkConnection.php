@@ -25,11 +25,13 @@ namespace Phalcon\Queue\Adapter\Beanstalk;
 use Phalcon\Queue\Exceptions\Exception;
 
 use function array_keys;
+use function count;
 use function explode;
 use function fclose;
 use function feof;
 use function fsockopen;
 use function fwrite;
+use function is_numeric;
 use function is_resource;
 use function pfsockopen;
 use function rtrim;
@@ -37,6 +39,7 @@ use function stream_get_line;
 use function stream_get_meta_data;
 use function stream_set_timeout;
 use function strlen;
+use function trim;
 
 /**
  * Dependency-free socket client for the Beanstalkd work queue, implementing
@@ -268,6 +271,27 @@ class BeanstalkConnection
     }
 
     /**
+     * Returns the Beanstalkd statistics for a tube as an associative array, or
+     * false when the tube does not exist.
+     *
+     * @return array<string, int|string>|false
+     */
+    public function statsTube(string $tube): array|false
+    {
+        $this->write("stats-tube " . $tube);
+
+        $response = $this->readStatus();
+
+        if (($response[0] ?? "") !== "OK") {
+            return false;
+        }
+
+        $body = (string) $this->read((int) ($response[1] ?? 0));
+
+        return $this->parseDictionary($body);
+    }
+
+    /**
      * Extends the time-to-run of a reserved job.
      */
     public function touchJob(string $id): bool
@@ -323,6 +347,45 @@ class BeanstalkConnection
         $packet = $data . "\r\n";
 
         return fwrite($connection, $packet, strlen($packet));
+    }
+
+    /**
+     * Parses a Beanstalkd YAML dictionary payload (a flat "key: value" map)
+     * into an associative array. Numeric values are cast to int, except the
+     * `name` field, which is always kept as a string (a tube may be named
+     * numerically). Avoids the yaml extension; the payload format is a fixed,
+     * flat map.
+     *
+     * @return array<string, int|string>
+     */
+    private function parseDictionary(string $payload): array
+    {
+        $result = [];
+
+        foreach (explode("\n", $payload) as $line) {
+            $line = trim($line);
+
+            if ($line === "" || $line === "---") {
+                continue;
+            }
+
+            $parts = explode(":", $line, 2);
+
+            if (count($parts) !== 2) {
+                continue;
+            }
+
+            $key   = trim($parts[0]);
+            $value = trim($parts[1]);
+
+            if ($key !== "name" && $value !== "" && is_numeric($value)) {
+                $result[$key] = (int) $value;
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
     /**
