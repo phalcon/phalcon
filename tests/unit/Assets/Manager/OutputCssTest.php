@@ -18,12 +18,12 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use Phalcon\Tests\Unit\Assets\Fake\TrimFilter;
 use Phalcon\Tests\Unit\Assets\Fake\UppercaseFilter;
 
 use function file_get_contents;
-use function outputDir;
 
 use const PHP_EOL;
 
@@ -51,7 +51,7 @@ final class OutputCssTest extends AbstractUnitTestCase
     public function testAssetsManagerOutputCssFilterChainCustomFilterWithCssmin(): void
     {
         $fileName = $this->getNewFileName('assets_', 'css');
-        $fileName = outputDir('tests/assets/' . $fileName);
+        $fileName = Talon::settings()->outputPath('tests/assets/' . $fileName);
         $cssFile  = supportDir('assets/assets/1198.css');
         $manager  = new Manager(new TagFactory(new Escaper()));
 

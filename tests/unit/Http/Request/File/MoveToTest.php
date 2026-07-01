@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request\File;
 
 use Phalcon\Http\Request\File;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Page\Http;
 
-use function outputDir;
 use function supportDir;
 
 final class MoveToTest extends AbstractUnitTestCase
@@ -42,7 +42,7 @@ final class MoveToTest extends AbstractUnitTestCase
         // for genuine HTTP-uploaded files (per is_uploaded_file()).
         // Outside a real upload context it emits a warning and returns
         // false - silence the warning and assert the return value.
-        $destination = outputDir('tests/' . uniqid('move-', true) . '.txt');
+        $destination = Talon::settings()->outputPath('tests/' . uniqid('move-', true) . '.txt');
 
         $previous = error_reporting(0);
         try {

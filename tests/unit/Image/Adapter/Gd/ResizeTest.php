@@ -17,10 +17,10 @@ use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-use function outputDir;
 use function supportDir;
 
 final class ResizeTest extends AbstractUnitTestCase
@@ -134,7 +134,7 @@ final class ResizeTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $outputDir = 'tests/image/gd/';
-        $output    = outputDir($outputDir . '/' . $file);
+        $output    = Talon::settings()->outputPath($outputDir . '/' . $file);
 
         $image = new Gd($source);
 
@@ -142,7 +142,7 @@ final class ResizeTest extends AbstractUnitTestCase
               ->save($output)
         ;
 
-        $this->assertFileExists(outputDir($outputDir) . $file);
+        $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $file);
 
         $actual = $image->getWidth();
         $this->assertSame($width, $actual);
@@ -246,7 +246,7 @@ final class ResizeTest extends AbstractUnitTestCase
     public function testImageAdapterGdResizePreservesTransparency(): void
     {
         $source = supportDir('assets/images/example-png.png');
-        $output = outputDir('tests/image/gd/resize-transparency.png');
+        $output = Talon::settings()->outputPath('tests/image/gd/resize-transparency.png');
 
         $image = new Gd($source);
         $image->resize(50, 50)->save($output);

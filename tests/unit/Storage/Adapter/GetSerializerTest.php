@@ -24,11 +24,11 @@ use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Talon\Talon;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 
 final class GetSerializerTest extends AbstractUnitTestCase
 {
@@ -66,7 +66,7 @@ final class GetSerializerTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],

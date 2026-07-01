@@ -23,12 +23,12 @@ use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Talon\Talon;
 
 use function array_merge;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 
 final class GetLifetimeTest extends AbstractUnitTestCase
 {
@@ -66,7 +66,7 @@ final class GetLifetimeTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],

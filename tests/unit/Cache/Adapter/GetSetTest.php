@@ -25,6 +25,7 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Talon\Talon;
 use SplObjectStorage;
 use SplQueue;
 use stdClass;
@@ -34,7 +35,6 @@ use function file_get_contents;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function sort;
 use function uniqid;
 
@@ -69,7 +69,7 @@ final class GetSetTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],
@@ -328,7 +328,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 null,
             ],
@@ -336,7 +336,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 true,
             ],
@@ -344,7 +344,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 false,
             ],
@@ -352,7 +352,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 123456,
             ],
@@ -360,7 +360,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 123.456,
             ],
@@ -368,7 +368,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 uniqid(),
             ],
@@ -376,7 +376,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 new stdClass(),
             ],
@@ -392,7 +392,7 @@ final class GetSetTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Stream(
             $serializer,
-            ['storageDir' => outputDir()]
+            ['storageDir' => Talon::settings()->outputPath() . '/']
         );
 
         $key = uniqid();
@@ -419,12 +419,12 @@ final class GetSetTest extends AbstractUnitTestCase
         $adapter    = new Stream(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
                 'prefix'     => 'en',
             ]
         );
 
-        $target = outputDir() . 'en/';
+        $target = Talon::settings()->outputPath('en/');
 
         $actual = $adapter->set('men', 123);
         $this->assertTrue($actual);
@@ -456,7 +456,7 @@ final class GetSetTest extends AbstractUnitTestCase
         $adapter    = new Stream(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
             ]
         );
 
@@ -464,7 +464,7 @@ final class GetSetTest extends AbstractUnitTestCase
         $actual = $adapter->set('test-key', $data);
         $this->assertTrue($actual);
 
-        $target   = outputDir() . 'ph-strm/te/st/-k/';
+        $target   = Talon::settings()->outputPath('ph-strm/te/st/-k/');
         $expected = 's:3:"ttl";i:3600;s:7:"content";s:25:"s:17:"Phalcon Framework";";}';
         $actual   = file_get_contents($target . 'test-key');
         $this->assertStringContainsString($expected, $actual);

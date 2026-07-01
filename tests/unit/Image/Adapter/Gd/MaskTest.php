@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class MaskTest extends AbstractUnitTestCase
@@ -34,7 +35,7 @@ final class MaskTest extends AbstractUnitTestCase
 
         $outputDir   = 'tests/image/gd/';
         $outputImage = 'mask.png';
-        $output      = outputDir($outputDir . '/' . $outputImage);
+        $output      = Talon::settings()->outputPath($outputDir . '/' . $outputImage);
 
         $hash = '30787c3c3f191810';
 
@@ -43,7 +44,7 @@ final class MaskTest extends AbstractUnitTestCase
              ->save($output)
         ;
 
-        $this->assertFileExists(outputDir($outputDir) . $outputImage);
+        $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $outputImage);
 
         $actual = $this->checkImageHash($output, $hash);
         $this->assertTrue($actual);

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class LiquidRescaleTest extends AbstractUnitTestCase
@@ -38,11 +38,11 @@ final class LiquidRescaleTest extends AbstractUnitTestCase
 
         // Resize to 200 pixels on the shortest side
         $image->liquidRescale(200, 200)
-              ->save(outputDir('tests/image/imagick/liquidRescale.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/liquidRescale.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/liquidRescale.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/liquidRescale.jpg')
         );
 
         $expected = 200;

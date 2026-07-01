@@ -20,6 +20,7 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
+use Phalcon\Talon\Talon;
 use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
@@ -32,7 +33,6 @@ use stdClass;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function uniqid;
 
 final class HasTest extends AbstractUnitTestCase
@@ -71,7 +71,7 @@ final class HasTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],
@@ -115,7 +115,7 @@ final class HasTest extends AbstractUnitTestCase
         $adapter    = new FakeStreamFopen(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
             ],
         );
 
@@ -137,7 +137,7 @@ final class HasTest extends AbstractUnitTestCase
         $adapter    = new FakeStreamFileGetContents(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
             ],
         );
 

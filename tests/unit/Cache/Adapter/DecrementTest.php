@@ -22,11 +22,11 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Talon\Talon;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function uniqid;
 
 final class DecrementTest extends AbstractUnitTestCase
@@ -76,7 +76,7 @@ final class DecrementTest extends AbstractUnitTestCase
                 'Stream',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
                 false,
@@ -130,7 +130,7 @@ final class DecrementTest extends AbstractUnitTestCase
         $this->assertEquals($expected, $actual);
 
         if ('Stream' === $className) {
-            $this->safeDeleteDirectory(outputDir('ph-strm'));
+            $this->safeDeleteDirectory(Talon::settings()->outputPath('ph-strm'));
         }
     }
 }

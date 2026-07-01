@@ -20,11 +20,11 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function ob_get_clean;
 use function ob_start;
-use function outputDir;
 use function sprintf;
 use function supportDir;
 use function uniqid;
@@ -59,7 +59,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $manager->collection('js')
                 ->addJs(supportDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('tests/assets/combined.js'))
+                ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
         ;
 
@@ -83,7 +83,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $manager->collection('js')
                 ->addJs(supportDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('tests/assets/combined.js'))
+                ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(false)
         ;
@@ -109,7 +109,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $manager->collection('js')
                 ->addJs(supportDir('assets/assets/jquery.js'), false, false)
-                ->setTargetPath(outputDir('tests/assets/combined.js'))
+                ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(true)
         ;
@@ -157,7 +157,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $manager->collection('js')
                 ->addJs($jsFile, false, false)
-                ->setTargetPath(outputDir('tests/assets/combined.js'))
+                ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(false)
                 ->addFilter(new None())
@@ -258,7 +258,7 @@ final class OutputJsTest extends AbstractUnitTestCase
                 ->addJs($jsFile)
                 ->join(true)
                 ->addFilter(new JsMin())
-                ->setTargetPath(outputDir("tests/assets/{$file}"))
+                ->setTargetPath(Talon::settings()->outputPath("tests/assets/{$file}"))
                 ->setTargetIsLocal(false)
                 ->setPrefix('//phalcon.io/')
                 ->setTargetUri('js/jquery.js')
@@ -269,7 +269,7 @@ final class OutputJsTest extends AbstractUnitTestCase
         $actual   = $manager->outputJs('js');
         $this->assertSame($expected, $actual);
 
-        $this->assertFileExists(outputDir("tests/assets/$file"));
-        $this->safeDeleteFile(outputDir("tests/assets/$file"));
+        $this->assertFileExists(Talon::settings()->outputPath("tests/assets/$file"));
+        $this->safeDeleteFile(Talon::settings()->outputPath("tests/assets/$file"));
     }
 }

@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class PixelateTest extends AbstractUnitTestCase
@@ -40,13 +41,13 @@ final class PixelateTest extends AbstractUnitTestCase
 
             $outputDir   = 'tests/image/gd/';
             $outputImage = $amount . '-pixelate.jpg';
-            $output      = outputDir($outputDir . '/' . $outputImage);
+            $output      = Talon::settings()->outputPath($outputDir . '/' . $outputImage);
 
             $image->pixelate($amount)
                   ->save($output)
             ;
 
-            $this->assertFileExists(outputDir($outputDir) . $outputImage);
+            $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $outputImage);
 
             $actual = $this->checkImageHash($output, $hash);
             $this->assertTrue($actual);

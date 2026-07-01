@@ -22,6 +22,7 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Storage\Fake\FakeWeakFetching;
 use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
@@ -29,7 +30,6 @@ use stdClass;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function uniqid;
 
 final class DeleteTest extends AbstractUnitTestCase
@@ -68,7 +68,7 @@ final class DeleteTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],

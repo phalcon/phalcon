@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class TextTest extends AbstractUnitTestCase
@@ -45,11 +45,11 @@ final class TextTest extends AbstractUnitTestCase
             12,
             supportDir('assets/fonts/Roboto-Thin.ttf')
         )
-              ->save(outputDir('tests/image/imagick/text.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/text.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/text.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/text.jpg')
         );
 
         $expected = 1820;

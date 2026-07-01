@@ -20,6 +20,7 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
+use Phalcon\Talon\Talon;
 use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
@@ -34,7 +35,6 @@ use stdClass;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function uniqid;
 
 final class ClearTest extends AbstractUnitTestCase
@@ -73,7 +73,7 @@ final class ClearTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],
@@ -181,7 +181,7 @@ final class ClearTest extends AbstractUnitTestCase
         $adapter    = new FakeStreamUnlink(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
             ],
         );
 
@@ -198,7 +198,7 @@ final class ClearTest extends AbstractUnitTestCase
         $actual = $adapter->clear();
         $this->assertFalse($actual);
 
-        $this->safeDeleteDirectory(outputDir('ph-strm'));
+        $this->safeDeleteDirectory(Talon::settings()->outputPath('ph-strm'));
     }
 
     /**

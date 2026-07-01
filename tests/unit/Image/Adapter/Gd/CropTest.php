@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class CropTest extends AbstractUnitTestCase
@@ -66,15 +67,15 @@ final class CropTest extends AbstractUnitTestCase
         $width     = 200;
         $height    = 200;
         $cropImage = 'crop.jpg';
-        $output    = outputDir($outputDir . '/' . $cropImage);
+        $output    = Talon::settings()->outputPath($outputDir . '/' . $cropImage);
         $hash      = 'ffffffb803402030';
 
         // Resize to 200 pixels on the shortest side
         $image->crop($width, $height)
-              ->save(outputDir($outputDir . '/' . $cropImage))
+              ->save(Talon::settings()->outputPath($outputDir . '/' . $cropImage))
         ;
 
-        $this->assertFileExists(outputDir($outputDir) . $cropImage);
+        $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $cropImage);
 
         $actual = $image->getWidth();
         $this->assertSame($width, $actual);
@@ -104,7 +105,7 @@ final class CropTest extends AbstractUnitTestCase
         $offsetX   = 200;
         $offsetY   = 200;
         $cropImage = 'cropwithoffset.jpg';
-        $output    = outputDir($outputDir . '/' . $cropImage);
+        $output    = Talon::settings()->outputPath($outputDir . '/' . $cropImage);
         $hash      = 'fffff00000000000';
 
         // Resize to 200 pixels on the shortest side
@@ -112,7 +113,7 @@ final class CropTest extends AbstractUnitTestCase
               ->save($output)
         ;
 
-        $this->assertFileExists(outputDir($outputDir) . $cropImage);
+        $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $cropImage);
 
         $actual = $image->getWidth();
         $this->assertSame($width, $actual);
@@ -137,7 +138,7 @@ final class CropTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $source = supportDir('assets/images/example-jpg.jpg');
-        $output = outputDir('tests/image/gd/crop-zero-offset.jpg');
+        $output = Talon::settings()->outputPath('tests/image/gd/crop-zero-offset.jpg');
 
         $original = imagecreatefromjpeg($source);
         $expected = imagecolorat($original, 0, 0);

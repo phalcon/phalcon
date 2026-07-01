@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class BackgroundTest extends AbstractUnitTestCase
@@ -38,11 +38,11 @@ final class BackgroundTest extends AbstractUnitTestCase
 
         // Add a watermark to the bottom right of the image
         $image->background('#000')
-              ->save(outputDir('tests/image/imagick/background.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/background.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/background.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/background.jpg')
         );
 
         $this->assertGreaterThan(

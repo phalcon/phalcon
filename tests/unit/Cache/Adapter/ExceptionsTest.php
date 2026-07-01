@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Cache\Adapter;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
+use Phalcon\Talon\Talon;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
@@ -28,7 +29,6 @@ use function getOptionsRedis;
 use function getOptionsRedisCluster;
 use function is_dir;
 use function mkdir;
-use function outputDir;
 use function sleep;
 use function uniqid;
 
@@ -116,11 +116,11 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Stream(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
             ]
         );
 
-        $target = outputDir() . 'ph-strm/te/st/-k/';
+        $target = Talon::settings()->outputPath('ph-strm/te/st/-k/');
         if (true !== is_dir($target)) {
             mkdir($target, 0777, true);
         }

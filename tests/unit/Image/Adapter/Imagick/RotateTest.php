@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class RotateTest extends AbstractUnitTestCase
@@ -38,11 +38,11 @@ final class RotateTest extends AbstractUnitTestCase
 
         // Rotate 45 degrees clockwise
         $image->rotate(45)
-              ->save(outputDir('tests/image/imagick/rotate.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/rotate.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/rotate.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/rotate.jpg')
         );
 
         $this->assertGreaterThan(

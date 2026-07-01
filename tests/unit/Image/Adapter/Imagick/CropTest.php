@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class CropTest extends AbstractUnitTestCase
@@ -38,11 +38,11 @@ final class CropTest extends AbstractUnitTestCase
 
         // Crop the image to 200x200 pixels, from the center
         $image->crop(200, 200)
-              ->save(outputDir('tests/image/imagick/crop.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/crop.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/crop.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/crop.jpg')
         );
 
         $expected = 200;

@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Enum;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 
 final class BackgroundTest extends AbstractUnitTestCase
@@ -37,7 +38,7 @@ final class BackgroundTest extends AbstractUnitTestCase
 
         foreach ($params as [$width, $height, $master, $color, $opacity, $hash]) {
             $resultImage = $color . 'bg.png';
-            $output      = outputDir($outputDir . '/' . $resultImage);
+            $output      = Talon::settings()->outputPath($outputDir . '/' . $resultImage);
             $image       = new Gd(supportDir('assets/images/example-png.png'));
 
             $image->background($color, $opacity)
@@ -45,7 +46,7 @@ final class BackgroundTest extends AbstractUnitTestCase
                   ->save($output)
             ;
 
-            $this->assertFileExists(outputDir($outputDir) . $resultImage);
+            $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $resultImage);
 
             $actual = $this->checkImageHash($output, $hash);
             $this->assertTrue($actual);

@@ -25,12 +25,12 @@ use Phalcon\Events\Manager;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Talon\Talon;
 use RuntimeException;
 
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 
 final class EventsTest extends AbstractUnitTestCase
 {
@@ -68,7 +68,7 @@ final class EventsTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],
@@ -109,7 +109,7 @@ final class EventsTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
             ],
             [

@@ -20,6 +20,7 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
+use Phalcon\Talon\Talon;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
@@ -35,7 +36,6 @@ use function array_merge;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function uniqid;
 
 final class ClearTest extends AbstractUnitTestCase
@@ -74,7 +74,7 @@ final class ClearTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],
@@ -105,7 +105,7 @@ final class ClearTest extends AbstractUnitTestCase
             [
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 '',
             ],
@@ -245,8 +245,8 @@ final class ClearTest extends AbstractUnitTestCase
         $adapter2->clear();
 
         if ($class === Stream::class) {
-            $this->safeDeleteDirectory(outputDir('test-one-'));
-            $this->safeDeleteDirectory(outputDir('test-two-'));
+            $this->safeDeleteDirectory(Talon::settings()->outputPath('test-one-'));
+            $this->safeDeleteDirectory(Talon::settings()->outputPath('test-two-'));
         }
     }
 
@@ -260,7 +260,7 @@ final class ClearTest extends AbstractUnitTestCase
         $adapter    = new FakeStreamUnlink(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
             ],
         );
 
@@ -277,7 +277,7 @@ final class ClearTest extends AbstractUnitTestCase
         $actual = $adapter->clear();
         $this->assertFalse($actual);
 
-        $this->safeDeleteDirectory(outputDir('ph-strm'));
+        $this->safeDeleteDirectory(Talon::settings()->outputPath('ph-strm'));
     }
 
     /**

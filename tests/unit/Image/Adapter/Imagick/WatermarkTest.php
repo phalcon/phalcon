@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class WatermarkTest extends AbstractUnitTestCase
@@ -42,11 +42,11 @@ final class WatermarkTest extends AbstractUnitTestCase
 
         // Add a watermark to the bottom right of the image
         $image->watermark($mark, 10, 10)
-              ->save(outputDir('tests/image/imagick/watermark.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/watermark.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/watermark.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/watermark.jpg')
         );
 
         $this->assertGreaterThan(

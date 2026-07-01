@@ -21,6 +21,7 @@ use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
+use Phalcon\Talon\Talon;
 use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception;
@@ -34,7 +35,6 @@ use stdClass;
 use function getOptionsLibmemcached;
 use function getOptionsRedis;
 use function getOptionsRedisCluster;
-use function outputDir;
 use function phpversion;
 use function uniqid;
 use function version_compare;
@@ -75,7 +75,7 @@ final class GetKeysTest extends AbstractUnitTestCase
                 '',
                 Stream::class,
                 [
-                    'storageDir' => outputDir(),
+                    'storageDir' => Talon::settings()->outputPath() . '/',
                 ],
                 'ph-strm'
             ],
@@ -128,7 +128,7 @@ final class GetKeysTest extends AbstractUnitTestCase
         $this->runTests($adapter, $prefix);
 
         if ('ph-strm' === $prefix) {
-            $this->safeDeleteDirectory(outputDir('ph-strm'));
+            $this->safeDeleteDirectory(Talon::settings()->outputPath('ph-strm'));
         }
     }
 
@@ -186,7 +186,7 @@ final class GetKeysTest extends AbstractUnitTestCase
         $adapter    = new Stream(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
                 'prefix'     => 'basePrefix-',
             ]
         );
@@ -213,7 +213,7 @@ final class GetKeysTest extends AbstractUnitTestCase
             $this->assertTrue($actual);
         }
 
-        $this->safeDeleteDirectory(outputDir('basePrefix-'));
+        $this->safeDeleteDirectory(Talon::settings()->outputPath('basePrefix-'));
     }
 
     /**
@@ -227,7 +227,7 @@ final class GetKeysTest extends AbstractUnitTestCase
         $adapter    = new Stream(
             $serializer,
             [
-                'storageDir' => outputDir(),
+                'storageDir' => Talon::settings()->outputPath() . '/',
                 'prefix'     => 'pref-',
             ]
         );
@@ -268,7 +268,7 @@ final class GetKeysTest extends AbstractUnitTestCase
         $actual = $adapter->clear();
         $this->assertTrue($actual);
 
-        $this->safeDeleteDirectory(outputDir('pref-'));
+        $this->safeDeleteDirectory(Talon::settings()->outputPath('pref-'));
     }
 
     /**

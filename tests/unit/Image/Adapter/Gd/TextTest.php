@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Gd;
 
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\GdTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-use function outputDir;
 use function supportDir;
 
 final class TextTest extends AbstractUnitTestCase
@@ -121,7 +121,7 @@ final class TextTest extends AbstractUnitTestCase
         $outputDir   = 'tests/image/gd/';
         $image       = new Gd(supportDir('assets/images/example-jpg.jpg'));
         $outputImage = $index . 'text.jpg';
-        $output      = outputDir($outputDir . '/' . $outputImage);
+        $output      = Talon::settings()->outputPath($outputDir . '/' . $outputImage);
 
         $image
             ->text(
@@ -136,7 +136,7 @@ final class TextTest extends AbstractUnitTestCase
             ->save($output)
         ;
 
-        $this->assertFileExists(outputDir($outputDir) . $outputImage);
+        $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $outputImage);
 
         $this->assertTrue($this->checkImageHash($output, $hash));
         $this->safeDeleteFile($outputImage);
@@ -155,7 +155,7 @@ final class TextTest extends AbstractUnitTestCase
 
         $image       = supportDir('assets/images/example-jpg.jpg');
         $outputImage = '15188-text.jpg';
-        $output      = outputDir($outputDir . '/' . $outputImage);
+        $output      = Talon::settings()->outputPath($outputDir . '/' . $outputImage);
         $text        = 'Hello Phalcon!';
         $offsetX     = 50;
         $offsetY     = 75;
@@ -171,7 +171,7 @@ final class TextTest extends AbstractUnitTestCase
             ->save($output)
         ;
 
-        $this->assertFileExists(outputDir($outputDir) . $outputImage);
+        $this->assertFileExists(Talon::settings()->outputPath($outputDir) . $outputImage);
 
         $this->assertTrue($this->checkImageHash($output, $hash));
         $this->safeDeleteFile($outputImage);

@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function outputDir;
 use function supportDir;
 
 final class ReflectionTest extends AbstractUnitTestCase
@@ -38,11 +38,11 @@ final class ReflectionTest extends AbstractUnitTestCase
 
         // Create a 50 pixel reflection that fades from 0-100% opacity
         $image->reflection(50)
-              ->save(outputDir('tests/image/imagick/reflection.jpg'))
+              ->save(Talon::settings()->outputPath('tests/image/imagick/reflection.jpg'))
         ;
 
         $this->assertFileExists(
-            outputDir('tests/image/imagick/reflection.jpg')
+            Talon::settings()->outputPath('tests/image/imagick/reflection.jpg')
         );
 
         $this->assertGreaterThan(

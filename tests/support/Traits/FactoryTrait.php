@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Support\Traits;
 
 use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Config;
-use function outputDir;
+use Phalcon\Talon\Talon;
 use function supportDir;
 
 /**
@@ -60,12 +60,12 @@ trait FactoryTrait
                 'adapters' => [
                     0 => [
                         'adapter' => 'stream',
-                        'name'    => outputDir('tests/logs/factory.log'),
+                        'name'    => Talon::settings()->outputPath('tests/logs/factory.log'),
 
                     ],
                     1 => [
                         'adapter' => 'stream',
-                        'name'    => outputDir('tests/logs/factory.log'),
+                        'name'    => Talon::settings()->outputPath('tests/logs/factory.log'),
 
                     ],
                 ],
