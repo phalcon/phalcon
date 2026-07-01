@@ -19,7 +19,7 @@ use Phalcon\Acl\Component;
 use Phalcon\Acl\Enum;
 use Phalcon\Acl\Role;
 use Phalcon\Contracts\Acl\Adapter\Adapter;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 use function cacheDir;
 use function file_get_contents;
