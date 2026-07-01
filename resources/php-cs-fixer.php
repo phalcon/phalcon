@@ -22,9 +22,14 @@ declare(strict_types=1);
  *   composer cs-fixer-fix   (applies the changes)
  */
 
+use PhpCsFixer\Finder;
+use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
+
+
 $root = dirname(__DIR__);
 
-$finder = PhpCsFixer\Finder::create()
+$finder = Finder::create()
     ->in(
         [
             $root . '/src',
@@ -33,8 +38,8 @@ $finder = PhpCsFixer\Finder::create()
         ]
     );
 
-return (new PhpCsFixer\Config())
-    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
+return (new Config())
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(false)
     ->setUsingCache(true)
     ->setCacheFile($root . '/tests/_output/.php-cs-fixer.cache')
