@@ -17,7 +17,7 @@ use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Queue\Adapter\Redis\RedisConnectionFactory;
 use Phalcon\Queue\Exceptions\PriorityNotSupportedException;
 use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Throwable;
 
 use function array_merge;

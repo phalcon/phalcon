@@ -18,7 +18,7 @@ use Phalcon\Contracts\Queue\VisibilityAware;
 use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConnectionFactory;
 use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConsumer;
 use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Throwable;
 
 use function getOptionsBeanstalk;

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Queue;
 
 use Phalcon\Contracts\Queue\Context as ContextInterface;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 /**
  * Cross-adapter conformance suite. Every adapter that ships a Context must

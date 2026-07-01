@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Queue\Adapter\Beanstalk;
 
 use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConnectionFactory;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Throwable;
 
 use function getOptionsBeanstalk;
