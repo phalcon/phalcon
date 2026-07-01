@@ -177,8 +177,7 @@ trait DiTrait
      */
     protected function newDbService(): AdapterInterface
     {
-        /** @var PDO $connection */
-        $connection = $this->getConnection();
+        $connection = $this->getPdoConnection();
         $driver     = $connection->getAttribute(PDO::ATTR_DRIVER_NAME);
 
         return $this->newDbConnection($driver);
