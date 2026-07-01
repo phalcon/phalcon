@@ -11,6 +11,11 @@
 
 declare(strict_types=1);
 
+use Phalcon\Talon\Bootstrap\Runner;
+use Phalcon\Talon\Bootstrap\Stage;
+use Phalcon\Talon\Contracts\Settings as SettingsContract;
+use Phalcon\Talon\Settings;
+
 error_reporting(E_ALL);
 
 $autoloader = __DIR__ . '/vendor/autoload.php';
@@ -29,5 +34,58 @@ if (file_exists('.env')) {
     $dotenv->load();
 }
 
-loadFolders();
-loadDefined();
+Runner::for(Settings::fromEnv())
+    ->before(Stage::Environment, static function (SettingsContract $settings): void {
+        $mysql = $settings->getDatabaseOptions('mysql');
+
+        $constants = [
+            'DATA_MYSQL_CHARSET' => (string) $mysql['charset'],
+            'DATA_MYSQL_HOST'    => (string) $mysql['host'],
+            'DATA_MYSQL_NAME'    => (string) $mysql['dbname'],
+            'DATA_MYSQL_PASS'    => (string) $mysql['password'],
+            'DATA_MYSQL_PORT'    => (string) $mysql['port'],
+            'DATA_MYSQL_USER'    => (string) $mysql['username'],
+        ];
+
+        foreach ($constants as $name => $value) {
+            if (!defined($name)) {
+                define($name, $value);
+            }
+        }
+
+        if (!defined('PATH_DATA')) {
+            define('PATH_DATA', $settings->dataPath() . '/');
+        }
+
+        if (!defined('PATH_SUPPORT')) {
+            define('PATH_SUPPORT', $settings->supportPath() . '/');
+        }
+
+        if (!defined('PATH_OUTPUT')) {
+            define('PATH_OUTPUT', $settings->outputPath() . '/');
+        }
+    })
+    ->after(
+        Stage::Directories,
+        static function (SettingsContract $settings): void {
+            $folders = [
+                'tests/annotations',
+                'tests/assets',
+                'tests/cache',
+                'tests/cache/models',
+                'tests/image/gd',
+                'tests/image/imagick',
+                'tests/logs',
+                'tests/session',
+                'tests/stream',
+            ];
+
+            foreach ($folders as $folder) {
+                $path = $settings->outputPath($folder);
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+            }
+        }
+    )
+    ->boot();

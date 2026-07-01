@@ -16,33 +16,6 @@ declare(strict_types=1);
  *******************************************************************************/
 
 /**
- * Converts ENV variables to defined for tests to work
- */
-if (!function_exists('loadDefined')) {
-    function loadDefined()
-    {
-        defineFromEnv('DATA_MYSQL_CHARSET');
-        defineFromEnv('DATA_MYSQL_HOST');
-        defineFromEnv('DATA_MYSQL_NAME');
-        defineFromEnv('DATA_MYSQL_PASS');
-        defineFromEnv('DATA_MYSQL_PORT');
-        defineFromEnv('DATA_MYSQL_USER');
-
-        if (!defined('PATH_DATA')) {
-            define('PATH_DATA', dataDir());
-        }
-
-        if (!defined('PATH_SUPPORT')) {
-            define('PATH_SUPPORT', supportDir());
-        }
-
-        if (!defined('PATH_OUTPUT')) {
-            define('PATH_OUTPUT', outputDir());
-        }
-    }
-}
-
-/**
  * Ensures that certain folders are always ready for us.
  */
 if (!function_exists('loadFolders')) {
@@ -214,20 +187,6 @@ if (!function_exists('env')) {
         }
 
         return $_ENV[$key] ?? $default;
-    }
-}
-
-if (!function_exists('defineFromEnv')) {
-    function defineFromEnv(string $name)
-    {
-        if (defined($name)) {
-            return;
-        }
-
-        define(
-            $name,
-            env($name)
-        );
     }
 }
 
