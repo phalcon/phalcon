@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Phalcon\Di\FactoryDefault\Cli as Di;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Di\SomeComponent;
 use Phalcon\Tests\Support\Di\SomeServiceProvider;
 
@@ -26,8 +27,8 @@ final class RegisterTest extends AbstractUnitTestCase
      */
     public function testDiFactorydefaultCliRegister(): void
     {
-        require_once supportDir('Di/SomeComponent.php');
-        require_once supportDir('Di/SomeServiceProvider.php');
+        require_once Talon::settings()->supportPath('Di/SomeComponent.php');
+        require_once Talon::settings()->supportPath('Di/SomeServiceProvider.php');
 
         $di = new Di();
 
