@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Example\Namespaces\Adapter\Another;
 use Example\Namespaces\Adapter\Mongo;
 use Phalcon\Autoload\Loader;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 final class AutoloadTest extends AbstractUnitTestCase

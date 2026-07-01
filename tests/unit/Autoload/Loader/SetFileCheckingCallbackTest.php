@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 use Phalcon\Autoload\Exception;
 use Phalcon\Autoload\Loader;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 
