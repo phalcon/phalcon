@@ -18,7 +18,7 @@ use Phalcon\Talon\Settings;
 
 error_reporting(E_ALL);
 
-$autoloader = __DIR__ . '/vendor/autoload.php';
+$autoloader = __DIR__ . '/../vendor/autoload.php';
 
 if (! file_exists($autoloader)) {
     echo "Composer autoloader not found: $autoloader" . PHP_EOL;
@@ -27,10 +27,10 @@ if (! file_exists($autoloader)) {
 }
 
 require_once $autoloader;
-require_once __DIR__ . '/tests/support/_config/functions.php';
+require_once __DIR__ . '/support/_config/functions.php';
 
-if (file_exists('.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+if (file_exists(__DIR__ . '/../.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
     $dotenv->load();
 }
 
