@@ -22,7 +22,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-use function env;
 use function getOptionsMysql;
 use function getOptionsPostgresql;
 use function getOptionsSqlite;
@@ -48,7 +47,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
     #[Group('sqlite')]
     public function testDbAdapterPdoConstruct(): void
     {
-        $driver = env('driver');
+        $driver = self::getDatabaseDriver();
 
         $adapter = match ($driver) {
             'mysql'  => new Mysql(getOptionsMysql()),

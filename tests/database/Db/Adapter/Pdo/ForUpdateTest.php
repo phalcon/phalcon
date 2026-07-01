@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-use function env;
 
 final class ForUpdateTest extends AbstractDatabaseTestCase
 {
@@ -46,7 +45,7 @@ final class ForUpdateTest extends AbstractDatabaseTestCase
             'mysql'  => 'SELECT 1 FOR UPDATE',
             'pgsql'  => 'SELECT 1 FOR UPDATE',
             'sqlite' => 'SELECT 1',
-        ][env('driver')];
+        ][self::getDatabaseDriver()];
 
         $this->assertSame($expected, $db->forUpdate('SELECT 1'));
     }

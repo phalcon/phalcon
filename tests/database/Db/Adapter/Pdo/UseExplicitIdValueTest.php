@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-use function env;
 
 final class UseExplicitIdValueTest extends AbstractDatabaseTestCase
 {
@@ -46,7 +45,7 @@ final class UseExplicitIdValueTest extends AbstractDatabaseTestCase
             'mysql'  => false,
             'pgsql'  => true,
             'sqlite' => true,
-        ][env('driver')];
+        ][self::getDatabaseDriver()];
 
         $this->assertSame($expected, $db->useExplicitIdValue());
     }

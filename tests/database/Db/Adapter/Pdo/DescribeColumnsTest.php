@@ -22,7 +22,6 @@ use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-use function env;
 
 final class DescribeColumnsTest extends AbstractDatabaseTestCase
 {
@@ -108,7 +107,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
                 'inv_total'       => Column::TYPE_FLOAT,
                 'inv_created_at'  => Column::TYPE_TEXT,
             ],
-        ][env('driver')];
+        ][self::getDatabaseDriver()];
 
         foreach ($expectedTypes as $col => $type) {
             $this->assertSame(
