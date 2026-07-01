@@ -20,8 +20,8 @@ use Phalcon\Logger\Logger;
 use Phalcon\Logger\LoggerFactory;
 use Phalcon\Logger\LoggerInterface;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
-use function logsDir;
 
 /**
  * Class NewInstanceTest extends AbstractUnitTestCase
@@ -36,7 +36,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
      */
     public function testLoggerLoggerFactoryNewInstance(): void
     {
-        $logPath = logsDir();
+        $logPath = Talon::settings()->outputPath('tests/logs/');
         $fileName = $this->getNewFileName('log', 'log');
         $adapter = new Stream($logPath . $fileName);
         $factory = new LoggerFactory(new AdapterFactory());

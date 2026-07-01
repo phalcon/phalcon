@@ -18,7 +18,6 @@ use Phalcon\Logger\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-use function dataDir;
 use function file_get_contents;
 use function serialize;
 

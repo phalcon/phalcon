@@ -19,7 +19,6 @@ use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 
-use function dataDir;
 
 final class GetSetDirectoryTest extends AbstractUnitTestCase
 {
@@ -40,15 +39,15 @@ final class GetSetDirectoryTest extends AbstractUnitTestCase
         $actual   = $translator->getDirectory();
         $this->assertSame($expected, $actual);
 
-        $translator->setDirectory(dataDir());
+        $translator->setDirectory(Talon::settings()->dataPath() . '/');
 
-        $expected = dataDir();
+        $expected = Talon::settings()->dataPath() . '/';
         $actual   = $translator->getDirectory();
         $this->assertSame($expected, $actual);
 
-        $translator->setDirectory(['en_US.utf8' => dataDir()]);
+        $translator->setDirectory(['en_US.utf8' => Talon::settings()->dataPath() . '/']);
 
-        $expected = ['en_US.utf8' => dataDir()];
+        $expected = ['en_US.utf8' => Talon::settings()->dataPath() . '/'];
         $actual   = $translator->getDirectory();
         $this->assertSame($expected, $actual);
     }

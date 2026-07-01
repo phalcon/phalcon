@@ -22,7 +22,6 @@ use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-use function dataDir;
 use function sprintf;
 
 use const PHP_EOL;

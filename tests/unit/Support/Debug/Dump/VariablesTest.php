@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use stdClass;
 
-use function dataDir;
 use function file_get_contents;
 
 final class VariablesTest extends AbstractUnitTestCase

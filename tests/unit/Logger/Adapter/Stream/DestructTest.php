@@ -19,6 +19,7 @@ use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
 use function date_default_timezone_get;
 use function file_get_contents;
@@ -33,7 +34,7 @@ final class DestructTest extends AbstractUnitTestCase
     public function testLoggerAdapterStreamDestructCommitsOpenTransaction(): void
     {
         $fileName   = $this->getNewFileName('log', 'log');
-        $outputPath = logsDir();
+        $outputPath = Talon::settings()->outputPath('tests/logs/');
         $timezone   = date_default_timezone_get();
         $datetime   = new DateTimeImmutable('now', new DateTimeZone($timezone));
         $adapter    = new Stream($outputPath . $fileName);

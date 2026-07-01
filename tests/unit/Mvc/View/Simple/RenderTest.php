@@ -22,7 +22,6 @@ use Phalcon\Tests\Support\Objects\ParentObject;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use Phalcon\Tests\Unit\Mvc\Fake\ViewTrait;
 
-use function dataDir;
 use function ob_end_clean;
 use function ob_get_level;
 use function ob_start;

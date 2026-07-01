@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Stream;
 
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
 final class GetNameTest extends AbstractUnitTestCase
 {
@@ -25,7 +26,7 @@ final class GetNameTest extends AbstractUnitTestCase
     public function testLoggerAdapterStreamGetName(): void
     {
         $fileName   = $this->getNewFileName('log', 'log');
-        $outputPath = logsDir();
+        $outputPath = Talon::settings()->outputPath('tests/logs/');
         $adapter    = new Stream($outputPath . $fileName);
 
         $expected = $outputPath . $fileName;

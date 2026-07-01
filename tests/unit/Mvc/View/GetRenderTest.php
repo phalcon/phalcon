@@ -18,7 +18,6 @@ use Phalcon\Mvc\View;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-use function dataDir;
 
 class GetRenderTest extends AbstractUnitTestCase
 {
