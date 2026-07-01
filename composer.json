@@ -6,15 +6,6 @@
     "framework"
   ],
   "license": "MIT",
-  "repositories": [
-    {
-      "type": "path",
-      "url": "talon",
-      "options": {
-        "symlink": true
-      }
-    }
-  ],
   "require": {
     "php": ">=8.1 <9.0",
     "ext-fileinfo": "*",
@@ -61,7 +52,7 @@
     "pds/composer-script-names": "^1.0",
     "pds/skeleton": "^1.0",
     "phalcon/phql": "1.0.x-dev",
-    "phalcon/talon": "@dev",
+    "phalcon/talon": "^0.5.0",
     "phalcon/volt": "1.0.x-dev",
     "phpbench/phpbench": "^1.4",
     "phpstan/phpstan": "^2.2",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50434bf95d6835322c6b19a7e0a5c0a4",
+    "content-hash": "dc4bd29248edf3be7e72416a950cce05",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1354,11 +1354,17 @@
         },
         {
             "name": "phalcon/talon",
-            "version": "dev-master",
+            "version": "v0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/talon.git",
+                "reference": "df20b55840bbfbe38b0443710e90946f1bcf5e5b"
+            },
             "dist": {
-                "type": "path",
-                "url": "talon",
-                "reference": "2f89620d9afe209ffb64eea58a2c14ca5c1db198"
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/talon/zipball/df20b55840bbfbe38b0443710e90946f1bcf5e5b",
+                "reference": "df20b55840bbfbe38b0443710e90946f1bcf5e5b",
+                "shasum": ""
             },
             "require": {
                 "php": "^8.1",
@@ -1371,6 +1377,7 @@
                 "friendsofphp/php-cs-fixer": "^3",
                 "pds/composer-script-names": "^1",
                 "pds/skeleton": "^1",
+                "phalcon/phalcon": "^6.0@alpha",
                 "phpstan/phpstan": "^2",
                 "phpunit/phpunit": "^10.5",
                 "predis/predis": "^2 || ^3",
@@ -1388,37 +1395,7 @@
                     "Phalcon\\Talon\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Phalcon\\Talon\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "analyze": [
-                    "phpstan analyse -c resources/phpstan.neon"
-                ],
-                "cs": [
-                    "phpcs --standard=resources/phpcs.xml"
-                ],
-                "cs-fix": [
-                    "phpcbf --standard=resources/phpcs.xml"
-                ],
-                "cs-fixer": [
-                    "php-cs-fixer fix --config=resources/php-cs-fixer.php --dry-run --diff"
-                ],
-                "cs-fixer-fix": [
-                    "php-cs-fixer fix --config=resources/php-cs-fixer.php"
-                ],
-                "test": [
-                    "phpunit -c resources/phpunit.xml.dist"
-                ],
-                "test-coverage": [
-                    "phpunit -c resources/phpunit.xml.dist --coverage-clover tests/_output/coverage.xml"
-                ],
-                "test-coverage-html": [
-                    "phpunit -c resources/phpunit.xml.dist --coverage-html tests/_output/coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1430,10 +1407,21 @@
                 "test",
                 "testing"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/phalcon/talon/issues",
+                "source": "https://github.com/phalcon/talon/tree/v0.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2026-07-01T22:12:00+00:00"
         },
         {
             "name": "phalcon/volt",
@@ -6003,7 +5991,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "phalcon/phql": 20,
-        "phalcon/talon": 20,
         "phalcon/volt": 20
     },
     "prefer-stable": false,
