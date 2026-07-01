@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
 use Phalcon\Session\Exception;
-use Phalcon\Tests\AbstractServicesTestCase;
+use Phalcon\Talon\PHPUnit\AbstractServicesTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use Phalcon\Tests\Unit\Session\Fake\FakeStreamGlob;
 

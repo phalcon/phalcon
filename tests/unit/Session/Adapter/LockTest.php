@@ -17,7 +17,7 @@ use Phalcon\Session\Adapter\Exceptions\AdapterRuntimeError;
 use Phalcon\Session\Adapter\Redis;
 use Phalcon\Storage\AdapterFactory;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\AbstractServicesTestCase;
+use Phalcon\Talon\PHPUnit\AbstractServicesTestCase;
 
 use function array_merge;
 use function getOptionsRedis;

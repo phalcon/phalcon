@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
-use Phalcon\Tests\AbstractServicesTestCase;
+use Phalcon\Talon\PHPUnit\AbstractServicesTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 use function cacheDir;
