@@ -41,7 +41,7 @@ final class TableOptionsTest extends AbstractDatabaseTestCase
     #[Group('sqlite')]
     public function testDbAdapterPdoTableOptions(): void
     {
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $db         = $this->container->get('db');
 
         new InvoicesMigration($connection);

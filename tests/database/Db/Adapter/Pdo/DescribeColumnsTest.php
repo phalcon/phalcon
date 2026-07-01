@@ -50,7 +50,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
     #[Group('sqlite')]
     public function testDbAdapterPdoDescribeColumns(): void
     {
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $db         = $this->container->get('db');
 
         new InvoicesMigration($connection);
@@ -132,7 +132,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
     {
         $db        = $this->container->get('db');
         $now       = date('Y-m-d H:i:s');
-        $migration = new ComplexDefaultMigration(self::getConnection());
+        $migration = new ComplexDefaultMigration(self::getPdoConnection());
         $migration->insert(1, $now, $now);
 
         $columns = $db->describeColumns($migration->getTable());
@@ -154,7 +154,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
     {
         $db        = $this->container->get('db');
         $now       = date('Y-m-d H:i:s');
-        $migration = new ComplexDefaultMigration(self::getConnection());
+        $migration = new ComplexDefaultMigration(self::getPdoConnection());
         $migration->insert(1, $now, $now);
 
         $columns = $db->describeColumns($migration->getTable());
@@ -176,7 +176,7 @@ final class DescribeColumnsTest extends AbstractDatabaseTestCase
     {
         /** @var Mysql $db */
         $db        = $this->container->get('db');
-        $migration = new DialectMigration(self::getConnection());
+        $migration = new DialectMigration(self::getPdoConnection());
         $columns   = $db->describeColumns($migration->getTable());
 
         $expected = 40;

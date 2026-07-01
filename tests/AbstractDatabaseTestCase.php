@@ -48,6 +48,14 @@ abstract class AbstractDatabaseTestCase extends TalonAbstractDatabaseTestCase
         };
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getDatabaseOptions(): array
+    {
+        return Talon::settings()->getDatabaseOptions(self::resolveDriver());
+    }
+
     public static function getDatabasePassword(): string
     {
         return self::$password;
