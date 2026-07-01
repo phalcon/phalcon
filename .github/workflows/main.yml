@@ -181,22 +181,8 @@ jobs:
         if: always()
         with:
           name: "unit-${{ matrix.php }}.coverage"
-          path: "tests/_output/coverage.xml"
+          path: "tests/_output/coverage.cov"
           retention-days: 7
-
-      - name: "octocov"
-        if: matrix.php == '8.3'
-        uses: k1LoW/octocov-action@b3b6ee60482a667950f87553abf1df63217235d9 # v1.5.1
-        with:
-          config: ${{ github.event_name == 'pull_request' && '.octocov.pr.yml' || '.octocov.yml' }}
-
-      - name: "Upload coverage badge"
-        if: matrix.php == '8.3' && always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: coverage-badge
-          path: tests/_output/coverage.svg
-          if-no-files-found: ignore
 
   db-mysql-tests:
     name: MySQL tests
@@ -297,7 +283,7 @@ jobs:
         if: always()
         with:
           name: "db-mysql-${{ matrix.php }}.coverage"
-          path: "tests/_output/coverage.xml"
+          path: "tests/_output/coverage.cov"
           retention-days: 7
 
   db-postgres-tests:
@@ -396,7 +382,7 @@ jobs:
         if: always()
         with:
           name: "db-postgres-${{ matrix.php }}.coverage"
-          path: "tests/_output/coverage.xml"
+          path: "tests/_output/coverage.cov"
           retention-days: 7
 
   db-sqlite-tests:
@@ -482,14 +468,16 @@ jobs:
         if: always()
         with:
           name: "db-sqlite-${{ matrix.php }}.coverage"
-          path: "tests/_output/coverage.xml"
+          path: "tests/_output/coverage.cov"
           retention-days: 7
 
   upload-coverage:
-    name: Upload coverage
+    name: Merge coverage and report
 
     permissions:
       contents: read
+      pull-requests: write # to comment coverage on PRs (octocov)
+      actions: read # to download prior coverage artifacts (octocov)
 
     runs-on: ubuntu-latest
 
@@ -508,6 +496,21 @@ jobs:
           fetch-depth: 0
           token: ${{ github.token }}
 
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: '8.3'
+          extensions: ${{ env.EXTENSIONS }}
+          tools: pecl, phpize, php-config, composer:v2
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PHALCON_PATH: ext
+
+      - name: "Install development dependencies with Composer"
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
+        with:
+          composer-options: "--prefer-dist --ignore-platform-reqs"
+
       - name: Create directory for coverage files
         run: mkdir -p cv
 
@@ -515,6 +518,9 @@ jobs:
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           path: cv
+
+      - name: "Merge coverage reports"
+        run: mkdir -p tests/_output && php -d memory_limit=4G resources/merge-coverage.php cv tests/_output/coverage.xml
 
       - name: Official SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8.2.0
@@ -526,5 +532,18 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
             -Dsonar.sources=src
-            -Dsonar.php.coverage.reportPaths=cv/**/coverage.xml
+            -Dsonar.php.coverage.reportPaths=tests/_output/coverage.xml
             -Dsonar.verbose=true
+
+      - name: "octocov"
+        uses: k1LoW/octocov-action@b3b6ee60482a667950f87553abf1df63217235d9 # v1.5.1
+        with:
+          config: ${{ github.event_name == 'pull_request' && '.octocov.pr.yml' || '.octocov.yml' }}
+
+      - name: "Upload coverage badge"
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: coverage-badge
+          path: tests/_output/coverage.svg
+          if-no-files-found: ignore

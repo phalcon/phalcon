@@ -6,10 +6,15 @@
 # which adds the no-regression (diff >= 0) ratchet on top of this floor.
 # (octocov's `acceptable` cannot branch on is_pull_request, so the two gates
 # live in separate files selected by the workflow.)
+#
+# `tests/_output/coverage.xml` here is the MERGED report (unit + all three
+# database driver legs), produced by `resources/merge-coverage.php` in the
+# "Merge coverage reports" workflow step - the same merged file SonarQube
+# reads, so the two dashboards never disagree with each other.
 coverage:
   paths:
     - tests/_output/coverage.xml
-  acceptable: "current >= 56.8%"
+  acceptable: "current >= 84.4%"
   badge:
     path: tests/_output/coverage.svg
 codeToTestRatio:
@@ -20,6 +25,9 @@ codeToTestRatio:
 testExecutionTime:
   steps:
     - Tests with coverage
+    - Run Database Tests (MySQL)
+    - Run Database Tests (Postgres)
+    - Run Database Tests (SQLite)
 comment:
   if: is_pull_request
 summary:

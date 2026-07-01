@@ -5,10 +5,15 @@
 # base branch. The default branch deliberately omits this check (floor only)
 # to avoid a coverage blip red-Xing master; keep the rest of this file in sync
 # with .octocov.yml.
+#
+# `tests/_output/coverage.xml` here is the MERGED report (unit + all three
+# database driver legs), produced by `resources/merge-coverage.php` in the
+# "Merge coverage reports" workflow step - the same merged file SonarQube
+# reads, so the two dashboards never disagree with each other.
 coverage:
   paths:
     - tests/_output/coverage.xml
-  acceptable: "current >= 56.8% && diff >= 0"
+  acceptable: "current >= 84.4% && diff >= 0"
   badge:
     path: tests/_output/coverage.svg
 codeToTestRatio:
@@ -19,6 +24,9 @@ codeToTestRatio:
 testExecutionTime:
   steps:
     - Tests with coverage
+    - Run Database Tests (MySQL)
+    - Run Database Tests (Postgres)
+    - Run Database Tests (SQLite)
 comment:
   if: is_pull_request
 summary:
