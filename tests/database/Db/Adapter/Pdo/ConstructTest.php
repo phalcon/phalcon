@@ -18,13 +18,10 @@ use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Db\Adapter\Pdo\Sqlite;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
-
-use function getOptionsMysql;
-use function getOptionsPostgresql;
-use function getOptionsSqlite;
 
 final class ConstructTest extends AbstractDatabaseTestCase
 {
@@ -50,9 +47,9 @@ final class ConstructTest extends AbstractDatabaseTestCase
         $driver = self::getDatabaseDriver();
 
         $adapter = match ($driver) {
-            'mysql'  => new Mysql(getOptionsMysql()),
-            'pgsql'  => new Postgresql(getOptionsPostgresql()),
-            'sqlite' => new Sqlite(getOptionsSqlite()),
+            'mysql'  => new Mysql(Talon::settings()->getDatabaseOptions('mysql')),
+            'pgsql'  => new Postgresql(Talon::settings()->getDatabaseOptions('pgsql')),
+            'sqlite' => new Sqlite(Talon::settings()->getDatabaseOptions('sqlite')),
         };
 
         $this->assertInstanceOf(AdapterInterface::class, $adapter);
