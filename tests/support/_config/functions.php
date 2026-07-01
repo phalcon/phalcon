@@ -11,40 +11,6 @@
 
 declare(strict_types=1);
 
-/*******************************************************************************
- * Load settings and setup
- *******************************************************************************/
-
-/**
- * Ensures that certain folders are always ready for us.
- */
-if (!function_exists('loadFolders')) {
-    function loadFolders()
-    {
-        $folders = [
-            'coverage',
-            'tests' . DIRECTORY_SEPARATOR . 'annotations',
-            'tests' . DIRECTORY_SEPARATOR . 'assets',
-            'tests' . DIRECTORY_SEPARATOR . 'cache',
-            'tests' . DIRECTORY_SEPARATOR . 'cache/models',
-            'tests' . DIRECTORY_SEPARATOR . 'image',
-            'tests' . DIRECTORY_SEPARATOR . 'image/gd',
-            'tests' . DIRECTORY_SEPARATOR . 'image/imagick',
-            'tests' . DIRECTORY_SEPARATOR . 'logs',
-            'tests' . DIRECTORY_SEPARATOR . 'session',
-            'tests' . DIRECTORY_SEPARATOR . 'stream',
-        ];
-
-        foreach ($folders as $folder) {
-            $item = outputDir($folder);
-
-            if (true !== file_exists($item)) {
-                mkdir($item, 0777, true);
-            }
-        }
-    }
-}
-
 /**
  * Initialize ini values and xdebug if it is loaded
  */
@@ -80,101 +46,6 @@ if (!function_exists('loadIni')) {
     }
 }
 
-/*******************************************************************************
- * Directories
- *******************************************************************************/
-/**
- * Returns the project root directory
- */
-if (!function_exists('rootDir')) {
-    function rootDir(string $fileName = ''): string
-    {
-        return dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . $fileName;
-    }
-}
-
-/**
- * Returns the cache folder
- */
-if (!function_exists('cacheDir')) {
-    function cacheDir(string $fileName = ''): string
-    {
-        return outputDir()
-            . 'tests' . DIRECTORY_SEPARATOR
-            . 'cache' . DIRECTORY_SEPARATOR
-            . $fileName;
-    }
-}
-
-/**
- * Returns the data folder
- */
-if (!function_exists('dataDir')) {
-    function dataDir(string $fileName = ''): string
-    {
-        return rootDir()
-            . 'tests' . DIRECTORY_SEPARATOR
-            . '_data' . DIRECTORY_SEPARATOR
-            . $fileName;
-    }
-}
-
-/**
- * Returns the logs folder
- */
-if (!function_exists('logsDir')) {
-    function logsDir(string $fileName = ''): string
-    {
-        return outputDir()
-            . 'tests' . DIRECTORY_SEPARATOR
-            . 'logs' . DIRECTORY_SEPARATOR
-            . $fileName;
-    }
-}
-
-/**
- * Returns the cache/models folder
- */
-if (!function_exists('cacheModelsDir')) {
-    function cacheModelsDir(string $fileName = ''): string
-    {
-        return outputDir()
-            . 'tests' . DIRECTORY_SEPARATOR
-            . 'cache' . DIRECTORY_SEPARATOR
-            . 'models' . DIRECTORY_SEPARATOR
-            . $fileName;
-    }
-}
-
-/**
- * Returns the output folder
- */
-if (!function_exists('outputDir')) {
-    function outputDir(string $fileName = ''): string
-    {
-        return rootDir()
-            . 'tests' . DIRECTORY_SEPARATOR
-            . '_output' . DIRECTORY_SEPARATOR
-            . $fileName;
-    }
-}
-
-/**
- * Returns the support folder
- */
-if (!function_exists('supportDir')) {
-    function supportDir(string $fileName = ''): string
-    {
-        return rootDir()
-            . 'tests' . DIRECTORY_SEPARATOR
-            . 'support' . DIRECTORY_SEPARATOR
-            . $fileName;
-    }
-}
-
-/*******************************************************************************
- * Utility
- *******************************************************************************/
 if (!function_exists('env')) {
     function env(string $key, $default = null)
     {
@@ -190,113 +61,12 @@ if (!function_exists('env')) {
     }
 }
 
-/*******************************************************************************
- * Options
- *******************************************************************************/
-
-if (!function_exists('getOptionsLibmemcached')) {
-    function getOptionsLibmemcached(): array
-    {
-        return [
-            'client'  => [],
-            'servers' => [
-                [
-                    'host'   => env('DATA_MEMCACHED_HOST', '127.0.0.1'),
-                    'port'   => env('DATA_MEMCACHED_PORT', 11211),
-                    'weight' => env('DATA_MEMCACHED_WEIGHT', 0),
-                ],
-            ],
-        ];
-    }
-}
-
-if (!function_exists('getOptionsMysql')) {
-    /**
-     * Get mysql db options
-     */
-    function getOptionsMysql(): array
-    {
-        return [
-            'host'     => env('DATA_MYSQL_HOST'),
-            'username' => env('DATA_MYSQL_USER'),
-            'password' => env('DATA_MYSQL_PASS'),
-            'dbname'   => env('DATA_MYSQL_NAME'),
-            'port'     => env('DATA_MYSQL_PORT'),
-            'charset'  => env('DATA_MYSQL_CHARSET'),
-        ];
-    }
-}
-
-if (!function_exists('getOptionsMariadb')) {
-    /**
-     * Get mariadb db options
-     */
-    function getOptionsMariadb(): array
-    {
-        return [
-            'host'     => env('DATA_MARIADB_HOST'),
-            'username' => env('DATA_MARIADB_USER'),
-            'password' => env('DATA_MARIADB_PASS'),
-            'dbname'   => env('DATA_MARIADB_NAME'),
-            'port'     => env('DATA_MARIADB_PORT'),
-            'charset'  => env('DATA_MARIADB_CHARSET'),
-        ];
-    }
-}
-
-if (!function_exists('getOptionsPostgresql')) {
-    function getOptionsPostgresql(): array
-    {
-        return [
-            'host'     => env('DATA_POSTGRES_HOST'),
-            'username' => env('DATA_POSTGRES_USER'),
-            'password' => env('DATA_POSTGRES_PASS'),
-            'port'     => env('DATA_POSTGRES_PORT'),
-            'dbname'   => env('DATA_POSTGRES_NAME'),
-            'schema'   => env('DATA_POSTGRES_SCHEMA'),
-        ];
-    }
-}
-
 if (!function_exists('getOptionsBeanstalk')) {
     function getOptionsBeanstalk(): array
     {
         return [
             'host' => env('DATA_BEANSTALKD_HOST'),
             'port' => env('DATA_BEANSTALKD_PORT'),
-        ];
-    }
-}
-
-if (!function_exists('getOptionsRedis')) {
-    function getOptionsRedis(): array
-    {
-        return [
-            'host'  => env('DATA_REDIS_HOST'),
-            'port'  => env('DATA_REDIS_PORT'),
-            'index' => env('DATA_REDIS_NAME'),
-        ];
-    }
-}
-
-if (!function_exists('getOptionsRedisCluster')) {
-    function getOptionsRedisCluster(): array
-    {
-        return [
-            'hosts' => explode(',', env('DATA_REDIS_CLUSTER_HOSTS')),
-            'auth' => env('DATA_REDIS_CLUSTER_AUTH')
-        ];
-    }
-}
-
-if (!function_exists('getOptionsSqlite')) {
-    /**
-     * Get sqlite db options
-     */
-    function getOptionsSqlite(): array
-    {
-        return [
-            'dbname' => rootDir(env('DATA_SQLITE_NAME')),
         ];
     }
 }
