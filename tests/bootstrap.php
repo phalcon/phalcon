@@ -18,7 +18,8 @@ use Phalcon\Talon\Settings;
 
 error_reporting(E_ALL);
 
-$autoloader = __DIR__ . '/../vendor/autoload.php';
+$root       = dirname(__DIR__);
+$autoloader = $root . '/vendor/autoload.php';
 
 if (! file_exists($autoloader)) {
     echo "Composer autoloader not found: $autoloader" . PHP_EOL;
@@ -29,42 +30,45 @@ if (! file_exists($autoloader)) {
 require_once $autoloader;
 require_once __DIR__ . '/support/_config/functions.php';
 
-if (file_exists(__DIR__ . '/../.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+if (file_exists($root . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable($root);
     $dotenv->load();
 }
 
 Runner::for(Settings::fromEnv())
-    ->before(Stage::Environment, static function (SettingsContract $settings): void {
-        $mysql = $settings->getDatabaseOptions('mysql');
+    ->before(
+        Stage::Environment,
+        static function (SettingsContract $settings): void {
+            $mysql = $settings->getDatabaseOptions('mysql');
 
-        $constants = [
-            'DATA_MYSQL_CHARSET' => (string) $mysql['charset'],
-            'DATA_MYSQL_HOST'    => (string) $mysql['host'],
-            'DATA_MYSQL_NAME'    => (string) $mysql['dbname'],
-            'DATA_MYSQL_PASS'    => (string) $mysql['password'],
-            'DATA_MYSQL_PORT'    => (string) $mysql['port'],
-            'DATA_MYSQL_USER'    => (string) $mysql['username'],
-        ];
+            $constants = [
+                'DATA_MYSQL_CHARSET' => (string) $mysql['charset'],
+                'DATA_MYSQL_HOST'    => (string) $mysql['host'],
+                'DATA_MYSQL_NAME'    => (string) $mysql['dbname'],
+                'DATA_MYSQL_PASS'    => (string) $mysql['password'],
+                'DATA_MYSQL_PORT'    => (string) $mysql['port'],
+                'DATA_MYSQL_USER'    => (string) $mysql['username'],
+            ];
 
-        foreach ($constants as $name => $value) {
-            if (!defined($name)) {
-                define($name, $value);
+            foreach ($constants as $name => $value) {
+                if (!defined($name)) {
+                    define($name, $value);
+                }
+            }
+
+            if (!defined('PATH_DATA')) {
+                define('PATH_DATA', $settings->dataPath() . '/');
+            }
+
+            if (!defined('PATH_SUPPORT')) {
+                define('PATH_SUPPORT', $settings->supportPath() . '/');
+            }
+
+            if (!defined('PATH_OUTPUT')) {
+                define('PATH_OUTPUT', $settings->outputPath() . '/');
             }
         }
-
-        if (!defined('PATH_DATA')) {
-            define('PATH_DATA', $settings->dataPath() . '/');
-        }
-
-        if (!defined('PATH_SUPPORT')) {
-            define('PATH_SUPPORT', $settings->supportPath() . '/');
-        }
-
-        if (!defined('PATH_OUTPUT')) {
-            define('PATH_OUTPUT', $settings->outputPath() . '/');
-        }
-    })
+    )
     ->after(
         Stage::Directories,
         static function (SettingsContract $settings): void {

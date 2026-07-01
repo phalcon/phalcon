@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Clover;
@@ -23,7 +23,7 @@ use SebastianBergmann\CodeCoverage\Report\Clover;
  * independently (SonarQube via its own multi-path glob merge, octocov via
  * whatever it was pointed at) - a single merged file is the source of truth.
  *
- * Usage: php resources/merge-coverage.php <input-dir> <output-file>
+ * Usage: php bin/merge-coverage.php <input-dir> <output-file>
  *   <input-dir>   directory searched recursively for *.cov files (default: cv)
  *   <output-file> merged Clover XML output path (default: tests/_output/coverage.xml)
  */
