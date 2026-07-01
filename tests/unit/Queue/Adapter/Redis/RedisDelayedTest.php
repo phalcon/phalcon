@@ -18,11 +18,11 @@ use Phalcon\Queue\Adapter\Redis\RedisConnectionFactory;
 use Phalcon\Queue\Exceptions\PriorityNotSupportedException;
 use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Throwable;
 
 use function array_merge;
 use function extension_loaded;
-use function getOptionsRedis;
 use function uniqid;
 use function usleep;
 
@@ -39,7 +39,7 @@ final class RedisDelayedTest extends AbstractUnitTestCase
         }
 
         $this->options = array_merge(
-            getOptionsRedis(),
+            Talon::settings()->getRedisOptions(),
             ['prefix' => 'phalcon_queue_test_' . uniqid('', true) . ':']
         );
 

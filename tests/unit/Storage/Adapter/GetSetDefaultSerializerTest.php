@@ -25,9 +25,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 final class GetSetDefaultSerializerTest extends AbstractUnitTestCase
 {
@@ -44,7 +41,7 @@ final class GetSetDefaultSerializerTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -54,12 +51,12 @@ final class GetSetDefaultSerializerTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [

@@ -32,9 +32,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use stdClass;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function phpversion;
 use function uniqid;
 use function version_compare;
@@ -62,13 +59,13 @@ final class GetKeysTest extends AbstractUnitTestCase
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'ph-reds-'
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'ph-redc-'
             ],
             [
@@ -142,7 +139,7 @@ final class GetKeysTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
             $serializer,
-            getOptionsLibmemcached()
+            ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]]
         );
 
         $memcachedServerVersions   = $adapter->getAdapter()

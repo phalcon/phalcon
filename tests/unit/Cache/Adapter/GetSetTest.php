@@ -32,9 +32,6 @@ use stdClass;
 
 use function array_merge;
 use function file_get_contents;
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function sort;
 use function uniqid;
 
@@ -53,7 +50,7 @@ final class GetSetTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -63,7 +60,7 @@ final class GetSetTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
@@ -126,50 +123,50 @@ final class GetSetTest extends AbstractUnitTestCase
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 null,
             ],
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 true,
             ],
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 false,
             ],
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 123456,
             ],
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 123.456,
             ],
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 uniqid(),
             ],
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 new stdClass(),
             ],
             [
                 'memcached',
                 Libmemcached::class,
                 array_merge(
-                    getOptionsLibmemcached(),
+                    ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                     [
                         'defaultSerializer' => 'Base64',
                     ]
@@ -221,50 +218,50 @@ final class GetSetTest extends AbstractUnitTestCase
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 null,
             ],
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 true,
             ],
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 false,
             ],
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 123456,
             ],
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 123.456,
             ],
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 uniqid(),
             ],
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 new stdClass(),
             ],
             [
                 'redis',
                 Redis::class,
                 array_merge(
-                    getOptionsRedis(),
+                    Talon::settings()->getRedisOptions(),
                     [
                         'defaultSerializer' => 'Base64',
                     ]
@@ -275,7 +272,7 @@ final class GetSetTest extends AbstractUnitTestCase
                 'redis',
                 Redis::class,
                 array_merge(
-                    getOptionsRedis(),
+                    Talon::settings()->getRedisOptions(),
                     [
                         'persistent' => true,
                     ]
@@ -285,43 +282,43 @@ final class GetSetTest extends AbstractUnitTestCase
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 null,
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 true,
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 false,
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 123456,
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 123.456,
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 uniqid(),
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 new stdClass(),
             ],
             [

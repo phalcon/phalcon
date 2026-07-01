@@ -27,9 +27,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 final class NewInstanceTest extends AbstractUnitTestCase
@@ -45,7 +42,7 @@ final class NewInstanceTest extends AbstractUnitTestCase
             [
                 'libmemcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
             ],
             [
                 'memory',
@@ -55,12 +52,12 @@ final class NewInstanceTest extends AbstractUnitTestCase
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
             ],
             [
                 'rediscluster',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
             ],
             [
                 'stream',

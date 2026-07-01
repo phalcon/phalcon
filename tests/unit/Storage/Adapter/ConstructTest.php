@@ -31,9 +31,6 @@ use Phalcon\Tests\Unit\Storage\Fake\FakeLibmemcached;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -50,7 +47,7 @@ final class ConstructTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -60,12 +57,12 @@ final class ConstructTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [
@@ -137,7 +134,7 @@ final class ConstructTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new FakeLibmemcached(
             $serializer,
-            getOptionsLibmemcached()
+            ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]]
         );
 
         $expected = 3600;

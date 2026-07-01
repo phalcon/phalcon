@@ -26,8 +26,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 
 use function array_merge;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 final class GetPrefixTest extends AbstractUnitTestCase
 {
@@ -60,7 +58,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 Libmemcached::class,
                 array_merge(
-                    getOptionsLibmemcached(),
+                    ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                     [
                     ]
                 ),
@@ -70,7 +68,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 Libmemcached::class,
                 array_merge(
-                    getOptionsLibmemcached(),
+                    ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                     [
                         'prefix' => '',
                     ]
@@ -81,7 +79,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 Libmemcached::class,
                 array_merge(
-                    getOptionsLibmemcached(),
+                    ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                     [
                         'prefix' => 'my-prefix',
                     ]
@@ -115,7 +113,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 Redis::class,
                 array_merge(
-                    getOptionsRedis(),
+                    Talon::settings()->getRedisOptions(),
                     [
                     ]
                 ),
@@ -125,7 +123,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 Redis::class,
                 array_merge(
-                    getOptionsRedis(),
+                    Talon::settings()->getRedisOptions(),
                     [
                         'prefix' => '',
                     ]
@@ -136,7 +134,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 Redis::class,
                 array_merge(
-                    getOptionsRedis(),
+                    Talon::settings()->getRedisOptions(),
                     [
                         'prefix' => 'my-prefix',
                     ]
@@ -147,7 +145,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 RedisCluster::class,
                 array_merge(
-                    getOptionsRedisCluster(),
+                    Talon::settings()->getRedisClusterOptions(),
                     [
                     ]
                 ),
@@ -157,7 +155,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 RedisCluster::class,
                 array_merge(
-                    getOptionsRedisCluster(),
+                    Talon::settings()->getRedisClusterOptions(),
                     [
                         'prefix' => '',
                     ]
@@ -168,7 +166,7 @@ final class GetPrefixTest extends AbstractUnitTestCase
             [
                 RedisCluster::class,
                 array_merge(
-                    getOptionsRedisCluster(),
+                    Talon::settings()->getRedisClusterOptions(),
                     [
                         'prefix' => 'my-prefix',
                     ]

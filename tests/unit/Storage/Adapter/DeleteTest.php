@@ -27,9 +27,6 @@ use Phalcon\Tests\Unit\Storage\Fake\FakeWeakFetching;
 use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 final class DeleteTest extends AbstractUnitTestCase
@@ -47,7 +44,7 @@ final class DeleteTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -57,12 +54,12 @@ final class DeleteTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [

@@ -54,7 +54,7 @@ final class ConstructTest extends AbstractUnitTestCase
      */
     public function testSessionAdapterLibmemcachedConstructWithPrefix(): void
     {
-        $options           = getOptionsLibmemcached();
+        $options           = ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]];
         $options['prefix'] = 'my-custom-prefix-';
 
         $serializerFactory = new SerializerFactory();

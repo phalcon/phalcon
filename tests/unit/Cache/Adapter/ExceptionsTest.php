@@ -25,8 +25,6 @@ use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 use function array_merge;
 use function file_put_contents;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function is_dir;
 use function mkdir;
 use function sleep;
@@ -72,7 +70,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Redis(
             $serializer,
             array_merge(
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 [
                     'auth' => 'something',
                 ]
@@ -96,7 +94,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Redis(
             $serializer,
             array_merge(
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 [
                     'index' => 99,
                 ]

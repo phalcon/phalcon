@@ -28,9 +28,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 use RuntimeException;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 final class EventsTest extends AbstractUnitTestCase
 {
@@ -47,7 +44,7 @@ final class EventsTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached'
             ],
             [
@@ -57,12 +54,12 @@ final class EventsTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [
@@ -88,7 +85,7 @@ final class EventsTest extends AbstractUnitTestCase
             [
                 'memcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
             ],
             [
                 '',
@@ -98,12 +95,12 @@ final class EventsTest extends AbstractUnitTestCase
             [
                 'redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
             ],
             [
                 'redis',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
             ],
             [
                 '',

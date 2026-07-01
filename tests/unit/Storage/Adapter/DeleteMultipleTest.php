@@ -26,9 +26,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 use stdClass;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 final class DeleteMultipleTest extends AbstractUnitTestCase
@@ -46,7 +43,7 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -56,12 +53,12 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [

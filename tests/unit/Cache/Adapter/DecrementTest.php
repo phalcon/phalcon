@@ -24,9 +24,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 final class DecrementTest extends AbstractUnitTestCase
@@ -47,7 +44,7 @@ final class DecrementTest extends AbstractUnitTestCase
             [
                 'Libmemcached',
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
                 false,
             ],
@@ -61,14 +58,14 @@ final class DecrementTest extends AbstractUnitTestCase
             [
                 'Redis',
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
                 -1
             ],
             [
                 'RedisCluster',
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
                 -1
             ],

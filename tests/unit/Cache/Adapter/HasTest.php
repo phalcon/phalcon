@@ -30,9 +30,6 @@ use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeStreamFopen;
 use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 use function uniqid;
 
 final class HasTest extends AbstractUnitTestCase
@@ -50,7 +47,7 @@ final class HasTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -60,12 +57,12 @@ final class HasTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [

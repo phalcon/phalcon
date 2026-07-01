@@ -26,9 +26,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 
 use function array_merge;
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 final class GetLifetimeTest extends AbstractUnitTestCase
 {
@@ -45,7 +42,7 @@ final class GetLifetimeTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 'memcached',
             ],
             [
@@ -55,12 +52,12 @@ final class GetLifetimeTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 'redis',
             ],
             [

@@ -28,9 +28,6 @@ use Phalcon\Talon\Talon;
 use Redis as NativeRedis;
 use RedisCluster as NativeRedisCluster;
 
-use function getOptionsLibmemcached;
-use function getOptionsRedis;
-use function getOptionsRedisCluster;
 
 final class GetAdapterTest extends AbstractUnitTestCase
 {
@@ -48,7 +45,7 @@ final class GetAdapterTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                getOptionsLibmemcached(),
+                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
                 NativeMemcached::class,
                 'memcached',
             ],
@@ -60,13 +57,13 @@ final class GetAdapterTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                getOptionsRedis(),
+                Talon::settings()->getRedisOptions(),
                 NativeRedis::class,
                 'redis',
             ],
             [
                 RedisCluster::class,
-                getOptionsRedisCluster(),
+                Talon::settings()->getRedisClusterOptions(),
                 NativeRedisCluster::class,
                 'redis',
             ],
