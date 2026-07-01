@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View;
 use Phalcon\Di\Di;
 use Phalcon\Mvc\View;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
 use function dataDir;
 
@@ -32,7 +33,7 @@ class HasTest extends AbstractUnitTestCase
         $view = new View();
 
         $view->setViewsDir(
-            $this->getDirSeparator(supportDir('assets/views'))
+            $this->getDirSeparator(Talon::settings()->supportPath('assets/views'))
         );
 
         $view->setDI($container);

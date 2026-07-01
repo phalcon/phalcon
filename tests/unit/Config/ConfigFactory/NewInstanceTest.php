@@ -21,8 +21,8 @@ use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Phalcon\Talon\Talon;
 
-use function supportDir;
 
 final class NewInstanceTest extends AbstractUnitTestCase
 {
@@ -34,22 +34,22 @@ final class NewInstanceTest extends AbstractUnitTestCase
         return [
             [
                 'ini',
-                supportDir('assets/config/config.ini'),
+                Talon::settings()->supportPath('assets/config/config.ini'),
                 Ini::class,
             ],
             [
                 'json',
-                supportDir('assets/config/config.json'),
+                Talon::settings()->supportPath('assets/config/config.json'),
                 Json::class,
             ],
             [
                 'php',
-                supportDir('assets/config/config.php'),
+                Talon::settings()->supportPath('assets/config/config.php'),
                 Php::class,
             ],
             [
                 'yaml',
-                supportDir('assets/config/config.yml'),
+                Talon::settings()->supportPath('assets/config/config.yml'),
                 Yaml::class,
             ],
         ];

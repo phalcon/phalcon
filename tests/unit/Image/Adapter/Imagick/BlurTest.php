@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function supportDir;
 
 final class BlurTest extends AbstractUnitTestCase
 {
@@ -30,7 +29,7 @@ final class BlurTest extends AbstractUnitTestCase
      */
     public function testImageAdapterImagickBlur(): void
     {
-        $source = supportDir('assets/images/example-jpg.jpg');
+        $source = Talon::settings()->supportPath('assets/images/example-jpg.jpg');
         $output = Talon::settings()->outputPath('tests/image/imagick/blur.jpg');
 
         $image = new Imagick($source);

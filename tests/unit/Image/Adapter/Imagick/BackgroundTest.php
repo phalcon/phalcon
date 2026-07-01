@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function supportDir;
 
 final class BackgroundTest extends AbstractUnitTestCase
 {
@@ -31,7 +30,7 @@ final class BackgroundTest extends AbstractUnitTestCase
     public function testImageAdapterImagickBackground(): void
     {
         $image = new Imagick(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);

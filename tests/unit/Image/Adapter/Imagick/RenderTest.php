@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function supportDir;
 
 final class RenderTest extends AbstractUnitTestCase
 {
@@ -29,7 +29,7 @@ final class RenderTest extends AbstractUnitTestCase
      */
     public function testImageAdapterImagickRender(): void
     {
-        $source = supportDir('assets/images/example-jpg.jpg');
+        $source = Talon::settings()->supportPath('assets/images/example-jpg.jpg');
         $image  = new Imagick($source);
         $image->setResourceLimit(6, 1);
 
@@ -45,7 +45,7 @@ final class RenderTest extends AbstractUnitTestCase
      */
     public function testImageAdapterImagickRenderDefaultExtension(): void
     {
-        $source = supportDir('assets/images/example-jpg.jpg');
+        $source = Talon::settings()->supportPath('assets/images/example-jpg.jpg');
         $image  = new Imagick($source);
         $image->setResourceLimit(6, 1);
 

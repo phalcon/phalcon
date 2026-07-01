@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 use Phalcon\Assets\Collection;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Talon\Talon;
 
-use function supportDir;
 
 final class GetSetSourcePathTest extends AbstractUnitTestCase
 {
@@ -28,7 +28,7 @@ final class GetSetSourcePathTest extends AbstractUnitTestCase
     public function testAssetsCollectionGetSetSourcePath(): void
     {
         $collection = new Collection();
-        $sourcePath = supportDir('assets');
+        $sourcePath = Talon::settings()->supportPath('assets');
         $collection->setSourcePath($sourcePath);
 
         $this->assertSame($sourcePath, $collection->getSourcePath());

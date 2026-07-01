@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function supportDir;
 
 final class PixelateTest extends AbstractUnitTestCase
 {
@@ -30,7 +29,7 @@ final class PixelateTest extends AbstractUnitTestCase
      */
     public function testImageAdapterImagickPixelate(): void
     {
-        $source = supportDir('assets/images/example-jpg.jpg');
+        $source = Talon::settings()->supportPath('assets/images/example-jpg.jpg');
         $output = Talon::settings()->outputPath('tests/image/imagick/pixelate.jpg');
 
         $image = new Imagick($source);

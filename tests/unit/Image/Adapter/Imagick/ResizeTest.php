@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function supportDir;
 
 final class ResizeTest extends AbstractUnitTestCase
 {
@@ -31,7 +30,7 @@ final class ResizeTest extends AbstractUnitTestCase
     public function testImageAdapterImagickResize(): void
     {
         $image = new Imagick(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);

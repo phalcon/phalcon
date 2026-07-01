@@ -30,8 +30,8 @@ final class MaskTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $image = new Gd(supportDir('assets/images/example-png.png'));
-        $mask  = new Gd(supportDir('assets/images/example-jpg.jpg'));
+        $image = new Gd(Talon::settings()->supportPath('assets/images/example-png.png'));
+        $mask  = new Gd(Talon::settings()->supportPath('assets/images/example-jpg.jpg'));
 
         $outputDir   = 'tests/image/gd/';
         $outputImage = 'mask.png';

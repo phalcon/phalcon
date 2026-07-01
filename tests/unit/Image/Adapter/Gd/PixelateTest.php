@@ -37,7 +37,7 @@ final class PixelateTest extends AbstractUnitTestCase
             [60, 'fbfbf3e3c3c3c383'],
         ];
         foreach ($params as [$amount, $hash]) {
-            $image = new Gd(supportDir('assets/images/example-jpg.jpg'));
+            $image = new Gd(Talon::settings()->supportPath('assets/images/example-jpg.jpg'));
 
             $outputDir   = 'tests/image/gd/';
             $outputImage = $amount . '-pixelate.jpg';

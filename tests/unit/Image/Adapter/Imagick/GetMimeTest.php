@@ -15,10 +15,10 @@ namespace Phalcon\Tests\Unit\Image\Adapter\Imagick;
 
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-use function supportDir;
 
 final class GetMimeTest extends AbstractUnitTestCase
 {
@@ -31,15 +31,15 @@ final class GetMimeTest extends AbstractUnitTestCase
     {
         return [
             [
-                supportDir('assets/images/example-gif.gif'),
+                Talon::settings()->supportPath('assets/images/example-gif.gif'),
                 'image/GIF',
             ],
             [
-                supportDir('assets/images/example-jpg.jpg'),
+                Talon::settings()->supportPath('assets/images/example-jpg.jpg'),
                 'image/JPEG',
             ],
             [
-                supportDir('assets/images/example-png.png'),
+                Talon::settings()->supportPath('assets/images/example-png.png'),
                 'image/PNG',
             ],
         ];

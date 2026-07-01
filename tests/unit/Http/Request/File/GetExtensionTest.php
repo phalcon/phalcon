@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Http\Request\File;
 
 use Phalcon\Http\Request\File;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Page\Http;
 
-use function supportDir;
 
 final class GetExtensionTest extends AbstractUnitTestCase
 {
@@ -32,7 +32,7 @@ final class GetExtensionTest extends AbstractUnitTestCase
                 'name'      => 'test.php',
                 'type'      => Http::CONTENT_TYPE_PLAIN,
                 'extension' => 'jpg',
-                'tmp_name'  => supportDir('/assets/images/example-jpg.jpg'),
+                'tmp_name'  => Talon::settings()->supportPath('/assets/images/example-jpg.jpg'),
                 'size'      => 1,
                 'error'     => 0,
             ]

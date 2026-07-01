@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Router\Annotations;
 
 use Phalcon\Mvc\Router\Annotations;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
 final class SetDefaultNamespaceTest extends AbstractUnitTestCase
@@ -36,7 +37,7 @@ final class SetDefaultNamespaceTest extends AbstractUnitTestCase
      */
     public function testMvcRouterAnnotationsSetDefaultNamespace(): void
     {
-        require_once supportDir('Controllers/NamespacedAnnotationController.php');
+        require_once Talon::settings()->supportPath('Controllers/NamespacedAnnotationController.php');
 
         $router = new Annotations(false);
         $router->setDI($this->container);

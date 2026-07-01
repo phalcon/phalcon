@@ -52,7 +52,7 @@ final class OutputCssTest extends AbstractUnitTestCase
     {
         $fileName = $this->getNewFileName('assets_', 'css');
         $fileName = Talon::settings()->outputPath('tests/assets/' . $fileName);
-        $cssFile  = supportDir('assets/assets/1198.css');
+        $cssFile  = Talon::settings()->supportPath('assets/assets/1198.css');
         $manager  = new Manager(new TagFactory(new Escaper()));
 
         $manager->useImplicitOutput(false);

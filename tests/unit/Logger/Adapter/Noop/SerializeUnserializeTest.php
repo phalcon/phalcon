@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Logger\Adapter\Noop;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
 use function dataDir;
 use function file_get_contents;
@@ -33,7 +34,7 @@ final class SerializeUnserializeTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("This object cannot be unserialized");
 
-        $serialized = file_get_contents(supportDir('assets/logger/logger.serialized'));
+        $serialized = file_get_contents(Talon::settings()->supportPath('assets/logger/logger.serialized'));
         $object     = unserialize($serialized);
     }
 

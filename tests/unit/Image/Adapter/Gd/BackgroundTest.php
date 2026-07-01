@@ -39,7 +39,7 @@ final class BackgroundTest extends AbstractUnitTestCase
         foreach ($params as [$width, $height, $master, $color, $opacity, $hash]) {
             $resultImage = $color . 'bg.png';
             $output      = Talon::settings()->outputPath($outputDir . '/' . $resultImage);
-            $image       = new Gd(supportDir('assets/images/example-png.png'));
+            $image       = new Gd(Talon::settings()->supportPath('assets/images/example-png.png'));
 
             $image->background($color, $opacity)
                   ->resize($width, $height, $master)

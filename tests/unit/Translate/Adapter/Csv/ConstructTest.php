@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Translate\Adapter\Csv;
 
 use ArrayAccess;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Translate\Fake\FakeCsvFopen;
 use Phalcon\Tests\Unit\Translate\Fake\TranslateCsvTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
@@ -23,7 +24,6 @@ use Phalcon\Translate\Exceptions\FileOpenError;
 use Phalcon\Translate\Exceptions\MissingRequiredParameter;
 use Phalcon\Translate\InterpolatorFactory;
 
-use function supportDir;
 
 final class ConstructTest extends AbstractUnitTestCase
 {
@@ -63,7 +63,7 @@ final class ConstructTest extends AbstractUnitTestCase
     public function testTranslateAdapterCsvErrorLoadingFile(): void
     {
 
-        $message = "Error opening translation file '" . supportDir('assets/translation/csv/en.csv') . "'";
+        $message = "Error opening translation file '" . Talon::settings()->supportPath('assets/translation/csv/en.csv') . "'";
         $this->expectException(FileOpenError::class);
         $this->expectExceptionMessage($message);
 

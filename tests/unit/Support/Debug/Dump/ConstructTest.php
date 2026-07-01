@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Support\Dump\ClassProperties;
 
-use function supportDir;
 
 use const PHP_OS_FAMILY;
 

@@ -391,7 +391,7 @@ trait DiTrait
                 $this->container->set(
                     $service,
                     function () use ($class) {
-                        $class->setViewsDir(supportDir('assets/views/'));
+                        $class->setViewsDir(Talon::settings()->supportPath('assets/views/'));
 
                         return $class;
                     }

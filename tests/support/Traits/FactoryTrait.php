@@ -16,7 +16,6 @@ namespace Phalcon\Tests\Support\Traits;
 use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Config;
 use Phalcon\Talon\Talon;
-use function supportDir;
 
 /**
  * Trait FactoryTrait
@@ -40,7 +39,7 @@ trait FactoryTrait
      */
     protected function init(): void
     {
-        $configFile = supportDir('assets/config/factory.ini');
+        $configFile = Talon::settings()->supportPath('assets/config/factory.ini');
 
         $this->config = new Ini($configFile, INI_SCANNER_NORMAL);
 

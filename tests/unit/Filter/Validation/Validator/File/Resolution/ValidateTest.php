@@ -24,7 +24,6 @@ use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function filesize;
-use function supportDir;
 
 #[BackupGlobals(true)]
 final class ValidateTest extends AbstractUnitTestCase

@@ -30,7 +30,7 @@ final class CropTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $source       = supportDir('assets/images/example-jpg.jpg');
+        $source       = Talon::settings()->supportPath('assets/images/example-jpg.jpg');
         $original     = new Gd($source);
         $sourceWidth  = $original->getWidth();
         $sourceHeight = $original->getHeight();
@@ -61,7 +61,7 @@ final class CropTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $image = new Gd(supportDir('assets/images/example-jpg.jpg'));
+        $image = new Gd(Talon::settings()->supportPath('assets/images/example-jpg.jpg'));
 
         $outputDir = 'tests/image/gd/';
         $width     = 200;
@@ -97,7 +97,7 @@ final class CropTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $image = new Gd(supportDir('assets/images/example-jpg.jpg'));
+        $image = new Gd(Talon::settings()->supportPath('assets/images/example-jpg.jpg'));
 
         $outputDir = 'tests/image/gd/';
         $width     = 200;
@@ -137,7 +137,7 @@ final class CropTest extends AbstractUnitTestCase
     {
         $this->checkJpegSupport();
 
-        $source = supportDir('assets/images/example-jpg.jpg');
+        $source = Talon::settings()->supportPath('assets/images/example-jpg.jpg');
         $output = Talon::settings()->outputPath('tests/image/gd/crop-zero-offset.jpg');
 
         $original = imagecreatefromjpeg($source);

@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\Application;
 
 use Phalcon\Mvc\Application;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Modules\Frontend\Module;
 
 class GetModulesTest extends AbstractUnitTestCase
@@ -32,11 +33,11 @@ class GetModulesTest extends AbstractUnitTestCase
         $definition = [
             'frontend' => [
                 'className' => Module::class,
-                'path'      => supportDir('Modules/Frontend/Module.php'),
+                'path'      => Talon::settings()->supportPath('Modules/Frontend/Module.php'),
             ],
             'backend'  => [
                 'className' => \Phalcon\Tests\Support\Modules\Backend\Module::class,
-                'path'      => supportDir('Modules/Backend/Module.php'),
+                'path'      => Talon::settings()->supportPath('Modules/Backend/Module.php'),
             ],
         ];
 

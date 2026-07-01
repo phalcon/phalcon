@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
 class GetTemplatePathTest extends AbstractUnitTestCase
 {
@@ -24,7 +25,7 @@ class GetTemplatePathTest extends AbstractUnitTestCase
      */
     public function testMvcViewEngineVoltCompilerGetTemplatePath(): void
     {
-        $viewFile    = supportDir('assets/views/compiler/partial.volt');
+        $viewFile    = Talon::settings()->supportPath('assets/views/compiler/partial.volt');
         $compileFile = $viewFile . '.php';
 
         $compiler = new Compiler();

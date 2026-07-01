@@ -33,11 +33,11 @@ final class WatermarkTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $image = new Gd(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
 
         $watermark = new Gd(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
         $watermark->resize(250, null, Enum::WIDTH);
 
@@ -73,11 +73,11 @@ final class WatermarkTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $image = new Gd(
-            supportDir('assets/images/example-png.png')
+            Talon::settings()->supportPath('assets/images/example-png.png')
         );
 
         $watermark = new Gd(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
         $watermark->resize(50, 50, Enum::NONE);
 
@@ -113,11 +113,11 @@ final class WatermarkTest extends AbstractUnitTestCase
         $this->checkJpegSupport();
 
         $image = new Gd(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
 
         $watermark = new Gd(
-            supportDir('assets/images/example-png.png')
+            Talon::settings()->supportPath('assets/images/example-png.png')
         );
 
         $outputDir   = 'tests/image/gd/';
@@ -148,11 +148,11 @@ final class WatermarkTest extends AbstractUnitTestCase
     public function testImageAdapterGdWatermarkPngInsidePng(): void
     {
         $image = new Gd(
-            supportDir('assets/images/example-png.png')
+            Talon::settings()->supportPath('assets/images/example-png.png')
         );
 
         $watermark = new Gd(
-            supportDir('assets/images/example-png.png')
+            Talon::settings()->supportPath('assets/images/example-png.png')
         );
         $watermark->resize(null, 30, Enum::HEIGHT);
 

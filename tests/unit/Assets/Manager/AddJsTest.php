@@ -17,9 +17,9 @@ use Phalcon\Assets\Manager;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
-use function supportDir;
 
 final class AddJsTest extends AbstractUnitTestCase
 {
@@ -73,7 +73,7 @@ final class AddJsTest extends AbstractUnitTestCase
         $manager->useImplicitOutput(false);
 
         $manager->addJs(
-            supportDir('assets/assets/assets-version-1.js'),
+            Talon::settings()->supportPath('assets/assets/assets-version-1.js'),
             true,
             false,
             [],
@@ -81,7 +81,7 @@ final class AddJsTest extends AbstractUnitTestCase
         );
 
         $manager->addJs(
-            supportDir('assets/assets/assets-version-2.js'),
+            Talon::settings()->supportPath('assets/assets/assets-version-2.js'),
             true,
             false,
             [],
@@ -89,13 +89,13 @@ final class AddJsTest extends AbstractUnitTestCase
         );
 
         $manager->addJs(
-            supportDir('assets/assets/assets-version-3.js'),
+            Talon::settings()->supportPath('assets/assets/assets-version-3.js'),
             true,
             false,
             []
         );
 
-        $pathData = supportDir('assets/');
+        $pathData = Talon::settings()->supportPath('assets/');
         $expected = sprintf(
             "%s" . PHP_EOL . "%s" . PHP_EOL . "%s" . PHP_EOL,
             "<script type=\"application/javascript\" "

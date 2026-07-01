@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Simple;
 use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Objects\ChildObject;
 use Phalcon\Tests\Support\Objects\ParentObject;
 use Phalcon\Tests\Support\Traits\DiTrait;
@@ -26,7 +27,6 @@ use function ob_end_clean;
 use function ob_get_level;
 use function ob_start;
 use function sprintf;
-use function supportDir;
 
 class RenderTest extends AbstractUnitTestCase
 {
@@ -51,7 +51,7 @@ class RenderTest extends AbstractUnitTestCase
     public function testMvcViewRenderChildobject(): void
     {
         $this->safeDeleteFile(
-            supportDir('assets/views/currentrender/subobject.volt.php')
+            Talon::settings()->supportPath('assets/views/currentrender/subobject.volt.php')
         );
 
         $view = $this->container->get('viewSimple');
@@ -72,7 +72,7 @@ class RenderTest extends AbstractUnitTestCase
         $this->assertEquals($expected, $actual);
 
         $this->safeDeleteFile(
-            supportDir('assets/views/currentrender/subobject.volt.php')
+            Talon::settings()->supportPath('assets/views/currentrender/subobject.volt.php')
         );
     }
 
@@ -110,7 +110,7 @@ class RenderTest extends AbstractUnitTestCase
             $actual   = $ex->getMessage();
             $expected = sprintf(
                 "View '%sunknown/view' was not found in the views directory",
-                supportDir('assets/views/')
+                Talon::settings()->supportPath('assets/views/')
             );
             $this->assertSame($expected, $actual);
         }
@@ -136,7 +136,7 @@ class RenderTest extends AbstractUnitTestCase
 
             $expected = sprintf(
                 "View '%sunknown/view' was not found in the views directory",
-                supportDir('assets/views/')
+                Talon::settings()->supportPath('assets/views/')
             );
             $this->assertSame($expected, $ex->getMessage());
         }
@@ -164,11 +164,11 @@ class RenderTest extends AbstractUnitTestCase
         );
 
         $this->assertFileExists(
-            supportDir('assets/views/mustache') . '/index.mhtml.php'
+            Talon::settings()->supportPath('assets/views/mustache') . '/index.mhtml.php'
         );
 
         $this->safeDeleteFile(
-            supportDir('assets/views/mustache') . '/index.mhtml.php'
+            Talon::settings()->supportPath('assets/views/mustache') . '/index.mhtml.php'
         );
     }
 

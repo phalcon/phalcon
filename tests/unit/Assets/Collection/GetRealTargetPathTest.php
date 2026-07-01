@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Assets\Collection;
 
 use Phalcon\Assets\Collection;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Assets\Fake\FakeCollectionFileExists;
 
-use function supportDir;
 
 final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
@@ -29,7 +29,7 @@ final class GetRealTargetPathTest extends AbstractUnitTestCase
     {
         $collection        = new Collection();
         $targetPath        = '/assets';
-        $basePath          = supportDir('assets');
+        $basePath          = Talon::settings()->supportPath('assets');
         $constructRealPath = realpath($basePath . $targetPath);
 
         $collection->setTargetPath($targetPath);
@@ -46,7 +46,7 @@ final class GetRealTargetPathTest extends AbstractUnitTestCase
     {
         $collection        = new FakeCollectionFileExists();
         $targetPath        = '/assets';
-        $basePath          = supportDir('assets');
+        $basePath          = Talon::settings()->supportPath('assets');
         $constructRealPath = realpath($basePath . $targetPath);
 
         $collection->setTargetPath($targetPath);

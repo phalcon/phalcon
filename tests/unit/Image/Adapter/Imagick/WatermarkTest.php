@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-use function supportDir;
 
 final class WatermarkTest extends AbstractUnitTestCase
 {
@@ -31,13 +30,13 @@ final class WatermarkTest extends AbstractUnitTestCase
     public function testImageAdapterImagickWatermark(): void
     {
         $image = new Imagick(
-            supportDir('assets/images/example-jpg.jpg')
+            Talon::settings()->supportPath('assets/images/example-jpg.jpg')
         );
 
         $image->setResourceLimit(6, 1);
 
         $mark = new Imagick(
-            supportDir('assets/images/example-png.png')
+            Talon::settings()->supportPath('assets/images/example-png.png')
         );
 
         // Add a watermark to the bottom right of the image

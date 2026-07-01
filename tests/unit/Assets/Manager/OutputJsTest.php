@@ -26,7 +26,6 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use function ob_get_clean;
 use function ob_start;
 use function sprintf;
-use function supportDir;
 use function uniqid;
 
 use const PHP_EOL;
@@ -58,14 +57,14 @@ final class OutputJsTest extends AbstractUnitTestCase
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-                ->addJs(supportDir('assets/assets/jquery.js'), false, false)
+                ->addJs(Talon::settings()->supportPath('assets/assets/jquery.js'), false, false)
                 ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
         ;
 
         $expected = sprintf(
             '<script type="application/javascript" src="%s"></script>%s',
-            supportDir('assets/assets/jquery.js'),
+            Talon::settings()->supportPath('assets/assets/jquery.js'),
             PHP_EOL
         );
 
@@ -82,7 +81,7 @@ final class OutputJsTest extends AbstractUnitTestCase
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-                ->addJs(supportDir('assets/assets/jquery.js'), false, false)
+                ->addJs(Talon::settings()->supportPath('assets/assets/jquery.js'), false, false)
                 ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(false)
@@ -90,7 +89,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $expected = sprintf(
             '<script type="application/javascript" src="%s"></script>%s',
-            supportDir('assets/assets/jquery.js'),
+            Talon::settings()->supportPath('assets/assets/jquery.js'),
             PHP_EOL
         );
 
@@ -108,7 +107,7 @@ final class OutputJsTest extends AbstractUnitTestCase
         $manager->useImplicitOutput(false);
 
         $manager->collection('js')
-                ->addJs(supportDir('assets/assets/jquery.js'), false, false)
+                ->addJs(Talon::settings()->supportPath('assets/assets/jquery.js'), false, false)
                 ->setTargetPath(Talon::settings()->outputPath('tests/assets/combined.js'))
                 ->setTargetUri('production/combined.js')
                 ->join(true)
@@ -116,7 +115,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $expected = sprintf(
             '<script type="application/javascript" src="%s"></script>%s',
-            supportDir('assets/assets/jquery.js'),
+            Talon::settings()->supportPath('assets/assets/jquery.js'),
             PHP_EOL
         );
 
@@ -151,7 +150,7 @@ final class OutputJsTest extends AbstractUnitTestCase
     public function testAssetsManagerOutputJsJoinAndFilter(): void
     {
         $manager = new Manager(new TagFactory(new Escaper()));
-        $jsFile  = supportDir('assets/assets/jquery.js');
+        $jsFile  = Talon::settings()->supportPath('assets/assets/jquery.js');
 
         $manager->useImplicitOutput(false);
 
@@ -165,7 +164,7 @@ final class OutputJsTest extends AbstractUnitTestCase
 
         $expected = sprintf(
             '<script type="application/javascript" src="%s"></script>%s',
-            supportDir('assets/assets/jquery.js'),
+            Talon::settings()->supportPath('assets/assets/jquery.js'),
             PHP_EOL
         );
 
@@ -249,7 +248,7 @@ final class OutputJsTest extends AbstractUnitTestCase
     public function testAssetsManagerOutputJsTargetLocal(): void
     {
         $file   = uniqid() . '.js';
-        $jsFile = supportDir('assets/assets/jquery.js');
+        $jsFile = Talon::settings()->supportPath('assets/assets/jquery.js');
 
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->useImplicitOutput(false);

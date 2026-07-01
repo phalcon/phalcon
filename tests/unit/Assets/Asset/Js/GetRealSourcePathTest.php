@@ -16,8 +16,8 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Js;
 use Phalcon\Assets\Asset\Js;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
+use Phalcon\Talon\Talon;
 
-use function supportDir;
 
 final class GetRealSourcePathTest extends AbstractUnitTestCase
 {
@@ -27,7 +27,7 @@ final class GetRealSourcePathTest extends AbstractUnitTestCase
      */
     public function testAssetsAssetJsGetRealSourcePathLocal(): void
     {
-        $file  = supportDir('assets/assets/jquery.js');
+        $file  = Talon::settings()->supportPath('assets/assets/jquery.js');
         $asset = new Js($file);
 
         $expected = $file;
