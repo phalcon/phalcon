@@ -23,7 +23,7 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\AdapterFactory;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 use function getOptionsLibmemcached;

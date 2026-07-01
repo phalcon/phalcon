@@ -23,7 +23,7 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 

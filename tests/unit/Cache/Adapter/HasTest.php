@@ -23,7 +23,7 @@ use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\Exception\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as HelperException;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeStreamFileGetContents;
 use Phalcon\Tests\Unit\Cache\Fake\Adapter\FakeStreamFopen;
 use PHPUnit\Framework\Attributes\DataProvider;
