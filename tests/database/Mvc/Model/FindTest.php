@@ -20,6 +20,7 @@ use Phalcon\Db\RawValue;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Router;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\CustomersMigration;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
@@ -30,11 +31,9 @@ use Phalcon\Tests\Support\Models\Objects;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-use function getOptionsRedis;
 use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
-use function outputDir;
 use function sleep;
 use function uniqid;
 use function var_dump;
@@ -158,7 +157,7 @@ final class FindTest extends AbstractDatabaseTestCase
         // Models Cache setup
         $serializerFactory = new SerializerFactory();
         $adapterFactory    = new AdapterFactory($serializerFactory);
-        $adapter           = $adapterFactory->newInstance('redis', getOptionsRedis());
+        $adapter           = $adapterFactory->newInstance('redis', Talon::settings()->getRedisOptions());
         $cache             = new Cache($adapter);
         $this->container->setShared('modelsCache', $cache);
 
@@ -308,7 +307,7 @@ final class FindTest extends AbstractDatabaseTestCase
     #[Group('sqlite')]
     public function testMvcModelFindWithCache(): void
     {
-        $file = outputDir('data-/my/-c/ac/my-cache');
+        $file = Talon::settings()->outputPath('data-/my/-c/ac/my-cache');
         $this->safeDeleteFile($file);
 
         /** @var PDO $connection */
@@ -318,7 +317,7 @@ final class FindTest extends AbstractDatabaseTestCase
 
         $options = [
             'defaultSerializer' => 'Json',
-            'storageDir'        => outputDir(),
+            'storageDir'        => Talon::settings()->outputPath() . '/',
             'lifetime'          => 172800,
             'prefix'            => 'data-',
         ];
@@ -389,7 +388,7 @@ final class FindTest extends AbstractDatabaseTestCase
         );
 
         $options = [
-            'storageDir' => outputDir(),
+            'storageDir' => Talon::settings()->outputPath() . '/',
             'lifetime'   => 172800,
             'prefix'     => 'data-',
         ];

@@ -18,14 +18,13 @@ use Phalcon\Cache\AdapterFactory;
 use Phalcon\Mvc\Model\MetaData\Libmemcached;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
-
-use function getOptionsLibmemcached;
 
 #[Group('phql')]
 #[RequiresPhpExtension('memcached')]
@@ -54,7 +53,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
 
                 return new Libmemcached(
                     $factory,
-                    getOptionsLibmemcached()
+                    Talon::settings()->getMemcachedOptions()
                 );
             }
         );
