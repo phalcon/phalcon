@@ -77,6 +77,8 @@ jobs:
 
     permissions:
       contents: read # to fetch code (actions/checkout)
+      pull-requests: write # to comment coverage on PRs (octocov)
+      actions: read # to download prior coverage artifacts (octocov)
 
     runs-on: ubuntu-latest
 
@@ -111,7 +113,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          fetch-depth: 1
+          fetch-depth: 0
           token: ${{ github.token }}
 
       - name: "Setup platform specific environment"
@@ -171,7 +173,7 @@ jobs:
           cp tests/support/_config/.env.default .env
           php bin/generate-db-schemas.php
 
-      - name: "Run Unit Tests"
+      - name: "Tests with coverage"
         run: composer test-unit-coverage
 
       - name: Upload coverage file artifact
@@ -181,6 +183,20 @@ jobs:
           name: "unit-${{ matrix.php }}.coverage"
           path: "tests/_output/coverage.xml"
           retention-days: 7
+
+      - name: "octocov"
+        if: matrix.php == '8.3'
+        uses: k1LoW/octocov-action@b3b6ee60482a667950f87553abf1df63217235d9 # v1.5.1
+        with:
+          config: ${{ github.event_name == 'pull_request' && '.octocov.pr.yml' || '.octocov.yml' }}
+
+      - name: "Upload coverage badge"
+        if: matrix.php == '8.3' && always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: coverage-badge
+          path: tests/_output/coverage.svg
+          if-no-files-found: ignore
 
   db-mysql-tests:
     name: MySQL tests
