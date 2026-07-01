@@ -8,7 +8,7 @@
 # live in separate files selected by the workflow.)
 #
 # `tests/_output/coverage.xml` here is the MERGED report (unit + all three
-# database driver legs), produced by `resources/merge-coverage.php` in the
+# database driver legs), produced by `bin/merge-coverage.php` in the
 # "Merge coverage reports" workflow step - the same merged file SonarQube
 # reads, so the two dashboards never disagree with each other.
 coverage:

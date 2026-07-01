@@ -520,7 +520,7 @@ jobs:
           path: cv
 
       - name: "Merge coverage reports"
-        run: mkdir -p tests/_output && php -d memory_limit=4G resources/merge-coverage.php cv tests/_output/coverage.xml
+        run: mkdir -p tests/_output && php -d memory_limit=4G bin/merge-coverage.php cv tests/_output/coverage.xml
 
       - name: Official SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8.2.0
