@@ -53,7 +53,10 @@ final class ConstructTest extends AbstractDatabaseTestCase
 
                 return new Libmemcached(
                     $factory,
-                    Talon::settings()->getMemcachedOptions()
+                    [
+                        'client'  => [],
+                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                    ]
                 );
             }
         );

@@ -193,24 +193,6 @@ if (!function_exists('env')) {
 /*******************************************************************************
  * Options
  *******************************************************************************/
-if (!function_exists('getOptionsModelCacheStream')) {
-    /**
-     * Get Model cache options - Stream
-     */
-    function getOptionsModelCacheStream(): array
-    {
-        if (!is_dir(cacheDir('models'))) {
-            mkdir(
-                cacheDir('models')
-            );
-        }
-
-        return [
-            'lifetime'   => 3600,
-            'storageDir' => cacheModelsDir(),
-        ];
-    }
-}
 
 if (!function_exists('getOptionsLibmemcached')) {
     function getOptionsLibmemcached(): array
@@ -303,22 +285,6 @@ if (!function_exists('getOptionsRedisCluster')) {
         return [
             'hosts' => explode(',', env('DATA_REDIS_CLUSTER_HOSTS')),
             'auth' => env('DATA_REDIS_CLUSTER_AUTH')
-        ];
-    }
-}
-
-if (!function_exists('getOptionsSessionStream')) {
-    /**
-     * Get Session Stream options
-     */
-    function getOptionsSessionStream(): array
-    {
-        if (!is_dir(cacheDir('sessions'))) {
-            mkdir(cacheDir('sessions'));
-        }
-
-        return [
-            'savePath' => cacheDir('sessions'),
         ];
     }
 }

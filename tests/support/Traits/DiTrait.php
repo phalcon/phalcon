@@ -51,15 +51,10 @@ use Phalcon\Session\Manager;
 use Phalcon\Storage\AdapterFactory as StorageAdapterFactory;
 use Phalcon\Storage\Exception;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Talon\Talon;
 
-use function getOptionsLibmemcached;
-use function getOptionsModelCacheStream;
-use function getOptionsMysql;
-use function getOptionsPostgresql;
-use function getOptionsRedis;
-use function getOptionsSessionStream;
-use function getOptionsSqlite;
-use function outputDir;
+use function is_dir;
+use function mkdir;
 
 /**
  * Trait DiTrait
@@ -102,14 +97,14 @@ trait DiTrait
     {
         switch ($driver) {
             case 'mysql':
-                $options = getOptionsMysql();
+                $options = Talon::settings()->getDatabaseOptions('mysql');
                 break;
             case 'pgsql':
-                $options = getOptionsPostgresql();
+                $options = Talon::settings()->getDatabaseOptions('pgsql');
                 $driver  = 'postgresql';
                 break;
             case 'sqlite':
-                $options = getOptionsSqlite();
+                $options = Talon::settings()->getDatabaseOptions('sqlite');
                 break;
             case 'sqlsrv':
             default:
@@ -229,21 +224,27 @@ trait DiTrait
             case 'metadataLibmemcached':
                 return new MetaDataMemcached(
                     new AdapterFactory(new SerializerFactory()),
-                    getOptionsLibmemcached()
+                    [
+                        'client'  => [],
+                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                    ]
                 );
             case 'metadataRedis':
                 return new MetaDataRedis(
                     new AdapterFactory(new SerializerFactory()),
-                    getOptionsRedis()
+                    Talon::settings()->getRedisOptions()
                 );
             case 'metadataStream':
                 return new MetaDataStream(
-                    ['metaDataDir' => outputDir()],
+                    ['metaDataDir' => Talon::settings()->outputPath() . '/'],
                 );
             case 'modelsCacheLibmemcached':
                 return new StorageLibmemcached(
                     new SerializerFactory(),
-                    getOptionsLibmemcached()
+                    [
+                        'client'  => [],
+                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                    ]
                 );
             case 'modelsCacheStream':
                 return new StorageStream(
@@ -267,7 +268,10 @@ trait DiTrait
                     new StorageAdapterFactory(
                         new SerializerFactory()
                     ),
-                    getOptionsLibmemcached()
+                    [
+                        'client'  => [],
+                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                    ]
                 );
             case 'sessionNoop':
                 return new SessionNoop();
@@ -276,7 +280,7 @@ trait DiTrait
                     new StorageAdapterFactory(
                         new SerializerFactory()
                     ),
-                    getOptionsRedis()
+                    Talon::settings()->getRedisOptions()
                 );
             case 'url':
                 return new Url();
@@ -422,4 +426,42 @@ trait DiTrait
         $this->container = $this->newService('factoryDefault');
         FactoryDefault::setDefault($this->container);
     }
+}
+
+/**
+ * Get Model cache options - Stream
+ *
+ * @return array<string, mixed>
+ */
+function getOptionsModelCacheStream(): array
+{
+    $settings = Talon::settings();
+    $dir      = $settings->outputPath('tests/cache/models');
+
+    if (!is_dir($dir)) {
+        mkdir($dir);
+    }
+
+    return [
+        'lifetime'   => 3600,
+        'storageDir' => $settings->outputPath('tests/cache/models/'),
+    ];
+}
+
+/**
+ * Get Session Stream options
+ *
+ * @return array<string, mixed>
+ */
+function getOptionsSessionStream(): array
+{
+    $dir = Talon::settings()->outputPath('tests/cache/sessions');
+
+    if (!is_dir($dir)) {
+        mkdir($dir);
+    }
+
+    return [
+        'savePath' => $dir,
+    ];
 }
