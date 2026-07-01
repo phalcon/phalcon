@@ -17,7 +17,7 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\FactoryTrait;
 
 use function hash;

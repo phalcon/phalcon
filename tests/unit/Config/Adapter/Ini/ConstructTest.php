@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Config\Adapter\Ini;
 
 use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 use Phalcon\Tests\Unit\Config\Fake\Adapter\FakeIniParseFile;
 

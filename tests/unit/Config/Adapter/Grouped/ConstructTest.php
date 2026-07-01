@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Config\Adapter\Grouped;
 use Phalcon\Config\Adapter\Grouped;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 
 use function supportDir;

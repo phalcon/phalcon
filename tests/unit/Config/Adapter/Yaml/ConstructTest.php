@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Config\Adapter\Yaml;
 use Phalcon\Config\Adapter\Yaml;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 use Phalcon\Tests\Unit\Config\Fake\Adapter\FakeYamlExtensionLoaded;
 use Phalcon\Tests\Unit\Config\Fake\Adapter\FakeYamlParseFile;
