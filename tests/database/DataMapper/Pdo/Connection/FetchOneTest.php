@@ -20,8 +20,6 @@ use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
-use function env;
-
 #[Group('mysql')]
 #[Group('pgsql')]
 #[Group('sqlite')]
@@ -67,7 +65,7 @@ final class FetchOneTest extends AbstractDatabaseTestCase
          * `IS NOT :param` is valid on MySQL/SQLite but not on PostgreSQL,
          * where a parameter cannot be bound inside an `IS NOT` predicate.
          */
-        if ('pgsql' !== env('driver')) {
+        if ('pgsql' !== self::getDatabaseDriver()) {
             $data[] = [
                 'named null',
                 'inv_id = :id AND inv_status_flag IS NOT :status',
