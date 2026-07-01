@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Tag;
 use Phalcon\Di\Di;
 use Phalcon\Mvc\Url;
 use Phalcon\Tag;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use ReflectionProperty;
 
 use const PHP_EOL;
