@@ -19,9 +19,9 @@ use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConnectionFactory;
 use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConsumer;
 use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Throwable;
 
-use function getOptionsBeanstalk;
 use function uniqid;
 use function usleep;
 
@@ -39,7 +39,7 @@ final class BeanstalkVisibilityTest extends AbstractUnitTestCase
     {
         parent::setUp();
 
-        $this->options = getOptionsBeanstalk();
+        $this->options = Talon::settings()->getServiceOptions('beanstalk');
         $this->tube    = 'phalcon_test_' . uniqid('', true);
 
         try {
