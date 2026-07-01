@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use stdClass;
 
 final class AllTest extends AbstractUnitTestCase
@@ -33,7 +34,7 @@ final class AllTest extends AbstractUnitTestCase
 
         $expected = trim(
             file_get_contents(
-                supportDir('assets/Support/Dump/variables_output.txt'),
+                Talon::settings()->supportPath('assets/Support/Dump/variables_output.txt'),
             ),
         );
 

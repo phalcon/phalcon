@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use stdClass;
 
 use function dataDir;
@@ -36,7 +37,7 @@ final class VariablesTest extends AbstractUnitTestCase
 
         $expected = trim(
             file_get_contents(
-                supportDir('assets/Support/Dump/variables_output.txt'),
+                Talon::settings()->supportPath('assets/Support/Dump/variables_output.txt'),
             ),
         );
         $actual = $dump->variables($test1, $test2, $test3);

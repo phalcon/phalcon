@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Support\Debug\Dump;
 
 use Phalcon\Support\Debug\Dump;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Support\Dump\ClassProperties;
 
 use function supportDir;
@@ -36,7 +37,7 @@ final class ConstructTest extends AbstractUnitTestCase
         $actual = $this->callProtectedMethod($dump, 'output', $patient);
 
         $expected = file_get_contents(
-            supportDir('assets/Support/Dump/class_properties.txt'),
+            Talon::settings()->supportPath('assets/Support/Dump/class_properties.txt'),
         );
 
         // Test without HTML
