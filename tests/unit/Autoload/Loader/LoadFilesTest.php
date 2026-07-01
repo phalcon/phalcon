@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Autoload\Loader;
 
 use Phalcon\Autoload\Loader;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Autoload\Fake\LoaderTrait;
 
 use function function_exists;
@@ -39,7 +40,7 @@ final class LoadFilesTest extends AbstractUnitTestCase
 
         $loader
             ->addFile(
-                supportDir('assets/Loader/Example/Functions/FunctionsNoClassTwo.php')
+                Talon::settings()->supportPath('assets/Loader/Example/Functions/FunctionsNoClassTwo.php')
             )
             ->addFile(
                 '/path/to/unknown/file'
