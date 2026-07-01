@@ -30,7 +30,7 @@ abstract class AbstractDatabaseTestCase extends TalonAbstractDatabaseTestCase
 
     public static function getDatabaseDsn(): string
     {
-        $driver   = self::resolveDriver();
+        $driver   = self::getDatabaseDriver();
         $settings = Talon::settings();
         $options  = $settings->getDatabaseOptions($driver);
 
@@ -53,7 +53,7 @@ abstract class AbstractDatabaseTestCase extends TalonAbstractDatabaseTestCase
      */
     public static function getDatabaseOptions(): array
     {
-        return Talon::settings()->getDatabaseOptions(self::resolveDriver());
+        return Talon::settings()->getDatabaseOptions(self::getDatabaseDriver());
     }
 
     public static function getDatabasePassword(): string
@@ -86,7 +86,14 @@ abstract class AbstractDatabaseTestCase extends TalonAbstractDatabaseTestCase
         return $this->getConnection()->getPdo();
     }
 
-    private static function resolveDriver(): string
+    /**
+     * Named distinctly from Talon's inherited, non-static `getDriver()`
+     * (`DatabaseTrait::getDriver()`) — same collision reasoning as
+     * `getPdoConnection()` above, but for a `static`-vs-instance mismatch
+     * instead of a return-type mismatch: PHP does not allow an override to
+     * change a method from non-static to static.
+     */
+    public static function getDatabaseDriver(): string
     {
         $driver = getenv('driver');
 

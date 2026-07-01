@@ -69,7 +69,7 @@ final class CacheTest extends AbstractDatabaseTestCase
     public function testMvcModelQueryCache(
         string $serializer
     ): void {
-        (new InvoicesMigration(self::getConnection()));
+        (new InvoicesMigration(self::getPdoConnection()));
 
         $this->container->set(
             'modelsCache',

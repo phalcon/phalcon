@@ -45,7 +45,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
         $this->setDiService('modelsCacheStream');
 
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->insert(1, 1, 0, 'Invoice One');
         $migration->insert(2, 1, 0, 'Invoice Two');

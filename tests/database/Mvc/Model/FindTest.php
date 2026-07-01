@@ -60,7 +60,7 @@ final class FindTest extends AbstractDatabaseTestCase
     public function testMvcModelFind(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
 
@@ -83,7 +83,7 @@ final class FindTest extends AbstractDatabaseTestCase
     public function testMvcModelFindDeprecationWarning(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
         $migration->insert(2, 'random data 2', 1);
@@ -129,7 +129,7 @@ final class FindTest extends AbstractDatabaseTestCase
     public function testMvcModelFindPrivatePropertyWithRedisCache(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->insert(1, 1, 1, 'Test', 101);
 
@@ -246,7 +246,7 @@ final class FindTest extends AbstractDatabaseTestCase
     public function testMvcModelFindResultsetSecondIteration(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
 
         $customersMigration = new CustomersMigration($connection);
         $customersMigration->clear();
@@ -312,7 +312,7 @@ final class FindTest extends AbstractDatabaseTestCase
         $this->safeDeleteFile($file);
 
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
 
@@ -421,7 +421,7 @@ final class FindTest extends AbstractDatabaseTestCase
     public function testMvcModelFindWithCacheLifetimeFromCacheService(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
 
@@ -487,7 +487,7 @@ final class FindTest extends AbstractDatabaseTestCase
     #[Group('sqlite')]
     public function testMvcModelFindWithCacheOptionsLifetimePriorityOverCacheService(): void
     {
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
 
@@ -558,7 +558,7 @@ final class FindTest extends AbstractDatabaseTestCase
     #[Group('mysql')]
     public function testMvcModelFindWithRawValueBind(): void
     {
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new InvoicesMigration($connection);
         $migration->insert(1, null, 1, 'raw-value-one', 100, '2000-01-01 00:00:00');
         $migration->insert(2, null, 1, 'raw-value-two', 200, '2000-06-01 00:00:00');
@@ -588,7 +588,7 @@ final class FindTest extends AbstractDatabaseTestCase
     public function testMvcModelFindWithSpecificColumn(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $migration  = new ObjectsMigration($connection);
         $migration->insert(1, 'random data', 1);
         $migration->insert(2, 'random data 2', 1);

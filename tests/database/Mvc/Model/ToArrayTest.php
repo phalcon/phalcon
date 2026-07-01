@@ -39,7 +39,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
         $this->setDatabase();
 
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         (new InvoicesMigration($connection));
     }
 
@@ -146,7 +146,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     public function testMvcModelToArrayExecuteColumnNotInColumnMap(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $title      = uniqid('inv-');
         $date       = date('Y-m-d H:i:s');
 
@@ -203,7 +203,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     public function testMvcModelToArrayFindCastOnHydrateForceCasting(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $title      = uniqid('inv-');
         $date       = date('Y-m-d H:i:s');
 
@@ -320,7 +320,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     public function testMvcModelToArrayModelWithGetters(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $title      = uniqid('inv-');
         $date       = date('Y-m-d H:i:s');
 
@@ -375,7 +375,7 @@ final class ToArrayTest extends AbstractDatabaseTestCase
     public function testMvcModelToArrayModelWithGettersSerialize(): void
     {
         /** @var PDO $connection */
-        $connection = self::getConnection();
+        $connection = self::getPdoConnection();
         $title      = uniqid('inv-');
         $date       = date('Y-m-d H:i:s');
 
