@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db\Event;
 
 use Phalcon\Events\PsrEventInterface;
+use Phalcon\Events\UnknownEventTypeException;
 use Phalcon\Mvc\Model;
 
 class Factory
@@ -24,7 +25,7 @@ class Factory
             $className = ModelEventNameEnum::getEventClass($eventName);
 
             return new $className($model);
-        } catch (UnknownEventTypeException $e) {
+        } catch (UnknownEventTypeException) {
             return null;
         }
     }

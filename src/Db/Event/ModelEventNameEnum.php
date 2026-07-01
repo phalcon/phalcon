@@ -2,6 +2,8 @@
 
 namespace Phalcon\Db\Event;
 
+use Phalcon\Events\UnknownEventTypeException;
+
 enum ModelEventNameEnum: string
 {
     case AFTER_CREATE = 'afterCreate';
