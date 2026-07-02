@@ -64,6 +64,24 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Http\Message\Uri :: standard port returns null
+     *
+     * Per RFC 3986, standard ports (80 for http, 443 for https) should
+     * return null from getPort().
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriStandardPortReturnsNull(): void
+    {
+        $uri = new Uri('https://example.com:443');
+
+        $this->assertNull($uri->getPort());
+    }
+
+    /**
      * Tests Phalcon\Http\Message\Uri :: __toString()
      *
      * @return void
@@ -97,20 +115,53 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: withScheme()
+     * Tests Phalcon\Http\Message\Uri :: __toString() - rootless path with
+     * authority gets prefixed with "/"
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUriWithScheme(): void
+    public function testHttpMessageUriToStringRootlessPathWithAuthority(): void
     {
-        $uri     = new Uri('https://example.com');
-        $newUri  = $uri->withScheme('http');
+        $uri    = new Uri('https://example.com');
+        $newUri = $uri->withPath('relative/path');
 
-        $this->assertNotSame($uri, $newUri);
-        $this->assertSame('http', $newUri->getScheme());
+        $this->assertStringContainsString('/relative/path', (string) $newUri);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: withFragment()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithFragment(): void
+    {
+        $uri    = new Uri('https://example.com');
+        $newUri = $uri->withFragment('section1');
+
+        $this->assertSame('section1', $newUri->getFragment());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: withFragment() - hash prefix gets
+     * encoded
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithFragmentHashPrefix(): void
+    {
+        $uri    = new Uri('https://example.com');
+        $newUri = $uri->withFragment('#section');
+
+        $this->assertSame('%23section', $newUri->getFragment());
     }
 
     /**
@@ -127,38 +178,6 @@ final class ConstructTest extends AbstractUnitTestCase
         $newUri = $uri->withHost('other.com');
 
         $this->assertSame('other.com', $newUri->getHost());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withPort()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriWithPort(): void
-    {
-        $uri    = new Uri('https://example.com');
-        $newUri = $uri->withPort(9090);
-
-        $this->assertSame(9090, $newUri->getPort());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withPort() - null removes port
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriWithPortNull(): void
-    {
-        $uri    = new Uri('https://example.com:8080');
-        $newUri = $uri->withPort(null);
-
-        $this->assertNull($newUri->getPort());
     }
 
     /**
@@ -195,136 +214,35 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: withQuery()
+     * Tests Phalcon\Http\Message\Uri :: withPort()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUriWithQuery(): void
+    public function testHttpMessageUriWithPort(): void
     {
         $uri    = new Uri('https://example.com');
-        $newUri = $uri->withQuery('key=value');
+        $newUri = $uri->withPort(9090);
 
-        $this->assertSame('key=value', $newUri->getQuery());
+        $this->assertSame(9090, $newUri->getPort());
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: withFragment()
+     * Tests Phalcon\Http\Message\Uri :: withPort() - null removes port
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUriWithFragment(): void
+    public function testHttpMessageUriWithPortNull(): void
     {
-        $uri    = new Uri('https://example.com');
-        $newUri = $uri->withFragment('section1');
+        $uri    = new Uri('https://example.com:8080');
+        $newUri = $uri->withPort(null);
 
-        $this->assertSame('section1', $newUri->getFragment());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withUserInfo()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriWithUserInfo(): void
-    {
-        $uri    = new Uri('https://example.com');
-        $newUri = $uri->withUserInfo('user', 'secret');
-
-        $this->assertSame('user:secret', $newUri->getUserInfo());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: standard port returns null
-     *
-     * Per RFC 3986, standard ports (80 for http, 443 for https) should
-     * return null from getPort().
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriStandardPortReturnsNull(): void
-    {
-        $uri = new Uri('https://example.com:443');
-
-        $this->assertNull($uri->getPort());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: cloneInstance same value returns same
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriWithSameValueReturnsSame(): void
-    {
-        $uri    = new Uri('https://example.com');
-        $newUri = $uri->withScheme('https');
-
-        $this->assertSame($uri, $newUri);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: __toString() - rootless path with
-     * authority gets prefixed with "/"
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriToStringRootlessPathWithAuthority(): void
-    {
-        $uri    = new Uri('https://example.com');
-        $newUri = $uri->withPath('relative/path');
-
-        $this->assertStringContainsString('/relative/path', (string) $newUri);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withQuery() - fragment throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriWithQueryFragmentThrows(): void
-    {
-        $uri = new Uri('https://example.com');
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Query cannot contain a URI fragment');
-        $uri->withQuery('key=value#fragment');
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Uri :: withFragment() - hash prefix gets
-     * encoded
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageUriWithFragmentHashPrefix(): void
-    {
-        $uri    = new Uri('https://example.com');
-        $newUri = $uri->withFragment('#section');
-
-        $this->assertSame('%23section', $newUri->getFragment());
+        $this->assertNull($newUri->getPort());
     }
 
     /**
@@ -345,6 +263,88 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Http\Message\Uri :: withQuery()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithQuery(): void
+    {
+        $uri    = new Uri('https://example.com');
+        $newUri = $uri->withQuery('key=value');
+
+        $this->assertSame('key=value', $newUri->getQuery());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: withQuery() - fragment throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithQueryFragmentThrows(): void
+    {
+        $uri = new Uri('https://example.com');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Query cannot contain a URI fragment');
+        $uri->withQuery('key=value#fragment');
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: withQuery() - no equals sign
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithQueryNoEquals(): void
+    {
+        $uri    = new Uri('https://example.com');
+        $newUri = $uri->withQuery('key1&key2');
+
+        $this->assertSame('key1&key2', $newUri->getQuery());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: cloneInstance same value returns same
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithSameValueReturnsSame(): void
+    {
+        $uri    = new Uri('https://example.com');
+        $newUri = $uri->withScheme('https');
+
+        $this->assertSame($uri, $newUri);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Uri :: withScheme()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageUriWithScheme(): void
+    {
+        $uri     = new Uri('https://example.com');
+        $newUri  = $uri->withScheme('http');
+
+        $this->assertNotSame($uri, $newUri);
+        $this->assertSame('http', $newUri->getScheme());
+    }
+
+    /**
      * Tests Phalcon\Http\Message\Uri :: withScheme() - unsupported throws
      *
      * @return void
@@ -362,18 +362,18 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Uri :: withQuery() - no equals sign
+     * Tests Phalcon\Http\Message\Uri :: withUserInfo()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageUriWithQueryNoEquals(): void
+    public function testHttpMessageUriWithUserInfo(): void
     {
         $uri    = new Uri('https://example.com');
-        $newUri = $uri->withQuery('key1&key2');
+        $newUri = $uri->withUserInfo('user', 'secret');
 
-        $this->assertSame('key1&key2', $newUri->getQuery());
+        $this->assertSame('user:secret', $newUri->getUserInfo());
     }
 }

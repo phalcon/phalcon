@@ -378,16 +378,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Returns a list of available ciphers.
-     *
-     * @return array
-     */
-    public function getAvailableCiphers(): array
-    {
-        return $this->availableCiphers;
-    }
-
-    /**
      * Returns the auth data
      *
      * @return string
@@ -418,6 +408,16 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Returns a list of available ciphers.
+     *
+     * @return array
+     */
+    public function getAvailableCiphers(): array
+    {
+        return $this->availableCiphers;
+    }
+
+    /**
      * Return a list of registered hashing algorithms suitable for hash_hmac.
      *
      * @return array
@@ -432,16 +432,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * Get the name of hashing algorithm.
-     *
-     * @return string
-     */
-    public function getHashAlgorithm(): string
-    {
-        return $this->hashAlgorithm;
-    }
-
-    /**
      * Returns the current cipher
      *
      * @return string
@@ -449,6 +439,16 @@ class Crypt implements CryptInterface
     public function getCipher(): string
     {
         return $this->cipher;
+    }
+
+    /**
+     * Get the name of hashing algorithm.
+     *
+     * @return string
+     */
+    public function getHashAlgorithm(): string
+    {
+        return $this->hashAlgorithm;
     }
 
     /**
@@ -540,6 +540,23 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * Set the name of hashing algorithm.
+     *
+     * @param string $hashAlgorithm
+     *
+     * @return static
+     * @throws Exception
+     */
+    public function setHashAlgorithm(string $hashAlgorithm): static
+    {
+        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
+
+        $this->hashAlgorithm = $hashAlgorithm;
+
+        return $this;
+    }
+
+    /**
      * Sets the encryption key.
      *
      * The `$key` should have been previously generated in a cryptographically
@@ -561,23 +578,6 @@ class Crypt implements CryptInterface
     public function setKey(string $key): CryptInterface
     {
         $this->key = $key;
-
-        return $this;
-    }
-
-    /**
-     * Set the name of hashing algorithm.
-     *
-     * @param string $hashAlgorithm
-     *
-     * @return static
-     * @throws Exception
-     */
-    public function setHashAlgorithm(string $hashAlgorithm): static
-    {
-        $this->checkCipherHashIsAvailable($hashAlgorithm, "hash");
-
-        $this->hashAlgorithm = $hashAlgorithm;
 
         return $this;
     }
@@ -727,32 +727,6 @@ class Crypt implements CryptInterface
 
     /**
      * @param string $mode
-     * @param int    $blockSize
-     * @param string $decrypted
-     *
-     * @return string
-     */
-    protected function decryptGetUnpadded(
-        string $mode,
-        int $blockSize,
-        string $decrypted
-    ): string {
-        $localDecrypted = $decrypted;
-        if (true === $this->checkIsMode(["cbc"], $mode)) {
-            $padding   = $this->padding;
-            $localDecrypted = $this->cryptUnpadText(
-                $decrypted,
-                $mode,
-                $blockSize,
-                $padding
-            );
-        }
-
-        return $localDecrypted;
-    }
-
-    /**
-     * @param string $mode
      * @param string $cipherText
      * @param string $decryptKey
      * @param string $iv
@@ -803,25 +777,28 @@ class Crypt implements CryptInterface
 
     /**
      * @param string $mode
-     * @param string $input
      * @param int    $blockSize
+     * @param string $decrypted
      *
      * @return string
-     * @throws Exception
      */
-    protected function encryptGetPadded(
+    protected function decryptGetUnpadded(
         string $mode,
-        string $input,
-        int $blockSize
+        int $blockSize,
+        string $decrypted
     ): string {
-        if (
-            0 !== $this->padding &&
-            true === $this->checkIsMode(["cbc"], $mode)
-        ) {
-            return $this->cryptPadText($input, $mode, $blockSize, $this->padding);
+        $localDecrypted = $decrypted;
+        if (true === $this->checkIsMode(["cbc"], $mode)) {
+            $padding   = $this->padding;
+            $localDecrypted = $this->cryptUnpadText(
+                $decrypted,
+                $mode,
+                $blockSize,
+                $padding
+            );
         }
 
-        return $input;
+        return $localDecrypted;
     }
 
     /**
@@ -890,6 +867,29 @@ class Crypt implements CryptInterface
     }
 
     /**
+     * @param string $mode
+     * @param string $input
+     * @param int    $blockSize
+     *
+     * @return string
+     * @throws Exception
+     */
+    protected function encryptGetPadded(
+        string $mode,
+        string $input,
+        int $blockSize
+    ): string {
+        if (
+            0 !== $this->padding &&
+            true === $this->checkIsMode(["cbc"], $mode)
+        ) {
+            return $this->cryptPadText($input, $mode, $blockSize, $this->padding);
+        }
+
+        return $input;
+    }
+
+    /**
      * Initialize available cipher algorithms.
      *
      * @return static
@@ -918,6 +918,24 @@ class Crypt implements CryptInterface
         $this->availableCiphers = $allowed;
 
         return $this;
+    }
+
+    /**
+     * @todo to be removed when we get traits
+     */
+    protected function phpFunctionExists(string $name): bool
+    {
+        return function_exists($name);
+    }
+
+    protected function phpOpensslCipherIvLength(string $cipher): int|bool
+    {
+        return openssl_cipher_iv_length($cipher);
+    }
+
+    protected function phpOpensslRandomPseudoBytes(int $length)
+    {
+        return openssl_random_pseudo_bytes($length);
     }
 
     /**
@@ -982,23 +1000,5 @@ class Crypt implements CryptInterface
         return mb_strtolower(
             substr($this->cipher, $position - strlen($this->cipher) + 1)
         );
-    }
-
-    /**
-     * @todo to be removed when we get traits
-     */
-    protected function phpFunctionExists(string $name): bool
-    {
-        return function_exists($name);
-    }
-
-    protected function phpOpensslCipherIvLength(string $cipher): int|bool
-    {
-        return openssl_cipher_iv_length($cipher);
-    }
-
-    protected function phpOpensslRandomPseudoBytes(int $length)
-    {
-        return openssl_random_pseudo_bytes($length);
     }
 }

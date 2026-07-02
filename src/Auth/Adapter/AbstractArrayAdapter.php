@@ -55,6 +55,8 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
             }
         }
 
+        $this->burnHash();
+
         return null;
     }
 
@@ -106,9 +108,12 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
         if ($modelClass !== null) {
             $instance = new $modelClass();
 
-            if (!($instance instanceof AuthUserContract)) {
-                throw new DoesNotImplement('User model', 'AuthUser');
-            }
+            DoesNotImplement::assert(
+                $instance,
+                AuthUserContract::class,
+                'User model',
+                'AuthUser'
+            );
 
             if (method_exists($instance, 'assign')) {
                 $instance->assign($row);
@@ -129,7 +134,9 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
     abstract protected function loadUsers(): array;
 
     /**
-     * Strict per-key match of a row against credentials, skipping 'password'.
+     * Per-key match of a row against credentials, skipping 'password'. Values
+     * are compared as strings so typed row values (e.g. int id, bool active)
+     * match the string input that arrives from an HTTP request.
      *
      * @phpstan-param AuthUserRow     $row
      * @phpstan-param AuthCredentials $credentials
@@ -141,7 +148,7 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
                 continue;
             }
 
-            if (!isset($row[$key]) || $row[$key] !== $value) {
+            if (!isset($row[$key]) || (string) $row[$key] !== (string) $value) {
                 return false;
             }
         }

@@ -19,6 +19,12 @@ namespace Phalcon\Mvc\Router;
 interface RouteInterface
 {
     /**
+     * Resets the internal route id generator
+     *
+     * @return void
+     */
+    public static function reset(): void;
+    /**
      * Replaces placeholders from pattern returning a valid PCRE regular expression
      *
      * @param string $pattern
@@ -105,13 +111,6 @@ interface RouteInterface
         string $pattern,
         array | string | null $paths = null
     ): void;
-
-    /**
-     * Resets the internal route id generator
-     *
-     * @return void
-     */
-    public static function reset(): void;
 
     /**
      * Sets a hostname restriction to the route

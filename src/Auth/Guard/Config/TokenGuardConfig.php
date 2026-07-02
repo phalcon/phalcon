@@ -28,19 +28,8 @@ class TokenGuardConfig extends AbstractGuardConfig
         protected readonly string $inputKey,
         protected readonly string $storageKey,
     ) {
-        if ($inputKey === '') {
-            throw new ConfigRequiresNonEmptyValue(
-                'Token guard',
-                'inputKey'
-            );
-        }
-
-        if ($storageKey === '') {
-            throw new ConfigRequiresNonEmptyValue(
-                'Token guard',
-                'storageKey'
-            );
-        }
+        ConfigRequiresNonEmptyValue::assert($inputKey, 'Token guard', 'inputKey');
+        ConfigRequiresNonEmptyValue::assert($storageKey, 'Token guard', 'storageKey');
     }
 
     public function getInputKey(): string

@@ -100,6 +100,20 @@ class Memory extends AbstractAdapter
     }
 
     /**
+     * Stores data in the adapter forever. The key needs to manually deleted
+     * from the adapter.
+     *
+     * @param string $key
+     * @param mixed  $data
+     *
+     * @return bool
+     */
+    public function setForever(string $key, mixed $data): bool
+    {
+        return $this->set($key, $data);
+    }
+
+    /**
      * Caps the number of items retained in the in-memory store.
      * 0 disables the cap (the default; preserves the original
      * unbounded behavior). When the cap is exceeded, the oldest
@@ -114,20 +128,6 @@ class Memory extends AbstractAdapter
         $this->maxItems = $maxItems;
 
         return $this;
-    }
-
-    /**
-     * Stores data in the adapter forever. The key needs to manually deleted
-     * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
-     */
-    public function setForever(string $key, mixed $data): bool
-    {
-        return $this->set($key, $data);
     }
 
     /**

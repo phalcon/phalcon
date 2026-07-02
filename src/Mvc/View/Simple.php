@@ -63,8 +63,8 @@ use function ob_start;
  */
 class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterface
 {
-    use EventsAwareTrait;
     use DirSeparatorTrait;
+    use EventsAwareTrait;
 
     /**
      * @var string

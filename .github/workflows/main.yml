@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 1
@@ -62,7 +62,7 @@ jobs:
           PHALCON_PATH: ext
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -92,6 +92,10 @@ jobs:
         image: memcached:1.6-alpine
         ports:
           - "11211:11211"
+      beanstalkd:
+        image: schickling/beanstalkd:latest
+        ports:
+          - "11300:11300"
 
     strategy:
       fail-fast: true
@@ -104,7 +108,7 @@ jobs:
           - '8.5'
 
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 1
@@ -153,7 +157,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: "Install development dependencies with Composer"
-        uses: "ramsey/composer-install@v4"
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -224,7 +228,7 @@ jobs:
           - "11211:11211"
 
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 1
@@ -250,7 +254,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -325,7 +329,7 @@ jobs:
           - "11211:11211"
 
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 1
@@ -351,7 +355,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -411,7 +415,7 @@ jobs:
           - "11211:11211"
 
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 1
@@ -437,7 +441,7 @@ jobs:
         run: composer validate --no-check-all --no-check-publish
 
       - name: Install development dependencies with Composer
-        uses: ramsey/composer-install@5c2bcf28d7b060ef3c601d7b476d5430a7b46c27 # v4
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
         with:
           composer-options: "--prefer-dist --ignore-platform-reqs"
 
@@ -482,7 +486,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
@@ -496,39 +500,6 @@ jobs:
         with:
           path: cv
 
-      - name: Display structure of downloaded files
-        run: |
-          mv cv/unit-8.1.coverage/coverage.xml         cv/01.xml
-          mv cv/unit-8.2.coverage/coverage.xml         cv/02.xml
-          mv cv/unit-8.3.coverage/coverage.xml         cv/03.xml
-          mv cv/unit-8.4.coverage/coverage.xml         cv/04.xml
-          mv cv/unit-8.5.coverage/coverage.xml         cv/05.xml
-          mv cv/db-mysql-8.1.coverage/coverage.xml     cv/06.xml
-          mv cv/db-mysql-8.2.coverage/coverage.xml     cv/07.xml
-          mv cv/db-mysql-8.3.coverage/coverage.xml     cv/08.xml
-          mv cv/db-mysql-8.4.coverage/coverage.xml     cv/09.xml
-          mv cv/db-mysql-8.5.coverage/coverage.xml     cv/10.xml
-          mv cv/db-postgres-8.1.coverage/coverage.xml  cv/11.xml
-          mv cv/db-postgres-8.2.coverage/coverage.xml  cv/12.xml
-          mv cv/db-postgres-8.3.coverage/coverage.xml  cv/13.xml
-          mv cv/db-postgres-8.4.coverage/coverage.xml  cv/14.xml
-          mv cv/db-postgres-8.5.coverage/coverage.xml  cv/15.xml
-          mv cv/db-sqlite-8.1.coverage/coverage.xml    cv/16.xml
-          mv cv/db-sqlite-8.2.coverage/coverage.xml    cv/17.xml
-          mv cv/db-sqlite-8.3.coverage/coverage.xml    cv/18.xml
-          mv cv/db-sqlite-8.4.coverage/coverage.xml    cv/19.xml
-          mv cv/db-sqlite-8.5.coverage/coverage.xml    cv/20.xml
-          ls -la cv/
-
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v5
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        with:
-          files: cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml,cv/07.xml,cv/08.xml,cv/09.xml,cv/10.xml,cv/11.xml,cv/12.xml,cv/13.xml,cv/14.xml,cv/15.xml,cv/16.xml,cv/17.xml,cv/18.xml,cv/19.xml,cv/20.xml
-          fail_ci_if_error: false
-
       - name: Official SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@713881670b6b3676cda39549040e2d88c70d582e # v8.2.0
         env:
@@ -538,5 +509,6 @@ jobs:
           args: >
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.php.coverage.reportPaths=cv/01.xml,cv/02.xml,cv/03.xml,cv/04.xml,cv/05.xml,cv/06.xml,cv/07.xml,cv/08.xml,cv/09.xml,cv/10.xml,cv/11.xml,cv/12.xml,cv/13.xml,cv/14.xml,cv/15.xml,cv/16.xml,cv/17.xml,cv/18.xml,cv/19.xml,cv/20.xml
+            -Dsonar.sources=src
+            -Dsonar.php.coverage.reportPaths=cv/**/coverage.xml
             -Dsonar.verbose=true

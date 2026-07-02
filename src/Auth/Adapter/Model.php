@@ -59,9 +59,12 @@ class Model extends AbstractAdapter implements RememberAdapter
      */
     public function createRememberToken(AuthUser $user): RememberToken
     {
-        if (!($user instanceof AuthRemember)) {
-            throw new DoesNotImplement('User model', 'AuthRemember');
-        }
+        DoesNotImplement::assert(
+            $user,
+            AuthRemember::class,
+            'User model',
+            'AuthRemember'
+        );
 
         return $user->createRememberToken(bin2hex(random_bytes(30)));
     }
@@ -73,8 +76,6 @@ class Model extends AbstractAdapter implements RememberAdapter
      */
     public function retrieveByCredentials(array $credentials): ?AuthUser
     {
-        /** @var class-string<ModelInterface> $modelClass */
-        $modelClass = $this->config->getModel();
         $conditions = [];
         $bind       = [];
 
@@ -91,47 +92,28 @@ class Model extends AbstractAdapter implements RememberAdapter
             return null;
         }
 
-        $found = $modelClass::findFirst(
+        $found = $this->findFirstAsAuthUser(
             [
                 'conditions' => implode(' AND ', $conditions),
                 'bind'       => $bind,
             ]
         );
 
-        if ($found === false) {
-            return null;
+        if ($found === null) {
+            $this->burnHash();
         }
 
-        if ($found !== null && !($found instanceof AuthUser)) {
-            throw new DoesNotImplement('User model', 'AuthUser');
-        }
-
-        /** @var AuthUser $found */
         return $found;
     }
 
     public function retrieveById(int | string $id): ?AuthUser
     {
-        /** @var class-string<ModelInterface> $modelClass */
-        $modelClass = $this->config->getModel();
-        $idColumn   = $this->config->getIdColumn();
-        $found      = $modelClass::findFirst(
+        return $this->findFirstAsAuthUser(
             [
-                'conditions' => '[' . $idColumn . '] = :id:',
+                'conditions' => '[' . $this->config->getIdColumn() . '] = :id:',
                 'bind'       => ['id' => $id],
             ]
         );
-
-        if ($found === false) {
-            return null;
-        }
-
-        if ($found !== null && !($found instanceof AuthUser)) {
-            throw new DoesNotImplement('User model', 'AuthUser');
-        }
-
-        /** @var AuthUser $found */
-        return $found;
     }
 
     /**
@@ -164,5 +146,35 @@ class Model extends AbstractAdapter implements RememberAdapter
         }
 
         return $user;
+    }
+
+    /**
+     * Runs findFirst() with the given parameters and normalizes the result to
+     * an ?AuthUser: a missing record yields null, a record that is not an
+     * AuthUser throws.
+     *
+     * @param array{conditions: string, bind: array<string, mixed>} $parameters
+     *
+     * @throws DoesNotImplement
+     */
+    private function findFirstAsAuthUser(array $parameters): ?AuthUser
+    {
+        /** @var class-string<ModelInterface> $modelClass */
+        $modelClass = $this->config->getModel();
+
+        $found = $modelClass::findFirst($parameters);
+
+        if ($found === false || $found === null) {
+            return null;
+        }
+
+        DoesNotImplement::assert(
+            $found,
+            AuthUser::class,
+            'User model',
+            'AuthUser'
+        );
+
+        return $found;
     }
 }

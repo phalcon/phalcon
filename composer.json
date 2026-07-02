@@ -24,6 +24,7 @@
     "ext-imagick": "to use Image\\Adapter\\Imagick",
     "ext-memcached": "to use Cache\\Adapter\\Libmemcached, Session\\Adapter\\Libmemcached, Storage\\Adapter\\Libmemcached",
     "ext-openssl": "to use Encryption\\Crypt",
+    "ext-pcntl": "to use signal-based graceful shutdown in Queue\\Consumer\\Worker",
     "ext-redis": "to use Cache\\Adapter\\Redis, Session\\Adapter\\Redis, Storage\\Adapter\\Redis",
     "ext-yaml": "to use Config\\Adapter\\Yaml"
   },
@@ -65,6 +66,7 @@
     "cs-fix": "vendor/bin/phpcbf --standard=resources/phpcs.xml",
     "cs-fixer": "vendor/bin/php-cs-fixer fix --config=resources/php-cs-fixer.php --dry-run --diff",
     "cs-fixer-fix": "vendor/bin/php-cs-fixer fix --config=resources/php-cs-fixer.php",
+    "infection": "vendor/bin/infection --configuration=resources/infection.json5 --threads=max --test-framework-options='--order-by=default'",
     "test-unit": "vendor/bin/phpunit -c resources/phpunit.xml.dist",
     "test-unit-coverage": "vendor/bin/phpunit  -c resources/phpunit.xml.dist --coverage-clover tests/_output/coverage.xml",
     "test-unit-coverage-html": "vendor/bin/phpunit  -c resources/phpunit.xml.dist --coverage-html tests/_output/coverage/",
@@ -90,5 +92,8 @@
     ]
   },
   "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
   }
 }

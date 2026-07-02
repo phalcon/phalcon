@@ -27,6 +27,12 @@ use PDOStatement;
 interface PdoInterface
 {
     /**
+     * Return an array of available PDO drivers (empty array if none available)
+     *
+     * @return array
+     */
+    public static function getAvailableDrivers(): array;
+    /**
      * Begins a transaction. If the profiler is enabled, the operation will
      * be recorded.
      *
@@ -74,13 +80,6 @@ interface PdoInterface
      * @return mixed
      */
     public function getAttribute(int $attribute);
-
-    /**
-     * Return an array of available PDO drivers (empty array if none available)
-     *
-     * @return array
-     */
-    public static function getAvailableDrivers(): array;
 
     /**
      * Is a transaction currently active? If the profiler is enabled, the

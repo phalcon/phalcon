@@ -42,6 +42,15 @@ class Route implements RouteInterface
     public const DEFAULT_DELIMITER = " ";
 
     /**
+     * @var string
+     */
+    protected static string $delimiterPath = self::DEFAULT_DELIMITER;
+    /**
+     * @var int
+     */
+    protected static int $uniqueId = 0;
+
+    /**
      * @var mixed|null
      */
     protected mixed $beforeMatch = null;
@@ -64,11 +73,6 @@ class Route implements RouteInterface
     /**
      * @var string
      */
-    protected static string $delimiterPath = self::DEFAULT_DELIMITER;
-
-    /**
-     * @var string
-     */
     protected string $description = "";
     /**
      * @var string
@@ -86,10 +90,6 @@ class Route implements RouteInterface
      * @var string
      */
     protected string $routeId;
-    /**
-     * @var int
-     */
-    protected static int $uniqueId = 0;
 
     /**
      * Constructor
@@ -113,6 +113,48 @@ class Route implements RouteInterface
         // TODO: Add a function that increase static members
         $this->routeId  = (string)$uniqueId;
         self::$uniqueId = $uniqueId + 1;
+    }
+
+    /**
+     * Set the routing delimiter.
+     *
+     * This sets a process-global delimiter that each route captures at
+     * construction time. Configure it once during bootstrap, before any routes
+     * are created: routes built before and after a change keep their own
+     * delimiter, and `Console::setArgument()` reads the current value when it
+     * parses arguments.
+     *
+     * @param string $delimiter
+     *
+     * @return void
+     */
+    public static function delimiter(string $delimiter): void
+    {
+        self::$delimiterPath = $delimiter;
+    }
+
+    /**
+     * Get routing delimiter
+     *
+     * @return string
+     */
+    public static function getDelimiter(): string
+    {
+        return self::$delimiterPath;
+    }
+
+    /**
+     * Resets the internal route id generator.
+     *
+     * Intended for test isolation only. The router keys its route map by the
+     * route id, so resetting the sequence while a router still holds routes
+     * makes newly created routes overwrite existing entries.
+     *
+     * @return void
+     */
+    public static function reset(): void
+    {
+        self::$uniqueId = 0;
     }
 
     /**
@@ -191,24 +233,6 @@ class Route implements RouteInterface
         $this->converters[$name] = $converter;
 
         return $this;
-    }
-
-    /**
-     * Set the routing delimiter.
-     *
-     * This sets a process-global delimiter that each route captures at
-     * construction time. Configure it once during bootstrap, before any routes
-     * are created: routes built before and after a change keep their own
-     * delimiter, and `Console::setArgument()` reads the current value when it
-     * parses arguments.
-     *
-     * @param string $delimiter
-     *
-     * @return void
-     */
-    public static function delimiter(string $delimiter): void
-    {
-        self::$delimiterPath = $delimiter;
     }
 
     /**
@@ -388,16 +412,6 @@ class Route implements RouteInterface
     public function getConverters(): array
     {
         return $this->converters;
-    }
-
-    /**
-     * Get routing delimiter
-     *
-     * @return string
-     */
-    public static function getDelimiter(): string
-    {
-        return self::$delimiterPath;
     }
 
     /**
@@ -593,20 +607,6 @@ class Route implements RouteInterface
          * Update the route's paths
          */
         $this->paths = $routePaths;
-    }
-
-    /**
-     * Resets the internal route id generator.
-     *
-     * Intended for test isolation only. The router keys its route map by the
-     * route id, so resetting the sequence while a router still holds routes
-     * makes newly created routes overwrite existing entries.
-     *
-     * @return void
-     */
-    public static function reset(): void
-    {
-        self::$uniqueId = 0;
     }
 
     /**

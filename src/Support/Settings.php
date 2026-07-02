@@ -35,6 +35,12 @@ namespace Phalcon\Support;
 class Settings
 {
     /**
+     * PHP-level overrides. Keys stored here take priority over ini_get().
+     *
+     * @var array
+     */
+    protected static array $overrides = [];
+    /**
      * Hardcoded defaults - mirror of the C extension's compiled-in global
      * defaults. Used as the final fallback when ini_get() returns false
      * (i.e. the Phalcon C extension is not loaded).
@@ -45,6 +51,7 @@ class Settings
         'db.escape_identifiers'                 => true,
         'db.force_casting'                      => false,
         'form.strict_entity_property_check'     => false,
+        'orm.call_setters_on_hydration'         => false,
         'orm.case_insensitive_column_map'       => false,
         'orm.cast_last_insert_id_to_int'        => false,
         'orm.cast_on_hydrate'                   => false,
@@ -64,13 +71,6 @@ class Settings
         'orm.virtual_foreign_keys'              => true,
         'orm.dynamic_update'                    => true,
     ];
-
-    /**
-     * PHP-level overrides. Keys stored here take priority over ini_get().
-     *
-     * @var array
-     */
-    protected static array $overrides = [];
 
     /**
      * Returns the value of a known setting.
@@ -105,6 +105,17 @@ class Settings
     }
 
     /**
+     * Clears all PHP-level overrides, restoring get() to return ini_get()
+     * fallback values (as configured in php.ini or .htaccess).
+     *
+     * @return void
+     */
+    public static function reset(): void
+    {
+        self::$overrides = [];
+    }
+
+    /**
      * Overrides a setting at the PHP level.
      *
      * Does NOT call ini_set(), so the ini configuration is not modified and
@@ -123,6 +134,7 @@ class Settings
             case 'db.escape_identifiers':
             case 'db.force_casting':
             case 'form.strict_entity_property_check':
+            case 'orm.call_setters_on_hydration':
             case 'orm.case_insensitive_column_map':
             case 'orm.cast_last_insert_id_to_int':
             case 'orm.cast_on_hydrate':
@@ -147,16 +159,5 @@ class Settings
             default:
                 break;
         }
-    }
-
-    /**
-     * Clears all PHP-level overrides, restoring get() to return ini_get()
-     * fallback values (as configured in php.ini or .htaccess).
-     *
-     * @return void
-     */
-    public static function reset(): void
-    {
-        self::$overrides = [];
     }
 }

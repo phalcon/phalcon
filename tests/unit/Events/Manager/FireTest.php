@@ -77,17 +77,6 @@ final class FireTest extends AbstractUnitTestCase
     }
 
     /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
-    public function testEventsManagerFireNoEvents(): void
-    {
-        $manager = new Manager();
-        $actual  = $manager->fire('someEvent', new stdClass());
-        $this->assertNull($actual);
-    }
-
-    /**
      * Tests Phalcon\Events\Manager :: fire() - no colon, data is object,
      * delegates to dispatch() (L206-207)
      *
@@ -137,6 +126,17 @@ final class FireTest extends AbstractUnitTestCase
         $this->expectExceptionMessage('Invalid event type nocolon');
 
         $manager->fire('nocolon', new stdClass(), 'not-an-object');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2020-09-09
+     */
+    public function testEventsManagerFireNoEvents(): void
+    {
+        $manager = new Manager();
+        $actual  = $manager->fire('someEvent', new stdClass());
+        $this->assertNull($actual);
     }
 
     /**

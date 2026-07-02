@@ -31,6 +31,10 @@ use function is_string;
 abstract class AbstractValidator implements ValidatorInterface
 {
     /**
+     * @var array
+     */
+    protected array $options = [];
+    /**
      * Message template
      *
      * @var string|null
@@ -43,11 +47,6 @@ abstract class AbstractValidator implements ValidatorInterface
      * @var array
      */
     protected array $templates = [];
-
-    /**
-     * @var array
-     */
-    protected array $options = [];
 
     /**
      * Phalcon\Filter\Validation\Validator constructor

@@ -501,20 +501,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
     }
 
     /**
-     * Sets the default controller name
-     *
-     * @param string $taskName
-     *
-     * @return RouterInterface
-     */
-    public function setDefaultTask(string $taskName): static
-    {
-        $this->defaultTask = $taskName;
-
-        return $this;
-    }
-
-    /**
      * Sets an array of default paths. If a route is missing a path the router
      * will use the defined here. This method must not be used to set a 404
      * route
@@ -538,6 +524,20 @@ class Router extends AbstractInjectionAware implements RouterInterface
         $this->defaultTask   = $defaults["task"] ?? $this->defaultTask;
         $this->defaultAction = $defaults["action"] ?? $this->defaultAction;
         $this->defaultParams = $defaults["params"] ?? $this->defaultParams;
+
+        return $this;
+    }
+
+    /**
+     * Sets the default controller name
+     *
+     * @param string $taskName
+     *
+     * @return RouterInterface
+     */
+    public function setDefaultTask(string $taskName): static
+    {
+        $this->defaultTask = $taskName;
 
         return $this;
     }

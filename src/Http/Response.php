@@ -214,7 +214,7 @@ class Response extends Injectable implements
      */
     public function getReasonPhrase(): string | null
     {
-        $statusReasonPhrase = substr($this->headers->get('Status'), 4);
+        $statusReasonPhrase = substr((string) $this->headers->get('Status'), 4);
 
         return $statusReasonPhrase ?: null;
     }
@@ -230,7 +230,7 @@ class Response extends Injectable implements
      */
     public function getStatusCode(): int | null
     {
-        $statusCode = substr($this->headers->get('Status'), 0, 3);
+        $statusCode = substr((string) $this->headers->get('Status'), 0, 3);
 
         return $statusCode ? (int)$statusCode : null;
     }

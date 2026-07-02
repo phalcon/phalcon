@@ -9,86 +9,6 @@ use Phalcon\Tests\Unit\Events\Fake\EmptyEventObject;
 
 final class Psr14LayerTest extends AbstractUnitTestCase
 {
-    public function testDispatchWithStringName(): void
-    {
-        $result = false;
-        $manager = new Manager();
-        $manager->attach('test', function () use (&$result) {
-            $this->assertTrue(true, 'Event was not dispatched');
-            $result = true;
-        });
-
-        $manager->dispatch(new \stdClass(), 'test');
-        $this->assertTrue($result, 'Event was dispatched');
-    }
-
-    public function testDispatchWithObject(): void
-    {
-        $result = false;
-        $manager = new Manager();
-        $manager->attach(EmptyEventObject::class, function ($model) use (&$result) {
-            $this->assertTrue(true, 'Event was not dispatched');
-            $result = true;
-        });
-
-        $manager->dispatch(new EmptyEventObject());
-        $this->assertTrue($result, 'Event was dispatched');
-    }
-
-    public function testDispatchNamedEvent(): void
-    {
-        $result = false;
-        $manager = new Manager();
-        $manager->attach('test', function ($model) use (&$result) {
-            $this->assertTrue(true, 'Event was not dispatched');
-            $result = true;
-        });
-
-        $manager->dispatch(new EmptyEventObject(), 'test');
-        $this->assertTrue($result, 'Event was dispatched');
-    }
-
-
-    public function testOldStyleAttachAndNewStyleDispatch(): void
-    {
-        $manager = new Manager();
-        $counter = 0;
-
-        $manager->attach('group:test', new class ($counter) {
-            public function __construct(private &$c)
-            {
-            }
-            public function __invoke()
-            {
-                $this->c++;
-            }
-        });
-
-        $manager->fire('group:test', $this);
-        $manager->dispatch(new EmptyEventObject(), 'group:test');
-
-        $this->assertEquals(2, $counter, 'Event was not dispatched twice');
-    }
-
-    public function testCancelStopsPropagationToSubsequentListeners(): void
-    {
-        $manager = new Manager();
-        $callOrder = [];
-
-        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
-            $callOrder[] = 'first';
-            $event->cancel();
-        });
-
-        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
-            $callOrder[] = 'second';
-        });
-
-        $manager->dispatch(new CancellableEventObject(), 'cancellable');
-
-        $this->assertSame(['first'], $callOrder, 'Second listener should not have been called after cancel()');
-    }
-
     public function testAllListenersCalledWithoutCancel(): void
     {
         $manager = new Manager();
@@ -126,36 +46,36 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $this->assertSame(['first'], $callOrder, 'Second listener should not have been called after cancel()');
     }
 
-    public function testIsPropagationStoppedReflectsCancelState(): void
+    public function testCancelStopsPropagationToSubsequentListeners(): void
     {
-        $event = new CancellableEventObject();
-
-        $this->assertFalse($event->isPropagationStopped(), 'New event should not be stopped');
-
-        $event->cancel();
-
-        $this->assertTrue($event->isPropagationStopped(), 'Cancelled event should be stopped');
-    }
-
-    /**
-     * Tests Phalcon\Events\Manager :: dispatch() - array name (L258)
-     *
-     * When dispatch() is called with an array $name, it joins the parts
-     * with ':' to form the event type string.
-     *
-     * @return void
-     */
-    public function testDispatchWithArrayName(): void
-    {
-        $called  = false;
         $manager = new Manager();
-        $manager->attach('group:action', function () use (&$called) {
-            $called = true;
+        $callOrder = [];
+
+        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
+            $callOrder[] = 'first';
+            $event->cancel();
         });
 
-        $manager->dispatch(new EmptyEventObject(), ['group', 'action']);
+        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
+            $callOrder[] = 'second';
+        });
 
-        $this->assertTrue($called);
+        $manager->dispatch(new CancellableEventObject(), 'cancellable');
+
+        $this->assertSame(['first'], $callOrder, 'Second listener should not have been called after cancel()');
+    }
+
+    public function testDispatchNamedEvent(): void
+    {
+        $result = false;
+        $manager = new Manager();
+        $manager->attach('test', function ($model) use (&$result) {
+            $this->assertTrue(true, 'Event was not dispatched');
+            $result = true;
+        });
+
+        $manager->dispatch(new EmptyEventObject(), 'test');
+        $this->assertTrue($result, 'Event was dispatched');
     }
 
     /**
@@ -180,6 +100,63 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $this->assertNull($result);
     }
 
+    /**
+     * Tests Phalcon\Events\Manager :: dispatch() - array name (L258)
+     *
+     * When dispatch() is called with an array $name, it joins the parts
+     * with ':' to form the event type string.
+     *
+     * @return void
+     */
+    public function testDispatchWithArrayName(): void
+    {
+        $called  = false;
+        $manager = new Manager();
+        $manager->attach('group:action', function () use (&$called) {
+            $called = true;
+        });
+
+        $manager->dispatch(new EmptyEventObject(), ['group', 'action']);
+
+        $this->assertTrue($called);
+    }
+
+    public function testDispatchWithObject(): void
+    {
+        $result = false;
+        $manager = new Manager();
+        $manager->attach(EmptyEventObject::class, function ($model) use (&$result) {
+            $this->assertTrue(true, 'Event was not dispatched');
+            $result = true;
+        });
+
+        $manager->dispatch(new EmptyEventObject());
+        $this->assertTrue($result, 'Event was dispatched');
+    }
+    public function testDispatchWithStringName(): void
+    {
+        $result = false;
+        $manager = new Manager();
+        $manager->attach('test', function () use (&$result) {
+            $this->assertTrue(true, 'Event was not dispatched');
+            $result = true;
+        });
+
+        $manager->dispatch(new \stdClass(), 'test');
+        $this->assertTrue($result, 'Event was dispatched');
+    }
+
+    public function testIsPropagationStoppedReflectsCancelState(): void
+    {
+        $event = new CancellableEventObject();
+
+        $this->assertFalse($event->isPropagationStopped(), 'New event should not be stopped');
+
+        $event->cancel();
+
+        $this->assertTrue($event->isPropagationStopped(), 'Cancelled event should be stopped');
+    }
+
     public function testNonCancellableEventIsNotAffectedByStoppableCheck(): void
     {
         $manager = new Manager();
@@ -196,5 +173,27 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $manager->dispatch(new EmptyEventObject(), 'noncancellable');
 
         $this->assertSame(['first', 'second'], $callOrder, 'Both listeners should run for non-cancellable events');
+    }
+
+
+    public function testOldStyleAttachAndNewStyleDispatch(): void
+    {
+        $manager = new Manager();
+        $counter = 0;
+
+        $manager->attach('group:test', new class ($counter) {
+            public function __construct(private &$c)
+            {
+            }
+            public function __invoke()
+            {
+                $this->c++;
+            }
+        });
+
+        $manager->fire('group:test', $this);
+        $manager->dispatch(new EmptyEventObject(), 'group:test');
+
+        $this->assertEquals(2, $counter, 'Event was not dispatched twice');
     }
 }

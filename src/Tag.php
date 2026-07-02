@@ -1117,18 +1117,6 @@ class Tag
     }
 
     /**
-     * Sets the dependency injector container.
-     *
-     * @param DiInterface $container
-     *
-     * @return void
-     */
-    public static function setDI(DiInterface $container): void
-    {
-        self::$container = $container;
-    }
-
-    /**
      * Assigns default values to generated tags by helpers
      *
      * @param string $id
@@ -1166,6 +1154,18 @@ class Tag
         } else {
             self::$displayValues = $values;
         }
+    }
+
+    /**
+     * Sets the dependency injector container.
+     *
+     * @param DiInterface $container
+     *
+     * @return void
+     */
+    public static function setDI(DiInterface $container): void
+    {
+        self::$container = $container;
     }
 
     /**

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tag;
 
+use Closure;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Tag as BaseTag;
 
@@ -311,9 +312,12 @@ abstract class Select
                 }
             } else {
                 /**
-                 * Check if using is a closure
+                 * Render through the developer-supplied closure.
+                 * Restricting this to Closure (rather than any object)
+                 * keeps the invoked callable out of reach of
+                 * user-controlled data: #17210
                  */
-                if (is_object($using)) {
+                if ($using instanceof Closure) {
                     if (null === $params) {
                         $params = [];
                     }

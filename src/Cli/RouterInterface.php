@@ -69,16 +69,16 @@ interface RouterInterface
      * Returns processed extra params
      *
      * @return array
-     * @deprecated Use getParameters() instead
      */
-    public function getParams(): array;
+    public function getParameters(): array;
 
     /**
      * Returns processed extra params
      *
      * @return array
+     * @deprecated Use getParameters() instead
      */
-    public function getParameters(): array;
+    public function getParams(): array;
 
     /**
      * Returns a route object by its id
@@ -146,15 +146,6 @@ interface RouterInterface
     public function setDefaultModule(string $moduleName): RouterInterface;
 
     /**
-     * Sets the default task name
-     *
-     * @param string $taskName
-     *
-     * @return RouterInterface
-     */
-    public function setDefaultTask(string $taskName): RouterInterface;
-
-    /**
      * Sets an array of default paths
      *
      * @param TDefaults $defaults
@@ -162,6 +153,15 @@ interface RouterInterface
      * @return RouterInterface
      */
     public function setDefaults(array $defaults): RouterInterface;
+
+    /**
+     * Sets the default task name
+     *
+     * @param string $taskName
+     *
+     * @return RouterInterface
+     */
+    public function setDefaultTask(string $taskName): RouterInterface;
 
     /**
      * Check if the router matches any of the defined routes

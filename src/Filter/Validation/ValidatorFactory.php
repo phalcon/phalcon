@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation;
 
 use Exception as BaseException;
+use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Between;
@@ -23,7 +24,6 @@ use Phalcon\Filter\Validation\Validator\CreditCard;
 use Phalcon\Filter\Validation\Validator\Date;
 use Phalcon\Filter\Validation\Validator\Digit;
 use Phalcon\Filter\Validation\Validator\Email;
-use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Exception as ValidatorException;
 use Phalcon\Filter\Validation\Validator\ExclusionIn;
 use Phalcon\Filter\Validation\Validator\File;

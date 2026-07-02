@@ -16,7 +16,9 @@ namespace Phalcon\Support\Debug;
 use InvalidArgumentException;
 use JsonException;
 use Phalcon\Container\Container;
+use Phalcon\Contracts\Support\Debug\TemplateAware;
 use Phalcon\Di\DiInterface;
+use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Traits\Helper\Str\InterpolateTrait;
 use Reflection;
@@ -74,9 +76,10 @@ use const PHP_EOL;
  * @property array $methods
  * @property array $styles
  */
-class Dump
+class Dump implements TemplateAware
 {
     use InterpolateTrait;
+    use TemplateAwareTrait;
 
     /**
      * @var bool
@@ -234,7 +237,7 @@ class Dump
      */
     public function variable(mixed $variable, string | null $name = null): string
     {
-        $message = '<pre style="%style%">%output%</pre>';
+        $message = $this->getTemplate('pre');
         $context = [
             'style'  => $this->getStyle('pre'),
             'output' => $this->output($variable, $name),
@@ -271,6 +274,37 @@ class Dump
     }
 
     /**
+     * Returns the embedded default template for the given name.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function defaultTemplate(string $name): string
+    {
+        return match ($name) {
+            'pre'                     => '<pre style="%style%">%output%</pre>',
+            'bold'                    => '<b style="%style%">%text%</b>',
+            'varParens'               => '(<span style="%style%">%var%</span>)',
+            'lengthValue'             => '(<span style="%style%">%length%</span>) '
+                . '"<span style="%style%">%var%</span>"',
+            'arrayHeader'             => '<b style="%style%">Array</b> '
+                . '(<span style="%style%">%count%</span>) (',
+            'arrayKey'                => '[<span style="%style%">%key%</span>] => ',
+            'objectHeader'            => '<b style="%style%">Object</b> %class%',
+            'objectExtends'           => ' <b style="%style%">extends</b> %parent%',
+            'objectProperty'          => '-><span style="%style%">%key%</span> '
+                . '(<span style="%style%">%type%</span>) = ',
+            'objectMethods'           => "%class% <b style=\"%style%\">methods</b>: "
+                . "(<span style=\"%style%\">%count%</span>) (\n",
+            'objectMethod'            => "-><span style=\"%style%\">%method%</span>();\n",
+            'objectMethodConstructor' => "-><span style=\"%style%\">%method%</span>(); "
+                . "[<b style=\"%style%\">constructor</b>]\n",
+            default                   => '',
+        };
+    }
+
+    /**
      * Get style for type
      *
      * @param string $type
@@ -301,20 +335,15 @@ class Dump
         string | null $name = null,
         int $tab = 1
     ): string {
-        $space       = '  ';
-        $output      = '';
-        $varTemplate = "(<span style=\"%style%\">%var%</span>)";
+        $space  = '  ';
+        $output = '';
 
         if (!empty($name)) {
             $output .= $name . ' ';
         }
 
         if (is_array($variable)) {
-            $message = $this->getOutputBold('Array')
-                . ' '
-                . $this->getOutputParenthesis('count')
-                . ' ('
-                . PHP_EOL;
+            $message = $this->getTemplate('arrayHeader') . PHP_EOL;
             $context = [
                 'style' => $this->getStyle('arr'),
                 'count' => count($variable),
@@ -324,7 +353,7 @@ class Dump
             foreach ($variable as $key => $value) {
                 $output .= str_repeat($space, $tab);
 
-                $message = "[<span style=\"%style%\">%key%</span>] => ";
+                $message = $this->getTemplate('arrayKey');
                 $context = [
                     'style' => $this->getStyle('arr'),
                     'key'   => $key,
@@ -347,7 +376,7 @@ class Dump
         }
 
         if (is_object($variable)) {
-            $message = $this->getOutputBold('Object') . ' %class%';
+            $message = $this->getTemplate('objectHeader');
             $context = [
                 'style' => $this->getStyle('obj'),
                 'class' => get_class($variable),
@@ -355,7 +384,7 @@ class Dump
             $output  .= $this->toInterpolate($message, $context);
 
             if (false !== get_parent_class($variable)) {
-                $message = ' ' . $this->getOutputBold('extends') . ' {parent}';
+                $message = $this->getTemplate('objectExtends');
                 $context = [
                     'style'  => $this->getStyle('obj'),
                     'parent' => get_parent_class($variable),
@@ -372,8 +401,7 @@ class Dump
                 // Debug only public properties
                 $vars = get_object_vars($variable);
                 foreach ($vars as $key => $value) {
-                    $message = "-><span style=\"%style%\">%key%</span> "
-                        . "(<span style=\"%style%\">%type%</span>) = ";
+                    $message = $this->getTemplate('objectProperty');
                     $context = [
                         'style' => $this->getStyle('obj'),
                         'key'   => $key,
@@ -402,8 +430,7 @@ class Dump
                         Reflection::getModifierNames($property->getModifiers())
                     );
 
-                    $message = "-><span style=\"%style%\">%key%</span> "
-                        . "(<span style=\"%style%\">%type%</span>) = ";
+                    $message = $this->getTemplate('objectProperty');
                     $context = [
                         'style' => $this->getStyle('obj'),
                         'key'   => $key,
@@ -418,8 +445,7 @@ class Dump
             }
 
             $attr    = get_class_methods($variable);
-            $message = "%class% <b style=\"%style%\">methods</b>: "
-                . "(<span style=\"%style%\">%count%</span>) (\n";
+            $message = $this->getTemplate('objectMethods');
             $context = [
                 'style' => $this->getStyle('obj'),
                 'class' => get_class($variable),
@@ -436,10 +462,9 @@ class Dump
                 foreach ($attr as $value) {
                     $this->methods[] = get_class($variable);
 
-                    $message = "-><span style=\"%style%\">:method</span>();\n";
+                    $message = $this->getTemplate('objectMethod');
                     if ('__construct' === $value) {
-                        $message = "-><span style=\"%style%\">:method</span>(); "
-                            . "[<b style=\"%style%\">constructor</b>]\n";
+                        $message = $this->getTemplate('objectMethodConstructor');
                     }
                     $context = [
                         'style'  => $this->getStyle('obj'),
@@ -457,7 +482,7 @@ class Dump
         }
 
         if (is_int($variable)) {
-            $message = "<b style=\"%style%\">Integer</b> " . $varTemplate;
+            $message = $this->getOutputBold('Integer') . ' ' . $this->getTemplate('varParens');
             $context = [
                 'style' => $this->getStyle('int'),
                 'var'   => $variable,
@@ -467,7 +492,7 @@ class Dump
         }
 
         if (is_float($variable)) {
-            $message = "<b style=\"%style%\">Float</b> " . $varTemplate;
+            $message = $this->getOutputBold('Float') . ' ' . $this->getTemplate('varParens');
             $context = [
                 'style' => $this->getStyle('float'),
                 'var'   => $variable,
@@ -477,9 +502,7 @@ class Dump
         }
 
         if (is_numeric($variable)) {
-            $message = "<b style=\"%style%\">Numeric String</b> "
-                . "(<span style=\"%style%\">%length%</span>) "
-                . "\"<span style=\"%style%\">%var%</span>\"";
+            $message = $this->getOutputBold('Numeric String') . ' ' . $this->getTemplate('lengthValue');
             $context = [
                 'style'  => $this->getStyle('num'),
                 'length' => mb_strlen((string)$variable),
@@ -490,9 +513,7 @@ class Dump
         }
 
         if (is_string($variable)) {
-            $message = "<b style=\"%style%\">String</b> "
-                . "(<span style=\"%style%\">%length%</span>) "
-                . "\"<span style=\"%style%\">%var%</span>\"";
+            $message = $this->getOutputBold('String') . ' ' . $this->getTemplate('lengthValue');
             $context = [
                 'style'  => $this->getStyle('str'),
                 'length' => mb_strlen($variable),
@@ -503,7 +524,7 @@ class Dump
         }
 
         if (is_bool($variable)) {
-            $message = "<b style=\"%style%\">Boolean</b> " . $varTemplate;
+            $message = $this->getOutputBold('Boolean') . ' ' . $this->getTemplate('varParens');
             $context = [
                 'style' => $this->getStyle('bool'),
                 'var'   => ($variable) ? 'TRUE' : 'FALSE',
@@ -513,7 +534,7 @@ class Dump
         }
 
         if (null === $variable) {
-            $message = "<b style=\"%style%\">NULL</b>";
+            $message = $this->getOutputBold('NULL');
             $context = [
                 'style' => $this->getStyle('null'),
             ];
@@ -521,7 +542,7 @@ class Dump
             return $output . $this->toInterpolate($message, $context);
         }
 
-        $message = "(<span style=\"%style%\">%var%</span>)";
+        $message = $this->getTemplate('varParens');
         $context = [
             'style' => $this->getStyle('other'),
             'var'   => $variable,
@@ -537,16 +558,9 @@ class Dump
      */
     private function getOutputBold(string $text): string
     {
-        return "<b style=\"%style%\">" . $text . "</b>";
-    }
-
-    /**
-     * @param string $varName
-     *
-     * @return string
-     */
-    private function getOutputParenthesis(string $varName): string
-    {
-        return "(<span style=\"%style%\">%" . $varName . "%</span>)";
+        return $this->toInterpolate(
+            $this->getTemplate('bold'),
+            ['text' => $text]
+        );
     }
 }

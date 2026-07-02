@@ -18,6 +18,7 @@ namespace Phalcon\Auth\Guard\Config;
 
 use Phalcon\Auth\Exception;
 use Phalcon\Auth\Exceptions\ConfigRequiresNonEmptyValue;
+use Phalcon\Auth\Exceptions\SessionNamesMustDiffer;
 
 /**
  * Configuration for the Session guard. Holds the names under which the
@@ -57,9 +58,7 @@ class SessionGuardConfig extends AbstractGuardConfig
         $this->rememberTtl  = $rememberTtl ?? self::DEFAULT_REMEMBER_TTL;
 
         if ($this->name === $this->rememberName) {
-            throw new Exception(
-                "Session guard 'name' and 'rememberName' must differ"
-            );
+            throw new SessionNamesMustDiffer();
         }
     }
 
@@ -88,12 +87,6 @@ class SessionGuardConfig extends AbstractGuardConfig
      */
     private function validateNonEmpty(string $param, ?string $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
-        if ($value === '') {
-            throw new ConfigRequiresNonEmptyValue('Session guard', $param);
-        }
+        ConfigRequiresNonEmptyValue::assert($value, 'Session guard', $param);
     }
 }

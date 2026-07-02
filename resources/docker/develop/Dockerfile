@@ -70,6 +70,7 @@ docker-php-ext-install \
     gettext \
     gmp \
     intl \
+    pcntl \
     pdo_mysql \
     pdo_pgsql \
     zip

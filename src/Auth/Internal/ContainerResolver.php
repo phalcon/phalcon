@@ -52,6 +52,58 @@ final class ContainerResolver
     }
 
     /**
+     * Resolves the first candidate service name that the container can
+     * provide, as a shared instance. Used for framework services (request,
+     * cookies, session) whose container key may vary between application
+     * setups.
+     *
+     * @param list<string> $candidates
+     *
+     * @throws ContainerException
+     */
+    public static function requireService(mixed $container, array $candidates, string $context): object
+    {
+        self::ensureContainer($container);
+
+        /** @var Collection|DiInterface $container */
+        foreach ($candidates as $name) {
+            if ($container->has($name)) {
+                return self::resolveShared($container, $name);
+            }
+        }
+
+        throw new ContainerException(
+            'Auth ' . $context . ' requires service. None of the following are '
+            . 'bound in the container: ' . implode(', ', $candidates)
+        );
+    }
+
+    /**
+     * Convenience composition of serviceCandidates() + requireService():
+     * resolves the first bound candidate for a framework service whose
+     * container key may vary, using the options override or the
+     * [interface FQN, conventional short name] fallback.
+     *
+     * @param array<string, mixed> $options
+     *
+     * @throws ContainerException
+     */
+    public static function resolveCandidate(
+        mixed $container,
+        array $options,
+        string $key,
+        string $fqn,
+        string $shortName,
+        string $context
+    ): object {
+        return self::requireService(
+            $container,
+            self::serviceCandidates($options, $key, $fqn, $shortName),
+            $context
+        );
+    }
+
+    /**
      * Resolves a fresh instance: new() on the Container (bypasses the
      * instance cache); get() on the legacy Di (fresh for unregistered or
      * non-shared services). On Di, an unregistered but existing class is
@@ -93,33 +145,6 @@ final class ContainerResolver
                 $e
             );
         }
-    }
-
-    /**
-     * Resolves the first candidate service name that the container can
-     * provide, as a shared instance. Used for framework services (request,
-     * cookies, session) whose container key may vary between application
-     * setups.
-     *
-     * @param list<string> $candidates
-     *
-     * @throws ContainerException
-     */
-    public static function requireService(mixed $container, array $candidates, string $context): object
-    {
-        self::ensureContainer($container);
-
-        /** @var Collection|DiInterface $container */
-        foreach ($candidates as $name) {
-            if ($container->has($name)) {
-                return self::resolveShared($container, $name);
-            }
-        }
-
-        throw new ContainerException(
-            'Auth ' . $context . ' requires service. None of the following are '
-            . 'bound in the container: ' . implode(', ', $candidates)
-        );
     }
 
     /**

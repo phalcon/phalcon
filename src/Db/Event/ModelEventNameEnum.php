@@ -26,38 +26,6 @@ enum ModelEventNameEnum: string
     case VALIDATION = 'validation';
 
     /**
-     * Get the event class associated with this event type
-     *
-     * @return string The fully qualified class name
-     */
-    public static function getEventClass($eventName): string
-    {
-        return match ($eventName) {
-            self::AFTER_CREATE->value => AfterCreateEvent::class,
-            self::AFTER_DELETE->value => AfterDeleteEvent::class,
-            self::AFTER_FETCH->value => AfterFetchEvent::class,
-            self::AFTER_SAVE->value => AfterSaveEvent::class,
-            self::AFTER_UPDATE->value => AfterUpdateEvent::class,
-            self::AFTER_VALIDATION->value => AfterValidationEvent::class,
-            self::AFTER_VALIDATION_ON_CREATE->value => AfterValidationOnCreateEvent::class,
-            self::AFTER_VALIDATION_ON_UPDATE->value => AfterValidationOnUpdateEvent::class,
-            self::BEFORE_CREATE->value => BeforeCreateEvent::class,
-            self::BEFORE_DELETE->value => BeforeDeleteEvent::class,
-            self::BEFORE_SAVE->value => BeforeSaveEvent::class,
-            self::BEFORE_UPDATE->value => BeforeUpdateEvent::class,
-            self::BEFORE_VALIDATION->value => BeforeValidationEvent::class,
-            self::BEFORE_VALIDATION_ON_CREATE->value => BeforeValidationOnCreateEvent::class,
-            self::BEFORE_VALIDATION_ON_UPDATE->value => BeforeValidationOnUpdateEvent::class,
-            self::NOT_DELETED->value => NotDeletedEvent::class,
-            self::NOT_SAVED->value => NotSavedEvent::class,
-            self::ON_VALIDATION_FAILS->value => OnValidationFailsEvent::class,
-            self::PREPARE_SAVE->value => PrepareSaveEvent::class,
-            self::VALIDATION->value => ValidationEvent::class,
-            default => throw new UnknownEventTypeException($eventName),
-        };
-    }
-
-    /**
      * Get an enum case from event class name
      *
      * @param string $eventClassName
@@ -91,6 +59,38 @@ enum ModelEventNameEnum: string
             'PrepareSaveEvent' => self::PREPARE_SAVE,
             'ValidationEvent' => self::VALIDATION,
             default => throw new UnknownEventTypeException($shortClassName),
+        };
+    }
+
+    /**
+     * Get the event class associated with this event type
+     *
+     * @return string The fully qualified class name
+     */
+    public static function getEventClass($eventName): string
+    {
+        return match ($eventName) {
+            self::AFTER_CREATE->value => AfterCreateEvent::class,
+            self::AFTER_DELETE->value => AfterDeleteEvent::class,
+            self::AFTER_FETCH->value => AfterFetchEvent::class,
+            self::AFTER_SAVE->value => AfterSaveEvent::class,
+            self::AFTER_UPDATE->value => AfterUpdateEvent::class,
+            self::AFTER_VALIDATION->value => AfterValidationEvent::class,
+            self::AFTER_VALIDATION_ON_CREATE->value => AfterValidationOnCreateEvent::class,
+            self::AFTER_VALIDATION_ON_UPDATE->value => AfterValidationOnUpdateEvent::class,
+            self::BEFORE_CREATE->value => BeforeCreateEvent::class,
+            self::BEFORE_DELETE->value => BeforeDeleteEvent::class,
+            self::BEFORE_SAVE->value => BeforeSaveEvent::class,
+            self::BEFORE_UPDATE->value => BeforeUpdateEvent::class,
+            self::BEFORE_VALIDATION->value => BeforeValidationEvent::class,
+            self::BEFORE_VALIDATION_ON_CREATE->value => BeforeValidationOnCreateEvent::class,
+            self::BEFORE_VALIDATION_ON_UPDATE->value => BeforeValidationOnUpdateEvent::class,
+            self::NOT_DELETED->value => NotDeletedEvent::class,
+            self::NOT_SAVED->value => NotSavedEvent::class,
+            self::ON_VALIDATION_FAILS->value => OnValidationFailsEvent::class,
+            self::PREPARE_SAVE->value => PrepareSaveEvent::class,
+            self::VALIDATION->value => ValidationEvent::class,
+            default => throw new UnknownEventTypeException($eventName),
         };
     }
 

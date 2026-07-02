@@ -17,8 +17,8 @@ use ArrayAccess;
 use Exception as BaseException;
 use Phalcon\Translate\Exceptions\ImmutableObject;
 use Phalcon\Translate\Exceptions\KeyNotFound;
-use Phalcon\Translate\InterpolatorFactory;
 use Phalcon\Translate\Interpolator\InterpolatorInterface;
+use Phalcon\Translate\InterpolatorFactory;
 
 /**
  * @psalm-type TOptions array{

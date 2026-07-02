@@ -72,6 +72,88 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     protected array $params = [];
 
     /**
+     * Builds a Phalcon\Mvc\Model\Criteria based on an input array like $_POST
+     *
+     * @param DiInterface $container
+     * @param string                 $modelName
+     * @param array                  $data
+     * @param string                 $operator
+     *
+     * @return CriteriaInterface
+     */
+    public static function fromInput(
+        DiInterface $container,
+        string $modelName,
+        array $data,
+        string $operator = "AND"
+    ): CriteriaInterface {
+        $conditions = [];
+        $bind       = [];
+
+        if (count($data)) {
+            if ($container instanceof DiInterface) {
+                $metaData = $container->getShared("modelsMetadata");
+            } else {
+                $metaData = $container->get("modelsMetadata");
+            }
+            $model     = new $modelName(null, $container);
+            $dataTypes = $metaData->getDataTypes($model);
+            $columnMap = $metaData->getReverseColumnMap($model);
+
+            /**
+             * We look for attributes in the array passed as data
+             */
+            foreach ($data as $field => $value) {
+                $attribute = $field;
+                if (is_array($columnMap) && count($columnMap)) {
+                    $attribute = $columnMap[$field];
+                }
+
+                if (
+                    isset($dataTypes[$attribute]) &&
+                    $value !== null &&
+                    $value !== ""
+                ) {
+                    $type = $dataTypes[$attribute];
+                    if ($type == Column::TYPE_VARCHAR) {
+                        /**
+                         * For varchar types we use LIKE operator
+                         */
+                        $conditions[] = "[" . $field . "] LIKE :" . $field . ":";
+                        $bind[$field] = "%" . $value . "%";
+
+                        continue;
+                    }
+
+                    /**
+                     * For the rest of data types we use a plain = operator
+                     */
+                    $conditions[] = "[" . $field . "] = :" . $field . ":";
+                    $bind[$field] = $value;
+                }
+            }
+        }
+
+        /**
+         * Create an object instance and pass the parameters to it
+         */
+        $criteria = new self();
+        $criteria->setDI($container);
+
+        if (count($conditions)) {
+            $criteria->where(
+                implode(" " . $operator . " ", $conditions)
+            );
+
+            $criteria->bind($bind);
+        }
+
+        $criteria->setModelName($modelName);
+
+        return $criteria;
+    }
+
+    /**
      * Appends a condition to the current conditions using an AND operator
      *
      * @param string     $conditions
@@ -338,88 +420,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     }
 
     /**
-     * Builds a Phalcon\Mvc\Model\Criteria based on an input array like $_POST
-     *
-     * @param DiInterface $container
-     * @param string                 $modelName
-     * @param array                  $data
-     * @param string                 $operator
-     *
-     * @return CriteriaInterface
-     */
-    public static function fromInput(
-        DiInterface $container,
-        string $modelName,
-        array $data,
-        string $operator = "AND"
-    ): CriteriaInterface {
-        $conditions = [];
-        $bind       = [];
-
-        if (count($data)) {
-            if ($container instanceof DiInterface) {
-                $metaData = $container->getShared("modelsMetadata");
-            } else {
-                $metaData = $container->get("modelsMetadata");
-            }
-            $model     = new $modelName(null, $container);
-            $dataTypes = $metaData->getDataTypes($model);
-            $columnMap = $metaData->getReverseColumnMap($model);
-
-            /**
-             * We look for attributes in the array passed as data
-             */
-            foreach ($data as $field => $value) {
-                $attribute = $field;
-                if (is_array($columnMap) && count($columnMap)) {
-                    $attribute = $columnMap[$field];
-                }
-
-                if (
-                    isset($dataTypes[$attribute]) &&
-                    $value !== null &&
-                    $value !== ""
-                ) {
-                    $type = $dataTypes[$attribute];
-                    if ($type == Column::TYPE_VARCHAR) {
-                        /**
-                         * For varchar types we use LIKE operator
-                         */
-                        $conditions[] = "[" . $field . "] LIKE :" . $field . ":";
-                        $bind[$field] = "%" . $value . "%";
-
-                        continue;
-                    }
-
-                    /**
-                     * For the rest of data types we use a plain = operator
-                     */
-                    $conditions[] = "[" . $field . "] = :" . $field . ":";
-                    $bind[$field] = $value;
-                }
-            }
-        }
-
-        /**
-         * Create an object instance and pass the parameters to it
-         */
-        $criteria = new self();
-        $criteria->setDI($container);
-
-        if (count($conditions)) {
-            $criteria->where(
-                implode(" " . $operator . " ", $conditions)
-            );
-
-            $criteria->bind($bind);
-        }
-
-        $criteria->setModelName($modelName);
-
-        return $criteria;
-    }
-
-    /**
      * Returns the columns to be queried
      *
      * @return string|array|null
@@ -550,6 +550,42 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     }
 
     /**
+     * Adds an INNER join to the query
+     *
+     *```php
+     * <?php
+     *
+     * $criteria->innerJoin(
+     *     Invoices::class
+     * );
+     *
+     * $criteria->innerJoin(
+     *     Invoices::class,
+     *     "inv_cst_id = Customers.cst_id"
+     * );
+     *
+     * $criteria->innerJoin(
+     *     Invoices::class,
+     *     "i.inv_cst_id = Customers.cst_id",
+     *     "i"
+     * );
+     *```
+     *
+     * @param string     $model
+     * @param mixed|null $conditions
+     * @param mixed|null $alias
+     *
+     * @return CriteriaInterface
+     */
+    public function innerJoin(
+        string $model,
+        mixed $conditions = null,
+        mixed $alias = null
+    ): CriteriaInterface {
+        return $this->addJoinClause($model, $conditions, $alias, "INNER");
+    }
+
+    /**
      * Appends an IN condition to the current conditions
      *
      * ```php
@@ -600,42 +636,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $this->hiddenParamNumber = $hiddenParam;
 
         return $this;
-    }
-
-    /**
-     * Adds an INNER join to the query
-     *
-     *```php
-     * <?php
-     *
-     * $criteria->innerJoin(
-     *     Invoices::class
-     * );
-     *
-     * $criteria->innerJoin(
-     *     Invoices::class,
-     *     "inv_cst_id = Customers.cst_id"
-     * );
-     *
-     * $criteria->innerJoin(
-     *     Invoices::class,
-     *     "i.inv_cst_id = Customers.cst_id",
-     *     "i"
-     * );
-     *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
-     */
-    public function innerJoin(
-        string $model,
-        mixed $conditions = null,
-        mixed $alias = null
-    ): CriteriaInterface {
-        return $this->addJoinClause($model, $conditions, $alias, "INNER");
     }
 
     /**
@@ -834,6 +834,20 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     }
 
     /**
+     * Adds the order-by clause to the criteria
+     *
+     * @param string $orderColumns
+     *
+     * @return CriteriaInterface
+     */
+    public function orderBy(string $orderColumns): CriteriaInterface
+    {
+        $this->params["order"] = $orderColumns;
+
+        return $this;
+    }
+
+    /**
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string     $conditions
@@ -852,20 +866,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         }
 
         return $this->where($conditions, $bindParams, $bindTypes);
-    }
-
-    /**
-     * Adds the order-by clause to the criteria
-     *
-     * @param string $orderColumns
-     *
-     * @return CriteriaInterface
-     */
-    public function orderBy(string $orderColumns): CriteriaInterface
-    {
-        $this->params["order"] = $orderColumns;
-
-        return $this;
     }
 
     /**

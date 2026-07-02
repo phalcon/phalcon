@@ -47,16 +47,6 @@ interface EvolvableLinkInterface extends LinkInterface
     public function withHref(string $href): EvolvableLinkInterface;
 
     /**
-     * Returns an instance with the specified relationship included.
-     *
-     * If the specified rel is already present, this method MUST return
-     * normally without errors, but without adding the rel a second time.
-     *
-     * @param string $rel The relationship value to add.
-     */
-    public function withRel(string $rel): EvolvableLinkInterface;
-
-    /**
      * Returns an instance with the specified attribute excluded.
      *
      * If the specified attribute is not present, this method MUST return
@@ -75,4 +65,14 @@ interface EvolvableLinkInterface extends LinkInterface
      * @param string $rel The relationship value to exclude.
      */
     public function withoutRel(string $rel): EvolvableLinkInterface;
+
+    /**
+     * Returns an instance with the specified relationship included.
+     *
+     * If the specified rel is already present, this method MUST return
+     * normally without errors, but without adding the rel a second time.
+     *
+     * @param string $rel The relationship value to add.
+     */
+    public function withRel(string $rel): EvolvableLinkInterface;
 }

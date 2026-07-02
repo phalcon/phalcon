@@ -409,6 +409,10 @@ abstract class AbstractElement implements ElementInterface
             unset($attributes["value"]);
         }
 
+        if (null !== $value) {
+            $value = (string)$value;
+        }
+
         $merged = array_merge($this->attributes, $attributes);
 
         return (string)$tagFactory->{$method}($this->name, $value, $merged);

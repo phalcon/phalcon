@@ -59,21 +59,6 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
     }
 
     /**
-     * Returns an instance with the specified relationship included.
-     *
-     * If the specified rel is already present, this method MUST return
-     * normally without errors, but without adding the rel a second time.
-     *
-     * @param string $rel The relationship value to add.
-     *
-     * @return $this
-     */
-    public function withRel(string $rel): static
-    {
-        return $this->doWithRel($rel);
-    }
-
-    /**
      * Returns an instance with the specified attribute excluded.
      *
      * If the specified attribute is not present, this method MUST return
@@ -101,5 +86,20 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
     public function withoutRel(string $rel): static
     {
         return $this->doWithoutRel($rel);
+    }
+
+    /**
+     * Returns an instance with the specified relationship included.
+     *
+     * If the specified rel is already present, this method MUST return
+     * normally without errors, but without adding the rel a second time.
+     *
+     * @param string $rel The relationship value to add.
+     *
+     * @return $this
+     */
+    public function withRel(string $rel): static
+    {
+        return $this->doWithRel($rel);
     }
 }

@@ -48,14 +48,12 @@ class Token extends AbstractGuard
     ): static {
         return new static(
             $adapter,
-            ContainerResolver::requireService(
+            ContainerResolver::resolveCandidate(
                 $container,
-                ContainerResolver::serviceCandidates(
-                    $options,
-                    'request',
-                    RequestInterface::class,
-                    'request'
-                ),
+                $options,
+                'request',
+                RequestInterface::class,
+                'request',
                 'Token guard'
             ),
             new TokenGuardConfig(

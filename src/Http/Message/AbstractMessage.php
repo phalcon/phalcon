@@ -242,28 +242,6 @@ abstract class AbstractMessage extends AbstractCommon implements
     }
 
     /**
-     * Return an instance with the specified HTTP protocol version.
-     *
-     * The version string MUST contain only the HTTP version number (e.g.,
-     * '1.1', '1.0').
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return an instance that has the
-     * new protocol version.
-     *
-     * @param string $version
-     *
-     * @return MessageInterface
-     */
-    public function withProtocolVersion(string $version): MessageInterface
-    {
-        return $this->cloneInstance(
-            $this->processProtocol($version),
-            "protocolVersion"
-        );
-    }
-
-    /**
      * Return an instance without the specified header.
      *
      * Header resolution MUST be done without case-sensitivity.
@@ -283,6 +261,28 @@ abstract class AbstractMessage extends AbstractCommon implements
         $headers->remove($name);
 
         return $this->cloneInstance($headers, "headers");
+    }
+
+    /**
+     * Return an instance with the specified HTTP protocol version.
+     *
+     * The version string MUST contain only the HTTP version number (e.g.,
+     * '1.1', '1.0').
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that has the
+     * new protocol version.
+     *
+     * @param string $version
+     *
+     * @return MessageInterface
+     */
+    public function withProtocolVersion(string $version): MessageInterface
+    {
+        return $this->cloneInstance(
+            $this->processProtocol($version),
+            "protocolVersion"
+        );
     }
 
     /**

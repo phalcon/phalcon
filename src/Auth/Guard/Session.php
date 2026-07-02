@@ -79,34 +79,28 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
         return new static(
             $adapter,
-            ContainerResolver::requireService(
+            ContainerResolver::resolveCandidate(
                 $container,
-                ContainerResolver::serviceCandidates(
-                    $options,
-                    'request',
-                    RequestInterface::class,
-                    'request'
-                ),
+                $options,
+                'request',
+                RequestInterface::class,
+                'request',
                 'Session guard'
             ),
-            ContainerResolver::requireService(
+            ContainerResolver::resolveCandidate(
                 $container,
-                ContainerResolver::serviceCandidates(
-                    $options,
-                    'cookies',
-                    CookiesInterface::class,
-                    'cookies'
-                ),
+                $options,
+                'cookies',
+                CookiesInterface::class,
+                'cookies',
                 'Session guard'
             ),
-            ContainerResolver::requireService(
+            ContainerResolver::resolveCandidate(
                 $container,
-                ContainerResolver::serviceCandidates(
-                    $options,
-                    'session',
-                    SessionManagerInterface::class,
-                    'session'
-                ),
+                $options,
+                'session',
+                SessionManagerInterface::class,
+                'session',
                 'Session guard'
             ),
             $config,
@@ -120,16 +114,13 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
      */
     public function attempt(array $credentials = [], bool $remember = false): bool
     {
-        $resolved                = $this->adapter->retrieveByCredentials($credentials);
-        $this->lastUserAttempted = $resolved;
-
-        if ($this->hasValidCredentials($resolved, $credentials)) {
-            $this->login($resolved, $remember);
-
-            return true;
+        if (!$this->validate($credentials)) {
+            return false;
         }
 
-        return false;
+        $this->login($this->lastUserAttempted, $remember);
+
+        return true;
     }
 
     /**
@@ -166,9 +157,12 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         $this->session->set($this->getName(), $user->getAuthIdentifier());
 
         if ($remember) {
-            if (!($this->adapter instanceof RememberAdapter)) {
-                throw new DoesNotImplement('Adapter', 'RememberAdapter');
-            }
+            DoesNotImplement::assert(
+                $this->adapter,
+                RememberAdapter::class,
+                'Adapter',
+                'RememberAdapter'
+            );
             $this->rememberUser($user);
         }
 

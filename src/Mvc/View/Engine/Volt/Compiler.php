@@ -140,13 +140,13 @@ class Compiler implements InjectionAwareInterface
      */
     protected array $filters = [];
     /**
-     * @var array
-     */
-    protected array $forElsePointers = [];
-    /**
      * @var int
      */
     protected int $foreachLevel = 0;
+    /**
+     * @var array
+     */
+    protected array $forElsePointers = [];
     /**
      * @var array
      */
@@ -172,12 +172,12 @@ class Compiler implements InjectionAwareInterface
      */
     protected array $options = [];
 
+    protected Parser $parser;
+
     /**
      * @var string
      */
     protected string $prefix = "";
-
-    protected Parser $parser;
 
     /**
      * Phalcon\Mvc\View\Engine\Volt\Compiler
@@ -737,27 +737,6 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Generates a 'forelse' PHP code
-     *
-     * @return string
-     */
-    public function compileForElse(): string
-    {
-        $level = $this->foreachLevel;
-
-        if (!isset($this->forElsePointers[$level])) {
-            return "";
-        }
-
-        $prefix = $this->forElsePointers[$level];
-        if (isset($this->loopPointers[$level])) {
-            return '<?php $' . $prefix . 'incr++; } if (!$' . $prefix . 'iterated) { ?>';
-        }
-
-        return '<?php } if (!$' . $prefix . 'iterated) { ?>';
-    }
-
-    /**
      * Compiles a "foreach" intermediate code representation into plain PHP code
      *
      * @param array $statement
@@ -923,6 +902,27 @@ class Compiler implements InjectionAwareInterface
         $this->foreachLevel--;
 
         return $compilation;
+    }
+
+    /**
+     * Generates a 'forelse' PHP code
+     *
+     * @return string
+     */
+    public function compileForElse(): string
+    {
+        $level = $this->foreachLevel;
+
+        if (!isset($this->forElsePointers[$level])) {
+            return "";
+        }
+
+        $prefix = $this->forElsePointers[$level];
+        if (isset($this->loopPointers[$level])) {
+            return '<?php $' . $prefix . 'incr++; } if (!$' . $prefix . 'iterated) { ?>';
+        }
+
+        return '<?php } if (!$' . $prefix . 'iterated) { ?>';
     }
 
     /**
@@ -2539,8 +2539,8 @@ class Compiler implements InjectionAwareInterface
             case "format":
                 return "sprintf(" . $arguments . ")";
             case "join":
-                return "join('" . $funcArguments[1]["expr"]["value"]
-                    . "', " . $funcArguments[0]["expr"]["value"] . ")";
+                return "join(" . $this->expression($funcArguments[1]["expr"])
+                    . ", " . $this->expression($funcArguments[0]["expr"]) . ")";
             case "json_encode":
                 return "json_encode(" . $arguments . ")";
             case "json_decode":

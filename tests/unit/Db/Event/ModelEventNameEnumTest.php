@@ -56,19 +56,6 @@ final class ModelEventNameEnumTest extends AbstractUnitTestCase
      * @since  2026-06-06
      */
     #[DataProvider('getCases')]
-    public function testGetEventClass(string $eventName, string $eventClass): void
-    {
-        $this->assertSame(
-            $eventClass,
-            ModelEventNameEnum::getEventClass($eventName)
-        );
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-06-06
-     */
-    #[DataProvider('getCases')]
     public function testFromEventClass(string $eventName, string $eventClass): void
     {
         $this->assertSame(
@@ -81,13 +68,24 @@ final class ModelEventNameEnumTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-06-06
      */
-    #[DataProvider('getCases')]
-    public function testTryFromEventClass(string $eventName, string $eventClass): void
+    public function testFromEventClassThrowsOnUnknown(): void
     {
-        $enum = ModelEventNameEnum::tryFromEventClass($eventClass);
+        $this->expectException(UnknownEventTypeException::class);
 
-        $this->assertInstanceOf(ModelEventNameEnum::class, $enum);
-        $this->assertSame($eventName, $enum->value);
+        ModelEventNameEnum::fromEventClass(self::NS . 'NotARealEvent');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-06-06
+     */
+    #[DataProvider('getCases')]
+    public function testGetEventClass(string $eventName, string $eventClass): void
+    {
+        $this->assertSame(
+            $eventClass,
+            ModelEventNameEnum::getEventClass($eventName)
+        );
     }
 
     /**
@@ -105,11 +103,13 @@ final class ModelEventNameEnumTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-06-06
      */
-    public function testFromEventClassThrowsOnUnknown(): void
+    #[DataProvider('getCases')]
+    public function testTryFromEventClass(string $eventName, string $eventClass): void
     {
-        $this->expectException(UnknownEventTypeException::class);
+        $enum = ModelEventNameEnum::tryFromEventClass($eventClass);
 
-        ModelEventNameEnum::fromEventClass(self::NS . 'NotARealEvent');
+        $this->assertInstanceOf(ModelEventNameEnum::class, $enum);
+        $this->assertSame($eventName, $enum->value);
     }
 
     /**

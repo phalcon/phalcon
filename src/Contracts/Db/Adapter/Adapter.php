@@ -734,14 +734,6 @@ interface Adapter
     public function sharedLock(string $sqlQuery, string $modifier = ''): string;
 
     /**
-     * Check whether the database system requires a sequence to produce
-     * auto-numeric values
-     *
-     * @return bool
-     */
-    public function supportSequences(): bool;
-
-    /**
      * SQLite does not support the DEFAULT keyword
      *
      * @return bool
@@ -749,6 +741,14 @@ interface Adapter
      *
      */
     public function supportsDefaultValue(): bool;
+
+    /**
+     * Check whether the database system requires a sequence to produce
+     * auto-numeric values
+     *
+     * @return bool
+     */
+    public function supportSequences(): bool;
 
     /**
      * Generates SQL checking for the existence of a schema.table

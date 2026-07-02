@@ -76,16 +76,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     use EventsAwareTrait;
 
     /**
-     * @var object|null
-     */
-    protected $activeHandler = null;
-
-    /**
-     * @var array
-     */
-    protected array $activeMethodMap = [];
-
-    /**
      * @var string
      */
     protected string $actionName = "";
@@ -94,6 +84,16 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @var string
      */
     protected string $actionSuffix = "Action";
+
+    /**
+     * @var object|null
+     */
+    protected $activeHandler = null;
+
+    /**
+     * @var array
+     */
+    protected array $activeMethodMap = [];
 
     /**
      * @var array
@@ -108,12 +108,22 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * @var string
      */
-    protected string $defaultNamespace = "";
+    protected string $defaultHandler = "";
 
     /**
      * @var string
      */
-    protected string $defaultHandler = "";
+    protected string $defaultNamespace = "";
+
+    /**
+     * @var bool
+     */
+    protected bool $finished = false;
+
+    /**
+     * @var bool
+     */
+    protected bool $forwarded = false;
 
     /**
      * @var array
@@ -134,16 +144,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @var string
      */
     protected string $handlerSuffix = "";
-
-    /**
-     * @var bool
-     */
-    protected bool $finished = false;
-
-    /**
-     * @var bool
-     */
-    protected bool $forwarded = false;
 
     /**
      * @var bool
@@ -944,21 +944,21 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Gets action params
      *
      * @return array
-     * @deprecated Use getParameters() instead
      */
-    public function getParams(): array
+    public function getParameters(): array
     {
-        return $this->getParameters();
+        return $this->params;
     }
 
     /**
      * Gets action params
      *
      * @return array
+     * @deprecated Use getParameters() instead
      */
-    public function getParameters(): array
+    public function getParams(): array
     {
-        return $this->params;
+        return $this->getParameters();
     }
 
     /**
@@ -1181,11 +1181,10 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param array $params
      *
      * @return void
-     * @deprecated Use setParameters() instead
      */
-    public function setParams(array $params): void
+    public function setParameters(array $params): void
     {
-        $this->setParameters($params);
+        $this->params = $params;
     }
 
     /**
@@ -1194,10 +1193,11 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @param array $params
      *
      * @return void
+     * @deprecated Use setParameters() instead
      */
-    public function setParameters(array $params): void
+    public function setParams(array $params): void
     {
-        $this->params = $params;
+        $this->setParameters($params);
     }
 
     /**
@@ -1252,6 +1252,19 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     }
 
     /**
+     * Throws an internal exception
+     *
+     * @param string $message
+     * @param int    $exceptionCode
+     *
+     * @return mixed
+     */
+    abstract protected function throwDispatchException(
+        string $message,
+        int $exceptionCode = 0
+    );
+
+    /**
      * @param string $input
      *
      * @return string
@@ -1274,17 +1287,4 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
         return $camelCaseInput;
     }
-
-    /**
-     * Throws an internal exception
-     *
-     * @param string $message
-     * @param int    $exceptionCode
-     *
-     * @return mixed
-     */
-    abstract protected function throwDispatchException(
-        string $message,
-        int $exceptionCode = 0
-    );
 }

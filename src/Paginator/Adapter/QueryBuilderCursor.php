@@ -138,6 +138,23 @@ class QueryBuilderCursor extends AbstractAdapter
     }
 
     /**
+     * Get the current page number
+     *
+     * Returns the cursor value used for this page, or 0 for the first page.
+     * Use getCursor() to retrieve the raw cursor value.
+     *
+     * @return int
+     */
+    public function getCurrentPage(): int
+    {
+        if ($this->cursor === null) {
+            return 0;
+        }
+
+        return (int) $this->cursor;
+    }
+
+    /**
      * Get the cursor value for the current page (null on first page)
      *
      * @return mixed
@@ -155,23 +172,6 @@ class QueryBuilderCursor extends AbstractAdapter
     public function getCursorColumn(): string
     {
         return $this->cursorColumn;
-    }
-
-    /**
-     * Get the current page number
-     *
-     * Returns the cursor value used for this page, or 0 for the first page.
-     * Use getCursor() to retrieve the raw cursor value.
-     *
-     * @return int
-     */
-    public function getCurrentPage(): int
-    {
-        if ($this->cursor === null) {
-            return 0;
-        }
-
-        return (int) $this->cursor;
     }
 
     /**

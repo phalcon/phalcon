@@ -185,9 +185,9 @@ interface BuilderInterface
     /**
      * Return the models who makes part of the query
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getFrom(): array | string;
+    public function getFrom(): array | string | null;
 
     /**
      * Returns the GROUP BY clause
@@ -255,9 +255,9 @@ interface BuilderInterface
     /**
      * Return the conditions for the query
      *
-     * @return array|string
+     * @return array|string|null
      */
-    public function getWhere(): array | string;
+    public function getWhere(): array | string | null;
 
     /**
      * Sets a GROUP BY clause
@@ -284,21 +284,6 @@ interface BuilderInterface
     ): BuilderInterface;
 
     /**
-     * Appends an IN condition to the current conditions
-     *
-     * @param string $expr
-     * @param array  $values
-     * @param string $operator
-     *
-     * @return BuilderInterface
-     */
-    public function inWhere(
-        string $expr,
-        array $values,
-        string $operator = BuilderInterface::OPERATOR_AND
-    ): BuilderInterface;
-
-    /**
      * Adds an INNER join to the query
      *
      * @param string      $model
@@ -311,6 +296,21 @@ interface BuilderInterface
         string $model,
         string | null $conditions = null,
         string | null $alias = null
+    ): BuilderInterface;
+
+    /**
+     * Appends an IN condition to the current conditions
+     *
+     * @param string $expr
+     * @param array  $values
+     * @param string $operator
+     *
+     * @return BuilderInterface
+     */
+    public function inWhere(
+        string $expr,
+        array $values,
+        string $operator = BuilderInterface::OPERATOR_AND
     ): BuilderInterface;
 
     /**
@@ -395,6 +395,13 @@ interface BuilderInterface
     public function offset(int $offset): BuilderInterface;
 
     /**
+     * Sets an ORDER BY condition clause
+     *
+     * @param array|string $orderBy
+     */
+    public function orderBy(array | string $orderBy): BuilderInterface;
+
+    /**
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string $conditions
@@ -408,13 +415,6 @@ interface BuilderInterface
         array $bindParams = [],
         array $bindTypes = []
     ): BuilderInterface;
-
-    /**
-     * Sets an ORDER BY condition clause
-     *
-     * @param array|string $orderBy
-     */
-    public function orderBy(array | string $orderBy): BuilderInterface;
 
     /**
      * Adds a RIGHT join to the query

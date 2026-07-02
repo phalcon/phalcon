@@ -201,6 +201,23 @@ interface ServerRequestInterface extends RequestInterface
     public function withCookieParams(array $cookies): ServerRequestInterface;
 
     /**
+     * Return an instance that removes the specified derived request attribute.
+     *
+     * This method allows removing a single derived request attribute as
+     * described in getAttributes().
+     *
+     * This method MUST be implemented in such a way as to retain the
+     * immutability of the message, and MUST return an instance that removes
+     * the attribute.
+     *
+     * @param string $name The attribute name.
+     *
+     * @return ServerRequestInterface
+     * @see getAttributes()
+     */
+    public function withoutAttribute(string $name): ServerRequestInterface;
+
+    /**
      * Return an instance with the specified body parameters.
      *
      * These MAY be injected during instantiation.
@@ -270,21 +287,4 @@ interface ServerRequestInterface extends RequestInterface
      * @throws InvalidArgumentException if an invalid structure is provided.
      */
     public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface;
-
-    /**
-     * Return an instance that removes the specified derived request attribute.
-     *
-     * This method allows removing a single derived request attribute as
-     * described in getAttributes().
-     *
-     * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return an instance that removes
-     * the attribute.
-     *
-     * @param string $name The attribute name.
-     *
-     * @return ServerRequestInterface
-     * @see getAttributes()
-     */
-    public function withoutAttribute(string $name): ServerRequestInterface;
 }

@@ -149,6 +149,11 @@ class Query implements QueryInterface, InjectionAwareInterface
     public const TYPE_UPDATE = 300;
 
     /**
+     * @var array|null
+     */
+    protected static array | null $internalPhqlCache = null;
+
+    /**
      * @var array
      * TODO: Add default value, instead of null, also remove type check
      */
@@ -183,11 +188,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @var array|null
      */
     protected array | null $intermediate = null;
-
-    /**
-     * @var array|null
-     */
-    protected static array | null $internalPhqlCache = null;
 
     /**
      * @var ManagerInterface|null
@@ -301,6 +301,16 @@ class Query implements QueryInterface, InjectionAwareInterface
     }
 
     /**
+     * Destroys the internal PHQL cache
+     *
+     * @return void
+     */
+    public static function clean(): void
+    {
+        self::$internalPhqlCache = [];
+    }
+
+    /**
      * Sets the cache parameters of the query
      *
      * @param array $cacheOptions
@@ -312,16 +322,6 @@ class Query implements QueryInterface, InjectionAwareInterface
         $this->cacheOptions = $cacheOptions;
 
         return $this;
-    }
-
-    /**
-     * Destroys the internal PHQL cache
-     *
-     * @return void
-     */
-    public static function clean(): void
-    {
-        self::$internalPhqlCache = [];
     }
 
     /**
@@ -497,9 +497,9 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns the current cache backend instance
      *
-     * @return AdapterInterface
+     * @return CacheInterface|null
      */
-    public function getCache(): AdapterInterface
+    public function getCache(): CacheInterface | null
     {
         return $this->cache;
     }
@@ -2561,41 +2561,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     }
 
     /**
-     * Resolves a JOIN type
-     *
-     * @param array $join
-     *
-     * @return string
-     * @throws Exception
-     */
-    final protected function getJoinType(array $join): string
-    {
-        if (!isset($join["type"])) {
-            throw new CorruptedSelectAst();
-        }
-
-        $type = $join["type"];
-        switch ($type) {
-            case Opcode::INNERJOIN->value:
-                return "INNER";
-
-            case Opcode::LEFTJOIN->value:
-                return "LEFT";
-
-            case Opcode::RIGHTJOIN->value:
-                return "RIGHT";
-
-            case Opcode::CROSSJOIN->value:
-                return "CROSS";
-
-            case Opcode::FULLJOIN->value:
-                return "FULL OUTER";
-        }
-
-        throw new UnknownJoinType((string) $type, (string) $this->phql);
-    }
-
-    /**
      * Processes the JOINs in the query returning an internal representation for
      * the database dialect
      *
@@ -2946,6 +2911,41 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         return $sqlJoins;
+    }
+
+    /**
+     * Resolves a JOIN type
+     *
+     * @param array $join
+     *
+     * @return string
+     * @throws Exception
+     */
+    final protected function getJoinType(array $join): string
+    {
+        if (!isset($join["type"])) {
+            throw new CorruptedSelectAst();
+        }
+
+        $type = $join["type"];
+        switch ($type) {
+            case Opcode::INNERJOIN->value:
+                return "INNER";
+
+            case Opcode::LEFTJOIN->value:
+                return "LEFT";
+
+            case Opcode::RIGHTJOIN->value:
+                return "RIGHT";
+
+            case Opcode::CROSSJOIN->value:
+                return "CROSS";
+
+            case Opcode::FULLJOIN->value:
+                return "FULL OUTER";
+        }
+
+        throw new UnknownJoinType((string) $type, (string) $this->phql);
     }
 
     /**

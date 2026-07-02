@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\Model;
 
 use Closure;
 use Phalcon\Messages\MessageInterface;
+use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 
 /**
@@ -72,9 +73,9 @@ interface ResultsetInterface
     /**
      * Get last row in the resultset
      *
-     * @return ModelInterface|null
+     * @return ModelInterface|Row|null
      */
-    public function getLast(): ModelInterface | null;
+    public function getLast(): ModelInterface | Row | null;
 
     /**
      * Returns the error messages produced by a batch operation

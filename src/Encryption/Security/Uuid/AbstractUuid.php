@@ -72,35 +72,6 @@ abstract class AbstractUuid implements UuidInterface
     }
 
     /**
-     * Returns the shared SysNodeProvider instance, creating it on first call.
-     * The static property means one discovery per request regardless of how
-     * many VersionN objects are constructed.
-     */
-    protected function getNodeProvider(): NodeProviderInterface
-    {
-        if (self::$nodeProvider === null) {
-            self::$nodeProvider = new SysNodeProvider();
-        }
-
-        return self::$nodeProvider;
-    }
-
-    /**
-     * Converts a 60-bit UUID timestamp (100-ns intervals since UUID epoch) to
-     * a DateTimeImmutable. Used by Version1 and Version6.
-     */
-    protected function uuidTimestampToDateTime(mixed $timestamp): DateTimeImmutable
-    {
-        $sec  = intdiv($timestamp, 10000000) - 12219292800;
-        $usec = intdiv($timestamp % 10000000, 10);
-
-        return DateTimeImmutable::createFromFormat(
-            "U u",
-            $sec . " " . str_pad((string) $usec, 6, "0", STR_PAD_LEFT)
-        );
-    }
-
-    /**
      * Formats a 32-character hex string as a canonical UUID string.
      */
     protected function format(string $hex): string
@@ -117,12 +88,41 @@ abstract class AbstractUuid implements UuidInterface
     }
 
     /**
+     * Returns the shared SysNodeProvider instance, creating it on first call.
+     * The static property means one discovery per request regardless of how
+     * many VersionN objects are constructed.
+     */
+    protected function getNodeProvider(): NodeProviderInterface
+    {
+        if (self::$nodeProvider === null) {
+            self::$nodeProvider = new SysNodeProvider();
+        }
+
+        return self::$nodeProvider;
+    }
+
+    /**
      * Converts a canonical UUID string to its 16-byte binary representation.
      */
     protected function namespaceToBytes(string $uuid): string
     {
         return hex2bin(
             str_replace("-", "", $uuid)
+        );
+    }
+
+    /**
+     * Converts a 60-bit UUID timestamp (100-ns intervals since UUID epoch) to
+     * a DateTimeImmutable. Used by Version1 and Version6.
+     */
+    protected function uuidTimestampToDateTime(mixed $timestamp): DateTimeImmutable
+    {
+        $sec  = intdiv($timestamp, 10000000) - 12219292800;
+        $usec = intdiv($timestamp % 10000000, 10);
+
+        return DateTimeImmutable::createFromFormat(
+            "U u",
+            $sec . " " . str_pad((string) $usec, 6, "0", STR_PAD_LEFT)
         );
     }
 }

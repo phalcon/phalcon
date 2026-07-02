@@ -24,6 +24,7 @@ use Phalcon\Mvc\Model\Exceptions\CursorIsImmutable;
 use Phalcon\Mvc\Model\Exceptions\IndexNotInCursor;
 use Phalcon\Mvc\Model\Exceptions\InvalidResultsetCacheService;
 use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
+use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 use SeekableIterator;
@@ -129,6 +130,13 @@ abstract class Resultset implements
     protected int $pointer = 0;
 
     /**
+     * Phalcon\Db\ResultInterface or false for empty resultset
+     *
+     * @var ResultInterface|bool
+     */
+    protected mixed $result = null;
+
+    /**
      * @var mixed|null
      */
     protected mixed $row = null;
@@ -137,13 +145,6 @@ abstract class Resultset implements
      * @var array|null
      */
     protected array | null $rows = null;
-
-    /**
-     * Phalcon\Db\ResultInterface or false for empty resultset
-     *
-     * @var ResultInterface|bool
-     */
-    protected mixed $result = null;
 
     /**
      * Phalcon\Mvc\Model\Resultset constructor
@@ -422,9 +423,9 @@ abstract class Resultset implements
     /**
      * Get last row in the resultset
      *
-     * @return ModelInterface|null
+     * @return ModelInterface|Row|null
      */
-    public function getLast(): ModelInterface | null
+    public function getLast(): ModelInterface | Row | null
     {
         $count = $this->count;
 
@@ -445,6 +446,14 @@ abstract class Resultset implements
     public function getMessages(): array
     {
         return $this->errorMessages;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResult(): mixed
+    {
+        return $this->result;
     }
 
     /**
@@ -586,6 +595,64 @@ abstract class Resultset implements
     public function offsetUnset(mixed $offset): void
     {
         throw new CursorIsImmutable();
+    }
+
+    /**
+     * @return bool
+     */
+    public function refresh(): bool
+    {
+        /**
+         * 'false' is given as result for empty result-sets
+         */
+        if (!is_object($this->result)) {
+            $this->count = 0;
+            $this->rows  = [];
+
+            return true;
+        }
+
+        $result  = $this->result;
+        $success = $result->execute();
+        if ($success === false) {
+            return false;
+        }
+
+        $this->isFresh = true;
+
+        /**
+         * Update the row-count
+         */
+        $rowCount    = $result->numRows();
+        $this->count = $rowCount;
+
+        /**
+         * Empty result-set
+         */
+        if ($rowCount == 0) {
+            $this->rows = [];
+
+            return true;
+        }
+
+        /**
+         * Small result-sets with less equals 32 rows are fetched at once
+         */
+        $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
+        if ($prefetchRecords > 0 && $rowCount <= $prefetchRecords) {
+            /**
+             * Fetch ALL rows from database
+             */
+            $rows = $result->fetchAll();
+
+            if (is_array($rows)) {
+                $this->rows = $rows;
+            } else {
+                $this->rows = [];
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -783,71 +850,5 @@ abstract class Resultset implements
     public function valid(): bool
     {
         return $this->pointer < $this->count;
-    }
-
-    /**
-     * @return bool
-     */
-    public function refresh(): bool
-    {
-        /**
-         * 'false' is given as result for empty result-sets
-         */
-        if (!is_object($this->result)) {
-            $this->count = 0;
-            $this->rows  = [];
-
-            return true;
-        }
-
-        $result  = $this->result;
-        $success = $result->execute();
-        if ($success === false) {
-            return false;
-        }
-
-        $this->isFresh = true;
-
-        /**
-         * Update the row-count
-         */
-        $rowCount    = $result->numRows();
-        $this->count = $rowCount;
-
-        /**
-         * Empty result-set
-         */
-        if ($rowCount == 0) {
-            $this->rows = [];
-
-            return true;
-        }
-
-        /**
-         * Small result-sets with less equals 32 rows are fetched at once
-         */
-        $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
-        if ($prefetchRecords > 0 && $rowCount <= $prefetchRecords) {
-            /**
-             * Fetch ALL rows from database
-             */
-            $rows = $result->fetchAll();
-
-            if (is_array($rows)) {
-                $this->rows = $rows;
-            } else {
-                $this->rows = [];
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getResult(): mixed
-    {
-        return $this->result;
     }
 }

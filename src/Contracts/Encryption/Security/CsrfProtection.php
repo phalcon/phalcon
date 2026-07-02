@@ -15,10 +15,6 @@ namespace Phalcon\Contracts\Encryption\Security;
 
 interface CsrfProtection
 {
-    public function getToken(): string | null;
-
-    public function getTokenKey(): string | null;
-
     public function checkToken(
         string | null $tokenKey = null,
         string | null $tokenValue = null,
@@ -30,4 +26,7 @@ interface CsrfProtection
     public function getRequestToken(): string | null;
 
     public function getSessionToken(): string | null;
+    public function getToken(): string | null;
+
+    public function getTokenKey(): string | null;
 }

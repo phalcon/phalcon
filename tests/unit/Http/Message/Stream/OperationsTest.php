@@ -41,115 +41,6 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Stream :: write() and read()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamWriteRead(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->write('hello world');
-        $stream->rewind();
-
-        $actual = $stream->read(5);
-        $this->assertSame('hello', $actual);
-
-        $actual = $stream->getContents();
-        $this->assertSame(' world', $actual);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: __toString()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamToString(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->write('test content');
-
-        $this->assertSame('test content', (string) $stream);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: getSize()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamGetSize(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->write('12345');
-
-        $this->assertSame(5, $stream->getSize());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: tell()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamTell(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->write('hello');
-
-        $this->assertSame(5, $stream->tell());
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: seek()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamSeek(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->write('hello world');
-        $stream->seek(6);
-
-        $this->assertSame(6, $stream->tell());
-        $this->assertSame('world', $stream->read(5));
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: getMetadata()
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamGetMetadata(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-
-        $metadata = $stream->getMetadata();
-        $this->assertIsArray($metadata);
-
-        $mode = $stream->getMetadata('mode');
-        $this->assertIsString($mode);
-
-        $null = $stream->getMetadata('nonexistent');
-        $this->assertNull($null);
-    }
-
-    /**
      * Tests Phalcon\Http\Message\Stream :: detach() and operations after detach
      *
      * @return void
@@ -189,71 +80,19 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Stream :: tell() throws after detach
+     * Tests Phalcon\Http\Message\Stream :: eof() - after detach returns true
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageStreamTellThrowsWhenDetached(): void
+    public function testHttpMessageStreamEofAfterDetachReturnsTrue(): void
     {
         $stream = new Stream('php://memory', 'r+b');
         $stream->detach();
 
-        $this->expectException(RuntimeException::class);
-        $stream->tell();
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: seek() throws after detach
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamSeekThrowsWhenDetached(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->detach();
-
-        $this->expectException(RuntimeException::class);
-        $stream->seek(0);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: read() throws after detach
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamReadThrowsWhenNotReadable(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->detach();
-
-        $this->expectException(RuntimeException::class);
-        $stream->read(10);
-    }
-
-    /**
-     * Tests Phalcon\Http\Message\Stream :: write() throws after detach
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamWriteThrowsWhenNotWritable(): void
-    {
-        $stream = new Stream('php://memory', 'r+b');
-        $stream->detach();
-
-        $this->expectException(RuntimeException::class);
-        $stream->write('data');
+        $this->assertTrue($stream->eof());
     }
 
     /**
@@ -274,51 +113,41 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Http\Message\Stream :: eof() - after detach returns true
+     * Tests Phalcon\Http\Message\Stream :: getMetadata()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageStreamEofAfterDetachReturnsTrue(): void
+    public function testHttpMessageStreamGetMetadata(): void
     {
         $stream = new Stream('php://memory', 'r+b');
-        $stream->detach();
 
-        $this->assertTrue($stream->eof());
+        $metadata = $stream->getMetadata();
+        $this->assertIsArray($metadata);
+
+        $mode = $stream->getMetadata('mode');
+        $this->assertIsString($mode);
+
+        $null = $stream->getMetadata('nonexistent');
+        $this->assertNull($null);
     }
 
     /**
-     * Tests Phalcon\Http\Message\Stream :: setStream() - invalid stream throws
+     * Tests Phalcon\Http\Message\Stream :: getSize()
      *
      * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
-    public function testHttpMessageStreamSetStreamInvalidThrows(): void
+    public function testHttpMessageStreamGetSize(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The stream provided is not valid');
-        new Stream(12345);
-    }
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->write('12345');
 
-    /**
-     * Tests Phalcon\Http\Message\Stream :: write() - not writable throws
-     *
-     * @return void
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testHttpMessageStreamWriteNotWritableThrows(): void
-    {
-        $stream = new Stream('php://memory', 'r');
-
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('The resource is not writable.');
-        $stream->write('data');
+        $this->assertSame(5, $stream->getSize());
     }
 
     /**
@@ -339,6 +168,106 @@ final class OperationsTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests Phalcon\Http\Message\Stream :: read() throws after detach
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamReadThrowsWhenNotReadable(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->detach();
+
+        $this->expectException(RuntimeException::class);
+        $stream->read(10);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: seek()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamSeek(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->write('hello world');
+        $stream->seek(6);
+
+        $this->assertSame(6, $stream->tell());
+        $this->assertSame('world', $stream->read(5));
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: seek() throws after detach
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamSeekThrowsWhenDetached(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->detach();
+
+        $this->expectException(RuntimeException::class);
+        $stream->seek(0);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: setStream() - invalid stream throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamSetStreamInvalidThrows(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The stream provided is not valid');
+        new Stream(12345);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: tell()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamTell(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->write('hello');
+
+        $this->assertSame(5, $stream->tell());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: tell() throws after detach
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamTellThrowsWhenDetached(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->detach();
+
+        $this->expectException(RuntimeException::class);
+        $stream->tell();
+    }
+
+    /**
      * Tests Phalcon\Http\Message\Stream\Temp :: __construct()
      *
      * @return void
@@ -353,5 +282,76 @@ final class OperationsTest extends AbstractUnitTestCase
         $this->assertInstanceOf(Stream::class, $stream);
         $this->assertTrue($stream->isReadable());
         $this->assertTrue($stream->isWritable());
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: __toString()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamToString(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->write('test content');
+
+        $this->assertSame('test content', (string) $stream);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: write() - not writable throws
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamWriteNotWritableThrows(): void
+    {
+        $stream = new Stream('php://memory', 'r');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The resource is not writable.');
+        $stream->write('data');
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: write() and read()
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamWriteRead(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->write('hello world');
+        $stream->rewind();
+
+        $actual = $stream->read(5);
+        $this->assertSame('hello', $actual);
+
+        $actual = $stream->getContents();
+        $this->assertSame(' world', $actual);
+    }
+
+    /**
+     * Tests Phalcon\Http\Message\Stream :: write() throws after detach
+     *
+     * @return void
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2024-01-01
+     */
+    public function testHttpMessageStreamWriteThrowsWhenNotWritable(): void
+    {
+        $stream = new Stream('php://memory', 'r+b');
+        $stream->detach();
+
+        $this->expectException(RuntimeException::class);
+        $stream->write('data');
     }
 }

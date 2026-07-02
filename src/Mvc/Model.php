@@ -25,8 +25,8 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Filter\Validation\ValidationInterface;
-use Phalcon\Messages\Message;
 use Phalcon\Logger\LoggerInterface;
+use Phalcon\Messages\Message;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\BehaviorInterface;
 use Phalcon\Mvc\Model\Criteria;
@@ -57,6 +57,7 @@ use Phalcon\Mvc\Model\Exceptions\RelationRequiresObjectOrArray;
 use Phalcon\Mvc\Model\Exceptions\SnapshotsDisabled;
 use Phalcon\Mvc\Model\Exceptions\StaticMethodRequiresOneArgument;
 use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
+use Phalcon\Mvc\Model\Hydration\CloneResultMapHydrate;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\QueryInterface;
@@ -757,6 +758,1276 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
+     * Enables/disables options in the ORM.
+     *
+     * The options are written to process-global `Phalcon\Support\Settings`
+     * (`orm.*` flags) and therefore affect every model in the process at once.
+     * Call this once during bootstrap; it is not per-model or per-container
+     * configuration, and one application's `setup()` reconfigures the ORM for
+     * every other user in the same process.
+     *
+     * @param array $options
+     *
+     * @return void
+     */
+    public static function setup(array $options): void
+    {
+        /**
+         * Enables/Disables globally the internal events
+         */
+        $map = [
+            "orm.events"                            => "events",
+            "orm.virtual_foreign_keys"              => "virtualForeignKeys",
+            "orm.column_renaming"                   => "columnRenaming",
+            "orm.not_null_validations"              => "notNullValidations",
+            "orm.exception_on_failed_save"          => "exceptionOnFailedSave",
+            "orm.exception_on_failed_metadata_save" => "exceptionOnFailedMetaDataSave",
+            "orm.enable_literals"                   => "phqlLiterals",
+            "orm.late_state_binding"                => "lateStateBinding",
+            "orm.cast_on_hydrate"                   => "castOnHydrate",
+            "orm.ignore_unknown_columns"            => "ignoreUnknownColumns",
+            "orm.case_insensitive_column_map"       => "caseInsensitiveColumnMap",
+            "orm.update_snapshot_on_save"           => "updateSnapshotOnSave",
+            "orm.disable_assign_setters"            => "disableAssignSetters",
+            "orm.cast_last_insert_id_to_int"        => "castLastInsertIdToInt",
+        ];
+
+        foreach ($map as $setting => $value) {
+            if (isset($options[$value])) {
+                Settings::set($setting, (bool)$options[$value]);
+            }
+        }
+
+        if (isset($options["prefetchRecords"])) {
+            Settings::set("orm.resultset_prefetch_records", (int)$options["prefetchRecords"]);
+        }
+    }
+
+    /**
+     * Returns the average value on a column for a result-set of rows matching
+     * the specified conditions.
+     *
+     * Returned value will be a float for simple queries or a ResultsetInterface
+     * instance for when the GROUP condition is used. The results will
+     * contain the average of each group.
+     *
+     * ```php
+     * // What's the average price of robots?
+     * $average = Robots::average(
+     *     [
+     *         "column" => "price",
+     *     ]
+     * );
+     *
+     * echo "The average price is ", $average, "\n";
+     *
+     * // What's the average price of mechanical robots?
+     * $average = Robots::average(
+     *     [
+     *         "type = 'mechanical'",
+     *         "column" => "price",
+     *     ]
+     * );
+     *
+     * echo "The average price of mechanical robots is ", $average, "\n";
+     * ```
+     *
+     * @param array $parameters
+     *
+     * @return float|ResultsetInterface
+     */
+    public static function average(
+        array $parameters = []
+    ): float | ResultsetInterface {
+        $result = self::groupResult("AVG", "average", $parameters);
+
+        if (is_string($result)) {
+            return (float)$result;
+        }
+
+        if ($result === null) {
+            return 0.0;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Assigns values to a model from an array returning a new model
+     *
+     *```php
+     * $robot = Phalcon\Mvc\Model::cloneResult(
+     *     new Robots(),
+     *     [
+     *         "type" => "mechanical",
+     *         "name" => "Astro Boy",
+     *         "year" => 1952,
+     *     ]
+     * );
+     *```
+     *
+     * @param ModelInterface $base
+     * @param array          $data
+     * @param int            $dirtyState
+     *
+     * @return ModelInterface
+     * @throws Exception
+     */
+    public static function cloneResult(
+        ModelInterface $base,
+        array $data,
+        int $dirtyState = 0
+    ): ModelInterface {
+        /**
+         * Clone the base record
+         */
+        $instance = clone $base;
+
+        /**
+         * Mark the object as persistent
+         */
+        $instance->setDirtyState($dirtyState);
+
+        foreach ($data as $key => $value) {
+            if (!is_string($key)) {
+                throw new InvalidDumpResultKey(get_class($base));
+            }
+
+            $instance->$key = $value;
+        }
+
+        /**
+         * Call afterFetch, this allows the developer to execute actions after a
+         * record is fetched from the database
+         */
+        $instance->fireEvent("afterFetch");
+
+        return $instance;
+    }
+
+    /**
+     * Assigns values to a model from an array, returning a new model.
+     *
+     *```php
+     * $robot = \Phalcon\Mvc\Model::cloneResultMap(
+     *     new Robots(),
+     *     [
+     *         "type" => "mechanical",
+     *         "name" => "Astro Boy",
+     *         "year" => 1952,
+     *     ]
+     * );
+     *```
+     *
+     * @param mixed     $base
+     * @param array     $data
+     * @param mixed     $columnMap
+     * @param int       $dirtyState
+     * @param bool|null $keepSnapshots
+     *
+     * @return ModelInterface|ResultInterface
+     * @throws Exception
+     */
+    public static function cloneResultMap(
+        mixed $base,
+        array $data,
+        mixed $columnMap,
+        int $dirtyState = 0,
+        bool | null $keepSnapshots = null
+    ): ModelInterface | ResultInterface {
+        $instance = clone $base;
+
+        if ($instance instanceof Model) {
+            $metaData          = $instance->getModelsMetaData();
+            $notNullAttributes = $metaData->getNotNullAttributes($instance);
+        } else {
+            $metaData          = null;
+            $notNullAttributes = [];
+        }
+
+        // Change the dirty state to persistent
+        $instance->setDirtyState($dirtyState);
+
+        $callSetters = (bool) Settings::get("orm.call_setters_on_hydration");
+
+        $localMethods = [
+            "setConnectionService"      => 1,
+            "setDirtyState"             => 1,
+            "setEventsManager"          => 1,
+            "setReadConnectionService"  => 1,
+            "setOldSnapshotData"        => 1,
+            "setSchema"                 => 1,
+            "setSnapshotData"           => 1,
+            "setSource"                 => 1,
+            "setTransaction"            => 1,
+            "setWriteConnectionService" => 1,
+        ];
+
+        /**
+         * Assign the data in the model
+         */
+        foreach ($data as $key => $value) {
+            // Only string keys in the data are valid
+            if (!is_string($key)) {
+                continue;
+            }
+
+            if ($value === null && in_array($key, $notNullAttributes)) {
+                continue;
+            }
+
+            if (!is_array($columnMap)) {
+                if ($callSetters) {
+                    $setter = "set" . self::staticToCamelize($key);
+                    if (
+                        method_exists($instance, $setter) &&
+                        !isset($localMethods[$setter])
+                    ) {
+                        try {
+                            $instance->$setter($value);
+                        } catch (\TypeError) {
+                            self::assignCoercedValue($instance, $key, $value);
+                        }
+
+                        continue;
+                    }
+                }
+
+                self::assignCoercedValue($instance, $key, $value);
+
+                continue;
+            }
+
+            // Every field must be part of the column map
+            if (!isset($columnMap[$key])) {
+                if (is_array($columnMap) && !empty($columnMap)) {
+                    if ($metaData === null) {
+                        $metaData = $instance->getModelsMetaData();
+                    }
+
+                    $reverseMap = $metaData->getReverseColumnMap($instance);
+                    if (!isset($reverseMap[$key])) {
+                        if (!Settings::get("orm.ignore_unknown_columns")) {
+                            throw new ColumnNotInMap($key, get_class($base));
+                        }
+
+                        continue;
+                    }
+
+                    $attribute = $reverseMap[$key];
+                } else {
+                    if (!Settings::get("orm.ignore_unknown_columns")) {
+                        throw new ColumnNotInMap($key, get_class($base));
+                    }
+
+                    continue;
+                }
+            } else {
+                $attribute = $columnMap[$key];
+            }
+
+            if (!is_array($attribute)) {
+                if ($callSetters) {
+                    $setter = "set" . self::staticToCamelize($attribute);
+                    if (
+                        method_exists($instance, $setter) &&
+                        !isset($localMethods[$setter])
+                    ) {
+                        try {
+                            $instance->$setter($value);
+                        } catch (\TypeError) {
+                            self::assignCoercedValue(
+                                $instance,
+                                $attribute,
+                                $value
+                            );
+                        }
+
+                        continue;
+                    }
+                }
+
+                self::assignCoercedValue($instance, $attribute, $value);
+
+                continue;
+            }
+
+            if ($value != "" && $value !== null) {
+                $castValue = match ($attribute[1]) {
+                    Column::TYPE_INTEGER,
+                    Column::TYPE_MEDIUMINTEGER,
+                    Column::TYPE_SMALLINTEGER,
+                    Column::TYPE_TINYINTEGER => intval($value),
+                    Column::TYPE_DECIMAL,
+                    Column::TYPE_DOUBLE,
+                    Column::TYPE_FLOAT       => (float)$value,
+                    Column::TYPE_BOOLEAN     => (bool)$value,
+                    Column::TYPE_GEOMETRY,
+                    Column::TYPE_POINT,
+                    Column::TYPE_LINESTRING,
+                    Column::TYPE_POLYGON,
+                    Column::TYPE_MULTIPOINT,
+                    Column::TYPE_MULTILINESTRING,
+                    Column::TYPE_MULTIPOLYGON,
+                    Column::TYPE_GEOMETRYCOLLECTION => self::castSpatial($value),
+                    default                  => $value,
+                };
+            } else {
+                $castValue = match ($attribute[1]) {
+                    Column::TYPE_BIGINTEGER,
+                    Column::TYPE_BOOLEAN,
+                    Column::TYPE_DECIMAL,
+                    Column::TYPE_DOUBLE,
+                    Column::TYPE_FLOAT,
+                    Column::TYPE_INTEGER,
+                    Column::TYPE_MEDIUMINTEGER,
+                    Column::TYPE_SMALLINTEGER,
+                    Column::TYPE_TINYINTEGER => null,
+                    default                  => $value,
+                };
+            }
+
+            $attributeName = $attribute[0];
+            $data[$key]    = $castValue;
+
+            if ($callSetters) {
+                $setter = "set" . self::staticToCamelize($attributeName);
+                if (
+                    method_exists($instance, $setter) &&
+                    !isset($localMethods[$setter])
+                ) {
+                    try {
+                        $instance->$setter($castValue);
+                    } catch (\TypeError) {
+                        $instance->$attributeName = $castValue;
+                    }
+
+                    continue;
+                }
+            }
+
+            $instance->$attributeName = $castValue;
+        }
+
+        /**
+         * Models that keep snapshots store the original data in t.
+         * At hydration both snapshot and oldSnapshot are the same
+         * "as fetched" baseline - reuse the column-mapped result of
+         * setSnapshotData() instead of running the column-map walk
+         * a second time. PHP's COW lets the two refs share memory
+         * until one is mutated by save().
+         */
+        if ($keepSnapshots) {
+            $instance->setSnapshotData($data, $columnMap);
+            $instance->setOldSnapshotData($instance->getSnapshotData());
+        }
+
+        /**
+         * Call afterFetch, this allows the developer to execute actions after a
+         * record is fetched from the database
+         */
+        if (method_exists($instance, "fireEvent")) {
+            $instance->fireEvent("afterFetch");
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Returns an hydrated result based on the data and the column map
+     *
+     * @param array $data
+     * @param mixed $columnMap
+     * @param int   $hydrationMode
+     *
+     * @return array|mixed|object
+     * @throws Exception
+     */
+    public static function cloneResultMapHydrate(
+        array $data,
+        mixed $columnMap,
+        int $hydrationMode
+    ) {
+        return CloneResultMapHydrate::cloneResultMapHydrate(
+            $data,
+            $columnMap,
+            $hydrationMode,
+            get_called_class()
+        );
+    }
+
+    /**
+     * Counts how many records match the specified conditions.
+     *
+     * Returns an integer for simple queries or a ResultsetInterface
+     * instance for when the GROUP condition is used. The results will
+     * contain the count of each group.
+     *
+     * ```php
+     * // How many robots are there?
+     * $number = Robots::count();
+     *
+     * echo "There are ", $number, "\n";
+     *
+     * // How many mechanical robots are there?
+     * $number = Robots::count("type = 'mechanical'");
+     *
+     * echo "There are ", $number, " mechanical robots\n";
+     * ```
+     *
+     * @param array|string|null $parameters
+     *
+     * @return int|ResultsetInterface
+     */
+    public static function count(
+        mixed $parameters = null
+    ): int | ResultsetInterface {
+        /**
+         * Removing `order by` for postgresql
+         */
+        if (isset($parameters["order"])) {
+            unset($parameters["order"]);
+        }
+
+        $result = self::groupResult("COUNT", "rowcount", $parameters);
+
+        if (is_string($result)) {
+            return (int)$result;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Query for a set of records that match the specified conditions
+     *
+     * ```php
+     * // How many robots are there?
+     * $robots = Robots::find();
+     *
+     * echo "There are ", count($robots), "\n";
+     *
+     * // How many mechanical robots are there?
+     * $robots = Robots::find(
+     *     "type = 'mechanical'"
+     * );
+     *
+     * echo "There are ", count($robots), "\n";
+     *
+     * // Get and print virtual robots ordered by name
+     * $robots = Robots::find(
+     *     [
+     *         "type = 'virtual'",
+     *         "order" => "name",
+     *     ]
+     * );
+     *
+     * foreach ($robots as $robot) {
+     *     echo $robot->name, "\n";
+     * }
+     *
+     * // Get first 100 virtual robots ordered by name
+     * $robots = Robots::find(
+     *     [
+     *         "type = 'virtual'",
+     *         "order" => "name",
+     *         "limit" => 100,
+     *     ]
+     * );
+     *
+     * foreach ($robots as $robot) {
+     *     echo $robot->name, "\n";
+     * }
+     *
+     * // encapsulate find it into an running transaction esp. useful for application unit-tests
+     * // or complex business logic where we wanna control which transactions are used.
+     *
+     * $myTransaction = new Transaction(\Phalcon\Di\Di::getDefault());
+     * $myTransaction->begin();
+     *
+     * $newRobot = new Robot();
+     * $newRobot->setTransaction($myTransaction);
+     *
+     * $newRobot->assign(
+     *     [
+     *         'name' => 'test',
+     *         'type' => 'mechanical',
+     *         'year' => 1944,
+     *     ]
+     * );
+     *
+     * $newRobot->save();
+     *
+     * $resultInsideTransaction = Robot::find(
+     *     [
+     *         'name' => 'test',
+     *         Model::TRANSACTION_INDEX => $myTransaction,
+     *     ]
+     * );
+     *
+     * $resultOutsideTransaction = Robot::find(['name' => 'test']);
+     *
+     * foreach ($setInsideTransaction as $robot) {
+     *     echo $robot->name, "\n";
+     * }
+     *
+     * foreach ($setOutsideTransaction as $robot) {
+     *     echo $robot->name, "\n";
+     * }
+     *
+     * // reverts all not commited changes
+     * $myTransaction->rollback();
+     *
+     * // creating two different transactions
+     * $myTransaction1 = new Transaction(\Phalcon\Di\Di::getDefault());
+     * $myTransaction1->begin();
+     * $myTransaction2 = new Transaction(\Phalcon\Di\Di::getDefault());
+     * $myTransaction2->begin();
+     *
+     *  // add a new robots
+     * $firstNewRobot = new Robot();
+     * $firstNewRobot->setTransaction($myTransaction1);
+     * $firstNewRobot->assign(
+     *     [
+     *         'name' => 'first-transaction-robot',
+     *         'type' => 'mechanical',
+     *         'year' => 1944,
+     *     ]
+     * );
+     * $firstNewRobot->save();
+     *
+     * $secondNewRobot = new Robot();
+     * $secondNewRobot->setTransaction($myTransaction2);
+     * $secondNewRobot->assign(
+     *     [
+     *         'name' => 'second-transaction-robot',
+     *         'type' => 'fictional',
+     *         'year' => 1984,
+     *     ]
+     * );
+     * $secondNewRobot->save();
+     *
+     * // this transaction will find the robot.
+     * $resultInFirstTransaction = Robot::find(
+     *     [
+     *         'name'                   => 'first-transaction-robot',
+     *         Model::TRANSACTION_INDEX => $myTransaction1,
+     *     ]
+     * );
+     *
+     * // this transaction won't find the robot.
+     * $resultInSecondTransaction = Robot::find(
+     *     [
+     *         'name'                   => 'first-transaction-robot',
+     *         Model::TRANSACTION_INDEX => $myTransaction2,
+     *     ]
+     * );
+     *
+     * // this transaction won't find the robot.
+     * $resultOutsideAnyExplicitTransaction = Robot::find(
+     *     [
+     *         'name' => 'first-transaction-robot',
+     *     ]
+     * );
+     *
+     * // this transaction won't find the robot.
+     * $resultInFirstTransaction = Robot::find(
+     *     [
+     *         'name'                   => 'second-transaction-robot',
+     *         Model::TRANSACTION_INDEX => $myTransaction2,
+     *     ]
+     * );
+     *
+     * // this transaction will find the robot.
+     * $resultInSecondTransaction = Robot::find(
+     *     [
+     *         'name'                   => 'second-transaction-robot',
+     *         Model::TRANSACTION_INDEX => $myTransaction1,
+     *     ]
+     * );
+     *
+     * // this transaction won't find the robot.
+     * $resultOutsideAnyExplicitTransaction = Robot::find(
+     *     [
+     *         'name' => 'second-transaction-robot',
+     *     ]
+     * );
+     *
+     * $transaction1->rollback();
+     * $transaction2->rollback();
+     * ```
+     *
+     * @param array|string|int|null $parameters = {
+     *
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option string "lifetime"
+     * @option string "key"
+     *      },
+     * @option ?bool  "hydration"
+     * }
+     *
+     * @return \Phalcon\Mvc\Model\Resultset<int, T>
+     */
+    public static function find(
+        mixed $parameters = null
+    ): ResultsetInterface {
+        if (!is_array($parameters)) {
+            $params = [];
+
+            if ($parameters !== null) {
+                $params[] = $parameters;
+            }
+        } else {
+            $params = $parameters;
+        }
+
+        $query = static::getPreparedQuery($params);
+
+        /**
+         * Execute the query passing the bind-params and casting-types
+         */
+        $resultset = $query->execute();
+
+        /**
+         * Define an hydration mode
+         */
+        if (is_object($resultset) && isset($params["hydration"])) {
+            $resultset->setHydrateMode($params["hydration"]);
+        }
+
+        return $resultset;
+    }
+
+    /**
+     * Query the first record that matches the specified conditions
+     *
+     * ```php
+     * // What's the first robot in robots table?
+     * $robot = Robots::findFirst();
+     *
+     * echo "The robot name is ", $robot->name;
+     *
+     * // What's the first mechanical robot in robots table?
+     * $robot = Robots::findFirst(
+     *     "type = 'mechanical'"
+     * );
+     *
+     * echo "The first mechanical robot name is ", $robot->name;
+     *
+     * // Get first virtual robot ordered by name
+     * $robot = Robots::findFirst(
+     *     [
+     *         "type = 'virtual'",
+     *         "order" => "name",
+     *     ]
+     * );
+     *
+     * echo "The first virtual robot name is ", $robot->name;
+     *
+     * // behaviour with transaction
+     * $myTransaction = new Transaction(\Phalcon\Di\Di::getDefault());
+     * $myTransaction->begin();
+     *
+     * $newRobot = new Robot();
+     * $newRobot->setTransaction($myTransaction);
+     * $newRobot->assign(
+     *     [
+     *         'name' => 'test',
+     *         'type' => 'mechanical',
+     *         'year' => 1944,
+     *     ]
+     * );
+     * $newRobot->save();
+     *
+     * $findsARobot = Robot::findFirst(
+     *     [
+     *         'name'                   => 'test',
+     *         Model::TRANSACTION_INDEX => $myTransaction,
+     *     ]
+     * );
+     *
+     * $doesNotFindARobot = Robot::findFirst(
+     *     [
+     *         'name' => 'test',
+     *     ]
+     * );
+     *
+     * var_dump($findARobot);
+     * var_dump($doesNotFindARobot);
+     *
+     * $transaction->commit();
+     *
+     * $doesFindTheRobotNow = Robot::findFirst(
+     *     [
+     *         'name' => 'test',
+     *     ]
+     * );
+     * ```
+     *
+     * @param array|string|int|null $parameters = {
+     *
+     * @option string "conditions"
+     * @option string "columns"
+     * @option array  "bind"
+     * @option array  "bindTypes"
+     * @option string "order"
+     * @option int    "limit"
+     * @option int    "offset"
+     * @option string "group"
+     * @option bool   "for_updated"
+     * @option bool   "shared_lock"
+     * @option array  "cache" {
+     * @option string "lifetime"
+     * @option string "key"
+     *      },
+     * @option ?bool  "hydration"
+     * }
+     *
+     * @return T|Row|null
+     * @throws Exception
+     */
+    public static function findFirst(
+        mixed $parameters = null
+    ) {
+        if (null === $parameters) {
+            $params = [];
+        } elseif (is_array($parameters)) {
+            $params = $parameters;
+        } elseif (is_string($parameters) || is_numeric($parameters)) {
+            $params = [$parameters];
+        } else {
+            throw new InvalidFindParameters(get_called_class());
+        }
+
+        $query = static::getPreparedQuery($params, 1);
+
+        /**
+         * Return only the first row
+         */
+        $query->setUniqueRow(true);
+
+        /**
+         * Execute the query passing the bind-params and casting-types
+         */
+        return $query->execute();
+    }
+
+    /**
+     * Returns the maximum value of a column for a result-set of rows that match
+     * the specified conditions
+     *
+     * ```php
+     * // What is the maximum robot id?
+     * $id = Robots::maximum(
+     *     [
+     *         "column" => "id",
+     *     ]
+     * );
+     *
+     * echo "The maximum robot id is: ", $id, "\n";
+     *
+     * // What is the maximum id of mechanical robots?
+     * $sum = Robots::maximum(
+     *     [
+     *         "type = 'mechanical'",
+     *         "column" => "id",
+     *     ]
+     * );
+     *
+     * echo "The maximum robot id of mechanical robots is ", $id, "\n";
+     * ```
+     *
+     * @param mixed|null $parameters
+     *
+     * @return mixed
+     */
+    public static function maximum(mixed $parameters = null): mixed
+    {
+        return self::groupResult("MAX", "maximum", $parameters);
+    }
+
+    /**
+     * Returns the minimum value of a column for a result-set of rows that match
+     * the specified conditions
+     *
+     * ```php
+     * // What is the minimum robot id?
+     * $id = Robots::minimum(
+     *     [
+     *         "column" => "id",
+     *     ]
+     * );
+     *
+     * echo "The minimum robot id is: ", $id;
+     *
+     * // What is the minimum id of mechanical robots?
+     * $sum = Robots::minimum(
+     *     [
+     *         "type = 'mechanical'",
+     *         "column" => "id",
+     *     ]
+     * );
+     *
+     * echo "The minimum robot id of mechanical robots is ", $id;
+     * ```
+     *
+     * @param mixed|null $parameters
+     *
+     * @return mixed
+     */
+    public static function minimum(mixed $parameters = null): mixed
+    {
+        return self::groupResult("MIN", "minimum", $parameters);
+    }
+
+    /**
+     * Create a criteria for a specific model
+     *
+     * @param DiInterface|null $container
+     *
+     * @return CriteriaInterface
+     */
+    public static function query(DiInterface | null $container = null): CriteriaInterface
+    {
+        /**
+         * Use the global dependency injector if there is no one defined
+         */
+        if (null === $container) {
+            $container = Di::getDefault();
+        }
+
+        /**
+         * Gets Criteria instance from DI container
+         */
+        if ($container instanceof DiInterface) {
+            $criteria = $container->get(
+                "Phalcon\\Mvc\\Model\\Criteria"
+            );
+        } elseif (null !== $container) {
+            $criteria = new Criteria();
+            $criteria->setDI($container);
+        } else {
+            $criteria = new Criteria();
+        }
+
+        $criteria->setModelName(get_called_class());
+
+        return $criteria;
+    }
+
+    /**
+     * Calculates the sum on a column for a result-set of rows that match the
+     * specified conditions
+     *
+     * ```php
+     * // How much are all robots?
+     * $sum = Robots::sum(
+     *     [
+     *         "column" => "price",
+     *     ]
+     * );
+     *
+     * echo "The total price of robots is ", $sum, "\n";
+     *
+     * // How much are mechanical robots?
+     * $sum = Robots::sum(
+     *     [
+     *         "type = 'mechanical'",
+     *         "column" => "price",
+     *     ]
+     * );
+     *
+     * echo "The total price of mechanical robots is  ", $sum, "\n";
+     * ```
+     *
+     * @param mixed|null $parameters
+     *
+     * @return float|ResultsetInterface
+     */
+    public static function sum(mixed $parameters = null): float | ResultsetInterface
+    {
+        $result = self::groupResult("SUM", "sumatory", $parameters);
+
+        if (is_string($result)) {
+            return (float)$result;
+        }
+
+        if ($result === null) {
+            return 0.0;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Generate a PHQL SELECT statement for an aggregate
+     *
+     * @param string            $functionName
+     * @param string            $alias
+     * @param array|string|null $parameters
+     *
+     * @return mixed
+     */
+    protected static function groupResult(
+        string $functionName,
+        string $alias,
+        array | string | null $parameters = null
+    ): mixed {
+        $bindParams = [];
+        $bindTypes  = [];
+
+        $container = Di::getDefault();
+        $manager   = $container->get("modelsManager");
+
+        if (!is_array($parameters)) {
+            $params = [];
+
+            if ($parameters !== null) {
+                $params[] = $parameters;
+            }
+        } else {
+            $params = $parameters;
+        }
+
+        $groupColumn = $params["column"] ?? "*";
+
+        /**
+         * Builds the columns to query according to the received parameters
+         */
+        if (isset($params["distinct"])) {
+            $distinctColumn = $params["distinct"];
+            $columns        = $functionName . "(DISTINCT " . $distinctColumn . ") AS " . $alias;
+        } else {
+            if (isset($params["group"])) {
+                $groupColumns = $params["group"];
+                $columns      = $groupColumns . ", " . $functionName . "(" . $groupColumn . ") AS " . $alias;
+            } else {
+                $columns = $functionName . "(" . $groupColumn . ") AS " . $alias;
+            }
+        }
+
+        /**
+         * Builds a query with the passed parameters
+         */
+        $builder = $manager->createBuilder($params);
+
+        $builder->columns($columns);
+        $builder->from(get_called_class());
+
+        $query = $builder->getQuery();
+
+        if (isset($params[self::TRANSACTION_INDEX])) {
+            $transaction = $params[self::TRANSACTION_INDEX];
+            if ($transaction instanceof TransactionInterface) {
+                $query->setTransaction($transaction);
+            }
+        }
+
+        /**
+         * Check for bind parameters
+         */
+        if (isset($params["bind"])) {
+            $bindParams = $params["bind"];
+
+            if (isset($params["bindTypes"])) {
+                $bindTypes = $params["bindTypes"];
+            }
+        }
+
+        /**
+         * Pass the cache options to the query
+         */
+        if (isset($params["cache"])) {
+            $cache = $params["cache"];
+            $query->cache($cache);
+        }
+
+        /**
+         * Execute the query
+         */
+        $resultset = $query->execute($bindParams, $bindTypes);
+
+        /**
+         * Return the full resultset if the query is grouped
+         */
+        if (isset($params["group"])) {
+            return $resultset;
+        }
+
+        /**
+         * Return only the value in the first result
+         */
+        $firstRow = $resultset->getFirst();
+
+        return $firstRow->$alias;
+    }
+
+    /**
+     * Try to check if the query must invoke a finder
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return ModelInterface[]|ModelInterface|bool|void
+     * @throws Exception
+     */
+    final protected static function invokeFinder(
+        string $method,
+        array $arguments
+    ) {
+        $extraMethod = null;
+        $type        = "find";
+
+        /**
+         * Check if the method starts with "findFirst"
+         */
+        if (str_starts_with($method, "findFirstBy")) {
+            $type        = "findFirst";
+            $extraMethod = substr($method, 11);
+        } elseif (str_starts_with($method, "findBy")) {
+            /**
+             * Check if the method starts with "find"
+             */
+            $type        = "find";
+            $extraMethod = substr($method, 6);
+        } elseif (str_starts_with($method, "countBy")) {
+            /**
+             * Check if the method starts with "count"
+             */
+            $type        = "count";
+            $extraMethod = substr($method, 7);
+        }
+
+        /**
+         * The called class is the model
+         */
+        $modelName = get_called_class();
+
+        if (!$extraMethod) {
+            return false;
+        }
+
+        if (!array_key_exists(0, $arguments)) {
+            throw new StaticMethodRequiresOneArgument($method, get_called_class());
+        }
+
+        $model    = new $modelName();
+        $metaData = $model->getModelsMetaData();
+
+        /**
+         * Get the attributes
+         */
+        $attributes = $metaData->getReverseColumnMap($model);
+
+        if (!is_array($attributes)) {
+            $attributes = $metaData->getDataTypes($model);
+        }
+
+        /**
+         * Check if the extra-method is an attribute
+         */
+        if (isset($attributes[$extraMethod])) {
+            $field = $extraMethod;
+        } else {
+            /**
+             * Lowercase the first letter of the extra-method
+             */
+            $extraMethodFirst = lcfirst($extraMethod);
+
+            if (isset($attributes[$extraMethodFirst])) {
+                $field = $extraMethodFirst;
+            } else {
+                /**
+                 * Get the possible real method name
+                 */
+                $field = self::staticToUncamelize($extraMethod);
+
+                if (!isset($attributes[$field])) {
+                    throw new CannotResolveAttribute($extraMethod, get_called_class());
+                }
+            }
+        }
+
+        /**
+         * Check if we have "conditions" and "bind" defined
+         */
+        $value = $arguments[0] ?? null;
+
+        if ($value !== null) {
+            $params = [
+                "conditions" => "[" . $field . "] = ?0",
+                "bind"       => [$value],
+            ];
+        } else {
+            $params = [
+                "conditions" => "[" . $field . "] IS NULL",
+            ];
+        }
+
+        /**
+         * Just in case remove 'conditions' and 'bind'
+         */
+        unset($arguments[0]);
+        unset($arguments["conditions"]);
+        unset($arguments["bind"]);
+
+        $params = array_merge($params, $arguments);
+
+        /**
+         * Execute the query
+         */
+        return $modelName::$type($params);
+    }
+
+    /**
+     * Assigns a value to a model property replicating the coercive property
+     * write performed by the C extension. PDO adapters (notably PostgreSQL)
+     * return numeric columns as strings; cphalcon relies on the extension to
+     * coerce them to the property's declared scalar type on assignment. Under
+     * strict_types a direct write throws a TypeError, so when that happens we
+     * coerce the scalar value to the declared type and retry. Non-coercible
+     * cases are re-thrown unchanged.
+     *
+     * @param object $instance
+     * @param string $property
+     * @param mixed  $value
+     *
+     * @return void
+     */
+    private static function assignCoercedValue(
+        object $instance,
+        string $property,
+        mixed $value
+    ): void {
+        try {
+            $instance->$property = $value;
+        } catch (\TypeError $ex) {
+            if (!is_scalar($value) || !property_exists($instance, $property)) {
+                throw $ex;
+            }
+
+            $propertyType = (new \ReflectionProperty($instance, $property))
+                ->getType();
+
+            if (!$propertyType instanceof \ReflectionNamedType) {
+                throw $ex;
+            }
+
+            $instance->$property = match ($propertyType->getName()) {
+                "bool"   => (bool) $value,
+                "float"  => (float) $value,
+                "int"    => (int) $value,
+                "string" => (string) $value,
+                default  => throw $ex,
+            };
+        }
+    }
+
+    /**
+     * Attempts to find key case-insensitively
+     *
+     * @param array  $columnMap
+     * @param string $key
+     *
+     * @return string
+     */
+    private static function caseInsensitiveColumnMap(
+        array $columnMap,
+        string $key
+    ): string {
+        $keys = array_keys($columnMap);
+        foreach ($keys as $cmKey) {
+            if (strtolower($cmKey) == strtolower($key)) {
+                return $cmKey;
+            }
+        }
+
+        return $key;
+    }
+
+    private static function castSpatial(mixed $value): mixed
+    {
+        try {
+            return (new WkbParser())->parse((string) $value);
+        } catch (InvalidWkb) {
+            return $value;
+        }
+    }
+
+    /**
+     * shared prepare query logic for find and findFirst method
+     *
+     * @param array|string|null $params
+     * @param mixed|null        $limit
+     *
+     * @return QueryInterface
+     */
+    private static function getPreparedQuery(
+        array | string | null $params,
+        mixed $limit = null
+    ): QueryInterface {
+        $container = Di::getDefault();
+        $manager   = $container->get("modelsManager");
+
+        /**
+         * Builds a query with the passed parameters
+         */
+        $builder = $manager->createBuilder($params);
+
+        $builder->from(get_called_class());
+
+        if ($limit != null) {
+            $builder->limit($limit);
+        }
+
+        $query = $builder->getQuery();
+
+        /**
+         * Check for bind parameters
+         */
+        if (isset($params["bind"])) {
+            $bindParams = $params["bind"];
+            if (is_array($bindParams)) {
+                $query->setBindParams($bindParams, true);
+            }
+
+            if (isset($params["bindTypes"])) {
+                $bindTypes = $params["bindTypes"];
+                if (is_array($bindTypes)) {
+                    $query->setBindTypes($bindTypes, true);
+                }
+            }
+        }
+
+        if (isset($params[self::TRANSACTION_INDEX])) {
+            $transaction = $params[self::TRANSACTION_INDEX];
+            if ($transaction instanceof TransactionInterface) {
+                $query->setTransaction($transaction);
+            }
+        }
+
+        /**
+         * Pass the cache options to the query
+         */
+        if (isset($params["cache"])) {
+            $cache = $params["cache"];
+            $query->cache($cache);
+        }
+
+        return $query;
+    }
+
+    /**
      * Setups a behavior in a model
      *
      *```php
@@ -999,468 +2270,6 @@ abstract class Model extends AbstractInjectionAware implements
         $this->rawValues = $rawValues;
 
         return $this;
-    }
-
-    /**
-     * Returns the average value on a column for a result-set of rows matching
-     * the specified conditions.
-     *
-     * Returned value will be a float for simple queries or a ResultsetInterface
-     * instance for when the GROUP condition is used. The results will
-     * contain the average of each group.
-     *
-     * ```php
-     * // What's the average price of robots?
-     * $average = Robots::average(
-     *     [
-     *         "column" => "price",
-     *     ]
-     * );
-     *
-     * echo "The average price is ", $average, "\n";
-     *
-     * // What's the average price of mechanical robots?
-     * $average = Robots::average(
-     *     [
-     *         "type = 'mechanical'",
-     *         "column" => "price",
-     *     ]
-     * );
-     *
-     * echo "The average price of mechanical robots is ", $average, "\n";
-     * ```
-     *
-     * @param array $parameters
-     *
-     * @return float|ResultsetInterface
-     */
-    public static function average(
-        array $parameters = []
-    ): float | ResultsetInterface {
-        $result = self::groupResult("AVG", "average", $parameters);
-
-        if (is_string($result)) {
-            return (float)$result;
-        }
-
-        if ($result === null) {
-            return 0.0;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Assigns values to a model from an array returning a new model
-     *
-     *```php
-     * $robot = Phalcon\Mvc\Model::cloneResult(
-     *     new Robots(),
-     *     [
-     *         "type" => "mechanical",
-     *         "name" => "Astro Boy",
-     *         "year" => 1952,
-     *     ]
-     * );
-     *```
-     *
-     * @param ModelInterface $base
-     * @param array          $data
-     * @param int            $dirtyState
-     *
-     * @return ModelInterface
-     * @throws Exception
-     */
-    public static function cloneResult(
-        ModelInterface $base,
-        array $data,
-        int $dirtyState = 0
-    ): ModelInterface {
-        /**
-         * Clone the base record
-         */
-        $instance = clone $base;
-
-        /**
-         * Mark the object as persistent
-         */
-        $instance->setDirtyState($dirtyState);
-
-        foreach ($data as $key => $value) {
-            if (!is_string($key)) {
-                throw new InvalidDumpResultKey(get_class($base));
-            }
-
-            $instance->$key = $value;
-        }
-
-        /**
-         * Call afterFetch, this allows the developer to execute actions after a
-         * record is fetched from the database
-         */
-        $instance->fireEvent("afterFetch");
-
-        return $instance;
-    }
-
-    /**
-     * Assigns values to a model from an array, returning a new model.
-     *
-     *```php
-     * $robot = \Phalcon\Mvc\Model::cloneResultMap(
-     *     new Robots(),
-     *     [
-     *         "type" => "mechanical",
-     *         "name" => "Astro Boy",
-     *         "year" => 1952,
-     *     ]
-     * );
-     *```
-     *
-     * @param mixed     $base
-     * @param array     $data
-     * @param mixed     $columnMap
-     * @param int       $dirtyState
-     * @param bool|null $keepSnapshots
-     *
-     * @return ModelInterface|ResultInterface
-     * @throws Exception
-     */
-    public static function cloneResultMap(
-        mixed $base,
-        array $data,
-        mixed $columnMap,
-        int $dirtyState = 0,
-        bool | null $keepSnapshots = null
-    ): ModelInterface | ResultInterface {
-        $instance = clone $base;
-
-        if ($instance instanceof Model) {
-            $metaData          = $instance->getModelsMetaData();
-            $notNullAttributes = $metaData->getNotNullAttributes($instance);
-        } else {
-            $metaData          = null;
-            $notNullAttributes = [];
-        }
-
-        // Change the dirty state to persistent
-        $instance->setDirtyState($dirtyState);
-
-        $disableSetters = (bool) Settings::get("orm.disable_assign_setters");
-
-        $localMethods = [
-            "setConnectionService"      => 1,
-            "setDirtyState"             => 1,
-            "setEventsManager"          => 1,
-            "setReadConnectionService"  => 1,
-            "setOldSnapshotData"        => 1,
-            "setSchema"                 => 1,
-            "setSnapshotData"           => 1,
-            "setSource"                 => 1,
-            "setTransaction"            => 1,
-            "setWriteConnectionService" => 1,
-        ];
-
-        /**
-         * Assign the data in the model
-         */
-        foreach ($data as $key => $value) {
-            // Only string keys in the data are valid
-            if (!is_string($key)) {
-                continue;
-            }
-
-            if ($value === null && in_array($key, $notNullAttributes)) {
-                continue;
-            }
-
-            if (!is_array($columnMap)) {
-                if (!$disableSetters) {
-                    $setter = "set" . self::staticToCamelize($key);
-                    if (
-                        method_exists($instance, $setter) &&
-                        !isset($localMethods[$setter])
-                    ) {
-                        try {
-                            $instance->$setter($value);
-                        } catch (\TypeError) {
-                            self::assignCoercedValue($instance, $key, $value);
-                        }
-
-                        continue;
-                    }
-                }
-
-                self::assignCoercedValue($instance, $key, $value);
-
-                continue;
-            }
-
-            // Every field must be part of the column map
-            if (!isset($columnMap[$key])) {
-                if (is_array($columnMap) && !empty($columnMap)) {
-                    if ($metaData === null) {
-                        $metaData = $instance->getModelsMetaData();
-                    }
-
-                    $reverseMap = $metaData->getReverseColumnMap($instance);
-                    if (!isset($reverseMap[$key])) {
-                        if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new ColumnNotInMap($key, get_class($base));
-                        }
-
-                        continue;
-                    }
-
-                    $attribute = $reverseMap[$key];
-                } else {
-                    if (!Settings::get("orm.ignore_unknown_columns")) {
-                        throw new ColumnNotInMap($key, get_class($base));
-                    }
-
-                    continue;
-                }
-            } else {
-                $attribute = $columnMap[$key];
-            }
-
-            if (!is_array($attribute)) {
-                if (!$disableSetters) {
-                    $setter = "set" . self::staticToCamelize($attribute);
-                    if (
-                        method_exists($instance, $setter) &&
-                        !isset($localMethods[$setter])
-                    ) {
-                        try {
-                            $instance->$setter($value);
-                        } catch (\TypeError) {
-                            self::assignCoercedValue(
-                                $instance,
-                                $attribute,
-                                $value
-                            );
-                        }
-
-                        continue;
-                    }
-                }
-
-                self::assignCoercedValue($instance, $attribute, $value);
-
-                continue;
-            }
-
-            if ($value != "" && $value !== null) {
-                $castValue = match ($attribute[1]) {
-                    Column::TYPE_INTEGER,
-                    Column::TYPE_MEDIUMINTEGER,
-                    Column::TYPE_SMALLINTEGER,
-                    Column::TYPE_TINYINTEGER => intval($value),
-                    Column::TYPE_DECIMAL,
-                    Column::TYPE_DOUBLE,
-                    Column::TYPE_FLOAT       => (float)$value,
-                    Column::TYPE_BOOLEAN     => (bool)$value,
-                    Column::TYPE_GEOMETRY,
-                    Column::TYPE_POINT,
-                    Column::TYPE_LINESTRING,
-                    Column::TYPE_POLYGON,
-                    Column::TYPE_MULTIPOINT,
-                    Column::TYPE_MULTILINESTRING,
-                    Column::TYPE_MULTIPOLYGON,
-                    Column::TYPE_GEOMETRYCOLLECTION => self::castSpatial($value),
-                    default                  => $value,
-                };
-            } else {
-                $castValue = match ($attribute[1]) {
-                    Column::TYPE_BIGINTEGER,
-                    Column::TYPE_BOOLEAN,
-                    Column::TYPE_DECIMAL,
-                    Column::TYPE_DOUBLE,
-                    Column::TYPE_FLOAT,
-                    Column::TYPE_INTEGER,
-                    Column::TYPE_MEDIUMINTEGER,
-                    Column::TYPE_SMALLINTEGER,
-                    Column::TYPE_TINYINTEGER => null,
-                    default                  => $value,
-                };
-            }
-
-            $attributeName = $attribute[0];
-            $data[$key]    = $castValue;
-
-            if (!$disableSetters) {
-                $setter = "set" . self::staticToCamelize($attributeName);
-                if (
-                    method_exists($instance, $setter) &&
-                    !isset($localMethods[$setter])
-                ) {
-                    try {
-                        $instance->$setter($castValue);
-                    } catch (\TypeError) {
-                        $instance->$attributeName = $castValue;
-                    }
-
-                    continue;
-                }
-            }
-
-            $instance->$attributeName = $castValue;
-        }
-
-        /**
-         * Models that keep snapshots store the original data in t.
-         * At hydration both snapshot and oldSnapshot are the same
-         * "as fetched" baseline - reuse the column-mapped result of
-         * setSnapshotData() instead of running the column-map walk
-         * a second time. PHP's COW lets the two refs share memory
-         * until one is mutated by save().
-         */
-        if ($keepSnapshots) {
-            $instance->setSnapshotData($data, $columnMap);
-            $instance->setOldSnapshotData($instance->getSnapshotData());
-        }
-
-        /**
-         * Call afterFetch, this allows the developer to execute actions after a
-         * record is fetched from the database
-         */
-        if (method_exists($instance, "fireEvent")) {
-            $instance->fireEvent("afterFetch");
-        }
-
-        return $instance;
-    }
-
-    private static function castSpatial(mixed $value): mixed
-    {
-        try {
-            return (new WkbParser())->parse((string) $value);
-        } catch (InvalidWkb) {
-            return $value;
-        }
-    }
-
-    /**
-     * Returns an hydrated result based on the data and the column map
-     *
-     * @param array $data
-     * @param mixed $columnMap
-     * @param int   $hydrationMode
-     *
-     * @return array|mixed|object
-     * @throws Exception
-     */
-    public static function cloneResultMapHydrate(
-        array $data,
-        mixed $columnMap,
-        int $hydrationMode
-    ) {
-        /**
-         * If there is no column map and the hydration mode is arrays return the
-         * data as it is
-         */
-        if (!is_array($columnMap) && $hydrationMode == Resultset::HYDRATE_ARRAYS) {
-            return $data;
-        }
-
-        /**
-         * Create the destination object
-         */
-        $hydrateArray = [];
-
-        foreach ($data as $key => $value) {
-            if (!is_string($key)) {
-                continue;
-            }
-
-            if (is_array($columnMap)) {
-                // Try to find case-insensitive key variant
-                if (
-                    !isset($columnMap[$key]) &&
-                    Settings::get("orm.case_insensitive_column_map")
-                ) {
-                    $key = self::caseInsensitiveColumnMap($columnMap, $key);
-                }
-
-                /**
-                 * Every field must be part of the column map
-                 */
-                if (!isset($columnMap[$key])) {
-                    if (!Settings::get("orm.ignore_unknown_columns")) {
-                        /**
-                         * @todo unless we pass the model name in the function
-                         *       we cannot tell what model has this problem
-                         */
-                        throw new ColumnNotInMap($key, get_called_class());
-                    }
-
-                    continue;
-                } else {
-                    $attribute = $columnMap[$key];
-                }
-
-                /**
-                 * Attribute can store info about his type
-                 */
-                if (is_array($attribute)) {
-                    $attributeName = $attribute[0];
-                } else {
-                    $attributeName = $attribute;
-                }
-
-                $hydrateArray[$attributeName] = $value;
-            } else {
-                $hydrateArray[$key] = $value;
-            }
-        }
-
-        if ($hydrationMode != Resultset::HYDRATE_ARRAYS) {
-            return (object)$hydrateArray;
-        }
-
-        return $hydrateArray;
-    }
-
-    /**
-     * Counts how many records match the specified conditions.
-     *
-     * Returns an integer for simple queries or a ResultsetInterface
-     * instance for when the GROUP condition is used. The results will
-     * contain the count of each group.
-     *
-     * ```php
-     * // How many robots are there?
-     * $number = Robots::count();
-     *
-     * echo "There are ", $number, "\n";
-     *
-     * // How many mechanical robots are there?
-     * $number = Robots::count("type = 'mechanical'");
-     *
-     * echo "There are ", $number, " mechanical robots\n";
-     * ```
-     *
-     * @param array|string|null $parameters
-     *
-     * @return int|ResultsetInterface
-     */
-    public static function count(
-        mixed $parameters = null
-    ): int | ResultsetInterface {
-        /**
-         * Removing `order by` for postgresql
-         */
-        if (isset($parameters["order"])) {
-            unset($parameters["order"]);
-        }
-
-        $result = self::groupResult("COUNT", "rowcount", $parameters);
-
-        if (is_string($result)) {
-            return (int)$result;
-        }
-
-        return $result;
     }
 
     /**
@@ -1914,330 +2723,6 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Query for a set of records that match the specified conditions
-     *
-     * ```php
-     * // How many robots are there?
-     * $robots = Robots::find();
-     *
-     * echo "There are ", count($robots), "\n";
-     *
-     * // How many mechanical robots are there?
-     * $robots = Robots::find(
-     *     "type = 'mechanical'"
-     * );
-     *
-     * echo "There are ", count($robots), "\n";
-     *
-     * // Get and print virtual robots ordered by name
-     * $robots = Robots::find(
-     *     [
-     *         "type = 'virtual'",
-     *         "order" => "name",
-     *     ]
-     * );
-     *
-     * foreach ($robots as $robot) {
-     *     echo $robot->name, "\n";
-     * }
-     *
-     * // Get first 100 virtual robots ordered by name
-     * $robots = Robots::find(
-     *     [
-     *         "type = 'virtual'",
-     *         "order" => "name",
-     *         "limit" => 100,
-     *     ]
-     * );
-     *
-     * foreach ($robots as $robot) {
-     *     echo $robot->name, "\n";
-     * }
-     *
-     * // encapsulate find it into an running transaction esp. useful for application unit-tests
-     * // or complex business logic where we wanna control which transactions are used.
-     *
-     * $myTransaction = new Transaction(\Phalcon\Di\Di::getDefault());
-     * $myTransaction->begin();
-     *
-     * $newRobot = new Robot();
-     * $newRobot->setTransaction($myTransaction);
-     *
-     * $newRobot->assign(
-     *     [
-     *         'name' => 'test',
-     *         'type' => 'mechanical',
-     *         'year' => 1944,
-     *     ]
-     * );
-     *
-     * $newRobot->save();
-     *
-     * $resultInsideTransaction = Robot::find(
-     *     [
-     *         'name' => 'test',
-     *         Model::TRANSACTION_INDEX => $myTransaction,
-     *     ]
-     * );
-     *
-     * $resultOutsideTransaction = Robot::find(['name' => 'test']);
-     *
-     * foreach ($setInsideTransaction as $robot) {
-     *     echo $robot->name, "\n";
-     * }
-     *
-     * foreach ($setOutsideTransaction as $robot) {
-     *     echo $robot->name, "\n";
-     * }
-     *
-     * // reverts all not commited changes
-     * $myTransaction->rollback();
-     *
-     * // creating two different transactions
-     * $myTransaction1 = new Transaction(\Phalcon\Di\Di::getDefault());
-     * $myTransaction1->begin();
-     * $myTransaction2 = new Transaction(\Phalcon\Di\Di::getDefault());
-     * $myTransaction2->begin();
-     *
-     *  // add a new robots
-     * $firstNewRobot = new Robot();
-     * $firstNewRobot->setTransaction($myTransaction1);
-     * $firstNewRobot->assign(
-     *     [
-     *         'name' => 'first-transaction-robot',
-     *         'type' => 'mechanical',
-     *         'year' => 1944,
-     *     ]
-     * );
-     * $firstNewRobot->save();
-     *
-     * $secondNewRobot = new Robot();
-     * $secondNewRobot->setTransaction($myTransaction2);
-     * $secondNewRobot->assign(
-     *     [
-     *         'name' => 'second-transaction-robot',
-     *         'type' => 'fictional',
-     *         'year' => 1984,
-     *     ]
-     * );
-     * $secondNewRobot->save();
-     *
-     * // this transaction will find the robot.
-     * $resultInFirstTransaction = Robot::find(
-     *     [
-     *         'name'                   => 'first-transaction-robot',
-     *         Model::TRANSACTION_INDEX => $myTransaction1,
-     *     ]
-     * );
-     *
-     * // this transaction won't find the robot.
-     * $resultInSecondTransaction = Robot::find(
-     *     [
-     *         'name'                   => 'first-transaction-robot',
-     *         Model::TRANSACTION_INDEX => $myTransaction2,
-     *     ]
-     * );
-     *
-     * // this transaction won't find the robot.
-     * $resultOutsideAnyExplicitTransaction = Robot::find(
-     *     [
-     *         'name' => 'first-transaction-robot',
-     *     ]
-     * );
-     *
-     * // this transaction won't find the robot.
-     * $resultInFirstTransaction = Robot::find(
-     *     [
-     *         'name'                   => 'second-transaction-robot',
-     *         Model::TRANSACTION_INDEX => $myTransaction2,
-     *     ]
-     * );
-     *
-     * // this transaction will find the robot.
-     * $resultInSecondTransaction = Robot::find(
-     *     [
-     *         'name'                   => 'second-transaction-robot',
-     *         Model::TRANSACTION_INDEX => $myTransaction1,
-     *     ]
-     * );
-     *
-     * // this transaction won't find the robot.
-     * $resultOutsideAnyExplicitTransaction = Robot::find(
-     *     [
-     *         'name' => 'second-transaction-robot',
-     *     ]
-     * );
-     *
-     * $transaction1->rollback();
-     * $transaction2->rollback();
-     * ```
-     *
-     * @param array|string|int|null $parameters = {
-     *
-     * @option string "conditions"
-     * @option string "columns"
-     * @option array  "bind"
-     * @option array  "bindTypes"
-     * @option string "order"
-     * @option int    "limit"
-     * @option int    "offset"
-     * @option string "group"
-     * @option bool   "for_updated"
-     * @option bool   "shared_lock"
-     * @option array  "cache" {
-     * @option string "lifetime"
-     * @option string "key"
-     *      },
-     * @option ?bool  "hydration"
-     * }
-     *
-     * @return \Phalcon\Mvc\Model\Resultset<int, T>
-     */
-    public static function find(
-        mixed $parameters = null
-    ): ResultsetInterface {
-        if (!is_array($parameters)) {
-            $params = [];
-
-            if ($parameters !== null) {
-                $params[] = $parameters;
-            }
-        } else {
-            $params = $parameters;
-        }
-
-        $query = static::getPreparedQuery($params);
-
-        /**
-         * Execute the query passing the bind-params and casting-types
-         */
-        $resultset = $query->execute();
-
-        /**
-         * Define an hydration mode
-         */
-        if (is_object($resultset) && isset($params["hydration"])) {
-            $resultset->setHydrateMode($params["hydration"]);
-        }
-
-        return $resultset;
-    }
-
-    /**
-     * Query the first record that matches the specified conditions
-     *
-     * ```php
-     * // What's the first robot in robots table?
-     * $robot = Robots::findFirst();
-     *
-     * echo "The robot name is ", $robot->name;
-     *
-     * // What's the first mechanical robot in robots table?
-     * $robot = Robots::findFirst(
-     *     "type = 'mechanical'"
-     * );
-     *
-     * echo "The first mechanical robot name is ", $robot->name;
-     *
-     * // Get first virtual robot ordered by name
-     * $robot = Robots::findFirst(
-     *     [
-     *         "type = 'virtual'",
-     *         "order" => "name",
-     *     ]
-     * );
-     *
-     * echo "The first virtual robot name is ", $robot->name;
-     *
-     * // behaviour with transaction
-     * $myTransaction = new Transaction(\Phalcon\Di\Di::getDefault());
-     * $myTransaction->begin();
-     *
-     * $newRobot = new Robot();
-     * $newRobot->setTransaction($myTransaction);
-     * $newRobot->assign(
-     *     [
-     *         'name' => 'test',
-     *         'type' => 'mechanical',
-     *         'year' => 1944,
-     *     ]
-     * );
-     * $newRobot->save();
-     *
-     * $findsARobot = Robot::findFirst(
-     *     [
-     *         'name'                   => 'test',
-     *         Model::TRANSACTION_INDEX => $myTransaction,
-     *     ]
-     * );
-     *
-     * $doesNotFindARobot = Robot::findFirst(
-     *     [
-     *         'name' => 'test',
-     *     ]
-     * );
-     *
-     * var_dump($findARobot);
-     * var_dump($doesNotFindARobot);
-     *
-     * $transaction->commit();
-     *
-     * $doesFindTheRobotNow = Robot::findFirst(
-     *     [
-     *         'name' => 'test',
-     *     ]
-     * );
-     * ```
-     *
-     * @param array|string|int|null $parameters = {
-     *
-     * @option string "conditions"
-     * @option string "columns"
-     * @option array  "bind"
-     * @option array  "bindTypes"
-     * @option string "order"
-     * @option int    "limit"
-     * @option int    "offset"
-     * @option string "group"
-     * @option bool   "for_updated"
-     * @option bool   "shared_lock"
-     * @option array  "cache" {
-     * @option string "lifetime"
-     * @option string "key"
-     *      },
-     * @option ?bool  "hydration"
-     * }
-     *
-     * @return T|Row|null
-     * @throws Exception
-     */
-    public static function findFirst(
-        mixed $parameters = null
-    ) {
-        if (null === $parameters) {
-            $params = [];
-        } elseif (is_array($parameters)) {
-            $params = $parameters;
-        } elseif (is_string($parameters) || is_numeric($parameters)) {
-            $params = [$parameters];
-        } else {
-            throw new InvalidFindParameters(get_called_class());
-        }
-
-        $query = static::getPreparedQuery($params, 1);
-
-        /**
-         * Return only the first row
-         */
-        $query->setUniqueRow(true);
-
-        /**
-         * Execute the query passing the bind-params and casting-types
-         */
-        return $query->execute();
-    }
-
-    /**
      * Fires an event, implicitly calls behaviors and listeners in the events
      * manager are notified
      *
@@ -2375,35 +2860,6 @@ abstract class Model extends AbstractInjectionAware implements
             $eventName,
             $this
         );
-    }
-
-    /**
-     * Resolves an optional logger from the container. Returns null when
-     * no logger service is registered: logging model-event dispatch errors is
-     * best-effort and must not abort the operation. The container's get()
-     * throws on a missing service, so has() is checked first.
-     *
-     * @param object|null $container
-     *
-     * @return LoggerInterface|null
-     */
-    protected function getEventLogger(object | null $container): LoggerInterface | null
-    {
-        if (!$container instanceof DiInterface) {
-            return null;
-        }
-
-        foreach (['logger', LoggerInterface::class] as $service) {
-            if ($container->has($service)) {
-                $logger = $container->get($service);
-
-                if ($logger instanceof LoggerInterface) {
-                    return $logger;
-                }
-            }
-        }
-
-        return null;
     }
 
     /**
@@ -2976,109 +3432,6 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Returns the maximum value of a column for a result-set of rows that match
-     * the specified conditions
-     *
-     * ```php
-     * // What is the maximum robot id?
-     * $id = Robots::maximum(
-     *     [
-     *         "column" => "id",
-     *     ]
-     * );
-     *
-     * echo "The maximum robot id is: ", $id, "\n";
-     *
-     * // What is the maximum id of mechanical robots?
-     * $sum = Robots::maximum(
-     *     [
-     *         "type = 'mechanical'",
-     *         "column" => "id",
-     *     ]
-     * );
-     *
-     * echo "The maximum robot id of mechanical robots is ", $id, "\n";
-     * ```
-     *
-     * @param mixed|null $parameters
-     *
-     * @return mixed
-     */
-    public static function maximum(mixed $parameters = null): mixed
-    {
-        return self::groupResult("MAX", "maximum", $parameters);
-    }
-
-    /**
-     * Returns the minimum value of a column for a result-set of rows that match
-     * the specified conditions
-     *
-     * ```php
-     * // What is the minimum robot id?
-     * $id = Robots::minimum(
-     *     [
-     *         "column" => "id",
-     *     ]
-     * );
-     *
-     * echo "The minimum robot id is: ", $id;
-     *
-     * // What is the minimum id of mechanical robots?
-     * $sum = Robots::minimum(
-     *     [
-     *         "type = 'mechanical'",
-     *         "column" => "id",
-     *     ]
-     * );
-     *
-     * echo "The minimum robot id of mechanical robots is ", $id;
-     * ```
-     *
-     * @param mixed|null $parameters
-     *
-     * @return mixed
-     */
-    public static function minimum(mixed $parameters = null): mixed
-    {
-        return self::groupResult("MIN", "minimum", $parameters);
-    }
-
-    /**
-     * Create a criteria for a specific model
-     *
-     * @param DiInterface|null $container
-     *
-     * @return CriteriaInterface
-     */
-    public static function query(DiInterface | null $container = null): CriteriaInterface
-    {
-        /**
-         * Use the global dependency injector if there is no one defined
-         */
-        if (null === $container) {
-            $container = Di::getDefault();
-        }
-
-        /**
-         * Gets Criteria instance from DI container
-         */
-        if ($container instanceof DiInterface) {
-            $criteria = $container->get(
-                "Phalcon\\Mvc\\Model\\Criteria"
-            );
-        } elseif (null !== $container) {
-            $criteria = new Criteria();
-            $criteria->setDI($container);
-        } else {
-            $criteria = new Criteria();
-        }
-
-        $criteria->setModelName(get_called_class());
-
-        return $criteria;
-    }
-
-    /**
      * Reads an attribute value by its name
      *
      * ```php
@@ -3556,52 +3909,6 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Enables/disables options in the ORM.
-     *
-     * The options are written to process-global `Phalcon\Support\Settings`
-     * (`orm.*` flags) and therefore affect every model in the process at once.
-     * Call this once during bootstrap; it is not per-model or per-container
-     * configuration, and one application's `setup()` reconfigures the ORM for
-     * every other user in the same process.
-     *
-     * @param array $options
-     *
-     * @return void
-     */
-    public static function setup(array $options): void
-    {
-        /**
-         * Enables/Disables globally the internal events
-         */
-        $map = [
-            "orm.events"                            => "events",
-            "orm.virtual_foreign_keys"              => "virtualForeignKeys",
-            "orm.column_renaming"                   => "columnRenaming",
-            "orm.not_null_validations"              => "notNullValidations",
-            "orm.exception_on_failed_save"          => "exceptionOnFailedSave",
-            "orm.exception_on_failed_metadata_save" => "exceptionOnFailedMetaDataSave",
-            "orm.enable_literals"                   => "phqlLiterals",
-            "orm.late_state_binding"                => "lateStateBinding",
-            "orm.cast_on_hydrate"                   => "castOnHydrate",
-            "orm.ignore_unknown_columns"            => "ignoreUnknownColumns",
-            "orm.case_insensitive_column_map"       => "caseInsensitiveColumnMap",
-            "orm.update_snapshot_on_save"           => "updateSnapshotOnSave",
-            "orm.disable_assign_setters"            => "disableAssignSetters",
-            "orm.cast_last_insert_id_to_int"        => "castLastInsertIdToInt",
-        ];
-
-        foreach ($map as $setting => $value) {
-            if (isset($options[$value])) {
-                Settings::set($setting, (bool)$options[$value]);
-            }
-        }
-
-        if (isset($options["prefetchRecords"])) {
-            Settings::set("orm.resultset_prefetch_records", (int)$options["prefetchRecords"]);
-        }
-    }
-
-    /**
      * Skips the current operation forcing a success state
      *
      * @param bool $skip
@@ -3611,50 +3918,6 @@ abstract class Model extends AbstractInjectionAware implements
     public function skipOperation(bool $skip): void
     {
         $this->skipped = $skip;
-    }
-
-    /**
-     * Calculates the sum on a column for a result-set of rows that match the
-     * specified conditions
-     *
-     * ```php
-     * // How much are all robots?
-     * $sum = Robots::sum(
-     *     [
-     *         "column" => "price",
-     *     ]
-     * );
-     *
-     * echo "The total price of robots is ", $sum, "\n";
-     *
-     * // How much are mechanical robots?
-     * $sum = Robots::sum(
-     *     [
-     *         "type = 'mechanical'",
-     *         "column" => "price",
-     *     ]
-     * );
-     *
-     * echo "The total price of mechanical robots is  ", $sum, "\n";
-     * ```
-     *
-     * @param mixed|null $parameters
-     *
-     * @return float|ResultsetInterface
-     */
-    public static function sum(mixed $parameters = null): float | ResultsetInterface
-    {
-        $result = self::groupResult("SUM", "sumatory", $parameters);
-
-        if (is_string($result)) {
-            return (float)$result;
-        }
-
-        if ($result === null) {
-            return 0.0;
-        }
-
-        return $result;
     }
 
     /**
@@ -5090,6 +5353,35 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
+     * Resolves an optional logger from the container. Returns null when
+     * no logger service is registered: logging model-event dispatch errors is
+     * best-effort and must not abort the operation. The container's get()
+     * throws on a missing service, so has() is checked first.
+     *
+     * @param object|null $container
+     *
+     * @return LoggerInterface|null
+     */
+    protected function getEventLogger(object | null $container): LoggerInterface | null
+    {
+        if (!$container instanceof DiInterface) {
+            return null;
+        }
+
+        foreach (['logger', LoggerInterface::class] as $service) {
+            if ($container->has($service)) {
+                $logger = $container->get($service);
+
+                if ($logger instanceof LoggerInterface) {
+                    return $logger;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Returns related records defined relations depending on the method name.
      * Returns false if the relation is non-existent.
      *
@@ -5156,109 +5448,6 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         return false;
-    }
-
-    /**
-     * Generate a PHQL SELECT statement for an aggregate
-     *
-     * @param string            $functionName
-     * @param string            $alias
-     * @param array|string|null $parameters
-     *
-     * @return mixed
-     */
-    protected static function groupResult(
-        string $functionName,
-        string $alias,
-        array | string | null $parameters = null
-    ): mixed {
-        $bindParams = [];
-        $bindTypes  = [];
-
-        $container = Di::getDefault();
-        $manager   = $container->get("modelsManager");
-
-        if (!is_array($parameters)) {
-            $params = [];
-
-            if ($parameters !== null) {
-                $params[] = $parameters;
-            }
-        } else {
-            $params = $parameters;
-        }
-
-        $groupColumn = $params["column"] ?? "*";
-
-        /**
-         * Builds the columns to query according to the received parameters
-         */
-        if (isset($params["distinct"])) {
-            $distinctColumn = $params["distinct"];
-            $columns        = $functionName . "(DISTINCT " . $distinctColumn . ") AS " . $alias;
-        } else {
-            if (isset($params["group"])) {
-                $groupColumns = $params["group"];
-                $columns      = $groupColumns . ", " . $functionName . "(" . $groupColumn . ") AS " . $alias;
-            } else {
-                $columns = $functionName . "(" . $groupColumn . ") AS " . $alias;
-            }
-        }
-
-        /**
-         * Builds a query with the passed parameters
-         */
-        $builder = $manager->createBuilder($params);
-
-        $builder->columns($columns);
-        $builder->from(get_called_class());
-
-        $query = $builder->getQuery();
-
-        if (isset($params[self::TRANSACTION_INDEX])) {
-            $transaction = $params[self::TRANSACTION_INDEX];
-            if ($transaction instanceof TransactionInterface) {
-                $query->setTransaction($transaction);
-            }
-        }
-
-        /**
-         * Check for bind parameters
-         */
-        if (isset($params["bind"])) {
-            $bindParams = $params["bind"];
-
-            if (isset($params["bindTypes"])) {
-                $bindTypes = $params["bindTypes"];
-            }
-        }
-
-        /**
-         * Pass the cache options to the query
-         */
-        if (isset($params["cache"])) {
-            $cache = $params["cache"];
-            $query->cache($cache);
-        }
-
-        /**
-         * Execute the query
-         */
-        $resultset = $query->execute($bindParams, $bindTypes);
-
-        /**
-         * Return the full resultset if the query is grouped
-         */
-        if (isset($params["group"])) {
-            return $resultset;
-        }
-
-        /**
-         * Return only the value in the first result
-         */
-        $firstRow = $resultset->getFirst();
-
-        return $firstRow->$alias;
     }
 
     /**
@@ -5703,123 +5892,6 @@ abstract class Model extends AbstractInjectionAware implements
             $referencedFields,
             $options
         );
-    }
-
-    /**
-     * Try to check if the query must invoke a finder
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return ModelInterface[]|ModelInterface|bool|void
-     * @throws Exception
-     */
-    final protected static function invokeFinder(
-        string $method,
-        array $arguments
-    ) {
-        $extraMethod = null;
-        $type        = "find";
-
-        /**
-         * Check if the method starts with "findFirst"
-         */
-        if (str_starts_with($method, "findFirstBy")) {
-            $type        = "findFirst";
-            $extraMethod = substr($method, 11);
-        } elseif (str_starts_with($method, "findBy")) {
-            /**
-             * Check if the method starts with "find"
-             */
-            $type        = "find";
-            $extraMethod = substr($method, 6);
-        } elseif (str_starts_with($method, "countBy")) {
-            /**
-             * Check if the method starts with "count"
-             */
-            $type        = "count";
-            $extraMethod = substr($method, 7);
-        }
-
-        /**
-         * The called class is the model
-         */
-        $modelName = get_called_class();
-
-        if (!$extraMethod) {
-            return false;
-        }
-
-        if (!array_key_exists(0, $arguments)) {
-            throw new StaticMethodRequiresOneArgument($method, get_called_class());
-        }
-
-        $model    = new $modelName();
-        $metaData = $model->getModelsMetaData();
-
-        /**
-         * Get the attributes
-         */
-        $attributes = $metaData->getReverseColumnMap($model);
-
-        if (!is_array($attributes)) {
-            $attributes = $metaData->getDataTypes($model);
-        }
-
-        /**
-         * Check if the extra-method is an attribute
-         */
-        if (isset($attributes[$extraMethod])) {
-            $field = $extraMethod;
-        } else {
-            /**
-             * Lowercase the first letter of the extra-method
-             */
-            $extraMethodFirst = lcfirst($extraMethod);
-
-            if (isset($attributes[$extraMethodFirst])) {
-                $field = $extraMethodFirst;
-            } else {
-                /**
-                 * Get the possible real method name
-                 */
-                $field = self::staticToUncamelize($extraMethod);
-
-                if (!isset($attributes[$field])) {
-                    throw new CannotResolveAttribute($extraMethod, get_called_class());
-                }
-            }
-        }
-
-        /**
-         * Check if we have "conditions" and "bind" defined
-         */
-        $value = $arguments[0] ?? null;
-
-        if ($value !== null) {
-            $params = [
-                "conditions" => "[" . $field . "] = ?0",
-                "bind"       => [$value],
-            ];
-        } else {
-            $params = [
-                "conditions" => "[" . $field . "] IS NULL",
-            ];
-        }
-
-        /**
-         * Just in case remove 'conditions' and 'bind'
-         */
-        unset($arguments[0]);
-        unset($arguments["conditions"]);
-        unset($arguments["bind"]);
-
-        $params = array_merge($params, $arguments);
-
-        /**
-         * Execute the query
-         */
-        return $modelName::$type($params);
     }
 
     /**
@@ -6859,134 +6931,5 @@ abstract class Model extends AbstractInjectionAware implements
 
         // If there is a message, it returns false otherwise true
         return !count($messages);
-    }
-
-    /**
-     * Assigns a value to a model property replicating the coercive property
-     * write performed by the C extension. PDO adapters (notably PostgreSQL)
-     * return numeric columns as strings; cphalcon relies on the extension to
-     * coerce them to the property's declared scalar type on assignment. Under
-     * strict_types a direct write throws a TypeError, so when that happens we
-     * coerce the scalar value to the declared type and retry. Non-coercible
-     * cases are re-thrown unchanged.
-     *
-     * @param object $instance
-     * @param string $property
-     * @param mixed  $value
-     *
-     * @return void
-     */
-    private static function assignCoercedValue(
-        object $instance,
-        string $property,
-        mixed $value
-    ): void {
-        try {
-            $instance->$property = $value;
-        } catch (\TypeError $ex) {
-            if (!is_scalar($value) || !property_exists($instance, $property)) {
-                throw $ex;
-            }
-
-            $propertyType = (new \ReflectionProperty($instance, $property))
-                ->getType();
-
-            if (!$propertyType instanceof \ReflectionNamedType) {
-                throw $ex;
-            }
-
-            $instance->$property = match ($propertyType->getName()) {
-                "bool"   => (bool) $value,
-                "float"  => (float) $value,
-                "int"    => (int) $value,
-                "string" => (string) $value,
-                default  => throw $ex,
-            };
-        }
-    }
-
-    /**
-     * Attempts to find key case-insensitively
-     *
-     * @param array  $columnMap
-     * @param string $key
-     *
-     * @return string
-     */
-    private static function caseInsensitiveColumnMap(
-        array $columnMap,
-        string $key
-    ): string {
-        $keys = array_keys($columnMap);
-        foreach ($keys as $cmKey) {
-            if (strtolower($cmKey) == strtolower($key)) {
-                return $cmKey;
-            }
-        }
-
-        return $key;
-    }
-
-    /**
-     * shared prepare query logic for find and findFirst method
-     *
-     * @param array|string|null $params
-     * @param mixed|null        $limit
-     *
-     * @return QueryInterface
-     */
-    private static function getPreparedQuery(
-        array | string | null $params,
-        mixed $limit = null
-    ): QueryInterface {
-        $container = Di::getDefault();
-        $manager   = $container->get("modelsManager");
-
-        /**
-         * Builds a query with the passed parameters
-         */
-        $builder = $manager->createBuilder($params);
-
-        $builder->from(get_called_class());
-
-        if ($limit != null) {
-            $builder->limit($limit);
-        }
-
-        $query = $builder->getQuery();
-
-        /**
-         * Check for bind parameters
-         */
-        if (isset($params["bind"])) {
-            $bindParams = $params["bind"];
-            if (is_array($bindParams)) {
-                $query->setBindParams($bindParams, true);
-            }
-
-            if (isset($params["bindTypes"])) {
-                $bindTypes = $params["bindTypes"];
-                if (is_array($bindTypes)) {
-                    $query->setBindTypes($bindTypes, true);
-                }
-            }
-        }
-
-        if (isset($params[self::TRANSACTION_INDEX])) {
-            $transaction = $params[self::TRANSACTION_INDEX];
-            if ($transaction instanceof TransactionInterface) {
-                $query->setTransaction($transaction);
-            }
-        }
-
-        /**
-         * Pass the cache options to the query
-         */
-        if (isset($params["cache"])) {
-            $cache = $params["cache"];
-            $query->cache($cache);
-        }
-
-        return $query;
     }
 }

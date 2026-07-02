@@ -46,14 +46,14 @@ class Profiler implements ProfilerInterface
     protected string $logFormat = "";
 
     /**
-     * @var int|string
-     */
-    protected int | string $logLevel = 0;
-
-    /**
      * @var LoggerInterface
      */
     protected LoggerInterface $logger;
+
+    /**
+     * @var int|string
+     */
+    protected int | string $logLevel = 0;
 
     /**
      * @var Encode
