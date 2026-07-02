@@ -21,7 +21,6 @@ use function serialize;
 
 final class MessageEnvelopeTest extends AbstractUnitTestCase
 {
-
     public function testDecodeReturnsNullForNonEnvelopePayload(): void
     {
         $this->assertNull(MessageEnvelope::decode(serialize('not-an-array')));
