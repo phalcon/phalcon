@@ -22,8 +22,8 @@ use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class GetSetDefaultSerializerTest extends AbstractUnitTestCase
 {

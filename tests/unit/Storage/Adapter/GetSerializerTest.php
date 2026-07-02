@@ -23,8 +23,8 @@ use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class GetSerializerTest extends AbstractUnitTestCase
 {

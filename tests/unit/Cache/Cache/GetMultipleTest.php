@@ -19,8 +19,8 @@ use Phalcon\Cache\Cache;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 use function uniqid;
 

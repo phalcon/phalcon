@@ -125,23 +125,6 @@ abstract class AbstractContextConformanceTestCase extends AbstractUnitTestCase
         $this->assertNull($consumer->receiveNoWait());
     }
 
-    public function testRejectWithRequeuePutsMessageBack(): void
-    {
-        $context  = $this->createContext();
-        $queue    = $context->createQueue('requeue');
-
-        $context->createProducer()->send($queue, $context->createMessage('again'));
-
-        $consumer = $context->createConsumer($queue);
-        $message  = $consumer->receiveNoWait();
-
-        $this->assertNotNull($message);
-
-        $consumer->reject($message, true);
-
-        $this->assertSame('again', $consumer->receiveNoWait()->getBody());
-    }
-
     public function testRejectWithoutRequeueDiscardsTheMessage(): void
     {
         $context = $this->createContext();
@@ -157,6 +140,23 @@ abstract class AbstractContextConformanceTestCase extends AbstractUnitTestCase
         $consumer->reject($message, false);
 
         $this->assertNull($consumer->receiveNoWait());
+    }
+
+    public function testRejectWithRequeuePutsMessageBack(): void
+    {
+        $context  = $this->createContext();
+        $queue    = $context->createQueue('requeue');
+
+        $context->createProducer()->send($queue, $context->createMessage('again'));
+
+        $consumer = $context->createConsumer($queue);
+        $message  = $consumer->receiveNoWait();
+
+        $this->assertNotNull($message);
+
+        $consumer->reject($message, true);
+
+        $this->assertSame('again', $consumer->receiveNoWait()->getBody());
     }
 
     public function testSendThenReceiveReturnsTheMessage(): void

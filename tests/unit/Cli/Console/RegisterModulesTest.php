@@ -15,9 +15,9 @@ namespace Phalcon\Tests\Unit\Cli\Console;
 
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Cli\Console\Exception;
-use Phalcon\Talon\Talon;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Modules\Backend\Module;
 use Phalcon\Tests\Support\Modules\Frontend\Module as FrontendModule;
 

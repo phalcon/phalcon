@@ -15,7 +15,6 @@ namespace Phalcon\Tests\Unit\Cli\Console;
 
 use Exception;
 use Phalcon\Application\Exceptions\ModuleNotRegistered;
-use Phalcon\Talon\Talon;
 use Phalcon\Cli\Console as CliConsole;
 use Phalcon\Cli\Console\Exception as ConsoleException;
 use Phalcon\Cli\Console\Exceptions\InvalidModuleDefinition;
@@ -24,6 +23,7 @@ use Phalcon\Cli\Router\Exception as RouterException;
 use Phalcon\Di\FactoryDefault\Cli as DiFactoryDefault;
 use Phalcon\Events\Event;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Modules\Backend\Module as BackendModule;
 use Phalcon\Tests\Support\Modules\Frontend\Module as FrontendModule;
 use Phalcon\Tests\Support\Tasks\Issue787Task;

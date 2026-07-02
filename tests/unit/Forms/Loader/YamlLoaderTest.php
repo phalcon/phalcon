@@ -14,8 +14,8 @@ namespace Phalcon\Tests\Unit\Forms\Loader;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Loader\YamlLoader;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 /**
  * Tests for YamlLoader.

@@ -17,8 +17,8 @@ use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Image\Exception;
 use Phalcon\Image\ImageFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
 use function uniqid;
 

@@ -15,8 +15,8 @@ namespace Phalcon\Tests\Unit\Assets\Asset\Css;
 
 use Phalcon\Assets\Asset\Css;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\Test;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\Test;
 
 use function file_get_contents;
 

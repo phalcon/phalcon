@@ -24,8 +24,8 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 
 final class EventsTest extends AbstractUnitTestCase

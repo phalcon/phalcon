@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault\Cli;
 
 use Phalcon\Config\Config;
-use Phalcon\Talon\Talon;
 use Phalcon\Di\FactoryDefault\Cli as Di;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 
 final class LoadFromPhpTest extends AbstractUnitTestCase
 {
