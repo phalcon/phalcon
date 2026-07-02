@@ -44,7 +44,12 @@ final class IncrementTest extends AbstractUnitTestCase
             [
                 'Libmemcached',
                 Libmemcached::class,
-                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
+                [
+                    'client' => [],
+                    'servers' => [
+                        Talon::settings()->getServiceOptions('memcached')
+                    ]
+                ],
                 'memcached',
                 false,
             ],
@@ -58,14 +63,14 @@ final class IncrementTest extends AbstractUnitTestCase
             [
                 'Redis',
                 Redis::class,
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 'redis',
                 1
             ],
             [
                 'RedisCluster',
                 RedisCluster::class,
-                Talon::settings()->getRedisClusterOptions(),
+                Talon::settings()->getServiceOptions('redisCluster'),
                 'redis',
                 1
             ],

@@ -171,7 +171,7 @@ final class LockTest extends AbstractServicesTestCase
     {
         return new Redis(
             new AdapterFactory(new SerializerFactory()),
-            array_merge(Talon::settings()->getRedisOptions(), $options)
+            array_merge(Talon::settings()->getServiceOptions('redis'), $options)
         );
     }
 }

@@ -226,13 +226,15 @@ trait DiTrait
                     new AdapterFactory(new SerializerFactory()),
                     [
                         'client'  => [],
-                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                        'servers' => [
+                            Talon::settings()->getServiceOptions('memcached')
+                        ],
                     ]
                 );
             case 'metadataRedis':
                 return new MetaDataRedis(
                     new AdapterFactory(new SerializerFactory()),
-                    Talon::settings()->getRedisOptions()
+                    Talon::settings()->getServiceOptions('redis')
                 );
             case 'metadataStream':
                 return new MetaDataStream(
@@ -243,7 +245,9 @@ trait DiTrait
                     new SerializerFactory(),
                     [
                         'client'  => [],
-                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                        'servers' => [
+                            Talon::settings()->getServiceOptions('memcached')
+                        ],
                     ]
                 );
             case 'modelsCacheStream':
@@ -270,7 +274,9 @@ trait DiTrait
                     ),
                     [
                         'client'  => [],
-                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                        'servers' => [
+                            Talon::settings()->getServiceOptions('memcached')
+                        ],
                     ]
                 );
             case 'sessionNoop':
@@ -280,7 +286,7 @@ trait DiTrait
                     new StorageAdapterFactory(
                         new SerializerFactory()
                     ),
-                    Talon::settings()->getRedisOptions()
+                    Talon::settings()->getServiceOptions('redis')
                 );
             case 'url':
                 return new Url();

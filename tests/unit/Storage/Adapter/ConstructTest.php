@@ -47,7 +47,12 @@ final class ConstructTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
+                [
+                    'client' => [],
+                    'servers' => [
+                        Talon::settings()->getServiceOptions('memcached')
+                    ]
+                ],
                 'memcached',
             ],
             [
@@ -57,12 +62,12 @@ final class ConstructTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                Talon::settings()->getRedisClusterOptions(),
+                Talon::settings()->getServiceOptions('redisCluster'),
                 'redis',
             ],
             [
@@ -134,7 +139,7 @@ final class ConstructTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new FakeLibmemcached(
             $serializer,
-            ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]]
+            ['client' => [], 'servers' => [Talon::settings()->getServiceOptions('memcached')]]
         );
 
         $expected = 3600;

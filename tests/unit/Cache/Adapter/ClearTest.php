@@ -49,7 +49,12 @@ final class ClearTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
+                [
+                    'client' => [],
+                    'servers' => [
+                        Talon::settings()->getServiceOptions('memcached')
+                    ]
+                ],
                 'memcached',
             ],
             [
@@ -59,12 +64,12 @@ final class ClearTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 'redis',
             ],
             [
                 RedisCluster::class,
-                Talon::settings()->getRedisClusterOptions(),
+                Talon::settings()->getServiceOptions('redisCluster'),
                 'redis',
             ],
             [

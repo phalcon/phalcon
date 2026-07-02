@@ -45,7 +45,12 @@ final class GetAdapterTest extends AbstractUnitTestCase
             ],
             [
                 Libmemcached::class,
-                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
+                [
+                    'client' => [],
+                    'servers' => [
+                        Talon::settings()->getServiceOptions('memcached')
+                    ]
+                ],
                 NativeMemcached::class,
                 'memcached',
             ],
@@ -57,13 +62,13 @@ final class GetAdapterTest extends AbstractUnitTestCase
             ],
             [
                 Redis::class,
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 NativeRedis::class,
                 'redis',
             ],
             [
                 RedisCluster::class,
-                Talon::settings()->getRedisClusterOptions(),
+                Talon::settings()->getServiceOptions('redisCluster'),
                 NativeRedisCluster::class,
                 'redis',
             ],

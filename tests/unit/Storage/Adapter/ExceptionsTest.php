@@ -70,7 +70,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Redis(
             $serializer,
             array_merge(
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 [
                     'auth' => 'something',
                 ]
@@ -93,7 +93,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
 //        );
 
         $serializer      = new SerializerFactory();
-        $options         = Talon::settings()->getRedisOptions();
+        $options         = Talon::settings()->getServiceOptions('redis');
         $options['host'] = 'tls://127.0.0.1';
         $options['ssl']  = [
             'verify_peer_name' => '127.0.0.1',
@@ -119,7 +119,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Redis(
             $serializer,
             array_merge(
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 [
                     'index' => 99,
                 ]

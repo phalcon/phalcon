@@ -42,7 +42,12 @@ final class NewInstanceTest extends AbstractUnitTestCase
             [
                 'libmemcached',
                 Libmemcached::class,
-                ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]],
+                [
+                    'client' => [],
+                    'servers' => [
+                        Talon::settings()->getServiceOptions('memcached')
+                    ]
+                ],
             ],
             [
                 'memory',
@@ -52,12 +57,12 @@ final class NewInstanceTest extends AbstractUnitTestCase
             [
                 'redis',
                 Redis::class,
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
             ],
             [
                 'rediscluster',
                 RedisCluster::class,
-                Talon::settings()->getRedisClusterOptions(),
+                Talon::settings()->getServiceOptions('redisCluster'),
             ],
             [
                 'stream',

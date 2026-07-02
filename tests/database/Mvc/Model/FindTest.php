@@ -157,7 +157,7 @@ final class FindTest extends AbstractDatabaseTestCase
         // Models Cache setup
         $serializerFactory = new SerializerFactory();
         $adapterFactory    = new AdapterFactory($serializerFactory);
-        $adapter           = $adapterFactory->newInstance('redis', Talon::settings()->getRedisOptions());
+        $adapter           = $adapterFactory->newInstance('redis', Talon::settings()->getServiceOptions('redis'));
         $cache             = new Cache($adapter);
         $this->container->setShared('modelsCache', $cache);
 

@@ -55,7 +55,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
                     $factory,
                     [
                         'client'  => [],
-                        'servers' => [Talon::settings()->getMemcachedOptions()],
+                        'servers' => [Talon::settings()->getServiceOptions('memcached')],
                     ]
                 );
             }

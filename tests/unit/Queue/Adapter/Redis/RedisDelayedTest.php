@@ -39,7 +39,7 @@ final class RedisDelayedTest extends AbstractUnitTestCase
         }
 
         $this->options = array_merge(
-            Talon::settings()->getRedisOptions(),
+            Talon::settings()->getServiceOptions('redis'),
             ['prefix' => 'phalcon_queue_test_' . uniqid('', true) . ':']
         );
 

@@ -53,7 +53,7 @@ final class ConstructTest extends AbstractDatabaseTestCase
 
                 return new Redis(
                     $factory,
-                    Talon::settings()->getRedisOptions()
+                    Talon::settings()->getServiceOptions('redis')
                 );
             }
         );

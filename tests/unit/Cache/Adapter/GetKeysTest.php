@@ -59,13 +59,13 @@ final class GetKeysTest extends AbstractUnitTestCase
             [
                 'redis',
                 Redis::class,
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 'ph-reds-'
             ],
             [
                 'redis',
                 RedisCluster::class,
-                Talon::settings()->getRedisClusterOptions(),
+                Talon::settings()->getServiceOptions('redisCluster'),
                 'ph-redc-'
             ],
             [
@@ -139,7 +139,12 @@ final class GetKeysTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         $adapter    = new Libmemcached(
             $serializer,
-            ['client' => [], 'servers' => [Talon::settings()->getMemcachedOptions()]]
+            [
+                'client' => [],
+                'servers' => [
+                    Talon::settings()->getServiceOptions('memcached')
+                ]
+            ],
         );
 
         $memcachedServerVersions   = $adapter->getAdapter()

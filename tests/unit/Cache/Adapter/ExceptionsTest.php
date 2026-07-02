@@ -70,7 +70,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Redis(
             $serializer,
             array_merge(
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 [
                     'auth' => 'something',
                 ]
@@ -94,7 +94,7 @@ final class ExceptionsTest extends AbstractUnitTestCase
         $adapter    = new Redis(
             $serializer,
             array_merge(
-                Talon::settings()->getRedisOptions(),
+                Talon::settings()->getServiceOptions('redis'),
                 [
                     'index' => 99,
                 ]

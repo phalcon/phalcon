@@ -92,7 +92,7 @@ final class GetMultipleTest extends AbstractUnitTestCase
         $factory    = new AdapterFactory($serializer);
         $instance   = $factory->newInstance(
             'redis',
-            Talon::settings()->getRedisOptions()
+            Talon::settings()->getServiceOptions('redis')
         );
 
         $adapter = new Cache($instance);
