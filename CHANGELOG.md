@@ -5,6 +5,8 @@
 
 ### Changed
 
+- Converted the internal test suite to the `phalcon/talon` testing framework and added octocov coverage reporting. [#769](https://github.com/phalcon/phalcon/issues/769)
+
 ### Added
 
 ### Fixed
