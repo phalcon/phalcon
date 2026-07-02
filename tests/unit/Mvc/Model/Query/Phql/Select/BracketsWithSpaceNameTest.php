@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Model\Query\Phql\Select;
 
 use Phalcon\Phql\Parser;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class BracketsWithSpaceNameTest extends AbstractUnitTestCase
 {

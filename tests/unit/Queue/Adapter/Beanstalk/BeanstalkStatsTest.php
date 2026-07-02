@@ -16,10 +16,10 @@ namespace Phalcon\Tests\Unit\Queue\Adapter\Beanstalk;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Contracts\Queue\Inspectable;
 use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConnectionFactory;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Throwable;
 
-use function getOptionsBeanstalk;
 use function random_int;
 use function uniqid;
 
@@ -38,7 +38,7 @@ final class BeanstalkStatsTest extends AbstractUnitTestCase
     {
         parent::setUp();
 
-        $this->options = getOptionsBeanstalk();
+        $this->options = Talon::settings()->getServiceOptions('beanstalk');
         $this->tube    = 'phalcon_test_' . uniqid('', true);
 
         try {

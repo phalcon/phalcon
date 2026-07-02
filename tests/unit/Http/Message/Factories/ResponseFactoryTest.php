@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Factories;
 
 use Phalcon\Http\Message\Factories\ResponseFactory;
 use Phalcon\Http\Message\Interfaces\ResponseInterface;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class ResponseFactoryTest extends AbstractUnitTestCase
 {

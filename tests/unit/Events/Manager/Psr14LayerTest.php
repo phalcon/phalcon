@@ -3,7 +3,7 @@
 namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Manager;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Events\Fake\CancellableEventObject;
 use Phalcon\Tests\Unit\Events\Fake\EmptyEventObject;
 

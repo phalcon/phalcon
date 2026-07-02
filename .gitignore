@@ -14,6 +14,9 @@ tests/_output/
 vendor/
 *.sqlite*
 
+# Local talon checkout (composer path-repository hotwire, not part of phalcon's history)
+/talon/
+
 # Docker
 docker-compose.override.yml
 

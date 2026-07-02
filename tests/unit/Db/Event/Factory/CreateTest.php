@@ -22,7 +22,7 @@ use Phalcon\Db\Event\BeforeSaveEvent;
 use Phalcon\Db\Event\Factory;
 use Phalcon\Events\PsrEventInterface;
 use Phalcon\Mvc\Model;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class CreateTest extends AbstractUnitTestCase
 {

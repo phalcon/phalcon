@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Factories;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Factories\StreamFactory;
 use Phalcon\Http\Message\Interfaces\StreamInterface;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class StreamFactoryTest extends AbstractUnitTestCase
 {

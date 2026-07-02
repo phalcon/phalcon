@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Response;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Response;
 use Phalcon\Http\Message\Stream;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class ConstructTest extends AbstractUnitTestCase
 {

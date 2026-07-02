@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Queue\Adapter;
 
 use Phalcon\Queue\Adapter\Memory\MemoryMessage;
 use Phalcon\Queue\Adapter\MessageEnvelope;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 use function serialize;
 
