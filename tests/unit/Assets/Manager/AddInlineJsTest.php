@@ -20,7 +20,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
 
-
 final class AddInlineJsTest extends AbstractUnitTestCase
 {
     use DiTrait;

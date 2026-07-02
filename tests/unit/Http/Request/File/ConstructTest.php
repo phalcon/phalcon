@@ -19,7 +19,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Page\Http;
 
-
 final class ConstructTest extends AbstractUnitTestCase
 {
     /**

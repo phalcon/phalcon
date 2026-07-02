@@ -188,7 +188,10 @@ final class ManagerOutputTest extends AbstractUnitTestCase
      */
     public function testAssetsManagerOutputCollectionSourcePath(): void
     {
-        $targetFile = Talon::settings()->outputPath('tests/assets/cov_srcpath_' . $this->getNewFileName() . '.css');
+        $targetFile = Talon::settings()->outputPath(
+            'tests/assets/cov_srcpath_'
+            . $this->getNewFileName() . '.css'
+        );
 
         $manager = new Manager(new TagFactory(new Escaper()), [
             'sourceBasePath' => Talon::settings()->supportPath() . '/',
@@ -246,7 +249,10 @@ final class ManagerOutputTest extends AbstractUnitTestCase
      */
     public function testAssetsManagerOutputEchoImplicitJoin(): void
     {
-        $targetFile = Talon::settings()->outputPath('tests/assets/cov_echo_join_' . $this->getNewFileName() . '.css');
+        $targetFile = Talon::settings()->outputPath(
+            'tests/assets/cov_echo_join_'
+            . $this->getNewFileName() . '.css'
+        );
         $cssFile    = Talon::settings()->supportPath('assets/assets/1198.css');
 
         $collection = new Collection();
@@ -421,7 +427,10 @@ final class ManagerOutputTest extends AbstractUnitTestCase
         $this->expectExceptionMessage('The filter is not valid');
 
         $cssFile    = Talon::settings()->supportPath('assets/assets/1198.css');
-        $targetFile = Talon::settings()->outputPath('tests/assets/cov_inv_filter_' . $this->getNewFileName() . '.css');
+        $targetFile = Talon::settings()->outputPath(
+            'tests/assets/cov_inv_filter_'
+            . $this->getNewFileName() . '.css'
+        );
 
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->useImplicitOutput(false);
@@ -443,7 +452,10 @@ final class ManagerOutputTest extends AbstractUnitTestCase
     public function testAssetsManagerOutputNoFilterJoin(): void
     {
         $cssFile    = Talon::settings()->supportPath('assets/assets/1198.css');
-        $targetFile = Talon::settings()->outputPath('tests/assets/cov_nofilter_join_' . $this->getNewFileName() . '.css');
+        $targetFile = Talon::settings()->outputPath(
+            'tests/assets/cov_nofilter_join_'
+            . $this->getNewFileName() . '.css'
+        );
 
         $manager = new Manager(new TagFactory(new Escaper()));
         $manager->useImplicitOutput(false);

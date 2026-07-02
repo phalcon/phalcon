@@ -19,7 +19,6 @@ use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-
 final class GetMimeTest extends AbstractUnitTestCase
 {
     use ImagickTrait;

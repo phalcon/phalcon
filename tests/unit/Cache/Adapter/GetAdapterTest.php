@@ -28,7 +28,6 @@ use Phalcon\Talon\Talon;
 use Redis as NativeRedis;
 use RedisCluster as NativeRedisCluster;
 
-
 final class GetAdapterTest extends AbstractUnitTestCase
 {
     /**

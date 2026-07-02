@@ -26,7 +26,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 
-
 final class GetSerializerTest extends AbstractUnitTestCase
 {
     /**

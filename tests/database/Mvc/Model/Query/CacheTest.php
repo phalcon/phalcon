@@ -24,7 +24,6 @@ use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
-
 #[Group('phql')]
 final class CacheTest extends AbstractDatabaseTestCase
 {

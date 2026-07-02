@@ -249,7 +249,12 @@ final class CachedDispatcherTest extends AbstractUnitTestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessageMatches('/not found/i');
 
-        $router->loadDispatcher(Talon::settings()->outputPath('tests/cache/' . '_router_nonexistent_' . uniqid('', true) . '.php'));
+        $router->loadDispatcher(
+            Talon::settings()->outputPath(
+                'tests/cache/_router_nonexistent_'
+                . uniqid('', true) . '.php'
+            )
+        );
     }
 
     /**
@@ -382,6 +387,9 @@ final class CachedDispatcherTest extends AbstractUnitTestCase
 
     private function makeCachePath(): string
     {
-        return Talon::settings()->outputPath('tests/cache/' . '_router_cache_' . uniqid('', true) . '.php');
+        return Talon::settings()->outputPath(
+            'tests/cache/_router_cache_'
+            . uniqid('', true) . '.php'
+        );
     }
 }

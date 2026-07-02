@@ -17,7 +17,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-
 final class SharedLockTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

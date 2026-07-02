@@ -19,7 +19,6 @@ use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
 
-
 final class GetSetDirectoryTest extends AbstractUnitTestCase
 {
     use TranslateGettextTrait;

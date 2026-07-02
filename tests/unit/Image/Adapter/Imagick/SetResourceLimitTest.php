@@ -18,7 +18,6 @@ use Phalcon\Image\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-
 final class SetResourceLimitTest extends AbstractUnitTestCase
 {
     /**

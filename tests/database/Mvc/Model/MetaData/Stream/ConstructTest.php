@@ -23,7 +23,6 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-
 #[Group('phql')]
 final class ConstructTest extends AbstractDatabaseTestCase
 {
@@ -64,8 +63,14 @@ final class ConstructTest extends AbstractDatabaseTestCase
      */
     public function tearDown(): void
     {
-        $this->safeDeleteFile(Talon::settings()->outputPath('tests/cache/' . 'meta-phalcon_tests_support_models_invoices.php'));
-        $this->safeDeleteFile(Talon::settings()->outputPath('tests/cache/' . 'map-phalcon_tests_support_models_invoices.php'));
+        $this->safeDeleteFile(
+            Talon::settings()->outputPath('tests/cache/'
+                . 'meta-phalcon_tests_support_models_invoices.php')
+        );
+        $this->safeDeleteFile(
+            Talon::settings()->outputPath('tests/cache/'
+                . 'map-phalcon_tests_support_models_invoices.php')
+        );
 
         $this->tearDownDatabase();
     }
@@ -88,11 +93,21 @@ final class ConstructTest extends AbstractDatabaseTestCase
         Invoices::findFirst();
 
         $this->assertTrue(
-            file_exists(Talon::settings()->outputPath('tests/cache/' . 'meta-phalcon_tests_support_models_invoices.php'))
+            file_exists(
+                Talon::settings()->outputPath(
+                    'tests/cache/'
+                    . 'meta-phalcon_tests_support_models_invoices.php'
+                )
+            )
         );
 
         $this->assertTrue(
-            file_exists(Talon::settings()->outputPath('tests/cache/' . 'map-phalcon_tests_support_models_invoices.php'))
+            file_exists(
+                Talon::settings()->outputPath(
+                    'tests/cache/'
+                    . 'map-phalcon_tests_support_models_invoices.php'
+                )
+            )
         );
 
         $this->assertFalse($md->isEmpty());

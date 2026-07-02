@@ -24,7 +24,6 @@ use Phalcon\Translate\Exceptions\FileOpenError;
 use Phalcon\Translate\Exceptions\MissingRequiredParameter;
 use Phalcon\Translate\InterpolatorFactory;
 
-
 final class ConstructTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
@@ -63,7 +62,9 @@ final class ConstructTest extends AbstractUnitTestCase
     public function testTranslateAdapterCsvErrorLoadingFile(): void
     {
 
-        $message = "Error opening translation file '" . Talon::settings()->supportPath('assets/translation/csv/en.csv') . "'";
+        $message = "Error opening translation file '"
+            . Talon::settings()->supportPath('assets/translation/csv/en.csv')
+            . "'";
         $this->expectException(FileOpenError::class);
         $this->expectExceptionMessage($message);
 

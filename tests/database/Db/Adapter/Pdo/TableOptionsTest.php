@@ -18,7 +18,6 @@ use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-
 final class TableOptionsTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

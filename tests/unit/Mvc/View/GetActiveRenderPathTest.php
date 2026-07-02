@@ -21,7 +21,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Mvc\View\AfterRenderListener;
 
-
 use const DIRECTORY_SEPARATOR;
 
 class GetActiveRenderPathTest extends AbstractUnitTestCase
@@ -52,7 +51,11 @@ class GetActiveRenderPathTest extends AbstractUnitTestCase
         $view->getContent();
 
         $this->assertEquals(
-            Talon::settings()->dataPath('views' . DIRECTORY_SEPARATOR . 'activerender' . DIRECTORY_SEPARATOR . 'index.phtml'),
+            Talon::settings()->dataPath(
+                'views' . DIRECTORY_SEPARATOR
+                . 'activerender' . DIRECTORY_SEPARATOR
+                . 'index.phtml'
+            ),
             $view->getActiveRenderPath()
         );
 
@@ -62,7 +65,11 @@ class GetActiveRenderPathTest extends AbstractUnitTestCase
         ]);
 
         $this->assertEquals(
-            Talon::settings()->dataPath('views' . DIRECTORY_SEPARATOR . 'activerender' . DIRECTORY_SEPARATOR . 'index.phtml'),
+            Talon::settings()->dataPath(
+                'views' . DIRECTORY_SEPARATOR
+                . 'activerender' . DIRECTORY_SEPARATOR
+                . 'index.phtml'
+            ),
             $view->getActiveRenderPath()
         );
     }
@@ -93,7 +100,11 @@ class GetActiveRenderPathTest extends AbstractUnitTestCase
         $view->render('activerender', 'missing_file');
         $view->finish();
 
-        $base   = Talon::settings()->dataPath('views' . DIRECTORY_SEPARATOR . 'activerender' . DIRECTORY_SEPARATOR . 'missing_file');
+        $base   = Talon::settings()->dataPath(
+            'views' . DIRECTORY_SEPARATOR
+            . 'activerender' . DIRECTORY_SEPARATOR
+            . 'missing_file'
+        );
         $actual = $view->getActiveRenderPath();
 
         $this->assertIsArray($actual);

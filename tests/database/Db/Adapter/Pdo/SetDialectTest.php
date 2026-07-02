@@ -20,7 +20,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-
 final class SetDialectTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

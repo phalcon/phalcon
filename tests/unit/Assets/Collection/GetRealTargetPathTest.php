@@ -18,7 +18,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Assets\Fake\FakeCollectionFileExists;
 
-
 final class GetRealTargetPathTest extends AbstractUnitTestCase
 {
     /**

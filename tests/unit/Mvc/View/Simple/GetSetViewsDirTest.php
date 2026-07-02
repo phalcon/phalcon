@@ -17,7 +17,6 @@ use Phalcon\Mvc\View\Simple;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-
 use const DIRECTORY_SEPARATOR;
 
 class GetSetViewsDirTest extends AbstractUnitTestCase

@@ -90,9 +90,15 @@ final class AutoloadTest extends AbstractUnitTestCase
             )
             ->setNamespaces(
                 [
-                    'Example\Namespaces\Base' => Talon::settings()->supportPath('assets/Loader/Example/Namespaces/Base/'),
-                    'Example\Namespaces'      => Talon::settings()->supportPath('assets/Loader/Example/Namespaces/'),
-                    'Example'                 => Talon::settings()->supportPath('assets/Loader/Example/Namespaces/'),
+                    'Example\Namespaces\Base' => Talon::settings()->supportPath(
+                        'assets/Loader/Example/Namespaces/Base/'
+                    ),
+                    'Example\Namespaces'      => Talon::settings()->supportPath(
+                        'assets/Loader/Example/Namespaces/'
+                    ),
+                    'Example'                 => Talon::settings()->supportPath(
+                        'assets/Loader/Example/Namespaces/'
+                    ),
                 ]
             )
         ;

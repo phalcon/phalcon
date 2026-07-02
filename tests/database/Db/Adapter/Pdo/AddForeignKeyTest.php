@@ -19,7 +19,6 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
-
 final class AddForeignKeyTest extends AbstractDatabaseTestCase
 {
     use DiTrait;

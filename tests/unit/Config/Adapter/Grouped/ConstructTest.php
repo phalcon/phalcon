@@ -20,7 +20,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\ConfigTrait;
 
-
 final class ConstructTest extends AbstractUnitTestCase
 {
     use ConfigTrait;

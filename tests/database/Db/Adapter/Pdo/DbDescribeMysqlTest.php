@@ -48,7 +48,13 @@ final class DbDescribeMysqlTest extends AbstractDatabaseTestCase
         $expected = $this->getExpectedColumnsMysql();
 
         $this->assertEquals($expected, $db->describeColumns('personas'));
-        $this->assertEquals($expected, $db->describeColumns('personas', Talon::settings()->getDatabaseOptions('mysql')['dbname']));
+        $this->assertEquals(
+            $expected,
+            $db->describeColumns(
+                'personas',
+                Talon::settings()->getDatabaseOptions('mysql')['dbname']
+            )
+        );
     }
 
     /**
@@ -99,7 +105,12 @@ final class DbDescribeMysqlTest extends AbstractDatabaseTestCase
 
         $this->assertTrue($db->tableExists('co_invoices'));
         $this->assertFalse($db->tableExists('noexist'));
-        $this->assertTrue($db->tableExists('co_invoices', Talon::settings()->getDatabaseOptions('mysql')['dbname']));
+        $this->assertTrue(
+            $db->tableExists(
+                'co_invoices',
+                Talon::settings()->getDatabaseOptions('mysql')['dbname']
+            )
+        );
         $this->assertFalse($db->tableExists('co_invoices', 'test'));
     }
 

@@ -22,7 +22,6 @@ use Phalcon\Logger\LoggerInterface;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-
 /**
  * Class NewInstanceTest extends AbstractUnitTestCase
  *

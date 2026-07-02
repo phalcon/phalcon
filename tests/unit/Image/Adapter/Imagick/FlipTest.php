@@ -19,7 +19,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use Phalcon\Tests\Unit\Image\Fake\ImagickTrait;
 
-
 final class FlipTest extends AbstractUnitTestCase
 {
     use ImagickTrait;

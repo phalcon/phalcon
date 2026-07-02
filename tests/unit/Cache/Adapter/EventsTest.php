@@ -28,7 +28,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Phalcon\Talon\Talon;
 use RuntimeException;
 
-
 final class EventsTest extends AbstractUnitTestCase
 {
     /**

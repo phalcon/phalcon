@@ -31,7 +31,6 @@ use Phalcon\Tests\Unit\Cache\Fake\Adapter\Libmemcached as LibmemcachedFixture;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 
-
 final class ConstructTest extends AbstractUnitTestCase
 {
     /**

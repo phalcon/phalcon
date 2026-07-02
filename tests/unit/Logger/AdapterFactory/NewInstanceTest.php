@@ -19,7 +19,6 @@ use Phalcon\Logger\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 
-
 final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
