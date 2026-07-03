@@ -12,6 +12,7 @@
 ### Fixed
 
 - Fixed the model `Annotations` metadata strategy (`Phalcon\Mvc\Model\MetaData\Strategy\Annotations`) to read the `#[Column]` skip and empty-string flags using the attribute constructor's camelCase argument names (`skipOnInsert`, `skipOnUpdate`, `allowEmptyString`); it previously looked for snake_case keys (`skip_on_insert`, `skip_on_update`, `allow_empty_string`) that never match a valid `#[Column]` usage, so those flags had no effect. [[doc]](https://docs.phalcon.io/6.0/annotations/)
+- Fixed `Phalcon\Annotations\Router\Route` (and its `#[Get]`, `#[Post]`, ... subclasses) to declare the `beforeMatch` constructor argument that `Phalcon\Mvc\Router\Annotations` already applies; instantiating the attribute with `beforeMatch:` previously raised an unknown-named-parameter error. [[doc]](https://docs.phalcon.io/6.0/annotations/)
 
 ### Removed
 
