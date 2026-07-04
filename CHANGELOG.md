@@ -13,8 +13,11 @@
 
 - Fixed the model `Annotations` metadata strategy (`Phalcon\Mvc\Model\MetaData\Strategy\Annotations`) to read the `#[Column]` skip and empty-string flags using the attribute constructor's camelCase argument names (`skipOnInsert`, `skipOnUpdate`, `allowEmptyString`); it previously looked for snake_case keys (`skip_on_insert`, `skip_on_update`, `allow_empty_string`) that never match a valid `#[Column]` usage, so those flags had no effect. [[doc]](https://docs.phalcon.io/6.0/annotations/)
 - Fixed `Phalcon\Annotations\Router\Route` (and its `#[Get]`, `#[Post]`, ... subclasses) to declare the `beforeMatch` constructor argument that `Phalcon\Mvc\Router\Annotations` already applies; instantiating the attribute with `beforeMatch:` previously raised an unknown-named-parameter error. [[doc]](https://docs.phalcon.io/6.0/annotations/)
+- Fixed the PHP 8.4/8.5 deprecation notices raised by the framework: removed the `imagedestroy()` calls in `Phalcon\Image\Adapter\Gd` (a no-op since PHP 8.0), the `finfo_close()` calls in `Phalcon\Http\Request\File` and `Phalcon\Filter\Validation\Validator\File\MimeType` and the `ReflectionProperty::setAccessible()` call in `Phalcon\Support\Debug\Dump` (no-ops since PHP 8.1), clamped the random pad byte in `Phalcon\Encryption\Crypt\Padding\Iso10126` to `chr(rand() % 256)` to avoid the out-of-range `chr()` deprecation on PHP 8.5, and guarded `Phalcon\Messages\Messages::offsetSet()` against an implicit `null` array offset. [#17253](https://github.com/phalcon/cphalcon/issues/17253) [[doc]](https://docs.phalcon.io/6.0/)
 
 ### Removed
+
+- Removed the deprecated `Serializable` interface from `Phalcon\Mvc\Model` and `Phalcon\Mvc\Model\Resultset` (deprecated by PHP 8.1); the `__serialize()` and `__unserialize()` magic methods remain, so model and resultset serialization is unchanged. [#17253](https://github.com/phalcon/cphalcon/issues/17253) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 
 ## [6.0.0 alpha 3](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha3) (2026-06-29)
 
