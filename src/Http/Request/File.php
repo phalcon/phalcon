@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Http\Request;
 
 use function defined;
-use function finfo_close;
 use function finfo_file;
 use function finfo_open;
 use function is_uploaded_file;
@@ -159,8 +158,6 @@ class File implements FileInterface
 
             if (false !== $finfo) {
                 $mime = finfo_file($finfo, $this->tmpName);
-
-                finfo_close($finfo);
 
                 $this->realType = $mime;
             }

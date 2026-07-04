@@ -16,7 +16,6 @@ namespace Phalcon\Filter\Validation\Validator\File;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\InvalidAllowedTypes;
 
-use function finfo_close;
 use function finfo_file;
 use function finfo_open;
 use function function_exists;
@@ -112,7 +111,6 @@ class MimeType extends AbstractFile
             $tmp = finfo_open(FILEINFO_MIME_TYPE);
             if ($tmp) {
                 $mime = finfo_file($tmp, $value["tmp_name"]);
-                finfo_close($tmp);
             }
         }
 

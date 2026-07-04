@@ -423,7 +423,6 @@ class Dump implements TemplateAware
                 );
 
                 foreach ($props as $property) {
-                    $property->setAccessible(true);
                     $key  = $property->getName();
                     $type = implode(
                         ' ',

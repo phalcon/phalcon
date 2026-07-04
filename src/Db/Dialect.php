@@ -187,14 +187,14 @@ abstract class Dialect implements DialectInterface
      * `modifier` appends a row-lock disposition keyword.
      *
      *```php
-     * $sql = $dialect->forUpdate("SELECT * FROM robots");
-     * echo $sql; // SELECT * FROM robots FOR UPDATE
+     * $sql = $dialect->forUpdate("SELECT * FROM co_invoices");
+     * echo $sql; // SELECT * FROM co_invoices FOR UPDATE
      *
      * $sql = $dialect->forUpdate(
-     *     "SELECT * FROM robots",
+     *     "SELECT * FROM co_invoices",
      *     Dialect::LOCK_NOWAIT
      * );
-     * echo $sql; // SELECT * FROM robots FOR UPDATE NOWAIT
+     * echo $sql; // SELECT * FROM co_invoices FOR UPDATE NOWAIT
      *```
      *
      * @param string $sqlQuery
@@ -550,15 +550,15 @@ abstract class Dialect implements DialectInterface
      * Generates the SQL for LIMIT clause
      *
      * ```php
-     * // SELECT * FROM robots LIMIT 10
+     * // SELECT * FROM co_invoices LIMIT 10
      * echo $dialect->limit(
-     *     "SELECT * FROM robots",
+     *     "SELECT * FROM co_invoices",
      *     10
      * );
      *
-     * // SELECT * FROM robots LIMIT 10 OFFSET 50
+     * // SELECT * FROM co_invoices LIMIT 10 OFFSET 50
      * echo $dialect->limit(
-     *     "SELECT * FROM robots",
+     *     "SELECT * FROM co_invoices",
      *     [10, 50]
      * );
      * ```

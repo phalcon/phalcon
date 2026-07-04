@@ -29,7 +29,7 @@ use function is_object;
  *
  * $paginator = new Model(
  *     [
- *         "model" => Robots::class,
+ *         "model" => Invoices::class,
  *         "limit" => 25,
  *         "page"  => $currentPage,
  *     ]
@@ -38,9 +38,9 @@ use function is_object;
  *
  * $paginator = new Model(
  *     [
- *         "model" => Robots::class,
+ *         "model" => Invoices::class,
  *         "parameters" => [
- *              "columns" => "id, name"
+ *              "columns" => "inv_id, inv_title"
  *         ],
  *         "limit" => 12,
  *         "page"  => $currentPage,
@@ -50,13 +50,13 @@ use function is_object;
  *
  * $paginator = new Model(
  *     [
- *         "model" => Robots::class,
+ *         "model" => Invoices::class,
  *         "parameters" => [
- *              "type = :type:",
+ *              "inv_status_flag = :flag:",
  *              "bind" => [
- *                  "type" => "mechanical"
+ *                  "flag" => 1
  *              ],
- *              "order" => "name"
+ *              "order" => "inv_title"
  *         ],
  *         "limit" => 16,
  *         "page"  => $currentPage,
@@ -65,8 +65,8 @@ use function is_object;
  *
  * $paginator = new Model(
  *     [
- *         "model" => Robots::class,
- *         "parameters" => "(id % 2) = 0",
+ *         "model" => Invoices::class,
+ *         "parameters" => "(inv_id % 2) = 0",
  *         "limit" => 8,
  *         "page"  => $currentPage,
  *     ]
@@ -75,8 +75,8 @@ use function is_object;
  *
  * $paginator = new Model(
  *     [
- *         "model" => Robots::class,
- *         "parameters" => [ "(id % 2) = 0" ],
+ *         "model" => Invoices::class,
+ *         "parameters" => [ "(inv_id % 2) = 0" ],
  *         "limit" => 8,
  *         "page"  => $currentPage,
  *     ]

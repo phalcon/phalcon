@@ -89,15 +89,15 @@ interface BuilderInterface
      * // Array, one column per element
      * $builder->columns(
      *     [
-     *         "id",
-     *         "name",
+     *         "inv_id",
+     *         "inv_title",
      *     ]
      * );
      *
      * // Array, named keys. The name of the key acts as an alias (`AS` clause)
      * $builder->columns(
      *     [
-     *         "name",
+     *         "inv_title",
      *         "number" => "COUNT(*)",
      *     ]
      * );

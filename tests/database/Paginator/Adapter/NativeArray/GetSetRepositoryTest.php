@@ -18,8 +18,13 @@ use Phalcon\Paginator\Repository;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Paginator\Store;
 
+use PHPUnit\Framework\Attributes\Group;
+
 use function array_fill;
 
+#[Group('mysql')]
+#[Group('pgsql')]
+#[Group('sqlite')]
 final class GetSetRepositoryTest extends AbstractDatabaseTestCase
 {
     /**

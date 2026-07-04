@@ -47,7 +47,6 @@ use function imagecreatefromwebp;
 use function imagecreatefromxbm;
 use function imagecreatetruecolor;
 use function imagecrop;
-use function imagedestroy;
 use function imagefill;
 use function imagefilledrectangle;
 use function imagefilter;
@@ -206,12 +205,6 @@ class Gd extends AbstractAdapter
      */
     public function __destruct()
     {
-        $image = $this->image;
-
-        if (null !== $image) {
-            imagedestroy($image);
-        }
-
         $this->image = null;
     }
 
@@ -301,8 +294,6 @@ class Gd extends AbstractAdapter
             $this->height
         );
         if (false !== $copy) {
-            imagedestroy($image);
-
             $this->image = $background;
         }
     }
@@ -360,8 +351,6 @@ class Gd extends AbstractAdapter
         ];
 
         $image = imagecrop($this->image, $rect);
-
-        imagedestroy($this->image);
 
         $this->image  = $image;
         $this->width  = imagesx($image);
@@ -426,8 +415,6 @@ class Gd extends AbstractAdapter
                 $maskHeight
             );
 
-            imagedestroy($maskImage);
-
             $maskImage = $tempImage;
         }
 
@@ -462,9 +449,6 @@ class Gd extends AbstractAdapter
 
             $x++;
         }
-
-        imagedestroy($this->image);
-        imagedestroy($maskImage);
 
         $this->image = $newImage;
     }
@@ -596,8 +580,6 @@ class Gd extends AbstractAdapter
             $offset++;
         }
 
-        imagedestroy($this->image);
-
         $this->image  = $reflection;
         $this->width  = imagesx($reflection);
         $this->height = imagesy($reflection);
@@ -656,8 +638,6 @@ class Gd extends AbstractAdapter
         imagesavealpha($image, true);
         imagecopyresampled($image, $this->image, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
 
-        imagedestroy($this->image);
-
         $this->image  = $image;
         $this->width  = imagesx($image);
         $this->height = imagesy($image);
@@ -701,8 +681,6 @@ class Gd extends AbstractAdapter
             100
         );
         if (false !== $copy) {
-            imagedestroy($this->image);
-
             $this->image  = $image;
             $this->width  = $width;
             $this->height = $height;
@@ -949,9 +927,6 @@ class Gd extends AbstractAdapter
             $width,
             $height
         );
-        if (true === $copy) {
-            imagedestroy($overlay);
-        }
     }
 
     /**

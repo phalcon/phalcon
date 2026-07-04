@@ -129,7 +129,11 @@ trait MessagesHelperTrait
             throw new MessageNotObject();
         }
 
-        $this->messages[$offset] = $message;
+        if ($offset === null) {
+            $this->messages[] = $message;
+        } else {
+            $this->messages[$offset] = $message;
+        }
     }
 
     /**

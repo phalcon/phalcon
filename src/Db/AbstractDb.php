@@ -45,13 +45,13 @@ use Phalcon\Support\Settings;
  *     );
  *
  *     $result = $connection->query(
- *         "SELECT * FROM robots LIMIT 5"
+ *         "SELECT * FROM co_invoices LIMIT 5"
  *     );
  *
  *     $result->setFetchMode(Enum::FETCH_NUM);
  *
- *     while ($robot = $result->fetch()) {
- *         print_r($robot);
+ *     while ($invoice = $result->fetch()) {
+ *         print_r($invoice);
  *     }
  * } catch (Exception $e) {
  *     echo $e->getMessage(), PHP_EOL;
