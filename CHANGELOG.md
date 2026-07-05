@@ -9,6 +9,8 @@
 
 ### Added
 
+- Added `Phalcon\Filter\Validation::setDefaultMessages()` and `Phalcon\Filter\Validation::getDefaultMessage()` for registering global default validator failure messages keyed by validator class name (e.g. `Validation::setDefaultMessages([PresenceOf::class => 'Default message :field is required'])`). A registered default overrides a validator's built-in class default message, while a message set on the validator instance (the constructor `message`/`template` option or `setTemplate()`) still takes precedence; it applies to validators whose message is produced through `getTemplate()`/`messageFactory()`. [#17257](https://github.com/phalcon/cphalcon/issues/17257) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+
 ### Fixed
 
 - Fixed the model `Annotations` metadata strategy (`Phalcon\Mvc\Model\MetaData\Strategy\Annotations`) to read the `#[Column]` skip and empty-string flags using the attribute constructor's camelCase argument names (`skipOnInsert`, `skipOnUpdate`, `allowEmptyString`); it previously looked for snake_case keys (`skip_on_insert`, `skip_on_update`, `allow_empty_string`) that never match a valid `#[Column]` usage, so those flags had no effect. [[doc]](https://docs.phalcon.io/6.0/annotations/)
