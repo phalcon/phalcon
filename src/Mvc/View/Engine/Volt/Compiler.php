@@ -2381,6 +2381,21 @@ class Compiler implements InjectionAwareInterface
      */
     protected function getFinalPath(string $path): string
     {
+        /**
+         * Absolute paths are used as they are
+         */
+        if ($this->isAbsolutePath($path)) {
+            return $path;
+        }
+
+        /**
+         * Paths starting with "./" or "../" are resolved relative to the
+         * directory of the template currently being compiled
+         */
+        if (str_starts_with($path, "./") || str_starts_with($path, "../")) {
+            return dirname((string) $this->currentPath) . DIRECTORY_SEPARATOR . $path;
+        }
+
         if (null !== $this->view) {
             $viewsDirs = $this->view->getViewsDir();
 
@@ -2961,6 +2976,32 @@ class Compiler implements InjectionAwareInterface
         }
 
         return "v" . sprintf('%u', $hash);
+    }
+
+    /**
+     * Checks whether a path is absolute (Unix root, Windows UNC or drive)
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    private function isAbsolutePath(string $path): bool
+    {
+        /**
+         * Unix absolute path or Windows UNC path
+         */
+        if (str_starts_with($path, "/") || str_starts_with($path, "\\")) {
+            return true;
+        }
+
+        /**
+         * Windows absolute path with a drive letter, e.g. "C:\" or "C:/"
+         */
+        if (strlen($path) >= 2 && ctype_alpha(substr($path, 0, 1)) && substr($path, 1, 1) === ":") {
+            return true;
+        }
+
+        return false;
     }
 
     /**
