@@ -2309,6 +2309,15 @@ class Compiler implements InjectionAwareInterface
             $blocks         = $this->blocks;
             $extendedBlocks = $this->extendedBlocks;
 
+            /**
+             * When the local template extends a parent but does not define any
+             * blocks of its own, "blocks" is null. Coerce it to an array so
+             * array_key_exists() below never receives a non-array value.
+             */
+            if (!is_array($blocks)) {
+                $blocks = [];
+            }
+
             foreach ($extendedBlocks as $name => $block) {
                 /**
                  * If name is a string then is a block name
