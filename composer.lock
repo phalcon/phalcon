@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3df76fcfdb256a0a820e21e95ae3bb41",
+    "content-hash": "b9d21b920c4124f2b0a221e943e522d1",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -131,16 +131,16 @@
         },
         {
             "name": "phalcon/traits",
-            "version": "3.0.0",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/traits.git",
-                "reference": "978b7fd9a4756ce66e3c05c146438cd44c981379"
+                "reference": "4e4412a78475af2d08f7e82e48e577e2a40b6896"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/traits/zipball/978b7fd9a4756ce66e3c05c146438cd44c981379",
-                "reference": "978b7fd9a4756ce66e3c05c146438cd44c981379",
+                "url": "https://api.github.com/repos/phalcon/traits/zipball/4e4412a78475af2d08f7e82e48e577e2a40b6896",
+                "reference": "4e4412a78475af2d08f7e82e48e577e2a40b6896",
                 "shasum": ""
             },
             "require": {
@@ -149,41 +149,55 @@
                 "php": ">=8.1 <9.0"
             },
             "require-dev": {
-                "codeception/codeception": "^5.0",
-                "codeception/module-asserts": "^3.0",
-                "codeception/module-filesystem": "^3.0",
-                "codeception/module-phpbrowser": "^3.0",
+                "friendsofphp/php-cs-fixer": "^3.75",
+                "infection/infection": "^0.29.9",
+                "pds/composer-script-names": "^1.0",
                 "pds/skeleton": "^1.0",
-                "phpstan/phpstan": "^1.9",
+                "phalcon/talon": "^0.7",
+                "phpstan/phpstan": "^2.2",
                 "phpunit/phpunit": "^10.5",
-                "squizlabs/php_codesniffer": "^3.7",
-                "vlucas/phpdotenv": "^5.5"
+                "squizlabs/php_codesniffer": "^4.0"
             },
             "suggest": {
-                "ext-gettext": "*",
-                "ext-yaml": "*"
+                "ext-apcu": "For Php\\ApcuTrait",
+                "ext-gettext": "For the gettext-based translation helpers",
+                "ext-igbinary": "For Php\\IgbinaryTrait",
+                "ext-msgpack": "For Php\\MsgpackTrait",
+                "ext-yaml": "For Php\\YamlTrait"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Phalcon\\Traits\\": "src/",
-                    "Phalcon\\Tests\\Unit\\": "tests/unit/",
-                    "Phalcon\\Tests\\Fixtures\\": "tests/support/fixtures/"
+                    "Phalcon\\Traits\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "BSD-3-Clause"
             ],
-            "description": "Phalcon Framework Traits",
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalcon.io",
+                    "homepage": "https://phalcon.io/en/team"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/traits/graphs/contributors"
+                }
+            ],
+            "description": "Phalcon Framework reusable traits",
+            "homepage": "https://phalcon.io",
             "keywords": [
                 "framework",
+                "phalcon",
                 "php",
                 "traits"
             ],
             "support": {
+                "discord": "https://phalcon.io/discord/",
                 "issues": "https://github.com/phalcon/traits/issues",
-                "source": "https://github.com/phalcon/traits/tree/3.0.0"
+                "source": "https://github.com/phalcon/traits"
             },
             "funding": [
                 {
@@ -195,7 +209,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2025-02-11T15:46:57+00:00"
+            "time": "2026-07-10T19:24:02+00:00"
         },
         {
             "name": "psr/event-dispatcher",
