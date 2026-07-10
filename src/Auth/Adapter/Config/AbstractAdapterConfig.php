@@ -16,17 +16,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth\Adapter\Config;
 
+use Phalcon\Auth\Adapter\Config\Traits\ModelConfigTrait;
 use Phalcon\Contracts\Auth\Adapter\AdapterConfig;
 
 abstract class AbstractAdapterConfig implements AdapterConfig
 {
-    public function __construct(
-        protected readonly ?string $model = null,
-    ) {
-    }
+    use ModelConfigTrait;
 
-    public function getModel(): ?string
+    public function __construct(?string $model = null)
     {
-        return $this->model;
+        $this->model = $model;
     }
 }

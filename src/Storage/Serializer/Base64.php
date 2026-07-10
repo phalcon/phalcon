@@ -15,13 +15,14 @@ namespace Phalcon\Storage\Serializer;
 
 use Phalcon\Storage\Serializer\Exceptions\InvalidSerializationInput;
 use Phalcon\Storage\Serializer\Exceptions\InvalidUnserializationInput;
+use Phalcon\Traits\Php\Base64Trait;
 
-use function base64_decode;
-use function base64_encode;
 use function is_string;
 
 class Base64 extends AbstractSerializer
 {
+    use Base64Trait;
+
     /**
      * Serializes data
      *
@@ -33,7 +34,7 @@ class Base64 extends AbstractSerializer
             throw new InvalidSerializationInput();
         }
 
-        return base64_encode($this->data);
+        return $this->phpBase64Encode($this->data);
     }
 
     /**
@@ -59,18 +60,5 @@ class Base64 extends AbstractSerializer
         }
 
         $this->data = $result;
-    }
-
-    /**
-     * Wrapper for base64_decode
-     *
-     * @param string $string
-     * @param bool   $strict
-     *
-     * @return string|false
-     */
-    protected function phpBase64Decode(string $string, bool $strict = false)
-    {
-        return base64_decode($string, $strict);
     }
 }

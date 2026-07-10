@@ -22,7 +22,7 @@ namespace Phalcon\Http\Message;
 
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Interfaces\UriInterface;
-use Phalcon\Traits\Helper\Str\StartsWithTrait;
+use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
 
 use function array_keys;
 use function explode;

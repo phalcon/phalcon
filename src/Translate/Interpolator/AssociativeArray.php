@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Interpolator;
 
-use Phalcon\Traits\Helper\Str\InterpolateTrait;
+use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 class AssociativeArray implements InterpolatorInterface
 {

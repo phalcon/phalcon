@@ -18,6 +18,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Http\Cookie\Exception;
 use Phalcon\Http\Response\Exceptions\ResponseServiceUnavailable;
+use Phalcon\Http\Traits\EncryptionAwareTrait;
 
 use function headers_sent;
 
@@ -72,6 +73,8 @@ use function headers_sent;
  */
 class Cookies extends AbstractInjectionAware implements CookiesInterface
 {
+    use EncryptionAwareTrait;
+
     /**
      * @var array
      */
@@ -95,9 +98,11 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * Constructor
      */
     public function __construct(
-        protected bool $useEncryption = true,
+        bool $useEncryption = true,
         string | null $signKey = null
     ) {
+        $this->useEncryption = $useEncryption;
+
         $this->setSignKey($signKey);
     }
 
@@ -195,16 +200,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
     public function isSent(): bool
     {
         return $this->isSent;
-    }
-
-    /**
-     * Returns if the bag is automatically encrypting/decrypting cookies
-     *
-     * @return bool
-     */
-    public function isUsingEncryption(): bool
-    {
-        return $this->useEncryption;
     }
 
     /**

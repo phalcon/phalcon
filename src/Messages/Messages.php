@@ -17,11 +17,12 @@ use JsonSerializable;
 use Phalcon\Contracts\Messages\Messages as MessagesContract;
 use Phalcon\Messages\Exceptions\MessagesNotIterable;
 use Phalcon\Messages\Traits\MessagesHelperTrait;
-use Phalcon\Support\Traits\JsonTrait;
 use Traversable;
 
 use function array_merge;
 use function is_array;
+use function is_object;
+use function method_exists;
 
 /**
  * Represents a collection of messages
@@ -35,7 +36,6 @@ use function is_array;
  */
 class Messages implements MessagesContract, JsonSerializable
 {
-    use JsonTrait;
     use MessagesHelperTrait;
 
     /**
@@ -159,5 +159,20 @@ class Messages implements MessagesContract, JsonSerializable
         }
 
         return $records;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function checkSerializable(mixed $value): mixed
+    {
+        if (
+            is_object($value) &&
+            true === method_exists($value, 'jsonSerialize')
+        ) {
+            return $value->jsonSerialize();
+        }
+
+        return $value;
     }
 }

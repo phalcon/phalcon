@@ -143,6 +143,6 @@ class Csv extends AbstractAdapter
             $this->translate[$data[0]] = $data[1];
         }
 
-        fclose($pointer);
+        $this->phpFclose($pointer);
     }
 }

@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
+use Phalcon\Traits\Php\InfoTrait;
+
 use function call_user_func;
-use function function_exists;
 use function is_callable;
 use function is_object;
 use function is_string;
@@ -24,6 +25,8 @@ use function is_string;
  */
 class Group
 {
+    use InfoTrait;
+
     /**
      * @param array<array-key, mixed> $collection
      * @param callable|string         $method
@@ -50,7 +53,7 @@ class Group
     private function isCallable($method): bool
     {
         return is_callable($method) ||
-            (is_string($method) && function_exists($method));
+            (is_string($method) && $this->phpFunctionExists($method));
     }
 
     /**

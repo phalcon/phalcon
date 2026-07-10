@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 /**
  * Converts strings to upperCamelCase or lowerCamelCase

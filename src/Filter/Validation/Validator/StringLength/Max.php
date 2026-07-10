@@ -17,8 +17,8 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Messages\Message;
+use Phalcon\Traits\Php\InfoTrait;
 
-use function function_exists;
 use function is_array;
 use function mb_strlen;
 use function strlen;
@@ -71,6 +71,8 @@ use function strlen;
  */
 class Max extends AbstractValidator
 {
+    use InfoTrait;
+
     /**
      * @var string|null
      */
@@ -102,7 +104,7 @@ class Max extends AbstractValidator
         }
 
         // Check if mbstring is available to calculate the correct length
-        if (function_exists("mb_strlen")) {
+        if ($this->phpFunctionExists("mb_strlen")) {
             $length = mb_strlen((string)$value);
         } else {
             $length = strlen((string)$value);

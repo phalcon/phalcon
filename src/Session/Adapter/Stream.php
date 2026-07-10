@@ -17,16 +17,14 @@ use Phalcon\Session\Adapter\Exceptions\AdapterRuntimeError;
 use Phalcon\Session\Adapter\Exceptions\InvalidSavePath;
 use Phalcon\Session\Adapter\Exceptions\SavePathUnavailable;
 use Phalcon\Traits\Php\FileTrait;
-use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\IniTrait;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
+use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 use function error_clear_last;
 use function error_get_last;
 use function error_reporting;
 use function file_exists;
-use function rtrim;
-
-use const DIRECTORY_SEPARATOR;
 
 /**
  * Phalcon\Session\Adapter\Stream
@@ -54,8 +52,9 @@ use const DIRECTORY_SEPARATOR;
  */
 class Stream extends Noop
 {
+    use DirSeparatorTrait;
     use FileTrait;
-    use InfoTrait;
+    use GetTrait;
     use IniTrait;
 
     /**
@@ -92,14 +91,14 @@ class Stream extends Noop
      */
     public function __construct(array $options = [])
     {
-        $this->prefix  = $options['prefix'] ?? '';
+        $this->prefix  = $this->getArrVal($options, 'prefix', '');
         $this->options = $options;
 
         /**
          * Get the save_path from the passed options. If not defined
          * get it from php.ini
          */
-        $path = $options['savePath'] ?? $this->phpIniGet('session.save_path');
+        $path = $this->getArrVal($options, 'savePath', $this->phpIniGet('session.save_path'));
 
         if (empty($path)) {
             throw new InvalidSavePath();
@@ -109,7 +108,7 @@ class Stream extends Noop
             throw new SavePathUnavailable($path);
         }
 
-        $this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $this->path = $this->toDirSeparator($path);
     }
 
     /**

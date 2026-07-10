@@ -21,7 +21,7 @@ use Phalcon\Flash\Exceptions\FlashMessageNotStringOrArray;
 use Phalcon\Flash\Traits\FlashGettersTrait;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
-use Phalcon\Traits\Helper\Str\InterpolateTrait;
+use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 use function is_array;
 use function is_string;

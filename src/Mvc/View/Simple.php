@@ -24,8 +24,9 @@ use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
 use Phalcon\Mvc\View\Exceptions\SimpleViewNotFound;
 use Phalcon\Mvc\View\Exceptions\SimpleViewServicesUnavailable;
+use Phalcon\Mvc\View\Traits\ViewParamsTrait;
 use Phalcon\Mvc\ViewBaseInterface;
-use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
+use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 use function array_merge;
 use function call_user_func;
@@ -65,6 +66,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 {
     use DirSeparatorTrait;
     use EventsAwareTrait;
+    use ViewParamsTrait;
 
     /**
      * @var string
@@ -72,23 +74,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     protected string $activeRenderPath;
 
     /**
-     * @var string
-     */
-    protected string $content;
-
-    /**
      * @var EngineInterface[]|false
      */
     protected array | false $engines = false; // TODO: Change to default null or empty array
 
-    /**
-     * @var array
-     */
-    protected array $registeredEngines = [];
-    /**
-     * @var array
-     */
-    protected array $viewParams = [];
     /**
      * @var string
      */
@@ -145,44 +134,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     public function getActiveRenderPath(): string
     {
         return $this->activeRenderPath;
-    }
-
-    /**
-     * Returns output from another view stage
-     *
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    /**
-     * Returns parameters to views
-     *
-     * @return array
-     */
-    public function getParamsToView(): array
-    {
-        return $this->viewParams;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRegisteredEngines(): array
-    {
-        return $this->registeredEngines;
-    }
-
-    /**
-     * Returns a parameter previously set in the view
-     *
-     * @return mixed|null
-     */
-    public function getVar(string $key): mixed
-    {
-        return $this->viewParams[$key] ?? null;
     }
 
     /**
@@ -317,24 +268,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     }
 
     /**
-     * Externally sets the view content
-     *
-     *```php
-     * $this->view->setContent("<h1>hello</h1>");
-     *```
-     *
-     * @param string $content
-     *
-     * @return $this
-     */
-    public function setContent(string $content): static
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
      * Adds parameters to views (alias of setVar)
      *
      *```php
@@ -349,25 +282,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     public function setParamToView(string $key, mixed $value): static
     {
         return $this->setVar($key, $value);
-    }
-
-    /**
-     * Set a single view parameter
-     *
-     *```php
-     * $this->view->setVar("products", $products);
-     *```
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function setVar(string $key, mixed $value): static
-    {
-        $this->viewParams[$key] = $value;
-
-        return $this;
     }
 
     /**

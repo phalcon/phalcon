@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Serializer;
 
 use Phalcon\Storage\Serializer\Exceptions\InvalidUnserializationInput;
+use Phalcon\Traits\Php\SerializeTrait;
 
 use function is_string;
 use function restore_error_handler;
-use function serialize;
 use function set_error_handler;
 
 use const E_NOTICE;
@@ -25,6 +25,8 @@ use const E_WARNING;
 
 class Php extends AbstractSerializer
 {
+    use SerializeTrait;
+
     /**
      * Serializes data
      *
@@ -36,7 +38,7 @@ class Php extends AbstractSerializer
             return $this->data;
         }
 
-        return serialize($this->data);
+        return $this->phpSerialize($this->data);
     }
 
     /**
@@ -74,16 +76,5 @@ class Php extends AbstractSerializer
 
             $this->data = $result;
         }
-    }
-
-    /**
-     * @param string $data
-     * @param array  $options
-     *
-     * @return mixed|false
-     */
-    private function phpUnserialize(string $data, array $options = []): mixed
-    {
-        return unserialize($data, $options);
     }
 }

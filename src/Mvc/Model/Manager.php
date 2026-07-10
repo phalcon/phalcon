@@ -34,7 +34,7 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
-use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;

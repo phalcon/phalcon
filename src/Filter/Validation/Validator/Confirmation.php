@@ -18,8 +18,8 @@ use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Exceptions\MissingMbstring;
 use Phalcon\Messages\Message;
+use Phalcon\Traits\Php\InfoTrait;
 
-use function function_exists;
 use function is_array;
 use function mb_strtolower;
 use function strcmp;
@@ -65,6 +65,8 @@ use function strcmp;
  */
 class Confirmation extends AbstractValidator
 {
+    use InfoTrait;
+
     /**
      * @var string|null
      */
@@ -138,7 +140,7 @@ class Confirmation extends AbstractValidator
             /**
              * mbstring is required here
              */
-            if (!function_exists("mb_strtolower")) {
+            if (!$this->phpFunctionExists("mb_strtolower")) {
                 throw new MissingMbstring();
             }
 

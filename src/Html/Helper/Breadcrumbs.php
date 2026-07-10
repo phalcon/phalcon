@@ -19,7 +19,7 @@ namespace Phalcon\Html\Helper;
 
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Mvc\Url\UrlInterface;
-use Phalcon\Traits\Helper\Str\InterpolateTrait;
+use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 use function array_key_last;
 use function implode;

@@ -15,7 +15,7 @@ namespace Phalcon\Encryption\Security;
 
 use Exception as BaseException;
 use Phalcon\Encryption\Security\Exceptions\InvalidRandomInput;
-use Phalcon\Traits\Php\UrlTrait;
+use Phalcon\Traits\Php\Base64Trait;
 
 /**
  * Phalcon\Encryption\Security\Random
@@ -90,7 +90,7 @@ use Phalcon\Traits\Php\UrlTrait;
  */
 class Random
 {
-    use UrlTrait;
+    use Base64Trait;
 
     /**
      * Generates a random base58 string
@@ -204,7 +204,7 @@ class Random
      */
     public function base64Safe(int $len = 16, bool $padding = false): string
     {
-        $output = $this->doBase64EncodeUrl($this->base64($len));
+        $output = $this->doEncodeUrl($this->base64($len));
 
         if (!$padding) {
             return rtrim($output, '=');

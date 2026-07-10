@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Traits\Helper\Arr\FilterTrait;
+use Phalcon\Traits\Support\Helper\Arr\FilterTrait;
 
 /**
  * Filters an array using array_filter. If a callback is supplied, it will be

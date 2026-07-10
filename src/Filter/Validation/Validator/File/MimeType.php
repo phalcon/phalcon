@@ -15,13 +15,14 @@ namespace Phalcon\Filter\Validation\Validator\File;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\InvalidAllowedTypes;
+use Phalcon\Traits\Php\InfoTrait;
 
 use function finfo_file;
 use function finfo_open;
-use function function_exists;
 use function implode;
 use function in_array;
 use function is_array;
+use function preg_match;
 
 use const FILEINFO_MIME_TYPE;
 
@@ -75,6 +76,8 @@ use const FILEINFO_MIME_TYPE;
  */
 class MimeType extends AbstractFile
 {
+    use InfoTrait;
+
     /**
      * @var string|null
      */
@@ -107,7 +110,7 @@ class MimeType extends AbstractFile
         }
 
         $mime = null;
-        if (function_exists("finfo_open")) {
+        if ($this->phpFunctionExists("finfo_open")) {
             $tmp = finfo_open(FILEINFO_MIME_TYPE);
             if ($tmp) {
                 $mime = finfo_file($tmp, $value["tmp_name"]);
@@ -118,7 +121,25 @@ class MimeType extends AbstractFile
             $mime = $value["type"];
         }
 
-        if (!in_array($mime, $types)) {
+        $allowWildcards = (bool) $this->getOption("allowWildcards", false);
+
+        $matched = false;
+        if ($allowWildcards) {
+            foreach ($types as $type) {
+                if (
+                    $mime === $type ||
+                    preg_match("#^" . (string) $type . "$#", (string) $mime)
+                ) {
+                    $matched = true;
+
+                    break;
+                }
+            }
+        } else {
+            $matched = in_array($mime, $types);
+        }
+
+        if (!$matched) {
             $replacePairs = [
                 ":types" => implode(", ", $types),
             ];

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Paginator;
 
 use JsonSerializable;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function get_class;
 use function method_exists;

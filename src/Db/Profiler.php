@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Db;
 
 use Phalcon\Db\Profiler\Item;
+use Phalcon\Db\Traits\ElapsedTimeTrait;
 
 use function method_exists;
 
@@ -70,6 +71,8 @@ use function method_exists;
  */
 class Profiler
 {
+    use ElapsedTimeTrait;
+
     /**
      * Active Item
      *
@@ -142,16 +145,6 @@ class Profiler
     }
 
     /**
-     * Returns the total time in milliseconds spent by the profiles
-     *
-     * @return float
-     */
-    public function getTotalElapsedMilliseconds(): float
-    {
-        return $this->getTotalElapsedNanoseconds() / 1000000;
-    }
-
-    /**
      * Returns the total time in nanoseconds spent by the profiles
      *
      * @return float
@@ -159,16 +152,6 @@ class Profiler
     public function getTotalElapsedNanoseconds(): float
     {
         return $this->totalNanoseconds;
-    }
-
-    /**
-     * Returns the total time in seconds spent by the profiles
-     *
-     * @return float
-     */
-    public function getTotalElapsedSeconds(): float
-    {
-        return $this->getTotalElapsedMilliseconds() / 1000;
     }
 
     /**

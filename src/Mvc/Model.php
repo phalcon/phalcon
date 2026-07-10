@@ -72,8 +72,8 @@ use Phalcon\Mvc\Model\ValidationFailed;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Settings;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
-use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 use Psr\EventDispatcher\StoppableEventInterface;
 use Throwable;
 
@@ -976,7 +976,7 @@ abstract class Model extends AbstractInjectionAware implements
 
             if (!is_array($columnMap)) {
                 if ($callSetters) {
-                    $setter = "set" . self::staticToCamelize($key);
+                    $setter = "set" . self::toCamelize($key);
                     if (
                         method_exists($instance, $setter) &&
                         !isset($localMethods[$setter])
@@ -1026,7 +1026,7 @@ abstract class Model extends AbstractInjectionAware implements
 
             if (!is_array($attribute)) {
                 if ($callSetters) {
-                    $setter = "set" . self::staticToCamelize($attribute);
+                    $setter = "set" . self::toCamelize($attribute);
                     if (
                         method_exists($instance, $setter) &&
                         !isset($localMethods[$setter])
@@ -1089,7 +1089,7 @@ abstract class Model extends AbstractInjectionAware implements
             $data[$key]    = $castValue;
 
             if ($callSetters) {
-                $setter = "set" . self::staticToCamelize($attributeName);
+                $setter = "set" . self::toCamelize($attributeName);
                 if (
                     method_exists($instance, $setter) &&
                     !isset($localMethods[$setter])
@@ -1848,7 +1848,7 @@ abstract class Model extends AbstractInjectionAware implements
                 /**
                  * Get the possible real method name
                  */
-                $field = self::staticToUncamelize($extraMethod);
+                $field = self::toUncamelize($extraMethod);
 
                 if (!isset($attributes[$field])) {
                     throw new CannotResolveAttribute($extraMethod, get_called_class());

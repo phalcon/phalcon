@@ -19,9 +19,9 @@ use FilesystemIterator;
 use Iterator;
 use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Traits\Helper\Str\DirFromFileTrait;
-use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
 use Phalcon\Traits\Php\FileTrait;
+use Phalcon\Traits\Support\Helper\Str\DirFromFileTrait;
+use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -86,7 +86,7 @@ class Stream extends AbstractAdapter
         SerializerFactory $factory,
         array $options = []
     ) {
-        $storageDir = $options['storageDir'] ?? '';
+        $storageDir = $this->getArrVal($options, 'storageDir', '');
         if (empty($storageDir)) {
             throw new InvalidConfiguration(
                 "The 'storageDir' must be specified in the options"
@@ -238,7 +238,7 @@ class Stream extends AbstractAdapter
             return $defaultValue;
         }
 
-        $content = $payload['content'] ?? null;
+        $content = $this->getArrVal($payload, 'content');
 
         return $this->getUnserializedData($content, $defaultValue);
     }

@@ -35,15 +35,15 @@ use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Mvc\ViewInterface;
 use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Support\Helper\Json\Encode;
+use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Traits\Php\UrlTrait;
 
 use function addcslashes;
 use function array_keys;
-use function function_exists;
 use function is_string;
 use function mb_detect_encoding;
 use function mb_detect_order;
 use function preg_match;
-use function rawurlencode;
 use function readfile;
 use function strlen;
 use function strtolower;
@@ -72,7 +72,9 @@ class Response extends Injectable implements
     RootResponseStatusCodeInterface
 {
     use EventsAwareTrait;
+    use InfoTrait;
     use StatusPhrasesTrait;
+    use UrlTrait;
 
     private const DATETIME_FORMAT = 'D, d M Y H:i:s';
 
@@ -621,7 +623,7 @@ class Response extends Injectable implements
         }
         if (true === $attachment) {
             // mbstring is a non-default extension
-            if (function_exists('mb_detect_encoding')) {
+            if ($this->phpFunctionExists('mb_detect_encoding')) {
                 $basePathEncoding = mb_detect_encoding(
                     $basePath,
                     mb_detect_order(),
@@ -638,7 +640,7 @@ class Response extends Injectable implements
             // According RFC2231 section-7, non-ASCII header param must add an
             // extended one to indicate charset
             if ('ASCII' !== $basePathEncoding) {
-                $basePath = rawurlencode($basePath);
+                $basePath = $this->phpRawUrlEncode($basePath);
                 $this->setRawHeader(
                     'Content-Disposition: attachment; filename='
                     . $basePath

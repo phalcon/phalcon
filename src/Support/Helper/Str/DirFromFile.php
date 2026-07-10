@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Helper\Str\DirFromFileTrait;
+use Phalcon\Traits\Support\Helper\Str\DirFromFileTrait;
 
 /**
  * Accepts a file name (without extension) and returns a calculated

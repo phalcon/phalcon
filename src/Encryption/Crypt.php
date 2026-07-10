@@ -27,7 +27,10 @@ use Phalcon\Encryption\Crypt\Exception\MissingOpensslExtension;
 use Phalcon\Encryption\Crypt\Exception\RandomBytesGenerationFailed;
 use Phalcon\Encryption\Crypt\Exception\UnsupportedAlgorithm;
 use Phalcon\Encryption\Crypt\PadFactory;
-use ValueError;
+use Phalcon\Traits\Php\HashTrait;
+use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Traits\Php\OpensslTrait;
+use Throwable;
 
 /**
  * Provides encryption capabilities to Phalcon applications.
@@ -50,6 +53,10 @@ use ValueError;
  */
 class Crypt implements CryptInterface
 {
+    use HashTrait;
+    use InfoTrait;
+    use OpensslTrait;
+
     public const DEFAULT_ALGORITHM = "sha256";
     public const DEFAULT_CIPHER    = "aes-256-cfb";
 
@@ -215,7 +222,7 @@ class Crypt implements CryptInterface
         if (true === $this->useSigning) {
             $hashLength = $this->hashLengthCache[$hashAlgorithm] ?? null;
             if (!$hashLength) {
-                $hashLength = strlen(hash($hashAlgorithm, "", true));
+                $hashLength = strlen($this->phpHash($hashAlgorithm, "", true));
                 $this->hashLengthCache[$hashAlgorithm] = $hashLength;
             }
 
@@ -239,8 +246,8 @@ class Crypt implements CryptInterface
              * and uses hash_equals() so that the comparison is constant-time.
              */
             if (
-                true !== hash_equals(
-                    hash_hmac($hashAlgorithm, $decrypted, $decryptKey, true),
+                true !== $this->phpHashEquals(
+                    $this->phpHashHmac($hashAlgorithm, $decrypted, $decryptKey, true),
                     $digest
                 )
             ) {
@@ -316,11 +323,7 @@ class Crypt implements CryptInterface
 
         try {
             $iv = $this->phpOpensslRandomPseudoBytes($ivLength);
-        } catch (ValueError) {
-            throw new RandomBytesGenerationFailed();
-        }
-
-        if (false === $iv) {
+        } catch (Throwable) {
             throw new RandomBytesGenerationFailed();
         }
 
@@ -333,7 +336,7 @@ class Crypt implements CryptInterface
         $encrypted = $this->encryptGcmCcm($mode, $padded, $encryptKey, $iv);
 
         if (true === $this->useSigning) {
-            $digest = hash_hmac(
+            $digest = $this->phpHashHmac(
                 $this->getHashAlgorithm(),
                 $padded,
                 $encryptKey,
@@ -918,24 +921,6 @@ class Crypt implements CryptInterface
         $this->availableCiphers = $allowed;
 
         return $this;
-    }
-
-    /**
-     * @todo to be removed when we get traits
-     */
-    protected function phpFunctionExists(string $name): bool
-    {
-        return function_exists($name);
-    }
-
-    protected function phpOpensslCipherIvLength(string $cipher): int|bool
-    {
-        return openssl_cipher_iv_length($cipher);
-    }
-
-    protected function phpOpensslRandomPseudoBytes(int $length)
-    {
-        return openssl_random_pseudo_bytes($length);
     }
 
     /**

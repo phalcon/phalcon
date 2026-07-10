@@ -19,7 +19,7 @@ use Phalcon\Encryption\Security\JWT\Exceptions\InvalidHeader;
 use Phalcon\Encryption\Security\JWT\Exceptions\MalformedJwtString;
 use Phalcon\Encryption\Security\JWT\Exceptions\MissingJwtTypHeader;
 use Phalcon\Support\Helper\Json\Decode;
-use Phalcon\Support\Traits\Base64Trait;
+use Phalcon\Traits\Php\Base64Trait;
 
 use function explode;
 use function is_array;

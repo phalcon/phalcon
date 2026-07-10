@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Logger\Formatter;
 
 use Phalcon\Logger\Item;
-use Phalcon\Traits\Helper\Str\InterpolateTrait;
+use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 /**
  * Class AbstractFormatter

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Http\Request;
 
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
+
 use function defined;
 use function finfo_file;
 use function finfo_open;
@@ -48,6 +50,8 @@ use const PATHINFO_EXTENSION;
  */
 class File implements FileInterface
 {
+    use GetTrait;
+
     /**
      * @var int
      */
@@ -104,10 +108,10 @@ class File implements FileInterface
             }
         }
 
-        $this->tmpName = $file['tmp_name'] ?? $this->tmpName;
-        $this->size    = $file['size'] ?? $this->size;
-        $this->type    = $file['type'] ?? $this->type;
-        $this->error   = $file['error'] ?? $this->error;
+        $this->tmpName = $this->getArrVal($file, 'tmp_name', $this->tmpName);
+        $this->size    = $this->getArrVal($file, 'size', $this->size);
+        $this->type    = $this->getArrVal($file, 'type', $this->type);
+        $this->error   = $this->getArrVal($file, 'error', $this->error);
 
         if (!empty($key)) {
             $this->key = $key;

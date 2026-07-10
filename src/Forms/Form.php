@@ -31,7 +31,7 @@ use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\Messages;
 use Phalcon\Support\Settings;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function array_key_exists;
 use function is_string;

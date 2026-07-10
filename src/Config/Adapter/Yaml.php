@@ -17,8 +17,8 @@ use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use Phalcon\Config\Exceptions\CannotLoadConfigFile;
 use Phalcon\Config\Exceptions\MissingYamlExtension;
-use Phalcon\Support\Traits\PhpYamlTrait;
 use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Traits\Php\YamlTrait;
 
 use function basename;
 
@@ -62,7 +62,7 @@ use function basename;
 class Yaml extends Config
 {
     use InfoTrait;
-    use PhpYamlTrait;
+    use YamlTrait;
 
     /**
      * Yaml constructor.

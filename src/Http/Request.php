@@ -29,6 +29,7 @@ use Phalcon\Http\Request\Exceptions\SanitizerNotFound;
 use Phalcon\Http\Request\File;
 use Phalcon\Http\Request\FileInterface;
 use Phalcon\Support\Helper\Json\Decode;
+use Phalcon\Traits\Php\FileTrait;
 use stdClass;
 
 use function array_key_exists;
@@ -36,7 +37,6 @@ use function array_merge;
 use function base64_decode;
 use function base64_encode;
 use function explode;
-use function file_get_contents;
 use function gethostbyname;
 use function is_array;
 use function is_numeric;
@@ -89,6 +89,7 @@ class Request extends AbstractInjectionAware implements
     RequestMethodInterface
 {
     use EventsAwareTrait;
+    use FileTrait;
 
     /**
      * @var FilterInterface|null
@@ -964,7 +965,7 @@ class Request extends AbstractInjectionAware implements
             /**
              * We need store the read raw body because it can't be read again
              */
-            $this->rawBody = file_get_contents('php://input');
+            $this->rawBody = $this->phpFileGetContents('php://input');
         }
 
         return $this->rawBody;

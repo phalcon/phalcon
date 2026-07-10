@@ -21,7 +21,7 @@ use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function array_filter;
 use function array_merge;

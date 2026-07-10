@@ -39,7 +39,7 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Volt\Compiler\Opcode;
 use Phalcon\Volt\Parser\Parser;
 
