@@ -15,8 +15,8 @@ namespace Phalcon\Support\Debug;
 
 use Phalcon\Support\Debug\Report\BacktraceItem;
 use Phalcon\Support\Debug\Report\ExceptionReport;
-use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;

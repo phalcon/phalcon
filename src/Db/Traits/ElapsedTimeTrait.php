@@ -19,13 +19,6 @@ namespace Phalcon\Db\Traits;
  */
 trait ElapsedTimeTrait
 {
-    /**
-     * Returns the total time in nanoseconds spent by the profiles. Implemented
-     * by the using class.
-     *
-     * @return float
-     */
-    abstract public function getTotalElapsedNanoseconds(): float;
 
     /**
      * Returns the total time in milliseconds spent by the profiles
@@ -36,6 +29,13 @@ trait ElapsedTimeTrait
     {
         return $this->getTotalElapsedNanoseconds() / 1000000;
     }
+    /**
+     * Returns the total time in nanoseconds spent by the profiles. Implemented
+     * by the using class.
+     *
+     * @return float
+     */
+    abstract public function getTotalElapsedNanoseconds(): float;
 
     /**
      * Returns the total time in seconds spent by the profiles
