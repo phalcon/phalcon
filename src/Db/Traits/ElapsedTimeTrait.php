@@ -19,7 +19,6 @@ namespace Phalcon\Db\Traits;
  */
 trait ElapsedTimeTrait
 {
-
     /**
      * Returns the total time in milliseconds spent by the profiles
      *

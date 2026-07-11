@@ -24,7 +24,6 @@ use const UPLOAD_ERR_OK;
 #[BackupGlobals(true)]
 final class ValidateTest extends AbstractUnitTestCase
 {
-
     /**
      * allowEmpty with every file missing (UPLOAD_ERR_NO_FILE) -> passes.
      *
