@@ -342,10 +342,8 @@ class Request extends AbstractInjectionAware implements
                 return $auth;
             }
 
-            if (!empty($matches)) {
-                foreach ($matches as $match) {
-                    $auth[$match[1]] = $match[3];
-                }
+            foreach ($matches as $match) {
+                $auth[$match[1]] = $match[3];
             }
         }
 
