@@ -15,7 +15,7 @@ namespace Phalcon\Cli\Router;
 
 use Phalcon\Cli\Router\Exceptions\BeforeMatchNotCallable;
 use Phalcon\Cli\Router\Exceptions\InvalidRoutePaths;
-use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 
 use function array_flip;
 use function array_keys;

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use function settype;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 
 /**
  * Gets an array element by key and if it does not exist returns the default.
@@ -22,6 +22,8 @@ use function settype;
  */
 class Get
 {
+    use GetTrait;
+
     /**
      * @param array<array-key, mixed> $collection
      * @param mixed                   $index
@@ -36,12 +38,6 @@ class Get
         mixed $defaultValue = null,
         string | null $cast = null
     ): mixed {
-        $value = $collection[$index] ?? $defaultValue;
-
-        if (null !== $cast) {
-            settype($value, $cast);
-        }
-
-        return $value;
+        return $this->getArrVal($collection, $index, $defaultValue, $cast);
     }
 }

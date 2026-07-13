@@ -16,7 +16,7 @@ namespace Phalcon\Autoload;
 use Phalcon\Autoload\Exceptions\LoaderMethodNotCallable;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Traits\Helper\Str\StartsWithTrait;
+use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
 
 use function array_merge;
 use function array_unique;

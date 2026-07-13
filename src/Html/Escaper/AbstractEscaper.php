@@ -17,18 +17,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Escaper;
 
+use Phalcon\Html\Escaper\Traits\EscaperTrait;
+
 use function chr;
 use function ctype_alnum;
 use function dechex;
-use function mb_convert_encoding;
-use function mb_detect_encoding;
 use function strlen;
 use function substr;
 use function unpack;
-
-use const ENT_HTML401;
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
 
 /**
  * Shared base for the per-context escaper objects. Holds the encoding,
@@ -45,119 +41,7 @@ use const ENT_SUBSTITUTE;
  */
 abstract class AbstractEscaper
 {
-    /**
-     * @var bool
-     */
-    protected bool $doubleEncode = true;
-
-    /**
-     * @var string
-     */
-    protected string $encoding = 'utf-8';
-
-    /**
-     * ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401
-     *
-     * @var int
-     */
-    protected int $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
-
-    /**
-     * Detects the character encoding of a string. Special-handling for
-     * chr(172) and chr(128) to chr(159) which fail to be detected by
-     * `mb_detect_encoding()`.
-     *
-     * @param string $input
-     *
-     * @return string|null
-     */
-    final public function detectEncoding(string $input): string | null
-    {
-        foreach (['UTF-32', 'UTF-8', 'ISO-8859-1', 'ASCII'] as $charset) {
-            if (false !== mb_detect_encoding($input, $charset, true)) {
-                return $charset;
-            }
-        }
-
-        return mb_detect_encoding($input) ?: null;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getDoubleEncode(): bool
-    {
-        return $this->doubleEncode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEncoding(): string
-    {
-        return $this->encoding;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFlags(): int
-    {
-        return $this->flags;
-    }
-
-    /**
-     * Normalizes a string's encoding to UTF-32, used by the CSS and JS
-     * escapers before invoking the escape routines.
-     *
-     * @param string $input
-     *
-     * @return string
-     */
-    final public function normalizeEncoding(string $input): string
-    {
-        return mb_convert_encoding(
-            $input,
-            'UTF-32',
-            $this->detectEncoding($input)
-        );
-    }
-
-    /**
-     * @param bool $doubleEncode
-     *
-     * @return static
-     */
-    public function setDoubleEncode(bool $doubleEncode): static
-    {
-        $this->doubleEncode = $doubleEncode;
-
-        return $this;
-    }
-
-    /**
-     * @param string $encoding
-     *
-     * @return static
-     */
-    public function setEncoding(string $encoding): static
-    {
-        $this->encoding = $encoding;
-
-        return $this;
-    }
-
-    /**
-     * @param int $flags
-     *
-     * @return static
-     */
-    public function setFlags(int $flags): static
-    {
-        $this->flags = $flags;
-
-        return $this;
-    }
+    use EscaperTrait;
 
     /**
      * Perform escaping of non-alphanumeric characters to different formats.

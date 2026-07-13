@@ -17,8 +17,8 @@ use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Exceptions\YamlExtensionRequired;
 use Phalcon\Forms\Exceptions\YamlSchemaNotArray;
+use Phalcon\Traits\Php\InfoTrait;
 
-use function extension_loaded;
 use function is_array;
 use function is_file;
 use function is_readable;
@@ -35,6 +35,8 @@ use function yaml_parse_file;
  */
 class YamlLoader implements Schema
 {
+    use InfoTrait;
+
     /**
      * @param string $source YAML string or path to a YAML file
      */
@@ -49,7 +51,7 @@ class YamlLoader implements Schema
      */
     public function load(): array
     {
-        if (!extension_loaded("yaml")) {
+        if (!$this->phpExtensionLoaded("yaml")) {
             throw new YamlExtensionRequired();
         }
 

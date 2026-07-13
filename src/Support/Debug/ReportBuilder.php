@@ -15,6 +15,8 @@ namespace Phalcon\Support\Debug;
 
 use Phalcon\Support\Debug\Report\BacktraceItem;
 use Phalcon\Support\Debug\Report\ExceptionReport;
+use Phalcon\Traits\Php\InfoTrait;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -23,7 +25,6 @@ use Throwable;
 use function count;
 use function explode;
 use function file;
-use function function_exists;
 use function get_class;
 use function get_included_files;
 use function mb_strtolower;
@@ -39,6 +40,9 @@ use function str_starts_with;
  */
 class ReportBuilder
 {
+    use GetTrait;
+    use InfoTrait;
+
     /**
      * @param Throwable $exception
      * @param array     $blacklist
@@ -80,8 +84,8 @@ class ReportBuilder
 
         $report
             ->setBacktrace($items)
-            ->setRequest($this->filter($_REQUEST, $blacklist['request'] ?? []))
-            ->setServer($this->filter($_SERVER, $blacklist['server'] ?? []))
+            ->setRequest($this->filter($_REQUEST, $this->getArrVal($blacklist, 'request', [])))
+            ->setServer($this->filter($_SERVER, $this->getArrVal($blacklist, 'server', [])))
             ->setIncludedFiles(get_included_files())
             ->setMemoryUsage(memory_get_usage(true))
             ->setPeakMemoryUsage(memory_get_peak_usage(true))
@@ -232,7 +236,7 @@ class ReportBuilder
      */
     private function resolveFunctionLink(string $functionName): string | null
     {
-        if (true !== function_exists($functionName)) {
+        if (true !== $this->phpFunctionExists($functionName)) {
             return null;
         }
 

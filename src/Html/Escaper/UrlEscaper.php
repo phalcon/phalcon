@@ -17,13 +17,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Escaper;
 
-use function rawurlencode;
+use Phalcon\Traits\Php\UrlTrait;
 
 /**
  * Escapes a string for use as a URL component via `rawurlencode`.
  */
 class UrlEscaper extends AbstractEscaper
 {
+    use UrlTrait;
+
     /**
      * @param string $input
      *
@@ -41,6 +43,6 @@ class UrlEscaper extends AbstractEscaper
      */
     public function escape(string $input): string
     {
-        return rawurlencode($input);
+        return $this->phpRawUrlEncode($input);
     }
 }

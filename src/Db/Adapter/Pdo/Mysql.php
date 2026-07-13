@@ -607,7 +607,7 @@ class Mysql extends PdoAdapter
      *
      * ```php
      * print_r(
-     *     $connection->describeIndexes("robots_parts")
+     *     $connection->describeIndexes("co_orders_x_products")
      * );
      * ```
      *
@@ -704,7 +704,7 @@ class Mysql extends PdoAdapter
      *
      *```php
      * print_r(
-     *     $connection->describeReferences("robots_parts")
+     *     $connection->describeReferences("co_orders_x_products")
      * );
      *```
      *

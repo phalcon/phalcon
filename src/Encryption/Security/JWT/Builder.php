@@ -26,7 +26,7 @@ use Phalcon\Encryption\Security\JWT\Token\Token;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Helper\Json\Encode;
-use Phalcon\Support\Traits\Base64Trait;
+use Phalcon\Traits\Php\Base64Trait;
 
 use function is_string;
 

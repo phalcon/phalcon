@@ -24,7 +24,9 @@ use Phalcon\Http\Cookie\Exceptions\CryptInterfaceRequired;
 use Phalcon\Http\Cookie\Exceptions\CryptServiceUnavailable;
 use Phalcon\Http\Cookie\Exceptions\FilterServiceUnavailable;
 use Phalcon\Http\Response\Exception;
+use Phalcon\Http\Traits\EncryptionAwareTrait;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use Stringable;
 
 use function array_filter;
@@ -39,6 +41,9 @@ class Cookie extends AbstractInjectionAware implements
     CookieInterface,
     Stringable
 {
+    use EncryptionAwareTrait;
+    use GetTrait;
+
     private const COOKIE_PREFIX = '_PHCOOKIE_';
 
     /**
@@ -62,11 +67,6 @@ class Cookie extends AbstractInjectionAware implements
      * @var string|null
      */
     protected string | null $signKey = null;
-
-    /**
-     * @var bool
-     */
-    protected bool $useEncryption = false;
 
     /**
      * @var mixed|null
@@ -286,16 +286,6 @@ class Cookie extends AbstractInjectionAware implements
         }
 
         return $this->value;
-    }
-
-    /**
-     * Check if the cookie is using implicit encryption
-     *
-     * @return bool
-     */
-    public function isUsingEncryption(): bool
-    {
-        return $this->useEncryption;
     }
 
     /**
@@ -590,11 +580,11 @@ class Cookie extends AbstractInjectionAware implements
     private function getCookieOptions(int $expiresDefault): array
     {
         $options             = $this->options;
-        $options['expires']  = $options['expires'] ?? $expiresDefault;
-        $options['domain']   = $options['domain'] ?? $this->domain;
-        $options['path']     = $options['path'] ?? $this->path;
-        $options['secure']   = $options['secure'] ?? $this->secure;
-        $options['httponly'] = $options['httponly'] ?? $this->httpOnly;
+        $options['expires']  = $this->getArrVal($options, 'expires', $expiresDefault);
+        $options['domain']   = $this->getArrVal($options, 'domain', $this->domain);
+        $options['path']     = $this->getArrVal($options, 'path', $this->path);
+        $options['secure']   = $this->getArrVal($options, 'secure', $this->secure);
+        $options['httponly'] = $this->getArrVal($options, 'httponly', $this->httpOnly);
 
         return $options;
     }

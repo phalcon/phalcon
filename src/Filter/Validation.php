@@ -21,9 +21,10 @@ use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function array_filter;
+use function array_merge;
 use function in_array;
 use function is_array;
 use function is_object;
@@ -37,6 +38,13 @@ use function property_exists;
 class Validation extends Injectable implements ValidationInterface
 {
     use CamelizeTrait;
+
+    /**
+     * Default messages for validators, keyed by validator class name
+     *
+     * @var array
+     */
+    protected static array $defaultMessages = [];
 
     /**
      * @var array
@@ -117,6 +125,36 @@ class Validation extends Injectable implements ValidationInterface
         if (true === method_exists($this, "initialize")) {
             $this->initialize();
         }
+    }
+
+    /**
+     * Returns the default message registered for a validator class, or an
+     * empty string when none has been registered.
+     *
+     * @param string $validatorClassName
+     *
+     * @return string
+     */
+    public static function getDefaultMessage(string $validatorClassName): string
+    {
+        return self::$defaultMessages[$validatorClassName] ?? "";
+    }
+
+    /**
+     * Registers default messages for validators, keyed by validator class
+     * name. A registered default is used when a validator does not define its
+     * own message; a message set on the validator instance still wins. Calls
+     * are merged, so defaults can be registered incrementally.
+     *
+     * @param array $messages
+     *
+     * @return array
+     */
+    public static function setDefaultMessages(array $messages = []): array
+    {
+        self::$defaultMessages = array_merge(self::$defaultMessages, $messages);
+
+        return self::$defaultMessages;
     }
 
     /**

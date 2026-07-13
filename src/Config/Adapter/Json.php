@@ -16,9 +16,9 @@ namespace Phalcon\Config\Adapter;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exceptions\CannotLoadConfigFile;
 use Phalcon\Support\Helper\Json\Decode;
+use Phalcon\Traits\Php\FileTrait;
 
 use function basename;
-use function file_get_contents;
 
 /**
  * Reads JSON files and converts them to Phalcon\Config objects.
@@ -42,6 +42,8 @@ use function file_get_contents;
  */
 class Json extends Config
 {
+    use FileTrait;
+
     /**
      * Json constructor.
      *
@@ -51,7 +53,7 @@ class Json extends Config
      */
     public function __construct(string $filePath)
     {
-        $content = file_get_contents($filePath);
+        $content = $this->phpFileGetContents($filePath);
 
         if (false === $content) {
             throw new CannotLoadConfigFile(basename($filePath));

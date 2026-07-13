@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Session\Adapter;
 
 use Phalcon\Storage\Adapter\AdapterInterface;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use SessionHandlerInterface;
 use SessionUpdateTimestampHandlerInterface;
 
@@ -26,6 +27,8 @@ use SessionUpdateTimestampHandlerInterface;
  */
 abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
+    use GetTrait;
+
     /**
      * @var AdapterInterface
      */

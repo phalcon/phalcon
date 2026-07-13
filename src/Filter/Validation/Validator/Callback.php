@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Closure;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exceptions\InvalidCallbackReturn;
@@ -102,19 +103,37 @@ class Callback extends AbstractValidator
                 $data = $validation->getData();
             }
 
+            /**
+             * Snapshot the message state so a setTemplate()/setTemplates()
+             * call inside the bound closure cannot leak into later
+             * validations that reuse this validator instance. Restored below
+             * once the failure message (if any) has been built.
+             */
+            $savedTemplate  = $this->template;
+            $savedChanged   = $this->templateChanged;
+            $savedTemplates = $this->templates;
+
+            if ($callback instanceof Closure) {
+                $callback = Closure::bind($callback, $this);
+            }
+
             $returnedValue = call_user_func($callback, $data);
 
+            if (is_bool($returnedValue) && !$returnedValue) {
+                $validation->appendMessage(
+                    $this->messageFactory($validation, $field)
+                );
+            }
+
+            $this->template        = $savedTemplate;
+            $this->templateChanged = $savedChanged;
+            $this->templates       = $savedTemplates;
+
             if (is_bool($returnedValue)) {
-                if (!$returnedValue) {
-                    $validation->appendMessage(
-                        $this->messageFactory($validation, $field)
-                    );
+                return $returnedValue;
+            }
 
-                    return false;
-                }
-
-                return true;
-            } elseif ($returnedValue instanceof ValidatorInterface) {
+            if ($returnedValue instanceof ValidatorInterface) {
                 return $returnedValue->validate($validation, $field);
             }
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 
 /**
  * Converts strings to non camelized style

@@ -20,9 +20,10 @@ use Phalcon\Session\Exceptions\InvalidSessionId;
 use Phalcon\Session\Exceptions\InvalidSessionName;
 use Phalcon\Session\Exceptions\SessionAlreadyStarted;
 use Phalcon\Session\Exceptions\SessionModificationDenied;
+use Phalcon\Traits\Php\HeaderTrait;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use SessionHandlerInterface;
 
-use function headers_sent;
 use function preg_match;
 use function session_destroy;
 use function session_id;
@@ -43,6 +44,8 @@ use function session_status;
  */
 class Manager implements InjectionAwareInterface, ManagerInterface
 {
+    use GetTrait;
+    use HeaderTrait;
     use InjectionAwareTrait;
 
     /**
@@ -162,7 +165,7 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
         if ($this->exists()) {
             $uniqueKey = $this->getUniqueKey($key);
-            $value     = $_SESSION[$uniqueKey] ?? $defaultValue;
+            $value     = $this->getArrVal($_SESSION, $uniqueKey, $defaultValue);
 
             if (true === $remove) {
                 unset($_SESSION[$uniqueKey]);
@@ -359,7 +362,7 @@ class Manager implements InjectionAwareInterface, ManagerInterface
      */
     public function setOptions(array $options): void
     {
-        $this->uniqueId = $options['uniqueId'] ?? '';
+        $this->uniqueId = $this->getArrVal($options, 'uniqueId', '');
         $this->options  = $options;
     }
 
@@ -426,18 +429,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
             PHP_SESSION_ACTIVE   => self::SESSION_ACTIVE,
             default              => self::SESSION_NONE,
         };
-    }
-
-    /**
-     * Checks if or where headers have been sent
-     *
-     * @return bool
-     *
-     * @link https://php.net/manual/en/function.headers-sent.php
-     */
-    protected function phpHeadersSent(): bool
-    {
-        return headers_sent();
     }
 
     /**

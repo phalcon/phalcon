@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Factories;
 use Phalcon\Http\Message\Factories\StreamFactory;
 use Phalcon\Http\Message\Factories\UploadedFileFactory;
 use Phalcon\Http\Message\Interfaces\UploadedFileInterface;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class UploadedFileFactoryTest extends AbstractUnitTestCase
 {

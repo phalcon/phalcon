@@ -18,6 +18,7 @@ use Phalcon\Support\Debug\Exceptions\RequestHalted;
 use Phalcon\Support\Debug\Exceptions\RuntimeWarning;
 use Phalcon\Support\Debug\Renderer\HtmlRenderer;
 use Phalcon\Support\Debug\ReportBuilder;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use ReflectionException;
 use Throwable;
 
@@ -40,6 +41,8 @@ use function mb_strtolower;
  */
 class Debug
 {
+    use GetTrait;
+
     /**
      * @var bool
      */
@@ -322,7 +325,7 @@ class Debug
      */
     public function setBlacklist(array $blacklist): static
     {
-        $area     = $blacklist['request'] ?? [];
+        $area     = $this->getArrVal($blacklist, 'request', []);
         $subArray = [];
         $result   = [];
 
@@ -331,7 +334,7 @@ class Debug
         }
 
         $result['request'] = $subArray;
-        $area              = $blacklist['server'] ?? [];
+        $area              = $this->getArrVal($blacklist, 'server', []);
         $subArray          = [];
 
         foreach ($area as $value) {

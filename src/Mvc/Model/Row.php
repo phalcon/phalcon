@@ -101,7 +101,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * Reads an attribute value by its name
      *
      *```php
-     * echo $robot->readAttribute("name");
+     * echo $invoice->readAttribute("inv_title");
      *```
      *
      * @param string $attribute
@@ -139,7 +139,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * Writes an attribute value by its name
      *
      *```php
-     * $robot->writeAttribute("name", "Rosey");
+     * $invoice->writeAttribute("inv_title", "Test Invoice");
      *```
      *
      * @param string $attribute

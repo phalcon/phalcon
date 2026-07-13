@@ -17,9 +17,9 @@ use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Exceptions\InvalidJsonSchema;
 use Phalcon\Forms\Exceptions\JsonSchemaNotArray;
+use Phalcon\Traits\Php\FileTrait;
 
 use function array_is_list;
-use function file_get_contents;
 use function is_array;
 use function is_file;
 use function is_readable;
@@ -35,6 +35,8 @@ use const JSON_THROW_ON_ERROR;
  */
 class JsonLoader implements Schema
 {
+    use FileTrait;
+
     /**
      * @param string $source JSON string or path to a JSON file
      */
@@ -52,7 +54,7 @@ class JsonLoader implements Schema
         $json = $this->source;
 
         if (is_file($json) && is_readable($json)) {
-            $json = (string) file_get_contents($json);
+            $json = (string) $this->phpFileGetContents($json);
         }
 
         try {

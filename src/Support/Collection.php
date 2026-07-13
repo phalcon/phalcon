@@ -21,8 +21,6 @@ use Phalcon\Support\Collection\Exceptions\InvalidValueType;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
 use Phalcon\Support\Helper\Json\Encode;
-use Phalcon\Support\Traits\JsonTrait as BaseJsonTrait;
-use Phalcon\Traits\Php\JsonTrait;
 
 use function array_key_first;
 use function array_key_last;
@@ -72,9 +70,7 @@ class Collection implements
     JsonSerializable
 {
     use ArrayAccessTrait;
-    use BaseJsonTrait;
     use GetSetHasTrait;
-    use JsonTrait;
 
     /**
      * @var array<int|string, mixed>
@@ -730,5 +726,20 @@ class Collection implements
         if (!$ok) {
             throw new InvalidValueType($this->type, $value);
         }
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function checkSerializable(mixed $value): mixed
+    {
+        if (
+            is_object($value) &&
+            true === method_exists($value, 'jsonSerialize')
+        ) {
+            return $value->jsonSerialize();
+        }
+
+        return $value;
     }
 }

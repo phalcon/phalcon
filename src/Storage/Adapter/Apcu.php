@@ -17,7 +17,7 @@ use APCUIterator;
 use DateInterval;
 use Exception;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Support\Traits\PhpApcuTrait;
+use Phalcon\Traits\Php\ApcuTrait;
 
 use function is_bool;
 use function is_int;
@@ -34,7 +34,7 @@ use function is_int;
  */
 class Apcu extends AbstractAdapter
 {
-    use PhpApcuTrait;
+    use ApcuTrait;
 
     /**
      * @var string

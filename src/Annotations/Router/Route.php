@@ -35,7 +35,8 @@ class Route
         ],
         public string | null $name = null,
         public array $paths = [],
-        public array $converters = []
+        public array $converters = [],
+        public array | string | null $beforeMatch = null
     ) {
     }
 }

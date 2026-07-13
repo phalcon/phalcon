@@ -16,7 +16,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Headers;
 use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Headers;
 use Phalcon\Http\Message\Uri;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class OperationsTest extends AbstractUnitTestCase
 {

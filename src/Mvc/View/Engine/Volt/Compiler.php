@@ -39,7 +39,7 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
-use Phalcon\Traits\Helper\Str\CamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Volt\Compiler\Opcode;
 use Phalcon\Volt\Parser\Parser;
 
@@ -2309,6 +2309,15 @@ class Compiler implements InjectionAwareInterface
             $blocks         = $this->blocks;
             $extendedBlocks = $this->extendedBlocks;
 
+            /**
+             * When the local template extends a parent but does not define any
+             * blocks of its own, "blocks" is null. Coerce it to an array so
+             * array_key_exists() below never receives a non-array value.
+             */
+            if (!is_array($blocks)) {
+                $blocks = [];
+            }
+
             foreach ($extendedBlocks as $name => $block) {
                 /**
                  * If name is a string then is a block name
@@ -2381,6 +2390,21 @@ class Compiler implements InjectionAwareInterface
      */
     protected function getFinalPath(string $path): string
     {
+        /**
+         * Absolute paths are used as they are
+         */
+        if ($this->isAbsolutePath($path)) {
+            return $path;
+        }
+
+        /**
+         * Paths starting with "./" or "../" are resolved relative to the
+         * directory of the template currently being compiled
+         */
+        if (str_starts_with($path, "./") || str_starts_with($path, "../")) {
+            return dirname((string) $this->currentPath) . DIRECTORY_SEPARATOR . $path;
+        }
+
         if (null !== $this->view) {
             $viewsDirs = $this->view->getViewsDir();
 
@@ -2961,6 +2985,32 @@ class Compiler implements InjectionAwareInterface
         }
 
         return "v" . sprintf('%u', $hash);
+    }
+
+    /**
+     * Checks whether a path is absolute (Unix root, Windows UNC or drive)
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    private function isAbsolutePath(string $path): bool
+    {
+        /**
+         * Unix absolute path or Windows UNC path
+         */
+        if (str_starts_with($path, "/") || str_starts_with($path, "\\")) {
+            return true;
+        }
+
+        /**
+         * Windows absolute path with a drive letter, e.g. "C:\" or "C:/"
+         */
+        if (strlen($path) >= 2 && ctype_alpha(substr($path, 0, 1)) && substr($path, 1, 1) === ":") {
+            return true;
+        }
+
+        return false;
     }
 
     /**

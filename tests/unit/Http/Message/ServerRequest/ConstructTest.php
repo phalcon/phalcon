@@ -17,7 +17,7 @@ use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\ServerRequest;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\UploadedFile;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class ConstructTest extends AbstractUnitTestCase
 {

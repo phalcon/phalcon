@@ -20,7 +20,7 @@ use Phalcon\Contracts\Support\Debug\TemplateAware;
 use Phalcon\Di\DiInterface;
 use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
 use Phalcon\Support\Helper\Json\Encode;
-use Phalcon\Traits\Helper\Str\InterpolateTrait;
+use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 use Reflection;
 use ReflectionClass;
 use ReflectionException;
@@ -423,7 +423,6 @@ class Dump implements TemplateAware
                 );
 
                 foreach ($props as $property) {
-                    $property->setAccessible(true);
                     $key  = $property->getName();
                     $type = implode(
                         ' ',

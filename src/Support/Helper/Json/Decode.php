@@ -15,12 +15,7 @@ namespace Phalcon\Support\Helper\Json;
 
 use JsonException;
 use Phalcon\Support\Helper\Json\Exceptions\JsonDecodeError;
-
-use function json_decode;
-use function json_last_error;
-use function json_last_error_msg;
-
-use const JSON_ERROR_NONE;
+use Phalcon\Traits\Support\Helper\Json\DecodeTrait;
 
 /**
  * Decodes a string using `json_decode` and throws an exception if the
@@ -37,6 +32,8 @@ use const JSON_ERROR_NONE;
  */
 class Decode
 {
+    use DecodeTrait;
+
     /**
      * @param string $data        JSON data to parse
      * @param bool   $associative When `true`, objects are converted to arrays
@@ -54,28 +51,10 @@ class Decode
         int $depth = 512,
         int $options = 79
     ) {
-        /**
-         * Need to clear the json_last_error() before the code below
-         */
         try {
-            json_encode(null);
-            $decoded = json_decode($data, $associative, $depth, $options);
-            $error   = json_last_error();
-            $message = json_last_error_msg();
+            return $this->toDecode($data, $associative, $depth, $options);
         } catch (JsonException $ex) {
             throw new JsonDecodeError($ex->getMessage(), $ex->getCode(), $ex);
         }
-
-        /**
-         * The above will throw an exception when JSON_THROW_ON_ERROR is
-         * specified. If not, the code below will handle the exception when
-         * an error occurs
-         */
-        if (JSON_ERROR_NONE !== $error) {
-            json_encode(null);
-            throw new JsonDecodeError($message, $error);
-        }
-
-        return $decoded;
     }
 }

@@ -1,17 +1,28 @@
 # Changelog
 
-## [6.0.0 alpha 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha1) (2026-xx-xx)
+## [6.0.0 alpha 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha1) (2026-07-13)
 
 
 ### Changed
 
+- Converted the internal test suite to the `phalcon/talon` testing framework and added octocov coverage reporting. [#769](https://github.com/phalcon/phalcon/issues/769)
+
 ### Added
+
+- Added `Phalcon\Filter\Validation::setDefaultMessages()` and `Phalcon\Filter\Validation::getDefaultMessage()` for registering global default validator failure messages keyed by validator class name (e.g. `Validation::setDefaultMessages([PresenceOf::class => 'Default message :field is required'])`). A registered default overrides a validator's built-in class default message, while a message set on the validator instance (the constructor `message`/`template` option or `setTemplate()`) still takes precedence; it applies to validators whose message is produced through `getTemplate()`/`messageFactory()`. [#17257](https://github.com/phalcon/cphalcon/issues/17257) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- Added an opt-in "sticky" read/write connection mode to `Phalcon\Mvc\Model\Manager`. After `Phalcon\Mvc\Model\Manager::setSticky(true)`, once a model has written to its write connection during the current request cycle, any further reads for that write service are served from the write connection, so data written earlier in the request can be read back immediately. Writes are recorded via the new `Phalcon\Mvc\Model\Manager::registerWrite()` (called internally on a successful insert/update/delete), and `Phalcon\Mvc\Model\Manager::resetConnectionState()` clears the per-request tracking for long-running runtimes (e.g. Swoole, RoadRunner) that reuse the manager across requests. Sticky is off by default, preserving the existing read/write split; the transaction connection still takes precedence. The three methods are added to `Phalcon\Mvc\Model\ManagerInterface`. [#17256](https://github.com/phalcon/cphalcon/issues/17256) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 
 ### Fixed
 
+- Fixed the model `Annotations` metadata strategy (`Phalcon\Mvc\Model\MetaData\Strategy\Annotations`) to read the `#[Column]` skip and empty-string flags using the attribute constructor's camelCase argument names (`skipOnInsert`, `skipOnUpdate`, `allowEmptyString`); it previously looked for snake_case keys (`skip_on_insert`, `skip_on_update`, `allow_empty_string`) that never match a valid `#[Column]` usage, so those flags had no effect. [[doc]](https://docs.phalcon.io/6.0/annotations/)
+- Fixed `Phalcon\Annotations\Router\Route` (and its `#[Get]`, `#[Post]`, ... subclasses) to declare the `beforeMatch` constructor argument that `Phalcon\Mvc\Router\Annotations` already applies; instantiating the attribute with `beforeMatch:` previously raised an unknown-named-parameter error. [[doc]](https://docs.phalcon.io/6.0/annotations/)
+- Fixed the PHP 8.4/8.5 deprecation notices raised by the framework: removed the `imagedestroy()` calls in `Phalcon\Image\Adapter\Gd` (a no-op since PHP 8.0), the `finfo_close()` calls in `Phalcon\Http\Request\File` and `Phalcon\Filter\Validation\Validator\File\MimeType` and the `ReflectionProperty::setAccessible()` call in `Phalcon\Support\Debug\Dump` (no-ops since PHP 8.1), clamped the random pad byte in `Phalcon\Encryption\Crypt\Padding\Iso10126` to `chr(rand() % 256)` to avoid the out-of-range `chr()` deprecation on PHP 8.5, and guarded `Phalcon\Messages\Messages::offsetSet()` against an implicit `null` array offset. [#17253](https://github.com/phalcon/cphalcon/issues/17253) [[doc]](https://docs.phalcon.io/6.0/)
+
 ### Removed
 
-## [6.0.0 alpha 3](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha3) (2026-xx-xx)
+- Removed the deprecated `Serializable` interface from `Phalcon\Mvc\Model` and `Phalcon\Mvc\Model\Resultset` (deprecated by PHP 8.1); the `__serialize()` and `__unserialize()` magic methods remain, so model and resultset serialization is unchanged. [#17253](https://github.com/phalcon/cphalcon/issues/17253) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+
+## [6.0.0 alpha 3](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha3) (2026-06-29)
 
 ### Changed
 

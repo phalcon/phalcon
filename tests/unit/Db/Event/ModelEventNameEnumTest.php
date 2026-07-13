@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Db\Event;
 
 use Phalcon\Db\Event\ModelEventNameEnum;
 use Phalcon\Db\Event\UnknownEventTypeException;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ModelEventNameEnumTest extends AbstractUnitTestCase

@@ -152,6 +152,7 @@ class File extends AbstractValidatorComposite
             $options["equalSize"],
             $options["messageEqualSize"],
             $options["allowedTypes"],
+            $options["allowWildcards"],
             $options["messageType"],
             $options["maxResolution"],
             $options["includedMaxResolution"],
@@ -185,8 +186,9 @@ class File extends AbstractValidatorComposite
         if (isset($options["allowedTypes"])) {
             $validator = new MimeType(
                 [
-                    "types"   => $options["allowedTypes"],
-                    "message" => $options["messageType"] ?? null,
+                    "types"          => $options["allowedTypes"],
+                    "message"        => $options["messageType"] ?? null,
+                    "allowWildcards" => (bool) ($options["allowWildcards"] ?? false),
                 ]
             );
 

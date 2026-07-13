@@ -22,12 +22,12 @@ use Phalcon\Cli\Console\Exceptions\ModuleDefinitionPathNotFound;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
+use Phalcon\Traits\Php\FileTrait;
 
 use function array_merge;
 use function array_shift;
 use function call_user_func_array;
 use function class_exists;
-use function file_exists;
 use function implode;
 use function is_array;
 use function is_object;
@@ -42,6 +42,8 @@ use function trim;
  */
 class Console extends AbstractApplication
 {
+    use FileTrait;
+
     /**
      * @var array|string
      */
@@ -133,7 +135,7 @@ class Console extends AbstractApplication
                  */
                 if (isset($module["path"])) {
                     $path = $module["path"];
-                    if (true !== file_exists($path)) {
+                    if (true !== $this->phpFileExists($path)) {
                         throw new ModuleDefinitionPathNotFound($path);
                     }
 

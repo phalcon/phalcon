@@ -15,7 +15,7 @@ namespace Phalcon\Tests\Unit\Http\Message\Factories;
 
 use Phalcon\Http\Message\Factories\UriFactory;
 use Phalcon\Http\Message\Interfaces\UriInterface;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class UriFactoryTest extends AbstractUnitTestCase
 {

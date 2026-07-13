@@ -16,6 +16,8 @@ namespace Phalcon\Assets;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use Phalcon\Assets\Traits\AttributesTrait;
+use Phalcon\Assets\Traits\SourceTargetTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Traversable;
 
@@ -30,17 +32,14 @@ use function realpath;
  */
 class Collection implements Countable, IteratorAggregate
 {
+    use AttributesTrait;
     use FileTrait;
+    use SourceTargetTrait;
 
     /**
      * @var array<string, AssetInterface>
      */
     protected array $assets = [];
-
-    /**
-     * @var array<string, string>
-     */
-    protected array $attributes = [];
 
     /**
      * Should version be determined from file modification time
@@ -58,38 +57,21 @@ class Collection implements Countable, IteratorAggregate
      * @var FilterInterface[]
      */
     protected array $filters = [];
-    /**
-     * @var bool
-     */
-    protected bool $isLocal = true;
+
     /**
      * @var bool
      */
     protected bool $join = true;
+
     /**
      * @var string
      */
     protected string $prefix = '';
 
     /**
-     * @var string
-     */
-    protected string $sourcePath = '';
-
-    /**
      * @var bool
      */
     protected bool $targetIsLocal = true;
-
-    /**
-     * @var string
-     */
-    protected string $targetPath = '';
-
-    /**
-     * @var string
-     */
-    protected string $targetUri = '';
 
     /**
      * @var string
@@ -257,16 +239,6 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * Return the stored attributes
-     *
-     * @return array<string, string>
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
      * Return the stored codes
      *
      * @return AssetInterface[]
@@ -344,16 +316,6 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * Returns the source path
-     *
-     * @return string
-     */
-    public function getSourcePath(): string
-    {
-        return $this->sourcePath;
-    }
-
-    /**
      * Returns whether the target is local or not
      *
      * @return bool
@@ -361,26 +323,6 @@ class Collection implements Countable, IteratorAggregate
     public function getTargetIsLocal(): bool
     {
         return $this->targetIsLocal;
-    }
-
-    /**
-     * Returns the target path
-     *
-     * @return string
-     */
-    public function getTargetPath(): string
-    {
-        return $this->targetPath;
-    }
-
-    /**
-     * Returns the target Uri
-     *
-     * @return string
-     */
-    public function getTargetUri(): string
-    {
-        return $this->targetUri;
     }
 
     /**
@@ -427,14 +369,6 @@ class Collection implements Countable, IteratorAggregate
     public function isAutoVersion(): bool
     {
         return $this->autoVersion;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLocal(): bool
-    {
-        return $this->isLocal;
     }
 
     /**
@@ -493,20 +427,6 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * Sets if the collection uses local assets by default
-     *
-     * @param bool $flag
-     *
-     * @return static
-     */
-    public function setIsLocal(bool $flag): static
-    {
-        $this->isLocal = $flag;
-
-        return $this;
-    }
-
-    /**
      * Sets a common prefix for all the assets
      *
      * @param string $prefix
@@ -521,20 +441,6 @@ class Collection implements Countable, IteratorAggregate
     }
 
     /**
-     * Sets a base source path for all the assets in this collection
-     *
-     * @param string $sourcePath
-     *
-     * @return static
-     */
-    public function setSourcePath(string $sourcePath): static
-    {
-        $this->sourcePath = $sourcePath;
-
-        return $this;
-    }
-
-    /**
      * Sets if the target local or not
      *
      * @param bool $flag
@@ -544,34 +450,6 @@ class Collection implements Countable, IteratorAggregate
     public function setTargetIsLocal(bool $flag): static
     {
         $this->targetIsLocal = $flag;
-
-        return $this;
-    }
-
-    /**
-     * Sets the target path of the file for the filtered/join output
-     *
-     * @param string $targetPath
-     *
-     * @return static
-     */
-    public function setTargetPath(string $targetPath): static
-    {
-        $this->targetPath = $targetPath;
-
-        return $this;
-    }
-
-    /**
-     * Sets a target uri for the generated HTML
-     *
-     * @param string $targetUri
-     *
-     * @return static
-     */
-    public function setTargetUri(string $targetUri): static
-    {
-        $this->targetUri = $targetUri;
 
         return $this;
     }

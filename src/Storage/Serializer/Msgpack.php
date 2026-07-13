@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use function msgpack_pack;
-use function msgpack_unpack;
+use Phalcon\Traits\Php\MsgpackTrait;
 
 class Msgpack extends Igbinary
 {
+    use MsgpackTrait;
+
     /**
      * Serializes data
      *
@@ -27,7 +28,7 @@ class Msgpack extends Igbinary
      */
     protected function doSerialize(mixed $value): string
     {
-        return msgpack_pack($value);
+        return $this->phpMsgpackPack($value);
     }
 
     /**
@@ -37,6 +38,6 @@ class Msgpack extends Igbinary
      */
     protected function doUnserialize($value)
     {
-        return msgpack_unpack($value);
+        return $this->phpMsgpackUnpack($value);
     }
 }

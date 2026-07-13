@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Helper\Str\StartsWithTrait;
+use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
 
 /**
  * Check if a string starts with a given string

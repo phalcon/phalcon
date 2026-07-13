@@ -13,51 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation;
 
-use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\Exceptions\NoValidatorsInComposite;
-
-use function count;
-use function get_class;
+use Phalcon\Filter\Validation\Traits\ValidatorCompositeTrait;
 
 /**
  * This is a base class for combined fields validators
+ *
+ * @todo Remove in v7. Kept only for backwards compatibility; compose
+ * Phalcon\Filter\Validation\Traits\ValidatorCompositeTrait directly (with
+ * extends AbstractValidator implements ValidatorCompositeInterface) instead of
+ * extending this.
  */
 abstract class AbstractValidatorComposite extends AbstractValidator implements ValidatorCompositeInterface
 {
-    /**
-     * @var array
-     */
-    protected array $validators = [];
-
-    /**
-     * @return array
-     */
-    public function getValidators(): array
-    {
-        return $this->validators;
-    }
-
-    /**
-     * Executes the validation
-     *
-     * @param Validation $validation
-     * @param string     $field
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function validate(Validation $validation, string $field): bool
-    {
-        if (count($this->getValidators()) === 0) {
-            throw new NoValidatorsInComposite(get_class($this));
-        }
-
-        foreach ($this->getValidators() as $validator) {
-            if ($validator->validate($validation, $field) === false) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    use ValidatorCompositeTrait;
 }

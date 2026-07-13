@@ -20,6 +20,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 
 use function is_object;
 use function mb_strtolower;
@@ -41,6 +42,7 @@ use function method_exists;
 abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
+    use GetTrait;
 
     /**
      * @var mixed
@@ -108,10 +110,12 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Lets set some defaults and options here
          */
-        $this->defaultSerializer = mb_strtolower(($options['defaultSerializer']) ?? 'php');
-        $this->lifetime          = $options['lifetime'] ?? 3600;
-        $this->serializer        = $options['serializer'] ?? null;
-        $this->stripPrefix       = (bool) ($options['stripPrefix'] ?? true);
+        $this->defaultSerializer = mb_strtolower(
+            $this->getArrVal($options, 'defaultSerializer', 'php')
+        );
+        $this->lifetime          = $this->getArrVal($options, 'lifetime', 3600);
+        $this->serializer        = $this->getArrVal($options, 'serializer', null);
+        $this->stripPrefix       = (bool) $this->getArrVal($options, 'stripPrefix', true);
 
         if (isset($options['prefix'])) {
             $this->prefix = $options['prefix'];

@@ -19,7 +19,7 @@ use Phalcon\Annotations\Parser\Exception;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router;
-use Phalcon\Traits\Helper\Str\UncamelizeTrait;
+use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 
 use function array_pop;
 use function call_user_func;

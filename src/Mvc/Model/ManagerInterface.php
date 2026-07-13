@@ -593,6 +593,16 @@ interface ManagerInterface
     public function notifyEvent(string $eventName, ModelInterface $model);
 
     /**
+     * Marks the model's write connection service as written-to for the
+     * current request cycle (sticky connections)
+     *
+     * @param ModelInterface $model
+     *
+     * @return void
+     */
+    public function registerWrite(ModelInterface $model): void;
+
+    /**
      * Removes a behavior from a model
      *
      * @param ModelInterface $model
@@ -604,6 +614,13 @@ interface ManagerInterface
         ModelInterface $model,
         string $behaviorClass
     ): void;
+
+    /**
+     * Clears the per-request sticky write tracking
+     *
+     * @return void
+     */
+    public function resetConnectionState(): void;
 
     /**
      * Sets both write and read connection service for a model
@@ -665,6 +682,15 @@ interface ManagerInterface
         string $key,
         mixed $records
     ): void;
+
+    /**
+     * Enables or disables sticky connections
+     *
+     * @param bool $sticky
+     *
+     * @return void
+     */
+    public function setSticky(bool $sticky): void;
 
     /**
      * Sets write connection service for a model

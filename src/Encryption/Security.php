@@ -19,6 +19,7 @@ use Phalcon\Encryption\Security\Exceptions\UnknownHashAlgorithm;
 use Phalcon\Encryption\Security\Random;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
+use Phalcon\Traits\Php\HashTrait;
 use ValueError;
 
 /**
@@ -40,6 +41,8 @@ use ValueError;
  */
 class Security extends AbstractInjectionAware implements SecurityContract
 {
+    use HashTrait;
+
     public const CRYPT_ARGON2I    = 10;
     public const CRYPT_ARGON2ID   = 11;
     public const CRYPT_BCRYPT     = 0;
@@ -187,7 +190,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
             return false;
         }
 
-        $equals = hash_equals($knownToken, $userToken);
+        $equals = $this->phpHashEquals($knownToken, $userToken);
 
         /**
          * Remove the key and value of the CSRF token in session
@@ -217,7 +220,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
         bool $raw = false
     ): string {
         try {
-            $hmac = hash_hmac($algorithm, $data, $key, $raw);
+            $hmac = $this->phpHashHmac($algorithm, $data, $key, $raw);
         } catch (ValueError) {
             throw new UnknownHashAlgorithm($algorithm);
         }

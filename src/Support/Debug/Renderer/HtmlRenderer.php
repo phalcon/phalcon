@@ -18,7 +18,7 @@ use Phalcon\Support\Debug\Report\BacktraceItem;
 use Phalcon\Support\Debug\Report\ExceptionReport;
 use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
 use Phalcon\Support\Version;
-use Phalcon\Traits\Helper\Str\InterpolateTrait;
+use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 use function count;
 use function get_class;

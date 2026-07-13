@@ -24,8 +24,9 @@ use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
 use Phalcon\Mvc\View\Exceptions\ViewNotFound;
 use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
 use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
+use Phalcon\Mvc\View\Traits\ViewParamsTrait;
 use Phalcon\Mvc\ViewInterface;
-use Phalcon\Traits\Helper\Str\DirSeparatorTrait;
+use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 use function array_keys;
 use function array_merge;
@@ -72,6 +73,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 {
     use DirSeparatorTrait;
     use EventsAwareTrait;
+    use ViewParamsTrait;
 
     /**
      * Render Level: To the action view
@@ -111,11 +113,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @var string
      */
     protected string $basePath = "";
-
-    /**
-     * @var string
-     */
-    protected string $content = "";
 
     /**
      * @var string
@@ -173,11 +170,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     protected array | null $pickView = null;
 
     /**
-     * @var array
-     */
-    protected array $registeredEngines = [];
-
-    /**
      * @var int
      */
     protected int $renderLevel = 5;
@@ -191,11 +183,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @var array
      */
     protected array $templatesBefore = [];
-
-    /**
-     * @var array
-     */
-    protected array $viewParams = [];
 
     /**
      * @var array|string
@@ -398,16 +385,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     }
 
     /**
-     * Returns output from another view stage
-     *
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    /**
      * Gets the name of the controller rendered
      *
      * @return string
@@ -456,16 +433,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     }
 
     /**
-     * Returns parameters to views
-     *
-     * @return array
-     */
-    public function getParamsToView(): array
-    {
-        return $this->viewParams;
-    }
-
-    /**
      * Renders a partial view
      *
      * ```php
@@ -511,14 +478,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function getPartialsDir(): string
     {
         return $this->partialsDir;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRegisteredEngines(): array
-    {
-        return $this->registeredEngines;
     }
 
     /**
@@ -596,18 +555,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function getRenderLevel(): int
     {
         return $this->renderLevel;
-    }
-
-    /**
-     * Returns a parameter previously set in the view
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function getVar(string $key): mixed
-    {
-        return $this->viewParams[$key] ?? null;
     }
 
     /**
@@ -1076,24 +1023,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     }
 
     /**
-     * Externally sets the view content
-     *
-     *```php
-     * $this->view->setContent("<h1>hello</h1>");
-     *```
-     *
-     * @param string $content
-     *
-     * @return $this
-     */
-    public function setContent(string $content): static
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
      * Change the layout to be used instead of using the name of the latest
      * controller name
      *
@@ -1238,20 +1167,6 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         } else {
             $this->templatesBefore = $templateBefore;
         }
-
-        return $this;
-    }
-
-    /**
-     * Set a single view parameter
-     *
-     *```php
-     * $this->view->setVar("products", $products);
-     *```
-     */
-    public function setVar(string $key, mixed $value): static
-    {
-        $this->viewParams[$key] = $value;
 
         return $this;
     }

@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Profiler;
 
+use Phalcon\Db\Traits\ElapsedTimeTrait;
+
 /**
  * This class identifies each profile in a Phalcon\Db\Profiler
  */
 class Item
 {
+    use ElapsedTimeTrait;
+
     /**
      * Timestamp when the profile ended
      *
@@ -104,16 +108,6 @@ class Item
     }
 
     /**
-     * Returns the total time in milliseconds spent by the profile
-     *
-     * @return float
-     */
-    public function getTotalElapsedMilliseconds(): float
-    {
-        return $this->getTotalElapsedNanoseconds() / 1000000;
-    }
-
-    /**
      * Returns the total time in nanoseconds spent by the profile
      *
      * @return float
@@ -121,16 +115,6 @@ class Item
     public function getTotalElapsedNanoseconds(): float
     {
         return $this->finalTime - $this->initialTime;
-    }
-
-    /**
-     * Returns the total time in seconds spent by the profile
-     *
-     * @return float
-     */
-    public function getTotalElapsedSeconds(): float
-    {
-        return $this->getTotalElapsedMilliseconds() / 1000;
     }
 
     /**

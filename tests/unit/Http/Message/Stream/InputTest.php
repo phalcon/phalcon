@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
 use Phalcon\Http\Message\Stream\Input;
-use Phalcon\Tests\AbstractUnitTestCase;
+use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class InputTest extends AbstractUnitTestCase
 {

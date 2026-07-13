@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-use function igbinary_serialize;
+use Phalcon\Traits\Php\IgbinaryTrait;
+
 use function restore_error_handler;
 use function set_error_handler;
 
@@ -21,6 +22,8 @@ use const E_WARNING;
 
 class Igbinary extends AbstractSerializer
 {
+    use IgbinaryTrait;
+
     /**
      * Serializes data
      *
@@ -100,18 +103,6 @@ class Igbinary extends AbstractSerializer
      */
     protected function doUnserialize($value)
     {
-        return igbinary_unserialize($value);
-    }
-
-    /**
-     * Wrapper for `igbinary_serialize`
-     *
-     * @param mixed $value
-     *
-     * @return string|null
-     */
-    protected function phpIgbinarySerialize($value): string | null
-    {
-        return igbinary_serialize($value);
+        return $this->phpIgbinaryUnserialize($value);
     }
 }
