@@ -1,6 +1,6 @@
 # Changelog
 
-## [6.0.0 alpha 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha1) (2026-xx-xx)
+## [6.0.0 alpha 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha1) (2026-07-13)
 
 
 ### Changed
