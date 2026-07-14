@@ -56,13 +56,15 @@ class Complex extends Resultset
      * @param array|null           $columnTypes
      * @param ResultInterface|null $result
      * @param mixed|null           $cache
+     * @param string               $resultsetRowClass
      *
      * @throws Exception
      */
     public function __construct(
         protected array | null $columnTypes,
         ResultInterface | null $result = null,
-        mixed $cache = null
+        mixed $cache = null,
+        protected string $resultsetRowClass = ""
     ) {
         parent::__construct($result, $cache);
     }
@@ -152,9 +154,12 @@ class Complex extends Resultset
 
         /**
          * Each row in a complex result is a Phalcon\Mvc\Model\Row instance
+         * (or a custom subclass when set)
          */
+        $rowClass = $this->resultsetRowClass !== "" ? $this->resultsetRowClass : Row::class;
+
         $activeRow = match ($hydrateMode) {
-            Resultset::HYDRATE_RECORDS => new Row(),
+            Resultset::HYDRATE_RECORDS => new $rowClass(),
             Resultset::HYDRATE_ARRAYS  => [],
             default                    => new stdClass(),
         };

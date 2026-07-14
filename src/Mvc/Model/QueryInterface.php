@@ -144,4 +144,12 @@ interface QueryInterface
      * @return QueryInterface
      */
     public function setUniqueRow(bool $uniqueRow): QueryInterface;
+
+    // TODO v7: promote the custom resultset-row-class accessors into this
+    // interface. They are implemented on Phalcon\Mvc\Model\Query but are kept
+    // out of the contract in 5.x to avoid breaking existing QueryInterface
+    // implementations in the wild.
+    //
+    // public function getResultsetRowClass(): string;
+    // public function setResultsetRowClass(string $resultsetRowClass): QueryInterface;
 }
