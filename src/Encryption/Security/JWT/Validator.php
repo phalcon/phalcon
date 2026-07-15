@@ -187,12 +187,18 @@ class Validator
     /**
      * Validate the id of the token
      *
-     * @param string $jwtId
+     * A null id expresses no expectation and is skipped.
+     *
+     * @param string|null $jwtId
      *
      * @return Validator
      */
-    public function validateId(string $jwtId): static
+    public function validateId(string | null $jwtId = null): static
     {
+        if (null === $jwtId) {
+            return $this;
+        }
+
         $tokenId = (string)$this->token->getClaims()->get(Enum::ID);
 
         if ($jwtId !== $tokenId) {
@@ -205,6 +211,9 @@ class Validator
     /**
      * Validate the issued at (iat) of the token
      *
+     * A token issued at exactly $timestamp is valid. Only a token issued after
+     * it, i.e. in the future, is rejected.
+     *
      * @param int $timestamp
      *
      * @return Validator
@@ -215,7 +224,7 @@ class Validator
                                           ->get(Enum::ISSUED_AT)
         ;
 
-        if ($this->getTimestamp($timestamp) <= $tokenIssuedAt) {
+        if ($this->getTimestamp($timestamp) < $tokenIssuedAt) {
             $this->errors[] = "Validation: the token cannot be used yet (future)";
         }
 
@@ -225,12 +234,18 @@ class Validator
     /**
      * Validate the issuer of the token
      *
-     * @param string $issuer
+     * A null issuer expresses no expectation and is skipped.
+     *
+     * @param string|null $issuer
      *
      * @return Validator
      */
-    public function validateIssuer(string $issuer): static
+    public function validateIssuer(string | null $issuer = null): static
     {
+        if (null === $issuer) {
+            return $this;
+        }
+
         $tokenIssuer = (string)$this->token->getClaims()
                                            ->get(Enum::ISSUER)
         ;
@@ -245,6 +260,9 @@ class Validator
     /**
      * Validate the notbefore (nbf) of the token
      *
+     * A token is valid at exactly $timestamp. Only a timestamp before the
+     * "nbf" claim is rejected.
+     *
      * @param int $timestamp
      *
      * @return Validator
@@ -255,7 +273,7 @@ class Validator
                                            ->get(Enum::NOT_BEFORE)
         ;
 
-        if ($this->getTimestamp($timestamp) <= $tokenNotBefore) {
+        if ($this->getTimestamp($timestamp) < $tokenNotBefore) {
             $this->errors[] = "Validation: the token cannot be used yet (not before)";
         }
 
@@ -283,6 +301,32 @@ class Validator
             )
         ) {
             $this->errors[] = "Validation: the signature does not match";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate the subject of the token
+     *
+     * A null subject expresses no expectation and is skipped.
+     *
+     * @param string|null $subject
+     *
+     * @return Validator
+     */
+    public function validateSubject(string | null $subject = null): static
+    {
+        if (null === $subject) {
+            return $this;
+        }
+
+        $tokenSubject = (string)$this->token->getClaims()
+                                            ->get(Enum::SUBJECT)
+        ;
+
+        if ($subject !== $tokenSubject) {
+            $this->errors[] = "Validation: incorrect subject";
         }
 
         return $this;

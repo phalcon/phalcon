@@ -113,6 +113,11 @@ class Token
     }
 
     /**
+     * Validate the token against the claims registered in the validator.
+     *
+     * Only claims that have a value in the validator are checked. A claim left
+     * as null expresses no expectation and is skipped.
+     *
      * @param Validator $validator
      *
      * @return array<array-key, string>
@@ -126,10 +131,13 @@ class Token
             "validateIssuedAt"   => $validator->get(Enum::ISSUED_AT),
             "validateIssuer"     => $validator->get(Enum::ISSUER),
             "validateNotBefore"  => $validator->get(Enum::NOT_BEFORE),
+            "validateSubject"    => $validator->get(Enum::SUBJECT),
         ];
 
-        foreach ($methods as $method => $claimId) {
-            $validator->$method($claimId);
+        foreach ($methods as $method => $claimValue) {
+            if (null !== $claimValue) {
+                $validator->$method($claimValue);
+            }
         }
 
         return $validator->getErrors();
