@@ -368,7 +368,7 @@ interface RequestInterface
      * @param bool $onlySuccessful
      * @param bool $namedKeys
      *
-     * @return array
+     * @return FileInterface[]
      */
     public function getUploadedFiles(
         bool $onlySuccessful = false,
