@@ -251,6 +251,15 @@ abstract class Model extends AbstractInjectionAware implements
     protected array $uniqueTypes = [];
 
     /**
+     * Per-process cache of declared private model properties as
+     * [class name => [property name => ReflectionProperty]], used during
+     * hydration - see getPrivateProperties()
+     *
+     * @var array
+     */
+    private static array $privatePropertiesCache = [];
+
+    /**
      * Phalcon\Mvc\Model constructor
      *
      * @param array|null                     $data
@@ -882,6 +891,12 @@ abstract class Model extends AbstractInjectionAware implements
         $instance = clone $base;
 
         /**
+         * Declared private properties must be written via reflection during
+         * hydration - see getPrivateProperties()
+         */
+        $privateProperties = self::getPrivateProperties(get_class($instance));
+
+        /**
          * Mark the object as persistent
          */
         $instance->setDirtyState($dirtyState);
@@ -891,7 +906,11 @@ abstract class Model extends AbstractInjectionAware implements
                 throw new InvalidDumpResultKey(get_class($base));
             }
 
-            $instance->$key = $value;
+            if (isset($privateProperties[$key])) {
+                $privateProperties[$key]->setValue($instance, $value);
+            } else {
+                $instance->$key = $value;
+            }
         }
 
         /**
@@ -934,6 +953,12 @@ abstract class Model extends AbstractInjectionAware implements
         bool | null $keepSnapshots = null
     ): ModelInterface | ResultInterface {
         $instance = clone $base;
+
+        /**
+         * Declared private properties must be written via reflection during
+         * hydration - see getPrivateProperties()
+         */
+        $privateProperties = self::getPrivateProperties(get_class($instance));
 
         if ($instance instanceof Model) {
             $metaData          = $instance->getModelsMetaData();
@@ -984,14 +1009,22 @@ abstract class Model extends AbstractInjectionAware implements
                         try {
                             $instance->$setter($value);
                         } catch (\TypeError) {
-                            self::assignCoercedValue($instance, $key, $value);
+                            if (isset($privateProperties[$key])) {
+                                $privateProperties[$key]->setValue($instance, $value);
+                            } else {
+                                self::assignCoercedValue($instance, $key, $value);
+                            }
                         }
 
                         continue;
                     }
                 }
 
-                self::assignCoercedValue($instance, $key, $value);
+                if (isset($privateProperties[$key])) {
+                    $privateProperties[$key]->setValue($instance, $value);
+                } else {
+                    self::assignCoercedValue($instance, $key, $value);
+                }
 
                 continue;
             }
@@ -1034,18 +1067,29 @@ abstract class Model extends AbstractInjectionAware implements
                         try {
                             $instance->$setter($value);
                         } catch (\TypeError) {
-                            self::assignCoercedValue(
-                                $instance,
-                                $attribute,
-                                $value
-                            );
+                            if (isset($privateProperties[$attribute])) {
+                                $privateProperties[$attribute]->setValue(
+                                    $instance,
+                                    $value
+                                );
+                            } else {
+                                self::assignCoercedValue(
+                                    $instance,
+                                    $attribute,
+                                    $value
+                                );
+                            }
                         }
 
                         continue;
                     }
                 }
 
-                self::assignCoercedValue($instance, $attribute, $value);
+                if (isset($privateProperties[$attribute])) {
+                    $privateProperties[$attribute]->setValue($instance, $value);
+                } else {
+                    self::assignCoercedValue($instance, $attribute, $value);
+                }
 
                 continue;
             }
@@ -1097,14 +1141,25 @@ abstract class Model extends AbstractInjectionAware implements
                     try {
                         $instance->$setter($castValue);
                     } catch (\TypeError) {
-                        $instance->$attributeName = $castValue;
+                        if (isset($privateProperties[$attributeName])) {
+                            $privateProperties[$attributeName]->setValue(
+                                $instance,
+                                $castValue
+                            );
+                        } else {
+                            $instance->$attributeName = $castValue;
+                        }
                     }
 
                     continue;
                 }
             }
 
-            $instance->$attributeName = $castValue;
+            if (isset($privateProperties[$attributeName])) {
+                $privateProperties[$attributeName]->setValue($instance, $castValue);
+            } else {
+                $instance->$attributeName = $castValue;
+            }
         }
 
         /**
@@ -1960,6 +2015,54 @@ abstract class Model extends AbstractInjectionAware implements
         } catch (InvalidWkb) {
             return $value;
         }
+    }
+
+    /**
+     * Returns the declared private properties of a class (including inherited
+     * ones) as [property name => ReflectionProperty], cached per class.
+     *
+     * Hydration (cloneResult/cloneResultMap) cannot write private properties
+     * directly: the write from Model scope falls back to __set(), which
+     * invokes a possible setter - or throws for a non-public property
+     * without one. Writing through ReflectionProperty stores the raw
+     * database value instead.
+     *
+     * @param string $className
+     *
+     * @return array<string, \ReflectionProperty>
+     *
+     * @see https://github.com/phalcon/cphalcon/issues/16454
+     */
+    private static function getPrivateProperties(string $className): array
+    {
+        if (!isset(self::$privatePropertiesCache[$className])) {
+            $privateProperties = [];
+            $reflection        = new \ReflectionClass($className);
+
+            while ($reflection instanceof \ReflectionClass) {
+                $reflectionProperties = $reflection->getProperties(
+                    \ReflectionProperty::IS_PRIVATE
+                );
+
+                foreach ($reflectionProperties as $reflectionProperty) {
+                    if ($reflectionProperty->isStatic()) {
+                        continue;
+                    }
+
+                    $propertyName = $reflectionProperty->getName();
+
+                    if (!isset($privateProperties[$propertyName])) {
+                        $privateProperties[$propertyName] = $reflectionProperty;
+                    }
+                }
+
+                $reflection = $reflection->getParentClass();
+            }
+
+            self::$privatePropertiesCache[$className] = $privateProperties;
+        }
+
+        return self::$privatePropertiesCache[$className];
     }
 
     /**
