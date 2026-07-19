@@ -16,8 +16,10 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Front;
 
+use Phalcon\ADR\Application;
 use Phalcon\ADR\Container\AdrProvider;
 use Phalcon\Container\Container;
+use Phalcon\Contracts\ADR\Emitter\Emitter;
 use Phalcon\Contracts\Front\FrontController;
 use Phalcon\Contracts\Http\AttributeRequest;
 
@@ -50,10 +52,10 @@ abstract class AbstractHttpFront implements FrontController
             $this->registerProviders($container);
 
             $request     = $container->get(AttributeRequest::class);
-            $application = $container->get("Phalcon\\ADR\\Application");
+            $application = $container->get(Application::class);
             $response    = $application->handle($request);
 
-            $container->get("Phalcon\\Contracts\\ADR\\Emitter\\Emitter")->emit($response);
+            $container->get(Emitter::class)->emit($response);
 
             return 0;
         } catch (\Throwable $exception) {

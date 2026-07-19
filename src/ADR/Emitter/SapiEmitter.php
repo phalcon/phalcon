@@ -29,7 +29,7 @@ class SapiEmitter implements Emitter
     public function emit(ResponseInterface $response): void
     {
         if (headers_sent()) {
-            throw new HeadersAlreadySent('Headers have already been sent; cannot emit the response.');
+            throw new HeadersAlreadySent();
         }
 
         $response->send();
