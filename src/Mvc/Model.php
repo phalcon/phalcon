@@ -174,6 +174,15 @@ abstract class Model extends AbstractInjectionAware implements
     public const OP_NONE                = 0;
     public const OP_UPDATE              = 2;
     public const TRANSACTION_INDEX      = "transaction";
+
+    /**
+     * Per-process cache of declared private model properties as
+     * [class name => [property name => ReflectionProperty]], used during
+     * hydration - see getPrivateProperties()
+     *
+     * @var array
+     */
+    private static array $privatePropertiesCache = [];
     /**
      * @var array
      */
@@ -249,15 +258,6 @@ abstract class Model extends AbstractInjectionAware implements
      * @var array
      */
     protected array $uniqueTypes = [];
-
-    /**
-     * Per-process cache of declared private model properties as
-     * [class name => [property name => ReflectionProperty]], used during
-     * hydration - see getPrivateProperties()
-     *
-     * @var array
-     */
-    private static array $privatePropertiesCache = [];
 
     /**
      * Phalcon\Mvc\Model constructor
@@ -2018,54 +2018,6 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Returns the declared private properties of a class (including inherited
-     * ones) as [property name => ReflectionProperty], cached per class.
-     *
-     * Hydration (cloneResult/cloneResultMap) cannot write private properties
-     * directly: the write from Model scope falls back to __set(), which
-     * invokes a possible setter - or throws for a non-public property
-     * without one. Writing through ReflectionProperty stores the raw
-     * database value instead.
-     *
-     * @param string $className
-     *
-     * @return array<string, \ReflectionProperty>
-     *
-     * @see https://github.com/phalcon/cphalcon/issues/16454
-     */
-    private static function getPrivateProperties(string $className): array
-    {
-        if (!isset(self::$privatePropertiesCache[$className])) {
-            $privateProperties = [];
-            $reflection        = new \ReflectionClass($className);
-
-            while ($reflection instanceof \ReflectionClass) {
-                $reflectionProperties = $reflection->getProperties(
-                    \ReflectionProperty::IS_PRIVATE
-                );
-
-                foreach ($reflectionProperties as $reflectionProperty) {
-                    if ($reflectionProperty->isStatic()) {
-                        continue;
-                    }
-
-                    $propertyName = $reflectionProperty->getName();
-
-                    if (!isset($privateProperties[$propertyName])) {
-                        $privateProperties[$propertyName] = $reflectionProperty;
-                    }
-                }
-
-                $reflection = $reflection->getParentClass();
-            }
-
-            self::$privatePropertiesCache[$className] = $privateProperties;
-        }
-
-        return self::$privatePropertiesCache[$className];
-    }
-
-    /**
      * shared prepare query logic for find and findFirst method
      *
      * @param array|string|null $params
@@ -2126,6 +2078,54 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         return $query;
+    }
+
+    /**
+     * Returns the declared private properties of a class (including inherited
+     * ones) as [property name => ReflectionProperty], cached per class.
+     *
+     * Hydration (cloneResult/cloneResultMap) cannot write private properties
+     * directly: the write from Model scope falls back to __set(), which
+     * invokes a possible setter - or throws for a non-public property
+     * without one. Writing through ReflectionProperty stores the raw
+     * database value instead.
+     *
+     * @param string $className
+     *
+     * @return array<string, \ReflectionProperty>
+     *
+     * @see https://github.com/phalcon/cphalcon/issues/16454
+     */
+    private static function getPrivateProperties(string $className): array
+    {
+        if (!isset(self::$privatePropertiesCache[$className])) {
+            $privateProperties = [];
+            $reflection        = new \ReflectionClass($className);
+
+            while ($reflection instanceof \ReflectionClass) {
+                $reflectionProperties = $reflection->getProperties(
+                    \ReflectionProperty::IS_PRIVATE
+                );
+
+                foreach ($reflectionProperties as $reflectionProperty) {
+                    if ($reflectionProperty->isStatic()) {
+                        continue;
+                    }
+
+                    $propertyName = $reflectionProperty->getName();
+
+                    if (!isset($privateProperties[$propertyName])) {
+                        $privateProperties[$propertyName] = $reflectionProperty;
+                    }
+                }
+
+                $reflection = $reflection->getParentClass();
+            }
+
+            self::$privatePropertiesCache[$className] = $privateProperties;
+        }
+
+        return self::$privatePropertiesCache[$className];
     }
 
     /**

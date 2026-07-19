@@ -532,6 +532,18 @@ class Query implements QueryInterface, InjectionAwareInterface
     }
 
     /**
+     * Returns the class that will be used to hydrate rows that are not mapped
+     * to a model (custom columns/joins). An empty string means the default
+     * Phalcon\Mvc\Model\Row is used.
+     *
+     * @return string
+     */
+    public function getResultsetRowClass(): string
+    {
+        return $this->resultsetRowClass;
+    }
+
+    /**
      * Executes the query returning the first result
      *
      * @param array $bindParams
@@ -606,18 +618,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     public function getType(): int
     {
         return $this->type;
-    }
-
-    /**
-     * Returns the class that will be used to hydrate rows that are not mapped
-     * to a model (custom columns/joins). An empty string means the default
-     * Phalcon\Mvc\Model\Row is used.
-     *
-     * @return string
-     */
-    public function getResultsetRowClass(): string
-    {
-        return $this->resultsetRowClass;
     }
 
     /**
@@ -812,6 +812,30 @@ class Query implements QueryInterface, InjectionAwareInterface
     }
 
     /**
+     * Sets the class used to hydrate rows that are not mapped to a model
+     * (custom columns/joins). The class must be a subclass of
+     * Phalcon\Mvc\Model\Row.
+     *
+     * @param string $resultsetRowClass
+     *
+     * @return QueryInterface
+     */
+    public function setResultsetRowClass(string $resultsetRowClass): QueryInterface
+    {
+        if (!class_exists($resultsetRowClass)) {
+            throw new ResultsetRowClassNotFound($resultsetRowClass);
+        }
+
+        if (!is_subclass_of($resultsetRowClass, Row::class)) {
+            throw new InvalidResultsetRowClass($resultsetRowClass);
+        }
+
+        $this->resultsetRowClass = $resultsetRowClass;
+
+        return $this;
+    }
+
+    /**
      * Set SHARED LOCK clause
      *
      * @param bool $sharedLock
@@ -849,30 +873,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     public function setType(int $type): QueryInterface
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Sets the class used to hydrate rows that are not mapped to a model
-     * (custom columns/joins). The class must be a subclass of
-     * Phalcon\Mvc\Model\Row.
-     *
-     * @param string $resultsetRowClass
-     *
-     * @return QueryInterface
-     */
-    public function setResultsetRowClass(string $resultsetRowClass): QueryInterface
-    {
-        if (!class_exists($resultsetRowClass)) {
-            throw new ResultsetRowClassNotFound($resultsetRowClass);
-        }
-
-        if (!is_subclass_of($resultsetRowClass, Row::class)) {
-            throw new InvalidResultsetRowClass($resultsetRowClass);
-        }
-
-        $this->resultsetRowClass = $resultsetRowClass;
 
         return $this;
     }
