@@ -139,7 +139,7 @@ Support us with a monthly donation and help us continue our activities. [[Become
 
 Phalcon is open-source software licensed under the MIT License.
 
-Copyright © 2020–present, The Phalcon PHP Framework.
+Copyright © 2020-present, The Phalcon PHP Framework.
 
 See the [LICENSE](LICENSE) file for details.
 

@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ *
+ * Based on the Action Domain Responder pattern
+ * @link    https://pmjones.io/adr/
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\ADR\Responder;
+
+use Phalcon\Contracts\ADR\Payload\Payload;
+use Phalcon\Contracts\ADR\Responder\Responder;
+use Phalcon\Http\RequestInterface;
+use Phalcon\Http\ResponseInterface;
+
+/**
+ * Sets the response HTTP status code from the payload status, via StatusMapper.
+ */
+class StatusResponder implements Responder
+{
+    /**
+     * @var StatusMapper
+     */
+    protected $mapper;
+
+    public function __construct(?StatusMapper $mapper = null)
+    {
+        if (null === $mapper) {
+            $this->mapper = new StatusMapper();
+        } else {
+            $this->mapper = $mapper;
+        }
+    }
+
+    public function __invoke(
+        RequestInterface $request,
+        ResponseInterface $response,
+        Payload $payload
+    ): ResponseInterface {
+        $status = $payload->getStatus();
+        if (null !== $status) {
+            $response->setStatusCode($this->mapper->toHttpCode((string) $status));
+        }
+
+        return $response;
+    }
+}

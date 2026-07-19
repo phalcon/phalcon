@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ *
+ * Based on the Action Domain Responder pattern
+ * @link    https://pmjones.io/adr/
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Contracts\ADR\Router;
+
+use Phalcon\Http\RequestInterface;
+
+/**
+ * Maps a request to an Action by convention: the HTTP method and the static
+ * path segments identify the class; trailing segments become positional
+ * request attributes. No route table.
+ */
+interface Router
+{
+    public function match(RequestInterface $request): ?RouterMatch;
+
+    public function setBaseNamespace(string $baseNamespace): Router;
+
+    public function setMiddlewareMap(array $middlewareMap): Router;
+}

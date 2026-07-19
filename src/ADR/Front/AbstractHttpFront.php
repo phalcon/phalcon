@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ *
+ * Based on the Action Domain Responder pattern
+ * @link    https://pmjones.io/adr/
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\ADR\Front;
+
+use Phalcon\ADR\Container\AdrProvider;
+use Phalcon\Container\Container;
+use Phalcon\Contracts\Front\FrontController;
+use Phalcon\Contracts\Http\AttributeRequest;
+
+/**
+ * Boots a container, resolves the Application, handles the request and emits the
+ * response. Userland front controllers override `loadEnvironment()` /
+ * `registerProviders()`; bootstrap is `exit((new AppFront(dirname(__DIR__)))->run());`.
+ */
+abstract class AbstractHttpFront implements FrontController
+{
+    /**
+     * @var string
+     */
+    protected string $projectRoot;
+
+    public function __construct(string $projectRoot)
+    {
+        $this->projectRoot = $projectRoot;
+    }
+
+    /**
+     * @return int<0,254>
+     */
+    final public function run(): int
+    {
+        try {
+            $container = $this->buildContainer();
+
+            $this->loadEnvironment($container);
+            $this->registerProviders($container);
+
+            $request     = $container->get(AttributeRequest::class);
+            $application = $container->get("Phalcon\\ADR\\Application");
+            $response    = $application->handle($request);
+
+            $container->get("Phalcon\\Contracts\\ADR\\Emitter\\Emitter")->emit($response);
+
+            return 0;
+        } catch (\Throwable $exception) {
+            return $this->handleBootError($exception);
+        }
+
+        return 0;
+    }
+
+    protected function buildContainer(): Container
+    {
+        return new Container();
+    }
+
+    protected function handleBootError(\Throwable $exception): int
+    {
+        error_log((string) $exception);
+
+        if (!headers_sent()) {
+            http_response_code(500);
+            header("Content-Type: text/plain; charset=utf-8");
+            echo "Internal Server Error\n";
+        }
+
+        return 1;
+    }
+
+    protected function loadEnvironment(Container $container): void
+    {
+    }
+
+    protected function registerProviders(Container $container): void
+    {
+        (new AdrProvider())->provide($container);
+    }
+}

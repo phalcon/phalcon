@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Http;
 
+use Phalcon\Contracts\Http\AttributeRequest;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\EventsAwareInterface;
@@ -20,6 +21,7 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
+use Phalcon\Http\Request\Bag\AttributeBag;
 use Phalcon\Http\Request\Exception;
 use Phalcon\Http\Request\Exceptions\FilterServiceUnavailable;
 use Phalcon\Http\Request\Exceptions\InvalidHost;
@@ -84,12 +86,18 @@ use const UPLOAD_ERR_OK;
  *```
  */
 class Request extends AbstractInjectionAware implements
+    AttributeRequest,
     EventsAwareInterface,
     RequestInterface,
     RequestMethodInterface
 {
     use EventsAwareTrait;
     use FileTrait;
+
+    /**
+     * @var AttributeBag|null
+     */
+    protected AttributeBag | null $attributes = null;
 
     /**
      * @var FilterInterface|null
@@ -172,6 +180,30 @@ class Request extends AbstractInjectionAware implements
     public function getAcceptableContent(): array
     {
         return $this->getQualityHeader("HTTP_ACCEPT", "accept");
+    }
+
+    /**
+     * Returns the request attributes bag. Attributes are arbitrary,
+     * application-defined values attached to the request during its
+     * lifecycle (router, dispatcher, security components etc.). The bag
+     * is created empty on first access and the same instance is returned
+     * on every subsequent call.
+     *
+     *```php
+     * $request->getAttributes()->set("user", $user);
+     *
+     * $user = $request->getAttributes()->get("user");
+     *```
+     *
+     * @return AttributeBag
+     */
+    public function getAttributes(): AttributeBag
+    {
+        if (null === $this->attributes) {
+            $this->attributes = new AttributeBag();
+        }
+
+        return $this->attributes;
     }
 
     /**
