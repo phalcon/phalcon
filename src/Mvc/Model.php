@@ -4890,7 +4890,7 @@ abstract class Model extends AbstractInjectionAware implements
                         $snapshot[$attributeField] = $rawValue;
                     } elseif (property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
-                        if ($value === null && isset($defaultValues[$field])) {
+                        if ($value === null && array_key_exists($field, $defaultValues)) {
                             $snapshot[$attributeField]           = $defaultValues[$field];
                             $unsetDefaultValues[$attributeField] = $defaultValues[$field];
 
@@ -4915,7 +4915,7 @@ abstract class Model extends AbstractInjectionAware implements
                         $values[]    = $value;
                         $bindTypes[] = $bindType;
                     } else {
-                        if (isset($defaultValues[$field])) {
+                        if (array_key_exists($field, $defaultValues)) {
                             $snapshot[$attributeField]           = $defaultValues[$field];
                             $unsetDefaultValues[$attributeField] = $defaultValues[$field];
 
