@@ -4867,7 +4867,7 @@ abstract class Model extends AbstractInjectionAware implements
                 $attributeField = $field;
             }
 
-            if (!isset($automaticAttributes[$attributeField])) {
+            if (!array_key_exists($attributeField, $automaticAttributes)) {
                 /**
                  * Check every attribute in the model except identity field
                  */
@@ -5192,7 +5192,7 @@ abstract class Model extends AbstractInjectionAware implements
                 } else {
                     $attributeField = $field;
                 }
-                if (!isset($automaticAttributes[$attributeField])) {
+                if (!array_key_exists($attributeField, $automaticAttributes)) {
                     /**
                      * Check a bind type for field to update
                      */
@@ -5318,7 +5318,7 @@ abstract class Model extends AbstractInjectionAware implements
                     $attributeField = $field;
                 }
 
-                if (!isset($automaticAttributes[$attributeField])) {
+                if (!array_key_exists($attributeField, $automaticAttributes)) {
                     /**
                      * Check a bind type for field to update
                      */
@@ -6582,7 +6582,7 @@ abstract class Model extends AbstractInjectionAware implements
                     /**
                      * We don't check fields that must be omitted
                      */
-                    if (!isset($automaticAttributes[$attributeField])) {
+                    if (!array_key_exists($attributeField, $automaticAttributes)) {
                         $isNull = false;
 
                         /**
