@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\View;
 
 use Closure;
+use Phalcon\Contracts\View\Renderer;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
@@ -62,7 +63,7 @@ use function ob_start;
  * );
  *```
  */
-class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterface
+class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterface, Renderer
 {
     use DirSeparatorTrait;
     use EventsAwareTrait;
