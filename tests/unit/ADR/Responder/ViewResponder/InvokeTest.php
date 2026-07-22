@@ -51,33 +51,6 @@ final class InvokeTest extends AbstractUnitTestCase
     }
 
     /**
-     * Unit Tests Phalcon\ADR\Responder\ViewResponder :: __invoke() - view data
-     */
-    public function testAdrResponderViewResponderInvokeViewData(): void
-    {
-        $renderer  = new FakeRenderer();
-        $responder = new ViewResponder($renderer, new StatusMapper());
-        $payload   = (new Payload())
-            ->withStatus(Status::NOT_FOUND)
-            ->withResult(['id' => 7])
-            ->withMessages(['not there']);
-
-        $responder->withTemplate('users/show')(
-            new Request(),
-            new Response(),
-            $payload
-        );
-
-        $expected = [
-            'result'   => ['id' => 7],
-            'messages' => ['not there'],
-            'status'   => Status::NOT_FOUND,
-        ];
-
-        $this->assertSame($expected, $renderer->data);
-    }
-
-    /**
      * Unit Tests Phalcon\ADR\Responder\ViewResponder :: __invoke() - unmapped
      * status
      */
@@ -90,5 +63,34 @@ final class InvokeTest extends AbstractUnitTestCase
         $result = $responder(new Request(), new Response(), $payload);
 
         $this->assertSame(500, $result->getStatusCode());
+    }
+
+    /**
+     * Unit Tests Phalcon\ADR\Responder\ViewResponder :: __invoke() - view data
+     */
+    public function testAdrResponderViewResponderInvokeViewData(): void
+    {
+        $renderer  = new FakeRenderer();
+        $responder = new ViewResponder($renderer, new StatusMapper());
+        $payload   = (new Payload())
+            ->withStatus(Status::NOT_FOUND)
+            ->withResult(['id' => 7])
+            ->withMessages(['not there'])
+            ->withExtras(['isLoggedIn' => true]);
+
+        $responder->withTemplate('users/show')(
+            new Request(),
+            new Response(),
+            $payload
+        );
+
+        $expected = [
+            'extras'   => ['isLoggedIn' => true],
+            'result'   => ['id' => 7],
+            'messages' => ['not there'],
+            'status'   => Status::NOT_FOUND,
+        ];
+
+        $this->assertSame($expected, $renderer->data);
     }
 }

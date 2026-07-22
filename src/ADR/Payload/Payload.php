@@ -75,6 +75,22 @@ class Payload implements PayloadContract
     }
 
     /**
+     * Creates a payload with the `AUTHENTICATED` status.
+     */
+    public static function authenticated(mixed $result = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::AUTHENTICATED)->withResult($result);
+    }
+
+    /**
+     * Creates a payload with the `AUTHORIZED` status.
+     */
+    public static function authorized(mixed $result = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::AUTHORIZED)->withResult($result);
+    }
+
+    /**
      * Creates a payload with the `CREATED` status.
      */
     public static function created(mixed $result = null): PayloadContract
@@ -124,11 +140,43 @@ class Payload implements PayloadContract
     }
 
     /**
+     * Creates a payload with the `NOT_ACCEPTED` status.
+     */
+    public static function notAccepted(mixed $messages = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::NOT_ACCEPTED)->withMessages($messages);
+    }
+
+    /**
+     * Creates a payload with the `NOT_CREATED` status.
+     */
+    public static function notCreated(mixed $messages = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::NOT_CREATED)->withMessages($messages);
+    }
+
+    /**
+     * Creates a payload with the `NOT_DELETED` status.
+     */
+    public static function notDeleted(mixed $messages = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::NOT_DELETED)->withMessages($messages);
+    }
+
+    /**
      * Creates a payload with the `NOT_FOUND` status.
      */
     public static function notFound(mixed $messages = null): PayloadContract
     {
         return (new static())->withStatus(Status::NOT_FOUND)->withMessages($messages);
+    }
+
+    /**
+     * Creates a payload with the `NOT_UPDATED` status.
+     */
+    public static function notUpdated(mixed $messages = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::NOT_UPDATED)->withMessages($messages);
     }
 
     /**
@@ -162,6 +210,14 @@ class Payload implements PayloadContract
     public static function updated(mixed $result = null): PayloadContract
     {
         return (new static())->withStatus(Status::UPDATED)->withResult($result);
+    }
+
+    /**
+     * Creates a payload with the `VALID` status.
+     */
+    public static function valid(mixed $result = null): PayloadContract
+    {
+        return (new static())->withStatus(Status::VALID)->withResult($result);
     }
 
     /**

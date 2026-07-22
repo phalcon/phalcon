@@ -682,9 +682,14 @@ class Container implements Collection
 
         $instance = $definition->buildService($this);
 
-        if ($instance instanceof InjectionAwareInterface) {
-            $instance->setDI($this);
-        }
+        /**
+         * `setDI()` only accepts a `Phalcon\Di\DiInterface` and this container
+         * is not one, so this always raised a `TypeError` for an injection
+         * aware service.
+         */
+        // if ($instance instanceof InjectionAwareInterface) {
+        //     $instance->setDI($this);
+        // }
 
         $lifetime = $definition->getLifetime();
 

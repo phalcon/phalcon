@@ -21,6 +21,7 @@ use Phalcon\Http\Request\Bag\AttributeBag;
 
 use function array_merge;
 use function is_array;
+use function str_contains;
 
 /**
  * Generic, string-keyed input bag for an Action.
@@ -49,9 +50,18 @@ class Input
 
     public static function fromRequest(AttributeRequest $request): static
     {
-        $json = $request->getJsonRawBody(true);
-        if (!is_array($json)) {
-            $json = [];
+        $json = [];
+
+        /**
+         * Only a request that says it carries JSON is decoded as JSON. A form
+         * post is not, and decoding its body raises a decode error.
+         */
+        if (str_contains((string) $request->getContentType(), 'json')) {
+            $decoded = $request->getJsonRawBody(true);
+
+            if (is_array($decoded)) {
+                $json = $decoded;
+            }
         }
 
         return new static(
