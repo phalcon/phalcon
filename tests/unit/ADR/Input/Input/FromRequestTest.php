@@ -19,7 +19,6 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
 final class FromRequestTest extends AbstractUnitTestCase
 {
-
     /**
      * Unit Tests Phalcon\ADR\Input\Input :: fromRequest() - a form post is not
      * decoded as JSON
