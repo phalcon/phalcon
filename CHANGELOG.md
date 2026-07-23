@@ -1,5 +1,11 @@
 # Changelog
 
+## [6.0.0 alpha 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha7) (2026-xx-xx)
+
+### Fixed
+
+- Fixed `Phalcon\Container\Definition\ServiceDefinition::resolveArgs()` treating any constructor-argument object that merely exposes a `resolve()` method as a lazy value, using `method_exists()`. Because `Phalcon\Container\Container` defines a private `resolve()`, autowiring a service whose constructor receives the container - for example `__construct(?Container $container)`, as `Phalcon\ADR\Application` does - mistook the injected container for a lazy resolvable and called its private `resolve()`, raising `Error: Call to private method Phalcon\Container\Container::resolve() from scope Phalcon\Container\Definition\ServiceDefinition`. The lazy check now tests `instanceof Phalcon\Contracts\Container\Resolver\Resolvable`. [#17391](https://github.com/phalcon/cphalcon/issues/17391)
+
 ## [6.0.0 alpha 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha5) (2026-07-22)
 
 ### Changed

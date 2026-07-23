@@ -37,6 +37,7 @@ use Phalcon\Container\Exceptions\FrozenDefinition;
 use Phalcon\Container\Exceptions\InvalidExtender;
 use Phalcon\Container\Exceptions\NoClassSet;
 use Phalcon\Container\Exceptions\NoFactorySet;
+use Phalcon\Contracts\Container\Resolver\Resolvable;
 use ReflectionClass;
 use ReflectionException;
 
@@ -518,7 +519,14 @@ class ServiceDefinition
         $resolved = [];
 
         foreach ($args as $key => $arg) {
-            if (is_object($arg) && method_exists($arg, 'resolve')) {
+            /**
+             * Only a genuine lazy value (Resolvable) is resolved here. A plain
+             * object that merely exposes a resolve() method - the container
+             * itself, whose resolve() is private - must be passed through
+             * untouched, otherwise that private resolve() would be called from
+             * this scope.
+             */
+            if ($arg instanceof Resolvable) {
                 $resolved[$key] = $arg->resolve($container);
             } else {
                 $resolved[$key] = $arg;
