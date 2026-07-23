@@ -1,6 +1,18 @@
 # Changelog
 
-## [6.0.0 alpha 5](https://github.com/phalcon/phalcon/releases/tag/v6.0.0aphla5) (2026-07-21)
+## [6.0.0 alpha 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha5) (2026-07-22)
+
+### Changed
+
+- Changed `Phalcon\ADR\Application` into a self-contained composition root: it owns (or accepts) a `Phalcon\Container\Container` and exposes a small registration surface - `bind()`, `define()`, `factory()`, `set()`, `extend()` and `getContainer()` - plus `setBaseNamespace()` and `secureWith()` for convention-router and namespace-prefix guard configuration. `Phalcon\ADR\Front\AbstractHttpFront` gained a protected `getApplication()` hook returning `Phalcon\Contracts\ADR\Application`, so a front controller can configure the application or wire a different implementation. [#17389](https://github.com/phalcon/cphalcon/issues/17389) [[doc]](https://docs.phalcon.io/5.18/adr/)
+
+### Added
+
+### Fixed
+
+### Removed
+
+## [6.0.0 alpha 5](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha5) (2026-07-21)
 
 ### Added
 
