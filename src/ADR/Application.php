@@ -24,6 +24,7 @@ use Phalcon\Container\Container;
 use Phalcon\Container\ContainerFactory;
 use Phalcon\Contracts\ADR\Application as ApplicationInterface;
 use Phalcon\Contracts\ADR\Dispatcher as DispatcherInterface;
+use Phalcon\Contracts\ADR\Router\AttributeFilter as AttributeFilterInterface;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\Events\Manager;
 use Phalcon\Contracts\Http\AttributeRequest;
@@ -150,8 +151,12 @@ final class Application implements ApplicationInterface
                 throw new RouteNotFound();
             }
 
-            foreach ($match->getAttributes() as $key => $value) {
-                $request->getAttributes()->set($key, $value);
+            $attributes = $this->container
+                ->get(AttributeFilterInterface::class)
+                ->filter($match->getAction(), $match->getAttributes());
+
+            foreach ($attributes as $key => $value) {
+                $request->getAttributes()->set((string) $key, $value);
             }
 
             $response = $dispatcher->dispatch($match->getAction(), $request, $match->getMiddleware());

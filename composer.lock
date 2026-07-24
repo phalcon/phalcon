@@ -879,16 +879,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.15",
+            "version": "v3.95.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "3e47e5d50046f87e3244acde2fe655d1a3b72555"
+                "reference": "0ee88422118f3cc59c8c3def222ba7f1493b6d5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/3e47e5d50046f87e3244acde2fe655d1a3b72555",
-                "reference": "3e47e5d50046f87e3244acde2fe655d1a3b72555",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/0ee88422118f3cc59c8c3def222ba7f1493b6d5b",
+                "reference": "0ee88422118f3cc59c8c3def222ba7f1493b6d5b",
                 "shasum": ""
             },
             "require": {
@@ -928,10 +928,10 @@
                 "php-coveralls/php-coveralls": "^2.9.1",
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.8",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.8",
-                "phpunit/phpunit": "^9.6.35 || ^10.5.64 || ^11.5.56 || ^12.5.31",
+                "phpunit/phpunit": "^9.6.35 || ^10.5.64 || ^11.5.56 || ^12.5.31 || ^13.0.6",
                 "symfony/polyfill-php85": "^1.38",
-                "symfony/var-dumper": "^5.4.48 || ^6.4.36 || ^7.4.8 || ^8.1.0",
-                "symfony/yaml": "^5.4.53 || ^6.4.41 || ^7.4.13 || ^8.1.0"
+                "symfony/var-dumper": "^5.4.48 || ^6.4.36 || ^7.4.8 || ^8.1.1",
+                "symfony/yaml": "^5.4.53 || ^6.4.41 || ^7.4.13 || ^8.1.1"
             },
             "suggest": {
                 "ext-dom": "For handling output formats in XML",
@@ -972,7 +972,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.15"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.17"
             },
             "funding": [
                 {
@@ -980,7 +980,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-15T09:51:47+00:00"
+            "time": "2026-07-24T13:54:39+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1376,12 +1376,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "10c0dec6b9d21c5f37dc93a23af6524cce3a332c"
+                "reference": "6bbbd9b7d022ddc5a93b1bb248dfe4112614103b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/10c0dec6b9d21c5f37dc93a23af6524cce3a332c",
-                "reference": "10c0dec6b9d21c5f37dc93a23af6524cce3a332c",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/6bbbd9b7d022ddc5a93b1bb248dfe4112614103b",
+                "reference": "6bbbd9b7d022ddc5a93b1bb248dfe4112614103b",
                 "shasum": ""
             },
             "require": {
@@ -1392,7 +1392,7 @@
                 "friendsofphp/php-cs-fixer": "^3.95",
                 "pds/composer-script-names": "^1.0",
                 "pds/skeleton": "^1.0",
-                "phalcon/talon": "^0.6.0",
+                "phalcon/talon": "^0.6.0 || ^0.7.0 || ^0.8.0",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^4.0"
@@ -1445,7 +1445,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-07-04T20:06:26+00:00"
+            "time": "2026-07-19T01:08:28+00:00"
         },
         {
             "name": "phalcon/talon",
@@ -1530,12 +1530,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "630984dd29b614f72d74ee87743a344c1708409e"
+                "reference": "e794926719a669d30cc79162f53a060871aaa879"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/630984dd29b614f72d74ee87743a344c1708409e",
-                "reference": "630984dd29b614f72d74ee87743a344c1708409e",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/e794926719a669d30cc79162f53a060871aaa879",
+                "reference": "e794926719a669d30cc79162f53a060871aaa879",
                 "shasum": ""
             },
             "require": {
@@ -1547,7 +1547,7 @@
                 "friendsofphp/php-cs-fixer": "^3.95",
                 "pds/skeleton": "^1.0",
                 "phalcon/ide-stubs": "^5.8",
-                "phalcon/talon": "^0.6.0",
+                "phalcon/talon": "^0.6.0 || ^0.8.0",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^4.0"
@@ -1607,7 +1607,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-07-08T14:55:49+00:00"
+            "time": "2026-07-22T13:19:11+00:00"
         },
         {
             "name": "phar-io/manifest",
