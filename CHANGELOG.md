@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.0.0 beta 1](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta1) (2026-07-24)
+
+### Changed
+
+### Added
+
+- Added `Phalcon\ADR\Responder\ViewResponder`, which renders a `.phtml` template and returns it as an HTML response. The action picks the template with `withTemplate()`, and the view receives `result`, `messages` and `status`. Any renderer implementing the new `Phalcon\Contracts\View\Renderer` can be used - `Phalcon\Mvc\View\Simple` now does. [#17379](https://github.com/phalcon/cphalcon/issues/17379) [[doc]](https://docs.phalcon.io/6.0/adr/)
+- Added opt-in route-parameter pre-filtering to the ADR convention router via the new `Phalcon\ADR\Router\AttributeFilter`. An Action that declares a static `params()` method has its positional route segments validated against a regex, cast to a scalar type (`int`, `float`, `string`) and optionally passed through a converter closure, then written to the request as named attributes - all before the Action runs. A regex miss is treated as a route miss (404). [#17393](https://github.com/phalcon/cphalcon/issues/17393) [[doc]](https://docs.phalcon.io/6.0/adr/)
+
+### Fixed
+
+### Removed
+
 ## [6.0.0 alpha 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha7) (2026-xx-xx)
 
 ### Fixed
@@ -10,7 +23,7 @@
 
 ### Changed
 
-- Changed `Phalcon\ADR\Application` into a self-contained composition root: it owns (or accepts) a `Phalcon\Container\Container` and exposes a small registration surface - `bind()`, `define()`, `factory()`, `set()`, `extend()` and `getContainer()` - plus `setBaseNamespace()` and `secureWith()` for convention-router and namespace-prefix guard configuration. `Phalcon\ADR\Front\AbstractHttpFront` gained a protected `getApplication()` hook returning `Phalcon\Contracts\ADR\Application`, so a front controller can configure the application or wire a different implementation. [#17389](https://github.com/phalcon/cphalcon/issues/17389) [[doc]](https://docs.phalcon.io/5.18/adr/)
+- Changed `Phalcon\ADR\Application` into a self-contained composition root: it owns (or accepts) a `Phalcon\Container\Container` and exposes a small registration surface - `bind()`, `define()`, `factory()`, `set()`, `extend()` and `getContainer()` - plus `setBaseNamespace()` and `secureWith()` for convention-router and namespace-prefix guard configuration. `Phalcon\ADR\Front\AbstractHttpFront` gained a protected `getApplication()` hook returning `Phalcon\Contracts\ADR\Application`, so a front controller can configure the application or wire a different implementation. [#17389](https://github.com/phalcon/cphalcon/issues/17389) [[doc]](https://docs.phalcon.io/6.0/adr/)
 
 ### Added
 
@@ -23,7 +36,7 @@
 ### Added
 
 - Added the Action-Domain-Responder (ADR) HTTP stack under `Phalcon\ADR`, an alternative to MVC that splits request handling into three focused roles: an _Action_ (one invokable class per route) drives a _Domain_ (your business logic, which returns a `Phalcon\ADR\Payload\Payload` and never touches HTTP) and hands the result to a _Responder_ that turns it into a response. `Phalcon\ADR\Application::handle()` routes the request with the convention-based `Phalcon\ADR\Router\Router` - the HTTP method, resource and optional operation resolve the Action class (e.g. `GET /invoices/list` maps to `MyApp\Action\Invoices\GetInvoicesList`), with no route table - writes the matched positional attributes onto the request, and runs the Action through `Phalcon\ADR\Dispatcher`, which resolves it from the container and wraps it in a middleware pipeline (`Phalcon\ADR\Middleware\CorsMiddleware`, `MethodOverrideMiddleware`, `RequestIdMiddleware` and `TimingMiddleware` ship built-in). The Action reads request data through the extendable `Phalcon\ADR\Input\Input` bag and returns a response built by a responder - `Phalcon\ADR\Responder\JsonResponder`, `TextResponder`, `RedirectResponder`, `StatusResponder` and the composable `ChainResponder`/`FormatResponder` - each mapping the payload's `Phalcon\ADR\Payload\Status` to an HTTP status via `Phalcon\ADR\Responder\StatusMapper`. Any escaping `Throwable` is turned into a response by the always-wired `Phalcon\ADR\ErrorResponder`, and `Phalcon\ADR\Emitter\SapiEmitter` sends it to the client. `Phalcon\ADR\Front\HttpFront` - a `Phalcon\Contracts\Front\FrontController` following the front-interop contract - boots the whole stack with a single `run()`, and `Phalcon\ADR\Container\AdrProvider` registers every service. Because route attributes are positional, `Phalcon\Http\Request\Bag\AbstractBag` now accepts integer keys alongside string keys. Contracts live under `Phalcon\Contracts\ADR`. [#17341](https://github.com/phalcon/cphalcon/issues/17341) [[doc]](https://docs.phalcon.io/6.0/adr/)
-- Added request attributes support to `Phalcon\Http\Request` in preparation for the future HTTP layer redesign: `Phalcon\Http\Request::getAttributes()` returns a `Phalcon\Http\Request\Bag\AttributeBag`, a mutable, string-keyed bag of arbitrary application-defined values attached to the request during its lifecycle (router, dispatcher, security components etc.). Unlike the superglobal-backed request data, the bag always starts empty; it is created on first access and the same instance is returned on every call. The bag is backed by the new `Phalcon\Http\Request\Bag\AbstractBag` base - `get()`/`has()`/`set()`/`remove()`/`all()`, the typed readers `getInt()`/`getString()`/`getBool()`/`getFloat()`/`getArray()` for cast-with-default access, and `ArrayAccess`/`Countable`/`IteratorAggregate` - which future request bags will extend. Writing with a `null` key (the `$bag[] = ...` append form) throws the new `Phalcon\Http\Request\Exceptions\NullKeyException`, since bag elements are always string-keyed. [#17367](https://github.com/phalcon/cphalcon/issues/17367) [[doc]](https://docs.phalcon.io/6.0/http-request/)
+- Added request attributes support to `Phalcon\Http\Request`. `Phalcon\Http\Request::getAttributes()` returns a `Phalcon\Http\Request\Bag\AttributeBag`, a mutable, string-keyed bag of arbitrary application-defined values attached to the request during its lifecycle (router, dispatcher, security components etc.). Writing with a `null` key (the `$bag[] = ...` append form) throws the new `Phalcon\Http\Request\Exceptions\NullKeyException`, since bag elements are always string-keyed. [#17367](https://github.com/phalcon/cphalcon/issues/17367) [[doc]](https://docs.phalcon.io/6.0/http-request/)
 
 ### Fixed
 
