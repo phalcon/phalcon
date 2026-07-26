@@ -2034,47 +2034,6 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
-     * Pre-loads the relations named by the `eager` find parameter.
-     *
-     * @param mixed $resultset
-     * @param mixed $eager     array of relation paths, optionally
-     *                         `path => options`
-     * @param array $params
-     *
-     * @return void
-     */
-    private static function loadEager(
-        mixed $resultset,
-        mixed $eager,
-        array $params
-    ): void {
-        if (!is_array($eager)) {
-            throw new InvalidEagerParameter();
-        }
-
-        if (!($resultset instanceof Simple)) {
-            throw new UnsupportedEagerResultset(get_class($resultset));
-        }
-
-        if (
-            isset($params["hydration"]) &&
-            $params["hydration"] !== Resultset::HYDRATE_RECORDS
-        ) {
-            throw new UnsupportedEagerHydration();
-        }
-
-        $container = Di::getDefault();
-        $manager   = $container->getShared("modelsManager");
-        $loader    = new Loader($manager);
-
-        $loader->loadResultset(
-            $resultset,
-            get_called_class(),
-            PathTree::parse($eager)
-        );
-    }
-
-    /**
      * shared prepare query logic for find and findFirst method
      *
      * @param array|string|null $params
@@ -2183,6 +2142,47 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         return self::$privatePropertiesCache[$className];
+    }
+
+    /**
+     * Pre-loads the relations named by the `eager` find parameter.
+     *
+     * @param mixed $resultset
+     * @param mixed $eager     array of relation paths, optionally
+     *                         `path => options`
+     * @param array $params
+     *
+     * @return void
+     */
+    private static function loadEager(
+        mixed $resultset,
+        mixed $eager,
+        array $params
+    ): void {
+        if (!is_array($eager)) {
+            throw new InvalidEagerParameter();
+        }
+
+        if (!($resultset instanceof Simple)) {
+            throw new UnsupportedEagerResultset(get_class($resultset));
+        }
+
+        if (
+            isset($params["hydration"]) &&
+            $params["hydration"] !== Resultset::HYDRATE_RECORDS
+        ) {
+            throw new UnsupportedEagerHydration();
+        }
+
+        $container = Di::getDefault();
+        $manager   = $container->getShared("modelsManager");
+        $loader    = new Loader($manager);
+
+        $loader->loadResultset(
+            $resultset,
+            get_called_class(),
+            PathTree::parse($eager)
+        );
     }
 
     /**

@@ -265,6 +265,82 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Merge two arrays of find parameters
+     *
+     * The order matters. Conditions coming from key 0 or "conditions" are
+     * ANDed in argument order; `bind` and `bindTypes` are merged for the
+     * second argument only and assigned outright for the first. Pass the
+     * parameters whose bindings must survive as the second argument.
+     *
+     * Static because it reads nothing but its arguments, and public so bulk
+     * loaders can reuse the merge instead of duplicating these semantics.
+     *
+     * @param mixed $findParamsOne
+     * @param mixed $findParamsTwo
+     *
+     * @return array
+     */
+    final public static function mergeFindParameters(
+        mixed $findParamsOne,
+        mixed $findParamsTwo
+    ): array {
+        $findParams = [];
+
+        if (is_string($findParamsOne)) {
+            $findParamsOne = [
+                "conditions" => $findParamsOne,
+            ];
+        }
+
+        if (is_string($findParamsTwo)) {
+            $findParamsTwo = [
+                "conditions" => $findParamsTwo,
+            ];
+        }
+
+        if (is_array($findParamsOne)) {
+            foreach ($findParamsOne as $key => $value) {
+                if ($key === 0 || $key === "conditions") {
+                    if (!isset($findParams[0])) {
+                        $findParams[0] = $value;
+                    } else {
+                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
+                    }
+                } else {
+                    $findParams[$key] = $value;
+                }
+            }
+        }
+
+        if (is_array($findParamsTwo)) {
+            foreach ($findParamsTwo as $key => $value) {
+                if ($key === 0 || $key === "conditions") {
+                    if (!isset($findParams[0])) {
+                        $findParams[0] = $value;
+                    } else {
+                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
+                    }
+                } elseif ($key === "bind" || $key === "bindTypes") {
+                    if (is_array($value)) {
+                        if (!isset($findParams[$key])) {
+                            $findParams[$key] = $value;
+                        } else {
+                            $findParams[$key] = array_merge(
+                                $findParams[$key],
+                                $value
+                            );
+                        }
+                    }
+                } else {
+                    $findParams[$key] = $value;
+                }
+            }
+        }
+
+        return $findParams;
+    }
+
+    /**
      * Binds a behavior to a model
      *
      * @param ModelInterface    $model
@@ -1934,82 +2010,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Load it using an autoloader
          */
         return new $modelName(null, $this->container, $this);
-    }
-
-    /**
-     * Merge two arrays of find parameters
-     *
-     * The order matters. Conditions coming from key 0 or "conditions" are
-     * ANDed in argument order; `bind` and `bindTypes` are merged for the
-     * second argument only and assigned outright for the first. Pass the
-     * parameters whose bindings must survive as the second argument.
-     *
-     * Static because it reads nothing but its arguments, and public so bulk
-     * loaders can reuse the merge instead of duplicating these semantics.
-     *
-     * @param mixed $findParamsOne
-     * @param mixed $findParamsTwo
-     *
-     * @return array
-     */
-    final public static function mergeFindParameters(
-        mixed $findParamsOne,
-        mixed $findParamsTwo
-    ): array {
-        $findParams = [];
-
-        if (is_string($findParamsOne)) {
-            $findParamsOne = [
-                "conditions" => $findParamsOne,
-            ];
-        }
-
-        if (is_string($findParamsTwo)) {
-            $findParamsTwo = [
-                "conditions" => $findParamsTwo,
-            ];
-        }
-
-        if (is_array($findParamsOne)) {
-            foreach ($findParamsOne as $key => $value) {
-                if ($key === 0 || $key === "conditions") {
-                    if (!isset($findParams[0])) {
-                        $findParams[0] = $value;
-                    } else {
-                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
-                    }
-                } else {
-                    $findParams[$key] = $value;
-                }
-            }
-        }
-
-        if (is_array($findParamsTwo)) {
-            foreach ($findParamsTwo as $key => $value) {
-                if ($key === 0 || $key === "conditions") {
-                    if (!isset($findParams[0])) {
-                        $findParams[0] = $value;
-                    } else {
-                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
-                    }
-                } elseif ($key === "bind" || $key === "bindTypes") {
-                    if (is_array($value)) {
-                        if (!isset($findParams[$key])) {
-                            $findParams[$key] = $value;
-                        } else {
-                            $findParams[$key] = array_merge(
-                                $findParams[$key],
-                                $value
-                            );
-                        }
-                    }
-                } else {
-                    $findParams[$key] = $value;
-                }
-            }
-        }
-
-        return $findParams;
     }
 
     /**
