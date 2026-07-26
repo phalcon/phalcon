@@ -522,6 +522,43 @@ abstract class Resultset implements
     }
 
     /**
+     * Fetches every remaining row of the underlying cursor into memory,
+     * turning the resultset into TYPE_RESULT_FULL.
+     *
+     * Free when called before the cursor has been advanced: the statement has
+     * already been executed by Model\Query::executeSelect() and no row has been
+     * consumed, so no re-execution takes place. Idempotent.
+     *
+     * @return void
+     */
+    public function materialize(): void
+    {
+        if (is_array($this->rows)) {
+            return;
+        }
+
+        $result = $this->result;
+
+        if (!is_object($result)) {
+            $this->rows = [];
+
+            return;
+        }
+
+        /**
+         * The cursor has already been advanced, so it has to be replayed
+         */
+        if ($this->row !== null) {
+            $result->execute();
+        }
+
+        $records = $result->fetchAll(Enum::FETCH_ASSOC);
+
+        $this->row  = null;
+        $this->rows = is_array($records) ? $records : [];
+    }
+
+    /**
      * Moves cursor to next row in the resultset
      *
      * @return void

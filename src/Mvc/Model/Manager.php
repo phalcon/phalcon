@@ -1393,7 +1393,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
              * Create a query builder
              */
             $builder = $this->createBuilder(
-                $this->mergeFindParameters($extraParameters, $parameters)
+                self::mergeFindParameters($extraParameters, $parameters)
             );
 
             $builder->from($referencedModel);
@@ -1490,9 +1490,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             "di"   => $record->getDi(),
         ];
 
-        $findArguments = $this->mergeFindParameters($findParams, $parameters);
+        $findArguments = self::mergeFindParameters($findParams, $parameters);
         if (is_array($extraParameters)) {
-            $findParams = $this->mergeFindParameters(
+            $findParams = self::mergeFindParameters(
                 $extraParameters,
                 $findArguments
             );
@@ -1937,6 +1937,82 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Merge two arrays of find parameters
+     *
+     * The order matters. Conditions coming from key 0 or "conditions" are
+     * ANDed in argument order; `bind` and `bindTypes` are merged for the
+     * second argument only and assigned outright for the first. Pass the
+     * parameters whose bindings must survive as the second argument.
+     *
+     * Static because it reads nothing but its arguments, and public so bulk
+     * loaders can reuse the merge instead of duplicating these semantics.
+     *
+     * @param mixed $findParamsOne
+     * @param mixed $findParamsTwo
+     *
+     * @return array
+     */
+    final public static function mergeFindParameters(
+        mixed $findParamsOne,
+        mixed $findParamsTwo
+    ): array {
+        $findParams = [];
+
+        if (is_string($findParamsOne)) {
+            $findParamsOne = [
+                "conditions" => $findParamsOne,
+            ];
+        }
+
+        if (is_string($findParamsTwo)) {
+            $findParamsTwo = [
+                "conditions" => $findParamsTwo,
+            ];
+        }
+
+        if (is_array($findParamsOne)) {
+            foreach ($findParamsOne as $key => $value) {
+                if ($key === 0 || $key === "conditions") {
+                    if (!isset($findParams[0])) {
+                        $findParams[0] = $value;
+                    } else {
+                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
+                    }
+                } else {
+                    $findParams[$key] = $value;
+                }
+            }
+        }
+
+        if (is_array($findParamsTwo)) {
+            foreach ($findParamsTwo as $key => $value) {
+                if ($key === 0 || $key === "conditions") {
+                    if (!isset($findParams[0])) {
+                        $findParams[0] = $value;
+                    } else {
+                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
+                    }
+                } elseif ($key === "bind" || $key === "bindTypes") {
+                    if (is_array($value)) {
+                        if (!isset($findParams[$key])) {
+                            $findParams[$key] = $value;
+                        } else {
+                            $findParams[$key] = array_merge(
+                                $findParams[$key],
+                                $value
+                            );
+                        }
+                    }
+                } else {
+                    $findParams[$key] = $value;
+                }
+            }
+        }
+
+        return $findParams;
+    }
+
+    /**
      * Dispatch an event to the listeners and behaviors
      * This method expects that the endpoint listeners/behaviors returns true
      * meaning that a least one was implemented
@@ -2291,74 +2367,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         }
 
         return $connection;
-    }
-
-    /**
-     * Merge two arrays of find parameters
-     *
-     * @param mixed $findParamsOne
-     * @param mixed $findParamsTwo
-     *
-     * @return array
-     */
-    final protected function mergeFindParameters(
-        mixed $findParamsOne,
-        mixed $findParamsTwo
-    ): array {
-        $findParams = [];
-
-        if (is_string($findParamsOne)) {
-            $findParamsOne = [
-                "conditions" => $findParamsOne,
-            ];
-        }
-
-        if (is_string($findParamsTwo)) {
-            $findParamsTwo = [
-                "conditions" => $findParamsTwo,
-            ];
-        }
-
-        if (is_array($findParamsOne)) {
-            foreach ($findParamsOne as $key => $value) {
-                if ($key === 0 || $key === "conditions") {
-                    if (!isset($findParams[0])) {
-                        $findParams[0] = $value;
-                    } else {
-                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
-                    }
-                } else {
-                    $findParams[$key] = $value;
-                }
-            }
-        }
-
-        if (is_array($findParamsTwo)) {
-            foreach ($findParamsTwo as $key => $value) {
-                if ($key === 0 || $key === "conditions") {
-                    if (!isset($findParams[0])) {
-                        $findParams[0] = $value;
-                    } else {
-                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
-                    }
-                } elseif ($key === "bind" || $key === "bindTypes") {
-                    if (is_array($value)) {
-                        if (!isset($findParams[$key])) {
-                            $findParams[$key] = $value;
-                        } else {
-                            $findParams[$key] = array_merge(
-                                $findParams[$key],
-                                $value
-                            );
-                        }
-                    }
-                } else {
-                    $findParams[$key] = $value;
-                }
-            }
-        }
-
-        return $findParams;
     }
 
     /**

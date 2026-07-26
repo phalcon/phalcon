@@ -17,6 +17,7 @@ use Phalcon\Db\Enum;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Eager\Loader;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Exceptions\InvalidContainer;
 use Phalcon\Mvc\Model\Exceptions\InvalidSerializationData;
@@ -27,6 +28,7 @@ use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 
+use function count;
 use function get_class;
 use function is_array;
 use function is_string;
@@ -39,6 +41,11 @@ use function unserialize;
  */
 class Simple extends Resultset
 {
+    /**
+     * @var array|null
+     */
+    protected array | null $eagerMap = null;
+
     /**
      * Phalcon\Mvc\Model\Resultset\Simple constructor
      *
@@ -163,9 +170,15 @@ class Simple extends Resultset
                     $this->keepSnapshots
                 );
             }
+
+            if ($this->eagerMap !== null) {
+                Loader::apply($activeRow, $this->eagerMap);
+            }
         } else {
             /**
-             * Other kinds of hydrations
+             * Other kinds of hydrations. Eagerly loaded relations are
+             * deliberately not applied here: arrays and standard objects have
+             * neither a relation cache nor writeAttribute().
              */
             $activeRow = Model::cloneResultMapHydrate(
                 $row,
@@ -216,6 +229,60 @@ class Simple extends Resultset
     }
 
     /**
+     * Attaches a pre-loaded relation map, applied to every record as it is
+     * hydrated.
+     *
+     * Records in a resultset are transient - seek() clears activeRow on every
+     * move and current() re-hydrates from the raw row - so hydration is the
+     * only durable point at which relations can be stamped.
+     *
+     * @param array $eagerMap
+     *
+     * @return void
+     */
+    public function setEagerMap(array $eagerMap): void
+    {
+        $this->eagerMap = $eagerMap;
+    }
+
+    /**
+     * Builds a new resultset of the same concrete class over the rows at the
+     * given positions, preserving the column map, record prototype and
+     * snapshot behavior of this resultset.
+     *
+     * @param array $indexes zero-based row positions, in the desired order
+     *
+     * @return Simple
+     */
+    public function sliceRows(array $indexes): Simple
+    {
+        $this->materialize();
+
+        $sliced = [];
+
+        foreach ($indexes as $index) {
+            if (isset($this->rows[$index])) {
+                $sliced[] = $this->rows[$index];
+            }
+        }
+
+        $class = get_class($this);
+
+        $resultset = new $class(
+            $this->columnMap,
+            $this->model,
+            false,
+            null,
+            $this->keepSnapshots
+        );
+
+        $resultset->rows  = $sliced;
+        $resultset->count = count($sliced);
+
+        return $resultset;
+    }
+
+    /**
      * Returns a complete resultset as an array, if the resultset has a big
      * number of rows it could consume more memory than currently it does.
      * Export the resultset to an array couldn't be faster with a large number
@@ -224,24 +291,12 @@ class Simple extends Resultset
     public function toArray(bool $renameColumns = true): array
     {
         /**
-         * If _rows is not present, fetchAll from database
-         * and keep them in memory for further operations
+         * If the rows are not present, fetch them from the database and keep
+         * them in memory for further operations
          */
+        $this->materialize();
+
         $records = $this->rows;
-
-        if (!is_array($records)) {
-            $result = $this->result;
-
-            if ($this->row !== null) {
-                // re-execute query if required and fetchAll rows
-                $result->execute();
-            }
-
-            $records = $result->fetchAll(Enum::FETCH_ASSOC);
-
-            $this->row  = null;
-            $this->rows = $records; // keep result-set in memory
-        }
 
         /**
          * We need to rename the whole set here, this could be slow
