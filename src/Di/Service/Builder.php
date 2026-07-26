@@ -81,7 +81,7 @@ class Builder
                         $methodPosition
                     );
 
-                    if (count($arguments) > 0) {
+                    if (!empty($arguments)) {
                         /**
                          * Call the method on the instance
                          */

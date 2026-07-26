@@ -144,7 +144,7 @@ class Reflection
         $reflectionArray = $this->reflectionData[$element] ?? null;
         if (
             is_array($reflectionArray) &&
-            count($reflectionArray) !== 0
+            !empty($reflectionArray)
         ) {
             foreach ($reflectionArray as $key => $data) {
                 $this->{$collection}[$key] = $data;

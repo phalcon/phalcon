@@ -780,7 +780,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
         $models = $this->models;
         if (is_array($models)) {
-            if (!count($models)) {
+            if (empty($models)) {
                 throw new ModelRequired();
             }
         } else {
@@ -819,7 +819,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             $noPrimary     = true;
             $primaryKeys   = $metaData->getPrimaryKeyAttributes($modelInstance);
 
-            if (count($primaryKeys) && isset($primaryKeys[0])) {
+            if (!empty($primaryKeys) && isset($primaryKeys[0])) {
                 $firstPrimaryKey = $primaryKeys[0];
                 /**
                  * The PHQL contains the renamed columns if available
@@ -1914,7 +1914,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
         $operatorMethod = $operator . $clause;
 
-        if (!count($values)) {
+        if (empty($values)) {
             $this->$operatorMethod($expr . " != " . $expr);
 
             return $this;
@@ -2009,7 +2009,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
         $operatorMethod = $operator . $clause;
 
-        if (!count($values)) {
+        if (empty($values)) {
             $this->$operatorMethod($expr . " != " . $expr);
 
             return $this;

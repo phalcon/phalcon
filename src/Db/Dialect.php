@@ -476,7 +476,7 @@ abstract class Dialect implements DialectInterface
              */
             case "select":
                 $nestedDefinition = $expression["value"];
-                if (count($bindCounts)) {
+                if (!empty($bindCounts)) {
                     $nestedDefinition["bindCounts"] = $bindCounts;
                 }
                 return "(" . $this->select($nestedDefinition) . ")";

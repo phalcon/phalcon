@@ -1359,7 +1359,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             }
         }
 
-        if (count($bindCounts)) {
+        if (!empty($bindCounts)) {
             $intermediate["bindCounts"] = $bindCounts;
         }
 
@@ -4302,8 +4302,8 @@ class Query implements QueryInterface, InjectionAwareInterface
         $joins = $select["joins"] ?? [];
 
         // Join existing JOINS with automatic Joins
-        if (count($joins)) {
-            if (count($automaticJoins)) {
+        if (!empty($joins)) {
+            if (!empty($automaticJoins)) {
                 if (isset($joins[0])) {
                     $select["joins"] = array_merge($joins, $automaticJoins);
                 } else {
@@ -4314,7 +4314,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             $sqlJoins = $this->getJoins($select);
         } else {
-            if (count($automaticJoins)) {
+            if (!empty($automaticJoins)) {
                 $select["joins"] = $automaticJoins;
                 $sqlJoins        = $this->getJoins($select);
             } else {
@@ -4373,7 +4373,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $sqlSelect["distinct"] = $select["distinct"];
         }
 
-        if (count($sqlJoins)) {
+        if (!empty($sqlJoins)) {
             $sqlSelect["joins"] = $sqlJoins;
         }
 
@@ -4563,7 +4563,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             "values" => $sqlValues,
         ];
 
-        if (count($sqlJoins)) {
+        if (!empty($sqlJoins)) {
             $sqlUpdate["joins"] = $sqlJoins;
         }
 

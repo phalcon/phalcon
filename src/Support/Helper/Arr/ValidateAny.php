@@ -33,6 +33,6 @@ class ValidateAny
      */
     public function __invoke(array $collection, callable $method): bool
     {
-        return count($this->toFilter($collection, $method)) > 0;
+        return !empty($this->toFilter($collection, $method));
     }
 }

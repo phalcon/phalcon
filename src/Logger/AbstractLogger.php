@@ -322,7 +322,7 @@ abstract class AbstractLogger
         array $context = []
     ): bool {
         if ($this->logLevel >= $level) {
-            if (count($this->adapters) === 0) {
+            if (empty($this->adapters)) {
                 throw new NoAdaptersConfigured();
             }
 

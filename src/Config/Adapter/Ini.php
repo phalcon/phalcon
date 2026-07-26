@@ -104,7 +104,7 @@ class Ini extends Config
                     );
                 }
 
-                if (count($sections)) {
+                if (!empty($sections)) {
                     $config[$section] = array_replace_recursive(...$sections);
                 }
 

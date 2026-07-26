@@ -171,7 +171,7 @@ class Breadcrumbs
         /**
          * Check if this is the "Home" element i.e. count() = 0
          */
-        if (0 !== count($elements)) {
+        if (!empty($elements)) {
             $output[] = '<dt>' . $lastLabel . '</dt>';
         } else {
             $output[] = str_replace(

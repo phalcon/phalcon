@@ -89,7 +89,7 @@ class Introspection implements StrategyInterface
          */
         $columns = $readConnection->describeColumns($table, $schema);
 
-        if (0 === count($columns)) {
+        if (empty($columns)) {
             $completeTable = $table;
             if (null !== $schema) {
                 $completeTable = $schema . "'.'" . $table;

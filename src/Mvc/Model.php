@@ -2552,7 +2552,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * We can't create dynamic SQL without a primary key
          */
-        if (!count($primaryKeys)) {
+        if (empty($primaryKeys)) {
             throw new PrimaryKeyRequired(get_class($this));
         }
 
@@ -2716,7 +2716,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Does it have unsaved related records
          */
-        $hasRelatedToSave = count($relatedToSave) > 0;
+        $hasRelatedToSave = !empty($relatedToSave);
 
         if (
             $hasRelatedToSave &&
@@ -3515,10 +3515,10 @@ abstract class Model extends AbstractInjectionAware implements
                 return $intersect == $fieldName;
             }
 
-            return count($intersect) > 0;
+            return !empty($intersect);
         }
 
-        return count($changedFields) > 0;
+        return !empty($changedFields);
     }
 
     /**
@@ -3560,10 +3560,10 @@ abstract class Model extends AbstractInjectionAware implements
                 return $intersect == $fieldName;
             }
 
-            return count($intersect) > 0;
+            return !empty($intersect);
         }
 
-        return count($updatedFields) > 0;
+        return !empty($updatedFields);
     }
 
     /**
@@ -4396,7 +4396,7 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function validationHasFailed(): bool
     {
-        return count($this->errorMessages) > 0;
+        return !empty($this->errorMessages);
     }
 
     /**
@@ -5068,7 +5068,7 @@ abstract class Model extends AbstractInjectionAware implements
                     if ($useExplicitIdentity) {
                         $values[]    = $defaultValue;
                         $bindTypes[] = $bindSkip;
-                    } elseif (!count($values)) {
+                    } elseif (empty($values)) {
                         /**
                          * Model has only the identity column; force an
                          * explicit default so the underlying adapter does not
@@ -5102,7 +5102,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if ($useExplicitIdentity) {
                     $values[]    = $defaultValue;
                     $bindTypes[] = $bindSkip;
-                } elseif (!count($values)) {
+                } elseif (empty($values)) {
                     /**
                      * Model has only the identity column; force an explicit
                      * default so the underlying adapter does not reject the
@@ -5387,7 +5387,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * If there is no fields to update we return true
              */
-            if (!count($fields)) {
+            if (empty($fields)) {
                 $this->oldSnapshot = $snapshot;
                 return true;
             }
@@ -5472,7 +5472,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * If there is no fields to update we return true
          */
-        if (!count($fields)) {
+        if (empty($fields)) {
             return true;
         }
 
@@ -5488,7 +5488,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * We can't create dynamic SQL without a primary key
              */
-            if (!count($primaryKeys)) {
+            if (empty($primaryKeys)) {
                 throw new PrimaryKeyRequired(get_class($this));
             }
 

@@ -90,7 +90,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $conditions = [];
         $bind       = [];
 
-        if (count($data)) {
+        if (!empty($data)) {
             if ($container instanceof DiInterface) {
                 $metaData = $container->getShared("modelsMetadata");
             } else {
@@ -105,7 +105,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
              */
             foreach ($data as $field => $value) {
                 $attribute = $field;
-                if (is_array($columnMap) && count($columnMap)) {
+                if (is_array($columnMap) && !empty($columnMap)) {
                     $attribute = $columnMap[$field];
                 }
 
@@ -140,7 +140,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $criteria = new self();
         $criteria->setDI($container);
 
-        if (count($conditions)) {
+        if (!empty($conditions)) {
             $criteria->where(
                 implode(" " . $operator . " ", $conditions)
             );
@@ -628,7 +628,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function inWhere(string $expr, array $values): CriteriaInterface
     {
-        if (!count($values)) {
+        if (empty($values)) {
             $this->andWhere($expr . " != " . $expr);
 
             return $this;

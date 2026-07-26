@@ -134,7 +134,7 @@ class StreamContext extends AbstractContext
         }
 
         $line      = (string) array_shift($lines);
-        $remaining = count($lines) > 0 ? implode(PHP_EOL, $lines) . PHP_EOL : "";
+        $remaining = !empty($lines) ? implode(PHP_EOL, $lines) . PHP_EOL : "";
 
         ftruncate($pointer, 0);
         rewind($pointer);

@@ -139,7 +139,7 @@ final class Application implements ApplicationInterface
             $router->setBaseNamespace($this->baseNamespace);
         }
 
-        if (count($this->middlewareMap) > 0) {
+        if (!empty($this->middlewareMap)) {
             $router->setMiddlewareMap($this->middlewareMap);
         }
 

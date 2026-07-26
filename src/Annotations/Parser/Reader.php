@@ -77,7 +77,7 @@ class Reader implements ReaderInterface
             }
         }
 
-        if (count($annotationsProperties) !== 0) {
+        if (!empty($annotationsProperties)) {
             $annotations["properties"] = $annotationsProperties;
         }
 
@@ -93,7 +93,7 @@ class Reader implements ReaderInterface
             }
         }
 
-        if (count($annotationsMethods) !== 0) {
+        if (!empty($annotationsMethods)) {
             $annotations["methods"] = $annotationsMethods;
         }
 

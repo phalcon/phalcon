@@ -366,7 +366,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         if (is_array($activeRenderPath)) {
             if (count($activeRenderPath) === 1) {
                 $activeRenderPath = $activeRenderPath[0];
-            } elseif (count($activeRenderPath) === 0) {
+            } elseif (empty($activeRenderPath)) {
                 $activeRenderPath = "";
             }
         }

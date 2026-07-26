@@ -99,7 +99,7 @@ class Libmemcached extends AbstractAdapter
 
             $connection->setOption(Memcached::OPT_PREFIX_KEY, $this->prefix);
 
-            if (count($serverList) < 1) {
+            if (empty($serverList)) {
                 /** @var array $servers */
                 $servers = $this->options['servers'] ?? [];
                 /** @var array $client */

@@ -306,7 +306,7 @@ class Annotations implements StrategyInterface
          */
         $propertiesAnnotations = $reflection->getPropertiesAnnotations();
 
-        if (0 === count($propertiesAnnotations)) {
+        if (empty($propertiesAnnotations)) {
             throw new NoPropertyAnnotationsForClass($className);
         }
 

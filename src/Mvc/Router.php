@@ -1110,8 +1110,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
          * route exists in the candidate bucket.
          */
         if (
-            (isset($this->hostnameByMethod[$requestMethod]) && count($this->hostnameByMethod[$requestMethod]) > 0)
-            || (isset($this->hostnameByMethod["*"]) && count($this->hostnameByMethod["*"]) > 0)
+            (isset($this->hostnameByMethod[$requestMethod]) && !empty($this->hostnameByMethod[$requestMethod]))
+            || (isset($this->hostnameByMethod["*"]) && !empty($this->hostnameByMethod["*"]))
         ) {
             $currentHostName = $request->getHttpHost();
         }
@@ -1495,7 +1495,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 unset($parts["params"]);
             }
 
-            if (count($params)) {
+            if (!empty($params)) {
                 $this->params = array_merge($params, $parts);
             } else {
                 $this->params = $parts;

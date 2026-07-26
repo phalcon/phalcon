@@ -50,7 +50,7 @@ trait ValidatorCompositeTrait
      */
     public function validate(Validation $validation, string $field): bool
     {
-        if (count($this->getValidators()) === 0) {
+        if (empty($this->getValidators())) {
             throw new NoValidatorsInComposite(get_class($this));
         }
 
