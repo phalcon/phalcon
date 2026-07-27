@@ -37,14 +37,9 @@
 ### Fixed
 
 - Fixed `Phalcon\Mvc\Model::assign()` skipping any value that is `null`, because the incoming data was tested with `isset()`. A `null` is a value the caller asked to assign, so `refresh()` could not restore a column to `NULL` and `assign(["column" => null])` was a no-op; the check now uses `array_key_exists()`. [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- Fixed `Phalcon\Container\Definition\ServiceDefinition::resolveArgs()` treating any constructor-argument object that merely exposes a `resolve()` method as a lazy value, using `method_exists()`. Because `Phalcon\Container\Container` defines a private `resolve()`, autowiring a service whose constructor receives the container - for example `__construct(?Container $container)`, as `Phalcon\ADR\Application` does - mistook the injected container for a lazy resolvable and called its private `resolve()`, raising `Error: Call to private method Phalcon\Container\Container::resolve() from scope Phalcon\Container\Definition\ServiceDefinition`. The lazy check now tests `instanceof Phalcon\Contracts\Container\Resolver\Resolvable`. [#17391](https://github.com/phalcon/cphalcon/issues/17391)
 
 ### Removed
-
-## [6.0.0 alpha 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha7) (2026-xx-xx)
-
-### Fixed
-
-- Fixed `Phalcon\Container\Definition\ServiceDefinition::resolveArgs()` treating any constructor-argument object that merely exposes a `resolve()` method as a lazy value, using `method_exists()`. Because `Phalcon\Container\Container` defines a private `resolve()`, autowiring a service whose constructor receives the container - for example `__construct(?Container $container)`, as `Phalcon\ADR\Application` does - mistook the injected container for a lazy resolvable and called its private `resolve()`, raising `Error: Call to private method Phalcon\Container\Container::resolve() from scope Phalcon\Container\Definition\ServiceDefinition`. The lazy check now tests `instanceof Phalcon\Contracts\Container\Resolver\Resolvable`. [#17391](https://github.com/phalcon/cphalcon/issues/17391)
 
 ## [6.0.0 alpha 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha5) (2026-07-22)
 
