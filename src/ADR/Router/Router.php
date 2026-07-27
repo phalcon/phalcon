@@ -39,30 +39,31 @@ final class Router implements RouterInterface
      */
     protected array $middlewareMap = [];
 
+    /**
+     * Every Action class this router would try for the given method and path,
+     * in the order it tries them. The first that exists wins at match time.
+     * The list is not filtered by existence.
+     *
+     * @return list<class-string>
+     */
+    public function candidatesFor(string $method, string $path): array
+    {
+        return array_column($this->deriveCandidates($method, $path), 0);
+    }
+
     public function match(RequestInterface $request): ?RouterMatchInterface
     {
-        $uri      = trim($request->getURI(true), '/');
-        $verb     = ucfirst(strtolower($request->getMethod()));
-        $segments = $uri === '' ? [] : explode('/', $uri);
+        $path   = $request->getURI(true);
+        $method = $request->getMethod();
 
-        if (empty($segments)) {
-            $className = $this->baseNamespace . '\\' . $verb;
-
-            if (class_exists($className)) {
-                return new RouterMatch($className, [], $this->middlewareFor($className));
-            }
-
-            return null;
-        }
-
-        $located = $this->locate($segments, $verb);
+        $located = $this->locate($method, $path);
         if (is_array($located)) {
             return new RouterMatch($located[0], $located[1], $this->middlewareFor($located[0]));
         }
 
         $verbs = ['Get', 'Post', 'Put', 'Patch', 'Delete'];
         foreach ($verbs as $other) {
-            if ($other !== $verb && is_array($this->locate($segments, $other))) {
+            if (strcasecmp($other, $method) !== 0 && is_array($this->locate($other, $path))) {
                 throw new MethodNotAllowed();
             }
         }
@@ -89,8 +90,26 @@ final class Router implements RouterInterface
         return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $segment)));
     }
 
-    protected function locate(array $segments, string $verb): ?array
+    /**
+     * The single derivation of the routing convention. Every candidate is
+     * paired with the request attributes it would leave behind, in try order.
+     *
+     * @return list<array{0: string, 1: list<string>}>
+     */
+    protected function deriveCandidates(string $method, string $path): array
     {
+        $candidates = [];
+        $uri        = trim($path, '/');
+        $verb       = ucfirst(strtolower($method));
+        $segments   = $uri === '' ? [] : explode('/', $uri);
+
+        if (empty($segments)) {
+            $className    = $this->baseNamespace . '\\' . $verb;
+            $candidates[] = [$className, []];
+
+            return $candidates;
+        }
+
         $index = count($segments);
 
         while ($index >= 1) {
@@ -105,9 +124,7 @@ final class Router implements RouterInterface
                     . $this->toNamespace(array_slice($head, 0, $last))
                     . '\\' . $verb . $this->camelize($resourceName) . $this->camelize($operation);
 
-                if (class_exists($className)) {
-                    return [$className, array_slice($segments, $index)];
-                }
+                $candidates[] = [$className, array_slice($segments, $index)];
             }
 
             $resourceName = $head[$last];
@@ -115,11 +132,22 @@ final class Router implements RouterInterface
                 . $this->toNamespace($head)
                 . '\\' . $verb . $this->camelize($resourceName);
 
-            if (class_exists($className)) {
-                return [$className, array_slice($segments, $index)];
-            }
+            $candidates[] = [$className, array_slice($segments, $index)];
 
             $index = $index - 1;
+        }
+
+        return $candidates;
+    }
+
+    protected function locate(string $method, string $path): ?array
+    {
+        $candidates = $this->deriveCandidates($method, $path);
+
+        foreach ($candidates as $candidate) {
+            if (class_exists($candidate[0])) {
+                return $candidate;
+            }
         }
 
         return null;

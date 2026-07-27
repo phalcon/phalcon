@@ -1,8 +1,29 @@
 # Changelog
 
-## [6.0.0 beta 1](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta1) (2026-07-24)
+## [6.0.0 beta 2](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta1) (2026-07-26)
 
 ### Changed
+
+- Changed `Phalcon\Mvc\Model::getRelated()` and `Phalcon\Mvc\Model::isRelationshipLoaded()` to test the relation cache with `array_key_exists()` instead of `isset()`, so a to-one relation that resolves to no record is no longer re-queried on every access [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
+- Changed `Phalcon\Mvc\Model\Manager::mergeFindParameters()` from `final protected` to `final public static` [#17331](https://github.com/phalcon/cphalcon/issues/17331)
+
+### Added
+
+- Added `Phalcon\ADR\Responder\ViewResponder`, which renders a `.phtml` template and returns it as an HTML response. The action picks the template with `withTemplate()`, and the view receives `result`, `messages` and `status`. Any renderer implementing the new `Phalcon\Contracts\View\Renderer` can be used - `Phalcon\Mvc\View\Simple` now does. [#17379](https://github.com/phalcon/cphalcon/issues/17379) [[doc]](https://docs.phalcon.io/6.0/adr/)
+- Added opt-in route-parameter pre-filtering to the ADR convention router via the new `Phalcon\ADR\Router\AttributeFilter`. An Action that declares a static `params()` method has its positional route segments validated against a regex, cast to a scalar type (`int`, `float`, `string`) and optionally passed through a converter closure, then written to the request as named attributes - all before the Action runs. A regex miss is treated as a route miss (404). [#17393](https://github.com/phalcon/cphalcon/issues/17393) [[doc]](https://docs.phalcon.io/6.0/adr/)
+- Added eager loading of model relations: `Phalcon\Mvc\Model::find()` accepts an `eager` parameter - an array of dot-delimited relation paths, optionally `path => options` - which pre-loads the named relations with one query per relation instead of one per record. `Phalcon\Mvc\Model\Criteria::eager()` exposes the same on the criteria surface. [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
+- Added `candidatesFor()` to the `Phalcon\Contracts\ADR\Router\Router` contract and to `Phalcon\ADR\Router\Router`. It returns every Action class the convention router would try for a given HTTP method and path, in the order it tries them and unfiltered by existence. [#17403](https://github.com/phalcon/cphalcon/issues/17403) [[doc]](https://docs.phalcon.io/6.0/adr/)
+
+### Fixed
+
+- Fixed `Phalcon\Http\Response\Cookies::delete()` not deleting a cookie that was not set in the same request; it now falls back to the `$_COOKIE` superglobal. `Phalcon\Http\Cookie::delete()` expires the cookie with its stored `path` and `domain` instead of the defaults. [#17395](https://github.com/phalcon/cphalcon/issues/17395) [[doc]](https://docs.phalcon.io/6.0/http-response/)
+
+### Removed
+
+
+## [6.0.0 beta 1](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta1) (2026-07-24)
+
+### Changed 
 
 - Changed `Phalcon\Mvc\Model::getRelated()` and `Phalcon\Mvc\Model::isRelationshipLoaded()` to test the relation cache with `array_key_exists()` instead of `isset()`, so a to-one relation that resolves to no record is no longer re-queried on every access [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
 - Changed `Phalcon\Mvc\Model\Manager::mergeFindParameters()` from `final protected` to `final public static` [#17331](https://github.com/phalcon/cphalcon/issues/17331)
