@@ -1,6 +1,6 @@
 # Changelog
 
-## [6.0.0 beta 3](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta3) (2026-xx-xx)
+## [6.0.0 beta 3](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta3) (2026-07-27)
 
 ### Changed
 
