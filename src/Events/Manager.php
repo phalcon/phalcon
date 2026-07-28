@@ -660,6 +660,21 @@ class Manager implements ManagerInterface, EventDispatcherInterface
     }
 
     /**
+     * Returns the event types that currently have at least one listener
+     * attached. Types contributed by subscribers are included, because
+     * addSubscriber() attaches through the regular listener pipeline.
+     *
+     * @return array<int, string>
+     *
+     * @todo v7: remove. Widen getListeners() to accept a nullable type and
+     *       let callers use array_keys(getListeners()) instead.
+     */
+    public function getEventTypes(): array
+    {
+        return array_keys($this->events);
+    }
+
+    /**
      * Returns all the attached listeners of a certain type
      *
      * @param string $type

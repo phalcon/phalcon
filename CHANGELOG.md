@@ -9,6 +9,8 @@
 ### Added
 
 - Added `pathFor()`, `setActionDirectory()` and `setWordSeparator()` to the `Phalcon\Contracts\ADR\Router\Router` contract and to `Phalcon\ADR\Router\Router`; the two setters are also on `Phalcon\ADR\Application`. `pathFor()` is the inverse of the routing convention, returning the canonical path an Action answers or `null`. Added `Phalcon\ADR\Exceptions\ActionDirectoryNotSet`. [#17405](https://github.com/phalcon/cphalcon/issues/17405) [[doc]](https://docs.phalcon.io/6.0/adr/)
+- Added `Phalcon\Container\Container::getServiceNames()`, returning the names of every registered service definition. Names that only exist as an alias, a pre-set instance or a parameter are not included. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/container/)
+- Added `Phalcon\Events\Manager::getEventTypes()`, returning the event types that currently have at least one listener attached, including those contributed by subscribers. Listeners attached with `attach()` were previously not enumerable at all, since `getListeners()` requires a known event type. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/events/)
 
 ### Fixed
 
