@@ -13,7 +13,7 @@
  * Implementation of this file has also been heavily influenced by Autoroute.
  *
  * @link    https://pmjones.io/adr/
- * 
+ *
  * @link    https://github.com/pmjones/AutoRoute
  * @license https://github.com/pmjones/AutoRoute/blob/2.x/LICENSE.md
  */

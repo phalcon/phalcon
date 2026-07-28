@@ -54,13 +54,6 @@ final class GetEventTypesTest extends AbstractUnitTestCase
         $this->assertContains('test:hello', $actual);
     }
 
-    public function testGetEventTypesReturnsEmptyArrayWhenNothingAttached(): void
-    {
-        $manager = new Manager();
-
-        $this->assertSame([], $manager->getEventTypes());
-    }
-
     public function testGetEventTypesReturnsEachTypeOnce(): void
     {
         $manager = new Manager();
@@ -72,5 +65,12 @@ final class GetEventTypesTest extends AbstractUnitTestCase
         $manager->attach('db', $first);
 
         $this->assertSame(['log', 'db'], $manager->getEventTypes());
+    }
+
+    public function testGetEventTypesReturnsEmptyArrayWhenNothingAttached(): void
+    {
+        $manager = new Manager();
+
+        $this->assertSame([], $manager->getEventTypes());
     }
 }

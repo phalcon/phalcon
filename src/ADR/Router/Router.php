@@ -13,7 +13,7 @@
  * Implementation of this file has also been heavily influenced by Autoroute.
  *
  * @link    https://pmjones.io/adr/
- * 
+ *
  * @link    https://github.com/pmjones/AutoRoute
  * @license https://github.com/pmjones/AutoRoute/blob/2.x/LICENSE.md
  */
@@ -113,29 +113,6 @@ final class Router implements RouterInterface
         return array_column($this->deriveCandidates($method, $path), 0);
     }
 
-    public function match(RequestInterface $request): ?RouterMatchInterface
-    {
-        if ($this->actionDirectory === '') {
-            throw new ActionDirectoryNotSet();
-        }
-
-        $path   = $request->getURI(true);
-        $method = $request->getMethod();
-
-        $located = $this->locate($method, $path);
-        if (is_array($located)) {
-            return new RouterMatch($located[0], $located[1], $this->middlewareFor($located[0]));
-        }
-
-        foreach ($this->verbs() as $other) {
-            if (strcasecmp($other, $method) !== 0 && is_array($this->locate($other, $path))) {
-                throw new MethodNotAllowed();
-            }
-        }
-
-        return null;
-    }
-
     /**
      * The class this convention names for a fully static path, derived without
      * consulting the filesystem.
@@ -166,6 +143,29 @@ final class Router implements RouterInterface
         return $this->baseNamespace
             . '\\' . implode('\\', $parts)
             . '\\' . $verb . implode('', $parts);
+    }
+
+    public function match(RequestInterface $request): ?RouterMatchInterface
+    {
+        if ($this->actionDirectory === '') {
+            throw new ActionDirectoryNotSet();
+        }
+
+        $path   = $request->getURI(true);
+        $method = $request->getMethod();
+
+        $located = $this->locate($method, $path);
+        if (is_array($located)) {
+            return new RouterMatch($located[0], $located[1], $this->middlewareFor($located[0]));
+        }
+
+        foreach ($this->verbs() as $other) {
+            if (strcasecmp($other, $method) !== 0 && is_array($this->locate($other, $path))) {
+                throw new MethodNotAllowed();
+            }
+        }
+
+        return null;
     }
 
     public function pathFor(string $className): ?string
