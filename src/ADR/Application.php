@@ -45,6 +45,11 @@ final class Application implements ApplicationInterface
     /**
      * @var string
      */
+    protected string $actionDirectory = "";
+
+    /**
+     * @var string
+     */
     protected string $baseNamespace = "";
 
     /**
@@ -56,6 +61,11 @@ final class Application implements ApplicationInterface
      * @var array<string, string[]>
      */
     protected array $middlewareMap = [];
+
+    /**
+     * @var string
+     */
+    protected string $wordSeparator = "";
 
     public function __construct(?Container $container = null)
     {
@@ -143,6 +153,14 @@ final class Application implements ApplicationInterface
             $router->setMiddlewareMap($this->middlewareMap);
         }
 
+        if ($this->actionDirectory !== '') {
+            $router->setActionDirectory($this->actionDirectory);
+        }
+
+        if ($this->wordSeparator !== '') {
+            $router->setWordSeparator($this->wordSeparator);
+        }
+
         $events->fire(Event::APPLICATION_BEFORE_HANDLE, $this, $request);
 
         try {
@@ -203,11 +221,31 @@ final class Application implements ApplicationInterface
     }
 
     /**
+     * Set the filesystem root that backs the base namespace.
+     */
+    public function setActionDirectory(string $actionDirectory): static
+    {
+        $this->actionDirectory = $actionDirectory;
+
+        return $this;
+    }
+
+    /**
      * Set the base namespace the convention router derives Actions from.
      */
     public function setBaseNamespace(string $baseNamespace): static
     {
         $this->baseNamespace = $baseNamespace;
+
+        return $this;
+    }
+
+    /**
+     * Set the single delimiter between words in a path segment.
+     */
+    public function setWordSeparator(string $wordSeparator): static
+    {
+        $this->wordSeparator = $wordSeparator;
 
         return $this;
     }

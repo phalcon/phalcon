@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Router;
 
+use Phalcon\ADR\Exceptions\ActionDirectoryNotSet;
 use Phalcon\ADR\Exceptions\MethodNotAllowed;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
@@ -32,6 +33,11 @@ final class Router implements RouterInterface
     /**
      * @var string
      */
+    protected string $actionDirectory = '';
+
+    /**
+     * @var string
+     */
     protected string $baseNamespace = '';
 
     /**
@@ -40,9 +46,15 @@ final class Router implements RouterInterface
     protected array $middlewareMap = [];
 
     /**
+     * @var string
+     */
+    protected string $wordSeparator = '-';
+
+    /**
      * Every Action class this router would try for the given method and path,
      * in the order it tries them. The first that exists wins at match time.
-     * The list is not filtered by existence.
+     * Namespace descent consults the filesystem, so the list depends on the
+     * action directory.
      *
      * @return list<class-string>
      */
@@ -53,6 +65,10 @@ final class Router implements RouterInterface
 
     public function match(RequestInterface $request): ?RouterMatchInterface
     {
+        if ($this->actionDirectory === '') {
+            throw new ActionDirectoryNotSet();
+        }
+
         $path   = $request->getURI(true);
         $method = $request->getMethod();
 
@@ -61,14 +77,70 @@ final class Router implements RouterInterface
             return new RouterMatch($located[0], $located[1], $this->middlewareFor($located[0]));
         }
 
-        $verbs = ['Get', 'Post', 'Put', 'Patch', 'Delete'];
-        foreach ($verbs as $other) {
+        foreach ($this->verbs() as $other) {
             if (strcasecmp($other, $method) !== 0 && is_array($this->locate($other, $path))) {
                 throw new MethodNotAllowed();
             }
         }
 
         return null;
+    }
+
+    public function pathFor(string $className): ?string
+    {
+        $prefix = $this->baseNamespace . '\\';
+
+        if (strncmp($className, $prefix, strlen($prefix)) !== 0) {
+            return null;
+        }
+
+        $parts = explode('\\', substr($className, strlen($prefix)));
+        $last  = array_pop($parts);
+
+        if (empty($parts)) {
+            return in_array($last, $this->verbs(), true) ? '/' : null;
+        }
+
+        $resource  = end($parts);
+        $operation = null;
+
+        foreach ($this->verbs() as $verb) {
+            if (strncmp($last, $verb, strlen($verb)) !== 0) {
+                continue;
+            }
+
+            $remainder = substr($last, strlen($verb));
+
+            if (strncmp($remainder, $resource, strlen($resource)) !== 0) {
+                continue;
+            }
+
+            $operation = substr($last, strlen($verb) + strlen($resource));
+
+            break;
+        }
+
+        if ($operation === null) {
+            return null;
+        }
+
+        $path = '';
+        foreach ($parts as $part) {
+            $path .= '/' . $this->decamelize($part);
+        }
+
+        if ($operation !== '') {
+            $path .= '/' . $this->decamelize($operation);
+        }
+
+        return $path;
+    }
+
+    public function setActionDirectory(string $actionDirectory): RouterInterface
+    {
+        $this->actionDirectory = rtrim($actionDirectory, DIRECTORY_SEPARATOR);
+
+        return $this;
     }
 
     public function setBaseNamespace(string $baseNamespace): RouterInterface
@@ -85,59 +157,97 @@ final class Router implements RouterInterface
         return $this;
     }
 
+    public function setWordSeparator(string $wordSeparator): RouterInterface
+    {
+        $this->wordSeparator = $wordSeparator;
+
+        return $this;
+    }
+
     protected function camelize(string $segment): string
     {
-        return str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $segment)));
+        return str_replace(
+            $this->wordSeparator,
+            '',
+            ucwords($segment, $this->wordSeparator)
+        );
+    }
+
+    protected function decamelize(string $part): string
+    {
+        return strtolower(
+            preg_replace(
+                '/([a-z0-9])([A-Z])/',
+                '$1' . $this->wordSeparator . '$2',
+                $part
+            )
+        );
     }
 
     /**
-     * The single derivation of the routing convention. Every candidate is
-     * paired with the request attributes it would leave behind, in try order.
+     * The single derivation of the routing convention. Path segments are
+     * consumed as namespace segments while the matching directory exists; the
+     * class at the stopping depth is probed, preceded by the fused operation
+     * form when exactly one segment remains. Every candidate is paired with the
+     * request attributes it would leave behind.
      *
      * @return list<array{0: string, 1: list<string>}>
      */
     protected function deriveCandidates(string $method, string $path): array
     {
-        $candidates = [];
-        $uri        = trim($path, '/');
-        $verb       = ucfirst(strtolower($method));
-        $segments   = $uri === '' ? [] : explode('/', $uri);
+        $uri      = trim($path, '/');
+        $verb     = ucfirst(strtolower($method));
+        $segments = $uri === '' ? [] : explode('/', $uri);
 
         if (empty($segments)) {
-            $className    = $this->baseNamespace . '\\' . $verb;
-            $candidates[] = [$className, []];
-
-            return $candidates;
+            return [[$this->baseNamespace . '\\' . $verb, []]];
         }
 
-        $index = count($segments);
+        $subNamespace = '';
+        $depth        = 0;
 
-        while ($index >= 1) {
-            $last = $index - 1;
-            $head = array_slice($segments, 0, $index);
+        while (!empty($segments)) {
+            $candidate = $subNamespace . '\\' . $this->camelize($segments[0]);
 
-            if ($index >= 2) {
-                $prev         = $index - 2;
-                $resourceName = $head[$prev];
-                $operation    = $head[$last];
-                $className    = $this->baseNamespace
-                    . $this->toNamespace(array_slice($head, 0, $last))
-                    . '\\' . $verb . $this->camelize($resourceName) . $this->camelize($operation);
-
-                $candidates[] = [$className, array_slice($segments, $index)];
+            if (!$this->hasSubNamespace($candidate)) {
+                break;
             }
 
-            $resourceName = $head[$last];
-            $className    = $this->baseNamespace
-                . $this->toNamespace($head)
-                . '\\' . $verb . $this->camelize($resourceName);
+            $subNamespace = $candidate;
+            $depth++;
 
-            $candidates[] = [$className, array_slice($segments, $index)];
-
-            $index = $index - 1;
+            array_shift($segments);
         }
 
+        if ($depth === 0) {
+            return [];
+        }
+
+        $parts     = explode('\\', ltrim($subNamespace, '\\'));
+        $resource  = end($parts);
+        $className = $this->baseNamespace . $subNamespace . '\\' . $verb . $resource;
+
+        $candidates = [];
+
+        if (count($segments) === 1) {
+            $candidates[] = [$className . $this->camelize($segments[0]), []];
+        }
+
+        $candidates[] = [$className, $segments];
+
         return $candidates;
+    }
+
+    protected function hasSubNamespace(string $subNamespace): bool
+    {
+        if (str_contains($subNamespace, '..')) {
+            return false;
+        }
+
+        return is_dir(
+            $this->actionDirectory
+            . str_replace('\\', DIRECTORY_SEPARATOR, $subNamespace)
+        );
     }
 
     protected function locate(string $method, string $path): ?array
@@ -167,17 +277,13 @@ final class Router implements RouterInterface
         return $stacked;
     }
 
-    protected function toNamespace(array $segments): string
+    /**
+     * The HTTP verbs the convention recognises, in class-name form.
+     *
+     * @return list<string>
+     */
+    protected function verbs(): array
     {
-        $parts = [];
-        foreach ($segments as $segment) {
-            $parts[] = $this->camelize($segment);
-        }
-
-        if (empty($parts)) {
-            return '';
-        }
-
-        return '\\' . implode('\\', $parts);
+        return ['Get', 'Post', 'Put', 'Patch', 'Delete'];
     }
 }
