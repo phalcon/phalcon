@@ -1,18 +1,33 @@
 # Changelog
 
+
+## [6.0.0 beta 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta4) (2026-07-xx)
+
+### Changed
+
+- Changed `Phalcon\ADR\Router\Router` to derive exactly one Action class per path: the class name is the verb followed by every static segment concatenated. [#17410](https://github.com/phalcon/cphalcon/issues/17410) [[doc]](https://docs.phalcon.io/6.0/adr/)
+
+### Added
+
+- Added `classFor()` to the `Phalcon\Contracts\ADR\Router\Router` contract and to `Phalcon\ADR\Router\Router`. It names the Action class the convention would use for a static path. [#17410](https://github.com/phalcon/cphalcon/issues/17410) [[doc]](https://docs.phalcon.io/6.0/adr/)
+
+### Fixed
+
+- Fixed `Phalcon\Mvc\Model::find()` and `Phalcon\Mvc\Model::findFirst()` raising an error `Call to undefined method static::getpreparedquery()`. Using `self` vs. 'static` for the internal calls. [#17409](https://github.com/phalcon/cphalcon/issues/17409) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+
+### Removed
+
 ## [6.0.0 beta 3](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta3) (2026-07-27)
 
 ### Changed
 
 - Changed `Phalcon\ADR\Router\Router` from a candidate chain to a namespace descent: a path segment becomes a namespace segment only if the matching directory exists, after which at most two Action classes are probed instead of five. An Action can no longer be silently shadowed by an earlier candidate. Requires `setActionDirectory()`. [#17405](https://github.com/phalcon/cphalcon/issues/17405) [[doc]](https://docs.phalcon.io/6.0/adr/)
-- Changed `Phalcon\ADR\Router\Router` to derive exactly one Action class per path: the class name is the verb followed by every static segment concatenated. [#17410](https://github.com/phalcon/cphalcon/issues/17410) [[doc]](https://docs.phalcon.io/5.18/adr/)
 
 ### Added
 
 - Added `pathFor()`, `setActionDirectory()` and `setWordSeparator()` to the `Phalcon\Contracts\ADR\Router\Router` contract and to `Phalcon\ADR\Router\Router`; the two setters are also on `Phalcon\ADR\Application`. `pathFor()` is the inverse of the routing convention, returning the canonical path an Action answers or `null`. Added `Phalcon\ADR\Exceptions\ActionDirectoryNotSet`. [#17405](https://github.com/phalcon/cphalcon/issues/17405) [[doc]](https://docs.phalcon.io/6.0/adr/)
 - Added `Phalcon\Container\Container::getServiceNames()`, returning the names of every registered service definition. Names that only exist as an alias, a pre-set instance or a parameter are not included. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/container/)
 - Added `Phalcon\Events\Manager::getEventTypes()`, returning the event types that currently have at least one listener attached, including those contributed by subscribers. Listeners attached with `attach()` were previously not enumerable at all, since `getListeners()` requires a known event type. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/events/)
-- Added `classFor()` to the `Phalcon\Contracts\ADR\Router\Router` contract and to `Phalcon\ADR\Router\Router`. It names the Action class the convention would use for a static path. [#17410](https://github.com/phalcon/cphalcon/issues/17410) [[doc]](https://docs.phalcon.io/5.18/adr/)
 
 ### Fixed
 

@@ -1449,7 +1449,7 @@ abstract class Model extends AbstractInjectionAware implements
             $params = $parameters;
         }
 
-        $query = static::getPreparedQuery($params);
+        $query = self::getPreparedQuery($params);
 
         /**
          * Execute the query passing the bind-params and casting-types
@@ -1470,7 +1470,7 @@ abstract class Model extends AbstractInjectionAware implements
              * cursor has not been advanced, so materializing it is free.
              */
             if (isset($params["eager"])) {
-                static::loadEager($resultset, $params["eager"], $params);
+                self::loadEager($resultset, $params["eager"], $params);
             }
         }
 
@@ -1578,7 +1578,7 @@ abstract class Model extends AbstractInjectionAware implements
             throw new InvalidFindParameters(get_called_class());
         }
 
-        $query = static::getPreparedQuery($params, 1);
+        $query = self::getPreparedQuery($params, 1);
 
         /**
          * Return only the first row
