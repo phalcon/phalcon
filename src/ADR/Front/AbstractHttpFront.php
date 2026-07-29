@@ -33,6 +33,11 @@ use Phalcon\Contracts\Http\AttributeRequest;
 abstract class AbstractHttpFront implements FrontController
 {
     /**
+     * @var Container|null
+     */
+    protected ?Container $container = null;
+
+    /**
      * @var string
      */
     protected string $projectRoot;
@@ -43,15 +48,30 @@ abstract class AbstractHttpFront implements FrontController
     }
 
     /**
+     * Builds the container, loads the environment and registers the providers,
+     * returning the container for consumers that need it before (or instead
+     * of) `run()`. The container is built once and cached, so calling `boot()`
+     * and then `run()` reuses the same instance.
+     */
+    final public function boot(): Container
+    {
+        if (null === $this->container) {
+            $this->container = $this->buildContainer();
+
+            $this->loadEnvironment($this->container);
+            $this->registerProviders($this->container);
+        }
+
+        return $this->container;
+    }
+
+    /**
      * @return int<0,254>
      */
     final public function run(): int
     {
         try {
-            $container = $this->buildContainer();
-
-            $this->loadEnvironment($container);
-            $this->registerProviders($container);
+            $container = $this->boot();
 
             $request     = $container->get(AttributeRequest::class);
             $application = $this->getApplication($container);
