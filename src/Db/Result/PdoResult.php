@@ -255,57 +255,46 @@ class PdoResult implements ResultInterface
      */
     public function numRows(): int
     {
-        if (null === $this->rowCount) {
-            $rowCount = null;
-
-            /**
-             * MySQL and PostgreSQL properly returns the number of records
-             */
-            if (
-                "mysql" === $this->connection->getType() ||
-                "pgsql" === $this->connection->getType()
-            ) {
-                $rowCount = $this->pdoStatement->rowCount();
-            }
-
-            /**
-             * We should get the count using a new statement :(
-             */
-            if (null === $rowCount) {
-                /**
-                 * SQLite/SQLServer returns resultsets that to the client eyes
-                 * (PDO) has an arbitrary number of rows, so we need to perform
-                 * an extra count to know that
-                 */
-                if (true !== str_starts_with($this->sqlStatement, "SELECT COUNT(*) ")) {
-                    $matches = null;
-
-                    if (
-                        preg_match(
-                            "/^SELECT\\s+(.*)/i",
-                            $this->sqlStatement,
-                            $matches
-                        )
-                    ) {
-                        $result = $this->connection->query(
-                            "SELECT COUNT(*) \"numrows\" FROM (SELECT " . $matches[1] . ")",
-                            $this->bindParams,
-                            $this->bindTypes
-                        );
-
-                        $row      = $result->fetch();
-                        $rowCount = $row["numrows"];
-                    }
-                } else {
-                    $rowCount = 1;
-                }
-            }
-
-            /**
-             * Update the value to avoid further calculations
-             */
-            $this->rowCount = $rowCount;
+        if (null !== $this->rowCount) {
+            return $this->rowCount;
         }
+
+        $type = $this->connection->getType();
+
+        /**
+         * MySQL and PostgreSQL properly return the number of records, and keep
+         * doing so once the cursor has been advanced
+         */
+        if ("mysql" === $type || "pgsql" === $type) {
+            $this->rowCount = (int) $this->pdoStatement->rowCount();
+
+            return $this->rowCount;
+        }
+
+        /**
+         * SQLite returns resultsets that to the client eyes (PDO) have an
+         * arbitrary number of rows - it is a streaming cursor and does not know
+         * the count until the result has been stepped to the end. So the count
+         * costs an extra statement.
+         *
+         * The original statement is wrapped verbatim rather than taken apart
+         * and rebuilt: any SELECT is a valid subquery, which keeps multi-line
+         * statements and common table expressions working, and makes a wrapped
+         * `SELECT COUNT(*) ... GROUP BY` report its number of groups instead of
+         * a hard-coded 1.
+         */
+        $result = $this->connection->query(
+            "SELECT COUNT(*) \"numrows\" FROM (" . $this->sqlStatement . ")",
+            $this->bindParams,
+            $this->bindTypes
+        );
+
+        $row = $result->fetch();
+
+        /**
+         * Update the value to avoid further calculations
+         */
+        $this->rowCount = (int) $row["numrows"];
 
         return $this->rowCount;
     }

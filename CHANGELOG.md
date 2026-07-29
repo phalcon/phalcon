@@ -6,11 +6,17 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Changed
 
+- Changed `Phalcon\Mvc\Model\Resultset::refresh()` to reset the cursor - position, current row, buffered rows and active row - after replaying the statement. [#17399](https://github.com/phalcon/cphalcon/issues/17399) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+
 ### Added
 
 - Added `Phalcon\ADR\Front\AbstractHttpFront::boot()`, which builds the container, loads the environment and registers the providers, then returns the container - for consumers that need it before, or instead of, `run()`. The container is built once and cached, so `boot()` and `run()` share the same instance. A bootstrap file can now be `return (new AppFront(dirname(__DIR__)))->boot();`. [#17413](https://github.com/phalcon/cphalcon/issues/17413) [[doc]](https://docs.phalcon.io/6.0/adr/)
 
 ### Fixed
+
+- Fixed `Phalcon\Mvc\Model\Resultset` costing two statements for every resultset on SQLite. [#17399](https://github.com/phalcon/cphalcon/issues/17399) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- Fixed `Phalcon\Db\Result\PdoResult::numRows()` failing on multi-line statements. [#17399](https://github.com/phalcon/cphalcon/issues/17399)
+- Fixed `Phalcon\Mvc\Model\Resultset::seek()` leaving the previous row in place as the current one when seeking past the end of a resultset held in memory. [#17399](https://github.com/phalcon/cphalcon/issues/17399) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 
 ### Removed
 

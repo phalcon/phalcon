@@ -103,9 +103,13 @@ abstract class Resultset implements
     protected mixed $cache = null;
 
     /**
-     * @var int
+     * Number of rows, or null while it has not been worked out yet. Resolved
+     * lazily by count() - asking the driver up front costs SQLite an extra
+     * statement on every single result-set.
+     *
+     * @var int|null
      */
-    protected int $count = 0;
+    protected int | null $count = null;
 
     /**
      * @var array
@@ -192,35 +196,33 @@ abstract class Resultset implements
         $result->setFetchMode(Enum::FETCH_ASSOC);
 
         /**
-         * Update the row-count
+         * Consume the first row. The statement has already been executed by
+         * `Model\Query::executeSelect()`, so this costs no extra round trip,
+         * and it is the only way to tell an empty result-set from a populated
+         * one without asking the driver for a row count - which SQLite can
+         * only answer by running a second statement.
          */
-        $rowCount    = $result->numRows();
-        $this->count = $rowCount;
+        $this->row = $result->fetch();
 
         /**
          * Empty result-set
          */
-        if ($rowCount == 0) {
-            $this->rows = [];
+        if (!is_array($this->row)) {
+            $this->count = 0;
+            $this->rows  = [];
 
             return;
         }
 
         /**
-         * Small result-sets with less equals 32 rows are fetched at once
+         * Small result-sets with less equals 32 rows are fetched at once.
+         * The count is only worth asking for when the prefetch is switched on,
+         * which it is not by default.
          */
         $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
-        if ($prefetchRecords > 0 && $rowCount <= $prefetchRecords) {
-            /**
-             * Fetch ALL rows from database
-             */
-            $rows = $result->fetchAll();
 
-            if (is_array($rows)) {
-                $this->rows = $rows;
-            } else {
-                $this->rows = [];
-            }
+        if ($prefetchRecords > 0 && $this->count() <= $prefetchRecords) {
+            $this->materialize();
         }
     }
 
@@ -231,6 +233,16 @@ abstract class Resultset implements
      */
     final public function count(): int
     {
+        if (null === $this->count) {
+            if (is_array($this->rows)) {
+                $this->count = count($this->rows);
+            } elseif (is_object($this->result)) {
+                $this->count = (int) $this->result->numRows();
+            } else {
+                $this->count = 0;
+            }
+        }
+
         return $this->count;
     }
 
@@ -399,11 +411,15 @@ abstract class Resultset implements
      */
     public function getFirst(): mixed
     {
-        if ($this->count == 0) {
+        $this->seek(0);
+
+        /**
+         * Positioning at the first row already tells us whether there is one,
+         * so there is no need to work out the whole count
+         */
+        if (!$this->valid()) {
             return null;
         }
-
-        $this->seek(0);
 
         return $this->current();
     }
@@ -425,7 +441,7 @@ abstract class Resultset implements
      */
     public function getLast(): ModelInterface | Row | null
     {
-        $count = $this->count;
+        $count = $this->count();
 
         if ($count == 0) {
             return null;
@@ -526,8 +542,9 @@ abstract class Resultset implements
      * turning the resultset into TYPE_RESULT_FULL.
      *
      * Free when called before the cursor has been advanced: the statement has
-     * already been executed by Model\Query::executeSelect() and no row has been
-     * consumed, so no re-execution takes place. Idempotent.
+     * already been executed by Model\Query::executeSelect() and only the row
+     * the constructor consumed is missing from the cursor, so no re-execution
+     * takes place. Idempotent.
      *
      * @return void
      */
@@ -545,14 +562,29 @@ abstract class Resultset implements
             return;
         }
 
-        /**
-         * The cursor has already been advanced, so it has to be replayed
-         */
-        if ($this->row !== null) {
+        if ($this->pointer > 0) {
+            /**
+             * The cursor has been advanced past the first row, so it has to be
+             * replayed from the beginning
+             */
             $result->execute();
-        }
 
-        $records = $result->fetchAll(Enum::FETCH_ASSOC);
+            $records = $result->fetchAll(Enum::FETCH_ASSOC);
+        } else {
+            /**
+             * The cursor sits right behind the row the constructor consumed, so
+             * the whole set is that row followed by whatever is left
+             */
+            $records = $result->fetchAll(Enum::FETCH_ASSOC);
+
+            if (!is_array($records)) {
+                $records = [];
+            }
+
+            if (is_array($this->row)) {
+                $records = array_merge([$this->row], $records);
+            }
+        }
 
         $this->row  = null;
         $this->rows = is_array($records) ? $records : [];
@@ -578,7 +610,7 @@ abstract class Resultset implements
      */
     public function offsetExists(mixed $index): bool
     {
-        return $index < $this->count;
+        return $index < $this->count();
     }
 
     /**
@@ -591,7 +623,7 @@ abstract class Resultset implements
      */
     public function offsetGet(mixed $index): mixed
     {
-        if ($index >= $this->count) {
+        if ($index >= $this->count()) {
             throw new IndexNotInCursor();
         }
 
@@ -653,19 +685,29 @@ abstract class Resultset implements
             return false;
         }
 
-        $this->isFresh = true;
+        /**
+         * The statement has been replayed, so everything derived from the
+         * previous run has to go - including the cursor position
+         */
+        $this->isFresh   = true;
+        $this->count     = null;
+        $this->rows      = null;
+        $this->row       = null;
+        $this->activeRow = null;
+        $this->pointer   = 0;
 
         /**
-         * Update the row-count
+         * Consume the first row to tell an empty result-set from a populated
+         * one, the same way the constructor does
          */
-        $rowCount    = $result->numRows();
-        $this->count = $rowCount;
+        $this->row = $result->fetch();
 
         /**
          * Empty result-set
          */
-        if ($rowCount == 0) {
-            $this->rows = [];
+        if (!is_array($this->row)) {
+            $this->count = 0;
+            $this->rows  = [];
 
             return true;
         }
@@ -674,17 +716,9 @@ abstract class Resultset implements
          * Small result-sets with less equals 32 rows are fetched at once
          */
         $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
-        if ($prefetchRecords > 0 && $rowCount <= $prefetchRecords) {
-            /**
-             * Fetch ALL rows from database
-             */
-            $rows = $result->fetchAll();
 
-            if (is_array($rows)) {
-                $this->rows = $rows;
-            } else {
-                $this->rows = [];
-            }
+        if ($prefetchRecords > 0 && $this->count() <= $prefetchRecords) {
+            $this->materialize();
         }
 
         return true;
@@ -717,6 +751,12 @@ abstract class Resultset implements
                  */
                 if (isset($this->rows[$position])) {
                     $this->row = $this->rows[$position];
+                } else {
+                    /**
+                     * Past the end - the previous row must not be left behind
+                     * as the current one
+                     */
+                    $this->row = false;
                 }
 
                 $this->pointer   = $position;
@@ -880,10 +920,22 @@ abstract class Resultset implements
     /**
      * Check whether internal resource has rows to fetch
      *
+     * Driven by the row the cursor is parked on rather than by the count, so
+     * that a plain traversal never has to ask the driver how many rows there
+     * are - on SQLite that answer costs a second statement.
+     *
      * @return bool
      */
     public function valid(): bool
     {
-        return $this->pointer < $this->count;
+        /**
+         * Nothing has been fetched yet, or the rows have just been pulled into
+         * memory - position the cursor before reporting
+         */
+        if ($this->row === null) {
+            $this->seek($this->pointer);
+        }
+
+        return is_array($this->row);
     }
 }
