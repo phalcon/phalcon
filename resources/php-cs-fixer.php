@@ -45,6 +45,7 @@ return (new Config())
     ->setCacheFile($root . '/tests/_output/.php-cs-fixer.cache')
     ->setRules(
         [
+            'no_unused_imports'      => true,
             'ordered_imports'        => [
                 'sort_algorithm' => 'alpha',
                 'imports_order'  => ['class', 'function', 'const'],
