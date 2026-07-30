@@ -54,6 +54,16 @@ interface Router
     public function match(RequestInterface $request): ?RouterMatch;
 
     /**
+     * The HTTP method the given Action class answers, uppercased, or null when
+     * the class is not one this convention would have produced.
+     *
+     * The counterpart to pathFor(): same argument, same null semantics, so a
+     * caller that accepts one answer accepts the other. Together they are the
+     * whole inverse of classFor().
+     */
+    public function methodFor(string $className): ?string;
+
+    /**
      * The canonical static path the given Action class answers, or null when
      * the class is not derivable from the base namespace. Positional
      * attributes are not part of the canonical path.

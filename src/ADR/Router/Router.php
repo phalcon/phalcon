@@ -24,7 +24,6 @@ namespace Phalcon\ADR\Router;
 
 use Phalcon\ADR\Exceptions\ActionDirectoryNotSet;
 use Phalcon\ADR\Exceptions\MethodNotAllowed;
-use Phalcon\Contracts\ADR\Router\Reversible;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
 use Phalcon\Http\RequestInterface;
@@ -79,7 +78,7 @@ use Phalcon\Http\RequestInterface;
  * from any standard. REST is Fielding's dissertation, not an RFC; RFC 3986 and
  * RFC 9110 both leave path structure entirely to the origin server.
  */
-final class Router implements RouterInterface, Reversible
+final class Router implements RouterInterface
 {
     /**
      * @var string
