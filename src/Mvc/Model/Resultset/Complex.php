@@ -22,7 +22,6 @@ use Phalcon\Mvc\Model\Exceptions\CorruptColumnType;
 use Phalcon\Mvc\Model\Exceptions\InvalidContainer;
 use Phalcon\Mvc\Model\Exceptions\InvalidSerializationData;
 use Phalcon\Mvc\Model\Resultset;
-use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Support\Settings;
 use stdClass;

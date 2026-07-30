@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Phalcon\ADR\Input;
 
 use Phalcon\Contracts\Http\AttributeRequest;
-use Phalcon\Http\Request\Bag\AttributeBag;
 
 use function array_merge;
 use function is_array;

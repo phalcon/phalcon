@@ -19,7 +19,6 @@ use Phalcon\Logger\Item;
 
 use function closelog;
 use function openlog;
-use function sprintf;
 
 use const LOG_ALERT;
 use const LOG_CRIT;

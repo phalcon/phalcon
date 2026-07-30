@@ -21,7 +21,6 @@ use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\CannotInsertWithoutData;
 use Phalcon\Db\Exceptions\IncompleteBindTypes;
 use Phalcon\Db\Exceptions\InvalidDialectClass;
-use Phalcon\Db\Exceptions\InvalidWhereConditions;
 use Phalcon\Db\Exceptions\NestedTransactionChangeBlocked;
 use Phalcon\Db\Exceptions\SavepointsNotSupported;
 use Phalcon\Db\Exceptions\TableMustHaveColumn;

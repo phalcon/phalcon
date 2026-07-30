@@ -20,7 +20,6 @@ use Phalcon\ADR\Exceptions\MethodNotAllowed;
 use Phalcon\ADR\Exceptions\RouteNotFound;
 use Phalcon\ADR\Payload\Payload;
 use Phalcon\ADR\Payload\Status;
-use Phalcon\Contracts\ADR\Payload\Payload as PayloadContract;
 use Phalcon\Contracts\ADR\Responder\Responder;
 use Phalcon\Contracts\Logger\Logger;
 use Phalcon\Http\RequestInterface;

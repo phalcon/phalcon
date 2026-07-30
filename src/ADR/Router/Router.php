@@ -24,6 +24,7 @@ namespace Phalcon\ADR\Router;
 
 use Phalcon\ADR\Exceptions\ActionDirectoryNotSet;
 use Phalcon\ADR\Exceptions\MethodNotAllowed;
+use Phalcon\Contracts\ADR\Router\Reversible;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
 use Phalcon\Http\RequestInterface;
@@ -78,7 +79,7 @@ use Phalcon\Http\RequestInterface;
  * from any standard. REST is Fielding's dissertation, not an RFC; RFC 3986 and
  * RFC 9110 both leave path structure entirely to the origin server.
  */
-final class Router implements RouterInterface
+final class Router implements RouterInterface, Reversible
 {
     /**
      * @var string
@@ -168,37 +169,24 @@ final class Router implements RouterInterface
         return null;
     }
 
+    public function methodFor(string $className): ?string
+    {
+        $verb = $this->verbOf($className);
+
+        return $verb === null ? null : strtoupper($verb);
+    }
+
     public function pathFor(string $className): ?string
     {
-        $prefix = $this->baseNamespace . '\\';
-
-        if (strncmp($className, $prefix, strlen($prefix)) !== 0) {
+        if ($this->verbOf($className) === null) {
             return null;
         }
 
-        $parts = explode('\\', substr($className, strlen($prefix)));
-        $last  = array_pop($parts);
+        $parts = explode('\\', substr($className, strlen($this->baseNamespace) + 1));
+        array_pop($parts);
 
         if (empty($parts)) {
-            return in_array($last, $this->verbs(), true) ? '/' : null;
-        }
-
-        // The class name is the verb followed by every namespace segment, so
-        // the namespace alone reconstructs the static path and the class name
-        // only has to agree with it. Anything that does not agree is not a
-        // class this convention would ever have produced.
-        $verb = null;
-
-        foreach ($this->verbs() as $candidate) {
-            if ($last === $candidate . implode('', $parts)) {
-                $verb = $candidate;
-
-                break;
-            }
-        }
-
-        if ($verb === null) {
-            return null;
+            return '/';
         }
 
         // Placeholders are emitted at the level that declares them, so the
@@ -385,6 +373,41 @@ final class Router implements RouterInterface
         }
 
         return $stacked;
+    }
+
+    /**
+     * The class-name-form verb the given Action class carries, or null when the
+     * class is not one this convention would have produced.
+     *
+     * The class name is the verb followed by every namespace segment, so the
+     * namespace alone reconstructs the static path and the class name only has
+     * to agree with it. Anything that does not agree is not a class this
+     * convention would ever have produced.
+     *
+     * Shared by pathFor() and methodFor() so that rule is stated once.
+     */
+    protected function verbOf(string $className): ?string
+    {
+        $prefix = $this->baseNamespace . '\\';
+
+        if (strncmp($className, $prefix, strlen($prefix)) !== 0) {
+            return null;
+        }
+
+        $parts = explode('\\', substr($className, strlen($prefix)));
+        $last  = array_pop($parts);
+
+        if (empty($parts)) {
+            return in_array($last, $this->verbs(), true) ? $last : null;
+        }
+
+        foreach ($this->verbs() as $candidate) {
+            if ($last === $candidate . implode('', $parts)) {
+                return $candidate;
+            }
+        }
+
+        return null;
     }
 
     /**

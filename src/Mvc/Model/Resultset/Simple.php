@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Resultset;
 
-use Phalcon\Db\Enum;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;

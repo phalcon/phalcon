@@ -15,7 +15,6 @@ namespace Phalcon\Mvc\Model;
 
 use Closure;
 use Phalcon\Messages\MessageInterface;
-use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 
 /**

@@ -40,7 +40,6 @@ use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\DispatcherInterface;
 use Phalcon\Cli\Router;
 use Phalcon\Cli\RouterInterface;
-use Phalcon\Container\Resolver\Lazy\LazyFactory;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Contracts\Container\Service\Provider;
 use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;

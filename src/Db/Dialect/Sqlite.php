@@ -34,7 +34,6 @@ use Phalcon\Db\ReferenceInterface;
 
 use function addcslashes;
 use function is_array;
-use function is_string;
 use function strtoupper;
 use function substr;
 

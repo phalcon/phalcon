@@ -37,7 +37,6 @@ use function file_put_contents;
 use function filemtime;
 use function is_array;
 use function is_dir;
-use function is_object;
 
 use const PHP_EOL;
 

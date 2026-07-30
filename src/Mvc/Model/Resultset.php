@@ -24,7 +24,6 @@ use Phalcon\Mvc\Model\Exceptions\CursorIsImmutable;
 use Phalcon\Mvc\Model\Exceptions\IndexNotInCursor;
 use Phalcon\Mvc\Model\Exceptions\InvalidResultsetCacheService;
 use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
-use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 use SeekableIterator;

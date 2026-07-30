@@ -21,11 +21,9 @@ use Phalcon\Db\Exceptions\InvalidOrderByExpression;
 use Phalcon\Db\Exceptions\InvalidSqlExpression;
 use Phalcon\Db\Exceptions\InvalidSqlExpressionType;
 use Phalcon\Db\Exceptions\InvalidUnaryExpression;
-use Phalcon\Db\Exceptions\InvalidWhereConditions;
 use Phalcon\Db\Exceptions\MaterializedViewsNotSupported;
 use Phalcon\Db\Exceptions\MissingDefinitionKey;
 use Phalcon\Db\Exceptions\ReturningNotSupported;
-use Phalcon\Db\Exceptions\ReturningRequiresColumn;
 use Phalcon\Db\Exceptions\UnsupportedOperator;
 use Phalcon\Support\Settings;
 

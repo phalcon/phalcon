@@ -19,8 +19,6 @@ use Phalcon\Db\Enum;
 use Phalcon\Db\ResultInterface;
 
 use function is_object;
-use function preg_match;
-use function str_starts_with;
 
 /**
  * Encapsulates the resultset internals

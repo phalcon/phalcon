@@ -13,7 +13,6 @@ namespace Phalcon\Encryption;
 
 use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
 use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Di\DiInterface;
 use Phalcon\Encryption\Security\Exception;
 use Phalcon\Encryption\Security\Exceptions\UnknownHashAlgorithm;
 use Phalcon\Encryption\Security\Random;

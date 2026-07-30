@@ -21,7 +21,6 @@ use Phalcon\Db\Dialect\Traits\TextTrait;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\MissingDefinitionKey;
 use Phalcon\Db\Exceptions\MysqlOnConflictNotSupported;
-use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 

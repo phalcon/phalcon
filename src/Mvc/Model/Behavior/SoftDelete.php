@@ -15,7 +15,6 @@ namespace Phalcon\Mvc\Model\Behavior;
 
 use Phalcon\Mvc\Model\Behavior;
 use Phalcon\Mvc\Model\Behavior\Exceptions\MissingRequiredOption;
-use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 

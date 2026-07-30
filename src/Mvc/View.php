@@ -25,7 +25,6 @@ use Phalcon\Mvc\View\Exceptions\ViewNotFound;
 use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
 use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
 use Phalcon\Mvc\View\Traits\ViewParamsTrait;
-use Phalcon\Mvc\ViewInterface;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 use function array_keys;

@@ -21,7 +21,6 @@ namespace Phalcon\DataMapper\Query;
 use Phalcon\DataMapper\Pdo\Connection;
 
 use function array_merge;
-use function count;
 use function is_int;
 
 /**

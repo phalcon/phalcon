@@ -16,7 +16,6 @@ namespace Phalcon\Mvc\View\Engine\Volt;
 use Closure;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
-use Phalcon\Mvc\View\Engine\Volt\Exception;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CannotOpenCompiledFile;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatementWithData;

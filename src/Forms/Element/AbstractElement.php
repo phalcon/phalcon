@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
-use InvalidArgumentException;
 use Phalcon\Di\Di;
-use Phalcon\Di\DiInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Exceptions\FormElementNameRequired;

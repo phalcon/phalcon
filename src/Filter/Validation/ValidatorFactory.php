@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation;
 
 use Exception as BaseException;
-use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Between;

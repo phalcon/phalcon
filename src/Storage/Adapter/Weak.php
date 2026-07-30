@@ -18,7 +18,6 @@ use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 use WeakReference;
 
-use function is_int;
 use function is_object;
 
 /**

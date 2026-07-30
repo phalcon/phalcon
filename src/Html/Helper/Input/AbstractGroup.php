@@ -21,11 +21,9 @@ use Phalcon\Html\Helper\AbstractHelper;
 
 use function array_merge;
 use function implode;
-use function in_array;
 use function is_array;
 use function is_string;
 use function rtrim;
-use function str_contains;
 use function str_replace;
 
 use const PHP_EOL;

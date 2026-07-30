@@ -19,7 +19,6 @@ use Phalcon\Config\Exceptions\CannotLoadConfigFile;
 use Phalcon\Traits\Php\IniTrait;
 
 use function basename;
-use function count;
 use function is_array;
 use function is_numeric;
 use function preg_match;

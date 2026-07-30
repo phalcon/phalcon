@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Cache;
 
 use Exception as BaseException;
-use Phalcon\Cache\CacheInterface;
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Exception as SupportException;

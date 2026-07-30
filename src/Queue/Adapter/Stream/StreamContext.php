@@ -36,7 +36,6 @@ use function array_filter;
 use function array_shift;
 use function base64_decode;
 use function base64_encode;
-use function count;
 use function explode;
 use function fclose;
 use function file_exists;

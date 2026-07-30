@@ -18,8 +18,6 @@ use Phalcon\Db\Exceptions\ReferencedColumnCountMismatch;
 use Phalcon\Db\Exceptions\ReferencedColumnsRequired;
 use Phalcon\Db\Exceptions\ReferencedTableRequired;
 
-use function is_array;
-
 /**
  * Allows to define reference constraints on tables
  *

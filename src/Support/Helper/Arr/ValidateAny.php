@@ -15,8 +15,6 @@ namespace Phalcon\Support\Helper\Arr;
 
 use Phalcon\Traits\Support\Helper\Arr\FilterTrait;
 
-use function count;
-
 /**
  * Returns `true` if the provided function returns `true` for at least one
  * element of the collection, `false` otherwise.

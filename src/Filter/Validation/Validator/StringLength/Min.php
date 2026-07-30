@@ -15,7 +15,6 @@ namespace Phalcon\Filter\Validation\Validator\StringLength;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
-use Phalcon\Filter\Validation\Exception;
 use Phalcon\Messages\Message;
 use Phalcon\Traits\Php\InfoTrait;
 

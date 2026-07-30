@@ -20,7 +20,6 @@ use Phalcon\Cache\Exception\Exception;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
-use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Traversable;
 

@@ -18,11 +18,7 @@ use Phalcon\Filter\Validation\AbstractValidator;
 
 use function array_reverse;
 use function array_sum;
-use function restore_error_handler;
-use function set_error_handler;
 use function str_split;
-
-use const E_WARNING;
 
 /**
  * Checks if a value has a valid credit card number

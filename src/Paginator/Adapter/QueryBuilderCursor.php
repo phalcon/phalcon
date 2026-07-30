@@ -14,13 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Paginator\Adapter;
 
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Exceptions\InvalidBuilderInstance;
 use Phalcon\Paginator\Exceptions\InvalidCursorColumn;
 use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\RepositoryInterface;
 
-use function array_column;
 use function array_pop;
 use function count;
 use function is_numeric;

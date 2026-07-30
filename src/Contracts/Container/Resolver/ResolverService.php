@@ -34,7 +34,6 @@ namespace Phalcon\Contracts\Container\Resolver;
 
 use Phalcon\Contracts\Container\Ioc\IocContainer;
 use ReflectionMethod;
-use ReflectionParameter;
 use ReflectionType;
 
 interface ResolverService extends ReflectionParameterResolver

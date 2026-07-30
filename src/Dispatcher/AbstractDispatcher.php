@@ -15,13 +15,11 @@ namespace Phalcon\Dispatcher;
 
 use Exception;
 use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\Exception as PhalconException;
 use Phalcon\Dispatcher\Exceptions\ForwardInInitializeForbidden;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Filter\FilterInterface;
 use Phalcon\Mvc\Model\Binder;
 use Phalcon\Mvc\Model\BinderInterface;
 use Phalcon\Support\Collection;
@@ -39,7 +37,6 @@ use function preg_split;
 use function spl_object_hash;
 use function str_contains;
 use function str_ends_with;
-use function ucfirst;
 
 /**
  * This is the base class for Phalcon\Mvc\Dispatcher and Phalcon\Cli\Dispatcher.

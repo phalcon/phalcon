@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
-use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Flash\Exceptions\EscaperServiceUnavailable;

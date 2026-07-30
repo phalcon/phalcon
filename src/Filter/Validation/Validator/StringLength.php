@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
-use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\AbstractValidatorComposite;
-use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
 use Phalcon\Messages\Message;

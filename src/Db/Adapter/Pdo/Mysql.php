@@ -30,7 +30,6 @@ use Throwable;
 use function preg_match;
 use function str_contains;
 use function str_starts_with;
-use function strtolower;
 use function substr;
 
 /**

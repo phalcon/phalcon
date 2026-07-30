@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Parser;
 
-use function count;
 use function is_array;
 
 /**

@@ -18,14 +18,12 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
-use BadMethodCallException;
 use Phalcon\DataMapper\Pdo\Exception\UnknownQueryMethod;
 
 use function array_key_last;
 use function array_merge;
 use function array_shift;
 use function call_user_func_array;
-use function count;
 use function implode;
 use function is_int;
 use function ltrim;

@@ -15,7 +15,6 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
-use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Exceptions\InvalidDomainOption;
 use Phalcon\Filter\Validation\Exceptions\InvalidStrictOption;
 use Phalcon\Messages\Message;

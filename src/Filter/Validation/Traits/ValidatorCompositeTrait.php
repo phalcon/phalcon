@@ -17,7 +17,6 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Exceptions\NoValidatorsInComposite;
 
-use function count;
 use function get_class;
 
 /**

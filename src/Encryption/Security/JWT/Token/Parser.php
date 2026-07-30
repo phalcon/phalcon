@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT\Token;
 
-use InvalidArgumentException;
 use Phalcon\Encryption\Security\JWT\Exceptions\InvalidClaims;
 use Phalcon\Encryption\Security\JWT\Exceptions\InvalidHeader;
 use Phalcon\Encryption\Security\JWT\Exceptions\MalformedJwtString;
