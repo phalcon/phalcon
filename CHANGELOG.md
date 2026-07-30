@@ -7,10 +7,13 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 ### Changed
 
 - Changed `Phalcon\Mvc\Model\Resultset::refresh()` to reset the cursor - position, current row, buffered rows and active row - after replaying the statement. [#17399](https://github.com/phalcon/cphalcon/issues/17399) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- Changed `Phalcon\Events\Manager::getEventTypes()` to `getListenerMap()`, which now returns each event type mapped to its listeners. [#17416](https://github.com/phalcon/cphalcon/issues/17416) [[doc]](https://docs.phalcon.io/6.0/events/)
 
 ### Added
 
 - Added `Phalcon\ADR\Front\AbstractHttpFront::boot()`, which builds the container, loads the environment and registers the providers, then returns the container - for consumers that need it before, or instead of, `run()`. The container is built once and cached, so `boot()` and `run()` share the same instance. A bootstrap file can now be `return (new AppFront(dirname(__DIR__)))->boot();`. [#17413](https://github.com/phalcon/cphalcon/issues/17413) [[doc]](https://docs.phalcon.io/6.0/adr/)
+- Added `Phalcon\Contracts\Container\Service\Enumerable` implemented in `Phalcon\Container\Container`. [#17416](https://github.com/phalcon/cphalcon/issues/17416) [[doc]](https://docs.phalcon.io/6.0/container/)
+- Added `Phalcon\Contracts\Events\Enumerable`, implemented in `Phalcon\Events\Manager`. [#17416](https://github.com/phalcon/cphalcon/issues/17416) [[doc]](https://docs.phalcon.io/6.0/events/)
 
 ### Fixed
 
@@ -46,7 +49,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 - Added `pathFor()`, `setActionDirectory()` and `setWordSeparator()` to the `Phalcon\Contracts\ADR\Router\Router` contract and to `Phalcon\ADR\Router\Router`; the two setters are also on `Phalcon\ADR\Application`. `pathFor()` is the inverse of the routing convention, returning the canonical path an Action answers or `null`. Added `Phalcon\ADR\Exceptions\ActionDirectoryNotSet`. [#17405](https://github.com/phalcon/cphalcon/issues/17405) [[doc]](https://docs.phalcon.io/6.0/adr/)
 - Added `Phalcon\Container\Container::getServiceNames()`, returning the names of every registered service definition. Names that only exist as an alias, a pre-set instance or a parameter are not included. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/container/)
-- Added `Phalcon\Events\Manager::getEventTypes()`, returning the event types that currently have at least one listener attached, including those contributed by subscribers. Listeners attached with `attach()` were previously not enumerable at all, since `getListeners()` requires a known event type. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/events/)
+- ~~Added `Phalcon\Events\Manager::getEventTypes()`, returning the event types that currently have at least one listener attached, including those contributed by subscribers. Listeners attached with `attach()` were previously not enumerable at all, since `getListeners()` requires a known event type. [#17406](https://github.com/phalcon/cphalcon/issues/17406) [[doc]](https://docs.phalcon.io/6.0/events/)~~
 
 ### Fixed
 
