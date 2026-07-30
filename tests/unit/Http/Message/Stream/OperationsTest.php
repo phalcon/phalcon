@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Message\Stream;
 
-use Phalcon\Http\Message\Exception\InvalidArgumentException;
 use Phalcon\Http\Message\Exception\RuntimeException;
 use Phalcon\Http\Message\Stream;
 use Phalcon\Http\Message\Stream\Memory;

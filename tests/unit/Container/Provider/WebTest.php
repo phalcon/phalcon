@@ -33,9 +33,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container\Provider;
 
-use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
-use Phalcon\Annotations\Annotations;
-use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Container\Container;
 use Phalcon\Container\ContainerFactory;
 use Phalcon\Container\Provider\Web;
@@ -64,7 +61,6 @@ use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\ManagerInterface as ModelsManagerInterface;
 use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\MetaDataInterface;
-use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Model\Transaction\ManagerInterface as TransactionManagerInterface;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\RouterInterface;
