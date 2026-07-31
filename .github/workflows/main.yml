@@ -184,6 +184,108 @@ jobs:
           path: "tests/_output/coverage.cov"
           retention-days: 7
 
+  db-mariadb-tests:
+    name: MariaDB tests
+
+    permissions:
+      contents: read # to fetch code (actions/checkout)
+
+    runs-on: ubuntu-latest
+
+    needs:
+      - phpcs
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+          - '8.5'
+
+    services:
+      mariadb:
+        image: mariadb:10.6
+        ports:
+          - "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_USER: phalcon
+          MYSQL_DATABASE: phalcon
+          MYSQL_PASSWORD: secret
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:8-alpine
+        ports:
+          - "6379:6379"
+      memcached:
+        image: memcached:1.6-alpine
+        ports:
+          - "11211:11211"
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 1
+          token: ${{ github.token }}
+
+      - name: Setup platform specific environment
+        shell: pwsh
+        run: git config --global core.autocrlf false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          tools: pecl, phpize, php-config, composer:v2
+          coverage: pcov
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PHALCON_PATH: ext
+
+      - name: Validate composer
+        run: composer validate --no-check-all --no-check-publish
+
+      - name: Install development dependencies with Composer
+        uses: ramsey/composer-install@26d8a556604053a9612623447203a691f406fbe6 # v4
+        with:
+          composer-options: "--prefer-dist --ignore-platform-reqs"
+
+      - name: Setup Tests
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            ./resources/linux-setup-locales.sh
+          fi
+
+          cp tests/support/_config/.env.default .env
+          php bin/generate-db-schemas.php
+
+      - name: Run Database Tests (MariaDB)
+        env:
+          DATA_MARIADB_PORT: ${{ job.services.mariadb.ports['3306'] }}
+          DATA_MARIADB_USER: root
+          DATA_REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          DATA_MEMCACHED_PORT: ${{ job.services.memcached.ports['11211'] }}
+        run: composer test-db-mariadb-coverage
+
+      - name: Upload coverage file artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        if: always()
+        with:
+          name: "db-mariadb-${{ matrix.php }}.coverage"
+          path: "tests/_output/coverage.cov"
+          retention-days: 7
+
   db-mysql-tests:
     name: MySQL tests
 
@@ -484,6 +586,7 @@ jobs:
     needs:
       - phpcs
       - unit-tests
+      - db-mariadb-tests
       - db-mysql-tests
       - db-postgres-tests
       - db-sqlite-tests

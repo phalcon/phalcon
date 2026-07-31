@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cef740a4a5dea404292987fadefd75e7",
+    "content-hash": "ce8a4716facd9a252652b8d737a9cb40",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -879,16 +879,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.17",
+            "version": "v3.95.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "0ee88422118f3cc59c8c3def222ba7f1493b6d5b"
+                "reference": "a8b4e4216faabf67f4e96110ee99a48c96e4e683"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/0ee88422118f3cc59c8c3def222ba7f1493b6d5b",
-                "reference": "0ee88422118f3cc59c8c3def222ba7f1493b6d5b",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/a8b4e4216faabf67f4e96110ee99a48c96e4e683",
+                "reference": "a8b4e4216faabf67f4e96110ee99a48c96e4e683",
                 "shasum": ""
             },
             "require": {
@@ -972,7 +972,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.17"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.18"
             },
             "funding": [
                 {
@@ -980,7 +980,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-24T13:54:39+00:00"
+            "time": "2026-07-30T15:46:02+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1449,16 +1449,16 @@
         },
         {
             "name": "phalcon/talon",
-            "version": "v0.8.0",
+            "version": "v0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/talon.git",
-                "reference": "b8557e7056395df23ed2634d284b6b54362c4c25"
+                "reference": "ca1a825a4b3167802f0987d41122657dc817f259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/talon/zipball/b8557e7056395df23ed2634d284b6b54362c4c25",
-                "reference": "b8557e7056395df23ed2634d284b6b54362c4c25",
+                "url": "https://api.github.com/repos/phalcon/talon/zipball/ca1a825a4b3167802f0987d41122657dc817f259",
+                "reference": "ca1a825a4b3167802f0987d41122657dc817f259",
                 "shasum": ""
             },
             "require": {
@@ -1475,8 +1475,9 @@
                 "friendsofphp/php-cs-fixer": "^3",
                 "pds/composer-script-names": "^1",
                 "pds/skeleton": "^1",
-                "phalcon/phalcon": "^6.0@alpha",
+                "phalcon/phalcon": "^6.0@alpha || ^6.0 || ^6.0",
                 "phpstan/phpstan": "^2",
+                "phpunit/phpcov": "^9",
                 "phpunit/phpunit": "^10.5",
                 "predis/predis": "^2 || ^3",
                 "squizlabs/php_codesniffer": "^3 || ^4"
@@ -1510,7 +1511,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/talon/issues",
-                "source": "https://github.com/phalcon/talon/tree/v0.8.0"
+                "source": "https://github.com/phalcon/talon/tree/v0.9.0"
             },
             "funding": [
                 {
@@ -1522,7 +1523,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-07-15T19:50:31+00:00"
+            "time": "2026-07-30T19:51:18+00:00"
         },
         {
             "name": "phalcon/volt",

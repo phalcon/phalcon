@@ -52,7 +52,7 @@
     "pds/composer-script-names": "^1.0",
     "pds/skeleton": "^1.0",
     "phalcon/phql": "1.0.x-dev",
-    "phalcon/talon": "^0.8.0",
+    "phalcon/talon": "^0.9.0",
     "phalcon/volt": "1.0.x-dev",
     "phpbench/phpbench": "^1.4",
     "phpstan/phpstan": "^2.2",
@@ -71,6 +71,9 @@
     "test-unit": "talon run unit",
     "test-unit-coverage": "talon run unit -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
     "test-unit-coverage-html": "talon run unit -- --coverage-html tests/_output/coverage/",
+    "test-db-mariadb": "talon run mariadb",
+    "test-db-mariadb-coverage": "talon run mariadb -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
+    "test-db-mariadb-coverage-html": "talon run mariadb -- --coverage-html tests/_output/coverage/",
     "test-db-mysql": "talon run mysql",
     "test-db-mysql-coverage": "talon run mysql -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
     "test-db-mysql-coverage-html": "talon run mysql -- --coverage-html tests/_output/coverage/",
@@ -80,7 +83,7 @@
     "test-db-sqlite": "talon run sqlite",
     "test-db-sqlite-coverage": "talon run sqlite -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
     "test-db-sqlite-coverage-html": "talon run sqlite -- --coverage-html tests/_output/coverage/",
-    "test-db": "talon run mysql pgsql sqlite",
+    "test-db": "talon run mariadb mysql pgsql sqlite",
     "test-all": "talon run all"
   },
   "config": {

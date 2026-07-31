@@ -29,7 +29,11 @@ use Throwable;
 
 use function preg_match;
 use function str_contains;
+use function str_ends_with;
+use function str_replace;
 use function str_starts_with;
+use function stripcslashes;
+use function strlen;
 use function substr;
 
 /**
@@ -156,6 +160,18 @@ class Mysql extends PdoAdapter
         $fields  = $this->fetchAll(
             $this->dialect->describeColumns($tableName, $schemaName),
             Enum::FETCH_NUM
+        );
+
+        /**
+         * MariaDB stores `COLUMN_DEFAULT` as the DDL source rather than the
+         * resolved literal, so its string defaults arrive quoted. MySQL
+         * resolves them, and a MySQL default may legitimately contain quotes,
+         * so the unquoting below must only run for MariaDB. Both engines report
+         * `mysql` as the PDO driver name; only the version tells them apart.
+         */
+        $isMariaDb = str_contains(
+            (string) $this->pdo->getAttribute(PDO::ATTR_SERVER_VERSION),
+            'MariaDB'
         );
 
         /**
@@ -567,13 +583,23 @@ class Mysql extends PdoAdapter
                 }
 
                 /**
-                 * Check if the column has default value
+                 * Check if the column has default value.
+                 *
+                 * MariaDB reports a column declared `DEFAULT NULL` as the
+                 * literal string "NULL"; treat that sentinel as "no default"
+                 * so a nullable column is not given the string "NULL" as its
+                 * default, which would later be written back onto the model
+                 * attribute on save.
                  */
-                if (null !== $field[5]) {
+                if (null !== $field[5] && "NULL" !== $field[5]) {
+                    $defaultValue = $isMariaDb
+                        ? $this->unquoteDefault((string) $field[5])
+                        : $field[5];
+
                     if (str_contains((string) $extraValue, "on update")) {
-                        $definition["default"] = $field[5] . " " . $extraValue;
+                        $definition["default"] = $defaultValue . " " . $extraValue;
                     } else {
-                        $definition["default"] = $field[5];
+                        $definition["default"] = $defaultValue;
                     }
                 } elseif (str_contains((string) $extraValue, "on update")) {
                     $definition["default"] = "NULL " . $extraValue;
@@ -801,5 +827,31 @@ class Mysql extends PdoAdapter
 
         return str_contains($message, "server has gone away")
             || str_contains($message, "Lost connection");
+    }
+
+    /**
+     * Resolves a MariaDB `COLUMN_DEFAULT` literal to the value it represents.
+     *
+     * MariaDB quotes literal defaults to tell them apart from the expression
+     * defaults it has supported since 10.2. Expression defaults arrive
+     * unquoted, so an unmatched pair leaves the value untouched.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private function unquoteDefault(string $value): string
+    {
+        if (
+            strlen($value) < 2 ||
+            !str_starts_with($value, "'") ||
+            !str_ends_with($value, "'")
+        ) {
+            return $value;
+        }
+
+        return stripcslashes(
+            str_replace("''", "'", substr($value, 1, -1))
+        );
     }
 }
