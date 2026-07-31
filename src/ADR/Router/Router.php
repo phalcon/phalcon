@@ -410,7 +410,7 @@ final class Router implements RouterInterface
     }
 
     /**
-     * The HTTP verbs the convention recognises, in class-name form.
+     * The HTTP verbs the convention recognizes, in class-name form.
      *
      * @return list<string>
      */
