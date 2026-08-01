@@ -202,6 +202,9 @@ class Resolver implements ResolverService
         return $resolved;
     }
 
+    /**
+     * type is ReflectionType
+     */
     public function resolveType(
         object $ioc,
         ReflectionType $type

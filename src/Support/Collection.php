@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Support;
 
 use Countable;
-use Generator;
 use JsonSerializable;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Collection\Exceptions\InvalidValueType;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
 use Phalcon\Support\Helper\Json\Encode;
+use Traversable;
 
 use function array_key_first;
 use function array_key_last;
@@ -85,10 +85,7 @@ class Collection implements
     /**
      * Collection constructor.
      *
-     * @param array<int|string, mixed> $data
-     * @param bool                     $insensitive
-     * @param bool                     $strictNull
-     * @param string|null              $type
+     * @phpstan-param array<int|string, mixed> $data
      */
     public function __construct(
         array $data = [],
@@ -288,10 +285,8 @@ class Collection implements
 
     /**
      * Returns the generator of the class
-     *
-     * @return Generator<int|string, mixed>
      */
-    public function getIterator(): Generator
+    public function getIterator(): Traversable
     {
         foreach ($this->data as $key => $value) {
             yield $key => $value;

@@ -19,6 +19,9 @@ use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\Repository;
 use Phalcon\Paginator\RepositoryInterface;
 
+/**
+ * Phalcon\Paginator\Adapter\AbstractAdapter
+ */
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**

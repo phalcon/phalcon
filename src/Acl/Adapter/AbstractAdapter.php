@@ -88,7 +88,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Returns the role which the list is checking if 's allowed to certain
+     * Returns the role which the list is checking if it's allowed to certain
      * component/access
      *
      * @return string|null

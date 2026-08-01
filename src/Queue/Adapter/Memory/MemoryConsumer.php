@@ -32,6 +32,9 @@ use Phalcon\Queue\Adapter\AbstractConsumer;
  */
 class MemoryConsumer extends AbstractConsumer
 {
+    /**
+     * MemoryConsumer constructor.
+     */
     public function __construct(protected MemoryContext $context, QueueInterface $queue)
     {
         $this->queue = $queue;

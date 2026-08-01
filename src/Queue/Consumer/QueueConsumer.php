@@ -50,6 +50,9 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
      * @var array
      */
     protected array $bindings = [];
+    /**
+     * Milliseconds slept between poll passes when nothing was received.
+     */
     protected int $pollInterval = 200;
     protected bool $shouldStop = false;
 
@@ -57,6 +60,9 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
     {
     }
 
+    /**
+     * Binds a processor to a queue. Returns self for chaining.
+     */
     public function bind(QueueInterface $queue, ProcessorInterface $processor): QueueConsumer
     {
         $this->bindings[$queue->getQueueName()] = new BoundProcessor(
@@ -68,6 +74,10 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
         return $this;
     }
 
+    /**
+     * Runs the consumption loop, blocking up to timeout milliseconds (0 =
+     * block until stopped). The simple loop; production setups use Worker.
+     */
     public function consume(int $timeout = 0): void
     {
         if (!$this->start()) {
@@ -130,21 +140,35 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
         return $processed;
     }
 
+    /**
+     * Fires the `queue:afterEnd` event. Called once the loop exits.
+     */
     public function end(): void
     {
         $this->fireManagerEvent(Events::AFTER_END, null, false);
     }
 
+    /**
+     * Whether a stop has been requested (by a signal, `stop()`, or an
+     * `afterReceive` listener returning false).
+     */
     public function isStopRequested(): bool
     {
         return $this->shouldStop;
     }
 
+    /**
+     * Sets the poll interval (in milliseconds).
+     */
     public function setPollInterval(int $pollInterval): void
     {
         $this->pollInterval = $pollInterval;
     }
 
+    /**
+     * Resets the stop flag and fires `queue:beforeStart`. Returns false when a
+     * listener cancels the start.
+     */
     public function start(): bool
     {
         $this->shouldStop = false;
@@ -152,11 +176,17 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
         return $this->fireManagerEvent(Events::BEFORE_START) !== false;
     }
 
+    /**
+     * Requests the consumption loop to stop after the current message.
+     */
     public function stop(): void
     {
         $this->shouldStop = true;
     }
 
+    /**
+     * Applies a processor result (ACK / REJECT / REQUEUE) to the message.
+     */
     private function handleResult(ConsumerInterface $consumer, MessageInterface $message, mixed $result): void
     {
         $outcome = (string) $result;
@@ -170,6 +200,11 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
         }
     }
 
+    /**
+     * Runs the processor for one message, firing the process events and
+     * applying the outcome. A processor exception fires
+     * `queue:processorException` and rejects the message.
+     */
     private function process(BoundProcessor $binding, MessageInterface $message): void
     {
         $consumer  = $binding->getConsumer();

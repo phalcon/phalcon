@@ -37,6 +37,9 @@ use function usleep;
  */
 trait SubscriptionConsumerTrait
 {
+    /**
+     * Milliseconds slept between poll passes.
+     */
     protected int $pollInterval = 200;
 
     /**

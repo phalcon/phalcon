@@ -77,7 +77,7 @@ class Settings
      *
      * Resolution order:
      *   1. PHP-level override (set via Settings::set())
-     *   2. ini_get("phalcon.<key>") - the ini value, honouring php.ini / .htaccess
+     *   2. ini_get("phalcon.<key>") - the ini value, honoring php.ini / .htaccess
      *      (only available when the Phalcon C extension is loaded)
      *   3. Hardcoded default - mirrors the C extension's compiled-in defaults
      *   4. null - for unknown keys

@@ -39,16 +39,33 @@ use function usleep;
  */
 abstract class AbstractConsumer implements ConsumerInterface
 {
+    /**
+     * Milliseconds slept between poll attempts.
+     */
     protected int $pollInterval = 200;
+    /**
+     * The queue this consumer reads from.
+     */
     protected QueueInterface $queue;
 
+    /**
+     * Acknowledges the message; the transport may then discard it.
+     */
     abstract public function acknowledge(MessageInterface $message): void;
 
+    /**
+     * Returns the queue this consumer reads from.
+     */
     public function getQueue(): QueueInterface
     {
         return $this->queue;
     }
 
+    /**
+     * Receives a message, blocking up to timeout milliseconds (0 = block
+     * until one is available), by polling `receiveNoWait()` every
+     * `pollInterval` milliseconds. Returns null when none arrives in time.
+     */
     public function receive(int $timeout = 0): ?MessageInterface
     {
         $sleep     = $this->pollInterval * 1000;
@@ -69,10 +86,19 @@ abstract class AbstractConsumer implements ConsumerInterface
         }
     }
 
+    /**
+     * Receives a message without blocking, or null when none is ready.
+     */
     abstract public function receiveNoWait(): ?MessageInterface;
 
+    /**
+     * Rejects the message. When requeue is true the transport redelivers it.
+     */
     abstract public function reject(MessageInterface $message, bool $requeue = false): void;
 
+    /**
+     * Sets the poll interval (in milliseconds) used by `receive()`.
+     */
     public function setPollInterval(int $pollInterval): void
     {
         $this->pollInterval = $pollInterval;

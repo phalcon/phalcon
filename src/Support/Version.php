@@ -25,6 +25,8 @@ class Version
      * echo (new Phalcon\Support\Version())
      *          ->getPart(Phalcon\Support\Version::VERSION_MAJOR);
      * ```
+     *
+     * @var int
      */
     public const VERSION_MAJOR = 0;
 
@@ -35,6 +37,8 @@ class Version
      * echo (new Phalcon\Support\Version())
      *          ->getPart(Phalcon\Support\Version::VERSION_MEDIUM);
      * ```
+     *
+     * @var int
      */
     public const VERSION_MEDIUM = 1;
 
@@ -45,6 +49,8 @@ class Version
      * echo (new Phalcon\Support\Version())
      *          ->getPart(Phalcon\Support\Version::VERSION_MINOR);
      * ```
+     *
+     * @var int
      */
     public const VERSION_MINOR = 2;
 
@@ -55,6 +61,8 @@ class Version
      * echo (new Phalcon\Support\Version())
      *          ->getPart(Phalcon\Support\Version::VERSION_SPECIAL);
      * ```
+     *
+     * @var int
      */
     public const VERSION_SPECIAL = 3;
 

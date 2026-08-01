@@ -104,6 +104,19 @@ class Gettext extends AbstractAdapter
     }
 
     /**
+     * Check whether is defined a translation key in the internal array
+     *
+     * @param string $index
+     *
+     * @return bool
+     * @deprecated
+     */
+    public function exists(string $index): bool
+    {
+        return $this->has($index);
+    }
+
+    /**
      * @return int
      */
     public function getCategory(): int
@@ -275,10 +288,10 @@ class Gettext extends AbstractAdapter
      *
      * ```php
      * // Set locale to Dutch
-     * $gettext->setLocale(LC_ALL, "nl_NL");
+     * $gettext->setLocale(LC_ALL, ["nl_NL"]);
      *
      * // Try different possible locale names for German
-     * $gettext->setLocale(LC_ALL, "de_DE@euro", "de_DE", "de", "ge");
+     * $gettext->setLocale(LC_ALL, ["de_DE@euro", "de_DE", "de", "ge"]);
      * ```
      *
      * @phpstan-param array<string, mixed> $localeArray

@@ -19,6 +19,6 @@ class MissingContent extends Exception
 {
     public function __construct()
     {
-        parent::__construct('Translation content was not provided');
+        parent::__construct("Translation content was not provided");
     }
 }

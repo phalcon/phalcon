@@ -254,6 +254,8 @@ class HtmlRenderer implements Renderer
     }
 
     /**
+     * Escapes a string with htmlentities
+     *
      * @param string $value
      *
      * @return string
@@ -268,6 +270,8 @@ class HtmlRenderer implements Renderer
     }
 
     /**
+     * Produces a recursive representation of an array
+     *
      * @param array $arguments
      * @param int   $number
      *
@@ -306,6 +310,8 @@ class HtmlRenderer implements Renderer
     }
 
     /**
+     * Produces a string representation of a variable
+     *
      * @param mixed $variable
      *
      * @return string

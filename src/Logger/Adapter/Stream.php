@@ -98,6 +98,8 @@ class Stream extends AbstractAdapter
     }
 
     /**
+     * Stream name
+     *
      * @return string
      */
     public function getName(): string

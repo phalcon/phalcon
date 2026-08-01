@@ -31,6 +31,9 @@ use Phalcon\Queue\Adapter\AbstractMessage;
  */
 class BeanstalkMessage extends AbstractMessage
 {
+    /**
+     * The reserved Beanstalkd job id, or null before it is reserved.
+     */
     protected ?string $jobId = null;
 
     public function getJobId(): ?string

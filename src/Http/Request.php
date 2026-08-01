@@ -2192,6 +2192,8 @@ class Request extends AbstractInjectionAware implements
     }
 
     /**
+     * Helper to build the uploaded files array
+     *
      * @param array  $files
      * @param bool   $namedKeys
      * @param array  $input

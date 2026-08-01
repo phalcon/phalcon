@@ -38,6 +38,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     protected array $properties = [];
 
     /**
+     * {@inheritdoc}
+     *
      * @param string $property
      *
      * @return mixed
@@ -64,6 +66,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return array
      */
     public function getAliases(): array
@@ -72,6 +76,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getCurrent(): int
@@ -80,6 +86,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getFirst(): int
@@ -88,6 +96,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return mixed
      */
     public function getItems(): mixed
@@ -96,6 +106,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getLast(): int
@@ -104,6 +116,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getLimit(): int
@@ -112,6 +126,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getNext(): int
@@ -120,6 +136,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getPrevious(): int
@@ -128,6 +146,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return int
      */
     public function getTotalItems(): int
@@ -136,6 +156,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * See [jsonSerialize](https://php.net/manual/en/jsonserializable.jsonserialize.php)
+     *
      * @return array
      */
     public function jsonSerialize(): array
@@ -144,6 +166,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param array $aliases
      *
      * @return RepositoryInterface
@@ -156,6 +180,8 @@ class Repository implements RepositoryInterface, JsonSerializable
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param array $properties
      *
      * @return RepositoryInterface

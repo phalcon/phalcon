@@ -31,10 +31,16 @@ use Phalcon\Contracts\Queue\Topic as TopicInterface;
  */
 class GenericTopic implements TopicInterface
 {
+    /**
+     * GenericTopic constructor.
+     */
     public function __construct(protected string $topicName)
     {
     }
 
+    /**
+     * Returns the topic name.
+     */
     public function getTopicName(): string
     {
         return $this->topicName;

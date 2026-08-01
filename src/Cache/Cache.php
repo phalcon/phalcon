@@ -178,6 +178,9 @@ class Cache extends AbstractCache
         return $this->doSetMultiple($values, $ttl);
     }
 
+    /**
+     * Returns the exception class that will be used for exceptions thrown
+     */
     protected function getExceptionClass(): string
     {
         return InvalidArgumentException::class;

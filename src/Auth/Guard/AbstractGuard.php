@@ -105,6 +105,8 @@ abstract class AbstractGuard implements Guard
     }
 
     /**
+     * user should be ?AuthUser
+     *
      * @phpstan-param AuthCredentials $credentials
      *
      * @phpstan-assert-if-true !null $user

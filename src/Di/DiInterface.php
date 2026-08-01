@@ -58,6 +58,8 @@ interface DiInterface extends ArrayAccess
      * Resolves the service based on its configuration
      */
     /**
+     * Resolves the service based on its configuration
+     *
      * @param string     $name
      * @param array|null $parameters
      *

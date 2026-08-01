@@ -107,6 +107,10 @@ class Worker
         return $processed;
     }
 
+    /**
+     * Installs graceful-shutdown signal handlers when ext-pcntl is available;
+     * a no-op otherwise (the lifetime bounds still apply).
+     */
     private function installSignalHandlers(): void
     {
         if (!function_exists('pcntl_async_signals')) {

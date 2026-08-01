@@ -80,7 +80,7 @@ class RedisConnectionFactory implements ConnectionFactoryInterface
 
         /**
          * Surface connect/auth/select failures as a queue exception so every
-         * adapter honours the QueueThrowable contract.
+         * adapter honors the QueueThrowable contract.
          */
         try {
             $redis = $adapter->getAdapter();

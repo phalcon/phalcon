@@ -41,6 +41,9 @@ use Phalcon\Queue\Adapter\QueueDestinationGuard;
  */
 class BeanstalkContext extends AbstractContext implements Inspectable
 {
+    /**
+     * Shared connection used by producers and purges.
+     */
     protected ?BeanstalkConnection $connection = null;
 
     public function __construct(

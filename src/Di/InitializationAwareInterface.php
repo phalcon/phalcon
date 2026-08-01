@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+/**
+ * Interface for components that have `initialize()`
+ */
 interface InitializationAwareInterface
 {
     public function initialize(): void;

@@ -20,7 +20,7 @@ class KeyNotFound extends Exception
     public function __construct(string $key)
     {
         parent::__construct(
-            'Cannot find translation key: ' . $key
+            "Cannot find translation key: " . $key
         );
     }
 }

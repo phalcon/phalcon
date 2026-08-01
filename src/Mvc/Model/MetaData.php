@@ -123,6 +123,11 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     protected array $metaData = [];
 
     /**
+     * Holds metadata index writes that arrived before the model's metadata was
+     * properly initialized (e.g. skipAttributes() called in a parent model's
+     * initialize() while the child's source had not yet been set).  Applied
+     * inside initializeMetaData() after the real schema is loaded.
+     *
      * @var array
      */
     protected array $pendingMetaDataWrites = [];
@@ -626,6 +631,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
+     * Checks if the internal meta-data container is empty
+     *
+     * ```php
+     * var_dump(
+     *     $metaData->isEmpty()
+     * );
+     * ```
+     *
      * @return bool
      */
     public function isEmpty(): bool
@@ -839,7 +852,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
-     * Initialize old behaviour for compatability
+     * Initialize old behavior for compatability
      *
      * Set the attributes that allow empty string values
      *
@@ -941,6 +954,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     }
 
     /**
+     * Initialize old behavior for compatability
+     *
      * @param ModelInterface $model
      * @param                $key
      * @param                $table

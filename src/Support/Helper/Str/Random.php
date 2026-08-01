@@ -26,17 +26,36 @@ use function strlen;
 class Random
 {
     // Only alphanumeric characters [a-zA-Z0-9]
+    /**
+     * Only alphanumeric characters [a-zA-Z0-9]
+     */
     public const RANDOM_ALNUM = 0;
     // Only alphabetical characters [azAZ]
+    /**
+     * Only alphabetical characters [azAZ]
+     */
     public const RANDOM_ALPHA = 1;
     // Only alphanumeric uppercase characters exclude similar
     // characters [2345679ACDEFHJKLMNPRSTUVWXYZ]
+    /**
+     * Only alphanumeric uppercase characters exclude similar
+     * characters [2345679ACDEFHJKLMNPRSTUVWXYZ]
+     */
     public const RANDOM_DISTINCT = 5;
     // Only hexadecimal characters [0-9a-f]
+    /**
+     * Only hexadecimal characters [0-9a-f]
+     */
     public const RANDOM_HEXDEC = 2;
     // Only numbers without 0 [1-9]
+    /**
+     * Only numbers without 0 [1-9]
+     */
     public const RANDOM_NOZERO = 4;
     // Only numbers [0-9]
+    /**
+     * Only numbers [0-9]
+     */
     public const RANDOM_NUMERIC = 3;
 
     /**

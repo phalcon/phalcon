@@ -97,6 +97,8 @@ class Breadcrumbs extends AbstractHelper
     ];
 
     /**
+     * AbstractHelper constructor.
+     *
      * @param EscaperInterface  $escaper
      * @param UrlInterface|null $url
      */
@@ -402,6 +404,8 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
+     * Processes attributes
+     *
      * @param array<string, string> $attributes
      *
      * @return string

@@ -59,6 +59,8 @@ class Binder implements BinderInterface
     protected array $originalValues = [];
 
     /**
+     * Phalcon\Mvc\Model\Binder constructor
+     *
      * @param AdapterInterface|null $cache
      */
     public function __construct(

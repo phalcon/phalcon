@@ -20,7 +20,7 @@ class ImmutableObject extends Exception
     public function __construct()
     {
         parent::__construct(
-            'Translate is an immutable ArrayAccess object'
+            "Translate is an immutable ArrayAccess object"
         );
     }
 }

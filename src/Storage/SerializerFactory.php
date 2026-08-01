@@ -36,6 +36,8 @@ class SerializerFactory
     use FactoryTrait;
 
     /**
+     * SerializerFactory constructor.
+     *
      * @param string[] $services
      */
     public function __construct(array $services = [])
@@ -63,6 +65,8 @@ class SerializerFactory
     }
 
     /**
+     * Returns the available adapters
+     *
      * @return string[]
      */
     protected function getServices(): array

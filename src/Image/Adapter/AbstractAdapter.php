@@ -522,6 +522,9 @@ abstract class AbstractAdapter implements AdapterInterface
 
 
     /**
+     * Renders the supplied colour onto the image as the background. Channels
+     * are 0-255; the opacity is the validated 0-100 value.
+     *
      * @param int $red
      * @param int $green
      * @param int $blue
@@ -537,6 +540,8 @@ abstract class AbstractAdapter implements AdapterInterface
     ): void;
 
     /**
+     * Applies a blur. The radius is already clamped to 1-100.
+     *
      * @param int $radius
      *
      * @return void
@@ -544,6 +549,9 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processBlur(int $radius): void;
 
     /**
+     * Crops the image. Width, height and both offsets are already normalized
+     * to fit within the current canvas.
+     *
      * @param int $width
      * @param int $height
      * @param int $offsetX
@@ -559,6 +567,9 @@ abstract class AbstractAdapter implements AdapterInterface
     ): void;
 
     /**
+     * Flips the image. The direction is already normalized to
+     * Enum::HORIZONTAL or Enum::VERTICAL.
+     *
      * @param int $direction
      *
      * @return void
@@ -566,6 +577,9 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processFlip(int $direction): void;
 
     /**
+     * Composites the supplied image as a mask onto this one. The mask is read
+     * through its public render() output, so it may be any adapter backend.
+     *
      * @param AdapterInterface $mask
      *
      * @return void
@@ -573,6 +587,8 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processMask(AdapterInterface $mask);
 
     /**
+     * Pixelates the image. The amount is already at least 2.
+     *
      * @param int $amount
      *
      * @return void
@@ -580,6 +596,9 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processPixelate(int $amount): void;
 
     /**
+     * Adds a reflection. The height is clamped to the image height and the
+     * opacity to 0-100.
+     *
      * @param int  $height
      * @param int  $opacity
      * @param bool $fadeIn
@@ -593,6 +612,9 @@ abstract class AbstractAdapter implements AdapterInterface
     ): void;
 
     /**
+     * Renders the image to a binary string. The extension is non-empty and the
+     * quality is already clamped to 1-100. Returns the encoded bytes.
+     *
      * @param string $extension
      * @param int    $quality
      *
@@ -602,6 +624,9 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processRender(string $extension, int $quality);
 
     /**
+     * Resizes the image. Width and height are already resolved to positive
+     * integers per the requested resize mode.
+     *
      * @param int $width
      * @param int $height
      *
@@ -610,6 +635,8 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processResize(int $width, int $height): void;
 
     /**
+     * Rotates the image. The degrees value is already normalized to -180..180.
+     *
      * @param int $degrees
      *
      * @return void
@@ -617,6 +644,8 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processRotate(int $degrees): void;
 
     /**
+     * Saves the image to the supplied file path.
+     *
      * @param string $file
      * @param int    $quality
      *
@@ -626,6 +655,8 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processSave(string $file, int $quality): bool;
 
     /**
+     * Sharpens the image. The amount is already clamped to 1-100.
+     *
      * @param int $amount
      *
      * @return void
@@ -633,6 +664,9 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract protected function processSharpen(int $amount): void;
 
     /**
+     * Renders text onto the image. The opacity is clamped to 0-100 and the
+     * colour is supplied as separate 0-255 channels.
+     *
      * @param string      $text
      * @param mixed       $offsetX
      * @param mixed       $offsetY
@@ -659,6 +693,10 @@ abstract class AbstractAdapter implements AdapterInterface
     ): void;
 
     /**
+     * Composites the supplied watermark onto this image. Offsets and opacity
+     * are already clamped to the valid range; the watermark is read through
+     * its public render() output, so it may be any adapter backend.
+     *
      * @param AdapterInterface $watermark
      * @param int              $offsetX
      * @param int              $offsetY

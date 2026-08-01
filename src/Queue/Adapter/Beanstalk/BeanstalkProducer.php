@@ -42,7 +42,13 @@ class BeanstalkProducer extends AbstractProducer
      */
     public const DEFAULT_PRIORITY = 100;
 
+    /**
+     * Delivery delay in milliseconds, or null when not set.
+     */
     protected ?int $deliveryDelay = null;
+    /**
+     * Job priority, or null when not set.
+     */
     protected ?int $priority      = null;
 
     public function __construct(protected BeanstalkContext $context)

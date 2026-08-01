@@ -597,6 +597,8 @@ class Di extends stdClass implements DiInterface
     }
 
     /**
+     * Registers an "always shared" service in the services container
+     *
      * @param string $name
      * @param mixed  $definition
      *

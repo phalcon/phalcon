@@ -1503,7 +1503,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * echo "The first virtual invoice name is ", $invoice->inv_title;
      *
-     * // behaviour with transaction
+     * // behavior with transaction
      * $myTransaction = new Transaction(\Phalcon\Di\Di::getDefault());
      * $myTransaction->begin();
      *
@@ -2263,7 +2263,7 @@ abstract class Model extends AbstractInjectionAware implements
         return $this;
     }
 
-    /***
+    /**
      * Append messages to this model from another Model.
      *
      * @param ModelInterface $model
@@ -3196,6 +3196,8 @@ abstract class Model extends AbstractInjectionAware implements
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @return MetaDataInterface
      * @throws Exception
      */

@@ -292,6 +292,8 @@ class Route implements RouteInterface
     }
 
     /**
+     * {@inheritdoc}
+     *
      * @param string $name
      * @param mixed  $converter
      *

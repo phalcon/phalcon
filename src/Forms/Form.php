@@ -554,6 +554,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     }
 
     /**
+     * return ValidationInterface|null
+     *
      * @return ValidationInterface|null
      */
     public function getValidation(): ValidationInterface | null
@@ -653,6 +655,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     }
 
     /**
+     * return array
+     *
      * @return array
      */
     public function getWhitelist(): array

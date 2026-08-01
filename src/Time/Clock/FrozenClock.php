@@ -49,7 +49,7 @@ final class FrozenClock implements ClockInterface
     {
         return new FrozenClock(
             new DateTimeImmutable(
-                'now',
+                "now",
                 new DateTimeZone(date_default_timezone_get())
             )
         );
@@ -61,7 +61,7 @@ final class FrozenClock implements ClockInterface
     public static function fromUTC(): FrozenClock
     {
         return new FrozenClock(
-            new DateTimeImmutable('now', new DateTimeZone('UTC'))
+            new DateTimeImmutable("now", new DateTimeZone("UTC"))
         );
     }
 

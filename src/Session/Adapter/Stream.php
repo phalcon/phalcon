@@ -128,6 +128,8 @@ class Stream extends Noop
     }
 
     /**
+     * Garbage Collector
+     *
      * @param int $max_lifetime
      *
      * @return false|int
@@ -173,6 +175,8 @@ class Stream extends Noop
     }
 
     /**
+     * Reads data from the adapter
+     *
      * @param string $id
      *
      * @return string

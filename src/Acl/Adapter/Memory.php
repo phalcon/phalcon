@@ -529,6 +529,8 @@ class Memory extends AbstractAdapter
     }
 
     /**
+     * Returns the latest function used to acquire access
+     *
      * @return mixed
      */
     public function getActiveFunction(): mixed
@@ -537,6 +539,8 @@ class Memory extends AbstractAdapter
     }
 
     /**
+     * Returns number of additional arguments(excluding role and resource) for active function
+     *
      * @return int
      */
     public function getActiveFunctionCustomArgumentsCount(): int

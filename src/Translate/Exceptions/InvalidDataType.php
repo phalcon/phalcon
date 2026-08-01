@@ -19,6 +19,6 @@ class InvalidDataType extends Exception
 {
     public function __construct()
     {
-        parent::__construct('Translation data must be an array');
+        parent::__construct("Translation data must be an array");
     }
 }

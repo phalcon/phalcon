@@ -65,6 +65,9 @@ use const PHP_EOL;
  */
 class StreamContext extends AbstractContext
 {
+    /**
+     * Directory (with trailing separator) that holds the queue files.
+     */
     protected string $storageDir = "";
 
     public function __construct(string $storageDir, protected int $pollInterval = 200)

@@ -38,11 +38,17 @@ class AdapterFactory
 {
     use FactoryTrait;
 
+    /**
+     * AdapterFactory constructor.
+     */
     public function __construct(array $services = [])
     {
         $this->init($services);
     }
 
+    /**
+     * Creates a new ConnectionFactory for the named adapter.
+     */
     public function newInstance(string $name, array $options = []): ConnectionFactoryInterface
     {
         $definition = $this->getService($name);

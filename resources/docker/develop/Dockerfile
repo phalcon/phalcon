@@ -112,4 +112,4 @@ SHELL [ "/bin/bash", "--rcfile", "/home/${USER}/.bashrc", "-o", "pipefail", "-c"
 
 WORKDIR /app
 
-#USER ${USER}
+USER ${USER}

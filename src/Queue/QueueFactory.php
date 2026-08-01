@@ -64,6 +64,9 @@ class QueueFactory
         return $this->newInstance($name, $options);
     }
 
+    /**
+     * Builds a Context for the named adapter.
+     */
     public function newInstance(string $name, array $options = []): ContextInterface
     {
         $connectionFactory = $this->adapterFactory->newInstance($name, $options);

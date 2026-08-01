@@ -50,9 +50,14 @@ use function trim;
 class BeanstalkConnection
 {
     /**
+     * Connection resource.
+     *
      * @var resource|null
      */
     protected $connection = null;
+    /**
+     * Tube currently selected with `use`. A fresh connection uses "default".
+     */
     protected string $usedTube = "default";
 
     /**

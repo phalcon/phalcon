@@ -15,6 +15,9 @@ namespace Phalcon\Translate\Interpolator;
 
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
+/**
+ * Class AssociativeArray
+ */
 class AssociativeArray implements InterpolatorInterface
 {
     use InterpolateTrait;

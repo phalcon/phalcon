@@ -35,6 +35,9 @@ use Phalcon\Queue\Adapter\QueueDestinationGuard;
  */
 class RedisProducer extends AbstractProducer
 {
+    /**
+     * Delivery delay in milliseconds, or null when not set.
+     */
     protected ?int $deliveryDelay = null;
 
     public function __construct(protected RedisContext $context)

@@ -31,10 +31,16 @@ use Phalcon\Contracts\Queue\Queue as QueueInterface;
  */
 class GenericQueue implements QueueInterface
 {
+    /**
+     * GenericQueue constructor.
+     */
     public function __construct(protected string $queueName)
     {
     }
 
+    /**
+     * Returns the queue name.
+     */
     public function getQueueName(): string
     {
         return $this->queueName;

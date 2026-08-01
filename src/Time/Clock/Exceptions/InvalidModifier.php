@@ -23,10 +23,10 @@ use Throwable;
 
 class InvalidModifier extends Exception
 {
-    public function __construct(string $message, ?Throwable $ex = null)
+    public function __construct(string $modifier, ?Throwable $ex = null)
     {
         parent::__construct(
-            message: 'Invalid modifier: "' . $message . '"',
+            message: 'Invalid modifier: "' . $modifier. '"',
             previous: $ex
         );
     }

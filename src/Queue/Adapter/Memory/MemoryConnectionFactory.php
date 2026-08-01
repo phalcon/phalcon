@@ -30,10 +30,16 @@ use Phalcon\Contracts\Queue\Context as ContextInterface;
  */
 class MemoryConnectionFactory implements ConnectionFactoryInterface
 {
+    /**
+     * MemoryConnectionFactory constructor.
+     */
     public function __construct(protected array $options = [])
     {
     }
 
+    /**
+     * Creates a new in-process context.
+     */
     public function createContext(): ContextInterface
     {
         return new MemoryContext();
