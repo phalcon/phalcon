@@ -71,7 +71,7 @@ interface Adapter
      */
     public function addInherit(
         string $roleName,
-        RoleInterface | array | string $roleToInherit
+        array | RoleInterface | string $roleToInherit
     ): bool;
 
     /**
@@ -87,7 +87,7 @@ interface Adapter
      */
     public function addRole(
         mixed $roleObject,
-        RoleInterface | array | string | null $accessInherits = null
+        array | RoleInterface | string | null $accessInherits = null
     ): bool;
 
     /**
@@ -181,7 +181,7 @@ interface Adapter
      *
      * @param string $roleName
      *
-     * @return array<int|string, string|array<int, string>>
+     * @return array<int|string, array<int, string>|string>
      */
     public function getInheritedRoles(string $roleName = ''): array | null;
 

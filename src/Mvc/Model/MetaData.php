@@ -774,12 +774,12 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param ModelInterface $model
      * @param int            $index
      *
-     * @return array|string|bool|null
+     * @return array|bool|string|null
      * @throws Exception
      * @todo check the return type; 8 seems to be only string
      *
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): array | string | bool | null
+    final public function readMetaDataIndex(ModelInterface $model, int $index): array | bool | string | null
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {

@@ -31,7 +31,7 @@ interface StatusInterface
     /**
      * Returns the model which executed the action
      *
-     * @return ModelInterface | null
+     * @return ModelInterface|null
      */
     public function getModel(): ModelInterface | null;
 

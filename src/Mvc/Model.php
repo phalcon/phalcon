@@ -330,7 +330,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $method
      * @param array  $arguments
      *
-     * @return bool|int|mixed|Simple|ModelInterface|ModelInterface[]|null
+     * @return bool|int|mixed|ModelInterface|ModelInterface[]|Simple|null
      * @throws Exception
      */
     public function __call(string $method, array $arguments)
@@ -1415,7 +1415,7 @@ abstract class Model extends AbstractInjectionAware implements
      * $transaction2->rollback();
      * ```
      *
-     * @param array|string|int|null $parameters = {
+     * @param array|int|string|null $parameters = {
      *
      * @option string "conditions"
      * @option string "columns"
@@ -1543,7 +1543,7 @@ abstract class Model extends AbstractInjectionAware implements
      * );
      * ```
      *
-     * @param array|string|int|null $parameters = {
+     * @param array|int|string|null $parameters = {
      *
      * @option string "conditions"
      * @option string "columns"
@@ -1562,7 +1562,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @option ?bool  "hydration"
      * }
      *
-     * @return T|Row|null
+     * @return Row|T|null
      * @throws Exception
      */
     public static function findFirst(
@@ -1847,7 +1847,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $method
      * @param array  $arguments
      *
-     * @return ModelInterface[]|ModelInterface|bool|void
+     * @return bool|ModelInterface|ModelInterface[]|void
      * @throws Exception
      */
     final protected static function invokeFinder(
@@ -3813,9 +3813,9 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param int $dirtyState
      *
-     * @return ModelInterface|bool
+     * @return bool|ModelInterface
      */
-    public function setDirtyState(int $dirtyState): ModelInterface | bool
+    public function setDirtyState(int $dirtyState): bool | ModelInterface
     {
         $this->dirtyState = $dirtyState;
 
@@ -4018,7 +4018,7 @@ abstract class Model extends AbstractInjectionAware implements
      * $post->setSync(["tags", "categories"], false)->save();
      *```
      *
-     * @param string|array|null $elements
+     * @param array|string|null $elements
      * @param bool              $enabled
      *
      * @return ModelInterface
@@ -5606,7 +5606,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param string $method
      * @param array  $arguments
      *
-     * @return false|int|mixed|Simple|ModelInterface
+     * @return false|int|mixed|ModelInterface|Simple
      * @throws Exception
      */
     protected function getRelatedRecords(
@@ -5846,7 +5846,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param mixed        $fields
      * @param string       $referenceModel
-     * @param string|array $referencedFields
+     * @param array|string $referencedFields
      * @param array  $options {
      *
      * @option bool   "reusable"

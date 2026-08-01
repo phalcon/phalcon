@@ -94,7 +94,7 @@ enum ModelEventNameEnum: string
         };
     }
 
-    public static function tryFromEventClass(string $eventClassName): self|null
+    public static function tryFromEventClass(string $eventClassName): self | null
     {
         try {
             return self::fromEventClass($eventClassName);

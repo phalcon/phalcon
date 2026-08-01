@@ -128,8 +128,8 @@ class Security extends AbstractInjectionAware implements SecurityContract
      * @param RequestInterface|null $request
      */
     public function __construct(
-        private SessionInterface|null $session = null,
-        private RequestInterface|null $request = null
+        private SessionInterface | null $session = null,
+        private RequestInterface | null $request = null
     ) {
         $this->random = new Random();
     }

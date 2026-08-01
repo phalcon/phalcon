@@ -119,9 +119,9 @@ interface CriteriaInterface
     /**
      * Returns the columns to be queried
      *
-     * @return string|array|null
+     * @return array|string|null
      */
-    public function getColumns(): string | array | null;
+    public function getColumns(): array | string | null;
 
     /**
      * Returns the conditions parameter in the criteria
@@ -151,9 +151,9 @@ interface CriteriaInterface
      * - An array with 'number' and 'offset' keys if an offset was set with the limit
      * - NULL if limit has not been set
      *
-     * @return int|array|null
+     * @return array|int|null
      */
-    public function getLimit(): int | array | null;
+    public function getLimit(): array | int | null;
 
     /**
      * Returns an internal model name on which the criteria will be applied

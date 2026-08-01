@@ -48,7 +48,7 @@ class Route implements RouteInterface
      *
      * @mixed string|null|false
      */
-    protected string | null | false $compiledHostName = false;
+    protected false | string | null $compiledHostName = false;
 
     /**
      * @mixed string|null

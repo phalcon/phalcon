@@ -198,14 +198,14 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Attach a listener to the events manager
      *
      * @param string|string[] $eventType
-     * @param object|callable $handler
+     * @param callable|object $handler
      * @param int             $priority
      *
      * @return void
      * @throws InvalidEventHandler
      */
     final public function attach(
-        string | array $eventType,
+        array | string $eventType,
         callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
@@ -281,12 +281,12 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Detach the listener from the events manager
      *
      * @param string          $eventType
-     * @param object|callable $handler
+     * @param callable|object $handler
      *
      * @return void
      * @throws InvalidEventHandler
      */
-    public function detach(string $eventType, object | callable $handler): void
+    public function detach(string $eventType, callable | object $handler): void
     {
         if (false === $this->isValidHandler($handler)) {
             throw new InvalidEventHandler();
@@ -345,7 +345,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      */
     public function dispatch(
         object $event,
-        string | array | null $name = null,
+        array | string | null $name = null,
         ?object $source = null
     ): mixed {
         if (empty($this->events)) {

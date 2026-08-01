@@ -41,7 +41,7 @@ abstract class AbstractLocator
      * @param array<string, class-string<T>> $services
      */
     public function __construct(
-        protected readonly Collection|DiInterface $container,
+        protected readonly Collection | DiInterface $container,
         array $services = []
     ) {
         $this->services = $this->getServices();

@@ -23,20 +23,20 @@ use function is_array;
 class Select extends AbstractElement
 {
     /**
-     * @var object|array|null
+     * @var array|object|null
      */
-    protected object | array | null $optionsValues = null;
+    protected array | object | null $optionsValues = null;
 
     /**
      * Constructor
      *
      * @param string            $name
-     * @param object|array|null $options
+     * @param array|object|null $options
      * @param array             $attributes
      */
     public function __construct(
         string $name,
-        object | array | null $options = null,
+        array | object | null $options = null,
         array $attributes = []
     ) {
         $this->optionsValues = $options;

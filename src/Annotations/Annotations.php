@@ -174,9 +174,9 @@ class Annotations
      *
      * @param string $key
      *
-     * @return Reflection|bool
+     * @return bool|Reflection
      */
-    public function read(string $key): Reflection | bool
+    public function read(string $key): bool | Reflection
     {
         return $this->adapter->get(strtolower($key)) ?? false;
     }

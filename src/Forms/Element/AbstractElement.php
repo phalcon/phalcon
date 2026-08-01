@@ -255,7 +255,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the element label
      *
-     * @return string | null
+     * @return string|null
      */
     public function getLabel(): string | null
     {

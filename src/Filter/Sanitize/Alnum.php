@@ -23,7 +23,7 @@ use function preg_replace;
 class Alnum implements Sanitizer
 {
     /**
-     * @param string[]|string $input The text to sanitize
+     * @param string|string[] $input The text to sanitize
      *
      * @return string|string[]|null
      */

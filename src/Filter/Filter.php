@@ -52,7 +52,7 @@ use function is_string;
  * @method string       email(string $input)
  * @method float        float(mixed $input)
  * @method int          int(string $input)
- * @method string|false ip(string $input, int $filter = FILTER_FLAG_NONE)
+ * @method false|string ip(string $input, int $filter = FILTER_FLAG_NONE)
  * @method string       lower(string $input)
  * @method string       lowerfirst(string $input)
  * @method mixed        regex(mixed $input, mixed $pattern, mixed $replace)
@@ -211,7 +211,7 @@ class Filter implements FilterInterface
      * passed to the sanitizer as a single value.
      *
      * @param mixed                                 $value
-     * @param array<array-key, string|array>|string $sanitizers
+     * @param array<array-key, array|string>|string $sanitizers
      * @param bool                                  $noRecursive
      *
      * @return array|false|mixed|null

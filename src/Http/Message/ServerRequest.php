@@ -111,14 +111,14 @@ class ServerRequest extends AbstractRequest implements
      * ServerRequest constructor.
      *
      * @param string                    $method
-     * @param UriInterface|string|null  $uri
+     * @param string|UriInterface|null  $uri
      * @param array                     $serverParams
      * @param StreamInterface|string    $body
      * @param array|CollectionInterface $headers
      * @param array                     $cookies
      * @param array                     $queryParams
      * @param array                     $uploadFiles
-     * @param null|array|object         $parsedBody
+     * @param array|object|null         $parsedBody
      * @param string                    $protocol
      */
     public function __construct(

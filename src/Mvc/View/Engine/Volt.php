@@ -285,7 +285,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * @param int        $start
      * @param mixed|null $end
      *
-     * @return array | string
+     * @return array|string
      */
     public function slice(mixed $value, int $start = 0, mixed $end = null): array | string
     {

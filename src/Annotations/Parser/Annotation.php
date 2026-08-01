@@ -52,7 +52,7 @@ class Annotation
     /**
      * Returns an argument in a specific position
      *
-     * @param int | string $position
+     * @param int|string $position
      *
      * @return mixed
      */
@@ -118,7 +118,7 @@ class Annotation
     /**
      * Returns an argument in a specific position
      *
-     * @param int | string $position
+     * @param int|string $position
      *
      * @return bool
      */

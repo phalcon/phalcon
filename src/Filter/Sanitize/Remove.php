@@ -23,8 +23,8 @@ use function str_replace;
 class Remove implements Sanitizer
 {
     /**
-     * @param string[]|string $input
-     * @param string[]|string $replace
+     * @param string|string[] $input
+     * @param string|string[] $replace
      *
      * @return string|string[]
      */

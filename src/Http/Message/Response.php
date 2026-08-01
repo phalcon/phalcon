@@ -60,7 +60,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * Response constructor.
      *
-     * @param StreamInterface|resource|string $body
+     * @param resource|StreamInterface|string $body
      * @param int                             $code
      * @param array                           $headers
      */

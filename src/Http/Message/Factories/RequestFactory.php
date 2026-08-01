@@ -32,7 +32,7 @@ final class RequestFactory implements RequestFactoryInterface
      * Create a new request.
      *
      * @param string                   $method
-     * @param UriInterface|string|null $uri
+     * @param string|UriInterface|null $uri
      *
      * @return RequestInterface
      */

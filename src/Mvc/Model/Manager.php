@@ -1019,7 +1019,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @param ModelInterface $model
      *
-     * @return RelationInterface[] | array
+     * @return array|RelationInterface[]
      */
     public function getBelongsTo(ModelInterface $model): array
     {
@@ -1035,7 +1035,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param mixed|null     $parameters
      * @param string|null    $method
      *
-     * @return ResultsetInterface|bool
+     * @return bool|ResultsetInterface
      * @throws Exception
      */
     public function getBelongsToRecords(
@@ -1044,7 +1044,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $record,
         mixed $parameters = null,
         string | null $method = null
-    ): ResultsetInterface | bool {
+    ): bool | ResultsetInterface {
         /**
          * Check if there is a relation between them
          */
@@ -1071,7 +1071,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Returns the newly created Phalcon\Mvc\Model\Query\Builder or null
      *
-     * @return BuilderInterface | null
+     * @return BuilderInterface|null
      */
     public function getBuilder(): BuilderInterface | null
     {
@@ -1100,7 +1100,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @param ModelInterface $model
      *
-     * @return EventsManagerInterface | null
+     * @return EventsManagerInterface|null
      */
     public function getCustomEventsManager(
         ModelInterface $model
@@ -1129,7 +1129,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param mixed|null     $parameters
      * @param string|null    $method
      *
-     * @return ResultsetInterface|bool
+     * @return bool|ResultsetInterface
      * @throws Exception
      */
     public function getHasManyRecords(
@@ -1138,7 +1138,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $record,
         mixed $parameters = null,
         string | null $method = null
-    ): ResultsetInterface | bool {
+    ): bool | ResultsetInterface {
         /**
          * Check if there is a relation between them
          */
@@ -1210,7 +1210,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param mixed|null     $parameters
      * @param string|null    $method
      *
-     * @return ModelInterface|bool
+     * @return bool|ModelInterface
      * @throws Exception
      */
     public function getHasOneRecords(
@@ -1219,7 +1219,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $record,
         mixed $parameters = null,
         string | null $method = null
-    ): ModelInterface | bool {
+    ): bool | ModelInterface {
         /**
          * Check if there is a relation between them
          */
@@ -1371,12 +1371,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param string $modelName
      * @param string $alias
      *
-     * @return RelationInterface|bool
+     * @return bool|RelationInterface
      */
     public function getRelationByAlias(
         string $modelName,
         string $alias
-    ): RelationInterface | bool {
+    ): bool | RelationInterface {
         return $this->aliases[strtolower($modelName . "$" . $alias)] ?? false;
     }
 
@@ -1388,7 +1388,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array|string|null $parameters
      * @param string|null       $method
      *
-     * @return Simple|ModelInterface|int|false
+     * @return false|int|ModelInterface|Simple
      * @throws Exception
      */
     public function getRelationRecords(
@@ -1693,7 +1693,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param string $first
      * @param string $second
      *
-     * @return RelationInterface[]|bool
+     * @return bool|RelationInterface[]
      */
     public function getRelationsBetween(string $first, string $second): array | bool
     {
@@ -2407,7 +2407,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @return string|null
      */
     private function getUniqueKey(
-        ModelInterface|CacheKeyProvider $model,
+        CacheKeyProvider | ModelInterface $model,
         mixed $prefix,
         mixed $value
     ): string | null {

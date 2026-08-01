@@ -723,9 +723,9 @@ abstract class AbstractPdo extends AbstractAdapter
      *
      * @param string|null $name
      *
-     * @return string|bool
+     * @return bool|string
      */
-    public function lastInsertId(string | null $name = null): string | bool
+    public function lastInsertId(string | null $name = null): bool | string
     {
         return $this->pdo->lastInsertId($name);
     }
@@ -804,7 +804,7 @@ abstract class AbstractPdo extends AbstractAdapter
      * @param array  $bindParams
      * @param array  $bindTypes
      *
-     * @return ResultInterface|bool
+     * @return bool|ResultInterface
      * @throws EventsException
      * @throws Exception
      */
@@ -812,7 +812,7 @@ abstract class AbstractPdo extends AbstractAdapter
         string $sqlStatement,
         array $bindParams = [],
         array $bindTypes = []
-    ): ResultInterface | bool {
+    ): bool | ResultInterface {
         /**
          * Execute the beforeQuery event if an EventsManager is available
          */
@@ -1028,13 +1028,13 @@ abstract class AbstractPdo extends AbstractAdapter
      * @param array  $bindParams
      * @param array  $bindTypes
      *
-     * @return int|false
+     * @return false|int
      */
     private function executeStatement(
         string $sqlStatement,
         array $bindParams,
         array $bindTypes
-    ): int | false {
+    ): false | int {
         $affectedRows = 0;
 
         if (!empty($bindParams)) {

@@ -185,7 +185,7 @@ class PdoResult implements ResultInterface
      *```
      *
      * @param int                      $mode
-     * @param int|string|callable|null $fetchArgument
+     * @param callable|int|string|null $fetchArgument
      * @param array|null               $constructorArgs
      *
      * @return array
@@ -330,7 +330,7 @@ class PdoResult implements ResultInterface
      */
     public function setFetchMode(
         int $fetchMode,
-        null | object | string $colNoOrClassNameOrObject = null,
+        object | string | null $colNoOrClassNameOrObject = null,
         mixed $ctorargs = null
     ): bool {
         if (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO === $fetchMode) {

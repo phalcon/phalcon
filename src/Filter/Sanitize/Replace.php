@@ -23,9 +23,9 @@ use function str_replace;
 class Replace implements Sanitizer
 {
     /**
-     * @param string[]|string $input
-     * @param string[]|string $source
-     * @param string[]|string $target
+     * @param string|string[] $input
+     * @param string|string[] $source
+     * @param string|string[] $target
      *
      * @return string|string[]
      */

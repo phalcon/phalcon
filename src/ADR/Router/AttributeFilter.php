@@ -86,7 +86,7 @@ final class AttributeFilter implements AttributeFilterInterface
         return $result;
     }
 
-    protected function cast(string $value, string $type): int | float | string
+    protected function cast(string $value, string $type): float | int | string
     {
         return match ($type) {
             'int'   => (int) $value,

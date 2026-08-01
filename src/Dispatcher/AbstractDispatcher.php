@@ -880,8 +880,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets a param by its name or numeric index
      *
-     * @param string|int        $param
-     * @param string|array|null $filters
+     * @param int|string        $param
+     * @param array|string|null $filters
      * @param mixed             $defaultValue
      *
      * @return mixed
@@ -894,8 +894,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * major version.
      */
     public function getParam(
-        string | int $param,
-        string | array | null $filters = null,
+        int | string $param,
+        array | string | null $filters = null,
         mixed $defaultValue = null
     ): mixed {
         return $this->getParameter($param, $filters, $defaultValue);
@@ -904,15 +904,15 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets a param by its name or numeric index
      *
-     * @param string|int        $param
-     * @param string|array|null $filters
+     * @param int|string        $param
+     * @param array|string|null $filters
      * @param mixed             $defaultValue
      *
      * @return mixed
      */
     public function getParameter(
-        string | int $param,
-        string | array | null $filters = null,
+        int | string $param,
+        array | string | null $filters = null,
         mixed $defaultValue = null
     ): mixed {
         if (!isset($this->params[$param])) {
@@ -1001,12 +1001,12 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Check if a param exists
      *
-     * @param string|int $param
+     * @param int|string $param
      *
      * @return bool
      * @deprecated Use hasParameter() instead
      */
-    public function hasParam(string | int $param): bool
+    public function hasParam(int | string $param): bool
     {
         return $this->hasParameter($param);
     }
@@ -1014,11 +1014,11 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Check if a param exists
      *
-     * @param string|int $param
+     * @param int|string $param
      *
      * @return bool
      */
-    public function hasParameter(string | int $param): bool
+    public function hasParameter(int | string $param): bool
     {
         return isset($this->params[$param]);
     }
@@ -1148,13 +1148,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Set a param by its name or numeric index
      *
-     * @param string|int $param
+     * @param int|string $param
      * @param mixed      $value
      *
      * @return void
      * @deprecated Use setParameter() instead
      */
-    public function setParam(string | int $param, mixed $value): void
+    public function setParam(int | string $param, mixed $value): void
     {
         $this->setParameter($param, $value);
     }
@@ -1162,12 +1162,12 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Set a param by its name or numeric index
      *
-     * @param string|int $param
+     * @param int|string $param
      * @param mixed      $value
      *
      * @return void
      */
-    public function setParameter(string | int $param, mixed $value): void
+    public function setParameter(int | string $param, mixed $value): void
     {
         $this->params[$param] = $value;
     }

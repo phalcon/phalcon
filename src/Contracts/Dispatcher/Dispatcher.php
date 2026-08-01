@@ -26,7 +26,7 @@ interface Dispatcher
     /**
      * Dispatches a handle action taking into account the routing parameters
      *
-     * @return mixed|bool
+     * @return bool|mixed
      */
     public function dispatch();
 
@@ -63,8 +63,8 @@ interface Dispatcher
     /**
      * Gets a param by its name or numeric index
      *
-     * @param string|int        $param
-     * @param string|array|null $filters
+     * @param int|string        $param
+     * @param array|string|null $filters
      *
      * @return mixed
      * @deprecated Use getParameter() instead
@@ -73,17 +73,17 @@ interface Dispatcher
      * implementation accepts; the two will be aligned in the next major
      * version.
      */
-    public function getParam(string | int $param, string | array | null $filters = null): mixed;
+    public function getParam(int | string $param, array | string | null $filters = null): mixed;
 
     /**
      * Gets a param by its name or numeric index
      *
-     * @param string|int        $param
-     * @param string|array|null $filters
+     * @param int|string        $param
+     * @param array|string|null $filters
      *
      * @return mixed
      */
-    public function getParameter(string | int $param, string | array | null $filters = null): mixed;
+    public function getParameter(int | string $param, array | string | null $filters = null): mixed;
 
     /**
      * Gets action params
@@ -105,12 +105,12 @@ interface Dispatcher
     /**
      * Check if a param exists
      *
-     * @param string|int $param
+     * @param int|string $param
      *
      * @return bool
      * @deprecated Use hasParameter() instead
      */
-    public function hasParam(string | int $param): bool;
+    public function hasParam(int | string $param): bool;
 
     /**
      * Checks if the dispatch loop is finished or has more pendent
@@ -186,13 +186,13 @@ interface Dispatcher
     /**
      * Set a param by its name or numeric index
      *
-     * @param string|int $param
+     * @param int|string $param
      * @param mixed      $value
      *
      * @return void
      * @deprecated Use setParameter() instead
      */
-    public function setParam(string | int $param, mixed $value): void;
+    public function setParam(int | string $param, mixed $value): void;
 
     /**
      * Sets action params to be dispatched

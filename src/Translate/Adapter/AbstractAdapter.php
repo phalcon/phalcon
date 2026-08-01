@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
-use Exception as BaseException;
+use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\ImmutableObject;
 use Phalcon\Translate\Exceptions\KeyNotFound;
 use Phalcon\Translate\Interpolator\InterpolatorInterface;
@@ -37,7 +37,7 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     protected string $defaultInterpolator = '';
 
     /**
-     * @var InterpolatorInterface | null
+     * @var InterpolatorInterface|null
      */
     protected InterpolatorInterface | null $interpolator = null;
 
@@ -159,7 +159,7 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      * @phpstan-param array<string, string> $placeholders
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     protected function replacePlaceholders(
         string $translation,

@@ -75,12 +75,12 @@ class ConfigFactory
     /**
      * Load a config to create a new instance
      *
-     * @param TConfig|string|Config $config
+     * @param Config|string|TConfig $config
      *
      * @return ConfigInterface
      * @throws Exception
      */
-    public function load(array | string | Config $config): ConfigInterface
+    public function load(array | Config | string $config): ConfigInterface
     {
         $configArray = $this->parseConfig($config);
 
@@ -111,7 +111,7 @@ class ConfigFactory
      *
      * @param string                                  $name
      * @param string                                  $fileName
-     * @param array<string, callable>|string|int|null $params
+     * @param array<string, callable>|int|string|null $params
      *
      * @return ConfigInterface
      * @throws BaseException
@@ -119,7 +119,7 @@ class ConfigFactory
     public function newInstance(
         string $name,
         string $fileName,
-        array | string | int | null $params = null
+        array | int | string | null $params = null
     ): ConfigInterface {
         $definition = $this->getService($name);
         $arguments  = [$fileName];
@@ -189,7 +189,7 @@ class ConfigFactory
     }
 
     /**
-     * @param TConfig|ConfigInterface|string $config
+     * @param ConfigInterface|string|TConfig $config
      *
      * @return TConfigReturn
      * @throws Exception

@@ -36,11 +36,11 @@ interface ModelInterface
      *
      * @param array $parameters
      *
-     * @return ResultsetInterface|float
+     * @return float|ResultsetInterface
      */
     public static function average(
         array $parameters = []
-    ): ResultsetInterface | float;
+    ): float | ResultsetInterface;
 
     /**
      * Assigns values to a model from an array returning a new model
@@ -117,7 +117,7 @@ interface ModelInterface
      *
      * @param mixed|null $parameters
      *
-     * @return T[]|\Phalcon\Mvc\Model\Resultset<int, T>
+     * @return \Phalcon\Mvc\Model\Resultset<int, T>|T[]
      */
     public static function find(mixed $parameters = null);
 
@@ -132,7 +132,7 @@ interface ModelInterface
      *
      * @param mixed|null $parameters
      *
-     * @return T|ModelInterface|Row|null
+     * @return ModelInterface|Row|T|null
      */
     public static function findFirst(mixed $parameters = null);
 
@@ -172,9 +172,9 @@ interface ModelInterface
      *
      * @param mixed|null $parameters
      *
-     * @return ResultsetInterface|float
+     * @return float|ResultsetInterface
      */
-    public static function sum(mixed $parameters = null): ResultsetInterface | float;
+    public static function sum(mixed $parameters = null): float | ResultsetInterface;
     /**
      * Appends a customized message on the validation process
      *
@@ -349,9 +349,9 @@ interface ModelInterface
      *
      * @param int $dirtyState
      *
-     * @return ModelInterface|bool
+     * @return bool|ModelInterface
      */
-    public function setDirtyState(int $dirtyState): ModelInterface | bool;
+    public function setDirtyState(int $dirtyState): bool | ModelInterface;
 
     /**
      * Sets the DependencyInjection connection service used to read data
@@ -377,7 +377,7 @@ interface ModelInterface
      * Marks one or more many-to-many relationships to be synchronized (or not)
      * on the next save() call.
      *
-     * @param string|array|null $elements
+     * @param array|string|null $elements
      * @param bool              $enabled
      *
      * @return ModelInterface

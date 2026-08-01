@@ -71,7 +71,7 @@ class Messages implements MessagesContract, JsonSerializable
      * $messages->appendMessages($messagesArray);
      *```
      *
-     * @param MessageInterface[]|Iterator $messages
+     * @param Iterator|MessageInterface[] $messages
      *
      * @throws MessagesNotIterable
      */

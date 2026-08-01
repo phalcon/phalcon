@@ -23,9 +23,9 @@ use function preg_replace;
 class Regex implements Sanitizer
 {
     /**
-     * @param string[]|string $input
-     * @param string[]|string $pattern
-     * @param string[]|string $replace
+     * @param string|string[] $input
+     * @param string|string[] $pattern
+     * @param string|string[] $replace
      *
      * @return string|string[]|null
      */

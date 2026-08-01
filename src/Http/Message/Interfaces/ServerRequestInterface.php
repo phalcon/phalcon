@@ -118,7 +118,7 @@ interface ServerRequestInterface extends RequestInterface
      * potential types MUST be arrays or objects only. A null value indicates
      * the absence of body content.
      *
-     * @return null|array|object The deserialized body parameters, if any.
+     * @return array|object|null The deserialized body parameters, if any.
      *     These will typically be an array or object.
      */
     public function getParsedBody();
@@ -239,7 +239,7 @@ interface ServerRequestInterface extends RequestInterface
      * immutability of the message, and MUST return an instance that has the
      * updated body parameters.
      *
-     * @param null|array|object $data The deserialized body data. This will
+     * @param array|object|null $data The deserialized body data. This will
      *                                typically be in an array or object.
      *
      * @return ServerRequestInterface

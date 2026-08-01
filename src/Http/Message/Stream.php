@@ -208,7 +208,7 @@ class Stream implements StreamInterface
      *
      * @param string|null $key
      *
-     * @return TMetadata|bool|int|mixed|string|null
+     * @return bool|int|mixed|string|TMetadata|null
      */
     public function getMetadata(string | null $key = null)
     {
@@ -233,7 +233,7 @@ class Stream implements StreamInterface
     public function getSize(): int | null
     {
         if (null !== $this->handle) {
-            /** @var TStat|false $stats */
+            /** @var false|TStat $stats */
             $stats = fstat($this->handle);
 
             if (false !== $stats) {

@@ -517,13 +517,13 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @param array  $paths        reversed-paths map (position => name)
      * @param mixed  $replacements user-supplied key=>value replacements (array portion used)
      *
-     * @return string|false|null
+     * @return false|string|null
      */
     private function replacePaths(
         string $pattern,
         array $paths,
         mixed $replacements
-    ): string | false | null {
+    ): false | string | null {
         if (!is_array($replacements)) {
             return null;
         }

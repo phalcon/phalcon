@@ -50,7 +50,7 @@ class Simple extends Resultset
      *
      * @param array|string          $columnMap
      * @param ModelInterface|Row    $model
-     * @param ResultInterface|false $result
+     * @param false|ResultInterface $result
      * @param mixed|null            $cache
      * @param bool                  $keepSnapshots
      *

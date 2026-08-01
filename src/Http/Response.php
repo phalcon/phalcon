@@ -430,10 +430,10 @@ class Response extends Injectable implements
     /**
      * Sends headers to the client
      *
-     * @return ResponseInterface|bool
+     * @return bool|ResponseInterface
      * @throws EventsException
      */
-    public function sendHeaders(): ResponseInterface | bool
+    public function sendHeaders(): bool | ResponseInterface
     {
         if (false === $this->fireManagerEvent('response:beforeSendHeaders')) {
             return false;

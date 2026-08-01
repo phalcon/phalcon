@@ -327,7 +327,7 @@ interface Adapter
      *
      * @return string
      */
-    public function escapeIdentifier(array | string | int | float $identifier): string;
+    public function escapeIdentifier(array | float | int | string $identifier): string;
 
     /**
      * Escapes a value to avoid SQL injections
@@ -392,7 +392,7 @@ interface Adapter
      * @param array      $placeholders
      * @param int|string $column
      *
-     * @return string|bool
+     * @return bool|string
      */
     public function fetchColumn(
         string $sqlQuery,
@@ -620,9 +620,9 @@ interface Adapter
      * @param string|null $name Name of the sequence object from which the ID
      *                          should be returned.
      *
-     * @return string|bool
+     * @return bool|string
      */
-    public function lastInsertId(string | null $name = null): string | bool;
+    public function lastInsertId(string | null $name = null): bool | string;
 
     /**
      * Appends a LIMIT clause to sqlQuery argument
@@ -678,13 +678,13 @@ interface Adapter
      * @param array  $bindParams
      * @param array  $bindTypes
      *
-     * @return ResultInterface|bool
+     * @return bool|ResultInterface
      */
     public function query(
         string $sqlStatement,
         array $bindParams = [],
         array $bindTypes = []
-    ): ResultInterface | bool;
+    ): bool | ResultInterface;
 
     /**
      * Releases given savepoint

@@ -73,7 +73,7 @@ class UploadedFile implements UploadedFileInterface
      * Implementations SHOULD return the value stored in the 'type' key of
      * the file in the $_FILES array.
      *
-     * @var string | null
+     * @var string|null
      */
     private string | null $clientMediaType;
 
@@ -320,7 +320,7 @@ class UploadedFile implements UploadedFileInterface
     /**
      * Checks the passed error code and if not in the range throws an exception
      *
-     * @param StreamInterface|resource|string $stream
+     * @param resource|StreamInterface|string $stream
      * @param int                             $error
      *
      * @return void

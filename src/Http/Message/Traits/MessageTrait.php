@@ -302,7 +302,7 @@ trait MessageTrait
     /**
      * Set a valid stream
      *
-     * @param StreamInterface|resource|string $body
+     * @param resource|StreamInterface|string $body
      * @param string                          $mode
      *
      * @return StreamInterface

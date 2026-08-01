@@ -118,9 +118,9 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      *
      * @param int $dirtyState
      *
-     * @return ModelInterface|bool
+     * @return bool|ModelInterface
      */
-    public function setDirtyState(int $dirtyState): ModelInterface | bool
+    public function setDirtyState(int $dirtyState): bool | ModelInterface
     {
         return false;
     }

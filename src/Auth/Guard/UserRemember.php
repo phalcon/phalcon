@@ -37,9 +37,9 @@ final class UserRemember
      * decoded associative array. Malformed input degrades to an empty
      * payload so callers can read getters without null-guarding.
      *
-     * @param string|array<string, mixed> $payload
+     * @param array<string, mixed>|string $payload
      */
-    public function __construct(string | array $payload)
+    public function __construct(array | string $payload)
     {
         try {
             $data = is_string($payload) ? (new Decode())->__invoke($payload, true) : $payload;

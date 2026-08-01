@@ -452,9 +452,9 @@ class Column implements ColumnInterface
     /**
      * Column data type values
      *
-     * @var array|string|int
+     * @var array|int|string
      */
-    protected array | string | int $typeValues = [];
+    protected array | int | string $typeValues = [];
 
     /**
      * Phalcon\Db\Column constructor
@@ -674,7 +674,7 @@ class Column implements ColumnInterface
      *
      * @return array|string
      */
-    public function getTypeValues(): array | string | int
+    public function getTypeValues(): array | int | string
     {
         return $this->typeValues;
     }

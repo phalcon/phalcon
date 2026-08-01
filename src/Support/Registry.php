@@ -229,7 +229,7 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/serializable.serialize.php
      */
-    final public function serialize(): string|null
+    final public function serialize(): string | null
     {
         return parent::serialize();
     }

@@ -50,13 +50,13 @@ class ServiceDefinition
      * @var array<array-key, mixed>
      */
     protected array $arguments = [];
-    protected string|null $className = null;
+    protected string | null $className = null;
     /**
      * @var array
      */
     protected array $constructorArgs = [];
 
-    protected object|null $container = null;
+    protected object | null $container = null;
     /**
      * @var array<array-key, callable>
      */
@@ -342,7 +342,7 @@ class ServiceDefinition
      * @return $this
      * @throws FrozenDefinition
      */
-    public function setArgument(int|string $param, mixed $value): static
+    public function setArgument(int | string $param, mixed $value): static
     {
         $this->checkFrozen();
         $this->arguments[$param] = $value;

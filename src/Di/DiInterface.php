@@ -46,7 +46,7 @@ interface DiInterface extends ArrayAccess
      * @param mixed  $definition
      * @param bool   $shared
      *
-     * @return ServiceInterface|bool
+     * @return bool|ServiceInterface
      */
     public function attempt(
         string $name,

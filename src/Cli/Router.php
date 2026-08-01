@@ -230,9 +230,9 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @param string $routeId
      *
-     * @return RouteInterface|bool
+     * @return bool|RouteInterface
      */
-    public function getRouteById(string $routeId): RouteInterface | bool
+    public function getRouteById(string $routeId): bool | RouteInterface
     {
         return $this->routes[$routeId] ?? false;
     }
@@ -242,9 +242,9 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *
      * @param string $name
      *
-     * @return RouteInterface|bool
+     * @return bool|RouteInterface
      */
-    public function getRouteByName(string $name): RouteInterface | bool
+    public function getRouteByName(string $name): bool | RouteInterface
     {
         /** @var RouteInterface $route */
         foreach ($this->routes as $route) {

@@ -46,7 +46,7 @@ abstract class AbstractUuid implements UuidInterface
      *
      * @var NodeProviderInterface|null
      */
-    protected static NodeProviderInterface|null $nodeProvider = null;
+    protected static NodeProviderInterface | null $nodeProvider = null;
 
     /**
      * The generated UUID string.

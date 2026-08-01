@@ -666,12 +666,12 @@ abstract class AbstractConnection implements ConnectionInterface
      * @param string $statement
      * @param array  $options
      *
-     * @return \PDOStatement|false
+     * @return false|\PDOStatement
      */
     public function prepare(
         string $statement,
         array $options = []
-    ): PDOStatement | bool {
+    ): bool | PDOStatement {
         $this->connect();
 
         $this->profiler->start(__FUNCTION__);
@@ -700,9 +700,9 @@ abstract class AbstractConnection implements ConnectionInterface
      * @param string $statement
      * @param mixed  ...$fetch
      *
-     * @return \PDOStatement|false
+     * @return false|\PDOStatement
      */
-    public function query(string $statement): PDOStatement | bool
+    public function query(string $statement): bool | PDOStatement
     {
         $this->connect();
 

@@ -645,7 +645,7 @@ class Uri extends AbstractCommon implements UriInterface
     /**
      * Filters the port
      *
-     * @param int | null $port
+     * @param int|null $port
      *
      * @return int|null
      */

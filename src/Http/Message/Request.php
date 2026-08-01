@@ -36,8 +36,8 @@ class Request extends AbstractRequest implements
      * Request constructor.
      *
      * @param string                          $method
-     * @param UriInterface|string|null        $uri
-     * @param StreamInterface|resource|string $body
+     * @param string|UriInterface|null        $uri
+     * @param resource|StreamInterface|string $body
      * @param array|CollectionInterface       $headers
      */
     public function __construct(

@@ -211,7 +211,7 @@ interface ManagerInterface
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): ResultsetInterface | bool;
+    ): bool | ResultsetInterface;
 
     /**
      * Returns the newly created Phalcon\Mvc\Model\Query\Builder or null
@@ -244,7 +244,7 @@ interface ManagerInterface
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): ResultsetInterface | bool;
+    ): bool | ResultsetInterface;
 
     /**
      * Gets hasManyToMany relations defined on a model
@@ -288,7 +288,7 @@ interface ManagerInterface
         ModelInterface $record,
         array | string | null $parameters = null,
         string | null $method = null
-    ): ModelInterface | bool;
+    ): bool | ModelInterface;
 
     /**
      * Gets hasOneThrough relations defined on a model
@@ -355,12 +355,12 @@ interface ManagerInterface
      * @param string $modelName
      * @param string $alias
      *
-     * @return RelationInterface|bool
+     * @return bool|RelationInterface
      */
     public function getRelationByAlias(
         string $modelName,
         string $alias
-    ): RelationInterface | bool;
+    ): bool | RelationInterface;
 
     /**
      * Helper method to query records based on a relation definition
@@ -370,7 +370,7 @@ interface ManagerInterface
      * @param array|string|null $parameters
      * @param string|null       $method
      *
-     * @return ModelInterface|Simple|int|false
+     * @return false|int|ModelInterface|Simple
      */
     public function getRelationRecords(
         RelationInterface $relation,
@@ -394,7 +394,7 @@ interface ManagerInterface
      * @param string $first
      * @param string $second
      *
-     * @return RelationInterface[]|bool
+     * @return bool|RelationInterface[]
      */
     public function getRelationsBetween(
         string $first,

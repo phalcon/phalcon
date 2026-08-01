@@ -99,12 +99,12 @@ class Application extends AbstractApplication
      *
      * @param string $uri
      *
-     * @return ResponseInterface|bool
+     * @return bool|ResponseInterface
      * @throws ApplicationException
      * @throws Exception
      * @throws EventsException
      */
-    public function handle(string $uri): ResponseInterface | bool
+    public function handle(string $uri): bool | ResponseInterface
     {
         $this->checkContainer(ContainerRequired::class, 'internal services');
 

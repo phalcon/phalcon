@@ -174,7 +174,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
     /**
      * @throws Exception
      */
-    public function loginById(int | string $id, bool $remember = false): false | AuthUser
+    public function loginById(int | string $id, bool $remember = false): AuthUser | false
     {
         $resolved = $this->adapter->retrieveById($id);
         if ($resolved === null) {
@@ -233,7 +233,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
     public function onceBasic(
         string $field = 'email',
         array $extraConditions = []
-    ): false | AuthUser {
+    ): AuthUser | false {
         $credentials = $this->basicCredentials($field);
         if ($credentials === null) {
             return false;

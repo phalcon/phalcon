@@ -220,8 +220,8 @@ class Validation extends Injectable implements ValidationInterface
      * @return ValidationInterface
      */
     public function bind(
-        object|null $entity,
-        array|object|null $data,
+        object | null $entity,
+        array | object | null $data,
         array $whitelist = []
     ): static {
         $this->setEntity($entity);
@@ -603,14 +603,14 @@ class Validation extends Injectable implements ValidationInterface
      * @param object|null $entity the entity object to assign data to
      * @param array $whitelist only allow these fields to be mutated when entity is used
      *
-     * @return Messages|false
+     * @return false|Messages
      * @throws ValidationException
      */
     public function validate(
-        array|object|null $data = null,
-        object|null $entity = null,
+        array | object | null $data = null,
+        object | null $entity = null,
         array $whitelist = []
-    ): Messages | false {
+    ): false | Messages {
         /**
          * Clear pre-calculated values
          */

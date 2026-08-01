@@ -76,14 +76,14 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @param string                $key
      * @param mixed                 $value
-     * @param null|int|DateInterval $ttl
+     * @param DateInterval|int|null $ttl
      *
      * @return bool
      */
     abstract public function set(
         string $key,
         mixed $value,
-        null | int | DateInterval $ttl = null
+        DateInterval | int | null $ttl = null
     ): bool;
 
     /**
@@ -320,7 +320,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @param string                $key    The key of the item to store.
      * @param mixed                 $value  The value of the item to store.
      *                                      Must be serializable.
-     * @param null|int|DateInterval $ttl    Optional. The TTL value of this
+     * @param DateInterval|int|null $ttl    Optional. The TTL value of this
      *                                      item. If no value is sent and the
      *                                      driver supports TTL then the library
      *                                      may set a default value for it or
@@ -335,7 +335,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     protected function doSet(
         string $key,
         mixed $value,
-        null | int | DateInterval $ttl = null
+        DateInterval | int | null $ttl = null
     ): bool {
         $this->checkKey($key);
 
@@ -353,7 +353,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @param iterable<mixed, mixed> $values A list of key => value pairs for a
      *                                       multiple-set operation.
-     * @param null|int|DateInterval  $ttl    Optional. The TTL value of this
+     * @param DateInterval|int|null  $ttl    Optional. The TTL value of this
      *                                       item. If no value is sent and the
      *                                       driver supports TTL then the
      *                                       library may set a default value for

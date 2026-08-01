@@ -103,7 +103,7 @@ abstract class AbstractGroup extends AbstractHelper
                 continue;
             }
 
-            /** @var string|array<string, mixed> $definition */
+            /** @var array<string, mixed>|string $definition */
             $lines[] = $this->renderItem((string) $value, $definition);
         }
 
@@ -127,11 +127,11 @@ abstract class AbstractGroup extends AbstractHelper
      * Renders a single input + optional label pair.
      *
      * @param string       $value
-     * @param string|array<string, mixed> $definition
+     * @param array<string, mixed>|string $definition
      *
      * @return string
      */
-    protected function renderItem(string $value, string | array $definition): string
+    protected function renderItem(string $value, array | string $definition): string
     {
         if (is_array($definition)) {
             $label     = $definition['label'] ?? null;

@@ -39,7 +39,7 @@ class Env extends Lazy
 {
     public function __construct(
         protected string $varname,
-        protected string|null $vartype = null
+        protected string | null $vartype = null
     ) {
     }
 

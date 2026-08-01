@@ -52,7 +52,7 @@ abstract class AbstractEventsAware
      * @param mixed|null $data
      * @param bool       $cancellable
      *
-     * @return mixed|bool
+     * @return bool|mixed
      */
     protected function fireManagerEvent(
         string $eventName,

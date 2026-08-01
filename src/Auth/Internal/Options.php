@@ -28,9 +28,9 @@ final class Options
 {
     /**
      * @param array<string, mixed>                              $options
-     * @param list<array{id?: int|string}&array<string, mixed>> $default
+     * @param list<array<string, mixed>&array{id?: int|string}> $default
      *
-     * @return list<array{id?: int|string}&array<string, mixed>>
+     * @return list<array<string, mixed>&array{id?: int|string}>
      */
     public static function arrayOption(array $options, string $key, array $default): array
     {
@@ -40,7 +40,7 @@ final class Options
             return $default;
         }
 
-        /** @var list<array{id?: int|string}&array<string, mixed>> */
+        /** @var list<array<string, mixed>&array{id?: int|string}> */
         return array_values($value);
     }
 

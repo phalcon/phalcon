@@ -128,9 +128,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     protected array $joins = [];
 
     /**
-     * @var array|string|int|null
+     * @var array|int|string|null
      */
-    protected array | string | int | null $limit = null;
+    protected array | int | string | null $limit = null;
 
     /**
      * @var array|string|null

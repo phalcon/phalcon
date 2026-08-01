@@ -99,7 +99,7 @@ class Igbinary extends AbstractSerializer
      *
      * @param string $value
      *
-     * @return mixed|false
+     * @return false|mixed
      */
     protected function doUnserialize($value)
     {

@@ -541,7 +541,7 @@ class Di extends stdClass implements DiInterface
      * Sets one or more aliases to the given name.
      *
      * @param string       $name
-     * @param string|array $aliases
+     * @param array|string $aliases
      *
      * @return $this
      * @throws DiException

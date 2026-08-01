@@ -152,7 +152,7 @@ class Validator
      *
      * @return Validator
      */
-    public function validateClaim(string $name, bool|int|string $value): static
+    public function validateClaim(string $name, bool | int | string $value): static
     {
         $claimValue = $this->token->getClaims()->get($name);
 

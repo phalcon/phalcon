@@ -71,12 +71,12 @@ class Gettext extends AbstractAdapter
     protected string $defaultDomain;
 
     /**
-     * @var string|array<string, string>
+     * @var array<string, string>|string
      */
     protected array | string $directory;
 
     /**
-     * @var string|false
+     * @var false|string
      */
     protected false | string $locale;
 
@@ -135,15 +135,15 @@ class Gettext extends AbstractAdapter
     /**
      * @phpstan-return array<string, string>|string
      */
-    public function getDirectory()
+    public function getDirectory(): array | string
     {
         return $this->directory;
     }
 
     /**
-     * @return string|false
+     * @return false|string
      */
-    public function getLocale()
+    public function getLocale(): false | string
     {
         return $this->locale;
     }
@@ -244,7 +244,7 @@ class Gettext extends AbstractAdapter
      * );
      * ```
      *
-     * @param string|array<string, string> $directory
+     * @param array<string, string>|string $directory
      */
     public function setDirectory($directory): void
     {
@@ -298,7 +298,7 @@ class Gettext extends AbstractAdapter
      *
      * @return false|string
      */
-    public function setLocale(int $category, array $localeArray = [])
+    public function setLocale(int $category, array $localeArray = []): false | string
     {
         $this->locale   = setlocale($category, $localeArray);
         $this->category = $category;

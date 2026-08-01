@@ -404,7 +404,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Returns the name of the main view
      *
-     * @return string | null
+     * @return string|null
      */
     public function getLayout(): string | null
     {
@@ -559,9 +559,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Gets views directory
      *
-     * @return string|array
+     * @return array|string
      */
-    public function getViewsDir(): string | array
+    public function getViewsDir(): array | string
     {
         return $this->viewsDirs;
     }
@@ -969,7 +969,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param string $actionName
      * @param array  $params
      *
-     * @return View|bool|$this
+     * @return $this|bool|View
      * @throws EventsException
      * @throws Exception
      */
@@ -977,7 +977,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         string $controllerName,
         string $actionName,
         array $params = []
-    ): static | bool {
+    ): bool | static {
         $result = $this->processRender($controllerName, $actionName, $params);
 
         if (!$result) {

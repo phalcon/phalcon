@@ -213,14 +213,14 @@ interface BuilderInterface
     /**
      * Returns the current LIMIT clause
      *
-     * @return string|array
+     * @return array|string
      */
     public function getLimit();
 
     /**
      * Returns the models involved in the query
      *
-     * @return string|array|null
+     * @return array|string|null
      */
     public function getModels(): array | string | null;
 

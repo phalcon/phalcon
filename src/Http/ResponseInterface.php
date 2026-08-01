@@ -108,9 +108,9 @@ interface ResponseInterface
     /**
      * Sends headers to the client
      *
-     * @return ResponseInterface|bool
+     * @return bool|ResponseInterface
      */
-    public function sendHeaders(): ResponseInterface | bool;
+    public function sendHeaders(): bool | ResponseInterface;
 
     /**
      * Sets HTTP response body

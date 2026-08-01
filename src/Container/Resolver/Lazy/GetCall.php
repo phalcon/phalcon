@@ -36,12 +36,12 @@ namespace Phalcon\Container\Resolver\Lazy;
 class GetCall extends Lazy
 {
     /**
-     * @param string|Lazy             $id
+     * @param Lazy|string             $id
      * @param string                  $method
      * @param array<array-key, mixed> $arguments
      */
     public function __construct(
-        protected string|Lazy $id,
+        protected Lazy | string $id,
         protected string $method,
         protected array $arguments
     ) {

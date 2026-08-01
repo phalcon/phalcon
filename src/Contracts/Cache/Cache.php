@@ -93,7 +93,7 @@ interface Cache
      * @param string                $key   The key of the item to store.
      * @param mixed                 $value The value of the item to store. Must
      *                                     be serializable.
-     * @param null|int|DateInterval $ttl   Optional. The TTL value of this item.
+     * @param DateInterval|int|null $ttl   Optional. The TTL value of this item.
      *
      * @return bool True on success and false on failure.
      *
@@ -103,19 +103,19 @@ interface Cache
     public function set(
         string $key,
         mixed $value,
-        null | int | DateInterval $ttl = null
+        DateInterval | int | null $ttl = null
     ): bool;
 
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
      * @param iterable              $values
-     * @param null|int|DateInterval $ttl
+     * @param DateInterval|int|null $ttl
      *
      * @return bool
      */
     public function setMultiple(
         iterable $values,
-        null | int | DateInterval $ttl = null
+        DateInterval | int | null $ttl = null
     ): bool;
 }

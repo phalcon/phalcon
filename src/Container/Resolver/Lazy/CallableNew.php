@@ -36,7 +36,7 @@ namespace Phalcon\Container\Resolver\Lazy;
 class CallableNew extends Lazy
 {
     public function __construct(
-        protected string|Lazy $id
+        protected Lazy | string $id
     ) {
     }
 

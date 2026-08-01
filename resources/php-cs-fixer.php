@@ -76,6 +76,23 @@ return (new Config())
                     'method_private',
                 ],
             ],
+            /**
+             * Both sorters default `null_adjustment` to 'always_first', which
+             * would rewrite every `string|null` to `null|string`. Phalcon puts
+             * null last, and so does the model quill builds from both this and
+             * the Zephir source, so last it stays.
+             */
+            'ordered_types'          => [
+                'sort_algorithm'  => 'alpha',
+                'null_adjustment' => 'always_last',
+            ],
+            'phpdoc_types_order'     => [
+                'sort_algorithm'  => 'alpha',
+                'null_adjustment' => 'always_last',
+            ],
+            'types_spaces'           => [
+                'space' => 'single',
+            ],
         ]
     )
     ->setFinder($finder);

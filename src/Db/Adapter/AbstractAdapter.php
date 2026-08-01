@@ -762,7 +762,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function escapeIdentifier(array | string | int | float $identifier): string
+    public function escapeIdentifier(array | float | int | string $identifier): string
     {
         if (is_array($identifier)) {
             return $this->dialect->escape($identifier[0])

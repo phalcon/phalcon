@@ -69,7 +69,7 @@ class PaginatorFactory
      * $paginator = (new PaginatorFactory())->load($options);
      *```
      *
-     * @param TOptions|Config $config
+     * @param Config|TOptions $config
      */
     public function load(array | Config $config): AdapterInterface
     {

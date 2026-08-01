@@ -968,9 +968,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param int|string $routeId
      *
-     * @return RouteInterface|bool
+     * @return bool|RouteInterface
      */
-    public function getRouteById(int | string $routeId): RouteInterface | bool
+    public function getRouteById(int | string $routeId): bool | RouteInterface
     {
         if (isset($this->keyRouteIds[$routeId])) {
             return $this->routes[$this->keyRouteIds[$routeId]];
@@ -997,9 +997,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * @param string $name
      *
-     * @return RouteInterface|bool
+     * @return bool|RouteInterface
      */
-    public function getRouteByName(string $name): RouteInterface | bool
+    public function getRouteByName(string $name): bool | RouteInterface
     {
         if (isset($this->keyRouteNames[$name])) {
             return $this->routes[$this->keyRouteNames[$name]];

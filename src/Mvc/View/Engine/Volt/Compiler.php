@@ -2623,7 +2623,7 @@ class Compiler implements InjectionAwareInterface
      * @param array $statements
      * @param bool  $extendsMode
      *
-     * @return string | null
+     * @return string|null
      * @throws Exception
      */
     final protected function statementList(

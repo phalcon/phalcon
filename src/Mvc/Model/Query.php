@@ -1136,7 +1136,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $bindTypes
      * @param bool  $simulate
      *
-     * @return ResultsetInterface|array
+     * @return array|ResultsetInterface
      * @throws Exception
      */
     final protected function executeSelect(
@@ -1144,7 +1144,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         array $bindParams,
         array $bindTypes,
         bool $simulate = false
-    ): ResultsetInterface | array {
+    ): array | ResultsetInterface {
         /**
          * Get a database connection
          */
@@ -2578,7 +2578,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array            $join
      *
      * @return array{
-     *     schema: null|string,
+     *     schema: string|null,
      *     source: string,
      *     modelName: string,
      *     model: ModelInterface

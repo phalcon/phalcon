@@ -161,7 +161,7 @@ class BeanstalkConnection
      * Puts a job on the queue using the currently used tube. Returns the new
      * job id, or false when the server did not accept it.
      */
-    public function put(string $data, int $priority, int $delay, int $ttr): int|false
+    public function put(string $data, int $priority, int $delay, int $ttr): false | int
     {
         $length = strlen($data);
 
@@ -181,7 +181,7 @@ class BeanstalkConnection
      * Reads a packet from the socket. Verifies the connection is available
      * first.
      */
-    public function read(int $length = 0): string|false
+    public function read(int $length = 0): false | string
     {
         $connection = $this->connection;
 
@@ -254,7 +254,7 @@ class BeanstalkConnection
      * job is available; otherwise it blocks up to timeout seconds. Returns
      * [id, body] or null when none is reserved.
      *
-     * @return array{0: string, 1: string|false}|null
+     * @return array{0: string, 1: false|string}|null
      */
     public function reserve(?int $timeout = null): ?array
     {
@@ -281,7 +281,7 @@ class BeanstalkConnection
      *
      * @return array<string, int|string>|false
      */
-    public function statsTube(string $tube): array|false
+    public function statsTube(string $tube): array | false
     {
         $this->write("stats-tube " . $tube);
 
@@ -341,7 +341,7 @@ class BeanstalkConnection
     /**
      * Writes data to the socket, connecting first when needed.
      */
-    public function write(string $data): int|false
+    public function write(string $data): false | int
     {
         $connection = $this->connection;
 

@@ -36,12 +36,12 @@ namespace Phalcon\Container\Resolver\Lazy;
 class StaticCall extends Lazy
 {
     /**
-     * @param string|Lazy             $className
+     * @param Lazy|string             $className
      * @param string                  $method
      * @param array<array-key, mixed> $arguments
      */
     public function __construct(
-        protected string|Lazy $className,
+        protected Lazy | string $className,
         protected string $method,
         protected array $arguments
     ) {

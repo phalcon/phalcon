@@ -103,7 +103,7 @@ class Builder
     }
 
     /**
-     * @return string[]|string
+     * @return string|string[]
      */
     public function getAudience(): array | string
     {

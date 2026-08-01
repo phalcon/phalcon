@@ -27,7 +27,7 @@ class Ip implements Sanitizer
      * @param int $filter
      * @return false|string
      */
-    public function __invoke(string $input, int $filter = 0): string|false
+    public function __invoke(string $input, int $filter = 0): false | string
     {
         $input = trim($input);
 

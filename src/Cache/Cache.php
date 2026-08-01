@@ -134,7 +134,7 @@ class Cache extends AbstractCache
      * @param string                $key    The key of the item to store.
      * @param mixed                 $value  The value of the item to store.
      *                                      Must be serializable.
-     * @param null|int|DateInterval $ttl    Optional. The TTL value of this
+     * @param DateInterval|int|null $ttl    Optional. The TTL value of this
      *                                      item. If no value is sent and the
      *                                      driver supports TTL then the library
      *                                      may set a default value for it or
@@ -148,7 +148,7 @@ class Cache extends AbstractCache
     public function set(
         string $key,
         mixed $value,
-        null | int | DateInterval $ttl = null
+        DateInterval | int | null $ttl = null
     ): bool {
         return $this->doSet($key, $value, $ttl);
     }
@@ -158,7 +158,7 @@ class Cache extends AbstractCache
      *
      * @param iterable<string, mixed> $values  A list of key => value pairs for
      *                                         a multiple-set operation.
-     * @param null|int|DateInterval   $ttl     Optional. The TTL value of this
+     * @param DateInterval|int|null   $ttl     Optional. The TTL value of this
      *                                         item. If no value is sent and the
      *                                         driver supports TTL then the
      *                                         library may set a default value
@@ -173,7 +173,7 @@ class Cache extends AbstractCache
      */
     public function setMultiple(
         iterable $values,
-        null | int | DateInterval $ttl = null
+        DateInterval | int | null $ttl = null
     ): bool {
         return $this->doSetMultiple($values, $ttl);
     }

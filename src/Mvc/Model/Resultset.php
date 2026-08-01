@@ -133,7 +133,7 @@ abstract class Resultset implements
     /**
      * Phalcon\Db\ResultInterface or false for empty resultset
      *
-     * @var ResultInterface|bool
+     * @var bool|ResultInterface
      */
     protected mixed $result = null;
 
@@ -150,7 +150,7 @@ abstract class Resultset implements
     /**
      * Phalcon\Mvc\Model\Resultset constructor
      *
-     * @param ResultInterface|false $result
+     * @param false|ResultInterface $result
      * @param mixed|null            $cache
      *
      * @throws Exception

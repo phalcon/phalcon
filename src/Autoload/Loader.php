@@ -77,7 +77,7 @@ class Loader
     protected array $extensions = [];
 
     /**
-     * @var string|callable
+     * @var callable|string
      */
     protected $fileCheckingCallback = "is_file";
 
@@ -179,7 +179,7 @@ class Loader
 
     /**
      * @param string          $namespace
-     * @param TStrings|string $directories
+     * @param string|TStrings $directories
      * @param bool            $prepend
      *
      * @return $this
@@ -465,7 +465,7 @@ class Loader
      * $loader->setFileCheckingCallback(null);
      * ```
      *
-     * @param string|callable|null $method
+     * @param callable|string|null $method
      *
      * @return Loader
      * @throws Exception
@@ -726,7 +726,7 @@ class Loader
      * to normalize the directories with the proper directory separator at the
      * end
      *
-     * @param TStrings|string $directories
+     * @param string|TStrings $directories
      * @param string          $dirSeparator
      * @param string          $name
      *

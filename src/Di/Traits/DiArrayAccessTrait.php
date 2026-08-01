@@ -27,7 +27,7 @@ trait DiArrayAccessTrait
      * @param string     $name
      * @param array|null $parameters
      *
-     * @return mixed|InjectionAwareInterface|null
+     * @return InjectionAwareInterface|mixed|null
      * @throws Exception
      */
     abstract public function getShared(string $name, array | null $parameters = null);
@@ -63,7 +63,7 @@ trait DiArrayAccessTrait
      *
      * @param mixed $name
      *
-     * @return mixed|InjectionAwareInterface|null
+     * @return InjectionAwareInterface|mixed|null
      * @throws Exception
      */
     #[ReturnTypeWillChange]

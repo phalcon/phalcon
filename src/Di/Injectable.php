@@ -52,7 +52,7 @@ use stdClass;
  * This class allows to access services in the services container by just only
  * accessing a public property with the same name of a registered service
  *
- * @property AnnotationsMemory|AnnotationsAdapterInterface $annotations
+ * @property AnnotationsAdapterInterface|AnnotationsMemory $annotations
  * @property AssetsManager                                 $assets
  * @property DiInterface|null                              $container
  * @property DbAdapterInterface                            $db

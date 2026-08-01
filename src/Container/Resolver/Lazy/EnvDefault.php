@@ -40,7 +40,7 @@ class EnvDefault extends Env
     public function __construct(
         string $varname,
         private mixed $defaultValue,
-        string|null $vartype = null
+        string | null $vartype = null
     ) {
         parent::__construct($varname, $vartype);
     }

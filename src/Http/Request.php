@@ -280,10 +280,10 @@ class Request extends AbstractInjectionAware implements
      *
      * @param bool $trustForwardedHeader
      *
-     * @return string|false
+     * @return false|string
      * @throws \Exception
      */
-    public function getClientAddress(bool $trustForwardedHeader = false): string | bool
+    public function getClientAddress(bool $trustForwardedHeader = false): bool | string
     {
         $address = $_SERVER["REMOTE_ADDR"] ?? null;
 
@@ -2127,7 +2127,7 @@ class Request extends AbstractInjectionAware implements
      * @param array|null $data
      * @return array
      */
-    private function getPostData(array|null $data): array
+    private function getPostData(array | null $data): array
     {
         if (empty($data)) {
             if ($this->isJson()) {
@@ -2176,10 +2176,10 @@ class Request extends AbstractInjectionAware implements
      * Verify if given IP address is public, eg. not private or reserved IP
      *
      * @param string $forwardedIp
-     * @return string|false
+     * @return false|string
      * @throws \Phalcon\Filter\Exception
      */
-    private function isValidPublicIp(string $forwardedIp): string | false
+    private function isValidPublicIp(string $forwardedIp): false | string
     {
         $filterService = $this->getFilterService();
         $filtered = $filterService->sanitize($forwardedIp, [

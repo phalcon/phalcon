@@ -97,7 +97,7 @@ interface RequestInterface
      *
      * @param bool $trustForwardedHeader
      *
-     * @return string|bool
+     * @return bool|string
      */
     public function getClientAddress(bool $trustForwardedHeader = false): bool | string;
 
@@ -201,7 +201,7 @@ interface RequestInterface
      *
      * @param bool $associative
      *
-     * @return stdClass|array|bool
+     * @return array|bool|stdClass
      */
     public function getJsonRawBody(bool $associative = false): array | bool | stdClass;
 
@@ -503,7 +503,7 @@ interface RequestInterface
     /**
      * Return if the current HTTP method matches any of the passed methods
      *
-     * @param string|array $methods
+     * @param array|string $methods
      * @param bool         $strict
      *
      * @return bool

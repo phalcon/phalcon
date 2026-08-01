@@ -264,18 +264,18 @@ interface RouterInterface
      *
      * @param int|string $routeId
      *
-     * @return RouteInterface|bool
+     * @return bool|RouteInterface
      */
-    public function getRouteById(int | string $routeId): RouteInterface | bool;
+    public function getRouteById(int | string $routeId): bool | RouteInterface;
 
     /**
      * Returns a route object by its name
      *
      * @param string $name
      *
-     * @return RouteInterface|bool
+     * @return bool|RouteInterface
      */
-    public function getRouteByName(string $name): RouteInterface | bool;
+    public function getRouteByName(string $name): bool | RouteInterface;
 
     /**
      * Return all the routes defined in the router

@@ -44,7 +44,7 @@ trait RequestTrait
     /**
      * The request-target, if it has been provided or calculated.
      *
-     * @var null|string
+     * @var string|null
      */
     protected string | null $requestTarget = null;
 
@@ -262,7 +262,7 @@ trait RequestTrait
     /**
      * Sets a valid Uri
      *
-     * @param UriInterface|string|null $uri
+     * @param string|UriInterface|null $uri
      *
      * @return UriInterface
      * @throws InvalidArgumentException

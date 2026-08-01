@@ -21,7 +21,7 @@ class Route
 {
     public function __construct(
         public string $route,
-        public string | array $methods = [
+        public array | string $methods = [
             RequestMethodInterface::METHOD_CONNECT,
             RequestMethodInterface::METHOD_GET,
             RequestMethodInterface::METHOD_DELETE,

@@ -40,14 +40,14 @@ interface Manager
      * Attach a listener to the events manager.
      *
      * @param string          $eventType
-     * @param object|callable $handler
+     * @param callable|object $handler
      * @param int             $priority
      *
      * @return void
      */
     public function attach(
         string $eventType,
-        object | callable $handler,
+        callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void;
 
@@ -72,11 +72,11 @@ interface Manager
      * Detach a listener from the events manager.
      *
      * @param string          $eventType
-     * @param object|callable $handler
+     * @param callable|object $handler
      *
      * @return void
      */
-    public function detach(string $eventType, object | callable $handler): void;
+    public function detach(string $eventType, callable | object $handler): void;
 
     /**
      * Removes all listeners -- globally or for a single event type.

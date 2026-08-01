@@ -102,7 +102,7 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
     /**
      * Builds a BeanstalkMessage from a reserved [id, body] pair, or null.
      *
-     * @param array{0: string, 1: string|false}|null $job
+     * @param array{0: string, 1: false|string}|null $job
      */
     private function buildMessage(?array $job): ?MessageInterface
     {

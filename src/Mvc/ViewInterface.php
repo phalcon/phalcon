@@ -51,7 +51,7 @@ interface ViewInterface extends ViewBaseInterface
     /**
      * Returns the path of the view that is currently rendered
      */
-    public function getActiveRenderPath(): string | array;
+    public function getActiveRenderPath(): array | string;
 
     /**
      * Gets base path
@@ -105,7 +105,7 @@ interface ViewInterface extends ViewBaseInterface
         string $controllerName,
         string $actionName,
         array $params = []
-    ): ViewInterface | bool;
+    ): bool | ViewInterface;
 
     /**
      * Resets the view component to its factory default values

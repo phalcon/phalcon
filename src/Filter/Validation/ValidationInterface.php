@@ -162,11 +162,11 @@ interface ValidationInterface
      * @param object|null       $entity
      * @param array             $whitelist
      *
-     * @return Messages|false
+     * @return false|Messages
      */
     public function validate(
         array | object | null $data = null,
         object | null $entity = null,
         array $whitelist = []
-    ): Messages | false;
+    ): false | Messages;
 }

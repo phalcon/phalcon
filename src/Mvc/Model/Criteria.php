@@ -318,7 +318,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param string|array $columns
+     * @param array|string $columns
      */
     public function columns(array | string $columns): CriteriaInterface
     {
@@ -451,9 +451,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Returns the columns to be queried
      *
-     * @return string|array|null
+     * @return array|string|null
      */
-    public function getColumns(): string | array | null
+    public function getColumns(): array | string | null
     {
         return $this->params["columns"] ?? null;
     }

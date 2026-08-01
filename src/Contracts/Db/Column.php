@@ -86,9 +86,9 @@ interface Column
     /**
      * Returns column type values
      *
-     * @return array|string|int
+     * @return array|int|string
      */
-    public function getTypeValues(): array | string | int;
+    public function getTypeValues(): array | int | string;
 
 
     /**
