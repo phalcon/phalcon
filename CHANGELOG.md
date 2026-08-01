@@ -10,6 +10,8 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Fixed
 
+- Fixed `Phalcon\Mvc\View::partial()` and `render()` throwing `ViewNotFound` for absolute paths [#17426](https://github.com/phalcon/cphalcon/issues/17426)
+
 ### Removed
 
 ## [6.0.0 beta 5](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta5) (2026-07-31)
