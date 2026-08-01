@@ -26,7 +26,7 @@ class InvalidModifier extends Exception
     public function __construct(string $modifier, ?Throwable $ex = null)
     {
         parent::__construct(
-            message: 'Invalid modifier: "' . $modifier. '"',
+            message: 'Invalid modifier: "' . $modifier . '"',
             previous: $ex
         );
     }
