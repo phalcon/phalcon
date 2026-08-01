@@ -9,6 +9,7 @@
 # Project
 .env
 tests/_output/
+nikos/
 .php_cs.cache
 .php-cs-fixer.cache
 vendor/
