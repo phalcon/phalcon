@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e928eade09b6bfc4ef5179a5d4c66e25",
+    "content-hash": "f8279f0cdd82f8733af85dafe8a4c8d8",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1448,23 +1448,26 @@
             "time": "2026-07-19T01:08:28+00:00"
         },
         {
-            "name": "phalcon/scribe",
+            "name": "phalcon/quill",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phalcon/scribe.git",
-                "reference": "c66d5a0f816325840289df76d9cc4c761dd93c9f"
+                "url": "https://github.com/phalcon/quill.git",
+                "reference": "2b95dccfce4a04de15fe9d6334f4f700d628b5e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/scribe/zipball/c66d5a0f816325840289df76d9cc4c761dd93c9f",
-                "reference": "c66d5a0f816325840289df76d9cc4c761dd93c9f",
+                "url": "https://api.github.com/repos/phalcon/quill/zipball/2b95dccfce4a04de15fe9d6334f4f700d628b5e9",
+                "reference": "2b95dccfce4a04de15fe9d6334f4f700d628b5e9",
                 "shasum": ""
             },
             "require": {
+                "pds/composer-script-names": "^1.0",
+                "pds/skeleton": "^1.0",
                 "php": "^8.1"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95",
                 "nikic/php-parser": "^5.1",
                 "phalcon/talon": "^0.9",
                 "phalcon/zephir": "dev-development",
@@ -1477,12 +1480,12 @@
             },
             "default-branch": true,
             "bin": [
-                "bin/scribe"
+                "bin/quill"
             ],
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Phalcon\\Scribe\\": "src/"
+                    "Phalcon\\Quill\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1498,8 +1501,8 @@
                 "zephir"
             ],
             "support": {
-                "issues": "https://github.com/phalcon/scribe/issues",
-                "source": "https://github.com/phalcon/scribe/tree/master"
+                "issues": "https://github.com/phalcon/quill/issues",
+                "source": "https://github.com/phalcon/quill/tree/master"
             },
             "funding": [
                 {
@@ -1511,7 +1514,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-01T04:51:25+00:00"
+            "time": "2026-08-01T19:02:44+00:00"
         },
         {
             "name": "phalcon/talon",
@@ -6581,7 +6584,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "phalcon/phql": 20,
-        "phalcon/scribe": 20,
+        "phalcon/quill": 20,
         "phalcon/volt": 20
     },
     "prefer-stable": false,
