@@ -33,7 +33,7 @@ class Memory extends AbstractArrayAdapter
     /**
      * Map of id => user row for O(1) retrieveById lookup.
      *
-     * @var array<int|string, AuthUserRow>
+     * @phpstan-var array<int|string, AuthUserRow>
      */
     private array $idStore = [];
 
@@ -71,6 +71,9 @@ class Memory extends AbstractArrayAdapter
         return $this->hydrate($this->idStore[$id]);
     }
 
+    /**
+     * @phpstan-return list<AuthUserRow>
+     */
     protected function loadUsers(): array
     {
         return $this->config->getUsers();

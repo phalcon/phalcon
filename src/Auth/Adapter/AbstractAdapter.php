@@ -57,7 +57,7 @@ abstract class AbstractAdapter implements Adapter
     /**
      * Returns the model class name, if configured.
      */
-    public function getModel(): ?string
+    public function getModel(): string | null
     {
         return $this->config->getModel();
     }

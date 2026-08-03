@@ -53,16 +53,25 @@ class AccessLocator extends AbstractLocator
         );
     }
 
+    /**
+     * @return class-string<\Throwable>
+     */
     protected function getExceptionClass(): string
     {
         return Exception::class;
     }
 
+    /**
+     * @return class-string
+     */
     protected function getInterfaceClass(): string
     {
         return Access::class;
     }
 
+    /**
+     * @return array<string, class-string<Access>>
+     */
     protected function getServices(): array
     {
         return [

@@ -68,7 +68,7 @@ class Manager implements ManagerContract
     }
 
     /**
-     * @param array<string, class-string<Access>> $accessList
+     * @phpstan-param array<string, class-string<Access>> $accessList
      */
     public function addAccessList(array $accessList): self
     {
@@ -118,7 +118,7 @@ class Manager implements ManagerContract
         return $this;
     }
 
-    public function getAccess(): ?Access
+    public function getAccess(): Access | null
     {
         return $this->activeAccess;
     }
@@ -131,7 +131,7 @@ class Manager implements ManagerContract
         return $this->accessFactory->getAll();
     }
 
-    public function getDefaultGuard(): ?Guard
+    public function getDefaultGuard(): Guard | null
     {
         return $this->defaultGuard;
     }
@@ -198,7 +198,7 @@ class Manager implements ManagerContract
         return $this;
     }
 
-    public function user(): ?AuthUser
+    public function user(): AuthUser | null
     {
         return $this->guard()->user();
     }

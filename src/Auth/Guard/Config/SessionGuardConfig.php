@@ -35,9 +35,7 @@ class SessionGuardConfig extends AbstractGuardConfig
     public const DEFAULT_REMEMBER_TTL = 31536000;
 
     private readonly string $name;
-
     private readonly string $rememberName;
-
     private readonly int $rememberTtl;
 
     /**

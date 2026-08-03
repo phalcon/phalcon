@@ -32,7 +32,6 @@ abstract class AbstractGuard implements Guard
     use EventsAwareTrait;
 
     protected ?AuthUser $lastUserAttempted = null;
-
     protected ?AuthUser $user = null;
 
     /**
@@ -64,7 +63,7 @@ abstract class AbstractGuard implements Guard
         return $this->config;
     }
 
-    public function getLastUserAttempted(): ?AuthUser
+    public function getLastUserAttempted(): AuthUser | null
     {
         return $this->lastUserAttempted;
     }

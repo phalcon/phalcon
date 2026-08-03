@@ -26,7 +26,7 @@ use Phalcon\Contracts\Auth\AuthUser as AuthUserContract;
 class AuthUser implements AuthUserContract
 {
     /**
-     * @var array<string, mixed>
+     * @phpstan-var array<string, mixed>
      */
     protected array $data;
 

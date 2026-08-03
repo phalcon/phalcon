@@ -43,7 +43,7 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
      *
      * @phpstan-param AuthCredentials $credentials
      */
-    public function retrieveByCredentials(array $credentials): ?AuthUserContract
+    public function retrieveByCredentials(array $credentials): AuthUserContract | null
     {
         if (!$this->hasIdentifyingField($credentials)) {
             return null;

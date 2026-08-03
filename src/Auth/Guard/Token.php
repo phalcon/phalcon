@@ -63,7 +63,7 @@ class Token extends AbstractGuard
         );
     }
 
-    public function getTokenForRequest(): ?string
+    public function getTokenForRequest(): string | null
     {
         $token = $this->request->get($this->config->getInputKey(), null, null);
 
@@ -89,7 +89,7 @@ class Token extends AbstractGuard
         return $this;
     }
 
-    public function user(): ?AuthUser
+    public function user(): AuthUser | null
     {
         if ($this->user !== null) {
             return $this->user;

@@ -31,14 +31,14 @@ class DoesNotImplement extends Exception
     }
 
     /**
-     * Throws when $value is not an instance of $interface. Keeps the
+     * Throws when value is not an instance of the given interface. Keeps the
      * "must implement" guard shared across adapters, guards and the manager
      * in one place.
      *
      * @template TExpected of object
      *
      * @param mixed                   $value
-     * @param class-string<TExpected> $interface
+     * @param class-string<TExpected> $interfaceName
      * @param string                  $type
      * @param string                  $name
      *
@@ -48,11 +48,11 @@ class DoesNotImplement extends Exception
      */
     public static function assert(
         mixed $value,
-        string $interface,
+        string $interfaceName,
         string $type,
         string $name
     ): void {
-        if (!($value instanceof $interface)) {
+        if (!($value instanceof $interfaceName)) {
             throw new self($type, $name);
         }
     }

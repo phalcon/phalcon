@@ -36,7 +36,7 @@ abstract class AbstractAccess implements Access
     protected array $onlyActions = [];
 
     /**
-     * @return list<string>
+     * @phpstan-return list<string>
      */
     public function getExceptActions(): array
     {
@@ -44,7 +44,7 @@ abstract class AbstractAccess implements Access
     }
 
     /**
-     * @return list<string>
+     * @phpstan-return list<string>
      */
     public function getOnlyActions(): array
     {
@@ -72,7 +72,7 @@ abstract class AbstractAccess implements Access
     /**
      * @phpstan-return ForwardTarget|null
      */
-    public function redirectTo(): ?array
+    public function redirectTo(): array | null
     {
         return null;
     }

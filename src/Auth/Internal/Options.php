@@ -27,20 +27,20 @@ use Phalcon\Auth\Exceptions\OptionRequiresString;
 final class Options
 {
     /**
-     * @param array<string, mixed>                              $options
-     * @param list<array<string, mixed>&array{id?: int|string}> $default
+     * @phpstan-param array<string, mixed>                              $options
+     * @phpstan-param list<array{id?: int|string}&array<string, mixed>> $defaultValue
      *
-     * @return list<array<string, mixed>&array{id?: int|string}>
+     * @phpstan-return list<array{id?: int|string}&array<string, mixed>>
      */
-    public static function arrayOption(array $options, string $key, array $default): array
+    public static function arrayOption(array $options, string $key, array $defaultValue): array
     {
-        $value = $options[$key] ?? $default;
+        $value = $options[$key] ?? $defaultValue;
 
         if (!is_array($value)) {
-            return $default;
+            return $defaultValue;
         }
 
-        /** @var list<array<string, mixed>&array{id?: int|string}> */
+        /** @var list<array{id?: int|string}&array<string, mixed>> */
         return array_values($value);
     }
 

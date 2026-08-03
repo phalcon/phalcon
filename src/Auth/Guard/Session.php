@@ -249,7 +249,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         return false;
     }
 
-    public function user(): ?AuthUser
+    public function user(): AuthUser | null
     {
         if ($this->user !== null) {
             return $this->user;
@@ -373,7 +373,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         );
     }
 
-    protected function userFromRecaller(UserRemember $recaller): ?AuthUser
+    protected function userFromRecaller(UserRemember $recaller): AuthUser | null
     {
         if (!($this->adapter instanceof RememberAdapter)) {
             return null;

@@ -18,15 +18,9 @@ namespace Phalcon\Auth\Adapter\Config\Traits;
  */
 trait ModelConfigTrait
 {
-    /**
-     * @var string|null
-     */
     protected ?string $model = null;
 
-    /**
-     * @return string|null
-     */
-    public function getModel(): ?string
+    public function getModel(): string | null
     {
         return $this->model;
     }

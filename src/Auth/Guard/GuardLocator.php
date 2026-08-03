@@ -29,16 +29,25 @@ use Phalcon\Support\AbstractLocator;
  */
 class GuardLocator extends AbstractLocator
 {
+    /**
+     * @return class-string<\Throwable>
+     */
     protected function getExceptionClass(): string
     {
         return Exception::class;
     }
 
+    /**
+     * @return class-string
+     */
     protected function getInterfaceClass(): string
     {
         return Guard::class;
     }
 
+    /**
+     * @return array<string, class-string<Guard>>
+     */
     protected function getServices(): array
     {
         return [
