@@ -41,6 +41,8 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
 {
     /**
      * Default Beanstalkd priority used when releasing or burying.
+     *
+     * @var int
      */
     public const DEFAULT_PRIORITY = 100;
 
@@ -64,7 +66,7 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
         $this->connection->deleteJob($this->resolveJobId($message));
     }
 
-    public function receive(int $timeout = 0): ?MessageInterface
+    public function receive(int $timeout = 0): MessageInterface | null
     {
         if ($timeout <= 0) {
             $seconds = null;
@@ -75,7 +77,7 @@ class BeanstalkConsumer extends AbstractConsumer implements VisibilityAware
         return $this->buildMessage($this->connection->reserve($seconds));
     }
 
-    public function receiveNoWait(): ?MessageInterface
+    public function receiveNoWait(): MessageInterface | null
     {
         return $this->buildMessage($this->connection->reserve(0));
     }

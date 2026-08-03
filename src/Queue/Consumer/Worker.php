@@ -22,6 +22,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Queue\Consumer;
 
+use Phalcon\Traits\Php\InfoTrait;
+
 use function function_exists;
 use function memory_get_usage;
 use function pcntl_async_signals;
@@ -38,6 +40,8 @@ use function time;
  */
 class Worker
 {
+    use InfoTrait;
+
     protected WorkerOptions $options;
 
     public function __construct(protected QueueConsumer $consumer, ?WorkerOptions $options = null)
@@ -113,7 +117,7 @@ class Worker
      */
     private function installSignalHandlers(): void
     {
-        if (!function_exists('pcntl_async_signals')) {
+        if (!$this->phpFunctionExists('pcntl_async_signals')) {
             return;
         }
 

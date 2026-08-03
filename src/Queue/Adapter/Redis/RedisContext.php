@@ -62,7 +62,7 @@ class RedisContext extends AbstractContext
      * messages first, then blocks up to timeout seconds. Internal transport
      * API used by RedisConsumer.
      */
-    public function blockingPop(string $queueName, int $timeout): ?MessageInterface
+    public function blockingPop(string $queueName, int $timeout): MessageInterface | null
     {
         $this->promote($queueName);
 

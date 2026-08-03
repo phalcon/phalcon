@@ -44,8 +44,6 @@ trait SubscriptionConsumerTrait
 
     /**
      * Subscriptions keyed by queue name: [consumer, callback].
-     *
-     * @var array
      */
     protected array $subscriptions = [];
 

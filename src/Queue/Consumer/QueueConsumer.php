@@ -37,10 +37,10 @@ use function usleep;
 /**
  * Lean consumption runner. Binds processors to queues, polls each bound queue
  * round-robin, and dispatches messages to their processors while firing the
- * lifecycle events on Phalcon\Queue\Consumer\Events through the events
+ * lifecycle events on `Phalcon\Queue\Consumer\Events` through the events
  * manager. The long-running operational shell (lifetime, signals) lives in
- * Phalcon\Queue\Consumer\Worker, which drives consumeOnce() and shares the
- * stop signal through stop() / isStopRequested().
+ * `Phalcon\Queue\Consumer\Worker`, which drives `consumeOnce()` and shares the
+ * stop signal through `stop()` / `isStopRequested()`.
  */
 class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
 {

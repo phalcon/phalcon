@@ -60,7 +60,7 @@ trait MessageTrait
     /**
      * Returns the correlation id used to correlate request/reply messages.
      */
-    public function getCorrelationId(): ?string
+    public function getCorrelationId(): string | null
     {
         return $this->getHeader("correlation_id");
     }
@@ -88,7 +88,7 @@ trait MessageTrait
     /**
      * Returns the message id.
      */
-    public function getMessageId(): ?string
+    public function getMessageId(): string | null
     {
         return $this->getHeader("message_id");
     }
@@ -116,7 +116,7 @@ trait MessageTrait
     /**
      * Returns the reply-to destination name.
      */
-    public function getReplyTo(): ?string
+    public function getReplyTo(): string | null
     {
         return $this->getHeader("reply_to");
     }
@@ -124,7 +124,7 @@ trait MessageTrait
     /**
      * Returns the timestamp (in milliseconds) or null when it is not set.
      */
-    public function getTimestamp(): ?int
+    public function getTimestamp(): int | null
     {
         $value = $this->getHeader("timestamp");
 

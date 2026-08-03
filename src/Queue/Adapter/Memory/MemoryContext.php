@@ -93,7 +93,7 @@ class MemoryContext extends AbstractContext
      * Removes the front message from a queue, or null when it is empty.
      * Internal transport API used by MemoryConsumer.
      */
-    public function popMessage(string $queueName): ?MessageInterface
+    public function popMessage(string $queueName): MessageInterface | null
     {
         if (empty($this->queues[$queueName])) {
             return null;

@@ -49,7 +49,7 @@ class RedisConsumer extends AbstractConsumer
     {
     }
 
-    public function receive(int $timeout = 0): ?MessageInterface
+    public function receive(int $timeout = 0): MessageInterface | null
     {
         $queueName = $this->queue->getQueueName();
         $deadline  = 0;
@@ -71,7 +71,7 @@ class RedisConsumer extends AbstractConsumer
         }
     }
 
-    public function receiveNoWait(): ?MessageInterface
+    public function receiveNoWait(): MessageInterface | null
     {
         return $this->context->popMessage($this->queue->getQueueName());
     }

@@ -38,17 +38,17 @@ use Phalcon\Queue\Exceptions\TimeToLiveNotSupportedException;
  */
 abstract class AbstractProducer implements ProducerInterface
 {
-    public function getDeliveryDelay(): ?int
+    public function getDeliveryDelay(): int | null
     {
         return null;
     }
 
-    public function getPriority(): ?int
+    public function getPriority(): int | null
     {
         return null;
     }
 
-    public function getTimeToLive(): ?int
+    public function getTimeToLive(): int | null
     {
         return null;
     }

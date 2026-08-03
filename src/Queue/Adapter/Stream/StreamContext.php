@@ -31,6 +31,7 @@ use Phalcon\Contracts\Queue\SubscriptionConsumer as SubscriptionConsumerInterfac
 use Phalcon\Queue\Adapter\AbstractContext;
 use Phalcon\Queue\Adapter\MessageEnvelope;
 use Phalcon\Queue\Adapter\QueueDestinationGuard;
+use Phalcon\Traits\Php\FileTrait;
 
 use function array_filter;
 use function array_shift;
@@ -65,6 +66,8 @@ use const PHP_EOL;
  */
 class StreamContext extends AbstractContext
 {
+    use FileTrait;
+
     /**
      * Directory (with trailing separator) that holds the queue files.
      */
@@ -105,7 +108,7 @@ class StreamContext extends AbstractContext
      * Removes the front message from a queue file, or null when it is empty.
      * Internal transport API used by StreamConsumer.
      */
-    public function popMessage(string $queueName): ?MessageInterface
+    public function popMessage(string $queueName): MessageInterface | null
     {
         $filepath = $this->getFilepath($queueName);
 
@@ -120,7 +123,7 @@ class StreamContext extends AbstractContext
         }
 
         if (!flock($pointer, LOCK_EX)) {
-            fclose($pointer);
+            $this->phpFclose($pointer);
 
             return null;
         }
@@ -130,7 +133,7 @@ class StreamContext extends AbstractContext
 
         if (empty($lines)) {
             flock($pointer, LOCK_UN);
-            fclose($pointer);
+            $this->phpFclose($pointer);
 
             return null;
         }
@@ -140,9 +143,9 @@ class StreamContext extends AbstractContext
 
         ftruncate($pointer, 0);
         rewind($pointer);
-        fwrite($pointer, $remaining);
+        $this->phpFwrite($pointer, $remaining);
         flock($pointer, LOCK_UN);
-        fclose($pointer);
+        $this->phpFclose($pointer);
 
         $data = MessageEnvelope::decode((string) base64_decode($line));
 
@@ -157,8 +160,8 @@ class StreamContext extends AbstractContext
     {
         $filepath = $this->getFilepath($queue->getQueueName());
 
-        if (file_exists($filepath)) {
-            unlink($filepath);
+        if ($this->phpFileExists($filepath)) {
+            $this->phpUnlink($filepath);
         }
     }
 
@@ -174,7 +177,7 @@ class StreamContext extends AbstractContext
 
         $line = base64_encode(MessageEnvelope::encode($message)) . PHP_EOL;
 
-        file_put_contents($filepath, $line, FILE_APPEND | LOCK_EX);
+        $this->phpFilePutContents($filepath, $line, FILE_APPEND | LOCK_EX);
     }
 
     private function ensureDir(): void

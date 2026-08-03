@@ -23,11 +23,11 @@ declare(strict_types=1);
 namespace Phalcon\Queue\Adapter\Beanstalk;
 
 use Phalcon\Queue\Exceptions\Exception;
+use Phalcon\Traits\Php\FileTrait;
 
 use function array_keys;
 use function count;
 use function explode;
-use function fclose;
 use function feof;
 use function fsockopen;
 use function fwrite;
@@ -49,6 +49,8 @@ use function trim;
  */
 class BeanstalkConnection
 {
+    use FileTrait;
+
     /**
      * Connection resource.
      *
@@ -134,7 +136,7 @@ class BeanstalkConnection
             return false;
         }
 
-        fclose($this->connection);
+        $this->phpFclose($this->connection);
 
         $this->connection = null;
 
@@ -225,8 +227,6 @@ class BeanstalkConnection
 
     /**
      * Reads the latest status line and splits it into tokens.
-     *
-     * @return string[]
      */
     public function readStatus(): array
     {
@@ -256,7 +256,7 @@ class BeanstalkConnection
      *
      * @return array{0: string, 1: false|string}|null
      */
-    public function reserve(?int $timeout = null): ?array
+    public function reserve(?int $timeout = null): array | null
     {
         if ($timeout !== null) {
             $command = "reserve-with-timeout " . $timeout;

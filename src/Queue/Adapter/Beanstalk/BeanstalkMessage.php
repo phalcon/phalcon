@@ -36,7 +36,7 @@ class BeanstalkMessage extends AbstractMessage
      */
     protected ?string $jobId = null;
 
-    public function getJobId(): ?string
+    public function getJobId(): string | null
     {
         return $this->jobId;
     }

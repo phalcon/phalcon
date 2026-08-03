@@ -66,7 +66,7 @@ abstract class AbstractConsumer implements ConsumerInterface
      * until one is available), by polling `receiveNoWait()` every
      * `pollInterval` milliseconds. Returns null when none arrives in time.
      */
-    public function receive(int $timeout = 0): ?MessageInterface
+    public function receive(int $timeout = 0): MessageInterface | null
     {
         $sleep     = $this->pollInterval * 1000;
         $startTime = (int) (microtime(true) * 1000);
@@ -89,7 +89,7 @@ abstract class AbstractConsumer implements ConsumerInterface
     /**
      * Receives a message without blocking, or null when none is ready.
      */
-    abstract public function receiveNoWait(): ?MessageInterface;
+    abstract public function receiveNoWait(): MessageInterface | null;
 
     /**
      * Rejects the message. When requeue is true the transport redelivers it.

@@ -39,6 +39,8 @@ class BeanstalkProducer extends AbstractProducer
 {
     /**
      * Default Beanstalkd priority (0 = most urgent).
+     *
+     * @var int
      */
     public const DEFAULT_PRIORITY = 100;
 
@@ -55,12 +57,12 @@ class BeanstalkProducer extends AbstractProducer
     {
     }
 
-    public function getDeliveryDelay(): ?int
+    public function getDeliveryDelay(): int | null
     {
         return $this->deliveryDelay;
     }
 
-    public function getPriority(): ?int
+    public function getPriority(): int | null
     {
         return $this->priority;
     }
