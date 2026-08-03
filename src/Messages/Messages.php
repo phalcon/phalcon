@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Messages;
 
+use Iterator;
 use JsonSerializable;
 use Phalcon\Contracts\Messages\Messages as MessagesContract;
 use Phalcon\Messages\Exceptions\MessagesNotIterable;
@@ -40,8 +41,6 @@ class Messages implements MessagesContract, JsonSerializable
 
     /**
      * Phalcon\Messages\Messages constructor
-     *
-     * @param array $messages
      */
     public function __construct(array $messages = [])
     {
@@ -56,8 +55,6 @@ class Messages implements MessagesContract, JsonSerializable
      *     new \Phalcon\Messages\Message("This is a message")
      * );
      *```
-     *
-     * @param MessageInterface $message
      */
     public function appendMessage(MessageInterface $message): void
     {
@@ -111,10 +108,6 @@ class Messages implements MessagesContract, JsonSerializable
 
     /**
      * Filters the message collection by field name
-     *
-     * @param string $fieldName
-     *
-     * @return array
      */
     public function filter(string $fieldName): array
     {
@@ -146,9 +139,6 @@ class Messages implements MessagesContract, JsonSerializable
      * $data = $messages->jsonSerialize();
      * echo json_encode($data);
      *```
-     *
-     * @return array
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      */
     public function jsonSerialize(): array
     {

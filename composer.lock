@@ -1453,12 +1453,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/quill.git",
-                "reference": "e144b2aaf5ee2117f5100d7ba844351764b84e6e"
+                "reference": "c25c436463cf1c0e9bcbd8c98f444de1635f8d98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/quill/zipball/e144b2aaf5ee2117f5100d7ba844351764b84e6e",
-                "reference": "e144b2aaf5ee2117f5100d7ba844351764b84e6e",
+                "url": "https://api.github.com/repos/phalcon/quill/zipball/c25c436463cf1c0e9bcbd8c98f444de1635f8d98",
+                "reference": "c25c436463cf1c0e9bcbd8c98f444de1635f8d98",
                 "shasum": ""
             },
             "require": {
@@ -1514,7 +1514,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-02T23:50:11+00:00"
+            "time": "2026-08-03T14:46:53+00:00"
         },
         {
             "name": "phalcon/talon",

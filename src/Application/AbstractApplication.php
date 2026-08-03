@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Application;
 
+use Closure;
 use Phalcon\Application\Exceptions\ModuleNotRegistered;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
@@ -23,7 +24,7 @@ use Phalcon\Events\Traits\EventsAwareTrait;
 /**
  * Base class for Phalcon\Cli\Console and Phalcon\Mvc\Application.
  *
- * @phpstan-type TModule = array{
+ * @phpstan-type TModule array{
  *     string: array{
  *          className: string,
  *          path: string,
@@ -34,9 +35,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
 {
     use EventsAwareTrait;
 
-    /**
-     * @var string
-     */
     protected string $defaultModule = '';
 
     /**
@@ -46,8 +44,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
 
     /**
      * AbstractApplication constructor.
-     *
-     * @param DiInterface|null $container
      */
     public function __construct(DiInterface | null $container = null)
     {
@@ -58,8 +54,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
 
     /**
      * Returns the default module name
-     *
-     * @return string
      */
     public function getDefaultModule(): string
     {
@@ -71,10 +65,11 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      *
      * @param string $name
      *
-     * @return TModule
+     * @return TModule|Closure
+     *
      * @throws Exception
      */
-    public function getModule(string $name)
+    public function getModule(string $name): array|object
     {
         if (!isset($this->modules[$name])) {
             throw new ModuleNotRegistered($name);
@@ -112,9 +107,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      * ```
      *
      * @param TModule[] $modules
-     * @param bool      $merge
-     *
-     * @return $this
      */
     public function registerModules(
         array $modules,
@@ -132,10 +124,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     /**
      * Sets the module name to be used if the router does not return a valid
      * module
-     *
-     * @param string $defaultModule
-     *
-     * @return $this
      */
     public function setDefaultModule(string $defaultModule): static
     {
@@ -146,8 +134,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
 
     /**
      * Sets the events manager
-     *
-     * @param ManagerInterface $eventsManager
      */
     public function setEventsManager(ManagerInterface $eventsManager): void
     {

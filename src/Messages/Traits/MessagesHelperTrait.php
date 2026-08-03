@@ -19,22 +19,10 @@ use Phalcon\Messages\MessageInterface;
 
 /**
  * Trait MessagesHelperTrait
- *
- * @package Phalcon\Messages\Traits
- *
- * @property array $messages
- * @property int   $position
  */
 trait MessagesHelperTrait
 {
-    /**
-     * @var array
-     */
     protected array $messages = [];
-
-    /**
-     * @var int
-     */
     protected int $position = 0;
 
     /**
@@ -49,8 +37,6 @@ trait MessagesHelperTrait
 
     /**
      * Returns the current message in the iterator
-     *
-     * @return MessageInterface
      */
     public function current(): MessageInterface
     {
@@ -59,8 +45,6 @@ trait MessagesHelperTrait
 
     /**
      * Returns the current position/key in the iterator
-     *
-     * @return int
      */
     public function key(): int
     {
@@ -83,12 +67,8 @@ trait MessagesHelperTrait
      *     isset($message["database"])
      * );
      *```
-     *
-     * @param int $offset
-     *
-     * @return bool
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->messages[$offset]);
     }
@@ -101,12 +81,8 @@ trait MessagesHelperTrait
      *     $messages[0]
      * );
      *```
-     *
-     * @param mixed $offset
-     *
-     * @return mixed
      */
-    public function offsetGet($offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->messages[$offset] ?? null;
     }
@@ -118,21 +94,20 @@ trait MessagesHelperTrait
      * $messages[0] = new \Phalcon\Messages\Message("This is a message");
      *```
      *
-     * @param mixed   $offset
-     * @param Message $message
+     * @param Message $value
      *
      * @throws MessageNotObject
      */
-    public function offsetSet($offset, $message): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
-        if (!($message instanceof MessageInterface)) {
+        if (!($value instanceof MessageInterface)) {
             throw new MessageNotObject();
         }
 
         if ($offset === null) {
-            $this->messages[] = $message;
+            $this->messages[] = $value;
         } else {
-            $this->messages[$offset] = $message;
+            $this->messages[$offset] = $value;
         }
     }
 
@@ -142,10 +117,8 @@ trait MessagesHelperTrait
      *```php
      * unset($message["database"]);
      *```
-     *
-     * @param mixed $offset
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         if (isset($this->messages[$offset])) {
             array_splice($this->messages, $offset, 1);
@@ -162,8 +135,6 @@ trait MessagesHelperTrait
 
     /**
      * Check if the current message in the iterator is valid
-     *
-     * @return bool
      */
     public function valid(): bool
     {

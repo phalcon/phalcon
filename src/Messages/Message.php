@@ -24,12 +24,6 @@ class Message implements MessageInterface, JsonSerializable
 {
     /**
      * Phalcon\Messages\Message constructor
-     *
-     * @param string $message
-     * @param string $field
-     * @param string $type
-     * @param int    $code
-     * @param array  $metaData
      */
     public function __construct(
         protected string $message,
@@ -90,9 +84,6 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Serializes the object for json_encode
-     *
-     * @return array
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      */
     public function jsonSerialize(): array
     {
@@ -107,10 +98,6 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Sets code for the message
-     *
-     * @param int $code
-     *
-     * @return MessageInterface
      */
     public function setCode(int $code): MessageInterface
     {
@@ -121,10 +108,6 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Sets field name related to message
-     *
-     * @param string $field
-     *
-     * @return MessageInterface
      */
     public function setField(string $field): MessageInterface
     {
@@ -135,10 +118,6 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Sets verbose message
-     *
-     * @param string $message
-     *
-     * @return MessageInterface
      */
     public function setMessage(string $message): MessageInterface
     {
@@ -149,10 +128,6 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Sets message metadata
-     *
-     * @param array $metaData
-     *
-     * @return MessageInterface
      */
     public function setMetaData(array $metaData): MessageInterface
     {
@@ -163,10 +138,6 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Sets message type
-     *
-     * @param string $type
-     *
-     * @return MessageInterface
      */
     public function setType(string $type): MessageInterface
     {
