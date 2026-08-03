@@ -69,23 +69,74 @@
     "cs-fixer": "vendor/bin/php-cs-fixer fix --config=resources/php-cs-fixer.php --dry-run --diff",
     "cs-fixer-fix": "vendor/bin/php-cs-fixer fix --config=resources/php-cs-fixer.php",
     "infection": "vendor/bin/infection --configuration=resources/infection.json5 --threads=max --test-framework-options='--order-by=default'",
-    "test-unit": "talon run unit",
-    "test-unit-coverage": "talon run unit -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
-    "test-unit-coverage-html": "talon run unit -- --coverage-html tests/_output/coverage/",
-    "test-db-mariadb": "talon run mariadb",
-    "test-db-mariadb-coverage": "talon run mariadb -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
-    "test-db-mariadb-coverage-html": "talon run mariadb -- --coverage-html tests/_output/coverage/",
-    "test-db-mysql": "talon run mysql",
-    "test-db-mysql-coverage": "talon run mysql -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
-    "test-db-mysql-coverage-html": "talon run mysql -- --coverage-html tests/_output/coverage/",
-    "test-db-pgsql": "talon run pgsql",
-    "test-db-pgsql-coverage": "talon run pgsql -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
-    "test-db-pgsql-coverage-html": "talon run pgsql -- --coverage-html tests/_output/coverage/",
-    "test-db-sqlite": "talon run sqlite",
-    "test-db-sqlite-coverage": "talon run sqlite -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov",
-    "test-db-sqlite-coverage-html": "talon run sqlite -- --coverage-html tests/_output/coverage/",
-    "test-db": "talon run mariadb mysql pgsql sqlite",
-    "test-all": "talon run all"
+    "test-unit": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run unit"
+    ],
+    "test-unit-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run unit -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov"
+    ],
+    "test-unit-coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run unit -- --coverage-html tests/_output/coverage/"
+    ],
+    "test-db-mariadb": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mariadb"
+    ],
+    "test-db-mariadb-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mariadb -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov"
+    ],
+    "test-db-mariadb-coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mariadb -- --coverage-html tests/_output/coverage/"
+    ],
+    "test-db-mysql": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mysql"
+    ],
+    "test-db-mysql-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mysql -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov"
+    ],
+    "test-db-mysql-coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mysql -- --coverage-html tests/_output/coverage/"
+    ],
+    "test-db-pgsql": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run pgsql"
+    ],
+    "test-db-pgsql-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run pgsql -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov"
+    ],
+    "test-db-pgsql-coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run pgsql -- --coverage-html tests/_output/coverage/"
+    ],
+    "test-db-sqlite": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run sqlite"
+    ],
+    "test-db-sqlite-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run sqlite -- --coverage-clover tests/_output/coverage.xml --coverage-php tests/_output/coverage.cov"
+    ],
+    "test-db-sqlite-coverage-html": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run sqlite -- --coverage-html tests/_output/coverage/"
+    ],
+    "test-db": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run mariadb mysql pgsql sqlite"
+    ],
+    "test-all": [
+      "Composer\\Config::disableProcessTimeout",
+      "talon run all"
+    ]
   },
   "config": {
     "allow-plugins": {

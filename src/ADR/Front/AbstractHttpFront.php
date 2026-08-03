@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Front;
 
-use Throwable;
 use Phalcon\ADR\Application;
 use Phalcon\ADR\Container\AdrProvider;
 use Phalcon\Container\Container;
@@ -24,6 +23,7 @@ use Phalcon\Contracts\ADR\Application as ApplicationInterface;
 use Phalcon\Contracts\ADR\Emitter\Emitter;
 use Phalcon\Contracts\Front\FrontController;
 use Phalcon\Contracts\Http\AttributeRequest;
+use Throwable;
 
 /**
  * Boots a container, builds the Application, handles the request and emits the

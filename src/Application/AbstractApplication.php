@@ -65,11 +65,11 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
      *
      * @param string $name
      *
-     * @return TModule|Closure
+     * @return Closure|TModule
      *
      * @throws Exception
      */
-    public function getModule(string $name): array|object
+    public function getModule(string $name): mixed
     {
         if (!isset($this->modules[$name])) {
             throw new ModuleNotRegistered($name);
