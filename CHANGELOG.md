@@ -2,7 +2,7 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
-## [6.0.0 beta 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta6) (2026-xx-xx)
+## [6.0.0 beta 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta6) (2026-08-02)
 
 ### Changed
 
