@@ -22,10 +22,6 @@ interface AdapterInterface
 {
     /**
      * Check whether is defined a translation key in the internal array
-     *
-     * @param string $index
-     *
-     * @return bool
      */
     public function has(string $index): bool;
 
@@ -44,8 +40,6 @@ interface AdapterInterface
      * throws `KeyNotFound` instead of falling back.
      *
      * @phpstan-param array<string, string> $placeholders
-     *
-     * @return string
      */
     public function query(string $translateKey, array $placeholders = []): string;
 
@@ -53,8 +47,6 @@ interface AdapterInterface
      * Returns the translation string of the given key
      *
      * @phpstan-param array<string, string> $placeholders
-     *
-     * @return string
      */
     public function t(string $translateKey, array $placeholders = []): string;
 }

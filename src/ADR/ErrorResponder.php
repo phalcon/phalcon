@@ -38,34 +38,16 @@ use Throwable;
 final class ErrorResponder
 {
     /**
-     * @var Responder
-     */
-    protected Responder $chain;
-
-    /**
-     * @var bool
-     */
-    protected bool $debug;
-
-    /**
      * @var array
      */
     protected array $exceptionMap;
 
-    /**
-     * @var Logger
-     */
-    protected Logger $logger;
-
     public function __construct(
-        Responder $chain,
-        Logger $logger,
-        bool $debug = false,
+        protected Responder $chain,
+        protected Logger $logger,
+        protected bool $debug = false,
         array $exceptionMap = []
     ) {
-        $this->chain        = $chain;
-        $this->logger       = $logger;
-        $this->debug        = $debug;
         $this->exceptionMap = $exceptionMap + $this->defaultMap();
     }
 

@@ -22,20 +22,10 @@ namespace Phalcon\ADR\Responder;
  */
 class Redirect
 {
-    /**
-     * @var int
-     */
-    protected $status;
-
-    /**
-     * @var string
-     */
-    protected $url;
-
-    public function __construct(string $url, int $status = 302)
-    {
-        $this->url    = $url;
-        $this->status = $status;
+    public function __construct(
+        protected string $url,
+        protected int $status = 302
+    ) {
     }
 
     public static function permanent(string $url): Redirect

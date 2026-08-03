@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Adapter;
 
-use Exception as BaseException;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\FileOpenError;
@@ -94,7 +93,7 @@ class Csv extends AbstractAdapter
      * @phpstan-param array<string, string> $placeholders
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     public function query(string $translateKey, array $placeholders = []): string
     {
@@ -119,13 +118,6 @@ class Csv extends AbstractAdapter
      * Lines whose first column begins with a `#` are treated as comments
      * and skipped.
      *
-     * @param string $file
-     * @param int    $length
-     * @param string $delimiter
-     * @param string $enclosure
-     * @param string $escape
-     *
-     * @return void
      * @throws FileOpenError
      */
     private function load(

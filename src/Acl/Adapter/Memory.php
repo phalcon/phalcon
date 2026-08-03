@@ -53,6 +53,66 @@ use const E_USER_WARNING;
 /**
  * Manages ACL lists in memory
  *
+ *```php
+ * $acl = new \Phalcon\Acl\Adapter\Memory();
+ *
+ * $acl->setDefaultAction(
+ *     \Phalcon\Acl\Enum::DENY
+ * );
+ *
+ * // Register roles
+ * $roles = [
+ *     "users"  => new \Phalcon\Acl\Role("Users"),
+ *     "guests" => new \Phalcon\Acl\Role("Guests"),
+ * ];
+ * foreach ($roles as $role) {
+ *     $acl->addRole($role);
+ * }
+ *
+ * // Private area components
+ * $privateComponents = [
+ *     "companies" => ["index", "search", "new", "edit", "save", "create", "delete"],
+ *     "products"  => ["index", "search", "new", "edit", "save", "create", "delete"],
+ *     "invoices"  => ["index", "profile"],
+ * ];
+ *
+ * foreach ($privateComponents as $componentName => $actions) {
+ *     $acl->addComponent(
+ *         new \Phalcon\Acl\Component($componentName),
+ *         $actions
+ *     );
+ * }
+ *
+ * // Public area components
+ * $publicComponents = [
+ *     "index"   => ["index"],
+ *     "about"   => ["index"],
+ *     "session" => ["index", "register", "start", "end"],
+ *     "contact" => ["index", "send"],
+ * ];
+ *
+ * foreach ($publicComponents as $componentName => $actions) {
+ *     $acl->addComponent(
+ *         new \Phalcon\Acl\Component($componentName),
+ *         $actions
+ *     );
+ * }
+ *
+ * // Grant access to public areas to both users and guests
+ * foreach ($roles as $role) {
+ *     foreach ($publicComponents as $component => $actions) {
+ *         $acl->allow($role->getName(), $component, "*");
+ *     }
+ * }
+ *
+ * // Grant access to private area to role Users
+ * foreach ($privateComponents as $component => $actions) {
+ *     foreach ($actions as $action) {
+ *         $acl->allow("Users", $component, $action);
+ *     }
+ * }
+ *```
+ *
  * @phpstan-import-type TComponent from Adapter
  * @phpstan-import-type TRole from Adapter
  * @phpstan-import-type TRoleToInherit from Adapter
@@ -77,7 +137,7 @@ class Memory extends AbstractAdapter
     protected array $accessList = [];
 
     /**
-     * Returns latest function used to acquire access
+     * Returns the latest function used to acquire access
      *
      * @var mixed
      */
@@ -92,7 +152,7 @@ class Memory extends AbstractAdapter
     protected int $activeFunctionCustomArgumentsCount = 0;
 
     /**
-     * Returns the last key used to acquire access
+     * Returns the latest key used to acquire access
      *
      * @var string|null
      */
@@ -103,10 +163,10 @@ class Memory extends AbstractAdapter
      *
      * @var array<string, ComponentInterface>|null
      */
-    protected ?array $components = null;
+    protected array $components = [];
 
     /**
-     * Components
+     * Component Names
      *
      * @var array<string, bool>
      */
@@ -327,6 +387,13 @@ class Memory extends AbstractAdapter
 
                 $usedRoleToInherits = [];
 
+                /**
+                 * Walk the inheritance queue with an integer cursor instead
+                 * of `array_shift`. New roles enqueued by the body land at
+                 * the end of `checkRoleToInherits`, so advancing `pendingIndex`
+                 * preserves FIFO order without paying `array_shift`'s O(n)
+                 * reindex per pop.
+                 */
                 $pendingIndex = 0;
                 while ($pendingIndex < count($checkRoleToInherits)) {
                     $checkRoleToInherit = $checkRoleToInherits[$pendingIndex];
@@ -577,8 +644,6 @@ class Memory extends AbstractAdapter
      * has been specified it will return the whole array. If the role has not
      * been found it returns an empty array
      *
-     * @param string $roleName
-     *
      * @return array<int|string, array<int, string>|string>
      */
     public function getInheritedRoles(string $roleName = ''): array | null
@@ -738,10 +803,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Check whether component exist in the components list
-     *
-     * @param string $componentName
-     *
-     * @return bool
      */
     public function isComponent(string $componentName): bool
     {
@@ -750,10 +811,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Check whether role exist in the roles list
-     *
-     * @param string $roleName
-     *
-     * @return bool
      */
     public function isRole(string $roleName): bool
     {
@@ -819,6 +876,9 @@ class Memory extends AbstractAdapter
             }
 
             $accessKey                = $this->buildKey($roleName, $componentName, $access);
+            /**
+             * Define the access action for the specified accessKey
+             */
             $this->access[$accessKey] = $action;
             if (null !== $function) {
                 $this->functions[$accessKey] = $function;
@@ -883,6 +943,12 @@ class Memory extends AbstractAdapter
 
             $usedRoleToInherits = [];
 
+            /**
+             * Walk the inheritance queue with an integer cursor instead of
+             * `array_shift`. New roles enqueued by the body land at the end
+             * of `checkRoleToInherits`, so advancing `pendingIndex` preserves
+             * FIFO order without paying `array_shift`'s O(n) reindex per pop.
+             */
             $pendingIndex = 0;
             while ($pendingIndex < count($checkRoleToInherits)) {
                 $checkRoleToInherit = $checkRoleToInherits[$pendingIndex];
@@ -896,6 +962,10 @@ class Memory extends AbstractAdapter
 
                 $inheritPrefix = $checkRoleToInherit . '!' . $componentName . '!';
                 $accessKey     = $inheritPrefix . $access;
+                /**
+                 * Check if there is a direct combination in one of the
+                 * inherited roles
+                 */
                 if (isset($accessList[$accessKey])) {
                     return $accessKey;
                 }
@@ -923,11 +993,8 @@ class Memory extends AbstractAdapter
 
     /**
      * @param array<string, mixed>|null $collection
-     * @param string                    $element
-     * @param string                    $elementName
-     * @param string                    $suffix
      *
-     * @throws Exception
+     * @throws ElementNotFound
      */
     private function checkExists(
         ?array $collection,

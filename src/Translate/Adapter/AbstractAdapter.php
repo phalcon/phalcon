@@ -31,25 +31,14 @@ use Phalcon\Translate\InterpolatorFactory;
  */
 abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
 {
-    /**
-     * @var string
-     */
     protected string $defaultInterpolator = '';
-
-    /**
-     * @var InterpolatorInterface|null
-     */
     protected InterpolatorInterface | null $interpolator = null;
-
-    /**
-     * @var bool
-     */
     protected bool $triggerError = false;
 
     /**
      * AbstractAdapter constructor.
      *
-     * @param TOptions            $options
+     * @param TOptions $options
      */
     public function __construct(
         protected InterpolatorFactory $interpolatorFactory,
@@ -63,8 +52,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      * Returns the translation string of the given key (alias of method 't')
      *
      * @phpstan-param array<string, string> $placeholders
-     *
-     * @return string
      */
     public function _(string $translateKey, array $placeholders = []): string
     {
@@ -74,9 +61,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * Whenever a key is not found this method will be called
      *
-     * @param string $index
-     *
-     * @return string
      * @throws KeyNotFound
      */
     public function notFound(string $index): string
@@ -90,10 +74,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
 
     /**
      * Check whether a translation key exists
-     *
-     * @param mixed $offset
-     *
-     * @return bool
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -117,10 +97,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * Sets a translation value
      *
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @return void
      * @throws ImmutableObject
      */
     public function offsetSet($offset, $value): void
@@ -131,9 +107,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * Unsets a translation from the dictionary
      *
-     * @param mixed $offset
-     *
-     * @return void
      * @throws ImmutableObject
      */
     public function offsetUnset($offset): void
@@ -145,8 +118,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      * Returns the translation string of the given key
      *
      * @phpstan-param array<string, string> $placeholders
-     *
-     * @return string
      */
     public function t(string $translateKey, array $placeholders = []): string
     {
@@ -158,7 +129,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      *
      * @phpstan-param array<string, string> $placeholders
      *
-     * @return string
      * @throws Exception
      */
     protected function replacePlaceholders(

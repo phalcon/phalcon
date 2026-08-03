@@ -33,29 +33,22 @@ class CorsMiddleware implements Middleware
 {
     use GetTrait;
 
-    /**
-     * @var bool
-     */
     protected bool $allowCredentials = false;
 
     /**
      * @var array
      */
-    protected array $allowedHeaders;
+    protected array $allowedHeaders = [];
 
     /**
      * @var array
      */
-    protected array $allowedMethods;
+    protected array $allowedMethods = [];
 
     /**
      * @var array
      */
-    protected array $allowedOrigins;
-
-    /**
-     * @var int
-     */
+    protected array $allowedOrigins = [];
     protected int $maxAge = 0;
 
     public function __construct(array $config = [])

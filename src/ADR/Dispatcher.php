@@ -37,30 +37,15 @@ use Phalcon\Http\ResponseInterface;
 final class Dispatcher implements DispatcherInterface
 {
     /**
-     * @var IocContainer
-     */
-    protected IocContainer $container;
-
-    /**
-     * @var Manager
-     */
-    protected Manager $events;
-
-    /**
-     * @var array
-     */
-    protected array $globalMiddleware;
-
-    /**
      * @var array|null
      */
     protected array | null $resolvedGlobal = null;
 
-    public function __construct(IocContainer $container, Manager $events, array $globalMiddleware = [])
-    {
-        $this->container        = $container;
-        $this->events           = $events;
-        $this->globalMiddleware = $globalMiddleware;
+    public function __construct(
+        protected IocContainer $container,
+        protected Manager $events,
+        protected array $globalMiddleware = []
+    ) {
     }
 
     public function dispatch(

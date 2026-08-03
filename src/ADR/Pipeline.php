@@ -29,26 +29,11 @@ use Phalcon\Http\ResponseInterface;
  */
 final class Pipeline implements Handler
 {
-    /**
-     * @var int
-     */
-    protected int $index;
-
-    /**
-     * @var array
-     */
-    protected array $middleware;
-
-    /**
-     * @var Handler
-     */
-    protected Handler $terminal;
-
-    public function __construct(array $middleware, Handler $terminal, int $index = 0)
-    {
-        $this->middleware = $middleware;
-        $this->terminal   = $terminal;
-        $this->index      = $index;
+    public function __construct(
+        protected array $middleware,
+        protected Handler $terminal,
+        protected int $index = 0
+    ) {
     }
 
     public function __invoke(AttributeRequest $request): ResponseInterface

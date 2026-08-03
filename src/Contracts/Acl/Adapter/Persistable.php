@@ -26,15 +26,11 @@ interface Persistable
     /**
      * Loads the policy snapshot from the backing store, replacing current
      * in-memory state. Returns false if no snapshot was found.
-     *
-     * @return bool
      */
     public function load(): bool;
 
     /**
      * Persists the current policy snapshot to the backing store.
-     *
-     * @return bool
      */
     public function save(): bool;
 }

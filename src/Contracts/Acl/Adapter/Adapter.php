@@ -169,8 +169,6 @@ interface Adapter
 
     /**
      * Returns the default action
-     *
-     * @return int
      */
     public function getDefaultAction(): int;
 
@@ -188,8 +186,6 @@ interface Adapter
     /**
      * Returns the default ACL access level for no arguments provided in
      * `isAllowed` action if a `function` (callable) exists for `accessKey`
-     *
-     * @return int
      */
     public function getNoArgumentsDefaultAction(): int;
 
@@ -222,29 +218,17 @@ interface Adapter
 
     /**
      * Check whether a component exists in the components list
-     *
-     * @param string $componentName
-     *
-     * @return bool
      */
     public function isComponent(string $componentName): bool;
 
     /**
      * Check whether role exist in the roles list
-     *
-     * @param string $roleName
-     *
-     * @return bool
      */
     public function isRole(string $roleName): bool;
 
     /**
      * Sets the default access level
      * (Phalcon\Acl\Enum::ALLOW or Phalcon\Acl\Enum::DENY)
-     *
-     * @param int $defaultAccess
-     *
-     * @return void
      */
     public function setDefaultAction(int $defaultAccess): void;
 
@@ -252,10 +236,6 @@ interface Adapter
      * Sets the default access level (Phalcon\Acl\Enum::ALLOW or
      * Phalcon\Acl\Enum::DENY) for no arguments provided in isAllowed action if
      * there exists func for accessKey
-     *
-     * @param int $defaultAccess
-     *
-     * @return void
      */
     public function setNoArgumentsDefaultAction(int $defaultAccess): void;
 }

@@ -32,14 +32,9 @@ use function str_contains;
  */
 class Input
 {
-    /**
-     * @var array
-     */
-    protected array $data = [];
-
-    public function __construct(array $data = [])
-    {
-        $this->data = $data;
+    public function __construct(
+        protected array $data = []
+    ) {
     }
 
     public static function fromArray(array $data): static

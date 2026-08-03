@@ -17,7 +17,7 @@ use Phalcon\Acl\Exceptions\ForbiddenWildcard;
 use Phalcon\Acl\Traits\ItemTrait;
 
 /**
- * Components of the ACL. Also known as "Resources"
+ * This class defines component entity and its description
  */
 class Component implements ComponentInterface
 {

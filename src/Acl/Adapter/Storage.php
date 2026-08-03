@@ -27,7 +27,7 @@ use function is_object;
 
 /**
  * ACL adapter that persists its policy to any Phalcon\Storage backend
- * (Redis, Apcu, Stream, Memcached, …) as a whole-policy snapshot.
+ * (Redis, Apcu, Stream, Memcached, ...) as a whole-policy snapshot.
  *
  * The snapshot is a versioned, scalar-only structure: roles and components are
  * stored as `name => description` maps and rebuilt into objects on load, so the
@@ -181,10 +181,6 @@ class Storage extends Memory implements Persistable
      * Recursively converts stdClass into nested arrays so a snapshot stored
      * through an object-decoding serializer (e.g. JSON) is read back the same
      * way as the array-decoding serializers (php, igbinary, msgpack).
-     *
-     * @param mixed $value
-     *
-     * @return mixed
      */
     private function normalizeToArray(mixed $value): mixed
     {

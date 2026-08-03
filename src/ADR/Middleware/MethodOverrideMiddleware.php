@@ -33,12 +33,14 @@ use Phalcon\Http\ResponseInterface;
 class MethodOverrideMiddleware implements Middleware
 {
     /**
-     * @var array
+     * @var array<int, string>
      */
     protected array $allowed = ['DELETE', 'PATCH', 'PUT'];
 
-    public function __invoke(AttributeRequest $request, Handler $next): ResponseInterface
-    {
+    public function __invoke(
+        AttributeRequest $request,
+        Handler $next
+    ): ResponseInterface {
         if ('POST' === $request->getMethod()) {
             $spoofed = strtoupper((string) $request->getPost('_method'));
 

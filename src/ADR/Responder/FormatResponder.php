@@ -30,14 +30,9 @@ use Phalcon\Http\ResponseInterface;
  */
 class FormatResponder implements Responder
 {
-    /**
-     * @var array
-     */
-    protected $formatters;
-
-    public function __construct(array $formatters = [])
-    {
-        $this->formatters = $formatters;
+    public function __construct(
+        protected array $formatters = []
+    ) {
     }
 
     public function __invoke(

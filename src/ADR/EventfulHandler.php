@@ -29,20 +29,10 @@ use Phalcon\Http\ResponseInterface;
  */
 final class EventfulHandler implements Handler
 {
-    /**
-     * @var Action
-     */
-    protected Action $action;
-
-    /**
-     * @var Manager
-     */
-    protected Manager $events;
-
-    public function __construct(Action $action, Manager $events)
-    {
-        $this->action = $action;
-        $this->events = $events;
+    public function __construct(
+        protected Action $action,
+        protected Manager $events
+    ) {
     }
 
     public function __invoke(AttributeRequest $request): ResponseInterface

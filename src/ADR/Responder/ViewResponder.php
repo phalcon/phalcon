@@ -32,29 +32,11 @@ use Phalcon\Http\ResponseInterface;
  */
 final class ViewResponder implements Responder
 {
-    /**
-     * @var Renderer
-     */
-    protected $renderer;
-
-    /**
-     * @var StatusMapper
-     */
-    protected $statusMapper;
-
-    /**
-     * @var string
-     */
-    protected $template = '';
-
     public function __construct(
-        Renderer $renderer,
-        StatusMapper $statusMapper,
-        string $template = ''
+        protected Renderer $renderer,
+        protected StatusMapper $statusMapper,
+        protected string $template = ''
     ) {
-        $this->renderer     = $renderer;
-        $this->statusMapper = $statusMapper;
-        $this->template     = $template;
     }
 
     public function __invoke(

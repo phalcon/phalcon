@@ -60,15 +60,8 @@ class Gettext extends AbstractAdapter
 {
     use InfoTrait;
 
-    /**
-     * @var int
-     */
-    protected int $category;
-
-    /**
-     * @var string
-     */
-    protected string $defaultDomain;
+    protected int $category = LC_ALL;
+    protected string $defaultDomain = "messages";
 
     /**
      * @var array<string, string>|string
@@ -140,9 +133,6 @@ class Gettext extends AbstractAdapter
         return $this->directory;
     }
 
-    /**
-     * @return false|string
-     */
     public function getLocale(): false | string
     {
         return $this->locale;
@@ -150,10 +140,6 @@ class Gettext extends AbstractAdapter
 
     /**
      * Check whether is defined a translation key in the internal array
-     *
-     * @param string $index
-     *
-     * @return bool
      */
     public function has(string $index): bool
     {

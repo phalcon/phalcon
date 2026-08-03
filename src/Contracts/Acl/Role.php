@@ -20,22 +20,16 @@ interface Role
 {
     /**
      * Magic method __toString
-     *
-     * @return string
      */
     public function __toString(): string;
 
     /**
      * Returns role description
-     *
-     * @return string
      */
     public function getDescription(): string | null;
 
     /**
      * Returns the role name
-     *
-     * @return string
      */
     public function getName(): string;
 }

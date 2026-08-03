@@ -42,29 +42,13 @@ use Phalcon\Http\ResponseInterface;
  */
 final class Application implements ApplicationInterface
 {
-    /**
-     * @var string
-     */
     protected string $actionDirectory = "";
-
-    /**
-     * @var string
-     */
     protected string $baseNamespace = "";
-
-    /**
-     * @var Container
-     */
     protected Container $container;
-
     /**
      * @var array<string, string[]>
      */
     protected array $middlewareMap = [];
-
-    /**
-     * @var string
-     */
     protected string $wordSeparator = "";
 
     public function __construct(?Container $container = null)

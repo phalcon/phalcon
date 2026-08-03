@@ -29,32 +29,12 @@ use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
  */
 final class RouterMatch implements RouterMatchInterface
 {
-    /**
-     * @var string
-     */
-    protected string $action;
-
-    /**
-     * @var array
-     */
-    protected array $attributes;
-
-    /**
-     * @var array
-     */
-    protected array $middleware;
-
-    /**
-     * @var string|null
-     */
-    protected string | null $name;
-
-    public function __construct(string $action, array $attributes = [], array $middleware = [], mixed $name = null)
-    {
-        $this->action     = $action;
-        $this->attributes = $attributes;
-        $this->middleware = $middleware;
-        $this->name       = $name;
+    public function __construct(
+        protected string $action,
+        protected array $attributes = [],
+        protected array $middleware = [],
+        protected ?string $name = null
+    ) {
     }
 
     public function getAction(): string

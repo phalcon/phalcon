@@ -17,7 +17,7 @@ use Phalcon\Acl\Exceptions\ForbiddenWildcard;
 use Phalcon\Acl\Traits\ItemTrait;
 
 /**
- * Roles for the ACL
+ * This class defines role entity and its description
  */
 class Role implements RoleInterface
 {

@@ -20,22 +20,16 @@ interface Component
 {
     /**
      * Magic method __toString
-     *
-     * @return string
      */
     public function __toString(): string;
 
     /**
      * Returns component description
-     *
-     * @return string
      */
     public function getDescription(): string | null;
 
     /**
      * Returns the component name
-     *
-     * @return string
      */
     public function getName(): string;
 }

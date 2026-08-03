@@ -80,24 +80,12 @@ use Phalcon\Http\RequestInterface;
  */
 final class Router implements RouterInterface
 {
-    /**
-     * @var string
-     */
     protected string $actionDirectory = '';
-
-    /**
-     * @var string
-     */
     protected string $baseNamespace = '';
-
     /**
      * @var array<string, string[]>
      */
     protected array $middlewareMap = [];
-
-    /**
-     * @var string
-     */
     protected string $wordSeparator = '-';
 
     /**

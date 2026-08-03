@@ -28,13 +28,11 @@ use Phalcon\Http\ResponseInterface;
 class ChainResponder implements Responder
 {
     /**
-     * @var Responder[]
+     * @param Responder[] $links
      */
-    protected $links;
-
-    public function __construct(array $links = [])
-    {
-        $this->links = $links;
+    public function __construct(
+        protected array $links = []
+    ) {
     }
 
     public function __invoke(
