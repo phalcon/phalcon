@@ -33,14 +33,7 @@ use function session_start;
 use function session_status;
 
 /**
- * Phalcon\Session\Manager
- *
  * Session manager class
- *
- * @property SessionHandlerInterface|null $adapter
- * @property string                       $name
- * @property array                        $options
- * @property string                       $uniqueId
  */
 class Manager implements InjectionAwareInterface, ManagerInterface
 {
@@ -48,32 +41,17 @@ class Manager implements InjectionAwareInterface, ManagerInterface
     use HeaderTrait;
     use InjectionAwareTrait;
 
-    /**
-     * @var SessionHandlerInterface|null
-     */
     private SessionHandlerInterface | null $adapter = null;
-
-    /**
-     * @var string
-     */
     private string $name = '';
-
-    /**
-     * @var array
-     */
     private array $options = [];
-
-    /**
-     * @var string
-     */
     private string $uniqueId = '';
 
     /**
      * Manager constructor.
      *
      * @param array $options = [
-     *                       'uniqueId' => null
-     *                       ]
+     *     'uniqueId' => null
+     * ]
      */
     public function __construct(array $options = [])
     {
@@ -177,8 +155,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Returns the stored session adapter
-     *
-     * @return SessionHandlerInterface|null
      */
     public function getAdapter(): SessionHandlerInterface | null
     {
@@ -187,8 +163,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Returns the session id
-     *
-     * @return string
      */
     public function getId(): string
     {
@@ -197,8 +171,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Returns the name of the session
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -211,8 +183,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Get internal options
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -221,10 +191,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Check whether a session variable is set in an application context
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function has(string $key): bool
     {
@@ -242,10 +208,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
      * Regenerates the session id via `session_regenerate_id()` (when the
      * session is active). The registered save handler persists the data
      * under the new id.
-     *
-     * @param bool $deleteOldSession
-     *
-     * @return ManagerInterface
      */
     public function regenerateId(bool $deleteOldSession = true): ManagerInterface
     {
@@ -258,8 +220,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Removes a session variable from an application context
-     *
-     * @param string $key
      */
     public function remove(string $key): void
     {
@@ -273,9 +233,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Sets a session variable in an application context
-     *
-     * @param string $key
-     * @param mixed  $value
      */
     public function set(string $key, $value): void
     {
@@ -289,10 +246,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Set the adapter for the session
-     *
-     * @param SessionHandlerInterface $adapter
-     *
-     * @return ManagerInterface
      */
     public function setAdapter(SessionHandlerInterface $adapter): ManagerInterface
     {
@@ -303,8 +256,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Set session Id
-     *
-     * @param string $sessionId
      *
      * @return ManagerInterface
      * @throws InvalidSessionId
@@ -357,8 +308,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Sets session's options
-     *
-     * @param array $options
      */
     public function setOptions(array $options): void
     {
@@ -369,8 +318,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
     /**
      * Starts the session (if headers are already sent the session will not be
      * started)
-     *
-     * @return bool
      */
     public function start(): bool
     {
@@ -419,8 +366,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Returns the status of the current session.
-     *
-     * @return int
      */
     public function status(): int
     {

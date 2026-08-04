@@ -59,32 +59,26 @@ class Stream extends Noop
 
     /**
      * Session options
-     *
-     * @var array
      */
     protected array $options = [];
 
     /**
      * Session prefix
-     *
-     * @var string
      */
     protected string $prefix = '';
 
     /**
      * The path of the session files
-     *
-     * @var string
      */
     private string $path = '';
 
     /**
-     * Stream constructor.
+     * Constructor
      *
      * @param array $options = [
-     *                       'prefix'   => '',
-     *                       'savePath' => ''
-     *                       ]
+     *     'prefix' => '',
+     *     'savePath' => ''
+     * ]
      *
      * @throws InvalidSavePath
      * @throws SavePathUnavailable
@@ -111,11 +105,6 @@ class Stream extends Noop
         $this->path = $this->toDirSeparator($path);
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool
-     */
     public function destroy(string $id): bool
     {
         $file = $this->path . $this->getPrefixedName($id);
@@ -162,13 +151,8 @@ class Stream extends Noop
     }
 
     /**
-     * Ignore the savePath and use local defined path
-     *
-     * @param string $path
-     * @param string $name
-     *
-     * @return bool
-     */
+    * Ignore the savePath and use local defined path
+    */
     public function open(string $path, string $name): bool
     {
         return true;
@@ -176,10 +160,6 @@ class Stream extends Noop
 
     /**
      * Reads data from the adapter
-     *
-     * @param string $id
-     *
-     * @return string
      */
     public function read(string $id): string
     {
@@ -205,11 +185,6 @@ class Stream extends Noop
 
     /**
      * Refresh the session file modification time without changing its data
-     *
-     * @param string $id
-     * @param string $data
-     *
-     * @return bool
      */
     public function updateTimestamp(string $id, string $data): bool
     {
@@ -220,22 +195,12 @@ class Stream extends Noop
 
     /**
      * Validate the session id (used when strict mode is enabled)
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     public function validateId(string $id): bool
     {
         return $this->phpFileExists($this->path . $this->getPrefixedName($id));
     }
 
-    /**
-     * @param string $id
-     * @param string $data
-     *
-     * @return bool
-     */
     public function write(string $id, string $data): bool
     {
         $name = $this->path . $this->getPrefixedName($id);
@@ -262,12 +227,8 @@ class Stream extends Noop
 
     /**
      * Helper method to get the name prefixed
-     *
-     * @param mixed $name
-     *
-     * @return string
      */
-    protected function getPrefixedName($name): string
+    protected function getPrefixedName(mixed $name): string
     {
         $name = (string)$name;
 

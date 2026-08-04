@@ -17,9 +17,7 @@ use Exception;
 use Phalcon\Storage\AdapterFactory;
 
 /**
- * Class Libmemcached
- *
- * @package Phalcon\Session\Adapter
+ * Phalcon\Session\Adapter\Libmemcached
  */
 class Libmemcached extends AbstractAdapter
 {
@@ -28,18 +26,19 @@ class Libmemcached extends AbstractAdapter
      *
      * @param AdapterFactory $factory
      * @param array          $options = [
-     *                                'servers'          => [
-     *                                [
-     *                                'host'   => 'localhost',
-     *                                'port'   => 11211,
-     *                                'weight' => 1,
+     *     'servers' => [
+     *         [
+     *             'host' => 'localhost',
+     *             'port' => 11211,
+     *             'weight' => 1,
      *
      *         ]
      *     ],
-     *     'defaultSerializer' => 'php',
-     *     'lifetime'          => 3600,
-     *     'serializer'        => null,
-     *     'prefix'            => 'sess-memc-'
+     *     'defaultSerializer' => 'Php',
+     *     'lifetime' => 3600,
+     *     'serializer' => null,
+     *     'prefix' => 'sess-memc-',
+     *     'stripPrefix' => false
      * ]
      *
      * @throws Exception

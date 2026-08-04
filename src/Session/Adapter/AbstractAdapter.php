@@ -18,26 +18,14 @@ use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use SessionHandlerInterface;
 use SessionUpdateTimestampHandlerInterface;
 
-/**
- * Class AbstractAdapter
- *
- * @package Phalcon\Session\Adapter
- *
- * @property AdapterInterface $adapter
- */
 abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
 {
     use GetTrait;
 
-    /**
-     * @var AdapterInterface
-     */
     protected AdapterInterface $adapter;
 
     /**
      * Close
-     *
-     * @return bool
      */
     public function close(): bool
     {
@@ -46,10 +34,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Destroy
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     public function destroy(string $id): bool
     {
@@ -74,11 +58,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Open
-     *
-     * @param string $path
-     * @param string $name
-     *
-     * @return bool
      */
     public function open(string $path, string $name): bool
     {
@@ -87,10 +66,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Read
-     *
-     * @param string $id
-     *
-     * @return string
      */
     public function read(string $id): string
     {
@@ -101,11 +76,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Refresh the session lifetime without changing the session data
-     *
-     * @param string $id
-     * @param string $data
-     *
-     * @return bool
      */
     public function updateTimestamp(string $id, string $data): bool
     {
@@ -114,10 +84,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Validate the session id (used when strict mode is enabled)
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     public function validateId(string $id): bool
     {
@@ -126,12 +92,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Write
-     *
-     *
-     * @param string $id
-     * @param string $data
-     *
-     * @return bool
      */
     public function write(string $id, string $data): bool
     {

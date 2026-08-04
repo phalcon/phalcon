@@ -26,54 +26,24 @@ use function usleep;
  */
 class Redis extends AbstractAdapter
 {
-    /**
-     * @var bool
-     */
     protected bool $lockAcquired = false;
-
     /**
      * Lock time-to-live in seconds. The lock is not refreshed during the
      * request: a request that runs longer than this expiry loses its lock
      * silently and a concurrent request may then acquire it (the token-guarded
      * release still avoids deleting the newer lock). Raise this above the
      * longest expected request to retain the lock for the whole request.
-     *
-     * @var int
      */
     protected int $lockExpiry = 30;
-
-    /**
-     * @var bool
-     */
     protected bool $lockingEnabled = false;
-
-    /**
-     * @var string
-     */
     protected string $lockKey = '';
-
-    /**
-     * @var int
-     */
     protected int $lockRetries = 100;
-
-    /**
-     * @var string
-     */
     protected string $lockToken = '';
-
-    /**
-     * @var int
-     */
     protected int $lockWaitTime = 50000;
-
-    /**
-     * @var string
-     */
     protected string $prefix = '';
 
     /**
-     * Redis constructor.
+     * Constructor
      *
      * @param AdapterFactory $factory
      * @param array          $options = [
@@ -112,8 +82,6 @@ class Redis extends AbstractAdapter
 
     /**
      * Close - releases the session lock if one is held
-     *
-     * @return bool
      */
     public function close(): bool
     {
@@ -124,10 +92,6 @@ class Redis extends AbstractAdapter
 
     /**
      * Destroy
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     public function destroy(string $id): bool
     {
@@ -140,10 +104,6 @@ class Redis extends AbstractAdapter
 
     /**
      * Read
-     *
-     * @param string $id
-     *
-     * @return string
      */
     public function read(string $id): string
     {
@@ -159,10 +119,6 @@ class Redis extends AbstractAdapter
     /**
      * Tries to acquire the session lock, pausing `lockWaitTime` microseconds
      * between attempts, up to `lockRetries` times
-     *
-     * @param string $id
-     *
-     * @return bool
      */
     protected function acquireLock(string $id): bool
     {
@@ -214,8 +170,6 @@ class Redis extends AbstractAdapter
 
     /**
      * Releases the session lock - only when this instance still owns it
-     *
-     * @return void
      */
     protected function releaseLock(): void
     {
