@@ -158,7 +158,7 @@ class RedisCluster extends Redis
         );
     }
 
-    protected function getDefaultOptions($options): array
+    protected function getDefaultOptions(array $options): array
     {
         /**
          * Lets set some defaults and options here
