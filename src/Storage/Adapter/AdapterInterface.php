@@ -27,81 +27,47 @@ interface AdapterInterface
 
     /**
      * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     public function decrement(string $key, int $value = 1): false | int;
 
     /**
      * Deletes data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function delete(string $key): bool;
 
     /**
      * Deletes multiple data from the adapter
-     *
-     * @param array $keys
-     *
-     * @return bool
      */
     public function deleteMultiple(array $keys): bool;
 
     /**
      * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     public function get(string $key, mixed $defaultValue = null): mixed;
 
     /**
-     * Returns the adapter - connects to the storage if not connected
-     *
-     * @return mixed
+     * Returns the already connected adapter or connects to the backend
+     * server(s)
      */
     public function getAdapter(): mixed;
 
     /**
      * Returns all the keys stored
-     *
-     * @param string $prefix
-     *
-     * @return array
      */
     public function getKeys(string $prefix = ''): array;
 
     /**
      * Returns the prefix for the keys
-     *
-     * @return string
      */
     public function getPrefix(): string;
 
     /**
      * Checks if an element exists in the cache
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function has(string $key): bool;
 
     /**
      * Increments a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     public function increment(string $key, int $value = 1): false | int;
 
@@ -112,8 +78,6 @@ interface AdapterInterface
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
      *
-     * @param string                $key
-     * @param mixed                 $value
      * @param DateInterval|int|null $ttl
      *
      * @return bool
@@ -123,11 +87,6 @@ interface AdapterInterface
     /**
      * Stores data in the adapter forever. The key needs to be manually deleted
      * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
      */
     public function setForever(string $key, mixed $data): bool;
 }

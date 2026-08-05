@@ -38,16 +38,10 @@ use function strtolower;
  */
 class Libmemcached extends AbstractAdapter
 {
-    /**
-     * @var string
-     */
     protected string $prefix = 'ph-memc-';
 
     /**
      * Libmemcached constructor.
-     *
-     * @param SerializerFactory $factory
-     * @param array             $options
      */
     public function __construct(
         SerializerFactory $factory,
@@ -71,21 +65,17 @@ class Libmemcached extends AbstractAdapter
     /**
      * Flushes/clears the cache
      *
-     * @return bool
      * @throws StorageException
      */
     public function clear(): bool
     {
-        return $this->getAdapter()
-                    ->flush()
-        ;
+        return $this->getAdapter()->flush();
     }
 
     /**
      * Returns the already connected adapter or connects to the Memcached
      * server(s)
      *
-     * @return Memcached|mixed
      * @throws StorageException
      */
     public function getAdapter(): mixed
@@ -135,16 +125,12 @@ class Libmemcached extends AbstractAdapter
     /**
      * Stores data in the adapter
      *
-     * @param string $prefix
-     *
-     * @return array
      * @throws StorageException
      */
     public function getKeys(string $prefix = ''): array
     {
         return $this->getFilteredKeys(
-            $this->getAdapter()
-                 ->getAllKeys(),
+            $this->getAdapter()->getAllKeys(),
             $prefix
         );
     }
@@ -153,10 +139,6 @@ class Libmemcached extends AbstractAdapter
      * Stores data in the adapter forever. The key needs to be manually deleted
      * from the adapter.
      *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
      * @throws StorageException
      */
     public function setForever(string $key, mixed $data): bool
@@ -173,40 +155,26 @@ class Libmemcached extends AbstractAdapter
     /**
      * Decrements a stored number
      *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      * @throws StorageException
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
-        return $this->getAdapter()
-                    ->decrement($key, $value)
-        ;
+        return $this->getAdapter()->decrement($key, $value);
     }
 
     /**
-     * Reads data from the adapter
+     * Deletes data from the adapter
      *
-     * @param string $key
-     *
-     * @return bool
      * @throws StorageException
      */
     protected function doDelete(string $key): bool
     {
-        return $this->getAdapter()
-                    ->delete($key, 0)
-        ;
+        return $this->getAdapter()->delete($key, 0);
     }
 
     /**
      * Deletes multiple keys from Memcached using a single deleteMulti call
      *
-     * @param array $keys
-     *
-     * @return bool
      * @throws StorageException
      */
     protected function doDeleteMultiple(array $keys): bool
@@ -225,9 +193,6 @@ class Libmemcached extends AbstractAdapter
     /**
      * Checks if an element exists in the cache
      *
-     * @param string $key
-     *
-     * @return bool
      * @throws StorageException
      */
     protected function doHas(string $key): bool
@@ -241,10 +206,6 @@ class Libmemcached extends AbstractAdapter
     /**
      * Increments a stored number
      *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      * @throws StorageException
      */
     protected function doIncrement(string $key, int $value = 1): false | int
@@ -285,10 +246,6 @@ class Libmemcached extends AbstractAdapter
     }
 
     /**
-     * @param Memcached $connection
-     * @param array     $client
-     *
-     * @return Libmemcached
      * @throws InvalidConfiguration
      */
     private function setOptions(Memcached $connection, array $client): static
@@ -302,15 +259,11 @@ class Libmemcached extends AbstractAdapter
         return $this;
     }
 
-    /**
-     * @param Memcached $connection
-     * @param string    $saslUser
-     * @param string    $saslPass
-     *
-     * @return Libmemcached
-     */
-    private function setSasl(Memcached $connection, string $saslUser, string $saslPass): static
-    {
+    private function setSasl(
+        Memcached $connection,
+        string $saslUser,
+        string $saslPass
+    ): static {
         if (!empty($saslUser)) {
             $connection->setSaslAuthData($saslUser, $saslPass);
         }
@@ -322,17 +275,14 @@ class Libmemcached extends AbstractAdapter
      * Checks the serializer. If it is a supported one it is set, otherwise
      * the custom one is set.
      *
-     * @param Memcached $connection
-     *
-     * @return void
      * @throws SupportException
      */
     private function setSerializer(Memcached $connection): void
     {
         $map = [
-            'memcached_php'      => Memcached::SERIALIZER_PHP,
-            'memcached_json'     => Memcached::SERIALIZER_JSON,
             'memcached_igbinary' => Memcached::SERIALIZER_IGBINARY,
+            'memcached_json'     => Memcached::SERIALIZER_JSON,
+            'memcached_php'      => Memcached::SERIALIZER_PHP,
         ];
 
         $serializer = strtolower($this->defaultSerializer);
@@ -346,10 +296,6 @@ class Libmemcached extends AbstractAdapter
     }
 
     /**
-     * @param Memcached $connection
-     * @param array     $servers
-     *
-     * @return Libmemcached
      * @throws ConnectionFailed
      */
     private function setServers(Memcached $connection, array $servers): static

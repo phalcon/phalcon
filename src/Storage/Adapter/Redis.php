@@ -28,7 +28,6 @@ use function constant;
 use function defined;
 use function is_bool;
 use function is_int;
-use function mb_strtolower;
 use function strlen;
 use function substr;
 
@@ -44,16 +43,26 @@ use function substr;
  */
 class Redis extends AbstractAdapter
 {
-    /**
-     * @var string
-     */
     protected string $prefix = 'ph-reds-';
 
     /**
      * Redis constructor.
      *
      * @param SerializerFactory $factory
-     * @param array             $options
+     * @param array             $options = [
+     *     "host"           => "127.0.0.1",
+     *     "port"           => 6379,
+     *     "index"          => 0,
+     *     "timeout"        => 0,
+     *     "persistent"     => false,
+     *     "persistentId"   => "",
+     *     "auth"           => "",
+     *     "socket"         => "",
+     *     "connectTimeout" => 0,
+     *     "retryInterval"  => 0,
+     *     "readTimeout"    => 0,
+     *     "ssl"            => [],
+     * ]
      */
     public function __construct(
         SerializerFactory $factory,
@@ -122,23 +131,51 @@ class Redis extends AbstractAdapter
      * SCAN replaces the blocking KEYS command. SCAN_NOPREFIX keeps the prefix
      * handling explicit: the physical prefix is matched and returned unchanged,
      * so getFilteredKeys() sees exactly what KEYS produced.
-     *
-     * @param string $prefix
-     *
-     * @return array
-     * @throws StorageException
      */
     public function getKeys(string $prefix = ''): array
     {
-        $adapter  = $this->getAdapter();
-        $iterator = null;
-        $keys     = [];
-        $pattern  = $this->prefix . '*';
+        $adapter = $this->getAdapter();
+        $keys    = [];
+        $cursor  = "0";
+        $pattern = $this->prefix . "*";
 
-        $adapter->setOption(RedisService::OPT_SCAN, RedisService::SCAN_NOPREFIX);
+        /**
+         * SCAN replaces the blocking KEYS command. It is issued through
+         * rawCommand() so the cursor travels in the reply ([cursor, [keys]])
+         * instead of through a by-reference argument, which Zephir cannot pass
+         * to a method. rawCommand() does not apply OPT_PREFIX, so the physical
+         * prefix is matched and returned unchanged and getFilteredKeys() sees
+         * exactly what KEYS produced.
+         */
+        while (true) {
+            $result = $adapter->rawCommand(
+                "scan",
+                $cursor,
+                "MATCH",
+                $pattern,
+                "COUNT",
+                100
+            );
 
-        while (false !== ($scanKeys = $adapter->scan($iterator, $pattern))) {
-            $keys = array_merge($keys, $scanKeys);
+            if (!is_array($result)) {
+                break;
+            }
+
+            $cursor = $result[0] ?? null;
+            if (null === $cursor) {
+                break;
+            }
+
+            $scanKeys = $result[1] ?? null;
+            if (null !== $scanKeys) {
+                if (is_array($scanKeys)) {
+                    $keys = array_merge($keys, $scanKeys);
+                }
+            }
+
+            if ($cursor === "0" || $cursor === 0) {
+                break;
+            }
         }
 
         return $this->getFilteredKeys($keys, $prefix);
@@ -148,10 +185,6 @@ class Redis extends AbstractAdapter
      * Stores data in the adapter forever. The key needs to manually deleted
      * from the adapter.
      *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
      * @throws StorageException
      * @throws RedisException
      */
@@ -172,23 +205,17 @@ class Redis extends AbstractAdapter
      * @param string $key
      * @param int    $value
      *
-     * @return false|int
      * @throws RedisException
      * @throws StorageException
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
-        return $this->getAdapter()
-                    ->decrBy($key, $value)
-        ;
+        return $this->getAdapter()->decrBy($key, $value);
     }
 
     /**
-     * Reads data from the adapter
+     * Deletes data from the adapter
      *
-     * @param string $key
-     *
-     * @return bool
      * @throws RedisException
      * @throws StorageException
      */
@@ -200,9 +227,6 @@ class Redis extends AbstractAdapter
     /**
      * Deletes multiple keys from Redis using a single unlink call
      *
-     * @param array $keys
-     *
-     * @return bool
      * @throws RedisException
      * @throws StorageException
      */
@@ -217,9 +241,6 @@ class Redis extends AbstractAdapter
     /**
      * Checks if an element exists in the cache
      *
-     * @param string $key
-     *
-     * @return bool
      * @throws RedisException
      * @throws StorageException
      */
@@ -231,10 +252,6 @@ class Redis extends AbstractAdapter
     /**
      * Increments a stored number
      *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      * @throws RedisException
      * @throws StorageException
      */
@@ -274,11 +291,6 @@ class Redis extends AbstractAdapter
         return is_bool($result) ? $result : false;
     }
 
-    /**
-     * @param array $options
-     *
-     * @return array
-     */
     protected function getDefaultOptions(array $options): array
     {
         /**
@@ -303,7 +315,6 @@ class Redis extends AbstractAdapter
     /**
      * @param RedisService $connection
      *
-     * @return Redis
      * @throws AuthenticationFailed
      */
     private function checkAuth(RedisService $connection): static
@@ -324,9 +335,6 @@ class Redis extends AbstractAdapter
     }
 
     /**
-     * @param RedisService $connection
-     *
-     * @return Redis
      * @throws ConnectionFailed
      */
     private function checkConnect(RedisService $connection): static
@@ -385,9 +393,6 @@ class Redis extends AbstractAdapter
     }
 
     /**
-     * @param RedisService $connection
-     *
-     * @return Redis
      * @throws DatabaseSelectionFailed
      */
     private function checkIndex(RedisService $connection): static
@@ -405,9 +410,6 @@ class Redis extends AbstractAdapter
      * Checks the serializer. If it is a supported one it is set, otherwise
      * the custom one is set.
      *
-     * @param RedisService $connection
-     *
-     * @return void
      * @throws BaseException
      */
     private function setSerializer(RedisService $connection): void
@@ -433,7 +435,7 @@ class Redis extends AbstractAdapter
             $map['redis_json'] = constant('\\Redis::SERIALIZER_JSON');
         }
 
-        $serializer = mb_strtolower($this->defaultSerializer);
+        $serializer = strtolower($this->defaultSerializer);
 
         if (isset($map[$serializer])) {
             $this->defaultSerializer = '';

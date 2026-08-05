@@ -21,10 +21,6 @@ class Msgpack extends Igbinary
 
     /**
      * Serializes data
-     *
-     * @param mixed $value
-     *
-     * @return string
      */
     protected function doSerialize(mixed $value): string
     {
@@ -33,8 +29,6 @@ class Msgpack extends Igbinary
 
     /**
      * @param mixed $value
-     *
-     * @return mixed
      */
     protected function doUnserialize($value)
     {

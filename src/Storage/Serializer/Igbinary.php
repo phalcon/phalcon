@@ -26,8 +26,6 @@ class Igbinary extends AbstractSerializer
 
     /**
      * Serializes data
-     *
-     * @return string
      */
     public function serialize(): mixed
     {
@@ -49,10 +47,6 @@ class Igbinary extends AbstractSerializer
 
     /**
      * Unserializes data
-     *
-     * @param string $data
-     *
-     * @return void
      */
     public function unserialize(mixed $data): void
     {
@@ -84,10 +78,6 @@ class Igbinary extends AbstractSerializer
 
     /**
      * Serialize
-     *
-     * @param mixed $value
-     *
-     * @return string|null
      */
     protected function doSerialize(mixed $value): string | null
     {

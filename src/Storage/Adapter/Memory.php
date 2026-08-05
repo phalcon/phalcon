@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
-use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 
@@ -91,8 +90,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Returns the configured store cap (0 = unlimited). See setMaxItems().
-     *
-     * @return int
      */
     public function getMaxItems(): int
     {
@@ -102,11 +99,6 @@ class Memory extends AbstractAdapter
     /**
      * Stores data in the adapter forever. The key needs to manually deleted
      * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
      */
     public function setForever(string $key, mixed $data): bool
     {
@@ -118,10 +110,6 @@ class Memory extends AbstractAdapter
      * 0 disables the cap (the default; preserves the original
      * unbounded behavior). When the cap is exceeded, the oldest
      * entry is evicted FIFO before a new key is stored.
-     *
-     * @param int $maxItems
-     *
-     * @return static
      */
     public function setMaxItems(int $maxItems): static
     {
@@ -132,11 +120,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
@@ -156,10 +139,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Deletes data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function doDelete(string $key): bool
     {
@@ -171,11 +150,6 @@ class Memory extends AbstractAdapter
         return $exists;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
     protected function doGetData(string $key): mixed
     {
         return $this->data[$this->getPrefixedKey($key)];
@@ -183,10 +157,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Checks if an element exists in the cache
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function doHas(string $key): bool
     {
@@ -197,11 +167,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Increments a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     protected function doIncrement(string $key, int $value = 1): false | int
     {
@@ -225,12 +190,6 @@ class Memory extends AbstractAdapter
      * is `0` or a negative number, a `delete()` will be issued, since this
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
-     *
-     * @param string                $key
-     * @param mixed                 $value
-     * @param DateInterval|int|null $ttl
-     *
-     * @return bool
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {

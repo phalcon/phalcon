@@ -23,10 +23,8 @@ class Json extends AbstractSerializer
 
     /**
      * AbstractSerializer constructor.
-     *
-     * @param null $data
      */
-    public function __construct($data = null)
+    public function __construct(mixed $data = null)
     {
         $this->encode = new Encode();
         $this->decode = new Decode();
@@ -36,8 +34,6 @@ class Json extends AbstractSerializer
 
     /**
      * Serializes data
-     *
-     * @return mixed|string
      */
     public function serialize(): mixed
     {
@@ -50,10 +46,6 @@ class Json extends AbstractSerializer
 
     /**
      * Unserializes data
-     *
-     * @param string $data
-     *
-     * @return void
      */
     public function unserialize(mixed $data): void
     {

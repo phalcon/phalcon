@@ -13,29 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
-interface SerializerInterface //extends Serializable
+interface SerializerInterface
 {
-    /**
-     * @return mixed
-     */
     public function getData(): mixed;
 
     /**
      * Serializes data
-     *
-     * @return mixed
      */
     public function serialize(): mixed;
 
-    /**
-     * @param mixed $data
-     */
-    public function setData($data): void;
+    public function setData(mixed $data): void;
 
     /**
      * Unserializes data
-     *
-     * @param mixed $data
      */
     public function unserialize(mixed $data): void;
 }

@@ -43,8 +43,6 @@ class Php extends AbstractSerializer
 
     /**
      * Unserializes data
-     *
-     * @param mixed $data
      */
     public function unserialize(mixed $data): void
     {

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
-use DateInterval;
-use Exception as BaseException;
 use FilesystemIterator;
 use Iterator;
 use Phalcon\Storage\Exceptions\InvalidConfiguration;
@@ -34,7 +32,6 @@ use function restore_error_handler;
 use function serialize;
 use function set_error_handler;
 use function time;
-use function unlink;
 
 use const E_NOTICE;
 use const LOCK_EX;
@@ -55,8 +52,6 @@ use const LOCK_SH;
  *     lifetime?: int,
  *     prefix?: string
  * }
- * @property string $storageDir
- * @property array  $options
  */
 class Stream extends AbstractAdapter
 {
@@ -64,20 +59,12 @@ class Stream extends AbstractAdapter
     use DirSeparatorTrait;
     use FileTrait;
 
-    /**
-     * @var string
-     */
     protected string $prefix = 'ph-strm';
-
-    /**
-     * @var string
-     */
     protected string $storageDir = '';
 
     /**
      * Stream constructor.
      *
-     * @param SerializerFactory $factory
      * @param TOptions          $options
      *
      * @throws InvalidConfiguration
@@ -128,10 +115,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Stores data in the adapter
-     *
-     * @param string $prefix
-     *
-     * @return array
      */
     public function getKeys(string $prefix = ''): array
     {
@@ -156,11 +139,6 @@ class Stream extends AbstractAdapter
     /**
      * Stores data in the adapter forever. The key needs to manually deleted
      * from the adapter.
-     *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
      */
     public function setForever(string $key, mixed $data): bool
     {
@@ -175,11 +153,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
@@ -199,11 +172,7 @@ class Stream extends AbstractAdapter
     }
 
     /**
-     * Reads data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
+     * Deletes data from the adapter
      */
     protected function doDelete(string $key): bool
     {
@@ -213,16 +182,11 @@ class Stream extends AbstractAdapter
 
         $filepath = $this->getFilepath($key);
 
-        return unlink($filepath);
+        return $this->phpUnlink($filepath);
     }
 
     /**
      * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed|null
      */
     protected function doGet(string $key, mixed $defaultValue = null): mixed
     {
@@ -245,10 +209,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Checks if an element exists in the cache and is not expired
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function doHas(string $key): bool
     {
@@ -268,12 +228,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Increments a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
-     * @throws BaseException
      */
     protected function doIncrement(string $key, int $value = 1): false | int
     {
@@ -298,13 +252,6 @@ class Stream extends AbstractAdapter
      * is `0` or a negative number, a `delete()` will be issued, since this
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
-     *
-     * @param string                $key
-     * @param mixed                 $value
-     * @param DateInterval|int|null $ttl
-     *
-     * @return bool
-     * @throws BaseException
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
     {
@@ -323,10 +270,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Returns the folder based on the storageDir and the prefix
-     *
-     * @param string $key
-     *
-     * @return string
      */
     private function getDir(string $key = ''): string
     {
@@ -340,10 +283,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Returns the full path to the file
-     *
-     * @param string $key
-     *
-     * @return string
      */
     private function getFilepath(string $key): string
     {
@@ -352,10 +291,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Returns an iterator for the directory contents
-     *
-     * @param string $dir
-     *
-     * @return Iterator
      */
     private function getIterator(string $dir): Iterator
     {
@@ -371,10 +306,6 @@ class Stream extends AbstractAdapter
     /**
      * Gets the file contents and returns an array or an error if something
      * went wrong
-     *
-     * @param string $filepath
-     *
-     * @return array
      */
     private function getPayload(string $filepath): array
     {
@@ -426,10 +357,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Returns if the cache has expired for this item or not
-     *
-     * @param array $payload
-     *
-     * @return bool
      */
     private function isExpired(array $payload): bool
     {
@@ -445,11 +372,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Stores an array payload on the file system
-     *
-     * @param array  $payload
-     * @param string $key
-     *
-     * @return bool
      */
     private function storePayload(array $payload, string $key): bool
     {

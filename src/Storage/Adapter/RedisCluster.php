@@ -36,16 +36,14 @@ use function mb_strtolower;
  */
 class RedisCluster extends Redis
 {
-    /**
-     * @var string
-     */
     protected string $prefix = 'ph-redc-';
 
     /**
-     * You can create and connect to a cluster either by passing it one or more 'seed' nodes, or by defining
-     * these in redis.ini as a 'named' cluster.
+     * You can create and connect to a cluster either by passing it one or more
+     * 'seed' nodes, or by defining these in redis.ini as a 'named' cluster.
      *
-     * If you are connecting with the cluster by offering a name, that is configured in redis.ini:
+     * If you are connecting with the cluster by offering a name, that is
+     * configured in redis.ini:
      *
      *      ```
      *      # In redis.ini
@@ -57,27 +55,28 @@ class RedisCluster extends Redis
      * you can use `$options = ["name" => "mycluster"]`.
      *
      * If you don't have cluster seeds configured in your redis.ini,
-     * you should pass hosts as an array, eg. `$options = ["hosts" => ["a-host:7000", "b-host:7001"]]`.
+     * you should pass hosts as an array,
+     * eg. `$options = ["hosts" => ["a-host:7000", "b-host:7001"]]`.
      *
-     * You can provide authentication data offering a string `user=password` or
-     * array `["user" => "name", "password" => "secret"]`.
+     * You can provide authentication data offering a string `user=password`
+     * or array `["user" => "name", "password" => "secret"]`.
      *
-     * The `timeout` is the amount of time library will wait when connecting or writing to the cluster
-     * `readTimeout` is the amount of time library will wait for a result from the cluster.
+     * The `timeout` is the amount of time library will wait when connecting
+     * or writing to the cluster. `readTimeout` is the amount of time library
+     * will wait for a result from the cluster.
      *
      * The `context` is an array of values used for ssl/tls stream context
      * options eg `["verify_peer" => 0, "local_cert" => "file:///path/to/cert.pem"]`
      *
-     * @param SerializerFactory $factory
-     * @param array             $options {
-     *                                   name: string | null,
-     *                                   hosts: array,
-     *                                   timeout: float,
-     *                                   readTimeout: float,
-     *                                   persistent: bool,
-     *                                   auth: string|array,
-     *                                   context: string
-     *                                   }
+     * @param array             $options = [
+     *     "name"        => null,
+     *     "hosts"       => ["127.0.0.1:6379"],
+     *     "timeout"     => 0,
+     *     "readTimeout" => 0,
+     *     "persistent"  => false,
+     *     "auth"        => "",
+     *     "context"     => null,
+     * ]
      *
      * @throws SupportException
      */
@@ -106,7 +105,6 @@ class RedisCluster extends Redis
      * Returns the already connected adapter or connects to the Redis
      * server(s)
      *
-     * @return RedisService
      * @throws ClusterConnectionFailed|SupportException
      */
     public function getAdapter(): mixed
@@ -124,13 +122,13 @@ class RedisCluster extends Redis
                     $options["auth"],
                     $options["context"]
                 );
-            } catch (Throwable $e) {
+            } catch (Throwable $ex) {
                 throw new ClusterConnectionFailed(
                     sprintf(
                         "Could not connect to the Redis Cluster server due to: %s",
-                        $e->getMessage()
+                        $ex->getMessage()
                     ),
-                    previous: $e
+                    previous: $ex
                 );
             }
 
@@ -150,16 +148,12 @@ class RedisCluster extends Redis
      * command is retained here (phpredis routes it across the masters). The
      * per-node SCAN migration is left to the storage redesign.
      *
-     * @param string $prefix
-     *
-     * @return array
      * @throws ClusterConnectionFailed|SupportException
      */
     public function getKeys(string $prefix = ''): array
     {
         return $this->getFilteredKeys(
-            $this->getAdapter()
-                 ->keys('*'),
+            $this->getAdapter()->keys('*'),
             $prefix
         );
     }
@@ -183,8 +177,6 @@ class RedisCluster extends Redis
     /**
      * Checks the serializer. If it is a supported one it is set, otherwise
      * the custom one is set.
-     *
-     * @param RedisService $connection
      *
      * @throws SupportException
      */

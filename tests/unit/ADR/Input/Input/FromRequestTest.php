@@ -35,6 +35,7 @@ final class FromRequestTest extends AbstractUnitTestCase
         unset($_SERVER['CONTENT_TYPE']);
         $_POST = [];
     }
+
     /**
      * Unit Tests Phalcon\ADR\Input\Input :: fromRequest() merges route attributes
      */

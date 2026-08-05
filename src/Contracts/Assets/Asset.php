@@ -24,29 +24,21 @@ interface Asset
 {
     /**
      * Gets the asset's key.
-     *
-     * @return string
      */
     public function getAssetKey(): string;
 
     /**
      * Gets extra HTML attributes.
-     *
-     * @return array<string, string>|null
      */
     public function getAttributes(): array | null;
 
     /**
      * Gets if the asset must be filtered or not.
-     *
-     * @return bool
      */
     public function getFilter(): bool;
 
     /**
      * Gets the asset's type.
-     *
-     * @return string
      */
     public function getType(): string;
 
@@ -54,26 +46,16 @@ interface Asset
      * Sets extra HTML attributes.
      *
      * @param array<string, string> $attributes
-     *
-     * @return Asset
      */
     public function setAttributes(array $attributes): Asset;
 
     /**
      * Sets if the asset must be filtered or not.
-     *
-     * @param bool $filter
-     *
-     * @return Asset
      */
     public function setFilter(bool $filter): Asset;
 
     /**
      * Sets the asset's type.
-     *
-     * @param string $type
-     *
-     * @return Asset
      */
     public function setType(string $type): Asset;
 }

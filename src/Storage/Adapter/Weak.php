@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Adapter;
 
-use DateInterval;
 use Exception as BaseException;
 use Phalcon\Storage\SerializerFactory;
 use WeakReference;
@@ -45,9 +44,6 @@ class Weak extends AbstractAdapter
 
     /**
      * Constructor, there are no options
-     *
-     * @param SerializerFactory $factory
-     * @param array             $options
      */
     public function __construct(
         SerializerFactory $factory,
@@ -71,10 +67,6 @@ class Weak extends AbstractAdapter
 
     /**
      * Stores data in the adapter
-     *
-     * @param string $prefix
-     *
-     * @return array
      */
     public function getKeys(string $prefix = ""): array
     {
@@ -95,8 +87,6 @@ class Weak extends AbstractAdapter
 
     /**
      * Will never set a serializer, WeakReference cannot be serialized
-     *
-     * @param string $serializer
      */
     public function setDefaultSerializer(string $serializer): void
     {
@@ -104,11 +94,6 @@ class Weak extends AbstractAdapter
 
     /**
      * For compatiblity only, there is no Forever with WeakReference.
-     *
-     * @param string $key
-     * @param mixed  $data
-     *
-     * @return bool
      */
     public function setForever(string $key, mixed $data): bool
     {
@@ -116,12 +101,7 @@ class Weak extends AbstractAdapter
     }
 
     /**
-     * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
+     * Decrements a stored number - not supported for WeakReference
      */
     protected function doDecrement(string $key, int $value = 1): false | int
     {
@@ -130,10 +110,6 @@ class Weak extends AbstractAdapter
 
     /**
      * Deletes data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function doDelete(string $key): bool
     {
@@ -149,11 +125,6 @@ class Weak extends AbstractAdapter
 
     /**
      * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     protected function doGet(string $key, mixed $defaultValue = null): mixed
     {
@@ -186,10 +157,6 @@ class Weak extends AbstractAdapter
 
     /**
      * Checks if an element exists in the cache
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     protected function doHas(string $key): bool
     {
@@ -197,12 +164,7 @@ class Weak extends AbstractAdapter
     }
 
     /**
-     * Increments a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
+     * Increments a stored number - not supported for WeakReference
      */
     protected function doIncrement(string $key, int $value = 1): false | int
     {
@@ -216,11 +178,6 @@ class Weak extends AbstractAdapter
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
      *
-     * @param string                $key
-     * @param mixed                 $value
-     * @param DateInterval|int|null $ttl
-     *
-     * @return bool
      * @throws BaseException
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool

@@ -23,20 +23,11 @@ use function is_numeric;
  */
 abstract class AbstractSerializer implements SerializerInterface
 {
-    /**
-     * @var mixed
-     */
     protected $data = null;
-
-    /**
-     * @var bool
-     */
     protected bool $isSuccess = true;
 
     /**
      * AbstractSerializer constructor.
-     *
-     * @param null $data
      */
     public function __construct($data = null)
     {
@@ -59,17 +50,12 @@ abstract class AbstractSerializer implements SerializerInterface
 
     /**
      * Unserialize data
-     *
-     * @param array $data
      */
     public function __unserialize(array $data): void
     {
         $this->data = $data;
     }
 
-    /**
-     * @return mixed
-     */
     public function getData(): mixed
     {
         return $this->data;
@@ -78,17 +64,12 @@ abstract class AbstractSerializer implements SerializerInterface
     /**
      * Returns `true` if the serialize/unserialize operation was successful;
      * `false` otherwise
-     *
-     * @return bool
      */
     public function isSuccess(): bool
     {
         return $this->isSuccess;
     }
 
-    /**
-     * @param mixed $data
-     */
     public function setData($data): void
     {
         $this->data = $data;
@@ -96,10 +77,6 @@ abstract class AbstractSerializer implements SerializerInterface
 
     /**
      * If this returns true, then the data is returned as is
-     *
-     * @param mixed $data
-     *
-     * @return bool
      */
     protected function isSerializable($data): bool
     {

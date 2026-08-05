@@ -27,17 +27,7 @@ use function mb_strtolower;
 use function method_exists;
 
 /**
- * Class AbstractAdapter
- *
- * @package Phalcon\Storage\Adapter
- *
- * @property mixed               $adapter
- * @property string              $defaultSerializer
- * @property int                 $lifetime
- * @property array               $options
- * @property string              $prefix
- * @property SerializerInterface $serializer
- * @property SerializerFactory   $serializerFactory
+ * Storage AbstractAdapter
  */
 abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
@@ -47,12 +37,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * @var mixed
      */
-    protected $adapter;
+    protected mixed $adapter = null;
 
     /**
      * Name of the default serializer class
-     *
-     * @var string
      */
     protected string $defaultSerializer = 'php';
 
@@ -65,28 +53,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Name of the default TTL (time to live)
-     *
-     * @var int
      */
     protected int $lifetime = 3600;
-
-    /**
-     * @var array
-     */
     protected array $options = [];
-
-    /**
-     * @var string
-     */
     protected string $prefix = 'ph-memo-';
-
-    /**
-     * Serializer
-     *
-     * @var SerializerInterface|null
-     */
-    protected SerializerInterface | null $serializer;
-
+    protected SerializerInterface | null $serializer = null;
     /**
      * Whether a leading prefix is stripped from incoming keys before the
      * adapter prefix is applied. Disable when keys are externally
@@ -99,9 +70,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * AbstractAdapter constructor.
-     *
-     * @param SerializerFactory $serializerFactory
-     * @param array             $options
      */
     protected function __construct(
         protected SerializerFactory $serializerFactory,
@@ -134,18 +102,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Flushes/clears the cache
-     *
-     * @return bool
      */
     abstract public function clear(): bool;
 
     /**
      * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     public function decrement(string $key, int $value = 1): false | int
     {
@@ -162,10 +123,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Deletes data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function delete(string $key): bool
     {
@@ -182,10 +139,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Deletes multiple data from the adapter
-     *
-     * @param array $keys
-     *
-     * @return bool
      */
     public function deleteMultiple(array $keys): bool
     {
@@ -207,11 +160,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Reads data from the adapter
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed|null
      */
     public function get(string $key, mixed $defaultValue = null): mixed
     {
@@ -228,8 +176,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns the adapter - connects to the storage if not connected
-     *
-     * @return mixed
      */
     public function getAdapter(): mixed
     {
@@ -238,8 +184,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Name of the default serializer class
-     *
-     * @return string
      */
     public function getDefaultSerializer(): string
     {
@@ -248,17 +192,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns all the keys stored
-     *
-     * @param string $prefix
-     *
-     * @return array
      */
     abstract public function getKeys(string $prefix = ''): array;
 
     /**
      * Returns the lifetime
-     *
-     * @return int
      */
     public function getLifetime(): int
     {
@@ -267,8 +205,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns the prefix
-     *
-     * @return string
      */
     public function getPrefix(): string
     {
@@ -277,8 +213,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Get the serializer
-     *
-     * @return SerializerInterface|null
      */
     public function getSerializer(): SerializerInterface | null
     {
@@ -287,10 +221,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Checks if an element exists in the cache
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function has(string $key): bool
     {
@@ -307,11 +237,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Increments a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     public function increment(string $key, int $value = 1): false | int
     {
@@ -332,12 +257,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * is `0` or a negative number, a `delete()` will be issued, since this
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
-     *
-     * @param string                $key
-     * @param mixed                 $value
-     * @param DateInterval|int|null $ttl
-     *
-     * @return bool
      */
     public function set(string $key, mixed $value, mixed $ttl = null): bool
     {
@@ -362,29 +281,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Decrements a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     abstract protected function doDecrement(string $key, int $value = 1): false | int;
 
     /**
      * Deletes data from the adapter
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     abstract protected function doDelete(string $key): bool;
 
     /**
      * Deletes multiple data from the adapter
-     *
-     * @param array $keys
-     *
-     * @return bool
      */
     protected function doDeleteMultiple(array $keys): bool
     {
@@ -435,11 +341,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Increments a stored number
-     *
-     * @param string $key
-     * @param int    $value
-     *
-     * @return false|int
      */
     abstract protected function doIncrement(string $key, int $value = 1): false | int;
 
@@ -460,11 +361,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Filters the keys array based on global and passed prefix
-     *
-     * @param mixed  $keys
-     * @param string $prefix
-     *
-     * @return array
      */
     protected function getFilteredKeys($keys, string $prefix): array
     {
@@ -485,10 +381,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Check if the key has the prefix and remove it, otherwise just return the
      * key unaltered. When the `stripPrefix` option is `false` the key is
      * always returned unaltered.
-     *
-     * @param string $key
-     *
-     * @return string
      */
     protected function getKeyWithoutPrefix(string $key): string
     {
@@ -501,10 +393,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns the key requested, prefixed
-     *
-     * @param string $key
-     *
-     * @return string
      */
     protected function getPrefixedKey(mixed $key): string
     {
@@ -514,9 +402,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Returns serialized data
      *
-     * @param mixed $content
-     *
-     * @return mixed|string|null
      * @throws Exception
      */
     protected function getSerializedData(mixed $content): mixed
@@ -532,9 +417,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Calculates the TTL for a cache item
      *
-     * @param DateInterval|int|null $ttl
-     *
-     * @return int
      * @throws Exception
      */
     protected function getTtl(mixed $ttl): int
@@ -545,9 +427,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         if (is_object($ttl) && $ttl instanceof DateInterval) {
             $dateTime = new DateTime('@0');
-            return $dateTime->add($ttl)
-                            ->getTimestamp()
-            ;
+            return $dateTime->add($ttl)->getTimestamp();
         }
 
         return (int)$ttl;
@@ -555,11 +435,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns unserialized data
-     *
-     * @param mixed      $content
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     protected function getUnserializedData(
         mixed $content,
@@ -584,7 +459,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Initializes the serializer
      *
-     * @return void
      * @throws Exception
      */
     protected function initSerializer(): void

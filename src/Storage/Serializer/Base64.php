@@ -25,10 +25,8 @@ class Base64 extends AbstractSerializer
 
     /**
      * Serializes data
-     *
-     * @return string
      */
-    public function serialize(): mixed
+    public function serialize(): string
     {
         if (!is_string($this->data)) {
             throw new InvalidSerializationInput();
@@ -39,10 +37,6 @@ class Base64 extends AbstractSerializer
 
     /**
      * Unserializes data
-     *
-     * @param string $data
-     *
-     * @retrun void
      */
     public function unserialize(mixed $data): void
     {

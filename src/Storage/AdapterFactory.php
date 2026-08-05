@@ -24,25 +24,14 @@ use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
 use Phalcon\Traits\Factory\FactoryTrait;
 
-/**
- * Class AdapterFactory
- *
- * @property SerializerFactory $serializerFactory
- */
 class AdapterFactory
 {
     use FactoryTrait;
 
-    /**
-     * @var SerializerFactory
-     */
     private SerializerFactory $serializerFactory;
 
     /**
      * AdapterFactory constructor.
-     *
-     * @param SerializerFactory $factory
-     * @param array             $services
      */
     public function __construct(
         SerializerFactory $factory,
@@ -56,27 +45,26 @@ class AdapterFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param array  $options = [
-     *                        'servers' => [
-     *                        [
-     *                        'host' => '127.0.0.1',
-     *                        'port' => 11211,
-     *                        'weight' => 1
-     *                        ]
-     *                        ],
-     *                        'defaultSerializer' => 'Php',
-     *                        'lifetime' => 3600,
-     *                        'serializer' => null,
-     *                        'prefix' => '',
-     *                        'host' => '127.0.0.1',
-     *                        'port' => 6379,
-     *                        'index' => 0,
-     *                        'persistent' => false,
-     *                        'auth' => '',
-     *                        'socket' => '',
-     *                        'storageDir' => '',
-     *                        ]
+     * @param array options = [
+     *     'servers' => [
+     *         [
+     *             'host' => '127.0.0.1',
+     *             'port' => 11211,
+     *             'weight' => 1
+     *         ]
+     *     ],
+     *     'defaultSerializer' => 'Php',
+     *     'lifetime' => 3600,
+     *     'serializer' => null,
+     *     'prefix' => '',
+     *     'host' => '127.0.0.1',
+     *     'port' => 6379,
+     *     'index' => 0,
+     *     'persistent' => false,
+     *     'auth' => '',
+     *     'socket' => '',
+     *     'storageDir' => '',
+     * ]
      *
      * @return AdapterInterface
      * @throws BaseException
