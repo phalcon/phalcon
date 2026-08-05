@@ -107,8 +107,6 @@ class Model extends AbstractAdapter
 
     /**
      * Returns a slice of the resultset to show in the pagination
-     *
-     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {

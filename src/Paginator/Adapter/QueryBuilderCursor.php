@@ -138,10 +138,8 @@ class QueryBuilderCursor extends AbstractAdapter
     /**
      * Get the current page number
      *
-     * Returns the cursor value used for this page, or 0 for the first page.
-     * Use getCursor() to retrieve the raw cursor value.
-     *
-     * @return int
+     * Returns the cursor value used for this page cast to int, or 0 for the
+     * first page. Use getCursor() to retrieve the raw cursor value.
      */
     public function getCurrentPage(): int
     {
@@ -154,8 +152,6 @@ class QueryBuilderCursor extends AbstractAdapter
 
     /**
      * Get the cursor value for the current page (null on first page)
-     *
-     * @return mixed
      */
     public function getCursor(): mixed
     {
@@ -164,8 +160,6 @@ class QueryBuilderCursor extends AbstractAdapter
 
     /**
      * Get the cursor column name
-     *
-     * @return string
      */
     public function getCursorColumn(): string
     {
@@ -174,8 +168,6 @@ class QueryBuilderCursor extends AbstractAdapter
 
     /**
      * Get query builder object
-     *
-     * @return Builder
      */
     public function getQueryBuilder(): Builder
     {
@@ -188,8 +180,6 @@ class QueryBuilderCursor extends AbstractAdapter
      * Fetches `limit + 1` rows from the builder. If the extra row is present
      * a next page exists; it is discarded and the cursor value of the last
      * included row is stored in the `next` repository property.
-     *
-     * @return RepositoryInterface
      */
     public function paginate(): RepositoryInterface
     {
@@ -198,6 +188,9 @@ class QueryBuilderCursor extends AbstractAdapter
         $currentCursor = $this->cursor;
         $currentPage   = ($currentCursor === null) ? 0 : (int) $currentCursor;
 
+        /**
+         * Append the keyset WHERE condition (skipped on the first page)
+         */
         if ($currentCursor !== null) {
             $builder->andWhere(
                 "[" . $this->cursorColumn . "] > :cursor:",
@@ -205,12 +198,20 @@ class QueryBuilderCursor extends AbstractAdapter
             );
         }
 
+        /**
+         * Fetch one extra row to detect whether a next page exists
+         */
         $builder->limit($limit + 1);
 
         $query  = $builder->getQuery();
         $result = $query->execute();
         $items  = $result->toArray();
 
+        /**
+         * If we received more rows than the page size a next page exists.
+         * Discard the lookahead row and record the cursor of the last
+         * included row so the caller can advance to the next page.
+         */
         if (count($items) > $limit) {
             array_pop($items);
 
@@ -248,10 +249,6 @@ class QueryBuilderCursor extends AbstractAdapter
      *
      * Pass the value returned by Repository::getNext() to advance to the
      * next page, or null to restart from the first page.
-     *
-     * @param mixed $cursor
-     *
-     * @return QueryBuilderCursor
      */
     public function setCursor(mixed $cursor): static
     {
@@ -262,10 +259,6 @@ class QueryBuilderCursor extends AbstractAdapter
 
     /**
      * Set query builder object
-     *
-     * @param Builder $builder
-     *
-     * @return QueryBuilderCursor
      */
     public function setQueryBuilder(Builder $builder): static
     {

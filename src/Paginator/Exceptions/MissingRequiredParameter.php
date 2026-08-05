@@ -17,9 +17,6 @@ use Phalcon\Paginator\Exception;
 
 class MissingRequiredParameter extends Exception
 {
-    /**
-     * @var string
-     */
     private string $parameter;
 
     public function __construct(string $parameter)

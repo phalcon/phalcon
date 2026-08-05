@@ -27,23 +27,9 @@ class Repository implements RepositoryInterface, JsonSerializable
 {
     use CamelizeTrait;
 
-    /**
-     * @var array
-     */
     protected array $aliases = [];
-
-    /**
-     * @var array
-     */
     protected array $properties = [];
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param string $property
-     *
-     * @return mixed
-     */
     public function __get(string $property): mixed
     {
         $method = "get" . $this->toCamelize(
@@ -65,113 +51,56 @@ class Repository implements RepositoryInterface, JsonSerializable
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getAliases(): array
     {
         return $this->aliases;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getCurrent(): int
     {
         return $this->getProperty(self::PROPERTY_CURRENT_PAGE, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getFirst(): int
     {
         return $this->getProperty(self::PROPERTY_FIRST_PAGE, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return mixed
-     */
     public function getItems(): mixed
     {
         return $this->getProperty(self::PROPERTY_ITEMS, null);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getLast(): int
     {
         return $this->getProperty(self::PROPERTY_LAST_PAGE, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getLimit(): int
     {
         return $this->getProperty(self::PROPERTY_LIMIT, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getNext(): int
     {
         return $this->getProperty(self::PROPERTY_NEXT_PAGE, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getPrevious(): int
     {
         return $this->getProperty(self::PROPERTY_PREVIOUS_PAGE, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return int
-     */
     public function getTotalItems(): int
     {
         return $this->getProperty(self::PROPERTY_TOTAL_ITEMS, 0);
     }
 
-    /**
-     * See [jsonSerialize](https://php.net/manual/en/jsonserializable.jsonserialize.php)
-     *
-     * @return array
-     */
     public function jsonSerialize(): array
     {
         return $this->properties;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param array $aliases
-     *
-     * @return RepositoryInterface
-     */
     public function setAliases(array $aliases): RepositoryInterface
     {
         $this->aliases = $aliases;
@@ -179,13 +108,6 @@ class Repository implements RepositoryInterface, JsonSerializable
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param array $properties
-     *
-     * @return RepositoryInterface
-     */
     public function setProperties(array $properties): RepositoryInterface
     {
         $this->properties = $properties;
@@ -195,11 +117,6 @@ class Repository implements RepositoryInterface, JsonSerializable
 
     /**
      * Gets value of property by name
-     *
-     * @param string     $property
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     protected function getProperty(string $property, mixed $defaultValue = null): mixed
     {
@@ -208,10 +125,6 @@ class Repository implements RepositoryInterface, JsonSerializable
 
     /**
      * Resolve alias property name
-     *
-     * @param string $property
-     *
-     * @return string
      */
     protected function getRealNameProperty(string $property): string
     {

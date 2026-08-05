@@ -80,10 +80,10 @@ class QueryBuilder extends AbstractAdapter
      * subquery). It has no effect on plain queries.
      *
      * @param array $config = [
-     *                      'limit' => 10,
-     *                      'builder' => null,
-     *                      'columns' => ''
-     *                      ]
+     *     'limit' => 10,
+     *     'builder' => null,
+     *     'columns' => ''
+     * ]
      */
     public function __construct(array $config)
     {
@@ -112,8 +112,6 @@ class QueryBuilder extends AbstractAdapter
 
     /**
      * Get the current page number
-     *
-     * @return int
      */
     public function getCurrentPage(): int
     {
@@ -122,8 +120,6 @@ class QueryBuilder extends AbstractAdapter
 
     /**
      * Get query builder object
-     *
-     * @return Builder
      */
     public function getQueryBuilder(): Builder
     {
@@ -132,9 +128,6 @@ class QueryBuilder extends AbstractAdapter
 
     /**
      * Returns a slice of the resultset to show in the pagination
-     *
-     * @return RepositoryInterface
-     * @throws Exception
      */
     public function paginate(): RepositoryInterface
     {

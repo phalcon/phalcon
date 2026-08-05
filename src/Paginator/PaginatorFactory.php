@@ -22,9 +22,10 @@ use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Adapter\QueryBuilderCursor;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
+use Throwable;
 
 /**
- * @phpstan-type TOptions = array{
+ * @phpstan-type TOptions array{
  *      adapter: string,
  *      limit?: int,
  *      page?: int,
@@ -38,8 +39,6 @@ class PaginatorFactory
 
     /**
      * AdapterFactory constructor.
-     *
-     * @param array $services
      */
     public function __construct(array $services = [])
     {
@@ -94,7 +93,7 @@ class PaginatorFactory
     }
 
     /**
-     * @return string
+     * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
     {

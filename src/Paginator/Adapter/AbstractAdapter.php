@@ -40,8 +40,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Repository for pagination
-     *
-     * @var RepositoryInterface
      */
     protected RepositoryInterface $repository;
 
@@ -74,8 +72,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Get current rows limit
-     *
-     * @return int
      */
     public function getLimit(): int
     {
@@ -84,10 +80,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Set the current page number
-     *
-     * @param int $page
-     *
-     * @return AdapterInterface
      */
     public function setCurrentPage(int $page): AdapterInterface
     {
@@ -98,11 +90,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Set current rows limit
-     *
-     * @param int $limit
-     *
-     * @return AdapterInterface
-     * @throws Exception
      */
     public function setLimit(int $limit): AdapterInterface
     {
@@ -117,10 +104,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Sets current repository for pagination
-     *
-     * @param RepositoryInterface $repository
-     *
-     * @return AdapterInterface
      */
     public function setRepository(RepositoryInterface $repository): AdapterInterface
     {
@@ -131,10 +114,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Gets current repository for pagination
-     *
-     * @param array|null $properties
-     *
-     * @return RepositoryInterface
      */
     protected function getRepository(
         array | null $properties = null
