@@ -30,10 +30,9 @@ use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Html\Helper\Link;
 use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
+use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
-use function file_exists;
-use function file_put_contents;
 use function filemtime;
 use function is_array;
 use function is_dir;
@@ -43,12 +42,12 @@ use const PHP_EOL;
 /**
  * Manages collections of CSS/JavaScript assets
  *
- * @phpstan-type TOptions = array{
+ * @phpstan-type TOptions array{
  *      sourceBasePath?: string,
  *      targetBasePath?: string
  * }
  *
- * @phpstan-type TParameters = array{
+ * @phpstan-type TParameters array{
  *      local?: bool,
  *      type?: string,
  *      rel?: string,
@@ -59,16 +58,13 @@ use const PHP_EOL;
  */
 class Manager implements InjectionAwareInterface
 {
+    use FileTrait;
     use InjectionAwareTrait;
 
     /**
      * @var array<string, Collection>
      */
     protected array $collections = [];
-
-    /**
-     * @var bool
-     */
     protected bool $implicitOutput = true;
 
     /**
@@ -87,8 +83,6 @@ class Manager implements InjectionAwareInterface
      * Adds a raw asset to the manager
      *
      * @param Asset $asset
-     *
-     * @return static
      */
     public function addAsset(Asset $asset): static
     {
@@ -105,8 +99,6 @@ class Manager implements InjectionAwareInterface
      *
      * @param string $type
      * @param Asset  $asset
-     *
-     * @return static
      */
     public function addAssetByType(string $type, Asset $asset): static
     {
@@ -119,14 +111,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Adds a CSS asset to the 'css' collection
      *
-     * @param string                $path
-     * @param bool                  $local
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $autoVersion
-     *
-     * @return static
      */
     public function addCss(
         string $path,
@@ -148,8 +133,6 @@ class Manager implements InjectionAwareInterface
      * Adds a raw inline code to the manager
      *
      * @param Inline $code
-     *
-     * @return static
      */
     public function addInlineCode(Inline $code): static
     {
@@ -166,8 +149,6 @@ class Manager implements InjectionAwareInterface
      *
      * @param string $type
      * @param Inline $code
-     *
-     * @return static
      */
     public function addInlineCodeByType(string $type, Inline $code): static
     {
@@ -180,11 +161,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Adds an inline CSS to the 'css' collection
      *
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     *
-     * @return static
      */
     public function addInlineCss(
         string $content,
@@ -202,11 +179,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Adds an inline JavaScript to the 'js' collection
      *
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     *
-     * @return static
      */
     public function addInlineJs(
         string $content,
@@ -229,14 +202,7 @@ class Manager implements InjectionAwareInterface
      * $assets->addJs("https://jquery.my-cdn.com/jquery.js", false);
      *```
      *
-     * @param string                $path
-     * @param bool                  $local
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $autoVersion
-     *
-     * @return static
      */
     public function addJs(
         string $path,
@@ -258,8 +224,6 @@ class Manager implements InjectionAwareInterface
      * Creates/Returns a collection of assets
      *
      * @param string $name
-     *
-     * @return Collection
      */
     public function collection(string $name): Collection
     {
@@ -270,7 +234,6 @@ class Manager implements InjectionAwareInterface
      * Creates/Returns a collection of assets by type
      *
      * @param AssetInterface[] $assets
-     * @param string           $type
      *
      * @return AssetInterface[]
      */
@@ -287,6 +250,24 @@ class Manager implements InjectionAwareInterface
         }
 
         return $filtered;
+    }
+
+    /**
+     * Returns true or false if collection exists.
+     *
+     * ```php
+     * if ($manager->exists("jsHeader")) {
+     *     // \Phalcon\Assets\Collection
+     *     $collection = $manager->get("jsHeader");
+     * }
+     * ```
+     *
+     * @param string $name
+     * @deprecated
+     */
+    public function exists(string $name): bool
+    {
+        return $this->has($name);
     }
 
     /**
@@ -353,9 +334,12 @@ class Manager implements InjectionAwareInterface
     /**
      * Returns true or false if collection exists.
      *
-     * @param string $name
-     *
-     * @return bool
+     * ```php
+     * if ($manager->has("jsHeader")) {
+     *     // \Phalcon\Assets\Collection
+     *     $collection = $manager->get("jsHeader");
+     * }
+     * ```
      */
     public function has(string $name): bool
     {
@@ -386,7 +370,10 @@ class Manager implements InjectionAwareInterface
         /**
          * Get the assets as an array
          */
-        $assets = $this->collectionAssetsByType($collection->getAssets(), $type);
+        $assets = $this->collectionAssetsByType(
+            $collection->getAssets(),
+            $type
+        );
 
         /**
          * Get filters in the collection
@@ -529,7 +516,7 @@ class Manager implements InjectionAwareInterface
                      * Write the file using file-put-contents. This respects the
                      * openbase-dir also writes to streams
                      */
-                    file_put_contents($targetPath, $filteredContent);
+                    $this->phpFilePutContents($targetPath, $filteredContent);
                 }
             }
 
@@ -572,7 +559,7 @@ class Manager implements InjectionAwareInterface
              * Write the file using file_put_contents. This respects the
              * openbase-dir also writes to streams
              */
-            file_put_contents($completeTargetPath, $filteredJoinedContent);
+            $this->phpFilePutContents($completeTargetPath, $filteredJoinedContent);
 
             $output = $this->getOutput($collection, $completeTargetPath, $callback, $output);
         }
@@ -583,12 +570,9 @@ class Manager implements InjectionAwareInterface
     /**
      * Prints the HTML for CSS assets
      *
-     * @param string|null $name
-     *
-     * @return string|null
      * @throws Exception
      */
-    public function outputCss(string | null $name = null): string | null
+    public function outputCss(string | null $name = null): string
     {
         $collection = $this->getCss();
         if (!empty($name)) {
@@ -666,9 +650,6 @@ class Manager implements InjectionAwareInterface
     /**
      * Prints the HTML for inline CSS
      *
-     * @param string|null $name
-     *
-     * @return string
      * @throws Exception
      */
     public function outputInlineCss(string | null $name = null): string
@@ -684,9 +665,6 @@ class Manager implements InjectionAwareInterface
     /**
      * Prints the HTML for inline JS
      *
-     * @param string|null $name
-     *
-     * @return string
      * @throws Exception
      */
     public function outputInlineJs(string | null $name = null): string
@@ -704,10 +682,10 @@ class Manager implements InjectionAwareInterface
      *
      * @param string|null $name
      *
-     * @return string|null
+     * @return string
      * @throws Exception
      */
-    public function outputJs(string | null $name = null): string | null
+    public function outputJs(string | null $name = null): string
     {
         $collection = $this->getJs();
         if (!empty($name)) {
@@ -723,11 +701,6 @@ class Manager implements InjectionAwareInterface
      *```php
      * $assets->set("js", $collection);
      *```
-     *
-     * @param string     $name
-     * @param Collection $collection
-     *
-     * @return static
      */
     public function set(string $name, Collection $collection): static
     {
@@ -740,8 +713,6 @@ class Manager implements InjectionAwareInterface
      * Sets the manager options
      *
      * @param TOptions $options
-     *
-     * $return static
      */
     public function setOptions(array $options): static
     {
@@ -752,10 +723,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Sets if the HTML generated must be directly printed or returned
-     *
-     * @param bool $implicitOutput
-     *
-     * $return static
      */
     public function useImplicitOutput(bool $implicitOutput): static
     {
@@ -769,11 +736,6 @@ class Manager implements InjectionAwareInterface
      * when `$mustFilter` is true; every filter must be a `FilterInterface`
      * instance.
      *
-     * @param string $content
-     * @param array  $filters
-     * @param bool   $mustFilter
-     *
-     * @return string
      * @throws InvalidFilter
      */
     private function applyFilters(
@@ -805,12 +767,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Calculates the prefixed path including the version
-     *
-     * @param Collection $collection
-     * @param string     $path
-     * @param string     $filePath
-     *
-     * @return string
      */
     private function calculatePrefixedPath(
         Collection $collection,
@@ -835,11 +791,6 @@ class Manager implements InjectionAwareInterface
         return $prefixedPath;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return Collection
-     */
     private function checkAndCreateCollection(string $type): Collection
     {
         if (!isset($this->collections[$type])) {
@@ -852,10 +803,6 @@ class Manager implements InjectionAwareInterface
     /**
      * Builds a LINK[rel="stylesheet"] tag
      *
-     * @param mixed $parameters
-     * @param bool  $local
-     *
-     * @return string
      * @throws BaseException
      */
     private function cssLink(mixed $parameters = [], bool $local = true): string
@@ -872,10 +819,6 @@ class Manager implements InjectionAwareInterface
     /**
      * @param array<Manager|string> $callback
      * @param array<string, string> $attributes
-     * @param string                $prefixedPath
-     * @param bool                  $local
-     *
-     * @return string
      */
     private function doCallback(
         array $callback,
@@ -973,10 +916,6 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
-     * @param Asset  $asset
-     * @param string $completeSourcePath
-     *
-     * @return string
      * @throws Exception
      */
     private function getSourcePath(Asset $asset, string $completeSourcePath): string
@@ -995,12 +934,6 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
-     * @param Asset  $asset
-     * @param string $targetPath
-     * @param string $sourcePath
-     * @param bool   $filterNeeded
-     *
-     * @return bool
      * @throws Exception
      */
     private function isFilterNeeded(
@@ -1017,12 +950,12 @@ class Manager implements InjectionAwareInterface
                 throw new AssetSourceTargetCollision($targetPath);
             }
 
-            if (true === file_exists($targetPath)) {
+            if (true === $this->phpFileExists($targetPath)) {
                 if (filemtime($targetPath) !== filemtime($sourcePath)) {
-                    $filterNeeded = true;
+                    return true;
                 }
             } else {
-                $filterNeeded = true;
+                return true;
             }
         }
 
@@ -1050,13 +983,6 @@ class Manager implements InjectionAwareInterface
     /**
      * Processes common parameters for js/css link generation
      *
-     * @param mixed  $parameters
-     * @param bool   $local
-     * @param string $helperClass
-     * @param string $type
-     * @param string $name
-     *
-     * @return string
      * @throws BaseException
      */
     private function processParameters(

@@ -17,19 +17,11 @@ use Phalcon\Assets\FilterInterface;
 
 /**
  * Returns the content without make any modification to the original source
- *
- * Class None
- *
- * @package Phalcon\Assets\Filters
  */
 class None implements FilterInterface
 {
     /**
      * Returns the content as is
-     *
-     * @param string $content
-     *
-     * @return string
      */
     public function filter(string $content): string
     {

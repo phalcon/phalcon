@@ -43,8 +43,6 @@ class Collection implements Countable, IteratorAggregate
 
     /**
      * Should version be determined from file modification time
-     *
-     * @var bool
      */
     protected bool $autoVersion = false;
 
@@ -57,33 +55,13 @@ class Collection implements Countable, IteratorAggregate
      * @var FilterInterface[]
      */
     protected array $filters = [];
-
-    /**
-     * @var bool
-     */
     protected bool $join = true;
-
-    /**
-     * @var string
-     */
     protected string $prefix = '';
-
-    /**
-     * @var bool
-     */
     protected bool $targetIsLocal = true;
-
-    /**
-     * @var string
-     */
     protected string $version = '';
 
     /**
      * Adds an asset to the collection
-     *
-     * @param AssetInterface $asset
-     *
-     * @return $this
      */
     public function add(AssetInterface $asset): static
     {
@@ -95,14 +73,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds a CSS asset to the collection
      *
-     * @param string                $path
-     * @param bool|null             $isLocal
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $autoVersion
-     *
-     * @return static
      */
     public function addCss(
         string $path,
@@ -127,8 +98,6 @@ class Collection implements Countable, IteratorAggregate
      * Adds a filter to the collection
      *
      * @param FilterInterface $filter
-     *
-     * @return static
      */
     public function addFilter(FilterInterface $filter): static
     {
@@ -141,8 +110,6 @@ class Collection implements Countable, IteratorAggregate
      * Adds an inline code to the collection
      *
      * @param Inline $code
-     *
-     * @return static
      */
     public function addInline(Inline $code): static
     {
@@ -154,11 +121,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds an inline CSS to the collection
      *
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     *
-     * @return static
      */
     public function addInlineCss(
         string $content,
@@ -171,11 +134,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds an inline JavaScript to the collection
      *
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     *
-     * @return static
      */
     public function addInlineJs(
         string $content,
@@ -188,14 +147,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds a JavaScript asset to the collection
      *
-     * @param string                $path
-     * @param bool|null             $isLocal
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $autoVersion
-     *
-     * @return static
      */
     public function addJs(
         string $path,
@@ -260,8 +212,6 @@ class Collection implements Countable, IteratorAggregate
 
     /**
      * Returns the iterator of the class
-     *
-     * @return Traversable
      */
     public function getIterator(): Traversable
     {
@@ -390,8 +340,6 @@ class Collection implements Countable, IteratorAggregate
      * Sets extra HTML attributes
      *
      * @param array<string, string> $attributes
-     *
-     * @return static
      */
     public function setAttributes(array $attributes): static
     {
@@ -402,8 +350,6 @@ class Collection implements Countable, IteratorAggregate
 
     /**
      * @param bool $flag
-     *
-     * @return static
      */
     public function setAutoVersion(bool $flag): static
     {
@@ -416,8 +362,6 @@ class Collection implements Countable, IteratorAggregate
      * Sets an array of filters in the collection
      *
      * @param FilterInterface[] $filters
-     *
-     * @return static
      */
     public function setFilters(array $filters): static
     {
@@ -430,8 +374,6 @@ class Collection implements Countable, IteratorAggregate
      * Sets a common prefix for all the assets
      *
      * @param string $prefix
-     *
-     * @return static
      */
     public function setPrefix(string $prefix): static
     {
@@ -444,8 +386,6 @@ class Collection implements Countable, IteratorAggregate
      * Sets if the target local or not
      *
      * @param bool $flag
-     *
-     * @return static
      */
     public function setTargetIsLocal(bool $flag): static
     {
@@ -458,8 +398,6 @@ class Collection implements Countable, IteratorAggregate
      * Sets the version
      *
      * @param string $version
-     *
-     * @return static
      */
     public function setVersion(string $version): static
     {
@@ -495,15 +433,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds an inline asset
      *
-     * @param string                $className
-     * @param string                $path
-     * @param bool|null             $isLocal
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $autoVersion
-     *
-     * @return static
      */
     private function processAdd(
         string $className,
@@ -535,12 +465,7 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds an inline asset
      *
-     * @param string                $className
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     *
-     * @return static
      */
     private function processAddInline(
         string $className,

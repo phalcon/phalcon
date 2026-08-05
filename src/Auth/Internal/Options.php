@@ -40,7 +40,7 @@ final class Options
             return $defaultValue;
         }
 
-        /** @var list<array{id?: int|string}&array<string, mixed>> */
+        /** @var list<array<string, mixed>&array{id?: int|string}> */
         return array_values($value);
     }
 

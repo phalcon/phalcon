@@ -23,8 +23,6 @@ class Js extends InlineBase
     /**
      * Js constructor.
      *
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
      */
     public function __construct(

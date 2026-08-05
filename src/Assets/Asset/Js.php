@@ -17,22 +17,11 @@ use Phalcon\Assets\Asset as AssetBase;
 
 /**
  * Represents JavaScript assets
- *
- * Class Js
- *
- * @package Phalcon\Assets\Asset
  */
 class Js extends AssetBase
 {
     /**
      * Js constructor.
-     *
-     * @param string                $path
-     * @param bool                  $local
-     * @param bool                  $filter
-     * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $autoVersion
      */
     public function __construct(
         string $path,

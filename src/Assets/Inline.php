@@ -13,39 +13,43 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
-use function hash;
+use Phalcon\Assets\Traits\AttributesTrait;
+use Phalcon\Traits\Php\HashTrait;
 
 /**
  * Represents an inline asset
+ *
+ *```php
+ * $inline = new \Phalcon\Assets\Inline("js", "alert('hello world');");
+ *```
  */
 class Inline implements AssetInterface
 {
+    use AttributesTrait;
+    use HashTrait;
+
     /**
      * Inline constructor.
      *
-     * @param string                $type
-     * @param string                $content
-     * @param bool                  $filter
      * @param array<string, string> $attributes
      */
     public function __construct(
         protected string $type,
         protected string $content,
         protected bool $filter = true,
-        protected array $attributes = []
+        array $attributes = []
     ) {
+        $this->attributes = $attributes;
     }
 
     /**
      * Gets the asset's key.
-     *
-     * @return string
      */
     public function getAssetKey(): string
     {
         $key = $this->getType() . ':' . $this->getContent();
 
-        return hash("sha256", $key);
+        return $this->phpHash("sha256", $key);
     }
 
     /**
@@ -92,8 +96,6 @@ class Inline implements AssetInterface
      * Sets extra HTML attributes
      *
      * @param array<string, string> $attributes
-     *
-     * @return AssetInterface
      */
     public function setAttributes(array $attributes): AssetInterface
     {
@@ -104,10 +106,6 @@ class Inline implements AssetInterface
 
     /**
      * Sets if the asset must be filtered or not
-     *
-     * @param bool $filter
-     *
-     * @return AssetInterface
      */
     public function setFilter(bool $filter): AssetInterface
     {
@@ -118,10 +116,6 @@ class Inline implements AssetInterface
 
     /**
      * Sets the inline's type
-     *
-     * @param string $type
-     *
-     * @return AssetInterface
      */
     public function setType(string $type): AssetInterface
     {

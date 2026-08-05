@@ -24,7 +24,6 @@ namespace Phalcon\Queue\Consumer;
 
 use Phalcon\Traits\Php\InfoTrait;
 
-use function function_exists;
 use function memory_get_usage;
 use function pcntl_async_signals;
 use function pcntl_signal;

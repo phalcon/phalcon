@@ -14,53 +14,41 @@ declare(strict_types=1);
 namespace Phalcon\Assets;
 
 use Phalcon\Assets\Exceptions\CannotReadAsset;
+use Phalcon\Assets\Traits\AttributesTrait;
+use Phalcon\Assets\Traits\SourceTargetTrait;
 use Phalcon\Traits\Php\FileTrait;
-
-use function hash;
+use Phalcon\Traits\Php\HashTrait;
 
 /**
  * Object representation of an asset
  *
+ *```php
+ * $asset = new \Phalcon\Assets\Asset("js", "js/jquery.js");
+ *```
  */
 class Asset implements AssetInterface
 {
+    use AttributesTrait;
     use FileTrait;
-
-    /**
-     * @var string
-     */
-    protected string $sourcePath = '';
-
-    /**
-     * @var string
-     */
-    protected string $targetPath = '';
-
-    /**
-     * @var string
-     */
-    protected string $targetUri = '';
+    use HashTrait;
+    use SourceTargetTrait;
 
     /**
      * Asset constructor.
      *
-     * @param string                $type
-     * @param string                $path
-     * @param bool                  $isLocal
-     * @param bool                  $filter
      * @param array<string, string> $attributes
-     * @param string|null           $version
-     * @param bool                  $isAutoVersion
      */
     public function __construct(
         protected string $type,
         protected string $path,
-        protected bool $isLocal = true,
+        bool $isLocal = true,
         protected bool $filter = true,
-        protected array $attributes = [],
+        array $attributes = [],
         protected string | null $version = null,
         protected bool $isAutoVersion = false
     ) {
+        $this->isLocal    = $isLocal;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -70,7 +58,7 @@ class Asset implements AssetInterface
     {
         $key = $this->getType() . ':' . $this->getPath();
 
-        return hash("sha256", $key);
+        return $this->phpHash("sha256", $key);
     }
 
     /**
@@ -97,10 +85,7 @@ class Asset implements AssetInterface
         /**
          * A base path for assets can be set in the assets manager
          */
-        $completePath = empty($this->sourcePath)
-            ? $this->path
-            : $this->sourcePath;
-        $completePath = $basePath . $completePath;
+        $completePath = $basePath . $this->checkPath("sourcePath");
 
         /**
          * Local assets are loaded from the local disk
@@ -128,8 +113,6 @@ class Asset implements AssetInterface
 
     /**
      * Gets if the asset must be filtered or not.
-     *
-     * @return bool
      */
     public function getFilter(): bool
     {
@@ -138,8 +121,6 @@ class Asset implements AssetInterface
 
     /**
      * Returns the path for this asset
-     *
-     * @return string
      */
     public function getPath(): string
     {
@@ -155,10 +136,7 @@ class Asset implements AssetInterface
      */
     public function getRealSourcePath(string | null $basePath = null): string
     {
-        $source = empty($this->sourcePath)
-            ? $this->path
-            : $this->sourcePath;
-
+        $source = $this->checkPath("sourcePath");
         if (true === $this->isLocal) {
             /**
              * Get the real template path. If `realpath` fails it will return
@@ -179,10 +157,7 @@ class Asset implements AssetInterface
      */
     public function getRealTargetPath(string | null $basePath = null): string
     {
-        $target = empty($this->targetPath)
-            ? $this->path
-            : $this->targetPath;
-
+        $target = $this->checkPath("targetPath");
         if (true === $this->isLocal) {
             /**
              * A base path for assets can be set in the assets manager
@@ -214,11 +189,8 @@ class Asset implements AssetInterface
      */
     public function getRealTargetUri(): string
     {
-        $target = empty($this->targetUri)
-            ? $this->path
-            : $this->targetUri;
-
-        $ver = $this->version;
+        $target = $this->checkPath("targetUri");
+        $ver    = $this->version;
         if (true === $this->isAutoVersion && true === $this->isLocal) {
             $modTime = filemtime($this->getRealSourcePath());
             $ver     = $ver ? $ver . '.' . $modTime : $modTime;
@@ -229,36 +201,6 @@ class Asset implements AssetInterface
         }
 
         return $target;
-    }
-
-    /**
-     * Gets the asset's source Path.
-     *
-     * @return string
-     */
-    public function getSourcePath(): string
-    {
-        return $this->sourcePath;
-    }
-
-    /**
-     * Gets the asset's target Path.
-     *
-     * @return string
-     */
-    public function getTargetPath(): string
-    {
-        return $this->targetPath;
-    }
-
-    /**
-     * Gets the asset's target URI.
-     *
-     * @return string
-     */
-    public function getTargetUri(): string
-    {
-        return $this->targetUri;
     }
 
     /**
@@ -289,16 +231,6 @@ class Asset implements AssetInterface
     public function isAutoVersion(): bool
     {
         return $this->isAutoVersion;
-    }
-
-    /**
-     * Checks if the asset is local or not
-     *
-     * @return bool
-     */
-    public function isLocal(): bool
-    {
-        return $this->isLocal;
     }
 
     /**
@@ -341,19 +273,6 @@ class Asset implements AssetInterface
         return $this;
     }
 
-    /**
-     * Sets if the asset is local or external
-     *
-     * @param bool $flag
-     *
-     * @return AssetInterface
-     */
-    public function setIsLocal(bool $flag): AssetInterface
-    {
-        $this->isLocal = $flag;
-
-        return $this;
-    }
 
     /**
      * Sets the asset's path
@@ -365,48 +284,6 @@ class Asset implements AssetInterface
     public function setPath(string $path): AssetInterface
     {
         $this->path = $path;
-
-        return $this;
-    }
-
-    /**
-     * Sets the asset's source path
-     *
-     * @param string $sourcePath
-     *
-     * @return AssetInterface
-     */
-    public function setSourcePath(string $sourcePath): AssetInterface
-    {
-        $this->sourcePath = $sourcePath;
-
-        return $this;
-    }
-
-    /**
-     * Sets the asset's target path
-     *
-     * @param string $targetPath
-     *
-     * @return AssetInterface
-     */
-    public function setTargetPath(string $targetPath): AssetInterface
-    {
-        $this->targetPath = $targetPath;
-
-        return $this;
-    }
-
-    /**
-     * Sets a target uri for the generated HTML
-     *
-     * @param string $targetUri
-     *
-     * @return AssetInterface
-     */
-    public function setTargetUri(string $targetUri): AssetInterface
-    {
-        $this->targetUri = $targetUri;
 
         return $this;
     }
@@ -437,6 +314,20 @@ class Asset implements AssetInterface
         $this->version = $version;
 
         return $this;
+    }
+
+    /**
+     * @param string $property
+     *
+     * @return string
+     */
+    private function checkPath(string $property): string
+    {
+        if (true === empty($this->$property)) {
+            return $this->path;
+        }
+
+        return $this->$property;
     }
 
     /**

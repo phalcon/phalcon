@@ -30,7 +30,6 @@ class JsMin implements FilterInterface
 {
     /**
      * Filters the content using JSMIN
-     * NOTE: This functionality is not currently available
      */
     public function filter(string $content): string
     {

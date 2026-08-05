@@ -25,19 +25,11 @@ use Phalcon\Assets\FilterInterface;
  * Minify the CSS - removes comments removes newlines and line feeds keeping
  * removes last semicolon from last property
  *
- * Class CssMin
- *
- * @package Phalcon\Assets\Filters
  */
 class CssMin implements FilterInterface
 {
     /**
      * Filters the content using CSSMIN
-     * NOTE: This functionality is not currently available
-     *
-     * @param string $content
-     *
-     * @return string
      */
     public function filter(string $content): string
     {
