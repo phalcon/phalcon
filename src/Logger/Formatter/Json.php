@@ -15,8 +15,7 @@ namespace Phalcon\Logger\Formatter;
 
 use JsonException;
 use Phalcon\Logger\Item;
-
-use function json_encode;
+use Phalcon\Traits\Support\Helper\Json\EncodeTrait;
 
 use const JSON_HEX_AMP;
 use const JSON_HEX_APOS;
@@ -26,12 +25,12 @@ use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
 
 /**
- * Phalcon\Logger\Formatter\Json
- *
  * Formats messages using JSON encoding
  */
 class Json extends AbstractFormatter
 {
+    use EncodeTrait;
+
     /**
      * Json constructor.
      *
@@ -59,15 +58,15 @@ class Json extends AbstractFormatter
      */
     public function format(Item $item): string
     {
+        $message = $this->getInterpolatedMessage($item, $item->getMessage());
         $options = JSON_HEX_TAG
             + JSON_HEX_APOS
             + JSON_HEX_AMP
             + JSON_HEX_QUOT
             + JSON_UNESCAPED_SLASHES
             + JSON_THROW_ON_ERROR;
-        $message = $this->getInterpolatedMessage($item, $item->getMessage());
 
-        return json_encode(
+        return $this->toEncode(
             [
                 'level'     => $item->getLevelName(),
                 'message'   => $message,

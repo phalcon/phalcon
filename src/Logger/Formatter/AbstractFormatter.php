@@ -18,8 +18,6 @@ use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 /**
  * Class AbstractFormatter
- *
- * @property string $dateFormat
  */
 abstract class AbstractFormatter implements FormatterInterface
 {
@@ -27,32 +25,16 @@ abstract class AbstractFormatter implements FormatterInterface
 
     /**
      * Default date format
-     *
-     * @var string
      */
     protected string $dateFormat = 'c';
-
-    /**
-     * @var string
-     */
     protected string $interpolatorLeft = '%';
-
-    /**
-     * @var string
-     */
     protected string $interpolatorRight = '%';
 
-    /**
-     * @return string
-     */
     public function getDateFormat(): string
     {
         return $this->dateFormat;
     }
 
-    /**
-     * @param string $format
-     */
     public function setDateFormat(string $format): void
     {
         $this->dateFormat = $format;
@@ -67,9 +49,7 @@ abstract class AbstractFormatter implements FormatterInterface
      */
     protected function getFormattedDate(Item $item): string
     {
-        return $item->getDateTime()
-                    ->format($this->dateFormat)
-        ;
+        return $item->getDateTime()->format($this->dateFormat);
     }
 
     /**

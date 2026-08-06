@@ -18,8 +18,6 @@ use Phalcon\Logger\Item;
 
 /**
  * Class Line
- *
- * @property string $format
  */
 class Line extends AbstractFormatter
 {
@@ -45,9 +43,6 @@ class Line extends AbstractFormatter
     /**
      * Applies a format to a message before sent it to the internal log
      *
-     * @param Item $item
-     *
-     * @return string
      * @throws Exception
      */
     public function format(Item $item): string
@@ -66,8 +61,6 @@ class Line extends AbstractFormatter
 
     /**
      * Return the format applied to each message
-     *
-     * @return string
      */
     public function getFormat(): string
     {
@@ -76,10 +69,6 @@ class Line extends AbstractFormatter
 
     /**
      * Set the format applied to each message
-     *
-     * @param string $format
-     *
-     * @return Line
      */
     public function setFormat(string $format): static
     {

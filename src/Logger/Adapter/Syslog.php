@@ -42,19 +42,8 @@ use const LOG_WARNING;
  */
 class Syslog extends AbstractAdapter
 {
-    /**
-     * @var int
-     */
     protected int $facility = 0;
-
-    /**
-     * @var bool
-     */
     protected bool $opened = false;
-
-    /**
-     * @var int
-     */
     protected int $option = 0;
 
     /**
@@ -86,8 +75,6 @@ class Syslog extends AbstractAdapter
     /**
      * Processes the message i.e. writes it to the syslog
      *
-     * @param Item $item
-     *
      * @throws SyslogOpenFailed
      */
     public function process(Item $item): void
@@ -107,14 +94,6 @@ class Syslog extends AbstractAdapter
 
     /**
      * Open connection to system logger
-     *
-     * @link https://php.net/manual/en/function.openlog.php
-     *
-     * @param string $ident
-     * @param int    $option
-     * @param int    $facility
-     *
-     * @return bool
      */
     protected function openlog(string $ident, int $option, int $facility): bool
     {
@@ -123,10 +102,6 @@ class Syslog extends AbstractAdapter
 
     /**
      * Translates a Logger level to a Syslog level
-     *
-     * @param int $level
-     *
-     * @return int
      */
     private function logLevelToSyslog(int $level): int
     {

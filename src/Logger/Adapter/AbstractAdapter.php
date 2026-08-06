@@ -24,12 +24,6 @@ use Phalcon\Logger\Item;
 
 /**
  * Class AbstractAdapter
- *
- * @property string             $defaultFormatter
- * @property FormatterInterface $formatter
- * @property bool               $inTransaction
- * @property array              $queue
- * @property int                $queueLimit
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -42,22 +36,16 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Formatter
-     *
-     * @var FormatterInterface|null
      */
     protected FormatterInterface | null $formatter = null;
 
     /**
      * Tells if there is an active transaction or not
-     *
-     * @var bool
      */
     protected bool $inTransaction = false;
 
     /**
      * Array with messages queued in the transaction
-     *
-     * @var array
      */
     protected array $queue = [];
 
@@ -66,8 +54,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * 0 (default) keeps the original unbounded behavior; a positive
      * value drops the oldest queued item FIFO before a new one is
      * appended in add().
-     *
-     * @var int
      */
     protected int $queueLimit = 0;
 
@@ -89,9 +75,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Prevent serialization
-     *
-     * @return array
-     * @throws Exception
      */
     public function __serialize(): array
     {
@@ -100,11 +83,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Prevent unserialization
-     *
-     * @param array $data
-     *
-     * @return void
-     * @throws Exception
      */
     public function __unserialize(array $data): void
     {
@@ -112,7 +90,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Add a message to the queue
+     * Adds a message to the queue
      *
      * @param Item $item
      *
@@ -133,7 +111,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Start a transaction
+     * Starts a transaction
      *
      * @return AdapterInterface
      * @throws TransactionAlreadyActive
@@ -157,10 +135,10 @@ abstract class AbstractAdapter implements AdapterInterface
     abstract public function close(): bool;
 
     /**
-     * Commit the internal transaction
+     * Commits the internal transaction
      *
      * @return AdapterInterface
-     * @throws Exception
+     * @throws TransactionNotActive
      */
     public function commit(): AdapterInterface
     {
@@ -181,8 +159,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Return the formatter used
-     *
-     * @return FormatterInterface
      */
     public function getFormatter(): FormatterInterface
     {
@@ -197,8 +173,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Returns the configured transaction-queue cap (0 = unlimited)
-     *
-     * @return int
      */
     public function getQueueLimit(): int
     {
@@ -208,8 +182,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Returns the whether the logger is currently in an active transaction or
      * not
-     *
-     * @return bool
      */
     public function inTransaction(): bool
     {
@@ -218,18 +190,13 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Processes the message in the adapter
-     *
-     * @param Item $item
-     *
-     * @return void
      */
     abstract public function process(Item $item): void;
 
     /**
      * Rollbacks the internal transaction
      *
-     * @return AdapterInterface
-     * @throws Exception
+     * @throws TransactionNotActive
      */
     public function rollback(): AdapterInterface
     {
@@ -241,10 +208,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Sets the message formatter
-     *
-     * @param FormatterInterface $formatter
-     *
-     * @return AdapterInterface
      */
     public function setFormatter(FormatterInterface $formatter): AdapterInterface
     {
@@ -257,10 +220,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * Sets the maximum number of items retained in the transaction
      * queue. 0 disables the cap (the default; preserves the original
      * unbounded behavior).
-     *
-     * @param int $queueLimit
-     *
-     * @return AdapterInterface
      */
     public function setQueueLimit(int $queueLimit): AdapterInterface
     {
@@ -271,10 +230,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Returns the formatted item
-     *
-     * @param Item $item
-     *
-     * @return string
      */
     protected function getFormattedItem(Item $item): string
     {
@@ -284,8 +239,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Checks if the transaction is active
      *
-     * @return void
-     * @throws Exception
+     * @throws TransactionNotActive
      */
     private function checkTransaction(): void
     {
@@ -296,8 +250,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Resets the transaction flag and queue array
-     *
-     * @return void
      */
     private function resetTransaction(): void
     {

@@ -17,6 +17,7 @@ use DateTimeZone;
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Support\Traits\ConfigTrait;
+use Throwable;
 
 /**
  * Factory creating logger objects
@@ -25,13 +26,10 @@ class LoggerFactory
 {
     use ConfigTrait;
 
-    /**
-     * @var AdapterFactory
-     */
     private AdapterFactory $adapterFactory;
 
     /**
-     * @param AdapterFactory $factory
+     * Constructor
      */
     public function __construct(AdapterFactory $factory)
     {
@@ -41,33 +39,23 @@ class LoggerFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = {
-     *
-     * @option string "'name"
-     * @option array  "adapters"' = {
-     * @option string "adapter-name" = {
-     * @option string "adapter"
-     * @option string "name"
-     * @option string "options" = {
-     * @option string "mode" = "ab"
-     * @option string "option"
-     * @option string "facility"
-     *              }
-     *          }
-     *      }
-     * }
-     *
-     * @return Logger
-     * @throws BaseException
+     * @param array|ConfigInterface $config = [
+     *     'name'     => 'messages',
+     *     'adapters' => [
+     *         'adapter-name' => [
+     *              'adapter' => 'stream',
+     *              'name'    => 'file.log',
+     *              'options' => [
+     *                  'mode'     => 'ab',
+     *                  'option'   => null,
+     *                  'facility' => null
+     *              ],
+     *         ],
+     *     ]
+     * ]
      */
-    public function load(mixed $config): Logger
+    public function load(array | ConfigInterface $config): Logger
     {
-        if (!is_array($config) && !($config instanceof ConfigInterface)) {
-            throw new Exception(
-                'Config must be array or Phalcon\Config\Config object'
-            );
-        }
-
         $data     = [];
         $config   = $this->checkConfig($config);
         $config   = $this->checkConfigElement($config, "name");
@@ -94,11 +82,6 @@ class LoggerFactory
     /**
      * Returns a Logger object
      *
-     * @param string            $name
-     * @param array             $adapters
-     * @param DateTimeZone|null $timezone
-     *
-     * @return Logger
      * @throws BaseException
      */
     public function newInstance(
@@ -110,7 +93,7 @@ class LoggerFactory
     }
 
     /**
-     * @return string
+     * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
     {

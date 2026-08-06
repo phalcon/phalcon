@@ -46,41 +46,26 @@ class Item
     ) {
     }
 
-    /**
-     * @return array
-     */
     public function getContext(): array
     {
         return $this->context;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getDateTime(): DateTimeImmutable
     {
         return $this->dateTime;
     }
 
-    /**
-     * @return int
-     */
     public function getLevel(): int
     {
         return $this->level;
     }
 
-    /**
-     * @return string
-     */
     public function getLevelName(): string
     {
         return $this->levelName;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

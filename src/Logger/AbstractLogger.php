@@ -37,8 +37,6 @@ use function strtolower;
  * developers to create new instances of the Logger or load them from config
  * files (see Phalcon\Config\Config object).
  *
- * @package Phalcon\Logger
- *
  * @property AdapterInterface[] $adapters
  * @property array              $excluded
  * @property int                $logLevel
@@ -53,46 +51,19 @@ abstract class AbstractLogger
      * @var AdapterInterface[]
      */
     protected array $adapters = [];
-
     /**
      * Clock used to timestamp log items
-     *
-     * @var ClockInterface
      */
     protected ClockInterface $clock;
-
     /**
      * The excluded adapters for this log process
-     *
-     * @var array
      */
     protected array $excluded = [];
-
-    /**
-     * Minimum log level for the logger
-     *
-     * @var int
-     */
     protected int $logLevel = Enum::CUSTOM;
-
-    /**
-     * @var DateTimeZone
-     */
     protected DateTimeZone $timezone;
 
     /**
      * Constructor.
-     *
-     * @param string            $name     The name of the logger
-     * @param array             $adapters The collection of adapters to be used
-     *                                    for logging (default [])
-     * @param DateTimeZone|null $timezone Timezone. If omitted,
-     *                                    date_Default_timezone_get() is used
-     * @param ClockInterface|null $clock    Clock used to timestamp log items.
-     *                                      Defaults to a SystemClock on the
-     *                                      resolved timezone.
-     *
-     * @throws Exception
      */
     public function __construct(
         protected string $name,
@@ -121,11 +92,6 @@ abstract class AbstractLogger
 
     /**
      * Add an adapter to the stack. For processing we use FIFO
-     *
-     * @param string           $name    The name of the adapter
-     * @param AdapterInterface $adapter The adapter to add to the stack
-     *
-     * @return AbstractLogger
      */
     public function addAdapter(string $name, AdapterInterface $adapter): static
     {
@@ -136,8 +102,6 @@ abstract class AbstractLogger
 
     /**
      * Starts a transaction on every (non-excluded) adapter in the stack.
-     *
-     * @return AbstractLogger
      */
     public function begin(): static
     {
@@ -151,8 +115,6 @@ abstract class AbstractLogger
 
     /**
      * Commits the transaction on every (non-excluded) adapter in the stack.
-     *
-     * @return AbstractLogger
      */
     public function commit(): static
     {
@@ -166,10 +128,6 @@ abstract class AbstractLogger
 
     /**
      * Exclude certain adapters.
-     *
-     * @param array $adapters
-     *
-     * @return AbstractLogger
      */
     public function excludeAdapters(array $adapters = []): static
     {
@@ -197,9 +155,6 @@ abstract class AbstractLogger
     /**
      * Returns an adapter from the stack
      *
-     * @param string $name The name of the adapter
-     *
-     * @return AdapterInterface
      * @throws AdapterNotFound
      */
     public function getAdapter(string $name): AdapterInterface
@@ -240,9 +195,6 @@ abstract class AbstractLogger
     /**
      * Removes an adapter from the stack
      *
-     * @param string $name The name of the adapter
-     *
-     * @return AbstractLogger
      * @throws AdapterNotFound
      */
     public function removeAdapter(string $name): static
@@ -258,8 +210,6 @@ abstract class AbstractLogger
 
     /**
      * Rolls back the transaction on every (non-excluded) adapter in the stack.
-     *
-     * @return AbstractLogger
      */
     public function rollback(): static
     {
@@ -273,10 +223,6 @@ abstract class AbstractLogger
 
     /**
      * Sets the adapters stack overriding what is already there
-     *
-     * @param array $adapters An array of adapters
-     *
-     * @return AbstractLogger
      */
     public function setAdapters(array $adapters): static
     {
@@ -291,10 +237,6 @@ abstract class AbstractLogger
      * An unknown level is not rejected: it is stored as CUSTOM, which sits
      * between DEBUG and TRACE in the ordering, so the threshold becomes
      * "everything except TRACE".
-     *
-     * @param int $level
-     *
-     * @return AbstractLogger
      */
     public function setLogLevel(int $level): static
     {
@@ -308,11 +250,6 @@ abstract class AbstractLogger
     /**
      * Adds a message to each handler for processing
      *
-     * @param int    $level
-     * @param string $message
-     * @param array  $context
-     *
-     * @return bool
      * @throws Exception
      * @throws NoAdaptersConfigured
      */
@@ -362,10 +299,6 @@ abstract class AbstractLogger
 
     /**
      * Converts the level from string/word to an integer
-     *
-     * @param mixed $level
-     *
-     * @return int
      */
     protected function getLevelNumber(mixed $level): int
     {
@@ -385,8 +318,6 @@ abstract class AbstractLogger
 
     /**
      * Returns an array of log levels with integer to string conversion
-     *
-     * @return string[]
      */
     protected function getLevels(): array
     {

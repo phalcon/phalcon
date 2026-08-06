@@ -35,22 +35,6 @@ final class LoadTest extends AbstractUnitTestCase
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
-    public function testLoggerFactoryLoadExceptionsInvalidConfig(): void
-    {
-        $factory = new LoggerFactory(new AdapterFactory());
-
-        $this->expectException(LoggerException::class);
-        $this->expectExceptionMessage(
-            'Config must be array or Phalcon\Config\Config object'
-        );
-
-        $factory->load(1234);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2020-09-09
-     */
     public function testLoggerFactoryLoadExceptionsNoName(): void
     {
         $options = $this->arrayConfig['logger'];

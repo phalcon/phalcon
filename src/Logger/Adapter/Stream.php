@@ -33,7 +33,7 @@ use const PHP_EOL;
  * $logger = new \Phalcon\Logger\Adapter\Stream('app/logs/test.log');
  *
  * $logger->log('This is a message');
- * $logger->log(\Phalcon\Logger::ERROR, 'This is an error');
+ * $logger->log(\Phalcon\Logger\Enum::ERROR, 'This is an error');
  * $logger->error('This is another error');
  *
  * $logger->close();
@@ -56,18 +56,13 @@ class Stream extends AbstractAdapter
 
     /**
      * The file open mode. Defaults to 'ab'
-     *
-     * @var string
      */
     protected string $mode = 'ab';
 
     /**
      * Stream constructor.
      *
-     * @param string $name
-     * @param array  $options
-     *
-     * @throws Exception
+     * @throws InvalidStreamMode
      */
     public function __construct(
         protected string $name,
@@ -99,8 +94,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Stream name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -109,8 +102,6 @@ class Stream extends AbstractAdapter
 
     /**
      * Processes the message i.e. writes it to the file
-     *
-     * @param Item $item
      */
     public function process(Item $item): void
     {
