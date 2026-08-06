@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Manager;

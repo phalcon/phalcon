@@ -82,7 +82,7 @@ class Imagick extends AbstractAdapter
     private const GRAVITY_SOUTHEAST  = 9;
     private const GRAVITY_WEST       = 4;
     private const IMAGICK_EXTNUM     = 30700;
-    
+
     protected int $version = 0;
 
     /**

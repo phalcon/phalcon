@@ -171,7 +171,12 @@ jobs:
           fi
 
           cp tests/support/_config/.env.default .env
-          php bin/generate-db-schemas.php
+          schema_source=tests/support/Migrations \
+          schema_namespace='Phalcon\Tests\Support\Migrations' \
+          schema_output=tests/support/assets/schema \
+          schema_pre='Phalcon\Tests\Support\Migrations\BootstrapMigration' \
+          schema_post='Phalcon\Tests\Support\Migrations\FooterMigration' \
+          vendor/bin/talon schema
 
       - name: "Tests with coverage"
         run: composer test-unit-coverage
@@ -268,7 +273,12 @@ jobs:
           fi
 
           cp tests/support/_config/.env.default .env
-          php bin/generate-db-schemas.php
+          schema_source=tests/support/Migrations \
+          schema_namespace='Phalcon\Tests\Support\Migrations' \
+          schema_output=tests/support/assets/schema \
+          schema_pre='Phalcon\Tests\Support\Migrations\BootstrapMigration' \
+          schema_post='Phalcon\Tests\Support\Migrations\FooterMigration' \
+          vendor/bin/talon schema
 
       - name: Run Database Tests (MariaDB)
         env:
@@ -370,7 +380,12 @@ jobs:
           fi
 
           cp tests/support/_config/.env.default .env
-          php bin/generate-db-schemas.php
+          schema_source=tests/support/Migrations \
+          schema_namespace='Phalcon\Tests\Support\Migrations' \
+          schema_output=tests/support/assets/schema \
+          schema_pre='Phalcon\Tests\Support\Migrations\BootstrapMigration' \
+          schema_post='Phalcon\Tests\Support\Migrations\FooterMigration' \
+          vendor/bin/talon schema
 
       - name: Run Database Tests (MySQL)
         env:
@@ -471,7 +486,12 @@ jobs:
           fi
 
           cp tests/support/_config/.env.default .env
-          php bin/generate-db-schemas.php
+          schema_source=tests/support/Migrations \
+          schema_namespace='Phalcon\Tests\Support\Migrations' \
+          schema_output=tests/support/assets/schema \
+          schema_pre='Phalcon\Tests\Support\Migrations\BootstrapMigration' \
+          schema_post='Phalcon\Tests\Support\Migrations\FooterMigration' \
+          vendor/bin/talon schema
 
       - name: Run Database Tests (Postgres)
         env:
@@ -557,7 +577,12 @@ jobs:
           fi
 
           cp tests/support/_config/.env.default .env
-          php bin/generate-db-schemas.php
+          schema_source=tests/support/Migrations \
+          schema_namespace='Phalcon\Tests\Support\Migrations' \
+          schema_output=tests/support/assets/schema \
+          schema_pre='Phalcon\Tests\Support\Migrations\BootstrapMigration' \
+          schema_post='Phalcon\Tests\Support\Migrations\FooterMigration' \
+          vendor/bin/talon schema
 
       - name: Run Database Tests (SQLite)
         env:
