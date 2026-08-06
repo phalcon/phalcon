@@ -21,11 +21,11 @@ use Phalcon\Image\Exceptions\ImageLoadFailed;
 use Phalcon\Image\Exceptions\TextRenderingFailed;
 use Phalcon\Image\Exceptions\UnsupportedImageType;
 use Phalcon\Image\Exceptions\VersionMismatch;
+use Phalcon\Traits\Php\FileTrait;
+use Phalcon\Traits\Php\InfoTrait;
 
 use function abs;
 use function defined;
-use function file_exists;
-use function function_exists;
 use function gd_info;
 use function getimagesize;
 use function image_type_to_extension;
@@ -113,6 +113,9 @@ use const PATHINFO_EXTENSION;
  */
 class Gd extends AbstractAdapter
 {
+    use FileTrait;
+    use InfoTrait;
+
     /**
      * Loads an image from a file, or creates a blank canvas.
      *
@@ -138,7 +141,7 @@ class Gd extends AbstractAdapter
         $this->file = $file;
         $this->type = 0;
 
-        if (true === file_exists($this->file)) {
+        if (true === $this->phpFileExists($this->file)) {
             $this->realpath = realpath($this->file);
             $imageInfo      = getimagesize($this->file);
 
@@ -212,10 +215,6 @@ class Gd extends AbstractAdapter
      * Creates a blank true-color canvas of the given dimensions, without the
      * load-or-create ambiguity of the constructor.
      *
-     * @param int $width
-     * @param int $height
-     *
-     * @return AbstractAdapter
      * @throws Exception
      */
     public static function create(int $width, int $height): AbstractAdapter
@@ -224,12 +223,11 @@ class Gd extends AbstractAdapter
     }
 
     /**
-     * @return string
      * @throws Exception
      */
     public function getVersion(): string
     {
-        if (true !== function_exists("gd_info")) {
+        if (true !== $this->phpFunctionExists("gd_info")) {
             throw new ExtensionNotLoaded("GD");
         }
 
@@ -255,14 +253,6 @@ class Gd extends AbstractAdapter
         return $version;
     }
 
-    /**
-     * @param int $red
-     * @param int $green
-     * @param int $blue
-     * @param int $opacity
-     *
-     * @return void
-     */
     protected function processBackground(
         int $red,
         int $green,
@@ -298,11 +288,6 @@ class Gd extends AbstractAdapter
         }
     }
 
-    /**
-     * @param int $radius
-     *
-     * @return void
-     */
     protected function processBlur(int $radius): void
     {
         $counter = 0;
@@ -314,9 +299,6 @@ class Gd extends AbstractAdapter
     }
 
     /**
-     * @param int $width
-     * @param int $height
-     *
      * @return false|GdImage|resource
      */
     protected function processCreate(int $width, int $height)
@@ -329,14 +311,6 @@ class Gd extends AbstractAdapter
         return $image;
     }
 
-    /**
-     * @param int $width
-     * @param int $height
-     * @param int $offsetX
-     * @param int $offsetY
-     *
-     * @return void
-     */
     protected function processCrop(
         int $width,
         int $height,
@@ -357,11 +331,6 @@ class Gd extends AbstractAdapter
         $this->height = imagesy($image);
     }
 
-    /**
-     * @param int $direction
-     *
-     * @return void
-     */
     protected function processFlip(int $direction): void
     {
         if ($direction === Enum::HORIZONTAL) {
@@ -371,11 +340,6 @@ class Gd extends AbstractAdapter
         }
     }
 
-    /**
-     * @param AdapterInterface $mask
-     *
-     * @return void
-     */
     protected function processMask(AdapterInterface $mask)
     {
         $maskImage  = imagecreatefromstring($mask->render());
@@ -453,11 +417,6 @@ class Gd extends AbstractAdapter
         $this->image = $newImage;
     }
 
-    /**
-     * @param int $amount
-     *
-     * @return void
-     */
     protected function processPixelate(int $amount): void
     {
         $x = 0;
@@ -493,13 +452,6 @@ class Gd extends AbstractAdapter
         }
     }
 
-    /**
-     * @param int  $height
-     * @param int  $opacity
-     * @param bool $fadeIn
-     *
-     * @return void
-     */
     protected function processReflection(
         int $height,
         int $opacity,
@@ -585,14 +537,7 @@ class Gd extends AbstractAdapter
         $this->height = imagesy($reflection);
     }
 
-    /**
-     * @param string $extension
-     * @param int    $quality
-     *
-     * @return false|string
-     * @throws Exception
-     */
-    protected function processRender(string $extension, int $quality)
+    protected function processRender(string $extension, int $quality): false | string
     {
         $extension = strtolower($extension);
 
@@ -624,12 +569,6 @@ class Gd extends AbstractAdapter
         return ob_get_clean();
     }
 
-    /**
-     * @param int $width
-     * @param int $height
-     *
-     * @return void
-     */
     protected function processResize(int $width, int $height): void
     {
         $image = imagecreatetruecolor($width, $height);
@@ -643,11 +582,6 @@ class Gd extends AbstractAdapter
         $this->height = imagesy($image);
     }
 
-    /**
-     * @param int $degrees
-     *
-     * @return void
-     */
     protected function processRotate(int $degrees): void
     {
         $transparent = imagecolorallocatealpha(
@@ -688,10 +622,6 @@ class Gd extends AbstractAdapter
     }
 
     /**
-     * @param string $file
-     * @param int    $quality
-     *
-     * @return bool
      * @throws Exception
      */
     protected function processSave(string $file, int $quality): bool
@@ -746,11 +676,6 @@ class Gd extends AbstractAdapter
         return true;
     }
 
-    /**
-     * @param int $amount
-     *
-     * @return void
-     */
     protected function processSharpen(int $amount): void
     {
         $amount = (int)round(abs(-18 + ($amount * 0.08)), 2);
@@ -774,17 +699,6 @@ class Gd extends AbstractAdapter
     }
 
     /**
-     * @param string      $text
-     * @param mixed       $offsetX
-     * @param mixed       $offsetY
-     * @param int         $opacity
-     * @param int         $red
-     * @param int         $green
-     * @param int         $blue
-     * @param int         $size
-     * @param string|null $fontFile
-     *
-     * @return void
      * @throws Exception
      */
     protected function processText(
@@ -932,7 +846,6 @@ class Gd extends AbstractAdapter
     /**
      * Checks the installed version of GD
      *
-     * @return void
      * @throws Exception
      */
     private function check(): void

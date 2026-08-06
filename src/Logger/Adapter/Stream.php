@@ -15,7 +15,6 @@ namespace Phalcon\Logger\Adapter;
 
 use Phalcon\Logger\Adapter\Exceptions\FileOpenFailed;
 use Phalcon\Logger\Adapter\Exceptions\InvalidStreamMode;
-use Phalcon\Logger\Exception;
 use Phalcon\Logger\Item;
 use Phalcon\Traits\Php\FileTrait;
 

@@ -26,6 +26,7 @@ use Phalcon\Image\Exceptions\ExtensionNotLoaded;
 use Phalcon\Image\Exceptions\ImageLoadFailed;
 use Phalcon\Image\Exceptions\ResizeFailed;
 use Phalcon\Image\Exceptions\ResourceTypeError;
+use Phalcon\Traits\Php\FileTrait;
 
 use function is_bool;
 use function is_int;
@@ -62,26 +63,8 @@ use const IMAGETYPE_GIF;
  */
 class Imagick extends AbstractAdapter
 {
-    private const ALPHACHANNEL_SET   = 8;
-    private const CHANNEL_ALPHA      = 8;
-    private const COMPOSITE_DISSOLVE = 28;
-    private const COMPOSITE_DSTIN    = 23;
-    private const COMPOSITE_DSTOUT   = 24;
-    private const COMPOSITE_OVER     = 40;
-    private const COMPOSITE_SRC      = 48;
-    private const COMPRESSION_JPEG   = 8;
-    private const EVALUATE_MULTIPLY  = 7;
-    private const GRAVITY_CENTER     = 5;
-    private const GRAVITY_EAST       = 6;
-    private const GRAVITY_NORTH      = 2;
-    private const GRAVITY_NORTHEAST  = 3;
-    private const GRAVITY_SOUTH      = 8;
-    private const GRAVITY_SOUTHEAST  = 9;
-    private const GRAVITY_WEST       = 4;
-    private const IMAGICK_EXTNUM     = 30700;
-    /**
-     * @var int
-     */
+    use FileTrait;
+
     protected int $version = 0;
 
     /**
@@ -110,7 +93,7 @@ class Imagick extends AbstractAdapter
         $this->file  = $file;
         $this->image = new ImagickNative();
 
-        if (true === file_exists($this->file)) {
+        if (true === $this->phpFileExists($this->file)) {
             $this->realpath = realpath($this->file);
 
             if (true !== $this->image->readImage($this->realpath)) {
@@ -118,7 +101,7 @@ class Imagick extends AbstractAdapter
             }
 
             if (!$this->image->getImageAlphaChannel()) {
-                $this->image->setImageAlphaChannel(self::ALPHACHANNEL_SET);
+                $this->image->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
             }
             $this->type = $this->image->getImageType();
 
@@ -171,10 +154,6 @@ class Imagick extends AbstractAdapter
      * Creates a blank transparent canvas of the given dimensions, without the
      * load-or-create ambiguity of the constructor.
      *
-     * @param int $width
-     * @param int $height
-     *
-     * @return AbstractAdapter
      * @throws Exception
      * @throws ImagickException
      */
@@ -187,14 +166,6 @@ class Imagick extends AbstractAdapter
      * This method scales the images using liquid rescaling method. Only support
      * Imagick
      *
-     * @param int $width    new width
-     * @param int $height   new height
-     * @param int $deltaX   How much the seam can traverse on x-axis. Passing
-     *                      0 causes the seams to be straight.
-     * @param int $rigidity Introduces a bias for non-straight seams. This
-     *                      parameter is typically 0.
-     *
-     * @return AbstractAdapter
      * @throws Exception
      * @throws ImagickException
      */
@@ -234,10 +205,6 @@ class Imagick extends AbstractAdapter
     /**
      * Sets the limit for a particular resource in megabytes
      *
-     * @param int $type
-     * @param int $limit
-     *
-     * @return void
      * @throws Exception
      * @throws ImagickException
      *
@@ -258,12 +225,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a background.
      *
-     * @param int $red
-     * @param int $green
-     * @param int $blue
-     * @param int $opacity
-     *
-     * @return void
      * @throws Exception
      * @throws ImagickException
      * @throws ImagickPixelException
@@ -289,7 +250,7 @@ class Imagick extends AbstractAdapter
             try {
                 if (true !== $background->getImageAlphaChannel()) {
                     $background->setImageAlphaChannel(
-                        self::ALPHACHANNEL_SET
+                        Imagick::ALPHACHANNEL_SET
                     );
                 }
             } catch (ImagickException) {
@@ -299,9 +260,9 @@ class Imagick extends AbstractAdapter
             $background->setImageBackgroundColor($pixel2);
 
             $background->evaluateImage(
-                self::EVALUATE_MULTIPLY,
+                Imagick::EVALUATE_MULTIPLY,
                 $localOpacity,
-                self::CHANNEL_ALPHA
+                Imagick::CHANNEL_ALPHA
             );
 
             $background->setColorspace(
@@ -310,7 +271,7 @@ class Imagick extends AbstractAdapter
 
             $result = $background->compositeImage(
                 $this->image,
-                self::COMPOSITE_DISSOLVE,
+                Imagick::COMPOSITE_DISSOLVE,
                 0,
                 0
             );
@@ -333,9 +294,6 @@ class Imagick extends AbstractAdapter
     /**
      * Blur image
      *
-     * @param int $radius Blur radius
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processBlur(int $radius): void
@@ -354,12 +312,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a crop.
      *
-     * @param int $width
-     * @param int $height
-     * @param int $offsetX
-     * @param int $offsetY
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processCrop(
@@ -388,9 +340,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a flip.
      *
-     * @param int $direction
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processFlip(int $direction): void
@@ -411,9 +360,6 @@ class Imagick extends AbstractAdapter
     /**
      * Composite one image onto another
      *
-     * @param AdapterInterface $mask
-     *
-     * @return void
      * @throws Exception
      * @throws ImagickException
      */
@@ -450,9 +396,6 @@ class Imagick extends AbstractAdapter
     /**
      * Pixelate image
      *
-     * @param int $amount amount to pixelate
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processPixelate(int $amount): void
@@ -475,11 +418,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a reflection.
      *
-     * @param int  $height
-     * @param int  $opacity
-     * @param bool $fadeIn
-     *
-     * @return void
      * @throws Exception
      * @throws ImagickException
      */
@@ -533,7 +471,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $reflection->compositeImage(
                 $fade,
-                self::COMPOSITE_DSTOUT,
+                Imagick::COMPOSITE_DSTOUT,
                 0,
                 0
             );
@@ -543,9 +481,9 @@ class Imagick extends AbstractAdapter
             }
 
             $reflection->evaluateImage(
-                self::EVALUATE_MULTIPLY,
+                Imagick::EVALUATE_MULTIPLY,
                 $opacity,
-                self::CHANNEL_ALPHA
+                Imagick::CHANNEL_ALPHA
             );
 
             if (true !== $this->image->nextImage()) {
@@ -563,13 +501,13 @@ class Imagick extends AbstractAdapter
 
         while (true) {
             $image->newImage($this->width, $height, $pixel);
-            $image->setImageAlphaChannel(self::ALPHACHANNEL_SET);
+            $image->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
 
             $image->setColorspace($this->image->getColorspace());
             $image->setImageDelay($this->image->getImageDelay());
             $return = $image->compositeImage(
                 $this->image,
-                self::COMPOSITE_SRC,
+                Imagick::COMPOSITE_SRC,
                 0,
                 0
             );
@@ -589,7 +527,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $image->compositeImage(
                 $reflection,
-                self::COMPOSITE_OVER,
+                Imagick::COMPOSITE_OVER,
                 0,
                 $this->height
             );
@@ -616,10 +554,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a render.
      *
-     * @param string $extension
-     * @param int    $quality
-     *
-     * @return string
      * @throws ImagickException
      */
     protected function processRender(string $extension, int $quality): string
@@ -640,7 +574,7 @@ class Imagick extends AbstractAdapter
                 break;
             case "jpg":
             case "jpeg":
-                $image->setImageCompression(self::COMPRESSION_JPEG);
+                $image->setImageCompression(Imagick::COMPRESSION_JPEG);
                 $image->setImageCompressionQuality($quality);
         }
 
@@ -650,10 +584,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a resize.
      *
-     * @param int $width
-     * @param int $height
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processResize(int $width, int $height): void
@@ -676,9 +606,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a rotation.
      *
-     * @param int $degrees
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processRotate(int $degrees): void
@@ -709,10 +636,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a save.
      *
-     * @param string $file
-     * @param int    $quality
-     *
-     * @return bool
      * @throws ImagickException
      */
     protected function processSave(string $file, int $quality): bool
@@ -739,7 +662,7 @@ class Imagick extends AbstractAdapter
                 return true;
             case "jpg":
             case "jpeg":
-                $this->image->setImageCompression(self::COMPRESSION_JPEG);
+                $this->image->setImageCompression(Imagick::COMPRESSION_JPEG);
         }
 
         if ($quality >= 0) {
@@ -755,9 +678,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a sharpen.
      *
-     * @param int $amount
-     *
-     * @return void
      * @throws ImagickException
      */
     protected function processSharpen(int $amount): void
@@ -779,17 +699,6 @@ class Imagick extends AbstractAdapter
     /**
      * Execute a text
      *
-     * @param string      $text
-     * @param mixed       $offsetX
-     * @param mixed       $offsetY
-     * @param int         $opacity
-     * @param int         $red
-     * @param int         $green
-     * @param int         $blue
-     * @param int         $size
-     * @param string|null $fontFile
-     *
-     * @return void
      * @throws ImagickDrawException
      * @throws ImagickException
      * @throws ImagickPixelException
@@ -832,10 +741,10 @@ class Imagick extends AbstractAdapter
             } elseif (is_int($offsetY)) {
                 $y = $offsetY;
 
-                $gravity = (true === $offsetX && $y < 0) ? self::GRAVITY_SOUTHEAST : $gravity;
-                $gravity = (true === $offsetX && $y >= 0) ? self::GRAVITY_NORTHEAST : $gravity;
-                $gravity = (true !== $offsetX && $y < 0) ? self::GRAVITY_SOUTH : $gravity;
-                $gravity = (true !== $offsetX && $y >= 0) ? self::GRAVITY_NORTH : $gravity;
+                $gravity = (true === $offsetX && $y < 0) ? Imagick::GRAVITY_SOUTHEAST : $gravity;
+                $gravity = (true === $offsetX && $y >= 0) ? Imagick::GRAVITY_NORTHEAST : $gravity;
+                $gravity = (true !== $offsetX && $y < 0) ? Imagick::GRAVITY_SOUTH : $gravity;
+                $gravity = (true !== $offsetX && $y >= 0) ? Imagick::GRAVITY_NORTH : $gravity;
 
                 $offsetX = 0;
                 $offsetY = ($y < 0) ? $y * -1 : $offsetY;
@@ -845,10 +754,10 @@ class Imagick extends AbstractAdapter
 
             if ($offsetX) {
                 if (is_bool($offsetY)) {
-                    $gravity = (true === $offsetY && $x < 0) ? self::GRAVITY_SOUTHEAST : $gravity;
-                    $gravity = (true === $offsetY && $x >= 0) ? self::GRAVITY_SOUTH : $gravity;
-                    $gravity = (true !== $offsetY && $x < 0) ? self::GRAVITY_EAST : $gravity;
-                    $gravity = (true !== $offsetY && $x >= 0) ? self::GRAVITY_WEST : $gravity;
+                    $gravity = (true === $offsetY && $x < 0) ? Imagick::GRAVITY_SOUTHEAST : $gravity;
+                    $gravity = (true === $offsetY && $x >= 0) ? Imagick::GRAVITY_SOUTH : $gravity;
+                    $gravity = (true !== $offsetY && $x < 0) ? Imagick::GRAVITY_EAST : $gravity;
+                    $gravity = (true !== $offsetY && $x >= 0) ? Imagick::GRAVITY_WEST : $gravity;
 
                     $offsetY = 0;
                     $offsetX = ($x < 0) ? $x * -1 : $offsetX;
@@ -858,8 +767,8 @@ class Imagick extends AbstractAdapter
                     $offsetX = ($x < 0) ? $x * -1 : 0;
                     $offsetY = ($y < 0) ? $y * -1 : $offsetY;
 
-                    $gravity = ($y < 0) ? self::GRAVITY_SOUTHEAST : $gravity;
-                    $gravity = ($y >= 0) ? self::GRAVITY_NORTHEAST : $gravity;
+                    $gravity = ($y < 0) ? Imagick::GRAVITY_SOUTHEAST : $gravity;
+                    $gravity = ($y >= 0) ? Imagick::GRAVITY_NORTHEAST : $gravity;
                 }
             }
         }
@@ -884,12 +793,6 @@ class Imagick extends AbstractAdapter
     /**
      * Add Watermark
      *
-     * @param AdapterInterface $watermark
-     * @param int              $offsetX
-     * @param int              $offsetY
-     * @param int              $opacity
-     *
-     * @return void
      * @throws Exception
      * @throws ImagickException
      */
@@ -904,9 +807,9 @@ class Imagick extends AbstractAdapter
 
         $image->readImageBlob($watermark->render());
         $image->evaluateImage(
-            self::EVALUATE_MULTIPLY,
+            Imagick::EVALUATE_MULTIPLY,
             $opacity,
-            self::CHANNEL_ALPHA
+            Imagick::CHANNEL_ALPHA
         );
 
         $this->image->setIteratorIndex(0);
@@ -914,7 +817,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $this->image->compositeImage(
                 $image,
-                self::COMPOSITE_OVER,
+                Imagick::COMPOSITE_OVER,
                 $offsetX,
                 $offsetY
             );
@@ -945,7 +848,7 @@ class Imagick extends AbstractAdapter
         }
 
         if (defined("Imagick::IMAGICK_EXTNUM")) {
-            $this->version = self::IMAGICK_EXTNUM;
+            $this->version = Imagick::IMAGICK_EXTNUM;
         }
     }
 }

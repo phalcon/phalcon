@@ -20,6 +20,7 @@ use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
 use Phalcon\Support\Traits\ConfigTrait;
 use Phalcon\Traits\Factory\FactoryTrait;
+use Throwable;
 
 /**
  * Factory to create adapters for image manipulation
@@ -40,14 +41,12 @@ class ImageFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config        = [
-     *                                             'adapter' => 'gd',
-     *                                             'file'    => 'image.jpg',
-     *                                             'height'  => null,
-     *                                             'width'   => null
-     *                                             ]
-     *
-     * @throws BaseException
+     * @param array|ConfigInterface config = [
+     *     'adapter' => 'gd',
+     *     'file' => 'image.jpg',
+     *     'height' => null,
+     *     'width' => null
+     * ]
      */
     public function load(array | ConfigInterface $config): AdapterInterface
     {
@@ -69,12 +68,6 @@ class ImageFactory
     /**
      * Creates a new instance
      *
-     * @param string   $name
-     * @param string   $file
-     * @param int|null $width
-     * @param int|null $height
-     *
-     * @return AdapterInterface
      * @throws BaseException
      */
     public function newInstance(
@@ -89,7 +82,7 @@ class ImageFactory
     }
 
     /**
-     * @return string
+     * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
     {

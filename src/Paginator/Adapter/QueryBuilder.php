@@ -15,7 +15,6 @@ namespace Phalcon\Paginator\Adapter;
 
 use Phalcon\Db\Enum;
 use Phalcon\Mvc\Model\Query\Builder;
-use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Exceptions\BuilderModelNotDefined;
 use Phalcon\Paginator\Exceptions\InvalidBuilderInstance;
 use Phalcon\Paginator\Exceptions\MissingColumnsForHaving;

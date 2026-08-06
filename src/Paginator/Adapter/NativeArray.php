@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
-use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Exceptions\PaginatorDataNotArray;
 use Phalcon\Paginator\RepositoryInterface;
 

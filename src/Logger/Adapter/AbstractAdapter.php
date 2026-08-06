@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Adapter;
 
-use Phalcon\Logger\Exception;
 use Phalcon\Logger\Exceptions\DeserializationFailed;
 use Phalcon\Logger\Exceptions\SerializationFailed;
 use Phalcon\Logger\Exceptions\TransactionAlreadyActive;

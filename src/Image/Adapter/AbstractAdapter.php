@@ -37,16 +37,7 @@ use const PATHINFO_EXTENSION;
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
-    /**
-     * @var string
-     */
     protected string $file;
-
-    /**
-     * Image height
-     *
-     * @var int
-     */
     protected int $height;
 
     /**
@@ -54,41 +45,24 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected mixed $image = null;
 
-    /**
-     * Image mime type
-     *
-     * @var string
-     */
     protected string $mime;
-
-    /**
-     * @var string
-     */
     protected string $realpath;
 
     /**
      * Image type
      *
      * Driver dependent
-     *
-     * @var int
      */
     protected int $type;
 
     /**
      * Image width
-     *
-     * @var int
      */
     protected int $width;
 
     /**
      * Set the background color of an image
      *
-     * @param string $color
-     * @param int    $opacity
-     *
-     * @return AdapterInterface
      * @throws Exception
      */
     public function background(
@@ -104,10 +78,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Blur image
-     *
-     * @param int $radius
-     *
-     * @return AdapterInterface
      */
     public function blur(int $radius): AdapterInterface
     {
@@ -120,13 +90,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Crop an image to the given size
-     *
-     * @param int      $width
-     * @param int      $height
-     * @param int|null $offsetX
-     * @param int|null $offsetY
-     *
-     * @return AdapterInterface
      */
     public function crop(
         int $width,
@@ -163,10 +126,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Flip the image along the horizontal or vertical axis
-     *
-     * @param int $direction
-     *
-     * @return AdapterInterface
      */
     public function flip(int $direction): AdapterInterface
     {
@@ -179,9 +138,6 @@ abstract class AbstractAdapter implements AdapterInterface
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getHeight(): int
     {
         return $this->height;
@@ -195,33 +151,21 @@ abstract class AbstractAdapter implements AdapterInterface
         return $this->image;
     }
 
-    /**
-     * @return string
-     */
     public function getMime(): string
     {
         return $this->mime;
     }
 
-    /**
-     * @return string
-     */
     public function getRealpath(): string
     {
         return $this->realpath;
     }
 
-    /**
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;
     }
 
-    /**
-     * @return int
-     */
     public function getWidth(): int
     {
         return $this->width;
@@ -234,10 +178,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * internal handle, so a mask created with a different backend composites
      * correctly. The cost is one encode/decode round trip per call, which is
      * worth knowing inside loops.
-     *
-     * @param AdapterInterface $mask
-     *
-     * @return AdapterInterface
      */
     public function mask(AdapterInterface $mask): AdapterInterface
     {
@@ -248,10 +188,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Pixelate image
-     *
-     * @param int $amount
-     *
-     * @return AdapterInterface
      */
     public function pixelate(int $amount): AdapterInterface
     {
@@ -266,12 +202,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Add a reflection to an image
-     *
-     * @param int  $height
-     * @param int  $opacity
-     * @param bool $fadeIn
-     *
-     * @return AdapterInterface
      */
     public function reflection(
         int $height,
@@ -292,10 +222,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Render the image and return the binary string
      *
-     * @param string|null $extension
-     * @param int         $quality
-     *
-     * @return string
      * @throws Exception
      */
     public function render(string | null $extension = null, int $quality = 100): string
@@ -316,11 +242,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Resize the image to the given size
      *
-     * @param int|null $width
-     * @param int|null $height
-     * @param int      $master
-     *
-     * @return AdapterInterface
      * @throws Exception
      */
     public function resize(
@@ -373,10 +294,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Rotate the image by a given amount
-     *
-     * @param int $degrees
-     *
-     * @return AdapterInterface
      */
     public function rotate(int $degrees): AdapterInterface
     {
@@ -399,11 +316,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Save the image
-     *
-     * @param string|null $file
-     * @param int         $quality
-     *
-     * @return AdapterInterface
      */
     public function save(string | null $file = null, int $quality = -1): AdapterInterface
     {
@@ -418,10 +330,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Sharpen the image by a given amount
-     *
-     * @param int $amount
-     *
-     * @return AdapterInterface
      */
     public function sharpen(int $amount): AdapterInterface
     {
@@ -435,15 +343,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Add a text to an image with a specified opacity
      *
-     * @param string      $text
-     * @param mixed       $offsetX
-     * @param mixed       $offsetY
-     * @param int         $opacity
-     * @param string      $color
-     * @param int         $size
-     * @param string|null $fontFile
-     *
-     * @return AdapterInterface
      * @throws Exception
      */
     public function text(
@@ -481,13 +380,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * internal handle, so a watermark created with a different backend
      * composites correctly. The cost is one encode/decode round trip per call,
      * which is worth knowing inside loops.
-     *
-     * @param AdapterInterface $watermark
-     * @param int              $offsetX
-     * @param int              $offsetY
-     * @param int              $opacity
-     *
-     * @return AdapterInterface
      */
     public function watermark(
         AdapterInterface $watermark,
@@ -508,29 +400,14 @@ abstract class AbstractAdapter implements AdapterInterface
         return $this;
     }
 
-    /**
-     * @param int $value
-     * @param int $min
-     * @param int $max
-     *
-     * @return int
-     */
     protected function checkHighLow(int $value, int $min = 0, int $max = 100): int
     {
         return min($max, max($value, $min));
     }
 
-
     /**
      * Renders the supplied colour onto the image as the background. Channels
      * are 0-255; the opacity is the validated 0-100 value.
-     *
-     * @param int $red
-     * @param int $green
-     * @param int $blue
-     * @param int $opacity
-     *
-     * @return void
      */
     abstract protected function processBackground(
         int $red,
@@ -541,23 +418,12 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Applies a blur. The radius is already clamped to 1-100.
-     *
-     * @param int $radius
-     *
-     * @return void
      */
     abstract protected function processBlur(int $radius): void;
 
     /**
      * Crops the image. Width, height and both offsets are already normalized
      * to fit within the current canvas.
-     *
-     * @param int $width
-     * @param int $height
-     * @param int $offsetX
-     * @param int $offsetY
-     *
-     * @return void
      */
     abstract protected function processCrop(
         int $width,
@@ -569,41 +435,23 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Flips the image. The direction is already normalized to
      * Enum::HORIZONTAL or Enum::VERTICAL.
-     *
-     * @param int $direction
-     *
-     * @return void
      */
     abstract protected function processFlip(int $direction): void;
 
     /**
      * Composites the supplied image as a mask onto this one. The mask is read
      * through its public render() output, so it may be any adapter backend.
-     *
-     * @param AdapterInterface $mask
-     *
-     * @return void
      */
     abstract protected function processMask(AdapterInterface $mask);
 
     /**
      * Pixelates the image. The amount is already at least 2.
-     *
-     * @param int $amount
-     *
-     * @return void
      */
     abstract protected function processPixelate(int $amount): void;
 
     /**
      * Adds a reflection. The height is clamped to the image height and the
      * opacity to 0-100.
-     *
-     * @param int  $height
-     * @param int  $opacity
-     * @param bool $fadeIn
-     *
-     * @return void
      */
     abstract protected function processReflection(
         int $height,
@@ -615,10 +463,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * Renders the image to a binary string. The extension is non-empty and the
      * quality is already clamped to 1-100. Returns the encoded bytes.
      *
-     * @param string $extension
-     * @param int    $quality
-     *
-     * @return string
      * @throws Exception
      */
     abstract protected function processRender(string $extension, int $quality);
@@ -626,40 +470,23 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Resizes the image. Width and height are already resolved to positive
      * integers per the requested resize mode.
-     *
-     * @param int $width
-     * @param int $height
-     *
-     * @return void
      */
     abstract protected function processResize(int $width, int $height): void;
 
     /**
      * Rotates the image. The degrees value is already normalized to -180..180.
-     *
-     * @param int $degrees
-     *
-     * @return void
      */
     abstract protected function processRotate(int $degrees): void;
 
     /**
      * Saves the image to the supplied file path.
      *
-     * @param string $file
-     * @param int    $quality
-     *
-     * @return bool
      * @throws Exception
      */
     abstract protected function processSave(string $file, int $quality): bool;
 
     /**
      * Sharpens the image. The amount is already clamped to 1-100.
-     *
-     * @param int $amount
-     *
-     * @return void
      */
     abstract protected function processSharpen(int $amount): void;
 
@@ -667,17 +494,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * Renders text onto the image. The opacity is clamped to 0-100 and the
      * colour is supplied as separate 0-255 channels.
      *
-     * @param string      $text
-     * @param mixed       $offsetX
-     * @param mixed       $offsetY
-     * @param int         $opacity
-     * @param int         $red
-     * @param int         $green
-     * @param int         $blue
-     * @param int         $size
-     * @param string|null $fontFile
-     *
-     * @return void
      * @throws Exception
      */
     abstract protected function processText(
@@ -696,13 +512,6 @@ abstract class AbstractAdapter implements AdapterInterface
      * Composites the supplied watermark onto this image. Offsets and opacity
      * are already clamped to the valid range; the watermark is read through
      * its public render() output, so it may be any adapter backend.
-     *
-     * @param AdapterInterface $watermark
-     * @param int              $offsetX
-     * @param int              $offsetY
-     * @param int              $opacity
-     *
-     * @return void
      */
     abstract protected function processWatermark(
         AdapterInterface $watermark,
