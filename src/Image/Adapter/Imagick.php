@@ -65,6 +65,24 @@ class Imagick extends AbstractAdapter
 {
     use FileTrait;
 
+    private const ALPHACHANNEL_SET   = 8;
+    private const CHANNEL_ALPHA      = 8;
+    private const COMPOSITE_DISSOLVE = 28;
+    private const COMPOSITE_DSTIN    = 23;
+    private const COMPOSITE_DSTOUT   = 24;
+    private const COMPOSITE_OVER     = 40;
+    private const COMPOSITE_SRC      = 48;
+    private const COMPRESSION_JPEG   = 8;
+    private const EVALUATE_MULTIPLY  = 7;
+    private const GRAVITY_CENTER     = 5;
+    private const GRAVITY_EAST       = 6;
+    private const GRAVITY_NORTH      = 2;
+    private const GRAVITY_NORTHEAST  = 3;
+    private const GRAVITY_SOUTH      = 8;
+    private const GRAVITY_SOUTHEAST  = 9;
+    private const GRAVITY_WEST       = 4;
+    private const IMAGICK_EXTNUM     = 30700;
+    
     protected int $version = 0;
 
     /**

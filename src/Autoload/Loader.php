@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Autoload;
 
+use Phalcon\Autoload\Exceptions\LoaderDirectoriesNotArray;
 use Phalcon\Autoload\Exceptions\LoaderMethodNotCallable;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
@@ -38,8 +39,8 @@ use const DIRECTORY_SEPARATOR;
  * (namespaced or not) as well as files. It also features extension loading,
  * allowing the user to autoload files with different extensions than .php.
  *
- * @phpstan-type TNamespaces = array<string, TStrings>
- * @phpstan-type TStrings = array<string, string>
+ * @phpstan-type TNamespaces array<string, TStrings>
+ * @phpstan-type TStrings array<string, string>
  */
 class Loader
 {
@@ -51,64 +52,39 @@ class Loader
     private const EVENT_BEFORE_CHECK_PATH  = "loader:beforeCheckPath";
     private const EVENT_PATH_FOUND         = "loader:pathFound";
 
-    /**
-     * @var string|null
-     */
     protected string | null $checkedPath = null;
-
     /**
      * @var TStrings
      */
     protected array $classes = [];
-
     /**
      * @var array<int, string>
      */
     protected array $debug = [];
-
     /**
      * @var TStrings
      */
     protected array $directories = [];
-
     /**
      * @var TStrings
      */
     protected array $extensions = [];
-
     /**
      * @var callable|string
      */
     protected $fileCheckingCallback = "is_file";
-
     /**
      * @var TStrings
      */
     protected array $files = [];
-
-    /**
-     * @var string|null
-     */
     protected string | null $foundPath = null;
-
-    /**
-     * @var bool
-     */
     protected bool $isDebug = false;
-
-    /**
-     * @var bool
-     */
     protected bool $isRegistered = false;
 
     /**
      * @var TNamespaces
      */
     protected array $namespaces = [];
-
-    /**
-     * @var int
-     */
     protected int $nestingLevel = 0;
 
     /**
@@ -122,11 +98,6 @@ class Loader
 
     /**
      * Adds a class to the internal collection for the mapping
-     *
-     * @param string $name
-     * @param string $file
-     *
-     * @return Loader
      */
     public function addClass(string $name, string $file): static
     {
@@ -137,10 +108,6 @@ class Loader
 
     /**
      * Adds a directory for the loaded files
-     *
-     * @param string $directory
-     *
-     * @return Loader
      */
     public function addDirectory(string $directory): static
     {
@@ -151,10 +118,6 @@ class Loader
 
     /**
      * Adds an extension for the loaded files
-     *
-     * @param string $extension
-     *
-     * @return Loader
      */
     public function addExtension(string $extension): static
     {
@@ -165,10 +128,6 @@ class Loader
 
     /**
      * Adds a file to be added to the loader
-     *
-     * @param string $file
-     *
-     * @return Loader
      */
     public function addFile(string $file): static
     {
@@ -178,31 +137,27 @@ class Loader
     }
 
     /**
-     * @param string          $namespace
      * @param string|TStrings $directories
-     * @param bool            $prepend
-     *
-     * @return $this
      */
     public function addNamespace(
-        string $namespace,
+        string $name,
         mixed $directories,
         bool $prepend = false
     ): static {
         $nsSeparator  = '\\';
         $dirSeparator = DIRECTORY_SEPARATOR;
-        $directories  = $this->checkDirectories($directories, $dirSeparator, $namespace);
-        $namespace    = trim($namespace, $nsSeparator) . $nsSeparator;
+        $directories  = $this->checkDirectories($directories, $dirSeparator, $name);
+        $name         = trim($name, $nsSeparator) . $nsSeparator;
 
         // initialize the namespace prefix array if needed
-        if (!isset($this->namespaces[$namespace])) {
-            $this->namespaces[$namespace] = [];
+        if (!isset($this->namespaces[$name])) {
+            $this->namespaces[$name] = [];
         }
 
-        $source = ($prepend) ? $directories : $this->namespaces[$namespace];
-        $target = ($prepend) ? $this->namespaces[$namespace] : $directories;
+        $source = ($prepend) ? $directories : $this->namespaces[$name];
+        $target = ($prepend) ? $this->namespaces[$name] : $directories;
 
-        $this->namespaces[$namespace] = array_unique(
+        $this->namespaces[$name] = array_unique(
             array_merge($source, $target)
         );
 
@@ -211,10 +166,6 @@ class Loader
 
     /**
      * Autoloads the registered classes
-     *
-     * @param string $className
-     *
-     * @return bool
      * @throws EventsException
      */
     public function autoload(string $className): bool
@@ -266,8 +217,6 @@ class Loader
 
     /**
      * Get the path the loader is checking for a path
-     *
-     * @return string|null
      */
     public function getCheckedPath(): string | null
     {
@@ -345,9 +294,7 @@ class Loader
     }
 
     /**
-     * returns isRegistered
-     *
-     * @return bool
+     * Returns isRegistered
      */
     public function isRegistered(): bool
     {
@@ -356,9 +303,6 @@ class Loader
 
     /**
      * Checks if a file exists and then adds the file by doing virtual require
-     *
-     * @return void
-     * @throws EventsException
      */
     public function loadFiles(): void
     {
@@ -372,9 +316,6 @@ class Loader
     /**
      * Register the autoload method
      *
-     * @param bool $prepend
-     *
-     * @return $this
      * @throws EventsException
      */
     public function register(bool $prepend = false): static
@@ -393,9 +334,6 @@ class Loader
      * Register classes and their locations
      *
      * @param TStrings $classes
-     * @param bool     $merge
-     *
-     * @return Loader
      */
     public function setClasses(array $classes, bool $merge = false): static
     {
@@ -414,9 +352,6 @@ class Loader
      * Register directories in which "not found" classes could be found
      *
      * @param TStrings $directories
-     * @param bool     $merge
-     *
-     * @return Loader
      */
     public function setDirectories(array $directories, bool $merge = false): static
     {
@@ -433,9 +368,6 @@ class Loader
      * to locate the file
      *
      * @param TStrings $extensions
-     * @param bool     $merge
-     *
-     * @return Loader
      */
     public function setExtensions(array $extensions, bool $merge = false): static
     {
@@ -467,7 +399,6 @@ class Loader
      *
      * @param callable|string|null $method
      *
-     * @return Loader
      * @throws Exception
      */
     public function setFileCheckingCallback(mixed $method = null): static
@@ -490,9 +421,6 @@ class Loader
      * very useful for including files that only have functions
      *
      * @param TStrings $files
-     * @param bool     $merge
-     *
-     * @return Loader
      */
     public function setFiles(array $files, bool $merge = false): static
     {
@@ -508,9 +436,6 @@ class Loader
      * Register namespaces and their related directories
      *
      * @param TNamespaces $namespaces
-     * @param bool        $merge
-     *
-     * @return Loader
      */
     public function setNamespaces(array $namespaces, bool $merge = false): static
     {
@@ -527,8 +452,6 @@ class Loader
 
     /**
      * Unregister the autoload method
-     *
-     * @return Loader
      */
     public function unregister(): static
     {
@@ -549,9 +472,6 @@ class Loader
     /**
      * If the file exists, require it and return true; false otherwise
      *
-     * @param string $file The file to require
-     *
-     * @return bool
      * @throws EventsException
      */
     protected function requireFile(string $file): bool
@@ -583,8 +503,6 @@ class Loader
 
     /**
      * Adds a debugging message in the collection
-     *
-     * @param string $message
      */
     private function addDebug(string $message): void
     {
@@ -598,11 +516,6 @@ class Loader
      * class method
      *
      * @param TStrings $collection
-     * @param string   $collectionName
-     * @param string   $method
-     * @param bool     $merge
-     *
-     * @return Loader
      */
     private function addToCollection(
         array $collection,
@@ -625,9 +538,6 @@ class Loader
      * Checks the registered classes to find the class. Includes the file if
      * found and returns true; false otherwise
      *
-     * @param string $className
-     *
-     * @return bool
      * @throws EventsException
      */
     private function autoloadCheckClasses(string $className): bool
@@ -652,10 +562,7 @@ class Loader
      * found and returns true; false otherwise
      *
      * @param TStrings $directories
-     * @param string   $className
-     * @param bool     $isDirectory
      *
-     * @return bool
      * @throws EventsException
      */
     private function autoloadCheckDirectories(
@@ -697,9 +604,6 @@ class Loader
      * Checks the registered namespaces to find the class. Includes the file if
      * found and returns true; false otherwise
      *
-     * @param string $className
-     *
-     * @return bool
      * @throws EventsException
      */
     private function autoloadCheckNamespaces(string $className): bool
@@ -727,8 +631,6 @@ class Loader
      * end
      *
      * @param string|TStrings $directories
-     * @param string          $dirSeparator
-     * @param string          $name
      *
      * @return TStrings
      */
@@ -738,7 +640,7 @@ class Loader
         string $name = ""
     ): array {
         if (!is_string($directories) && !is_array($directories)) {
-            throw new Exceptions\LoaderDirectoriesNotArray($name);
+            throw new LoaderDirectoriesNotArray($name);
         }
 
         if (is_string($directories)) {
@@ -755,11 +657,6 @@ class Loader
         return $results;
     }
 
-    /**
-     * @param bool $prepend
-     *
-     * @return bool
-     */
     private function registerAutoload(bool $prepend): bool
     {
         return spl_autoload_register([$this, 'autoload'], true, $prepend);

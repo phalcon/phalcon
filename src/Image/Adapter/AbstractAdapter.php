@@ -558,18 +558,11 @@ abstract class AbstractAdapter implements AdapterInterface
         }
     }
 
-    /**
-     * @param int|null $width
-     * @param int|null $height
-     * @param int      $master
-     *
-     * @return int
-     */
     private function checkResizeMaster(
         int | null $width = null,
         int | null $height = null,
         int $master = Enum::AUTO
-    ) {
+    ): int {
         if ($master === Enum::AUTO) {
             return ($this->width / $width) > ($this->height / $height)
                 ? Enum::WIDTH
