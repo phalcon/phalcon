@@ -41,12 +41,6 @@ trait ArrayAccessTrait
 
     /**
      * Whether a offset exists
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetexists.php
-     *
-     * @param mixed $element
-     *
-     * @return bool
      */
     public function offsetExists(mixed $element): bool
     {
@@ -57,12 +51,6 @@ trait ArrayAccessTrait
 
     /**
      * Offset to retrieve
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetget.php
-     *
-     * @param mixed $element
-     *
-     * @return mixed
      */
     public function offsetGet(mixed $element): mixed
     {
@@ -73,11 +61,6 @@ trait ArrayAccessTrait
 
     /**
      * Offset to set
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetset.php
-     *
-     * @param mixed $element
-     * @param mixed $value
      */
     public function offsetSet(mixed $element, mixed $value): void
     {
@@ -88,10 +71,6 @@ trait ArrayAccessTrait
 
     /**
      * Offset to unset
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetunset.php
-     *
-     * @param mixed $element
      */
     public function offsetUnset(mixed $element): void
     {
@@ -110,8 +89,6 @@ trait ArrayAccessTrait
     /**
      * Set an element in the collection
      *
-     * @param string $element
-     * @param mixed  $value
      */
     abstract public function set(string $element, mixed $value): void;
 }

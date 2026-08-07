@@ -13,14 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Collection\Traits;
 
+/**
+ * @phpstan-template T
+ */
 trait GetSetHasTrait
 {
     /**
      * Magic getter to get an element from the collection
-     *
-     * @param string $element
-     *
-     * @return mixed|null
      */
     public function __get(string $element): mixed
     {
@@ -29,10 +28,6 @@ trait GetSetHasTrait
 
     /**
      * Magic isset to check whether an element exists or not
-     *
-     * @param string $element
-     *
-     * @return bool
      */
     public function __isset(string $element): bool
     {
@@ -41,9 +36,6 @@ trait GetSetHasTrait
 
     /**
      * Magic setter to assign values to an element
-     *
-     * @param string $element
-     * @param mixed  $value
      */
     public function __set(string $element, mixed $value): void
     {
@@ -52,8 +44,6 @@ trait GetSetHasTrait
 
     /**
      * Magic unset to remove an element from the collection
-     *
-     * @param string $element
      */
     public function __unset(string $element): void
     {
@@ -63,9 +53,7 @@ trait GetSetHasTrait
     /**
      * Get the element from the collection
      *
-     * @param string      $element
-     * @param mixed|null  $defaultValue
-     * @param string|null $cast
+     * @phpstan-return T|mixed
      *
      * @return mixed
      */
@@ -77,25 +65,16 @@ trait GetSetHasTrait
 
     /**
      * Get the element from the collection
-     *
-     * @param string $element
-     *
-     * @return bool
      */
     abstract public function has(string $element): bool;
 
     /**
      * Delete the element from the collection
-     *
-     * @param string $element
      */
     abstract public function remove(string $element): void;
 
     /**
      * Set an element in the collection
-     *
-     * @param string $element
-     * @param mixed  $value
      */
-    abstract public function set(string $element, $value): void;
+    abstract public function set(string $element, mixed $value): void;
 }

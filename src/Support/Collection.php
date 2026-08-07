@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support;
 
+use ArrayIterator;
 use Countable;
 use JsonSerializable;
 use Phalcon\Support\Collection\CollectionInterface;
@@ -25,9 +26,11 @@ use Traversable;
 use function array_key_first;
 use function array_key_last;
 use function array_keys;
+use function array_map;
 use function array_values;
 use function arsort;
 use function asort;
+use function count;
 use function is_array;
 use function is_bool;
 use function is_float;
@@ -80,7 +83,6 @@ class Collection implements
      * @var array<int|string, mixed>
      */
     protected array $lowerKeys = [];
-
     /**
      * Collection constructor.
      *
@@ -147,8 +149,6 @@ class Collection implements
      * Returns the values from a single property/method extracted from every
      * item in the collection, keyed by the original collection key.
      *
-     * @param string $propertyOrMethod
-     *
      * @return array<int|string, mixed>
      */
     public function column(string $propertyOrMethod): array
@@ -164,8 +164,6 @@ class Collection implements
 
     /**
      * Count elements of an object
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -179,8 +177,6 @@ class Collection implements
      * @phpstan-param callable(T, array-key): mixed $callback
      *
      * @param callable $callback
-     *
-     * @return static
      */
     public function each(callable $callback): static
     {
@@ -199,8 +195,6 @@ class Collection implements
      * @phpstan-return static<T>
      *
      * @param callable $callback
-     *
-     * @return static
      */
     public function filter(callable $callback): static
     {
@@ -219,8 +213,6 @@ class Collection implements
      * Returns the first value in the collection, or null if empty.
      *
      * @phpstan-return T|null
-     *
-     * @return mixed
      */
     public function first(): mixed
     {
@@ -235,7 +227,6 @@ class Collection implements
      * Get the element from the collection
      *
      * @phpstan-return T|mixed
-     * @return mixed
      */
     public function get(
         string $element,
@@ -262,7 +253,7 @@ class Collection implements
             return $defaultValue;
         }
 
-        if (null !== $cast) {
+        if (!empty($cast)) {
             if (
                 'array' === $cast
                 && is_object($value)
@@ -278,13 +269,11 @@ class Collection implements
     }
 
     /**
-     * Returns the generator of the class
+     * Returns the iterator of the class
      */
     public function getIterator(): Traversable
     {
-        foreach ($this->data as $key => $value) {
-            yield $key => $value;
-        }
+        return new ArrayIterator($this->data);
     }
 
     /**
@@ -382,8 +371,6 @@ class Collection implements
      * Returns the last value in the collection, or null if empty.
      *
      * @phpstan-return T|null
-     *
-     * @return mixed
      */
     public function last(): mixed
     {
@@ -402,8 +389,6 @@ class Collection implements
      * @phpstan-return static<mixed>
      *
      * @param callable $callback
-     *
-     * @return static
      */
     public function map(callable $callback): static
     {
@@ -475,7 +460,7 @@ class Collection implements
     /**
      * Set an element in the collection
      */
-    public function set(string $element, $value): void
+    public function set(string $element, mixed $value): void
     {
         $this->setData($element, $value);
     }
