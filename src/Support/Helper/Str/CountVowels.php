@@ -21,11 +21,6 @@ use function preg_match_all;
  */
 class CountVowels
 {
-    /**
-     * @param string $text
-     *
-     * @return int
-     */
     public function __invoke(string $text): int
     {
         preg_match_all('/[aeiouy]/i', $text, $matches);

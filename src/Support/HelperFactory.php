@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Support;
 
-use Exception as BaseException;
 use Phalcon\Support\Helper\Arr\Blacklist;
 use Phalcon\Support\Helper\Arr\Chunk;
 use Phalcon\Support\Helper\Arr\Filter;
@@ -74,6 +73,7 @@ use Phalcon\Support\Helper\Str\Uncamelize;
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Support\Helper\Str\Upper;
 use Phalcon\Traits\Factory\FactoryTrait;
+use Throwable;
 
 use function call_user_func_array;
 
@@ -146,8 +146,6 @@ class HelperFactory
 
     /**
      * Constructor.
-     *
-     * @param array $services
      */
     public function __construct(array $services = [])
     {
@@ -155,11 +153,7 @@ class HelperFactory
     }
 
     /**
-     * @param string $name
-     * @param array  $arguments
-     *
-     * @return mixed
-     * @throws BaseException
+     * @throws Exception
      */
     public function __call(string $name, array $arguments)
     {
@@ -169,10 +163,7 @@ class HelperFactory
     }
 
     /**
-     * @param string $name
-     *
-     * @return mixed
-     * @throws BaseException
+     * @throws Exception
      */
     public function newInstance(string $name)
     {
@@ -180,7 +171,7 @@ class HelperFactory
     }
 
     /**
-     * @return string
+     * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
     {

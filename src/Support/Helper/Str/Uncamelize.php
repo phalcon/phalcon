@@ -22,12 +22,6 @@ class Uncamelize
 {
     use UncamelizeTrait;
 
-    /**
-     * @param string $text
-     * @param string $delimiter
-     *
-     * @return string
-     */
     public function __invoke(
         string $text,
         string $delimiter = '_'

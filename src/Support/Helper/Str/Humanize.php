@@ -21,11 +21,6 @@ use function trim;
  */
 class Humanize
 {
-    /**
-     * @param string $text
-     *
-     * @return string
-     */
     public function __invoke(string $text): string
     {
         $result = preg_replace('#[_-]+#', ' ', trim($text));

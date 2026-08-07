@@ -44,81 +44,51 @@ final class BacktraceItem
     ) {
     }
 
-    /**
-     * @return array
-     */
     public function getArgs(): array
     {
         return $this->args;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClassLink(): ?string
     {
         return $this->classLink;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClassName(): ?string
     {
         return $this->className;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFile(): ?string
     {
         return $this->file;
     }
 
-    /**
-     * @return array|null
-     */
     public function getFragment(): ?array
     {
         return $this->fragment;
     }
 
-    /**
-     * @return string|null
-     */
     public function getFunctionLink(): ?string
     {
         return $this->functionLink;
     }
 
-    /**
-     * @return string
-     */
     public function getFunctionName(): string
     {
         return $this->functionName;
     }
 
-    /**
-     * @return int|null
-     */
     public function getLine(): ?int
     {
         return $this->line;
     }
 
-    /**
-     * @return string|null
-     */
     public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @return bool
-     */
     public function hasArgs(): bool
     {
         return $this->hasArgs;

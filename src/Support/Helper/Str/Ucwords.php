@@ -22,12 +22,6 @@ use const MB_CASE_TITLE;
  */
 class Ucwords
 {
-    /**
-     * @param string $text
-     * @param string $encoding
-     *
-     * @return string
-     */
     public function __invoke(
         string $text,
         string $encoding = 'UTF-8'

@@ -30,9 +30,6 @@ class Order
 
     /**
      * @param array<array-key, mixed> $collection
-     * @param string                  $attribute
-     * @param int                     $order
-     * @param int                     $flags
      *
      * @return array<array-key, mixed>
      */

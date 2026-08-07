@@ -44,12 +44,10 @@ class Flatten
 
     /**
      * @param array<array-key, mixed> $data
-     * @param mixed                   $item
-     * @param bool                    $deep
      *
      * @return array<array-key, mixed>
      */
-    private function processArray(array $data, $item, bool $deep): array
+    private function processArray(array $data, mixed $item, bool $deep): array
     {
         if (is_array($item) && true !== $deep) {
             $data = array_merge($data, array_values($item));
@@ -60,8 +58,6 @@ class Flatten
 
     /**
      * @param array<array-key, mixed> $data
-     * @param mixed                   $item
-     * @param bool                    $deep
      *
      * @return array<array-key, mixed>
      */
@@ -76,7 +72,6 @@ class Flatten
 
     /**
      * @param array<array-key, mixed> $data
-     * @param mixed                   $item
      *
      * @return array<array-key, mixed>
      */

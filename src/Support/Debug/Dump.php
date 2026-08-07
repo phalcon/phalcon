@@ -71,41 +71,19 @@ use const PHP_EOL;
  *
  * echo (new \Phalcon\Debug\Dump())->variables($foo, $bar, $baz);
  * ```
- *
- * @property bool  $detailed
- * @property array $methods
- * @property array $styles
  */
 class Dump implements TemplateAware
 {
     use InterpolateTrait;
     use TemplateAwareTrait;
 
-    /**
-     * @var bool
-     */
     protected bool $detailed = false;
-
-    /**
-     * @var array
-     */
     protected array $methods = [];
-
-    /**
-     * @var array
-     */
     protected array $styles = [];
-
-    /**
-     * @var Encode
-     */
     private Encode $encode;
 
     /**
      * Dump constructor.
-     *
-     * @param array $styles
-     * @param bool  $detailed
      */
     public function __construct(array $styles = [], bool $detailed = false)
     {
@@ -118,8 +96,6 @@ class Dump implements TemplateAware
 
     /**
      * Alias of variables() method
-     *
-     * @return string
      */
     public function all(): string
     {
@@ -132,9 +108,6 @@ class Dump implements TemplateAware
         );
     }
 
-    /**
-     * @return bool
-     */
     public function getDetailed(): bool
     {
         return $this->detailed;
@@ -143,10 +116,6 @@ class Dump implements TemplateAware
     /**
      * Alias of variable() method
      *
-     * @param mixed       $variable
-     * @param string|null $name
-     *
-     * @return string
      * @throws ReflectionException
      */
     public function one(mixed $variable, string | null $name = null): string
@@ -154,9 +123,6 @@ class Dump implements TemplateAware
         return $this->variable($variable, $name);
     }
 
-    /**
-     * @param bool $flag
-     */
     public function setDetailed(bool $flag): void
     {
         $this->detailed = $flag;
@@ -164,10 +130,6 @@ class Dump implements TemplateAware
 
     /**
      * Set styles for vars type
-     *
-     * @param array $styles
-     *
-     * @return array
      */
     public function setStyles(array $styles = []): array
     {
@@ -208,10 +170,7 @@ class Dump implements TemplateAware
      * echo (new \Phalcon\Debug\Dump())->toJson($foo);
      * ```
      *
-     * @param mixed $variable
-     *
-     * @return string
-     * @throws InvalidArgumentException if the JSON cannot be encoded.
+     * @throws InvalidArgumentException
      * @throws JsonException
      */
     public function toJson(mixed $variable): string
@@ -229,10 +188,6 @@ class Dump implements TemplateAware
      * echo (new \Phalcon\Debug\Dump())->variable($foo, "foo");
      * ```
      *
-     * @param mixed       $variable
-     * @param string|null $name
-     *
-     * @return string
      * @throws ReflectionException
      */
     public function variable(mixed $variable, string | null $name = null): string
@@ -258,7 +213,6 @@ class Dump implements TemplateAware
      * echo (new \Phalcon\Debug\Dump())->variables($foo, $bar, $baz);
      * ```
      *
-     * @return string
      * @throws ReflectionException
      */
     public function variables(): string
@@ -306,10 +260,6 @@ class Dump implements TemplateAware
 
     /**
      * Get style for type
-     *
-     * @param string $type
-     *
-     * @return string
      */
     protected function getStyle(string $type): string
     {
@@ -323,11 +273,6 @@ class Dump implements TemplateAware
     /**
      * Prepare an HTML string of information about a single variable.
      *
-     * @param mixed       $variable
-     * @param string|null $name
-     * @param int         $tab
-     *
-     * @return string
      * @throws ReflectionException
      */
     protected function output(

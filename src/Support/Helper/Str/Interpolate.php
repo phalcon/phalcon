@@ -26,12 +26,7 @@ class Interpolate
     use InterpolateTrait;
 
     /**
-     * @param string   $message
      * @param string[] $context
-     * @param string   $leftToken
-     * @param string   $rightToken
-     *
-     * @return string
      */
     public function __invoke(
         string $message,

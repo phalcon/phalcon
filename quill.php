@@ -3,8 +3,9 @@
 /**
  * Quill configuration - https://github.com/phalcon/quill
  *
- * `source`, `output` and `assets` are relative to this file; `repository`,
- * `branch` and `prefix` build the "Source on GitHub" link on every class.
+ * Replaces bin/generate-api-docs.php. `source`, `output` and `assets` are
+ * relative to this file; `repository`, `branch` and `prefix` build the
+ * "Source on GitHub" link on every class.
  *
  * `output` and `assets` mirror the documentation site's own layout, so
  * `cp -r nikos/docs/* <documentation>/docs/` lands the pages and the

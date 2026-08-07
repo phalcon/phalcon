@@ -27,9 +27,6 @@ class ReadOnlyCollection extends Collection
      * ReadOnlyCollection constructor.
      *
      * @param array<int|string, mixed> $data
-     * @param bool                     $insensitive
-     * @param bool                     $strictNull
-     * @param string|null              $type
      */
     public function __construct(
         array $data = [],
@@ -46,8 +43,6 @@ class ReadOnlyCollection extends Collection
      *
      * Temporarily disables the read-only guard so the parent class can restore
      * the collection state. The guard is re-enabled before the method returns.
-     *
-     * @param array $data
      */
     public function __unserialize(array $data): void
     {
@@ -83,8 +78,6 @@ class ReadOnlyCollection extends Collection
     /**
      * Delete the element from the collection
      *
-     * @param string $element Name of the element
-     *
      * @throws ReadOnlyViolation
      */
     public function remove(string $element): void
@@ -106,9 +99,6 @@ class ReadOnlyCollection extends Collection
 
     /**
      * Set an element in the collection
-     *
-     * @param string $element Name of the element
-     * @param mixed  $value   Value to store for the element
      *
      * @throws ReadOnlyViolation
      */

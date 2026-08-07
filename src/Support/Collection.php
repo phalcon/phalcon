@@ -76,7 +76,6 @@ class Collection implements
      * @var array<int|string, mixed>
      */
     protected array $data = [];
-
     /**
      * @var array<int|string, mixed>
      */
@@ -236,11 +235,6 @@ class Collection implements
      * Get the element from the collection
      *
      * @phpstan-return T|mixed
-     *
-     * @param string      $element
-     * @param mixed|null  $defaultValue
-     * @param string|null $cast
-     *
      * @return mixed
      */
     public function get(
@@ -298,8 +292,6 @@ class Collection implements
      *
      * @deprecated Use {@see self::keys()} instead. Will be removed in a future major release.
      *
-     * @param bool $insensitive Case-insensitive keys (default: true)
-     *
      * @return array<int|string, mixed>
      */
     public function getKeys(bool $insensitive = true): array
@@ -309,8 +301,6 @@ class Collection implements
 
     /**
      * Returns the configured runtime type guard, or null if none.
-     *
-     * @return string|null
      */
     public function getType(): string | null
     {
@@ -331,10 +321,6 @@ class Collection implements
 
     /**
      * Get the element from the collection
-     *
-     * @param string $element Name of the element
-     *
-     * @return bool
      */
     public function has(string $element): bool
     {
@@ -346,7 +332,7 @@ class Collection implements
     /**
      * Initialize internal array
      *
-     * @param array<int|string, mixed> $data Array to initialize the collection with
+     * @phpstan-param array<int|string, mixed> $data
      */
     public function init(array $data = []): void
     {
@@ -357,8 +343,6 @@ class Collection implements
 
     /**
      * Return if the collection is empty
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -367,8 +351,6 @@ class Collection implements
 
     /**
      * Specify data which should be serialized to JSON
-     *
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      *
      * @return array<int|string, mixed>
      */
@@ -384,8 +366,6 @@ class Collection implements
 
     /**
      * Returns the keys (insensitive or not) of the collection.
-     *
-     * @param bool $insensitive Case-insensitive keys (default: true)
      *
      * @return array<int|string, mixed>
      */
@@ -460,8 +440,6 @@ class Collection implements
 
     /**
      * Delete the element from the collection
-     *
-     * @param string $element Name of the element
      */
     public function remove(string $element): void
     {
@@ -488,8 +466,6 @@ class Collection implements
 
     /**
      * BC - delegate to __serialize()
-     *
-     * @return string|null
      */
     public function serialize(): string | null
     {
@@ -498,9 +474,6 @@ class Collection implements
 
     /**
      * Set an element in the collection
-     *
-     * @param string $element Name of the element
-     * @param mixed  $value   Value to store for the element
      */
     public function set(string $element, $value): void
     {
@@ -576,10 +549,6 @@ class Collection implements
 
     /**
      * BC - delegate to __unserialize()
-     *
-     * @param string $data
-     *
-     * @return void
      */
     public function unserialize(string $data): void
     {
@@ -601,11 +570,6 @@ class Collection implements
      * `propertyOrMethod` strictly equals `$value`.
      *
      * @phpstan-return static<T>
-     *
-     * @param string $propertyOrMethod
-     * @param mixed  $value
-     *
-     * @return static
      */
     public function where(string $propertyOrMethod, mixed $value): static
     {
@@ -625,8 +589,6 @@ class Collection implements
      * configuration (insensitivity, strict-null, type) of the current one.
      *
      * @param array<int|string, mixed> $data
-     *
-     * @return static
      */
     protected function cloneEmpty(array $data = []): static
     {
@@ -637,11 +599,6 @@ class Collection implements
      * Extracts a single value from an item. For arrays returns the keyed
      * entry; for objects, prefers a callable method, then a readable
      * property. Returns null when nothing matches.
-     *
-     * @param mixed  $item
-     * @param string $propertyOrMethod
-     *
-     * @return mixed
      */
     protected function extractValue(mixed $item, string $propertyOrMethod): mixed
     {
@@ -687,7 +644,21 @@ class Collection implements
     {
         $this->validateType($value);
 
-        $key                   = $this->processKey($element);
+        $key = $this->processKey($element);
+
+        /**
+         * If the key already exists under a different original casing, evict
+         * the stale entry first so the `data` and `lowerKeys` stores stay
+         * consistent (otherwise the old-cased entry is orphaned).
+         */
+        if (isset($this->lowerKeys[$key])) {
+            $original = $this->lowerKeys[$key];
+
+            if ($original !== $element) {
+                unset($this->data[$original]);
+            }
+        }
+
         $this->data[$element]  = $value;
         $this->lowerKeys[$key] = $element;
     }

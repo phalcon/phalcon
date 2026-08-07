@@ -28,13 +28,6 @@ class Decapitalize
     use LowerTrait;
     use UpperTrait;
 
-    /**
-     * @param string $text
-     * @param bool   $upperRest
-     * @param string $encoding
-     *
-     * @return string
-     */
     public function __invoke(
         string $text,
         bool $upperRest = false,

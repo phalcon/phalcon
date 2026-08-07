@@ -21,11 +21,6 @@ use function trim;
  */
 class Underscore
 {
-    /**
-     * @param string $text
-     *
-     * @return string
-     */
     public function __invoke(string $text): string
     {
         $result = preg_replace('#\s+#', '_', trim($text));

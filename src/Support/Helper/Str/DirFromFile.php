@@ -23,11 +23,6 @@ class DirFromFile
 {
     use DirFromFileTrait;
 
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
     public function __invoke(string $file): string
     {
         return $this->toDirFromFile($file);

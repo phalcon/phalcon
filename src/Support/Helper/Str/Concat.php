@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use function array_merge;
+use Phalcon\Support\Helper\Str\Exceptions\InsufficientArguments;
+use Phalcon\Traits\Support\Helper\Str\EndsWithTrait;
+use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
+
 use function end;
 use function implode;
-use function str_ends_with;
-use function str_starts_with;
 use function trim;
 
 /**
@@ -26,29 +27,40 @@ use function trim;
  */
 class Concat
 {
+    use EndsWithTrait;
+    use StartsWithTrait;
+
     /**
      * @param string $delimiter
-     * @param string $first
-     * @param string $second
-     * @param string ...$arguments
+     * @param string ...$many
      *
      * @return string
+     *
+     * @throws InsufficientArguments
      */
-    public function __invoke(
-        string $delimiter,
-        string $first,
-        string $second,
-        string ...$arguments
-    ): string {
-        $data       = [];
-        $parameters = array_merge([$first, $second], $arguments);
-        $last       = end($parameters) ?? $second;
+    public function __invoke(string $delimiter, string ...$many): string
+    {
+        $data = [];
+        $prefix = "";
+        $suffix = "";
 
-        $prefix = str_starts_with($first, $delimiter) ? $delimiter : '';
-        $suffix = str_ends_with($last, $delimiter) ? $delimiter : '';
+        if (count($many) < 2) {
+            throw new InsufficientArguments();
+        }
 
-        foreach ($parameters as $parameter) {
-            $data[] = trim($parameter, $delimiter);
+        $first = reset($many);
+        $last  = end($many);
+
+        if ($this->toStartsWith($first, $delimiter, false)) {
+            $prefix = $delimiter;
+        }
+
+        if ($this->toEndsWith($last, $delimiter, false)) {
+            $suffix = $delimiter;
+        }
+
+        foreach ($many as $item) {
+            $data[] = trim($item, $delimiter);
         }
 
         return $prefix . implode($delimiter, $data) . $suffix;

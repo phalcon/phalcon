@@ -73,8 +73,6 @@ final class Registry extends Collection
 {
     /**
      * Constructor
-     *
-     * @param array $data
      */
     final public function __construct(array $data = [])
     {

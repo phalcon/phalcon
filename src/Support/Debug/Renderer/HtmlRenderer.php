@@ -49,11 +49,6 @@ class HtmlRenderer implements Renderer
     use InterpolateTrait;
     use TemplateAwareTrait;
 
-    /**
-     * @param string $uri
-     *
-     * @return string
-     */
     public function getCssSources(string $uri): string
     {
         return $this->toInterpolate(
@@ -62,11 +57,6 @@ class HtmlRenderer implements Renderer
         );
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return string
-     */
     public function getJsSources(string $uri): string
     {
         return $this->toInterpolate(
@@ -75,9 +65,6 @@ class HtmlRenderer implements Renderer
         );
     }
 
-    /**
-     * @return string
-     */
     public function getVersion(): string
     {
         $version = new Version();
@@ -96,11 +83,6 @@ class HtmlRenderer implements Renderer
         );
     }
 
-    /**
-     * @param ExceptionReport $report
-     *
-     * @return string
-     */
     public function render(ExceptionReport $report): string
     {
         $className      = $report->getClassName();
@@ -255,10 +237,6 @@ class HtmlRenderer implements Renderer
 
     /**
      * Escapes a string with htmlentities
-     *
-     * @param string $value
-     *
-     * @return string
      */
     protected function escapeString(string $value): string
     {
@@ -271,11 +249,6 @@ class HtmlRenderer implements Renderer
 
     /**
      * Produces a recursive representation of an array
-     *
-     * @param array $arguments
-     * @param int   $number
-     *
-     * @return string|null
      */
     protected function getArrayDump(array $arguments, int $number = 0): string | null
     {
@@ -311,10 +284,6 @@ class HtmlRenderer implements Renderer
 
     /**
      * Produces a string representation of a variable
-     *
-     * @param mixed $variable
-     *
-     * @return string
      */
     protected function getVarDump(mixed $variable): string
     {
@@ -357,11 +326,6 @@ class HtmlRenderer implements Renderer
         return gettype($variable);
     }
 
-    /**
-     * @param int $bytes
-     *
-     * @return string
-     */
     private function formatBytes(int $bytes): string
     {
         return number_format($bytes / 1048576, 1);
@@ -369,10 +333,6 @@ class HtmlRenderer implements Renderer
 
     /**
      * Frames whose file lives outside a vendor directory are application code.
-     *
-     * @param string|null $file
-     *
-     * @return bool
      */
     private function isApp(string | null $file): bool
     {
@@ -381,8 +341,6 @@ class HtmlRenderer implements Renderer
 
     /**
      * @param BacktraceItem[] $backtrace
-     *
-     * @return string
      */
     private function renderBacktrace(array $backtrace): string
     {
@@ -394,11 +352,6 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('panelClose');
     }
 
-    /**
-     * @param array $fragment
-     *
-     * @return string
-     */
     private function renderFragment(array $fragment): string
     {
         $firstLine = $fragment['firstLine'];
@@ -430,11 +383,6 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('codeClose');
     }
 
-    /**
-     * @param array $files
-     *
-     * @return string
-     */
     private function renderIncludedFiles(array $files): string
     {
         $html = $this->toInterpolate($this->getTemplate('panelOpen'), ['id' => 'files'])
@@ -456,11 +404,6 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('tableClose') . $this->getTemplate('panelClose');
     }
 
-    /**
-     * @param ExceptionReport $report
-     *
-     * @return string
-     */
     private function renderMemory(ExceptionReport $report): string
     {
         return $this->toInterpolate($this->getTemplate('panelOpen'), ['id' => 'memory'])
@@ -474,11 +417,6 @@ class HtmlRenderer implements Renderer
             . $this->getTemplate('panelClose');
     }
 
-    /**
-     * @param BacktraceItem $item
-     *
-     * @return string
-     */
     private function renderSignature(BacktraceItem $item): string
     {
         $html = '';
@@ -514,12 +452,6 @@ class HtmlRenderer implements Renderer
         return $html;
     }
 
-    /**
-     * @param string $div
-     * @param array  $source
-     *
-     * @return string
-     */
     private function renderSuperglobal(string $div, array $source): string
     {
         $html = $this->toInterpolate($this->getTemplate('panelOpen'), ['id' => $div])
@@ -541,11 +473,6 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('tableClose') . $this->getTemplate('panelClose');
     }
 
-    /**
-     * @param ExceptionReport $report
-     *
-     * @return string
-     */
     private function renderTabs(ExceptionReport $report): string
     {
         $variablesTab = '';
@@ -568,12 +495,6 @@ class HtmlRenderer implements Renderer
         );
     }
 
-    /**
-     * @param int           $index
-     * @param BacktraceItem $item
-     *
-     * @return string
-     */
     private function renderTraceItem(int $index, BacktraceItem $item): string
     {
         $isApp = $this->isApp($item->getFile());
@@ -607,11 +528,6 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('frameClose');
     }
 
-    /**
-     * @param array $variables
-     *
-     * @return string
-     */
     private function renderVariables(array $variables): string
     {
         if (empty($variables)) {

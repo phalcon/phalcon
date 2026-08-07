@@ -73,6 +73,8 @@ class Version
      * echo (new Phalcon\Support\Version())
      *          ->getPart(Phalcon\Support\Version::VERSION_SPECIAL_NUMBER);
      * ```
+     *
+     * @var int
      */
     public const VERSION_SPECIAL_NUMBER = 4;
 
@@ -82,8 +84,6 @@ class Version
      * ```php
      * echo (new Phalcon\Version())->get();
      * ```
-     *
-     * @return string
      */
     public function get(): string
     {
@@ -120,8 +120,6 @@ class Version
      * ```php
      * echo (new Phalcon\Version())->getId();
      * ```
-     *
-     * @return string
      */
     public function getId(): string
     {
@@ -147,10 +145,6 @@ class Version
      * ```php
      * echo (new Phalcon\Version())->getPart(Phalcon\Version::VERSION_MAJOR);
      * ```
-     *
-     * @param int $part
-     *
-     * @return string
      */
     public function getPart(int $part): string
     {
@@ -168,10 +162,6 @@ class Version
 
     /**
      * Translates a number to a special release.
-     *
-     * @param int $special
-     *
-     * @return string
      */
     final protected function getSpecial(int $special): string
     {

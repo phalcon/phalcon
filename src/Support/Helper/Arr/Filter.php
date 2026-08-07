@@ -29,7 +29,7 @@ class Filter
      *
      * @return array
      */
-    public function __invoke(array $collection, callable | null $method = null)
+    public function __invoke(array $collection, callable | null $method = null): array
     {
         return $this->toFilter($collection, $method);
     }

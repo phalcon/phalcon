@@ -33,7 +33,7 @@ class Group
      *
      * @return array<array-key, mixed>
      */
-    public function __invoke(array $collection, $method): array
+    public function __invoke(array $collection, callable | string $method): array
     {
         $filtered = [];
         foreach ($collection as $element) {
@@ -45,11 +45,6 @@ class Group
         return $filtered;
     }
 
-    /**
-     * @param mixed $method
-     *
-     * @return bool
-     */
     private function isCallable($method): bool
     {
         return is_callable($method) ||
@@ -84,7 +79,7 @@ class Group
      *
      * @return array<array-key, mixed>
      */
-    private function processCallable(array $filtered, $method, $element): array
+    private function processCallable(array $filtered, callable | string $method, mixed $element): array
     {
         if (true === $this->isCallable($method)) {
             /** @var string $key */
@@ -102,7 +97,7 @@ class Group
      *
      * @return array<array-key, mixed>
      */
-    private function processObject(array $filtered, $method, $element): array
+    private function processObject(array $filtered, callable | string $method, mixed $element): array
     {
         if (
             true !== $this->isCallable($method) &&
@@ -121,7 +116,7 @@ class Group
      *
      * @return array<array-key, mixed>
      */
-    private function processOther(array $filtered, $method, $element): array
+    private function processOther(array $filtered, callable | string $method, mixed $element): array
     {
         if (
             true !== $this->isCallable($method) &&

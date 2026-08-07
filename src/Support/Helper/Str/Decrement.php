@@ -21,12 +21,6 @@ use function explode;
  */
 class Decrement
 {
-    /**
-     * @param string $text
-     * @param string $separator
-     *
-     * @return string
-     */
     public function __invoke(
         string $text,
         string $separator = '_'

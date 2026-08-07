@@ -28,12 +28,6 @@ use const PREG_SPLIT_NO_EMPTY;
  */
 class PascalCase
 {
-    /**
-     * @param string      $text
-     * @param string|null $delimiters
-     *
-     * @return string
-     */
     public function __invoke(
         string $text,
         string | null $delimiters = null
@@ -51,9 +45,6 @@ class PascalCase
     }
 
     /**
-     * @param string      $text
-     * @param string|null $delimiters
-     *
      * @return string[]
      */
     protected function processArray(

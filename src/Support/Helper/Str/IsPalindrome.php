@@ -20,11 +20,6 @@ use function strrev;
  */
 class IsPalindrome
 {
-    /**
-     * @param string $text
-     *
-     * @return bool
-     */
     public function __invoke(string $text): bool
     {
         return strrev($text) === $text;

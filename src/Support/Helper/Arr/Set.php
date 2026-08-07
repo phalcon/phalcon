@@ -20,15 +20,13 @@ class Set
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param mixed                   $value
-     * @param mixed                   $index
      *
      * @return array<array-key, mixed>
      */
     public function __invoke(
         array $collection,
-        $value,
-        $index = null
+        mixed $value,
+        int | string | null $index = null
     ): array {
         $collection = $this->checkNull($collection, $value, $index);
 
@@ -37,12 +35,10 @@ class Set
 
     /**
      * @param array<array-key, mixed> $collection
-     * @param mixed                   $value
-     * @param mixed                   $index
      *
      * @return array<array-key, mixed>
      */
-    private function checkNotNull(array $collection, $value, $index): array
+    private function checkNotNull(array $collection, mixed $value, int | string | null $index): array
     {
         if (null !== $index) {
             $collection[$index] = $value;
@@ -53,12 +49,10 @@ class Set
 
     /**
      * @param array<array-key, mixed> $collection
-     * @param mixed                   $value
-     * @param mixed                   $index
      *
      * @return array<array-key, mixed>
      */
-    private function checkNull(array $collection, $value, $index): array
+    private function checkNull(array $collection, mixed $value, int | string | null $index): array
     {
         if (null === $index) {
             $collection[] = $value;
