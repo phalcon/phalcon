@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Phalcon Framework.
  *
@@ -17,6 +15,8 @@ declare(strict_types=1);
  * @link    https://github.com/laminas/laminas-diactoros
  * @license https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md
  */
+
+declare(strict_types=1);
 
 namespace Phalcon\Http\Message;
 
