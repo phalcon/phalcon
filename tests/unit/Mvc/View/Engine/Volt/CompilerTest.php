@@ -279,9 +279,12 @@ class CompilerTest extends AbstractUnitTestCase
 
         $actual = ob_get_clean();
 
-        // Trim xdebug first line (file path)
-        $actual   = substr($actual, strpos($actual, 'class'));
-        $expected = substr($view->getContent(), strpos($view->getContent(), 'class'));
+        // Xdebug's overloaded var_dump() prepends a "<file>:<line>:" header
+        // to the output. Drop it when present, so that the comparison holds
+        // whether or not Xdebug runs in "develop" mode.
+        $header   = '#^.+:\d+:\R#';
+        $actual   = preg_replace($header, '', $actual);
+        $expected = preg_replace($header, '', $view->getContent());
 
         $this->assertEquals($expected, $actual);
 
