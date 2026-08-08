@@ -50,7 +50,7 @@ class Headers implements HeadersInterface, IteratorAggregate
      */
     public function getIterator(): Traversable
     {
-        return new \ArrayIterator(this->headers);
+        return new \ArrayIterator($this->headers);
     }
 
     /**
