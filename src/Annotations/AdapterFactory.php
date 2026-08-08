@@ -22,18 +22,16 @@ use Phalcon\Annotations\Adapter\Redis;
 use Phalcon\Annotations\Adapter\Stream;
 use Phalcon\Annotations\Adapter\Weak;
 use Phalcon\Annotations\Parser\Exception;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
  * Factory to create Annotations adapters
  *
  * @property SerializerFactory $serializerFactory
  */
-class AdapterFactory
+class AdapterFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * @var SerializerFactory|null
      */

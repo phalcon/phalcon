@@ -22,21 +22,21 @@ final class ExceptionReport
     /**
      * @var BacktraceItem[]
      */
-    protected array $backtrace = [];
-    protected array $includedFiles = [];
-    protected int $memoryUsage = 0;
-    protected int $peakMemoryUsage = 0;
-    protected array $request = [];
-    protected array $server = [];
-    protected array $variables = [];
+    private array $backtrace = [];
+    private array $includedFiles = [];
+    private int $memoryUsage = 0;
+    private int $peakMemoryUsage = 0;
+    private array $request = [];
+    private array $server = [];
+    private array $variables = [];
 
     public function __construct(
-        protected readonly string $className,
-        protected readonly string $message,
-        protected readonly string $file,
-        protected readonly int $line,
-        protected readonly bool $showBackTrace,
-        protected readonly string $uri,
+        private readonly string $className,
+        private readonly string $message,
+        private readonly string $file,
+        private readonly int $line,
+        private readonly bool $showBackTrace,
+        private readonly string $uri,
     ) {
     }
 

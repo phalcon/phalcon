@@ -24,15 +24,13 @@ use Phalcon\Encryption\Crypt\Padding\PadInterface;
 use Phalcon\Encryption\Crypt\Padding\Pkcs7;
 use Phalcon\Encryption\Crypt\Padding\Space;
 use Phalcon\Encryption\Crypt\Padding\Zero;
-use Phalcon\Traits\Factory\FactoryTrait;
+use Phalcon\Factory\AbstractFactory;
 
 /**
  * Factory for creating pad classes
  */
-class PadFactory
+class PadFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * AdapterFactory constructor.
      *
@@ -53,7 +51,9 @@ class PadFactory
      */
     public function newInstance(string $name): PadInterface
     {
-        return $this->getCachedInstance($name);
+        $definition = $this->getService($name);
+
+        return new $definition();
     }
 
     /**

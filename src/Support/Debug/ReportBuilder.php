@@ -76,8 +76,12 @@ class ReportBuilder
 
         $report
             ->setBacktrace($items)
-            ->setRequest($this->filter($_REQUEST, $this->getArrVal($blacklist, 'request', [])))
-            ->setServer($this->filter($_SERVER, $this->getArrVal($blacklist, 'server', [])))
+            ->setRequest(
+                $this->filter($_REQUEST, $this->getArrVal($blacklist, 'request', []))
+            )
+            ->setServer(
+                $this->filter($_SERVER, $this->getArrVal($blacklist, 'server', []))
+            )
             ->setIncludedFiles(get_included_files())
             ->setMemoryUsage(memory_get_usage(true))
             ->setPeakMemoryUsage(memory_get_peak_usage(true))

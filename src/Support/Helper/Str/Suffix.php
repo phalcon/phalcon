@@ -19,12 +19,12 @@ namespace Phalcon\Support\Helper\Str;
 class Suffix
 {
     /**
-     * @param string $text
+     * @param mixed  $text
      * @param string $suffix
      *
      * @return string
      */
-    public function __invoke(string $text, string $suffix): string
+    public function __invoke(mixed $text, string $suffix): string
     {
         return ((string)$text) . $suffix;
     }

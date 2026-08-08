@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Support\Helper\Str\LowerTrait;
-use Phalcon\Traits\Support\Helper\Str\UpperTrait;
-
 use function mb_substr;
 
 /**
@@ -23,11 +20,8 @@ use function mb_substr;
  * of the string. Omit the upperRest parameter to keep the rest of the
  * string intact, or set it to true to convert to uppercase.
  */
-class Decapitalize
+class Decapitalize extends AbstractStr
 {
-    use LowerTrait;
-    use UpperTrait;
-
     public function __invoke(
         string $text,
         bool $upperRest = false,

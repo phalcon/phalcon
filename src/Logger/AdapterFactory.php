@@ -14,20 +14,18 @@ declare(strict_types=1);
 namespace Phalcon\Logger;
 
 use Exception as BaseException;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Adapter\Syslog;
-use Phalcon\Traits\Factory\FactoryTrait;
 use Throwable;
 
 /**
  * Factory used to create adapters used for Logging
  */
-class AdapterFactory
+class AdapterFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * AdapterFactory constructor.
      *

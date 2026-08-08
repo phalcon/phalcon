@@ -16,16 +16,14 @@ namespace Phalcon\Logger;
 use DateTimeZone;
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Traits\ConfigTrait;
+use Phalcon\Factory\AbstractConfigFactory;
 use Throwable;
 
 /**
  * Factory creating logger objects
  */
-class LoggerFactory
+class LoggerFactory extends AbstractConfigFactory
 {
-    use ConfigTrait;
-
     private AdapterFactory $adapterFactory;
 
     /**
@@ -54,7 +52,7 @@ class LoggerFactory
      *     ]
      * ]
      */
-    public function load(array | ConfigInterface $config): Logger
+    public function load(mixed $config): Logger
     {
         $data     = [];
         $config   = $this->checkConfig($config);

@@ -13,25 +13,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Traits\Support\Helper\Arr\FilterTrait;
-
 use function reset;
 
 /**
  * Returns the first element of the collection. If a callable is passed, the
  * element returned is the first that validates true
  */
-class First
+class First extends AbstractArr
 {
-    use FilterTrait;
-
     /**
      * @param array<array-key, mixed> $collection
      * @param callable|null           $method
      *
      * @return mixed
      */
-    public function __invoke(array $collection, callable | null $method = null)
+    public function __invoke(array $collection, callable | null $method = null): mixed
     {
         $filtered = $this->toFilter($collection, $method);
 

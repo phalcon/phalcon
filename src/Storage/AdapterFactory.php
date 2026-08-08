@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Storage;
 
 use Exception as BaseException;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
 use Phalcon\Storage\Adapter\Libmemcached;
@@ -22,12 +23,9 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
-use Phalcon\Traits\Factory\FactoryTrait;
 
-class AdapterFactory
+class AdapterFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     private SerializerFactory $serializerFactory;
 
     /**

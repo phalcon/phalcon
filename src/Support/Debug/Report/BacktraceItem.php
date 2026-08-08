@@ -18,18 +18,6 @@ namespace Phalcon\Support\Debug\Report;
  */
 final class BacktraceItem
 {
-    /**
-     * @param string      $functionName
-     * @param string|null $type
-     * @param string|null $className
-     * @param string|null $classLink
-     * @param string|null $functionLink
-     * @param bool        $hasArgs
-     * @param array       $args
-     * @param string|null $file
-     * @param int|null    $line
-     * @param array|null  $fragment
-     */
     public function __construct(
         private readonly string $functionName,
         private readonly ?string $type = null,

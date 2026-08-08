@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate;
 
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Support\Traits\ConfigTrait;
-use Phalcon\Traits\Factory\FactoryTrait;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Adapter\Gettext;
@@ -39,11 +38,8 @@ use Phalcon\Translate\Exceptions\TranslatorNotRegistered;
  *      }
  *  }
  */
-class TranslateFactory
+class TranslateFactory extends AbstractFactory
 {
-    use ConfigTrait;
-    use FactoryTrait;
-
     /**
      * @phpstan-param array<string, string> $services
      */
@@ -62,7 +58,7 @@ class TranslateFactory
      * @return AdapterInterface
      * @throws Exception
      */
-    public function load(array | ConfigInterface $config): AdapterInterface
+    public function load(mixed $config): AdapterInterface
     {
         /** @var TConfig $config */
         $config  = $this->checkConfig($config);
@@ -82,7 +78,9 @@ class TranslateFactory
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
-        return $this->getCachedInstance($name, $this->interpolator, $options);
+        $definition = $this->getService($name);
+
+        return new $definition($this->interpolator, $options);
     }
 
     /**

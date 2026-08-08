@@ -23,17 +23,15 @@ use Phalcon\Cache\Adapter\RedisCluster;
 use Phalcon\Cache\Adapter\Stream;
 use Phalcon\Cache\Adapter\Weak;
 use Phalcon\Cache\Exception\Exception;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Storage\SerializerFactory;
-use Phalcon\Traits\Factory\FactoryTrait;
 
 /**
  * Factory to create Cache adapters
  *
  */
-class AdapterFactory
+class AdapterFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * AdapterFactory constructor.
      *

@@ -24,17 +24,15 @@ namespace Phalcon\Queue;
 
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
+use Phalcon\Factory\AbstractConfigFactory;
 use Phalcon\Queue\Exceptions\Exception;
-use Phalcon\Support\Traits\ConfigTrait;
 
 /**
  * Builds a queue Context from the standard Phalcon config shape. Mirrors
  * Phalcon\Cache\CacheFactory.
  */
-class QueueFactory
+class QueueFactory extends AbstractConfigFactory
 {
-    use ConfigTrait;
-
     protected AdapterFactory $adapterFactory;
 
     /**
@@ -54,7 +52,7 @@ class QueueFactory
      *     'options' => [],
      * ]
      */
-    public function load(array | ConfigInterface $config): ContextInterface
+    public function load(mixed $config): ContextInterface
     {
         $config  = $this->checkConfig($config);
         $config  = $this->checkConfigElement($config, "adapter");

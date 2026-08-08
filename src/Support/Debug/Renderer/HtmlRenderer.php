@@ -131,10 +131,6 @@ class HtmlRenderer implements Renderer
 
     /**
      * Returns the embedded default template for the given name.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function defaultTemplate(string $name): string
     {

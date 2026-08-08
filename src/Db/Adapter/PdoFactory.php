@@ -18,15 +18,11 @@ use Phalcon\Config\ConfigInterface;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Db\Adapter\Pdo\Sqlite;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Support\Exception as SupportException;
-use Phalcon\Support\Traits\ConfigTrait;
-use Phalcon\Traits\Factory\FactoryTrait;
 
-class PdoFactory
+class PdoFactory extends AbstractFactory
 {
-    use ConfigTrait;
-    use FactoryTrait;
-
     /**
      * Constructor.
      *
@@ -59,7 +55,7 @@ class PdoFactory
      * @throws SupportException
      * @throws BaseException
      */
-    public function load(array | ConfigInterface $config): AdapterInterface
+    public function load(mixed $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

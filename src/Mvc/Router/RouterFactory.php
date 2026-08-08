@@ -15,7 +15,11 @@ namespace Phalcon\Mvc\Router;
 
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Mvc\Router;
+use Phalcon\Mvc\Router\Exceptions\InvalidRouterFactoryConfig;
 use Phalcon\Mvc\RouterInterface;
+
+use function is_array;
+use function is_object;
 
 /**
  * Phalcon\Mvc\Router\RouterFactory
@@ -46,10 +50,18 @@ class RouterFactory
      * @return RouterInterface
      * @throws Exception
      */
-    public function load(array | ConfigInterface $config): RouterInterface
+    public function load(mixed $config): RouterInterface
     {
-        if ($config instanceof ConfigInterface) {
+        if (is_object($config)) {
+            if (!($config instanceof ConfigInterface)) {
+                throw new InvalidRouterFactoryConfig();
+            }
+
             $config = $config->toArray();
+        }
+
+        if (!is_array($config)) {
+            throw new InvalidRouterFactoryConfig();
         }
 
         $defaultRoutes = true;

@@ -15,21 +15,17 @@ namespace Phalcon\Image;
 
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
-use Phalcon\Support\Traits\ConfigTrait;
-use Phalcon\Traits\Factory\FactoryTrait;
 use Throwable;
 
 /**
  * Factory to create adapters for image manipulation
  */
-class ImageFactory
+class ImageFactory extends AbstractFactory
 {
-    use ConfigTrait;
-    use FactoryTrait;
-
     /**
      * Constructor
      */
@@ -48,7 +44,7 @@ class ImageFactory
      *     'width' => null
      * ]
      */
-    public function load(array | ConfigInterface $config): AdapterInterface
+    public function load(mixed $config): AdapterInterface
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

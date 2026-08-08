@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation;
 
 use Exception as BaseException;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Alpha;
 use Phalcon\Filter\Validation\Validator\Between;
@@ -35,12 +36,9 @@ use Phalcon\Filter\Validation\Validator\Regex;
 use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation\Validator\Uniqueness;
 use Phalcon\Filter\Validation\Validator\Url;
-use Phalcon\Traits\Factory\FactoryTrait;
 
-class ValidatorFactory
+class ValidatorFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * Constructor.
      *

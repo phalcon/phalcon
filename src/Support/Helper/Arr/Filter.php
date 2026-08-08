@@ -13,23 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Traits\Support\Helper\Arr\FilterTrait;
-
 /**
  * Filters an array using array_filter. If a callback is supplied, it will be
  * used.
  */
-class Filter
+class Filter extends AbstractArr
 {
-    use FilterTrait;
-
     /**
      * @param array<array-key, mixed> $collection
      * @param callable|null           $method
      *
-     * @return array
+     * @return mixed
      */
-    public function __invoke(array $collection, callable | null $method = null): array
+    public function __invoke(array $collection, callable | null $method = null): mixed
     {
         return $this->toFilter($collection, $method);
     }

@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Paginator;
 
 use Phalcon\Config\Config;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Paginator\Adapter\AdapterInterface;
 use Phalcon\Paginator\Adapter\Model;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Adapter\QueryBuilderCursor;
-use Phalcon\Support\Traits\ConfigTrait;
-use Phalcon\Traits\Factory\FactoryTrait;
 use Throwable;
 
 /**
@@ -32,11 +31,8 @@ use Throwable;
  *      builder?: Builder
  * }
  */
-class PaginatorFactory
+class PaginatorFactory extends AbstractFactory
 {
-    use ConfigTrait;
-    use FactoryTrait;
-
     /**
      * AdapterFactory constructor.
      */
@@ -70,7 +66,7 @@ class PaginatorFactory
      *
      * @param Config|TOptions $config
      */
-    public function load(array | Config $config): AdapterInterface
+    public function load(mixed $config): AdapterInterface
     {
         $config  = $this->checkConfig($config);
         $config  = $this->checkConfigElement($config, "adapter");

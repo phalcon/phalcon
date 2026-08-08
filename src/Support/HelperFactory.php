@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support;
 
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Support\Helper\Arr\Blacklist;
 use Phalcon\Support\Helper\Arr\Chunk;
 use Phalcon\Support\Helper\Arr\Filter;
@@ -72,7 +73,6 @@ use Phalcon\Support\Helper\Str\Ucwords;
 use Phalcon\Support\Helper\Str\Uncamelize;
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Support\Helper\Str\Upper;
-use Phalcon\Traits\Factory\FactoryTrait;
 use Throwable;
 
 use function call_user_func_array;
@@ -140,10 +140,8 @@ use function call_user_func_array;
  * @method string upper(string $text, string $encoding = 'UTF-8')
  * @method array  whitelist(array $collection, array $whiteList)
  */
-class HelperFactory
+class HelperFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * Constructor.
      */
@@ -167,7 +165,13 @@ class HelperFactory
      */
     public function newInstance(string $name)
     {
-        return $this->getCachedInstance($name);
+        if (!isset($this->services[$name])) {
+            $definition = $this->getService($name);
+
+            $this->services[$name] = new $definition();
+        }
+
+        return $this->services[$name];
     }
 
     /**

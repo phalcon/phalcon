@@ -41,10 +41,6 @@ class Debug
     protected bool $showBackTrace = true;
     protected bool $showFileFragment = false;
     protected bool $showFiles = true;
-
-    /**
-     * @var string
-     */
     protected string $uri = "https://assets.phalcon.io/debug/6.0.x/";
 
     public function __construct()

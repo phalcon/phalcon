@@ -13,16 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate;
 
-use Phalcon\Traits\Factory\FactoryTrait;
+use Phalcon\Factory\AbstractFactory;
 use Phalcon\Translate\Exceptions\InterpolatorNotRegistered;
 use Phalcon\Translate\Interpolator\AssociativeArray;
 use Phalcon\Translate\Interpolator\IndexedArray;
 use Phalcon\Translate\Interpolator\InterpolatorInterface;
 
-class InterpolatorFactory
+class InterpolatorFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * @phpstan-param array<string, string> $services
      */
@@ -40,7 +38,9 @@ class InterpolatorFactory
      */
     public function newInstance(string $name): InterpolatorInterface
     {
-        return $this->getCachedInstance($name);
+        $definition = $this->getService($name);
+
+        return new $definition();
     }
 
     /**

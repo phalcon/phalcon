@@ -19,10 +19,12 @@ use Phalcon\Config\Adapter\Ini;
 use Phalcon\Config\Adapter\Json;
 use Phalcon\Config\Adapter\Php;
 use Phalcon\Config\Adapter\Yaml;
+use Phalcon\Config\Exceptions\ConfigNotArrayOrObject;
 use Phalcon\Config\Exceptions\MissingConfigOption;
 use Phalcon\Config\Exceptions\MissingFileExtension;
-use Phalcon\Traits\Factory\FactoryTrait;
+use Phalcon\Factory\AbstractFactory;
 
+use function is_array;
 use function is_string;
 use function pathinfo;
 use function strtolower;
@@ -58,10 +60,8 @@ use const PATHINFO_EXTENSION;
  *      callbacks?: array<string, callable>|null
  * }
  */
-class ConfigFactory
+class ConfigFactory extends AbstractFactory
 {
-    use FactoryTrait;
-
     /**
      * ConfigFactory constructor.
      *
@@ -80,7 +80,7 @@ class ConfigFactory
      * @return ConfigInterface
      * @throws Exception
      */
-    public function load(array | Config | string $config): ConfigInterface
+    public function load(mixed $config): ConfigInterface
     {
         $configArray = $this->parseConfig($config);
 
@@ -194,7 +194,7 @@ class ConfigFactory
      * @return TConfigReturn
      * @throws Exception
      */
-    protected function parseConfig(array | ConfigInterface | string $config): array
+    protected function parseConfig(mixed $config): array
     {
         if (is_string($config)) {
             $oldConfig = $config;
@@ -212,6 +212,10 @@ class ConfigFactory
 
         if ($config instanceof ConfigInterface) {
             $config = $config->toArray();
+        }
+
+        if (!is_array($config)) {
+            throw new ConfigNotArrayOrObject();
         }
 
         $this->checkConfigArray($config);

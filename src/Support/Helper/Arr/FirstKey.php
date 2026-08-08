@@ -13,18 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Traits\Support\Helper\Arr\FilterTrait;
-
 use function array_key_first;
 
 /**
  * Returns the key of the first element of the collection. If a callable
  * is passed, the element returned is the first that validates true
  */
-class FirstKey
+class FirstKey extends AbstractArr
 {
-    use FilterTrait;
-
     /**
      * @param array<array-key, mixed> $collection
      * @param callable|null           $method

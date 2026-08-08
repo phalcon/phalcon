@@ -15,6 +15,8 @@ namespace Phalcon\Support\Traits;
 
 use Phalcon\Config\ConfigInterface;
 
+use function is_array;
+
 trait ConfigTrait
 {
     /**
@@ -22,10 +24,17 @@ trait ConfigTrait
      *
      * @return array<string, mixed>
      */
-    protected function checkConfig(array | ConfigInterface $config): array
+    protected function checkConfig(mixed $config): array
     {
         if ($config instanceof ConfigInterface) {
             return $config->toArray();
+        }
+
+        if (!is_array($config)) {
+            $exception = $this->getExceptionClass();
+            throw new $exception(
+                "Config must be array or Phalcon\\Config\\Config object"
+            );
         }
 
         return $config;

@@ -13,15 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
-
 /**
  * Check if a string starts with a given string
  */
-class StartsWith
+class StartsWith extends AbstractStr
 {
-    use StartsWithTrait;
-
     public function __invoke(
         string $haystack,
         string $needle,

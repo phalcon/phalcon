@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Exceptions\InvalidReplaceFormat;
-use Phalcon\Traits\Support\Helper\Str\LowerTrait;
 
 use function array_keys;
 use function array_values;
@@ -28,10 +27,8 @@ use function trim;
  * characters with their Latin equivalents. If a `replace` string or array
  * is passed, it will also be used to replace those characters with a space.
  */
-class Friendly
+class Friendly extends AbstractStr
 {
-    use LowerTrait;
-
     /**
      * @throws InvalidReplaceFormat
      */

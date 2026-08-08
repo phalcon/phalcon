@@ -15,17 +15,18 @@ namespace Phalcon\Support\Helper\Str;
 
 /**
  * Prefixes the text with the supplied prefix
+ * @todo v7 make text string
  */
 class Prefix
 {
     /**
-     * @param string $text
+     * @param mixed  $text
      * @param string $prefix
      *
      * @return string
      */
-    public function __invoke(string $text, string $prefix): string
+    public function __invoke(mixed $text, string $prefix): string
     {
-        return $prefix . $text;
+        return $prefix . ((string) $text);
     }
 }

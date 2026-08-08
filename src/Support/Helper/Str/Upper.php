@@ -13,15 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
-use Phalcon\Traits\Support\Helper\Str\UpperTrait;
-
 /**
  * Converts a string to uppercase using mbstring
  */
-class Upper
+class Upper extends AbstractStr
 {
-    use UpperTrait;
-
     public function __invoke(
         string $text,
         string $encoding = 'UTF-8'

@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Str;
 
 use Phalcon\Support\Helper\Str\Exceptions\InsufficientArguments;
-use Phalcon\Traits\Support\Helper\Str\EndsWithTrait;
-use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
 
 use function end;
 use function implode;
@@ -25,11 +23,8 @@ use function trim;
  * Concatenates strings using the separator only once without duplication in
  * places concatenation
  */
-class Concat
+class Concat extends AbstractStr
 {
-    use EndsWithTrait;
-    use StartsWithTrait;
-
     /**
      * @param string $delimiter
      * @param string ...$many

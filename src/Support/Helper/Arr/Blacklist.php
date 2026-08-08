@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
-use Phalcon\Traits\Support\Helper\Arr\FilterTrait;
-
 use function array_diff_key;
 use function array_flip;
 use function is_int;
@@ -24,10 +22,8 @@ use function is_string;
  * Black list filter by key: exclude elements of an array
  * by the keys obtained from the elements of a blacklist
  */
-class Blacklist
+class Blacklist extends AbstractArr
 {
-    use FilterTrait;
-
     /**
      * @param array<array-key, mixed> $collection
      * @param array<array-key, mixed> $blackList
