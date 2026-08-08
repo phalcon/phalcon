@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
-use Phalcon\Http\Message\Interfaces\RequestMethodInterface;
+use Phalcon\Http\Message\RequestMethodInterface;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Connect extends Route

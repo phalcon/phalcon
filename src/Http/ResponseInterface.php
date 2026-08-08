@@ -25,10 +25,6 @@ interface ResponseInterface
 {
     /**
      * Appends a string to the HTTP response body
-     *
-     * @param string $content
-     *
-     * @return ResponseInterface
      */
     public function appendContent(string $content): ResponseInterface;
 
@@ -107,36 +103,22 @@ interface ResponseInterface
 
     /**
      * Sends headers to the client
-     *
-     * @return bool|ResponseInterface
      */
     public function sendHeaders(): bool | ResponseInterface;
 
     /**
      * Sets HTTP response body
-     *
-     * @param string $content
-     *
-     * @return ResponseInterface
      */
     public function setContent(string $content): ResponseInterface;
 
     /**
      * Sets the response content-length
-     *
-     * @param int $contentLength
-     *
-     * @return ResponseInterface
      */
     public function setContentLength(int $contentLength): ResponseInterface;
 
     /**
      * Sets the response content-type mime, optionally the charset
      *
-     * @param string      $contentType
-     * @param string|null $charset
-     *
-     * @return ResponseInterface
      * @todo check the null
      */
     public function setContentType(
@@ -146,20 +128,12 @@ interface ResponseInterface
 
     /**
      * Sets output expire time header
-     *
-     * @param DateTime $datetime
-     *
-     * @return ResponseInterface
      */
     public function setExpires(DateTime $datetime): ResponseInterface;
 
     /**
      * Sets an attached file to be sent at the end of the request
      *
-     * @param string      $filePath
-     * @param string|null $attachmentName
-     *
-     * @return ResponseInterface
      * @todo check the null
      */
     public function setFileToSend(
@@ -169,11 +143,6 @@ interface ResponseInterface
 
     /**
      * Overwrites a header in the response
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return ResponseInterface
      */
     public function setHeader(string $name, string $value): ResponseInterface;
 
@@ -188,36 +157,23 @@ interface ResponseInterface
      * );
      *```
      *
-     * @param mixed $content
-     *
-     * @return ResponseInterface
      * @todo check the parameter type
      */
     public function setJsonContent(mixed $content): ResponseInterface;
 
     /**
      * Sends a Not-Modified response
-     *
-     * @return ResponseInterface
      */
     public function setNotModified(): ResponseInterface;
 
     /**
      * Send a raw header to the response
-     *
-     * @param string $header
-     *
-     * @return ResponseInterface
      */
     public function setRawHeader(string $header): ResponseInterface;
 
     /**
      * Sets the HTTP response code
      *
-     * @param int         $code
-     * @param string|null $message
-     *
-     * @return ResponseInterface
      * @todo change $message to only string
      */
     public function setStatusCode(

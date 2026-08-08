@@ -16,7 +16,7 @@ namespace Phalcon\Http\Response;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
 use Phalcon\Http\Cookie\CookieInterface;
-use Phalcon\Http\Cookie\Exception;
+use Phalcon\Http\Cookie;
 use Phalcon\Http\Response\Exceptions\ResponseServiceUnavailable;
 use Phalcon\Http\Traits\EncryptionAwareTrait;
 
@@ -27,8 +27,8 @@ use function headers_sent;
  *
  * A cookies bag is automatically registered as part of the 'response' service
  * in the DI. By default, cookies are automatically encrypted before being sent
- * to the client and are decrypted when retrieved from the user. To set sign
- * key used to generate a message authentication code use
+ * to the client and are decrypted when retrieved from the user. To set sign key
+ * used to generate a message authentication code use
  * `Phalcon\Http\Response\Cookies::setSignKey()`.
  *
  * ```php
@@ -75,22 +75,11 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 {
     use EncryptionAwareTrait;
 
-    /**
-     * @var array
-     */
     protected array $cookies = [];
-    /**
-     * @var bool
-     */
     protected bool $isRegistered = false;
-    /**
-     * @var bool
-     */
     protected bool $isSent = false;
     /**
      * The cookie's sign key.
-     *
-     * @var string|null
      */
     protected string | null $signKey = null;
 
@@ -109,18 +98,32 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
     /**
      * Deletes a cookie by its name
      * This method does not remove cookies from the _COOKIE super-global
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function delete(string $name): bool
     {
-        if (!isset($this->cookies[$name])) {
-            return false;
+        /**
+         * Check the internal bag. Cookies that arrived with the request are
+         * not in it, so fall back to the _COOKIE superglobal.
+         */
+        $cookie = $this->cookies[$name] ?? null;
+
+        if (null === $cookie) {
+            if (true !== isset($_COOKIE[$name])) {
+                return false;
+            }
+
+            $cookie = new Cookie($name);
+
+            /**
+             * Pass the DI to the created cookie when one is available, so that
+             * the cookie definition stored in the session can be cleared. A
+             * container is not required to delete a cookie.
+             */
+            if ($this->container !== null) {
+                $cookie->setDI($this->container);
+            }
         }
 
-        $cookie = $this->cookies[$name];
         $cookie->delete();
 
         return true;
@@ -128,11 +131,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
     /**
      * Gets a cookie from the bag
-     *
-     * @param string $name
-     *
-     * @return CookieInterface
-     * @throws Exception
      */
     public function get(string $name): CookieInterface
     {
@@ -156,7 +154,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         /**
          * Pass the DI to created cookies
          */
-        $cookie->setDi($container);
+        $cookie->setDI($container);
 
         /**
          * Enable encryption in the cookie
@@ -171,8 +169,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
     /**
      * Gets all cookies from the bag
-     *
-     * @return array
      */
     public function getCookies(): array
     {
@@ -182,10 +178,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
     /**
      * Check if a cookie is defined in the bag or exists in the _COOKIE
      * super-global
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -194,8 +186,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
     /**
      * Returns if the headers have already been sent
-     *
-     * @return bool
      */
     public function isSent(): bool
     {
@@ -204,8 +194,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
     /**
      * Reset set cookies
-     *
-     * @return CookiesInterface
      */
     public function reset(): CookiesInterface
     {
@@ -280,7 +268,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
             /**
              * Pass the DI to created cookies
              */
-            $cookie->setDi($this->container);
+            $cookie->setDI($this->container);
 
             /**
              * Enable encryption in the cookie
@@ -334,9 +322,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      *
      * Use NULL to disable cookie signing.
      *
-     * @param string|null $signKey
-     *
-     * @return CookiesInterface
      * @see \Phalcon\Encryption\Security\Random
      */
     public function setSignKey(string | null $signKey = null): CookiesInterface
@@ -348,10 +333,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
     /**
      * Set if cookies in the bag must be automatically encrypted/decrypted
-     *
-     * @param bool $useEncryption
-     *
-     * @return CookiesInterface
      */
     public function useEncryption(bool $useEncryption): CookiesInterface
     {
@@ -360,11 +341,6 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         return $this;
     }
 
-    /**
-     * @return DiInterface
-     *
-     * @throws ResponseServiceUnavailable
-     */
     protected function checkGetContainer(): DiInterface
     {
         $container = $this->container;

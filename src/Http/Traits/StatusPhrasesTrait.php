@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Http\Traits;
 
-use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface as RSCI;
+use Phalcon\Http\Message\ResponseStatusCodeInterface as RSCI;
 
 /**
  * Status Phrases trait

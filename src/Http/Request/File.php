@@ -52,51 +52,17 @@ class File implements FileInterface
 {
     use GetTrait;
 
-    /**
-     * @var int
-     */
     protected int $error = 0;
-
-    /**
-     * @var string
-     */
     protected string $extension = '';
-
-    /**
-     * @var string
-     */
     protected string $key = '';
-
-    /**
-     * @var string
-     */
     protected string $name = '';
-
-    /**
-     * @var string
-     */
     protected string $realType;
-
-    /**
-     * @var int
-     */
     protected int $size = 0;
-
-    /**
-     * @var string
-     */
     protected string $tmpName = '';
-
-    /**
-     * @var string
-     */
     protected string $type = '';
 
     /**
      * Constructor
-     *
-     * @param array  $file
-     * @param string $key
      */
     public function __construct(array $file, string $key = '')
     {
@@ -118,25 +84,16 @@ class File implements FileInterface
         }
     }
 
-    /**
-     * @return int
-     */
     public function getError(): int
     {
         return $this->error;
     }
 
-    /**
-     * @return string
-     */
     public function getExtension(): string
     {
         return $this->extension;
     }
 
-    /**
-     * @return string
-     */
     public function getKey(): string
     {
         return $this->key;
@@ -152,8 +109,6 @@ class File implements FileInterface
 
     /**
      * Gets the real mime type of the upload file using finfo
-     *
-     * @return string
      */
     public function getRealType(): string
     {
@@ -172,8 +127,6 @@ class File implements FileInterface
 
     /**
      * Returns the file size of the uploaded file
-     *
-     * @return int
      */
     public function getSize(): int
     {
@@ -182,8 +135,6 @@ class File implements FileInterface
 
     /**
      * Returns the temporary name of the uploaded file
-     *
-     * @return string
      */
     public function getTempName(): string
     {
@@ -193,8 +144,6 @@ class File implements FileInterface
     /**
      * Returns the mime type reported by the browser
      * This mime type is not completely secure, use getRealType() instead
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -203,8 +152,6 @@ class File implements FileInterface
 
     /**
      * Checks whether the file has been uploaded via Post.
-     *
-     * @return bool
      */
     public function isUploadedFile(): bool
     {
@@ -215,10 +162,6 @@ class File implements FileInterface
 
     /**
      * Moves the temporary file to a destination within the application
-     *
-     * @param string $destination
-     *
-     * @return bool
      */
     public function moveTo(string $destination): bool
     {

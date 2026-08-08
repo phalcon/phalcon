@@ -148,7 +148,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}
+          ini-values: apc.enable_cli=on, session.save_path=${{ env.SESSION_SAVE_PATH }}, register_argc_argv=on
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
@@ -250,7 +250,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          ini-values: apc.enable_cli=on, session.save_path=/tmp, register_argc_argv=on
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
@@ -357,7 +357,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          ini-values: apc.enable_cli=on, session.save_path=/tmp, register_argc_argv=on
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
@@ -463,7 +463,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          ini-values: apc.enable_cli=on, session.save_path=/tmp, register_argc_argv=on
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:
@@ -554,7 +554,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
-          ini-values: apc.enable_cli=on, session.save_path=/tmp
+          ini-values: apc.enable_cli=on, session.save_path=/tmp, register_argc_argv=on
           tools: pecl, phpize, php-config, composer:v2
           coverage: pcov
         env:

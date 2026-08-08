@@ -14,16 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Http;
 
 use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Di\DiInterface;
-use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Cookie\CookieInterface;
-use Phalcon\Http\Cookie\Exception as CookieException;
 use Phalcon\Http\Cookie\Exceptions\CookieKeyTooShort;
 use Phalcon\Http\Cookie\Exceptions\CryptInterfaceRequired;
 use Phalcon\Http\Cookie\Exceptions\CryptServiceUnavailable;
 use Phalcon\Http\Cookie\Exceptions\FilterServiceUnavailable;
-use Phalcon\Http\Response\Exception;
 use Phalcon\Http\Traits\EncryptionAwareTrait;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
@@ -37,40 +33,19 @@ use function time;
 /**
  * Provide OO wrappers to manage a HTTP cookie.
  */
-class Cookie extends AbstractInjectionAware implements
-    CookieInterface,
-    Stringable
+class Cookie extends AbstractInjectionAware implements CookieInterface, Stringable
 {
     use EncryptionAwareTrait;
     use GetTrait;
 
-    private const COOKIE_PREFIX = '_PHCOOKIE_';
-
-    /**
-     * @var FilterInterface|null
-     */
     protected FilterInterface | null $filter = null;
-
-    /**
-     * @var bool
-     */
     protected bool $isRead = false;
-
-    /**
-     * @var bool
-     */
     protected bool $isRestored = false;
 
     /**
      * The cookie's sign key.
-     *
-     * @var string|null
      */
     protected string | null $signKey = null;
-
-    /**
-     * @var mixed|null
-     */
     protected mixed $value = null;
 
     /**
@@ -81,7 +56,7 @@ class Cookie extends AbstractInjectionAware implements
         mixed $value = null,
         protected int $expire = 0,
         protected string $path = '/',
-        protected bool $secure = false,
+        protected bool $secure = true,
         protected string $domain = '',
         protected bool $httpOnly = false,
         protected array $options = []
@@ -101,14 +76,12 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Deletes the cookie by setting an expiration time in the past
-     *
-     * @return void
      */
     public function delete(): void
     {
         $session = $this->getStartedSession();
         if (null !== $session) {
-            $session->remove(self::COOKIE_PREFIX . $this->name);
+            $session->remove($this->getSessionKey());
         }
 
         $this->value = null;
@@ -119,8 +92,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns the domain that the cookie is available to
-     *
-     * @return string
      */
     public function getDomain(): string
     {
@@ -131,8 +102,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns the current expiration time
-     *
-     * @return int
      */
     public function getExpiration(): int
     {
@@ -143,8 +112,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns if the cookie is accessible only through the HTTP protocol
-     *
-     * @return bool
      */
     public function getHttpOnly(): bool
     {
@@ -155,8 +122,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns the current cookie's name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -165,8 +130,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns the current cookie's options
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -175,8 +138,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Returns the current cookie's path
-     *
-     * @return string
      */
     public function getPath(): string
     {
@@ -188,8 +149,6 @@ class Cookie extends AbstractInjectionAware implements
     /**
      * Returns whether the cookie must only be sent when the connection is
      * secure (HTTPS)
-     *
-     * @return bool
      */
     public function getSecure(): bool
     {
@@ -201,11 +160,6 @@ class Cookie extends AbstractInjectionAware implements
     /**
      * Returns the cookie's value.
      *
-     * @param mixed|null $filters
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
-     * @throws Exception
      * @todo filters needs to be array/string
      */
     public function getValue(
@@ -226,12 +180,7 @@ class Cookie extends AbstractInjectionAware implements
                     throw new CryptServiceUnavailable();
                 }
 
-                /** @var CryptInterface $crypt */
-                if ($this->container instanceof DiInterface) {
-                    $crypt = $this->container->getShared('crypt');
-                } else {
-                    $crypt = $this->container->get('crypt');
-                }
+                $crypt = $this->container->getShared("crypt");
 
                 if (!is_object($crypt)) {
                     throw new CryptInterfaceRequired();
@@ -268,11 +217,7 @@ class Cookie extends AbstractInjectionAware implements
                     }
 
                     /** @var FilterInterface $filter */
-                    if ($this->container instanceof DiInterface) {
-                        $filter = $this->container->getShared('filter');
-                    } else {
-                        $filter = $this->container->get('filter');
-                    }
+                    $filter = $this->container->getShared('filter');
                     $this->filter = $filter;
                 }
 
@@ -294,17 +239,13 @@ class Cookie extends AbstractInjectionAware implements
      *
      * This method is automatically called internally so normally you don't
      * need to call it.
-     *
-     * @return CookieInterface
      */
     public function restore(): CookieInterface
     {
         if (true !== $this->isRestored) {
             $session = $this->getStartedSession();
             if (null !== $session) {
-                $definition = $session->get(
-                    self::COOKIE_PREFIX . $this->name
-                );
+                $definition = $session->get($this->getSessionKEy());
 
                 $this->expire   = $definition['expire'] ?? $this->expire;
                 $this->domain   = $definition['domain'] ?? $this->domain;
@@ -324,9 +265,6 @@ class Cookie extends AbstractInjectionAware implements
      * Sends the cookie to the HTTP client.
      *
      * Stores the cookie definition in session.
-     *
-     * @return CookieInterface
-     * @throws Exception
      */
     public function send(): CookieInterface
     {
@@ -349,7 +287,7 @@ class Cookie extends AbstractInjectionAware implements
         if (!empty($definition)) {
             $session = $this->getStartedSession();
             if (null !== $session) {
-                $session->set(self::COOKIE_PREFIX . $this->name, $definition);
+                $session->set($this->getSessionKey(), $definition);
             }
         }
 
@@ -359,12 +297,7 @@ class Cookie extends AbstractInjectionAware implements
                 throw new FilterServiceUnavailable();
             }
 
-            /** @var CryptInterface $crypt */
-            if ($this->container instanceof DiInterface) {
-                $crypt = $this->container->getShared('crypt');
-            } else {
-                $crypt = $this->container->get('crypt');
-            }
+            $crypt = $this->container->getShared("crypt");
 
             if (!is_object($crypt)) {
                 throw new CryptInterfaceRequired();
@@ -396,10 +329,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets the domain that the cookie is available to
-     *
-     * @param string $domain
-     *
-     * @return CookieInterface
      */
     public function setDomain(string $domain): CookieInterface
     {
@@ -412,10 +341,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets the cookie's expiration time
-     *
-     * @param int $expire
-     *
-     * @return CookieInterface
      */
     public function setExpiration(int $expire): CookieInterface
     {
@@ -428,10 +353,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets if the cookie is accessible only through the HTTP protocol
-     *
-     * @param bool $httpOnly
-     *
-     * @return CookieInterface
      */
     public function setHttpOnly(bool $httpOnly): CookieInterface
     {
@@ -444,10 +365,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets the cookie's options
-     *
-     * @param array $options
-     *
-     * @return CookieInterface
      */
     public function setOptions(array $options): CookieInterface
     {
@@ -458,10 +375,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets the cookie's path
-     *
-     * @param string $path
-     *
-     * @return CookieInterface
      */
     public function setPath(string $path): CookieInterface
     {
@@ -475,10 +388,6 @@ class Cookie extends AbstractInjectionAware implements
     /**
      * Sets if the cookie must only be sent when the connection is secure
      * (HTTPS)
-     *
-     * @param bool $secure
-     *
-     * @return CookieInterface
      */
     public function setSecure(bool $secure): CookieInterface
     {
@@ -497,10 +406,6 @@ class Cookie extends AbstractInjectionAware implements
      *
      * Use NULL to disable cookie signing.
      *
-     * @param string|null $signKey
-     *
-     * @return CookieInterface
-     * @throws CookieException
      * @see \Phalcon\Encryption\Security\Random
      */
     public function setSignKey(string | null $signKey = null): CookieInterface
@@ -516,10 +421,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets the cookie's value
-     *
-     * @param mixed $value
-     *
-     * @return CookieInterface
      */
     public function setValue(mixed $value): CookieInterface
     {
@@ -531,10 +432,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Sets if the cookie must be encrypted/decrypted automatically
-     *
-     * @param bool $useEncryption
-     *
-     * @return CookieInterface
      */
     public function useEncryption(bool $useEncryption): CookieInterface
     {
@@ -546,10 +443,7 @@ class Cookie extends AbstractInjectionAware implements
     /**
      * Assert the cookie's key is enough long.
      *
-     * @param string $signKey
-     *
-     * @return void
-     * @throws CookieException
+     * @throws \Phalcon\Http\Cookie\Exception
      */
     protected function assertSignKeyIsLongEnough(string $signKey): void
     {
@@ -562,8 +456,6 @@ class Cookie extends AbstractInjectionAware implements
 
     /**
      * Check if the cookie is restored and restore it if not
-     *
-     * @return void
      */
     private function checkRestored(): void
     {
@@ -572,11 +464,6 @@ class Cookie extends AbstractInjectionAware implements
         }
     }
 
-    /**
-     * @param int $expiresDefault
-     *
-     * @return array
-     */
     private function getCookieOptions(int $expiresDefault): array
     {
         $options             = $this->options;
@@ -590,10 +477,16 @@ class Cookie extends AbstractInjectionAware implements
     }
 
     /**
+     * The session key under which this cookie's definition is stored
+     */
+    private function getSessionKey(): string
+    {
+        return "_PHCOOKIE_" . $this->name;
+    }
+
+    /**
      * Returns the session manager from the container when the service is
      * available and the session has been started; `null` otherwise
-     *
-     * @return SessionManagerInterface|null
      */
     private function getStartedSession(): SessionManagerInterface | null
     {
@@ -604,12 +497,7 @@ class Cookie extends AbstractInjectionAware implements
             return null;
         }
 
-        /** @var SessionManagerInterface $session */
-        if ($this->container instanceof DiInterface) {
-            $session = $this->container->getShared('session');
-        } else {
-            $session = $this->container->get('session');
-        }
+        $session = $this->container->getShared("session");
 
         if (true !== $session->exists()) {
             return null;

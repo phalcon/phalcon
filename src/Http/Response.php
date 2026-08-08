@@ -17,12 +17,10 @@ use DateTime;
 use DateTimeZone;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
-use Phalcon\Di\Injectable;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Http\Message\Interfaces\ResponseStatusCodeInterface;
-use Phalcon\Http\Message\ResponseStatusCodeInterface as RootResponseStatusCodeInterface;
+use Phalcon\Http\Message\ResponseStatusCodeInterface;
 use Phalcon\Http\Response\CookiesInterface;
 use Phalcon\Http\Response\Exception;
 use Phalcon\Http\Response\Exceptions\NonStandardStatusCodeRequiresMessage;
@@ -65,11 +63,7 @@ use function substr;
  * $response->send();
  *```
  */
-class Response extends Injectable implements
-    EventsAwareInterface,
-    ResponseInterface,
-    ResponseStatusCodeInterface,
-    RootResponseStatusCodeInterface
+class Response implements ResponseInterface, InjectionAwareInterface, EventsAwareInterface, ResponseStatusCodeInterface
 {
     use EventsAwareTrait;
     use InfoTrait;
@@ -78,42 +72,16 @@ class Response extends Injectable implements
 
     private const DATETIME_FORMAT = 'D, d M Y H:i:s';
 
-    /**
-     * @var string|null
-     */
+    protected DiInterface | null $container = null;
     protected string | null $content = null;
-
-    /**
-     * @var CookiesInterface|null
-     */
     protected ?CookiesInterface $cookies = null;
-
-    /**
-     * @var Encode
-     */
     protected Encode $encode;
-
-    /**
-     * @var string|null
-     */
     protected string | null $file = null;
-
-    /**
-     * @var Headers
-     */
     protected Headers $headers;
-
-    /**
-     * @var bool
-     */
     protected bool $sent = false;
 
     /**
      * Constructor
-     *
-     * @param string|null $content
-     * @param int|null    $code
-     * @param string|null $status
      *
      * @throws Exception
      */
@@ -138,10 +106,6 @@ class Response extends Injectable implements
 
     /**
      * Appends a string to the HTTP response body
-     *
-     * @param mixed $content
-     *
-     * @return ResponseInterface
      */
     public function appendContent(mixed $content): ResponseInterface
     {
@@ -152,8 +116,6 @@ class Response extends Injectable implements
 
     /**
      * Gets the HTTP response body
-     *
-     * @return string
      */
     public function getContent(): string
     {
@@ -163,8 +125,6 @@ class Response extends Injectable implements
 
     /**
      * Returns cookies set by the user
-     *
-     * @return CookiesInterface
      */
     public function getCookies(): CookiesInterface
     {
@@ -173,9 +133,6 @@ class Response extends Injectable implements
 
     /**
      * Returns the internal dependency injector
-     *
-     * @return DiInterface
-     * @throws UrlServiceUnavailable
      */
     public function getDI(): DiInterface
     {
@@ -197,8 +154,6 @@ class Response extends Injectable implements
 
     /**
      * Returns headers set by the user
-     *
-     * @return HeadersInterface
      */
     public function getHeaders(): HeadersInterface
     {
@@ -211,8 +166,6 @@ class Response extends Injectable implements
      *```php
      * echo $response->getReasonPhrase();
      *```
-     *
-     * @return string|null
      */
     public function getReasonPhrase(): string | null
     {
@@ -227,8 +180,6 @@ class Response extends Injectable implements
      *```php
      * echo $response->getStatusCode();
      *```
-     *
-     * @return int|null
      */
     public function getStatusCode(): int | null
     {
@@ -243,10 +194,6 @@ class Response extends Injectable implements
      *```php
      * $response->hasHeader("Content-Type");
      *```
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasHeader(string $name): bool
     {
@@ -255,8 +202,6 @@ class Response extends Injectable implements
 
     /**
      * Check if the response is already sent
-     *
-     * @return bool
      */
     public function isSent(): bool
     {
@@ -281,13 +226,6 @@ class Response extends Injectable implements
      *     ]
      * );
      *```
-     *
-     * @param string|null $location
-     * @param bool        $externalRedirect
-     * @param int         $statusCode
-     *
-     * @return ResponseInterface
-     * @throws Exception
      */
     public function redirect(
         string | null $location = null,
@@ -314,20 +252,12 @@ class Response extends Injectable implements
 
         if (empty($header)) {
             /** @var UrlInterface $url */
-            if ($container instanceof DiInterface) {
-                $url = $container->getShared('url');
-            } else {
-                $url = $container->get('url');
-            }
+            $url = $container->getShared('url');
             $header = $url->get($location);
         }
 
         if (true === $container->has('view')) {
-            if ($container instanceof DiInterface) {
-                $view = $container->getShared('view');
-            } else {
-                $view = $container->get('view');
-            }
+            $view = $container->getShared('view');
 
             if ($view instanceof ViewInterface) {
                 $view->disable();
@@ -357,10 +287,6 @@ class Response extends Injectable implements
      *```php
      * $response->removeHeader("Expires");
      *```
-     *
-     * @param string $name
-     *
-     * @return ResponseInterface
      */
     public function removeHeader(string $name): ResponseInterface
     {
@@ -371,8 +297,6 @@ class Response extends Injectable implements
 
     /**
      * Resets all the established headers
-     *
-     * @return ResponseInterface
      */
     public function resetHeaders(): ResponseInterface
     {
@@ -383,10 +307,6 @@ class Response extends Injectable implements
 
     /**
      * Prints out HTTP response to the client
-     *
-     * @return ResponseInterface
-     * @throws EventsException
-     * @throws Exception
      */
     public function send(): ResponseInterface
     {
@@ -417,8 +337,6 @@ class Response extends Injectable implements
 
     /**
      * Sends cookies to the client
-     *
-     * @return ResponseInterface
      */
     public function sendCookies(): ResponseInterface
     {
@@ -429,9 +347,6 @@ class Response extends Injectable implements
 
     /**
      * Sends headers to the client
-     *
-     * @return bool|ResponseInterface
-     * @throws EventsException
      */
     public function sendHeaders(): bool | ResponseInterface
     {
@@ -457,10 +372,6 @@ class Response extends Injectable implements
      *```php
      * $this->response->setCache(60);
      *```
-     *
-     * @param int $minutes
-     *
-     * @return ResponseInterface
      */
     public function setCache(int $minutes): ResponseInterface
     {
@@ -480,10 +391,6 @@ class Response extends Injectable implements
      *```php
      * $response->setContent("<h1>Hello!</h1>");
      *```
-     *
-     * @param string $content
-     *
-     * @return ResponseInterface
      */
     public function setContent(string $content): ResponseInterface
     {
@@ -498,10 +405,6 @@ class Response extends Injectable implements
      *```php
      * $response->setContentLength(2048);
      *```
-     *
-     * @param int $contentLength
-     *
-     * @return ResponseInterface
      */
     public function setContentLength(int $contentLength): ResponseInterface
     {
@@ -517,11 +420,6 @@ class Response extends Injectable implements
      * $response->setContentType("application/pdf");
      * $response->setContentType("text/plain", "UTF-8");
      *```
-     *
-     * @param string      $contentType
-     * @param string|null $charset
-     *
-     * @return ResponseInterface
      */
     public function setContentType(
         string $contentType,
@@ -538,16 +436,20 @@ class Response extends Injectable implements
 
     /**
      * Sets a cookies bag for the response externally
-     *
-     * @param CookiesInterface $cookies
-     *
-     * @return ResponseInterface
      */
     public function setCookies(CookiesInterface $cookies): ResponseInterface
     {
         $this->cookies = $cookies;
 
         return $this;
+    }
+
+    /**
+     * Sets the dependency injector
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
     }
 
     /**
@@ -560,10 +462,6 @@ class Response extends Injectable implements
      *     )
      * );
      *```
-     *
-     * @param string $etag
-     *
-     * @return ResponseInterface
      */
     public function setEtag(string $etag): ResponseInterface
     {
@@ -580,10 +478,6 @@ class Response extends Injectable implements
      *     new DateTime()
      * );
      *```
-     *
-     * @param DateTime $datetime
-     *
-     * @return ResponseInterface
      */
     public function setExpires(DateTime $datetime): ResponseInterface
     {
@@ -674,11 +568,6 @@ class Response extends Injectable implements
      *```php
      * $response->setHeader("Content-Type", "text/plain");
      *```
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return ResponseInterface
      */
     public function setHeader(string $name, mixed $value): ResponseInterface
     {
@@ -689,10 +578,6 @@ class Response extends Injectable implements
 
     /**
      * Sets a headers bag for the response externally
-     *
-     * @param HeadersInterface $headers
-     *
-     * @return ResponseInterface
      */
     public function setHeaders(HeadersInterface $headers): ResponseInterface
     {
@@ -706,10 +591,8 @@ class Response extends Injectable implements
     }
 
     /**
-     * Sets HTTP response body. The parameter is automatically converted to
-     * JSON
-     * and also sets default header: Content-Type: "application/json;
-     * charset=UTF-8"
+     * Sets HTTP response body. The parameter is automatically converted to JSON
+     * and also sets default header: Content-Type: "application/json; charset=UTF-8"
      *
      *```php
      * $response->setJsonContent(
@@ -718,12 +601,6 @@ class Response extends Injectable implements
      *     ]
      * );
      *```
-     *
-     * @param mixed $content
-     * @param int   $jsonOptions
-     * @param int   $depth
-     *
-     * @return ResponseInterface
      */
     public function setJsonContent(
         mixed $content,
@@ -746,10 +623,6 @@ class Response extends Injectable implements
      *     new DateTime()
      * );
      *```
-     *
-     * @param DateTime $datetime
-     *
-     * @return ResponseInterface
      */
     public function setLastModified(DateTime $datetime): ResponseInterface
     {
@@ -774,9 +647,6 @@ class Response extends Injectable implements
 
     /**
      * Sends a Not-Modified response
-     *
-     * @return ResponseInterface
-     * @throws Exception
      */
     public function setNotModified(): ResponseInterface
     {
@@ -805,12 +675,6 @@ class Response extends Injectable implements
      *```php
      * $response->setStatusCode(404, "Not Found");
      *```
-     *
-     * @param int         $code
-     * @param string|null $message
-     *
-     * @return ResponseInterface
-     * @throws Exception
      */
     public function setStatusCode(
         int $code,

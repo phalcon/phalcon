@@ -25,9 +25,9 @@ use function count;
 use function is_array;
 
 /**
- * Shared base for the HTTP request bags. A bag is a string- or integer-keyed value store
- * backed by a raw array, exposing `get/has/set/remove/all` plus typed readers
- * for cast-with-default access.
+ * Shared base for the HTTP request bags. A bag is a string- or integer-keyed
+ * value store backed by a raw array, exposing `get/has/set/remove/all` plus
+ * typed readers for cast-with-default access.
  *
  * Two protected hooks (`normalizeKey`, `normalizeItems`) let subclasses
  * change key handling without restating the surface.
@@ -38,10 +38,7 @@ use function is_array;
  */
 abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 {
-    /**
-     * @var array
-     */
-    protected array $items;
+    protected array $items = [];
 
     /**
      * AbstractBag constructor.
@@ -65,8 +62,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Returns the number of elements in the bag
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -75,11 +70,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Returns an element of the bag, or the default value if it is not set
-     *
-     * @param int|string $key
-     * @param mixed  $defaultValue
-     *
-     * @return mixed
      */
     public function get(int | string $key, mixed $defaultValue = null): mixed
     {
@@ -89,11 +79,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag as an array. The default value is
      * returned if the element is not set or is not an array
-     *
-     * @param int|string $key
-     * @param array  $defaultValue
-     *
-     * @return array
      */
     public function getArray(int | string $key, array $defaultValue = []): array
     {
@@ -105,11 +90,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag cast to bool, or the default value if
      * it is not set
-     *
-     * @param int|string $key
-     * @param bool   $defaultValue
-     *
-     * @return bool
      */
     public function getBool(int | string $key, bool $defaultValue = false): bool
     {
@@ -123,11 +103,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag cast to float, or the default value if
      * it is not set
-     *
-     * @param int|string $key
-     * @param float  $defaultValue
-     *
-     * @return float
      */
     public function getFloat(int | string $key, float $defaultValue = 0.0): float
     {
@@ -141,11 +116,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag cast to int, or the default value if
      * it is not set
-     *
-     * @param int|string $key
-     * @param int    $defaultValue
-     *
-     * @return int
      */
     public function getInt(int | string $key, int $defaultValue = 0): int
     {
@@ -169,11 +139,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag cast to string, or the default value if
      * it is not set
-     *
-     * @param int|string $key
-     * @param string $defaultValue
-     *
-     * @return string
      */
     public function getString(int | string $key, string $defaultValue = ''): string
     {
@@ -186,10 +151,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Checks whether an element exists in the bag
-     *
-     * @param int|string $key
-     *
-     * @return bool
      */
     public function has(int | string $key): bool
     {
@@ -198,12 +159,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Whether an offset exists
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetexists.php
-     *
-     * @param mixed $offset
-     *
-     * @return bool
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -212,12 +167,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Offset to retrieve
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetget.php
-     *
-     * @param mixed $offset
-     *
-     * @return mixed
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -226,14 +175,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Offset to set
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetset.php
-     *
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @return void
-     *
      * @throws NullKeyException When the offset is null (append form)
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -247,12 +188,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Offset to unset
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetunset.php
-     *
-     * @param mixed $offset
-     *
-     * @return void
      */
     public function offsetUnset(mixed $offset): void
     {
@@ -261,10 +196,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Removes an element from the bag
-     *
-     * @param int|string $key
-     *
-     * @return void
      */
     public function remove(int | string $key): void
     {
@@ -273,11 +204,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      * Sets an element in the bag
-     *
-     * @param int|string $key
-     * @param mixed  $value
-     *
-     * @return void
      */
     public function set(int | string $key, mixed $value): void
     {
@@ -300,10 +226,6 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Normalizes a key for lookups and writes. Identity in the base;
      * subclasses can override it to change key handling
-     *
-     * @param int|string $key
-     *
-     * @return int|string
      */
     protected function normalizeKey(int | string $key): int | string
     {

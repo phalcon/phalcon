@@ -24,20 +24,11 @@ use function str_contains;
  */
 class Headers implements HeadersInterface, IteratorAggregate
 {
-    /**
-     * @var array
-     */
     protected array $headers = [];
-
-    /**
-     * @var bool
-     */
     protected bool $isSent = false;
 
     /**
      * Gets a header value from the internal bag
-     *
-     * @param string $name
      *
      * @return bool|string|null
      * @todo change the raw headers not to return null
@@ -59,17 +50,11 @@ class Headers implements HeadersInterface, IteratorAggregate
      */
     public function getIterator(): Traversable
     {
-        foreach ($this->headers as $index => $header) {
-            yield $index => $header;
-        }
+        return new \ArrayIterator(this->headers);
     }
 
     /**
      * Checks if a header exists
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -78,8 +63,6 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Returns if the headers have already been sent
-     *
-     * @return bool
      */
     public function isSent(): bool
     {
@@ -88,22 +71,16 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Removes a header by its name
-     *
-     * @param string $name
-     *
-     * @return HeadersInterface
      */
-    public function remove(string $name): HeadersInterface
+    public function remove(string $header): HeadersInterface
     {
-        unset($this->headers[$name]);
+        unset($this->headers[$header]);
 
         return $this;
     }
 
     /**
      * Reset set headers
-     *
-     * @return void
      */
     public function reset(): void
     {
@@ -112,8 +89,6 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Sends the headers to the client
-     *
-     * @return bool
      */
     public function send(): bool
     {
@@ -141,11 +116,6 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Sets a header to be sent at the end of the request
-     *
-     * @param string $name
-     * @param string $value
-     *
-     * @return HeadersInterface
      */
     public function set(string $name, string $value): HeadersInterface
     {
@@ -156,10 +126,6 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Sets a raw header to be sent at the end of the request
-     *
-     * @param string $header
-     *
-     * @return HeadersInterface
      */
     public function setRaw(string $header): HeadersInterface
     {
@@ -170,8 +136,6 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Returns the current headers as an array
-     *
-     * @return array
      */
     public function toArray(): array
     {
