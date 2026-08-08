@@ -102,4 +102,20 @@ final class LoadTest extends AbstractUnitTestCase
 
         $factory->load([]);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-05
+     */
+    public function testTranslateFactoryLoadExceptionInvalidConfig(): void
+    {
+        $factory = new TranslateFactory(new InterpolatorFactory());
+
+        $this->expectException(TranslatorNotRegistered::class);
+        $this->expectExceptionMessage(
+            'Config must be array or Phalcon\Config\Config object'
+        );
+
+        $factory->load(1234);
+    }
 }

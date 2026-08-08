@@ -34,4 +34,20 @@ final class LoadTest extends AbstractUnitTestCase
 
         $factory->load([]);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-05
+     */
+    public function testQueueQueueFactoryLoadExceptionInvalidConfig(): void
+    {
+        $factory = new QueueFactory();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Config must be array or Phalcon\Config\Config object'
+        );
+
+        $factory->load(1234);
+    }
 }

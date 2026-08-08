@@ -56,6 +56,25 @@ final class LoadTest extends AbstractDatabaseTestCase
 
     /**
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-05
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testDbAdapterPdoFactoryLoadExceptionInvalidConfig(): void
+    {
+        $factory = new PdoFactory();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Config must be array or Phalcon\Config\Config object'
+        );
+
+        $factory->load(1234);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-19
      */
     #[Group('mysql')]

@@ -102,4 +102,20 @@ final class LoadTest extends AbstractDatabaseTestCase
 
         $factory->load([]);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-05
+     */
+    public function testPaginatorPaginatorFactoryLoadExceptionInvalidConfig(): void
+    {
+        $factory = new PaginatorFactory();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Config must be array or Phalcon\Config\Config object'
+        );
+
+        $factory->load(1234);
+    }
 }
