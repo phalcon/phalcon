@@ -56,7 +56,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
         mixed $value = null,
         protected int $expire = 0,
         protected string $path = '/',
-        protected bool $secure = true,
+        protected bool $secure = false,
         protected string $domain = '',
         protected bool $httpOnly = false,
         protected array $options = []

@@ -341,7 +341,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         return $this;
     }
 
-    protected function checkGetContainer(): DiInterface
+    private function checkGetContainer(): DiInterface
     {
         $container = $this->container;
 

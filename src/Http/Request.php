@@ -90,9 +90,6 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     protected FilterInterface | null $filterService = null;
     protected bool $methodOverride = false;
     protected array | null $postCache = null;
-    /**
-     * @var array|null
-     */
     protected array $queryFilters = [];
     protected string $rawBody = '';
     protected bool $strictHostCheck = false;
