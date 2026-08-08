@@ -15,8 +15,8 @@ namespace Phalcon\Http\Response;
 
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
-use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Http\Cookie;
+use Phalcon\Http\Cookie\CookieInterface;
 use Phalcon\Http\Response\Exceptions\ResponseServiceUnavailable;
 use Phalcon\Http\Traits\EncryptionAwareTrait;
 

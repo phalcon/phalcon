@@ -15,14 +15,10 @@ namespace Phalcon\Http;
 
 use Phalcon\Contracts\Http\AttributeRequest;
 use Phalcon\Di\AbstractInjectionAware;
-use Phalcon\Di\DiInterface;
-use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Message\RequestMethodInterface;
 use Phalcon\Http\Request\Bag\AttributeBag;
-use Phalcon\Http\Request\Exception;
 use Phalcon\Http\Request\Exceptions\FilterServiceUnavailable;
 use Phalcon\Http\Request\Exceptions\InvalidHost;
 use Phalcon\Http\Request\Exceptions\InvalidHttpMethod;
