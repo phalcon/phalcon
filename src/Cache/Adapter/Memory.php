@@ -23,8 +23,6 @@ class Memory extends StorageMemory implements CacheAdapterInterface
 {
     /**
      * EventType prefix.
-     *
-     * @var string
      */
     protected string $eventType = "cache";
 }

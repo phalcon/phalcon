@@ -17,14 +17,12 @@ use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Storage\Adapter\Weak as StorageWeak;
 
 /**
- * Weak adapter
- */
+* WeakCache implementation based on WeakReference
+*/
 class Weak extends StorageWeak implements CacheAdapterInterface
 {
     /**
      * EventType prefix.
-     *
-     * @var string
      */
     protected string $eventType = "cache";
 }

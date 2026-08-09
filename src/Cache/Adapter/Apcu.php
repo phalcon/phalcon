@@ -23,8 +23,6 @@ class Apcu extends StorageApcu implements CacheAdapterInterface
 {
     /**
      * EventType prefix.
-     *
-     * @var string
      */
     protected string $eventType = "cache";
 }

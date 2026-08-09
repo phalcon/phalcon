@@ -23,8 +23,6 @@ class Libmemcached extends StorageLibmemcached implements CacheAdapterInterface
 {
     /**
      * EventType prefix.
-     *
-     * @var string
      */
     protected string $eventType = "cache";
 }

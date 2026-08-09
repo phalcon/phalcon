@@ -274,7 +274,7 @@ class Tag
 
         return self::$container;
     }
-    
+
     /**
      * Get the document type declaration of content
      */
@@ -349,7 +349,7 @@ class Tag
                     "A dependency injection container is required to access the 'escaper' service"
                 );
             }
-	    
+
             self::$escaperService = $container->getShared("escaper");
         }
 
@@ -428,7 +428,7 @@ class Tag
                     "A dependency injection container is required to access the 'url' service"
                 );
             }
-	    
+
             self::$urlService = $container->getShared("url");
         }
 

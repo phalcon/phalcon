@@ -23,8 +23,6 @@ class Redis extends StorageRedis implements CacheAdapterInterface
 {
     /**
      * EventType prefix.
-     *
-     * @var string
      */
     protected string $eventType = "cache";
 }
