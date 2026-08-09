@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "427ff7fcfa478135decafbad20bdfe35",
+    "content-hash": "d927847913b8d6dc1fb08d5a33afa220",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1376,12 +1376,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "6bbbd9b7d022ddc5a93b1bb248dfe4112614103b"
+                "reference": "355a43b3a04cca6b8a0d7eff99fdeff90f342d9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/6bbbd9b7d022ddc5a93b1bb248dfe4112614103b",
-                "reference": "6bbbd9b7d022ddc5a93b1bb248dfe4112614103b",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/355a43b3a04cca6b8a0d7eff99fdeff90f342d9d",
+                "reference": "355a43b3a04cca6b8a0d7eff99fdeff90f342d9d",
                 "shasum": ""
             },
             "require": {
@@ -1392,7 +1392,7 @@
                 "friendsofphp/php-cs-fixer": "^3.95",
                 "pds/composer-script-names": "^1.0",
                 "pds/skeleton": "^1.0",
-                "phalcon/talon": "^0.6.0 || ^0.7.0 || ^0.8.0",
+                "phalcon/talon": "^1.0.0",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^4.0"
@@ -1445,11 +1445,11 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-07-19T01:08:28+00:00"
+            "time": "2026-08-08T01:32:41+00:00"
         },
         {
             "name": "phalcon/quill",
-            "version": "dev-master",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/quill.git",
@@ -1478,7 +1478,6 @@
             "suggest": {
                 "phalcon/zephir": "Required by ZephirReader to parse .zep sources"
             },
-            "default-branch": true,
             "bin": [
                 "bin/quill"
             ],
@@ -1502,7 +1501,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/quill/issues",
-                "source": "https://github.com/phalcon/quill/tree/master"
+                "source": "https://github.com/phalcon/quill/tree/v0.3.0"
             },
             "funding": [
                 {
@@ -1518,16 +1517,16 @@
         },
         {
             "name": "phalcon/talon",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/talon.git",
-                "reference": "0289a3e0794520269a133fd3a789981329bb612c"
+                "reference": "21d9bfa6b334fe137a041967ea9e7bc18dbdc575"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/talon/zipball/0289a3e0794520269a133fd3a789981329bb612c",
-                "reference": "0289a3e0794520269a133fd3a789981329bb612c",
+                "url": "https://api.github.com/repos/phalcon/talon/zipball/21d9bfa6b334fe137a041967ea9e7bc18dbdc575",
+                "reference": "21d9bfa6b334fe137a041967ea9e7bc18dbdc575",
                 "shasum": ""
             },
             "require": {
@@ -1580,7 +1579,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/talon/issues",
-                "source": "https://github.com/phalcon/talon/tree/v1.0.1"
+                "source": "https://github.com/phalcon/talon/tree/v1.0.2"
             },
             "funding": [
                 {
@@ -1592,7 +1591,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-07T15:49:55+00:00"
+            "time": "2026-08-09T00:57:08+00:00"
         },
         {
             "name": "phalcon/volt",
@@ -1600,12 +1599,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "50629982a240ab6aaaa407fd048bceb1106b75f2"
+                "reference": "72831ce1381ff50fd23530a3f71a81c532c7088a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/50629982a240ab6aaaa407fd048bceb1106b75f2",
-                "reference": "50629982a240ab6aaaa407fd048bceb1106b75f2",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/72831ce1381ff50fd23530a3f71a81c532c7088a",
+                "reference": "72831ce1381ff50fd23530a3f71a81c532c7088a",
                 "shasum": ""
             },
             "require": {
@@ -1617,7 +1616,7 @@
                 "friendsofphp/php-cs-fixer": "^3.95",
                 "pds/skeleton": "^1.0",
                 "phalcon/ide-stubs": "^5.8",
-                "phalcon/talon": "^0.6.0 || ^0.8.0 || ^0.9.0",
+                "phalcon/talon": "^1.0.0",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^4.0"
@@ -1677,7 +1676,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-05T14:03:55+00:00"
+            "time": "2026-08-08T01:54:21+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -6589,7 +6588,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "phalcon/phql": 20,
-        "phalcon/quill": 20,
         "phalcon/volt": 20
     },
     "prefer-stable": false,

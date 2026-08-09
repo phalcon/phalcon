@@ -38,14 +38,14 @@ abstract class Select
      * Generates a SELECT tag
      *
      * @param array<string, mixed>|string $parameters = [
-     *                                                'id'         => '',
-     *                                                'name'       => '',
-     *                                                'value'      => '',
-     *                                                'useEmpty'   => false,
-     *                                                'emptyValue' => '',
-     *                                                'emptyText'  => '',
-     *                                                ]
-     * @param mixed|null                  $data
+     *     'id' => '',
+     *     'name' => '',
+     *     'value' => '',
+     *     'useEmpty' => false,
+     *     'emptyValue' => '',
+     *     'emptyText' => '',
+     * ]
+     * @param array data
      *
      * @return string
      * @throws Exception
@@ -108,7 +108,7 @@ abstract class Select
 
         if (is_object($options)) {
             /**
-             * The options parameter is a resultset
+             * The options is a resultset
              */
             $using = $params["using"] ?? null;
             if (null === $using) {
@@ -172,13 +172,6 @@ abstract class Select
 
     /**
      * Generate the OPTION tags based on an array
-     *
-     * @param array  $data
-     * @param mixed  $value
-     * @param string $closeOption
-     *
-     * @return string
-     * @throws Exception
      */
     private static function optionsFromArray(
         array $data,
@@ -229,14 +222,6 @@ abstract class Select
 
     /**
      * Generate the OPTION tags based on a resultset
-     *
-     * @param ResultsetInterface $resultset
-     * @param mixed              $using
-     * @param mixed              $value
-     * @param string             $closeOption
-     *
-     * @return string
-     * @throws Exception
      */
     private static function optionsFromResultset(
         ResultsetInterface $resultset,
@@ -312,10 +297,11 @@ abstract class Select
                 }
             } else {
                 /**
-                 * Render through the developer-supplied closure.
-                 * Restricting this to Closure (rather than any object)
-                 * keeps the invoked callable out of reach of
-                 * user-controlled data: #17210
+                 * Render through the developer-supplied closure. Restricting
+                 * this to Closure (rather than any object) keeps the invoked
+                 * callable out of reach of user-controlled data: a closure is
+                 * defined in application code and can never be a name built
+                 * from request input.
                  */
                 if ($using instanceof Closure) {
                     if (null === $params) {

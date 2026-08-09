@@ -60,7 +60,7 @@
     "predis/predis": "^3.4",
     "squizlabs/php_codesniffer": "^4.0",
     "vlucas/phpdotenv": "^5.6",
-    "phalcon/quill": "dev-master"
+    "phalcon/quill": "^0.3.0"
   },
   "scripts": {
     "analyze": "vendor/bin/phpstan analyse -c resources/phpstan.neon --memory-limit 1024M",
