@@ -103,7 +103,7 @@ class Cache extends AbstractCache
 
     /**
      * Returns the exception class that will be used for exceptions thrown
-     * 
+     *
      * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
