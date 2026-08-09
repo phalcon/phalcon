@@ -144,7 +144,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     /**
      * Fetches a value from the cache.
      */
-    protected function doGet(string $key, mixed $defaultValue = null)
+    protected function doGet(string $key, mixed $defaultValue = null) -> mixed
     {
         $this->checkKey($key);
 
