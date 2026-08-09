@@ -15,6 +15,7 @@ namespace Phalcon\Cache;
 
 use DateInterval;
 use Phalcon\Cache\Exception\InvalidArgumentException;
+use Throwable;
 
 /**
  * This component offers caching capabilities for your application.
@@ -102,6 +103,8 @@ class Cache extends AbstractCache
 
     /**
      * Returns the exception class that will be used for exceptions thrown
+     * 
+     * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
     {
