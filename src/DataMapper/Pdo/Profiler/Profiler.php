@@ -30,40 +30,15 @@ use function hrtime;
  */
 class Profiler implements ProfilerInterface
 {
-    /**
-     * @var bool
-     */
     protected bool $active = false;
-
-    /**
-     * @var array
-     */
     protected array $context = [];
-
-    /**
-     * @var string
-     */
     protected string $logFormat = "";
-
-    /**
-     * @var LoggerInterface
-     */
     protected LoggerInterface $logger;
-
-    /**
-     * @var int|string
-     */
     protected int | string $logLevel = 0;
-
-    /**
-     * @var Encode
-     */
     private Encode $encode;
 
     /**
      * Constructor.
-     *
-     * @param LoggerInterface $logger
      */
     public function __construct(?LoggerInterface $logger = null)
     {
@@ -79,9 +54,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Finishes and logs a profile entry.
-     *
-     * @param string $statement
-     * @param array  $values
      */
     public function finish(?string $statement = null, array $values = []): void
     {
@@ -105,8 +77,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Returns the log message format string, with placeholders.
-     *
-     * @return string
      */
     public function getLogFormat(): string
     {
@@ -115,8 +85,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Returns the underlying logger instance.
-     *
-     * @return LoggerInterface
      */
     public function getLogger(): LoggerInterface
     {
@@ -125,8 +93,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Returns the level at which to log profile messages.
-     *
-     * @return string
      */
     public function getLogLevel(): string
     {
@@ -135,8 +101,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Returns true if logging is active.
-     *
-     * @return bool
      */
     public function isActive(): bool
     {
@@ -145,10 +109,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Enable or disable profiler logging.
-     *
-     * @param bool $active
-     *
-     * @return ProfilerInterface
      */
     public function setActive(bool $active): ProfilerInterface
     {
@@ -159,10 +119,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Sets the log message format string, with placeholders.
-     *
-     * @param string $logFormat
-     *
-     * @return ProfilerInterface
      */
     public function setLogFormat(string $logFormat): ProfilerInterface
     {
@@ -173,10 +129,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Level at which to log profile messages.
-     *
-     * @param string $logLevel
-     *
-     * @return ProfilerInterface
      */
     public function setLogLevel(string $logLevel): ProfilerInterface
     {
@@ -187,8 +139,6 @@ class Profiler implements ProfilerInterface
 
     /**
      * Starts a profile entry.
-     *
-     * @param string $method
      */
     public function start(string $method): void
     {

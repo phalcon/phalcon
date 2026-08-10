@@ -30,9 +30,6 @@ class Update extends AbstractConditions
 {
     /**
      * Update constructor.
-     *
-     * @param Connection $connection
-     * @param Bind       $bind
      */
     public function __construct(Connection $connection, Bind $bind)
     {
@@ -44,10 +41,6 @@ class Update extends AbstractConditions
 
     /**
      * Sets a column for the `UPDATE` query
-     *
-     * @param string $column
-     *
-     * @return Update
      */
     public function column(string $column, $value = null, int $type = -1): Update
     {
@@ -62,10 +55,6 @@ class Update extends AbstractConditions
 
     /**
      * Mass sets columns and values for the `UPDATE`
-     *
-     * @param array $columns
-     *
-     * @return Update
      */
     public function columns(array $columns): Update
     {
@@ -82,10 +71,6 @@ class Update extends AbstractConditions
 
     /**
      * Adds table(s) in the query
-     *
-     * @param string $table
-     *
-     * @return Update
      */
     public function from(string $table): Update
     {
@@ -109,8 +94,6 @@ class Update extends AbstractConditions
 
     /**
      * Whether the query has columns or not
-     *
-     * @return bool
      */
     public function hasColumns(): bool
     {
@@ -130,10 +113,6 @@ class Update extends AbstractConditions
 
     /**
      * Adds the `RETURNING` clause
-     *
-     * @param array $columns
-     *
-     * @return Update
      */
     public function returning(array $columns): Update
     {
@@ -147,11 +126,6 @@ class Update extends AbstractConditions
 
     /**
      * Sets a column = value condition
-     *
-     * @param string     $column
-     * @param mixed|null $value
-     *
-     * @return Update
      */
     public function set(string $column, $value = null): Update
     {
@@ -168,8 +142,6 @@ class Update extends AbstractConditions
 
     /**
      * Builds the column list
-     *
-     * @return string
      */
     private function buildColumns(): string
     {

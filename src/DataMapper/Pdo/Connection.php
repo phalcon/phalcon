@@ -32,9 +32,6 @@ use function explode;
  */
 class Connection extends AbstractConnection
 {
-    /**
-     * @var array
-     */
     protected array $arguments = [];
 
     /**
@@ -42,13 +39,6 @@ class Connection extends AbstractConnection
      *
      * This overrides the parent so that it can take connection attributes as a
      * constructor parameter, and set them after connection.
-     *
-     * @param string            $dsn
-     * @param string            $username
-     * @param string            $password
-     * @param array             $options
-     * @param array             $queries
-     * @param ProfilerInterface $profiler
      */
     public function __construct(
         string $dsn,
@@ -94,8 +84,6 @@ class Connection extends AbstractConnection
 
     /**
      * The purpose of this method is to hide sensitive data from stack traces.
-     *
-     * @return array
      */
     public function __debugInfo(): array
     {

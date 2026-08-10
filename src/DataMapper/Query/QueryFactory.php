@@ -32,8 +32,6 @@ class QueryFactory
 
     /**
      * QueryFactory constructor.
-     *
-     * @param string $selectClass
      */
     public function __construct(string $selectClass = "")
     {
@@ -46,8 +44,6 @@ class QueryFactory
 
     /**
      * Create a new Bind object
-     *
-     * @return Bind
      */
     public function newBind(): Bind
     {
@@ -56,10 +52,6 @@ class QueryFactory
 
     /**
      * Create a new Delete object
-     *
-     * @param Connection $connection
-     *
-     * @return Delete
      */
     public function newDelete(Connection $connection): Delete
     {
@@ -68,10 +60,6 @@ class QueryFactory
 
     /**
      * Create a new Insert object
-     *
-     * @param Connection $connection
-     *
-     * @return Insert
      */
     public function newInsert(Connection $connection): Insert
     {
@@ -80,10 +68,6 @@ class QueryFactory
 
     /**
      * Create a new Select object
-     *
-     * @param Connection $connection
-     *
-     * @return Select
      */
     public function newSelect(Connection $connection): Select
     {
@@ -94,10 +78,6 @@ class QueryFactory
 
     /**
      * Create a new Update object
-     *
-     * @param Connection $connection
-     *
-     * @return Update
      */
     public function newUpdate(Connection $connection): Update
     {

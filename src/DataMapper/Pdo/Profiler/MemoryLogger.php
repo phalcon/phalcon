@@ -31,51 +31,28 @@ use function strtr;
  */
 class MemoryLogger implements LoggerInterface
 {
-    /**
-     * @var array
-     */
     protected array $messages = [];
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function alert(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::ALERT, $message, $context);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function critical(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::CRITICAL, $message, $context);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function debug(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::DEBUG, $message, $context);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function emergency(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::EMERGENCY, $message, $context);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function error(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::ERROR, $message, $context);
@@ -83,10 +60,6 @@ class MemoryLogger implements LoggerInterface
 
     /**
      * Returns an adapter from the stack
-     *
-     * @param string $name The name of the adapter
-     *
-     * @return AdapterInterface
      */
     public function getAdapter(string $name): AdapterInterface
     {
@@ -95,8 +68,6 @@ class MemoryLogger implements LoggerInterface
 
     /**
      * Returns the adapter stack array
-     *
-     * @return AdapterInterface[]
      */
     public function getAdapters(): array
     {
@@ -113,8 +84,6 @@ class MemoryLogger implements LoggerInterface
 
     /**
      * Returns the logged messages.
-     *
-     * @return array
      */
     public function getMessages(): array
     {
@@ -129,10 +98,6 @@ class MemoryLogger implements LoggerInterface
         return "memory logger";
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function info(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::INFO, $message, $context);
@@ -140,12 +105,8 @@ class MemoryLogger implements LoggerInterface
 
     /**
      * Logs a message.
-     *
-     * @param mixed             $level
-     * @param string|Stringable $message
-     * @param array             $context
      */
-    public function log($level, string | Stringable $message, array $context = []): void
+    public function log(mixed $level, string | Stringable $message, array $context = []): void
     {
         $replace = [];
 
@@ -156,28 +117,16 @@ class MemoryLogger implements LoggerInterface
         $this->messages[] = strtr((string)$message, $replace);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function notice(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::NOTICE, $message, $context);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function trace(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::TRACE, $message, $context);
     }
 
-    /**
-     * @param string|Stringable $message
-     * @param mixed[]           $context
-     */
     public function warning(string | Stringable $message, array $context = []): void
     {
         $this->log(Enum::WARNING, $message, $context);

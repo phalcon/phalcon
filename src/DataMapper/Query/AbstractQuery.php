@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Query;
 
 use PDO;
+use PDOStatement;
 use Phalcon\DataMapper\Pdo\Connection;
 
 use function array_keys;
@@ -29,26 +30,12 @@ use function implode;
  */
 abstract class AbstractQuery
 {
-    /**
-     * @var Bind
-     */
     protected Bind $bind;
-
-    /**
-     * @var Connection
-     */
     protected Connection $connection;
-
-    /**
-     * @var array
-     */
     protected array $store = [];
 
     /**
      * AbstractQuery constructor.
-     *
-     * @param Connection $connection
-     * @param Bind       $bind
      */
     public function __construct(Connection $connection, Bind $bind)
     {
@@ -61,29 +48,18 @@ abstract class AbstractQuery
 
     /**
      * Binds a value inline
-     *
-     * @param mixed $value
-     * @param int   $type
-     *
-     * @return string
      */
-    public function bindInline($value, int $type = -1): string
+    public function bindInline(mixed $value, int $type = -1): string
     {
         return $this->bind->bindInline($value, $type);
     }
 
     /**
      * Binds a value - auto-detects the type if necessary
-     *
-     * @param string $key
-     * @param mixed  $value
-     * @param int    $type
-     *
-     * @return AbstractQuery
      */
     public function bindValue(
         string $key,
-        $value,
+        mixed $value,
         int $type = -1
     ): AbstractQuery {
         $this->bind->setValue($key, $value, $type);
@@ -93,10 +69,6 @@ abstract class AbstractQuery
 
     /**
      * Binds an array of values
-     *
-     * @param array $values
-     *
-     * @return AbstractQuery
      */
     public function bindValues(array $values): AbstractQuery
     {
@@ -107,8 +79,6 @@ abstract class AbstractQuery
 
     /**
      * Returns all the bound values
-     *
-     * @return array
      */
     public function getBindValues(): array
     {
@@ -117,17 +87,13 @@ abstract class AbstractQuery
 
     /**
      * Return the generated statement
-     *
-     * @return string
      */
     abstract public function getStatement(): string;
 
     /**
      * Performs a statement in the connection
-     *
-     * @return \PDOStatement
      */
-    public function perform()
+    public function perform(): PDOStatement
     {
         return $this->connection->perform(
             $this->getStatement(),
@@ -137,11 +103,6 @@ abstract class AbstractQuery
 
     /**
      * Quotes the identifier
-     *
-     * @param string $name
-     * @param int    $type
-     *
-     * @return string
      */
     public function quoteIdentifier(
         string $name,

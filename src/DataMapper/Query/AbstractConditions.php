@@ -33,16 +33,10 @@ abstract class AbstractConditions extends AbstractQuery
 {
     /**
      * Sets a `AND` for a `WHERE` condition
-     *
-     * @param string     $condition
-     * @param mixed|null $value
-     * @param int        $type
-     *
-     * @return AbstractConditions
      */
     public function andWhere(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): AbstractConditions {
         $this->where($condition, $value, $type);
@@ -52,16 +46,10 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Concatenates to the most recent `WHERE` clause
-     *
-     * @param string     $condition
-     * @param mixed|null $value
-     * @param int        $type
-     *
-     * @return AbstractConditions
      */
     public function appendWhere(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): AbstractConditions {
         $this->appendCondition("WHERE", $condition, $value, $type);
@@ -71,10 +59,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Sets the `LIMIT` clause
-     *
-     * @param int $limit
-     *
-     * @return AbstractConditions
      */
     public function limit(int $limit): AbstractConditions
     {
@@ -85,10 +69,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Sets the `OFFSET` clause
-     *
-     * @param int $offset
-     *
-     * @return AbstractConditions
      */
     public function offset(int $offset): AbstractConditions
     {
@@ -99,10 +79,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Sets the `ORDER BY`
-     *
-     * @param array|string $orderBy
-     *
-     * @return AbstractConditions
      */
     public function orderBy($orderBy): AbstractConditions
     {
@@ -113,16 +89,10 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Sets a `OR` for a `WHERE` condition
-     *
-     * @param string     $condition
-     * @param mixed|null $value
-     * @param int        $type
-     *
-     * @return AbstractConditions
      */
     public function orWhere(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): AbstractConditions {
         $this->addCondition("WHERE", "OR ", $condition, $value, $type);
@@ -132,16 +102,10 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Sets a `WHERE` condition
-     *
-     * @param string     $condition
-     * @param mixed|null $value
-     * @param int        $type
-     *
-     * @return AbstractConditions
      */
     public function where(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): AbstractConditions {
         $this->addCondition("WHERE", "AND ", $condition, $value, $type);
@@ -149,11 +113,6 @@ abstract class AbstractConditions extends AbstractQuery
         return $this;
     }
 
-    /**
-     * @param array $columnsValues
-     *
-     * @return AbstractConditions
-     */
     public function whereEquals(array $columnsValues): AbstractConditions
     {
         foreach ($columnsValues as $key => $value) {
@@ -173,18 +132,12 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Appends a conditional
-     *
-     * @param string     $store
-     * @param string     $andor
-     * @param string     $condition
-     * @param mixed|null $value
-     * @param int        $type
      */
     protected function addCondition(
         string $store,
         string $andor,
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): void {
         if (!empty($value)) {
@@ -200,16 +153,11 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Concatenates a conditional
-     *
-     * @param string $store
-     * @param string $condition
-     * @param mixed  $value
-     * @param int    $type
      */
     protected function appendCondition(
         string $store,
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): void {
         if (!empty($value)) {
@@ -227,10 +175,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds a `BY` list
-     *
-     * @param string $type
-     *
-     * @return string
      */
     protected function buildBy(string $type): string
     {
@@ -244,10 +188,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds the conditional string
-     *
-     * @param string $type
-     *
-     * @return string
      */
     protected function buildCondition(string $type): string
     {
@@ -261,8 +201,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds the `LIMIT` clause
-     *
-     * @return string
      */
     protected function buildLimit(): string
     {
@@ -279,8 +217,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds the `LIMIT` clause for all drivers
-     *
-     * @return string
      */
     protected function buildLimitCommon(): string
     {
@@ -303,8 +239,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds the early `LIMIT` clause - MS SQLServer
-     *
-     * @return string
      */
     protected function buildLimitEarly(): string
     {
@@ -323,8 +257,6 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds the `LIMIT` clause for MSSQLServer
-     *
-     * @return string
      */
     protected function buildLimitSqlsrv(): string
     {
@@ -340,11 +272,8 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Processes a value (array or string) and merges it with the store
-     *
-     * @param string       $store
-     * @param array|string $data
      */
-    protected function processValue(string $store, $data): void
+    protected function processValue(string $store, mixed $data): void
     {
         if (is_string($data)) {
             $data = [$data];

@@ -31,38 +31,26 @@ class ConnectionLocator implements ConnectionLocatorInterface
 {
     /**
      * A default Connection connection factory/instance.
-     *
-     * @var ConnectionInterface
      */
     protected ConnectionInterface $master;
 
     /**
      * A registry of Connection "read" factories/instances.
-     *
-     * @var array
      */
     protected array $read = [];
 
     /**
      * A registry of Connection "write" factories/instances.
-     *
-     * @var array
      */
     protected array $write = [];
 
     /**
      * A collection of resolved instances
-     *
-     * @var array
      */
     private array $instances = [];
 
     /**
      * Constructor.
-     *
-     * @param ConnectionInterface $master
-     * @param array               $read
-     * @param array               $write
      */
     public function __construct(
         ConnectionInterface $master,
@@ -82,8 +70,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
 
     /**
      * Returns the default connection object.
-     *
-     * @return ConnectionInterface
      */
     public function getMaster(): ConnectionInterface
     {
@@ -94,11 +80,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * Returns a read connection by name; if no name is given, picks a
      * random connection; if no read connections are present, returns the
      * default connection.
-     *
-     * @param string $name
-     *
-     * @return ConnectionInterface
-     * @throws ConnectionNotFound
      */
     public function getRead(string $name = ""): ConnectionInterface
     {
@@ -109,11 +90,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
      * Returns a write connection by name; if no name is given, picks a
      * random connection; if no write connections are present, returns the
      * default connection.
-     *
-     * @param string $name
-     *
-     * @return ConnectionInterface
-     * @throws ConnectionNotFound
      */
     public function getWrite(string $name = ""): ConnectionInterface
     {
@@ -122,10 +98,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
 
     /**
      * Sets the default connection factory.
-     *
-     * @param ConnectionInterface $callable
-     *
-     * @return static
      */
     public function setMaster(ConnectionInterface $callableObject): static
     {
@@ -136,11 +108,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
 
     /**
      * Sets a read connection factory by name.
-     *
-     * @param string   $name
-     * @param callable $callable
-     *
-     * @return static
      */
     public function setRead(
         string $name,
@@ -153,11 +120,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
 
     /**
      * Sets a write connection factory by name.
-     *
-     * @param string   $name
-     * @param callable $callable
-     *
-     * @return static
      */
     public function setWrite(
         string $name,
@@ -170,12 +132,6 @@ class ConnectionLocator implements ConnectionLocatorInterface
 
     /**
      * Returns a connection by name.
-     *
-     * @param string $type
-     * @param string $name
-     *
-     * @return ConnectionInterface
-     * @throws ConnectionNotFound
      */
     protected function getConnection(
         string $type,
