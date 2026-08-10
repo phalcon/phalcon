@@ -68,7 +68,7 @@ class RedisContext extends AbstractContext
 
         $result = $this->redis->brPop([$this->listKey($queueName)], $timeout);
 
-        if (is_array($result) && count($result) >= 2) {
+        if (is_array($result) && count($result) >= 2 && is_scalar($result[1])) {
             return $this->buildMessage((string) $result[1]);
         }
 
@@ -190,6 +190,10 @@ class RedisContext extends AbstractContext
         }
 
         foreach ($due as $member) {
+            if (!is_string($member)) {
+                continue;
+            }
+
             if (1 === $this->redis->zRem($delayedKey, $member)) {
                 $position = strpos($member, "|");
                 $payload  = substr($member, $position + 1);

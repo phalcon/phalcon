@@ -60,7 +60,7 @@ class RedisProducer extends AbstractProducer
 
     public function setDeliveryDelay(mixed $deliveryDelay = null): ProducerInterface
     {
-        $this->deliveryDelay = $deliveryDelay === null ? null : (int) $deliveryDelay;
+        $this->deliveryDelay = is_scalar($deliveryDelay) ? (int) $deliveryDelay : null;
 
         return $this;
     }

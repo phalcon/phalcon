@@ -31,6 +31,7 @@ use Phalcon\Events\AbstractEventsAware;
 use Phalcon\Events\EventsAwareInterface;
 use Throwable;
 
+use function is_scalar;
 use function microtime;
 use function usleep;
 
@@ -47,7 +48,7 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
     /**
      * Bound processors keyed by queue name.
      *
-     * @var array
+     * @var array<string, BoundProcessor>
      */
     protected array $bindings = [];
     /**
@@ -189,7 +190,7 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
      */
     private function handleResult(ConsumerInterface $consumer, MessageInterface $message, mixed $result): void
     {
-        $outcome = (string) $result;
+        $outcome = is_scalar($result) ? (string) $result : "";
 
         if ($outcome === ProcessorInterface::ACK) {
             $consumer->acknowledge($message);

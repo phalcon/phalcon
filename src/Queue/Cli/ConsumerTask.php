@@ -24,10 +24,16 @@ namespace Phalcon\Queue\Cli;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Task;
+use Phalcon\Config\Config;
+use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Queue\Processor as ProcessorInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Queue\Consumer\QueueConsumer;
 use Phalcon\Queue\Consumer\Worker;
 use Phalcon\Queue\Consumer\WorkerOptions;
 use Phalcon\Queue\QueueFactory;
+
+use function is_scalar;
 
 /**
  * Optional CLI runner for a queue worker - the only class coupled to
@@ -48,34 +54,67 @@ class ConsumerTask extends Task
 {
     public function mainAction(): int
     {
+        /** @var DiInterface $di */
         $di = $this->getDI();
 
         /** @var Dispatcher $dispatcher */
         $dispatcher = $di->get('dispatcher');
         /** @var QueueFactory $queueFactory */
         $queueFactory = $di->get('queueFactory');
+        /** @var Config $config */
+        $config = $di->get('config');
 
         $params    = $dispatcher->getParams();
-        $queueName = (string) ($params[0] ?? '');
-        $processor = (string) ($params[1] ?? '');
+        $queueName = $this->stringParam($params, 0);
+        $processor = $this->stringParam($params, 1);
 
-        $context  = $queueFactory->load($di->get('config')->queue);
+        /** @var array<string, mixed>|ConfigInterface $queueConfig */
+        $queueConfig = $config->get('queue');
+
+        $context  = $queueFactory->load($queueConfig);
         $consumer = new QueueConsumer($context);
+
+        /** @var ProcessorInterface $processorService */
+        $processorService = $di->get($processor);
 
         $consumer->bind(
             $context->createQueue($queueName),
-            $di->get($processor)
+            $processorService
         );
 
         $options = new WorkerOptions(
-            (int) $dispatcher->getOption('max-messages', null, 0),
-            (int) $dispatcher->getOption('max-time', null, 0),
-            (int) $dispatcher->getOption('max-memory', null, 0),
-            (int) $dispatcher->getOption('jitter', null, 0),
+            $this->intOption($dispatcher, 'max-messages'),
+            $this->intOption($dispatcher, 'max-time'),
+            $this->intOption($dispatcher, 'max-memory'),
+            $this->intOption($dispatcher, 'jitter'),
         );
 
         (new Worker($consumer, $options))->run();
 
         return 0;
+    }
+
+    /**
+     * Reads a CLI option as an int, defaulting to 0 when it is absent or
+     * cannot be expressed as a number.
+     */
+    private function intOption(Dispatcher $dispatcher, string $name): int
+    {
+        $value = $dispatcher->getOption($name, null, 0);
+
+        return is_scalar($value) ? (int) $value : 0;
+    }
+
+    /**
+     * Reads a positional CLI argument as a string, defaulting to an empty
+     * string when it is absent or cannot be expressed as one.
+     *
+     * @param array<int|string, mixed> $params
+     */
+    private function stringParam(array $params, int $index): string
+    {
+        $value = $params[$index] ?? '';
+
+        return is_scalar($value) ? (string) $value : '';
     }
 }

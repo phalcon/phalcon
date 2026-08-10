@@ -24,10 +24,12 @@ namespace Phalcon\Queue\Adapter\Redis;
 
 use Phalcon\Contracts\Queue\ConnectionFactory as ConnectionFactoryInterface;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
+use Phalcon\Contracts\Queue\QueueTypes;
 use Phalcon\Queue\Exceptions\Exception;
 use Phalcon\Storage\Adapter\Redis as StorageRedis;
 use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
+use Redis as RedisService;
 
 use function array_merge;
 
@@ -47,9 +49,14 @@ use function array_merge;
  *   - index:        database index to SELECT (default 0).
  *   - prefix:       key prefix for every queue (default "phalcon_queue:").
  *   - pollInterval: milliseconds between subscription poll passes (default 200).
+ *
+ * @phpstan-import-type queue_redis_options from QueueTypes
  */
 class RedisConnectionFactory implements ConnectionFactoryInterface
 {
+    /**
+     * @phpstan-param queue_redis_options $options
+     */
     public function __construct(protected array $options = [])
     {
     }
@@ -83,6 +90,7 @@ class RedisConnectionFactory implements ConnectionFactoryInterface
          * adapter honors the QueueThrowable contract.
          */
         try {
+            /** @var RedisService $redis */
             $redis = $adapter->getAdapter();
         } catch (StorageException $exception) {
             throw new Exception($exception->getMessage(), (int) $exception->getCode(), $exception);

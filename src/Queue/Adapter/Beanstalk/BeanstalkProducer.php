@@ -86,14 +86,14 @@ class BeanstalkProducer extends AbstractProducer
 
     public function setDeliveryDelay(mixed $deliveryDelay = null): ProducerInterface
     {
-        $this->deliveryDelay = $deliveryDelay === null ? null : (int) $deliveryDelay;
+        $this->deliveryDelay = is_scalar($deliveryDelay) ? (int) $deliveryDelay : null;
 
         return $this;
     }
 
     public function setPriority(mixed $priority = null): ProducerInterface
     {
-        $this->priority = $priority === null ? null : (int) $priority;
+        $this->priority = is_scalar($priority) ? (int) $priority : null;
 
         return $this;
     }

@@ -24,6 +24,7 @@ namespace Phalcon\Queue\Adapter\Stream;
 
 use Phalcon\Contracts\Queue\ConnectionFactory as ConnectionFactoryInterface;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
+use Phalcon\Contracts\Queue\QueueTypes;
 
 use function sys_get_temp_dir;
 
@@ -34,9 +35,14 @@ use function sys_get_temp_dir;
  *   - storageDir:   directory holding the queue files (default: a private
  *                   "phalcon_queue" subdirectory of the system temp dir).
  *   - pollInterval: milliseconds between consumer poll attempts (default 200).
+ *
+ * @phpstan-import-type queue_stream_options from QueueTypes
  */
 class StreamConnectionFactory implements ConnectionFactoryInterface
 {
+    /**
+     * @phpstan-param queue_stream_options $options
+     */
     public function __construct(protected array $options = [])
     {
     }

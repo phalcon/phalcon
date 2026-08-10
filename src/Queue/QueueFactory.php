@@ -24,12 +24,18 @@ namespace Phalcon\Queue;
 
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
+use Phalcon\Contracts\Queue\QueueTypes;
 use Phalcon\Factory\AbstractConfigFactory;
 use Phalcon\Queue\Exceptions\Exception;
+
+use function is_array;
+use function is_scalar;
 
 /**
  * Builds a queue Context from the standard Phalcon config shape. Mirrors
  * Phalcon\Cache\CacheFactory.
+ *
+ * @phpstan-import-type queue_connection_options from QueueTypes
  */
 class QueueFactory extends AbstractConfigFactory
 {
@@ -59,11 +65,22 @@ class QueueFactory extends AbstractConfigFactory
         $name    = $config["adapter"];
         $options = $config["options"] ?? [];
 
-        return $this->newInstance($name, $options);
+        if (!is_array($options)) {
+            $options = [];
+        }
+
+        /** @phpstan-var queue_connection_options $options */
+
+        return $this->newInstance(
+            is_scalar($name) ? (string) $name : "",
+            $options
+        );
     }
 
     /**
      * Builds a Context for the named adapter.
+     *
+     * @phpstan-param queue_connection_options $options
      */
     public function newInstance(string $name, array $options = []): ContextInterface
     {

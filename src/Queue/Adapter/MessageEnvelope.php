@@ -23,8 +23,10 @@ declare(strict_types=1);
 namespace Phalcon\Queue\Adapter;
 
 use Phalcon\Contracts\Queue\Message as MessageInterface;
+use Phalcon\Contracts\Queue\QueueTypes;
 
 use function is_array;
+use function is_scalar;
 use function serialize;
 use function unserialize;
 
@@ -34,6 +36,10 @@ use function unserialize;
  * Beanstalk). Centralizes the wire shape, the object-injection-safe
  * `allowed_classes => false` guard, and the missing-key defaults, so each
  * adapter only supplies its own concrete message factory around `decode()`.
+ *
+ * @phpstan-import-type queue_message_envelope from QueueTypes
+ * @phpstan-import-type queue_message_headers from QueueTypes
+ * @phpstan-import-type queue_message_properties from QueueTypes
  */
 class MessageEnvelope
 {
@@ -41,7 +47,7 @@ class MessageEnvelope
      * Decodes a serialized payload into a normalized {body, properties,
      * headers} array, or null when the payload is not a valid envelope.
      *
-     * @return array{body: mixed, properties: array, headers: array}|null
+     * @phpstan-return queue_message_envelope|null
      */
     public static function decode(string $payload): ?array
     {
@@ -55,15 +61,17 @@ class MessageEnvelope
         $properties = [];
         $headers    = [];
 
-        if (isset($data["body"])) {
-            $body = $data["body"];
+        if (isset($data["body"]) && is_scalar($data["body"])) {
+            $body = (string) $data["body"];
         }
 
-        if (isset($data["properties"])) {
+        if (isset($data["properties"]) && is_array($data["properties"])) {
+            /** @phpstan-var queue_message_properties $properties */
             $properties = $data["properties"];
         }
 
-        if (isset($data["headers"])) {
+        if (isset($data["headers"]) && is_array($data["headers"])) {
+            /** @phpstan-var queue_message_headers $headers */
             $headers = $data["headers"];
         }
 

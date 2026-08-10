@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Phalcon\Queue;
 
 use Phalcon\Contracts\Queue\ConnectionFactory as ConnectionFactoryInterface;
+use Phalcon\Contracts\Queue\QueueTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Queue\Adapter\Beanstalk\BeanstalkConnectionFactory;
 use Phalcon\Queue\Adapter\Memory\MemoryConnectionFactory;
@@ -33,11 +34,15 @@ use Phalcon\Queue\Exceptions\Exception;
 /**
  * Maps an adapter name to its ConnectionFactory. Mirrors
  * Phalcon\Storage\AdapterFactory.
+ *
+ * @phpstan-import-type queue_connection_options from QueueTypes
  */
 class AdapterFactory extends AbstractFactory
 {
     /**
      * AdapterFactory constructor.
+     *
+     * @phpstan-param array<string, class-string<ConnectionFactoryInterface>> $services
      */
     public function __construct(array $services = [])
     {
@@ -46,9 +51,12 @@ class AdapterFactory extends AbstractFactory
 
     /**
      * Creates a new ConnectionFactory for the named adapter.
+     *
+     * @phpstan-param queue_connection_options $options
      */
     public function newInstance(string $name, array $options = []): ConnectionFactoryInterface
     {
+        /** @var class-string<ConnectionFactoryInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition($options);

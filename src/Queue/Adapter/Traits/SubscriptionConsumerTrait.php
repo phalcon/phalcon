@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Phalcon\Queue\Adapter\Traits;
 
 use Phalcon\Contracts\Queue\Consumer as ConsumerInterface;
+use Phalcon\Contracts\Queue\QueueTypes;
 
 use function call_user_func;
 use function microtime;
@@ -34,6 +35,8 @@ use function usleep;
  * callback returning false stops consumption. The loop relies only on the
  * consumer's `receiveNoWait()`, so it is transport-agnostic. Concrete adapters
  * keep just the constructor that captures their context and poll interval.
+ *
+ * @phpstan-import-type queue_subscriptions from QueueTypes
  */
 trait SubscriptionConsumerTrait
 {
@@ -44,6 +47,8 @@ trait SubscriptionConsumerTrait
 
     /**
      * Subscriptions keyed by queue name: [consumer, callback].
+     *
+     * @phpstan-var queue_subscriptions
      */
     protected array $subscriptions = [];
 

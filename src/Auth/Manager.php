@@ -23,7 +23,6 @@ use Phalcon\Auth\Exceptions\DefaultGuardNotRegistered;
 use Phalcon\Auth\Exceptions\DoesNotImplement;
 use Phalcon\Auth\Exceptions\GuardNotDefined;
 use Phalcon\Contracts\Auth\Access\Access;
-use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Auth\Guard\Guard;

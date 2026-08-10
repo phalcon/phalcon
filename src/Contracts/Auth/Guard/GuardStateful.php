@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Auth\Guard;
 
-use Phalcon\Contracts\Auth\Adapter\Adapter;
 use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\AuthUser;
 
