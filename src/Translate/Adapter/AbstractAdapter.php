@@ -25,9 +25,7 @@ use Phalcon\Translate\InterpolatorFactory;
  * @phpstan-import-type translate_adapter_options from TranslateTypes
  * @phpstan-import-type translate_placeholders from TranslateTypes
  *
- * @template TKey of string
- * @template TValue of string
- * @implements ArrayAccess<TKey, TValue>
+ * @implements ArrayAccess<string, string>
  */
 abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
 {
@@ -84,13 +82,12 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     /**
      * Returns the translation related to the given key
      *
-     * @param mixed $offset
+     * @param string $offset
      *
      * @return string
      */
-    public function offsetGet(mixed $offset): mixed
+    public function offsetGet(mixed $offset): string
     {
-        /** @var string $offset */
         return $this->query($offset);
     }
 

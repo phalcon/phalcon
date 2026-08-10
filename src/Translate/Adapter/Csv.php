@@ -26,8 +26,6 @@ use function is_resource;
  * @phpstan-import-type translate_csv_options from TranslateTypes
  * @phpstan-import-type translate_data from TranslateTypes
  * @phpstan-import-type translate_placeholders from TranslateTypes
- *
- * @extends AbstractAdapter<string, string>
  */
 class Csv extends AbstractAdapter
 {

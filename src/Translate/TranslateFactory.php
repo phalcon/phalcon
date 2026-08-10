@@ -21,6 +21,7 @@ use Phalcon\Translate\Adapter\Csv;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\Adapter\NativeArray;
 use Phalcon\Translate\Exceptions\TranslatorNotRegistered;
+use Throwable;
 
 /**
  * @property InterpolatorFactory $interpolator
@@ -78,7 +79,7 @@ class TranslateFactory extends AbstractFactory
     }
 
     /**
-     * @return string
+     * @return class-string<Throwable>
      */
     protected function getExceptionClass(): string
     {

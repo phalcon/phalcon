@@ -54,8 +54,6 @@ use const LC_ALL;
  * @phpstan-import-type translate_gettext_defaults from TranslateTypes
  * @phpstan-import-type translate_gettext_options from TranslateTypes
  * @phpstan-import-type translate_placeholders from TranslateTypes
- *
- * @extends AbstractAdapter<string, string>
  */
 class Gettext extends AbstractAdapter
 {
@@ -253,10 +251,6 @@ class Gettext extends AbstractAdapter
 
     /**
      * Changes the current domain (i.e. the translation file)
-     *
-     * @param string|null $domain
-     *
-     * @return string
      */
     public function setDomain(string | null $domain = null): string
     {

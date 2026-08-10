@@ -27,8 +27,6 @@ use function is_array;
  * @phpstan-import-type translate_array_options from TranslateTypes
  * @phpstan-import-type translate_data from TranslateTypes
  * @phpstan-import-type translate_placeholders from TranslateTypes
- *
- * @extends AbstractAdapter<string, string>
  */
 class NativeArray extends AbstractAdapter
 {
