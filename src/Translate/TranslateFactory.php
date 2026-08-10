@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate;
 
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Translate\TranslateTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\Csv;
@@ -24,19 +25,7 @@ use Phalcon\Translate\Exceptions\TranslatorNotRegistered;
 /**
  * @property InterpolatorFactory $interpolator
  *
- * @psalm-type TConfig array{
- *      adapter: string,
- *      options?: array{
- *          content: string,
- *          delimiter: string,
- *          enclosure: string,
- *          locale: string,
- *          defaultDomain: string,
- *          directory: string,
- *          category: string,
- *          triggerError: bool,
- *      }
- *  }
+ * @phpstan-import-type translate_factory_config from TranslateTypes
  */
 class TranslateFactory extends AbstractFactory
 {
@@ -53,17 +42,21 @@ class TranslateFactory extends AbstractFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param ConfigInterface|TConfig $config
+     * @phpstan-param ConfigInterface|translate_factory_config $config
      *
      * @return AdapterInterface
      * @throws Exception
      */
     public function load(mixed $config): AdapterInterface
     {
-        /** @var TConfig $config */
-        $config  = $this->checkConfig($config);
-        $config  = $this->checkConfigElement($config, "adapter");
-        $name    = (string)$config['adapter'];
+        $config = $this->checkConfig($config);
+
+        /** @phpstan-var translate_factory_config $config */
+        $config = $this->checkConfigElement($config, "adapter");
+
+        $name = (string)$config['adapter'];
+
+        /** @var array<string, mixed> $options */
         $options = isset($config['options']) ? (array)$config['options'] : [];
 
         return $this->newInstance($name, $options);
@@ -78,6 +71,7 @@ class TranslateFactory extends AbstractFactory
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
+        /** @var class-string<AdapterInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition($this->interpolator, $options);

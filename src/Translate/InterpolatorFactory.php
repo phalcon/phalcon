@@ -38,6 +38,7 @@ class InterpolatorFactory extends AbstractFactory
      */
     public function newInstance(string $name): InterpolatorInterface
     {
+        /** @var class-string<InterpolatorInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition();

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Adapter;
 
+use Phalcon\Contracts\Translate\TranslateTypes;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\MissingGettextExtension;
@@ -49,12 +50,12 @@ use const LC_ALL;
  *
  * Allows translations using gettext
  *
- * @phpstan-type TOptions array{
- *      locale?: string,
- *      defaultDomain?: string,
- *      directory?: string,
- *      category?: string
- * }
+ * @phpstan-import-type translate_data from TranslateTypes
+ * @phpstan-import-type translate_gettext_defaults from TranslateTypes
+ * @phpstan-import-type translate_gettext_options from TranslateTypes
+ * @phpstan-import-type translate_placeholders from TranslateTypes
+ *
+ * @extends AbstractAdapter<string, string>
  */
 class Gettext extends AbstractAdapter
 {
@@ -64,7 +65,7 @@ class Gettext extends AbstractAdapter
     protected string $defaultDomain = "messages";
 
     /**
-     * @var array<string, string>|string
+     * @phpstan-var translate_data|string
      */
     protected array | string $directory;
 
@@ -77,7 +78,7 @@ class Gettext extends AbstractAdapter
      * Gettext constructor.
      *
      * @param InterpolatorFactory $interpolator
-     * @param TOptions            $options
+     * @phpstan-param translate_gettext_options $options
      *
      * @throws Exception
      * @throws MissingGettextExtension
@@ -126,7 +127,7 @@ class Gettext extends AbstractAdapter
     }
 
     /**
-     * @phpstan-return array<string, string>|string
+     * @phpstan-return translate_data|string
      */
     public function getDirectory(): array | string
     {
@@ -151,7 +152,7 @@ class Gettext extends AbstractAdapter
      * Some languages have more than one form for plural messages dependent on
      * the count.
      *
-     * @phpstan-param array<string, string> $placeholders
+     * @phpstan-param translate_placeholders $placeholders
      *
      * @return string
      */
@@ -178,7 +179,7 @@ class Gettext extends AbstractAdapter
      * $translator->query("你好 %name%！", ["name" => "Phalcon"]);
      * ```
      *
-     * @phpstan-param array<string, string> $placeholders
+     * @phpstan-param translate_placeholders $placeholders
      *
      * @return string
      * @throws Exception
@@ -230,7 +231,7 @@ class Gettext extends AbstractAdapter
      * );
      * ```
      *
-     * @param array<string, string>|string $directory
+     * @phpstan-param translate_data|string $directory
      */
     public function setDirectory($directory): void
     {
@@ -280,7 +281,7 @@ class Gettext extends AbstractAdapter
      * $gettext->setLocale(LC_ALL, ["de_DE@euro", "de_DE", "de", "ge"]);
      * ```
      *
-     * @phpstan-param array<string, mixed> $localeArray
+     * @phpstan-param array<array-key, string> $localeArray
      *
      * @return false|string
      */
@@ -302,7 +303,7 @@ class Gettext extends AbstractAdapter
     /**
      * Gets default options
      *
-     * @phpstan-return array<string, mixed>
+     * @phpstan-return translate_gettext_defaults
      */
     protected function getOptionsDefault(): array
     {
@@ -315,7 +316,7 @@ class Gettext extends AbstractAdapter
     /**
      * Validator for constructor
      *
-     * @phpstan-param TOptions $options
+     * @phpstan-param translate_gettext_options $options
      *
      * @return void
      * @throws MissingRequiredParameter

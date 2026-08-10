@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Translate\Adapter;
 
+use Phalcon\Contracts\Translate\TranslateTypes;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\FileOpenError;
@@ -22,26 +23,25 @@ use Phalcon\Translate\InterpolatorFactory;
 use function is_resource;
 
 /**
- * @phpstan-type TOptions array{
- *      content?: string,
- *      delimiter?: string,
- *      enclosure?: string,
- *      escape?: string
- * }
+ * @phpstan-import-type translate_csv_options from TranslateTypes
+ * @phpstan-import-type translate_data from TranslateTypes
+ * @phpstan-import-type translate_placeholders from TranslateTypes
+ *
+ * @extends AbstractAdapter<string, string>
  */
 class Csv extends AbstractAdapter
 {
     use FileTrait;
 
     /**
-     * @var array<string, string>
+     * @phpstan-var translate_data
      */
     protected array $translate = [];
 
     /**
      * Csv constructor.
      *
-     * @phpstan-param TOptions            $options
+     * @phpstan-param translate_csv_options $options
      *
      * @throws Exception
      */
@@ -90,7 +90,7 @@ class Csv extends AbstractAdapter
     /**
      * Returns the translation related to the given key
      *
-     * @phpstan-param array<string, string> $placeholders
+     * @phpstan-param translate_placeholders $placeholders
      *
      * @return string
      * @throws Exception
@@ -105,7 +105,7 @@ class Csv extends AbstractAdapter
     /**
      * Returns the internal array
      *
-     * @return array<string, string>
+     * @phpstan-return translate_data
      */
     public function toArray(): array
     {
@@ -117,6 +117,8 @@ class Csv extends AbstractAdapter
      *
      * Lines whose first column begins with a `#` are treated as comments
      * and skipped.
+     *
+     * @phpstan-param int<0, max> $length
      *
      * @throws FileOpenError
      */
