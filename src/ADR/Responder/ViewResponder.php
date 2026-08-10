@@ -22,6 +22,8 @@ use Phalcon\Contracts\View\Renderer;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\ResponseInterface;
 
+use function is_scalar;
+
 /**
  * Renders a template from the payload and returns it as an HTML response.
  *
@@ -49,9 +51,11 @@ final class ViewResponder implements Responder
             $this->viewData($payload)
         );
 
+        $status = $payload->getStatus();
+
         $response
             ->setStatusCode(
-                $this->statusMapper->toHttpCode((string) $payload->getStatus())
+                $this->statusMapper->toHttpCode(is_scalar($status) ? (string) $status : '')
             )
             ->setContentType('text/html')
             ->setContent($html);
@@ -75,6 +79,8 @@ final class ViewResponder implements Responder
      * Flattens the payload into the variables handed to the template. The
      * extras travel as they are, so an action can hand the view whatever the
      * result should not carry.
+     *
+     * @return array{extras: mixed, result: mixed, messages: mixed, status: mixed}
      */
     protected function viewData(Payload $payload): array
     {

@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Input;
 
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\Http\AttributeRequest;
 
 use function array_merge;
@@ -29,14 +30,22 @@ use function str_contains;
  * into a single bag (later sources win). Extend it to build a typed, per-domain
  * input value object: the factories use late static binding, so a subclass's
  * `fromRequest()` / `fromArray()` return that subclass.
+ *
+ * @phpstan-import-type adr_input_data from ADRTypes
  */
 class Input
 {
+    /**
+     * @phpstan-param adr_input_data $data
+     */
     public function __construct(
         protected array $data = []
     ) {
     }
 
+    /**
+     * @phpstan-param adr_input_data $data
+     */
     public static function fromArray(array $data): static
     {
         return new static($data);
@@ -58,10 +67,15 @@ class Input
             }
         }
 
+        /** @phpstan-var adr_input_data $query */
+        $query = $request->getQuery();
+        /** @phpstan-var adr_input_data $post */
+        $post = $request->getPost();
+
         return new static(
             array_merge(
-                $request->getQuery(),
-                $request->getPost(),
+                $query,
+                $post,
                 $json,
                 $request->getAttributes()->all()
             )
@@ -78,6 +92,9 @@ class Input
         return isset($this->data[$key]);
     }
 
+    /**
+     * @phpstan-return adr_input_data
+     */
     public function toArray(): array
     {
         return $this->data;

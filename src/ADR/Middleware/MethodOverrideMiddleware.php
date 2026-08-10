@@ -21,6 +21,11 @@ use Phalcon\Contracts\ADR\Middleware;
 use Phalcon\Contracts\Http\AttributeRequest;
 use Phalcon\Http\ResponseInterface;
 
+use function in_array;
+use function is_scalar;
+use function method_exists;
+use function strtoupper;
+
 /**
  * Thin enabler for the native `_method` override.
  *
@@ -29,6 +34,9 @@ use Phalcon\Http\ResponseInterface;
  * turns that flag on, and only for a `POST` request whose `_method` names a
  * safe verb (`PUT`/`PATCH`/`DELETE`), so `_method` cannot spoof an arbitrary
  * method.
+ *
+ * The flag lives on `Phalcon\Http\Request`, not on the request contract, so a
+ * request implementation that does not carry it is simply passed through.
  */
 class MethodOverrideMiddleware implements Middleware
 {
@@ -42,9 +50,13 @@ class MethodOverrideMiddleware implements Middleware
         Handler $next
     ): ResponseInterface {
         if ('POST' === $request->getMethod()) {
-            $spoofed = strtoupper((string) $request->getPost('_method'));
+            $method  = $request->getPost('_method');
+            $spoofed = strtoupper(is_scalar($method) ? (string) $method : '');
 
-            if (in_array($spoofed, $this->allowed, true)) {
+            if (
+                in_array($spoofed, $this->allowed, true)
+                && method_exists($request, 'setHttpMethodParameterOverride')
+            ) {
                 $request->setHttpMethodParameterOverride(true);
             }
         }

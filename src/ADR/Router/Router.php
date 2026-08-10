@@ -24,6 +24,7 @@ namespace Phalcon\ADR\Router;
 
 use Phalcon\ADR\Exceptions\ActionDirectoryNotSet;
 use Phalcon\ADR\Exceptions\MethodNotAllowed;
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
 use Phalcon\Http\RequestInterface;
@@ -77,13 +78,18 @@ use Phalcon\Http\RequestInterface;
  * is a spelling difference, not a capability one - and it is not a deviation
  * from any standard. REST is Fielding's dissertation, not an RFC; RFC 3986 and
  * RFC 9110 both leave path structure entirely to the origin server.
+ *
+ * @phpstan-import-type adr_action_params from ADRTypes
+ * @phpstan-import-type adr_middleware_map from ADRTypes
+ * @phpstan-import-type adr_middleware_names from ADRTypes
+ * @phpstan-import-type adr_route_candidate from ADRTypes
  */
 final class Router implements RouterInterface
 {
     protected string $actionDirectory = '';
     protected string $baseNamespace = '';
     /**
-     * @var array<string, string[]>
+     * @phpstan-var adr_middleware_map
      */
     protected array $middlewareMap = [];
     protected string $wordSeparator = '-';
@@ -94,7 +100,10 @@ final class Router implements RouterInterface
      * Namespace descent consults the filesystem, so the list depends on the
      * action directory.
      *
-     * @return list<class-string>
+     * The names are derived, not resolved: a candidate is what the convention
+     * would call the class, whether or not that class exists.
+     *
+     * @return list<string>
      */
     public function candidatesFor(string $method, string $path): array
     {
@@ -210,6 +219,9 @@ final class Router implements RouterInterface
         return $this;
     }
 
+    /**
+     * @phpstan-param adr_middleware_map $middlewareMap
+     */
     public function setMiddlewareMap(array $middlewareMap): RouterInterface
     {
         $this->middlewareMap = $middlewareMap;
@@ -234,7 +246,7 @@ final class Router implements RouterInterface
      * and casting, so nothing new is asked of an Action - but declaring it now
      * decides routing, not just validation.
      *
-     * @return array<string, array<string, mixed>>
+     * @phpstan-return adr_action_params
      */
     protected function actionParams(string $className): array
     {
@@ -242,9 +254,15 @@ final class Router implements RouterInterface
             return [];
         }
 
-        $params = call_user_func([$className, 'params']);
+        /** @var callable(): mixed $callback */
+        $callback = [$className, 'params'];
 
-        return is_array($params) ? $params : [];
+        $declared = $callback();
+
+        /** @phpstan-var adr_action_params $params */
+        $params = is_array($declared) ? $declared : [];
+
+        return $params;
     }
 
     protected function camelize(string $segment): string
@@ -259,7 +277,7 @@ final class Router implements RouterInterface
     protected function decamelize(string $part): string
     {
         return strtolower(
-            preg_replace(
+            (string) preg_replace(
                 '/([a-z0-9])([A-Z])/',
                 '$1' . $this->wordSeparator . '$2',
                 $part
@@ -280,7 +298,7 @@ final class Router implements RouterInterface
      * dynamic begins - it no longer chooses between competing class shapes,
      * because there is only one.
      *
-     * @return list<array{0: string, 1: list<string>}>
+     * @phpstan-return list<adr_route_candidate>
      */
     protected function deriveCandidates(string $method, string $path): array
     {
@@ -335,19 +353,30 @@ final class Router implements RouterInterface
         );
     }
 
+    /**
+     * The first derived candidate whose class actually exists, together with
+     * the segments the walk did not consume.
+     *
+     * @phpstan-return array{0: class-string, 1: list<string>}|null
+     */
     protected function locate(string $method, string $path): ?array
     {
         $candidates = $this->deriveCandidates($method, $path);
 
         foreach ($candidates as $candidate) {
-            if (class_exists($candidate[0])) {
-                return $candidate;
+            $className = $candidate[0];
+
+            if (class_exists($className)) {
+                return [$className, $candidate[1]];
             }
         }
 
         return null;
     }
 
+    /**
+     * @phpstan-return adr_middleware_names
+     */
     protected function middlewareFor(string $className): array
     {
         $stacked = [];

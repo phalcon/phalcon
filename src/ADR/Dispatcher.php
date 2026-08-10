@@ -19,7 +19,9 @@ namespace Phalcon\ADR;
 use Phalcon\ADR\Events\Event;
 use Phalcon\ADR\Exceptions\NotAnAction;
 use Phalcon\Contracts\ADR\Action;
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Dispatcher as DispatcherInterface;
+use Phalcon\Contracts\ADR\Middleware;
 use Phalcon\Contracts\Container\Ioc\IocContainer;
 use Phalcon\Contracts\Events\Manager;
 use Phalcon\Contracts\Http\AttributeRequest;
@@ -33,14 +35,19 @@ use Phalcon\Http\ResponseInterface;
  * The container resolution is the one deliberate Service Locator: it uses the
  * resolve-only `IocContainer` contract, so a container swap is a two-method
  * adapter. Everything else is constructor-injected.
+ *
+ * @phpstan-import-type adr_middleware_names from ADRTypes
  */
 final class Dispatcher implements DispatcherInterface
 {
     /**
-     * @var array|null
+     * @var list<Middleware>|null
      */
     protected array | null $resolvedGlobal = null;
 
+    /**
+     * @phpstan-param adr_middleware_names $globalMiddleware
+     */
     public function __construct(
         protected IocContainer $container,
         protected Manager $events,
@@ -48,6 +55,10 @@ final class Dispatcher implements DispatcherInterface
     ) {
     }
 
+    /**
+     * @phpstan-param class-string          $actionClass
+     * @phpstan-param adr_middleware_names  $routeMiddleware
+     */
     public function dispatch(
         string $actionClass,
         AttributeRequest $request,
@@ -71,16 +82,27 @@ final class Dispatcher implements DispatcherInterface
         return $response;
     }
 
+    /**
+     * @phpstan-param adr_middleware_names $classes
+     *
+     * @return list<Middleware>
+     */
     protected function resolveAll(array $classes): array
     {
         $result = [];
         foreach ($classes as $className) {
-            $result[] = $this->container->getService($className);
+            /** @var Middleware $middleware */
+            $middleware = $this->container->getService($className);
+
+            $result[] = $middleware;
         }
 
         return $result;
     }
 
+    /**
+     * @return list<Middleware>
+     */
     protected function resolveGlobal(): array
     {
         if (null === $this->resolvedGlobal) {

@@ -21,8 +21,13 @@ use Phalcon\Contracts\ADR\Responder\Responder;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\ResponseInterface;
 
+use function is_scalar;
+
 /**
  * Sets the response HTTP status code from the payload status, via StatusMapper.
+ *
+ * The payload status is untyped, so anything that cannot be expressed as a
+ * string - an array, an object - leaves the response status code untouched.
  */
 class StatusResponder implements Responder
 {
@@ -46,7 +51,7 @@ class StatusResponder implements Responder
         Payload $payload
     ): ResponseInterface {
         $status = $payload->getStatus();
-        if (null !== $status) {
+        if (is_scalar($status)) {
             $response->setStatusCode($this->mapper->toHttpCode((string) $status));
         }
 

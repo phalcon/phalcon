@@ -18,13 +18,18 @@ namespace Phalcon\ADR\Responder\Formatter;
 
 use Phalcon\Contracts\ADR\Payload\Payload;
 use Phalcon\Contracts\ADR\Responder\Formatter\Formatter;
+use Stringable;
 
 use function is_array;
+use function is_scalar;
 use function json_encode;
 use function strpos;
 
 /**
  * Renders a payload as plain text.
+ *
+ * The payload is untyped, so anything that cannot be expressed as a string -
+ * an object without `__toString()`, for instance - renders as an empty body.
  */
 class TextFormatter implements Formatter
 {
@@ -47,6 +52,10 @@ class TextFormatter implements Formatter
 
         if (is_array($content)) {
             return (string) json_encode($content);
+        }
+
+        if (!is_scalar($content) && !($content instanceof Stringable)) {
+            return '';
         }
 
         return (string) $content;

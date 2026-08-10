@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Middleware;
 
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Handler;
 use Phalcon\Contracts\ADR\Middleware;
 use Phalcon\Contracts\Http\AttributeRequest;
@@ -28,6 +29,8 @@ use Phalcon\Traits\Support\Helper\Arr\GetTrait;
  * is configured, and only for requests whose `Origin` is on it. The allowed
  * origin is always echoed back explicitly, so credentials are never paired with
  * a wildcard origin. Preflight `OPTIONS` requests are answered directly.
+ *
+ * @phpstan-import-type adr_cors_config from ADRTypes
  */
 class CorsMiddleware implements Middleware
 {
@@ -36,32 +39,46 @@ class CorsMiddleware implements Middleware
     protected bool $allowCredentials = false;
 
     /**
-     * @var array
+     * @var list<string>
      */
     protected array $allowedHeaders = [];
 
     /**
-     * @var array
+     * @var list<string>
      */
     protected array $allowedMethods = [];
 
     /**
-     * @var array
+     * @var list<string>
      */
     protected array $allowedOrigins = [];
     protected int $maxAge = 0;
 
+    /**
+     * @phpstan-param adr_cors_config $config
+     */
     public function __construct(array $config = [])
     {
-        $this->allowedOrigins   = $this->getArrVal($config, 'origins', []);
-        $this->allowedMethods   = $this->getArrVal(
+        /** @var list<string> $origins */
+        $origins = $this->getArrVal($config, 'origins', []);
+        /** @var list<string> $methods */
+        $methods = $this->getArrVal(
             $config,
             'methods',
             ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
         );
-        $this->allowedHeaders   = $this->getArrVal($config, 'headers', ['Content-Type', 'Authorization']);
-        $this->allowCredentials = $this->getArrVal($config, 'credentials', false, 'bool');
-        $this->maxAge           = $this->getArrVal($config, 'maxAge', 0, 'int');
+        /** @var list<string> $headers */
+        $headers = $this->getArrVal($config, 'headers', ['Content-Type', 'Authorization']);
+        /** @var bool $credentials */
+        $credentials = $this->getArrVal($config, 'credentials', false, 'bool');
+        /** @var int $maxAge */
+        $maxAge = $this->getArrVal($config, 'maxAge', 0, 'int');
+
+        $this->allowedOrigins   = $origins;
+        $this->allowedMethods   = $methods;
+        $this->allowedHeaders   = $headers;
+        $this->allowCredentials = $credentials;
+        $this->maxAge           = $maxAge;
     }
 
     public function __invoke(AttributeRequest $request, Handler $next): ResponseInterface

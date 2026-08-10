@@ -23,6 +23,7 @@ declare(strict_types=1);
 namespace Phalcon\ADR\Router;
 
 use Phalcon\ADR\Exceptions\RouteNotFound;
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Router\AttributeFilter as AttributeFilterInterface;
 
 use function call_user_func;
@@ -37,19 +38,35 @@ use function preg_match;
  * the attributes; a declared parameter with no segment is skipped; surplus
  * segments pass through under their positional keys. An Action without
  * `params()` is returned unchanged.
+ *
+ * @phpstan-import-type adr_action_params from ADRTypes
+ * @phpstan-import-type adr_filtered_attributes from ADRTypes
+ * @phpstan-import-type adr_route_attributes from ADRTypes
  */
 final class AttributeFilter implements AttributeFilterInterface
 {
+    /**
+     * @phpstan-param class-string          $actionClass
+     * @phpstan-param adr_route_attributes  $attributes
+     *
+     * @phpstan-return adr_filtered_attributes
+     */
     public function filter(string $actionClass, array $attributes): array
     {
         if (!method_exists($actionClass, 'params')) {
             return $attributes;
         }
 
-        $params = call_user_func([$actionClass, 'params']);
-        if (!is_array($params)) {
+        /** @var callable(): mixed $callback */
+        $callback = [$actionClass, 'params'];
+
+        $declared = $callback();
+        if (!is_array($declared)) {
             return $attributes;
         }
+
+        /** @phpstan-var adr_action_params $params */
+        $params = $declared;
 
         $result = [];
         $index  = 0;

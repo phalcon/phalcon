@@ -79,7 +79,7 @@ class AdrProvider implements Provider
         // Logger default - null sink until the application binds its own
         $services->set(
             LoggerContract::class,
-            function ($container) {
+            function (Collection $container) {
                 $noop     = new Noop();
                 $adapters = ["main" => $noop];
 
@@ -94,11 +94,11 @@ class AdrProvider implements Provider
         // Dispatcher - handed the container instance and the events manager
         $services->set(
             DispatcherContract::class,
-            function ($container) {
-                return new Dispatcher(
-                    $container,
-                    $container->get(EventsManagerContract::class)
-                );
+            function (Collection $container) {
+                /** @var EventsManagerContract $events */
+                $events = $container->get(EventsManagerContract::class);
+
+                return new Dispatcher($container, $events);
             }
         );
         $services->setAlias(DispatcherContract::class, "dispatcher");

@@ -22,12 +22,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\ADR\Router;
 
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Http\RequestInterface;
 
 /**
  * Maps a request to an Action by convention: the HTTP method and the static
  * path segments identify the class; trailing segments become positional
  * request attributes. No route table.
+ *
+ * @phpstan-import-type adr_middleware_map from ADRTypes
  */
 interface Router
 {
@@ -37,7 +40,10 @@ interface Router
      * Namespace descent consults the filesystem, so the list depends on the
      * action directory.
      *
-     * @return list<class-string>
+     * The names are derived, not resolved: a candidate is what the convention
+     * would call the class, whether or not that class exists.
+     *
+     * @return list<string>
      */
     public function candidatesFor(string $method, string $path): array;
 
@@ -78,6 +84,9 @@ interface Router
 
     public function setBaseNamespace(string $baseNamespace): Router;
 
+    /**
+     * @phpstan-param adr_middleware_map $middlewareMap
+     */
     public function setMiddlewareMap(array $middlewareMap): Router;
 
     /**

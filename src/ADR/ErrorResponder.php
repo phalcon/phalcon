@@ -20,6 +20,7 @@ use Phalcon\ADR\Exceptions\MethodNotAllowed;
 use Phalcon\ADR\Exceptions\RouteNotFound;
 use Phalcon\ADR\Payload\Payload;
 use Phalcon\ADR\Payload\Status;
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Responder\Responder;
 use Phalcon\Contracts\Logger\Logger;
 use Phalcon\Http\RequestInterface;
@@ -34,14 +35,19 @@ use Throwable;
  * message plus that same reference, unless debug mode is on. Exceptions are
  * mapped to statuses deterministically: an exact class match first, then the
  * ancestor chain, so map ordering never matters.
+ *
+ * @phpstan-import-type adr_exception_map from ADRTypes
  */
 final class ErrorResponder
 {
     /**
-     * @var array
+     * @phpstan-var adr_exception_map
      */
     protected array $exceptionMap;
 
+    /**
+     * @phpstan-param adr_exception_map $exceptionMap
+     */
     public function __construct(
         protected Responder $chain,
         protected Logger $logger,
@@ -88,6 +94,9 @@ final class ErrorResponder
         return (string) $id;
     }
 
+    /**
+     * @phpstan-return adr_exception_map
+     */
     protected function defaultMap(): array
     {
         return [
@@ -96,6 +105,9 @@ final class ErrorResponder
         ];
     }
 
+    /**
+     * @return array{message: string, trace?: string, ref: string}
+     */
     protected function details(
         Throwable $exception,
         string $ref,

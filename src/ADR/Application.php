@@ -22,6 +22,7 @@ use Phalcon\ADR\Events\Event;
 use Phalcon\ADR\Exceptions\RouteNotFound;
 use Phalcon\Container\Container;
 use Phalcon\Container\ContainerFactory;
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Application as ApplicationInterface;
 use Phalcon\Contracts\ADR\Dispatcher as DispatcherInterface;
 use Phalcon\Contracts\ADR\Router\AttributeFilter as AttributeFilterInterface;
@@ -39,6 +40,8 @@ use Phalcon\Http\ResponseInterface;
  * When no container is supplied one is created with the ADR defaults
  * (`AdrProvider`) registered. Type-hinted dependencies autowire; only scalar
  * parameters need to be declared via `define()`.
+ *
+ * @phpstan-import-type adr_middleware_map from ADRTypes
  */
 final class Application implements ApplicationInterface
 {
@@ -46,7 +49,7 @@ final class Application implements ApplicationInterface
     protected string $baseNamespace = "";
     protected Container $container;
     /**
-     * @var array<string, string[]>
+     * @phpstan-var adr_middleware_map
      */
     protected array $middlewareMap = [];
     protected string $wordSeparator = "";
@@ -77,6 +80,8 @@ final class Application implements ApplicationInterface
      * parameters. Type-hinted dependencies autowire; only the supplied
      * (usually scalar) parameters are declared. Lazy values (e.g.
      * `new Phalcon\Container\Resolver\Lazy\Env(...)`) may be passed as values.
+     *
+     * @param array<string, mixed> $parameters
      */
     public function define(string $className, array $parameters = []): static
     {
@@ -125,9 +130,12 @@ final class Application implements ApplicationInterface
      */
     public function handle(AttributeRequest $request): ResponseInterface
     {
-        $router     = $this->container->get(RouterInterface::class);
+        /** @var RouterInterface $router */
+        $router = $this->container->get(RouterInterface::class);
+        /** @var DispatcherInterface $dispatcher */
         $dispatcher = $this->container->get(DispatcherInterface::class);
-        $events     = $this->container->get(Manager::class);
+        /** @var Manager $events */
+        $events = $this->container->get(Manager::class);
 
         if ($this->baseNamespace !== "") {
             $router->setBaseNamespace($this->baseNamespace);
@@ -153,9 +161,10 @@ final class Application implements ApplicationInterface
                 throw new RouteNotFound();
             }
 
-            $attributes = $this->container
-                ->get(AttributeFilterInterface::class)
-                ->filter($match->getAction(), $match->getAttributes());
+            /** @var AttributeFilterInterface $attributeFilter */
+            $attributeFilter = $this->container->get(AttributeFilterInterface::class);
+
+            $attributes = $attributeFilter->filter($match->getAction(), $match->getAttributes());
 
             foreach ($attributes as $key => $value) {
                 $request->getAttributes()->set((string) $key, $value);
@@ -164,7 +173,10 @@ final class Application implements ApplicationInterface
             $response = $dispatcher->dispatch($match->getAction(), $request, $match->getMiddleware());
         } catch (\Throwable $exception) {
             try {
-                $response = $this->container->get(ErrorResponder::class)->handle($request, new Response(), $exception);
+                /** @var ErrorResponder $errorResponder */
+                $errorResponder = $this->container->get(ErrorResponder::class);
+
+                $response = $errorResponder->handle($request, new Response(), $exception);
             } catch (\Throwable) {
                 $response = new Response();
 
@@ -179,6 +191,8 @@ final class Application implements ApplicationInterface
 
     /**
      * Attach a guard (middleware) to every Action under a namespace prefix.
+     *
+     * @param class-string $guard
      */
     public function secureWith(string $guard, string $prefix): static
     {

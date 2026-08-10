@@ -22,13 +22,22 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Router;
 
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
 
 /**
  * Immutable result of a successful route match.
+ *
+ * @phpstan-import-type adr_middleware_names from ADRTypes
+ * @phpstan-import-type adr_route_attributes from ADRTypes
  */
 final class RouterMatch implements RouterMatchInterface
 {
+    /**
+     * @phpstan-param class-string          $action
+     * @phpstan-param adr_route_attributes  $attributes
+     * @phpstan-param adr_middleware_names  $middleware
+     */
     public function __construct(
         protected string $action,
         protected array $attributes = [],
@@ -37,16 +46,25 @@ final class RouterMatch implements RouterMatchInterface
     ) {
     }
 
+    /**
+     * @phpstan-return class-string
+     */
     public function getAction(): string
     {
         return $this->action;
     }
 
+    /**
+     * @phpstan-return adr_route_attributes
+     */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
+    /**
+     * @phpstan-return adr_middleware_names
+     */
     public function getMiddleware(): array
     {
         return $this->middleware;

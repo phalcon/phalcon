@@ -51,14 +51,17 @@ abstract class AbstractHttpFront implements FrontController
      */
     final public function boot(): Container
     {
-        if (null === $this->container) {
-            $this->container = $this->buildContainer();
+        $container = $this->container;
 
-            $this->loadEnvironment($this->container);
-            $this->registerProviders($this->container);
+        if (null === $container) {
+            $container       = $this->buildContainer();
+            $this->container = $container;
+
+            $this->loadEnvironment($container);
+            $this->registerProviders($container);
         }
 
-        return $this->container;
+        return $container;
     }
 
     /**
@@ -69,18 +72,21 @@ abstract class AbstractHttpFront implements FrontController
         try {
             $container = $this->boot();
 
-            $request     = $container->get(AttributeRequest::class);
+            /** @var AttributeRequest $request */
+            $request = $container->get(AttributeRequest::class);
+
             $application = $this->getApplication($container);
             $response    = $application->handle($request);
 
-            $container->get(Emitter::class)->emit($response);
+            /** @var Emitter $emitter */
+            $emitter = $container->get(Emitter::class);
+
+            $emitter->emit($response);
 
             return 0;
         } catch (Throwable $exception) {
             return $this->handleBootError($exception);
         }
-
-        return 0;
     }
 
     protected function buildContainer(): Container
@@ -98,6 +104,9 @@ abstract class AbstractHttpFront implements FrontController
         return new Application($container);
     }
 
+    /**
+     * @return int<0,254>
+     */
     protected function handleBootError(\Throwable $exception): int
     {
         error_log((string) $exception);

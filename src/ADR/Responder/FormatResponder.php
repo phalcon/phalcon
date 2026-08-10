@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\ADR\Responder;
 
 use Phalcon\Contracts\ADR\Payload\Payload;
+use Phalcon\Contracts\ADR\Responder\Formatter\Formatter;
 use Phalcon\Contracts\ADR\Responder\Responder;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\ResponseInterface;
@@ -30,6 +31,9 @@ use Phalcon\Http\ResponseInterface;
  */
 class FormatResponder implements Responder
 {
+    /**
+     * @param list<Formatter> $formatters
+     */
     public function __construct(
         protected array $formatters = []
     ) {

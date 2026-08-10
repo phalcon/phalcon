@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\ADR;
 
 use Phalcon\Contracts\ADR\Handler;
+use Phalcon\Contracts\ADR\Middleware;
 use Phalcon\Contracts\Http\AttributeRequest;
 use Phalcon\Http\ResponseInterface;
 
@@ -29,6 +30,9 @@ use Phalcon\Http\ResponseInterface;
  */
 final class Pipeline implements Handler
 {
+    /**
+     * @param list<Middleware> $middleware
+     */
     public function __construct(
         protected array $middleware,
         protected Handler $terminal,
