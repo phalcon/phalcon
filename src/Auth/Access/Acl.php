@@ -19,6 +19,7 @@ use Phalcon\Auth\Exception;
 use Phalcon\Auth\Exceptions\DoesNotImplement;
 use Phalcon\Auth\Exceptions\MissingHandlerContext;
 use Phalcon\Contracts\Auth\Access\Access;
+use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\Guard\Guard;
 
 use function in_array;
@@ -38,7 +39,8 @@ use function in_array;
  * implementing Phalcon\Acl\RoleAwareInterface supplies its role name; any
  * other user is rejected with an exception.
  *
- * @phpstan-import-type AccessContext from Access
+ * @phpstan-import-type auth_access_context from AuthTypes
+ * @phpstan-import-type auth_acl_options from AuthTypes
  */
 class Acl extends AbstractAccess
 {
@@ -47,7 +49,7 @@ class Acl extends AbstractAccess
     protected string $moduleSeparator = ':';
 
     /**
-     * @phpstan-param array{guestRole?: string, moduleSeparator?: string} $options
+     * @phpstan-param auth_acl_options $options
      */
     public function __construct(
         protected AdapterInterface $acl,
@@ -63,7 +65,7 @@ class Acl extends AbstractAccess
     }
 
     /**
-     * @phpstan-param AccessContext $context
+     * @phpstan-param auth_access_context $context
      *
      * @throws Exception
      */

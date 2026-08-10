@@ -24,6 +24,7 @@ use Phalcon\Auth\Exceptions\FileDoesNotContainJson;
 use Phalcon\Auth\Exceptions\FileDoesNotExist;
 use Phalcon\Auth\Exceptions\FileNotValidJson;
 use Phalcon\Auth\Internal\Options;
+use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Encryption\Security\Security;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Traits\Php\FileTrait;
@@ -37,7 +38,7 @@ use function is_array;
  * The file must contain a JSON array of user records:
  *   [{"id":1,"email":"a@b","password":"<hashed>"}, ...]
  *
- * @phpstan-import-type AuthUserRow from AbstractArrayAdapter
+ * @phpstan-import-type auth_user_row from AuthTypes
  *
  * @extends AbstractArrayAdapter<StreamAdapterConfig>
  */
@@ -65,7 +66,7 @@ class Stream extends AbstractArrayAdapter
      * Loads and decodes the JSON users file. Re-read on every call - if you
      * need caching, wrap it.
      *
-     * @phpstan-return list<AuthUserRow>
+     * @phpstan-return list<auth_user_row>
      *
      * @throws Exception
      */
@@ -93,7 +94,7 @@ class Stream extends AbstractArrayAdapter
             throw new FileDoesNotContainJson($path);
         }
 
-        /** @var list<AuthUserRow> $rows */
+        /** @var list<auth_user_row> $rows */
         $rows = array_values($data);
 
         return $rows;

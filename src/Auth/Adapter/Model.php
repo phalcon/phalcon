@@ -22,15 +22,18 @@ use Phalcon\Auth\Exceptions\DoesNotImplement;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
 use Phalcon\Contracts\Auth\AuthRemember;
+use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Auth\RememberToken;
 use Phalcon\Contracts\Encryption\Security\Security;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon Model-backed adapter.
  *
- * @phpstan-import-type AuthCredentials from \Phalcon\Contracts\Auth\Adapter\Adapter
+ * @phpstan-import-type auth_credentials from AuthTypes
+ * @phpstan-import-type mvc_model_find_parameters from MvcTypes
  *
  * @extends AbstractAdapter<ModelAdapterConfig>
  */
@@ -72,7 +75,7 @@ class Model extends AbstractAdapter implements RememberAdapter
     /**
      * Find a user matching the given credentials (excluding 'password' key).
      *
-     * @phpstan-param AuthCredentials $credentials
+     * @phpstan-param auth_credentials $credentials
      */
     public function retrieveByCredentials(array $credentials): ?AuthUser
     {
@@ -153,13 +156,13 @@ class Model extends AbstractAdapter implements RememberAdapter
      * an ?AuthUser: a missing record yields null, a record that is not an
      * AuthUser throws.
      *
-     * @param array{conditions: string, bind: array<string, mixed>} $parameters
+     * @phpstan-param mvc_model_find_parameters $parameters
      *
      * @throws DoesNotImplement
      */
     private function findFirstAsAuthUser(array $parameters): ?AuthUser
     {
-        /** @var class-string<ModelInterface> $modelClass */
+        /** @var class-string<ModelInterface<mixed>> $modelClass */
         $modelClass = $this->config->getModel();
 
         $found = $modelClass::findFirst($parameters);

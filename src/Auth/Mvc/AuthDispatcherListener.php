@@ -40,7 +40,7 @@ class AuthDispatcherListener extends AbstractAuthDispatcherListener
             (string)$dispatcher->getActionName(),
             [
                 'handler' => $dispatcher->getControllerName(),
-                'module'  => $dispatcher->getModuleName(),
+                'module'  => (string) $dispatcher->getModuleName(),
                 'params'  => $dispatcher->getParams(),
             ],
             fn (array $target) => $dispatcher->forward($target),

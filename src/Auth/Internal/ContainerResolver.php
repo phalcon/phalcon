@@ -40,6 +40,8 @@ final class ContainerResolver
     /**
      * Validates that the value is a supported container.
      *
+     * @phpstan-assert Collection|DiInterface $container
+     *
      * @throws TypeError
      */
     public static function ensureContainer(mixed $container): void
@@ -65,7 +67,6 @@ final class ContainerResolver
     {
         self::ensureContainer($container);
 
-        /** @var Collection|DiInterface $container */
         foreach ($candidates as $name) {
             if ($container->has($name)) {
                 return self::resolveShared($container, $name);

@@ -17,13 +17,14 @@ declare(strict_types=1);
 namespace Phalcon\Auth\Guard;
 
 use Phalcon\Contracts\Auth\Adapter\Adapter;
+use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Auth\Guard\Guard;
 use Phalcon\Contracts\Auth\Guard\GuardConfig;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
 /**
- * @phpstan-import-type AuthCredentials from Adapter
+ * @phpstan-import-type auth_credentials from AuthTypes
  *
  * @template TConfig of GuardConfig
  */
@@ -106,7 +107,7 @@ abstract class AbstractGuard implements Guard
     /**
      * user should be ?AuthUser
      *
-     * @phpstan-param AuthCredentials $credentials
+     * @phpstan-param auth_credentials $credentials
      *
      * @phpstan-assert-if-true !null $user
      */

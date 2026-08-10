@@ -23,8 +23,8 @@ use Phalcon\Auth\Exceptions\UnknownGuard;
 use Phalcon\Auth\Guard\GuardLocator;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\Adapter\Adapter;
+use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\Guard\Guard;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
@@ -71,17 +71,9 @@ use Phalcon\Support\Traits\ConfigTrait;
  *      ],
  *  ]
  *
- * @phpstan-type GuardConfig array{
- *     type: string,
- *     default?: bool,
- *     adapter: array{name: string, options?: array<string, mixed>},
- *     options?: array<string, mixed>,
- * }
- *
- * @phpstan-type AuthConfig array{
- *     guards?: array<string, GuardConfig>,
- *     access?: array<string, class-string<Access>>,
- * }
+ * @phpstan-import-type auth_adapter_config from AuthTypes
+ * @phpstan-import-type auth_config from AuthTypes
+ * @phpstan-import-type auth_guard_config from AuthTypes
  */
 class ManagerFactory
 {
@@ -106,25 +98,25 @@ class ManagerFactory
     }
 
     /**
-     * @phpstan-param AuthConfig|ConfigInterface $config
+     * @phpstan-param auth_config|ConfigInterface $config
      *
      * @throws Exception
      */
     public function load(mixed $config): Manager
     {
-        /** @var AuthConfig $config */
+        /** @var auth_config $config */
         $config = $this->checkConfig($config);
 
         $manager = new Manager($this->accessLocator);
 
-        /** @var array<string, GuardConfig> $guards */
+        /** @var array<string, auth_guard_config> $guards */
         $guards = $config['guards'] ?? [];
 
         foreach ($guards as $name => $gconf) {
-            $adapter = $this->buildAdapter(
-                $this->adapterLocator,
-                Options::requireArray($gconf, 'adapter', "guard '" . $name . "'")
-            );
+            /** @var auth_adapter_config $adapterConfig */
+            $adapterConfig = Options::requireArray($gconf, 'adapter', "guard '" . $name . "'");
+
+            $adapter = $this->buildAdapter($this->adapterLocator, $adapterConfig);
             $guard   = $this->buildGuard(
                 $this->guardLocator,
                 Options::requireString($gconf, 'type', "guard '" . $name . "'"),
@@ -148,7 +140,7 @@ class ManagerFactory
     }
 
     /**
-     * @param array{name: string, options?: array<string, mixed>} $cfg
+     * @param auth_adapter_config $cfg
      *
      * @throws Exception
      */

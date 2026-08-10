@@ -17,12 +17,13 @@ declare(strict_types=1);
 namespace Phalcon\Contracts\Auth\Guard;
 
 use Phalcon\Contracts\Auth\Adapter\Adapter;
+use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\AuthUser;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 
 /**
- * @phpstan-import-type AuthCredentials from Adapter
+ * @phpstan-import-type auth_credentials from AuthTypes
  */
 interface Guard
 {
@@ -85,7 +86,7 @@ interface Guard
     /**
      * Validates the given credentials without logging in.
      *
-     * @phpstan-param AuthCredentials $credentials
+     * @phpstan-param auth_credentials $credentials
      */
     public function validate(array $credentials = []): bool;
 }

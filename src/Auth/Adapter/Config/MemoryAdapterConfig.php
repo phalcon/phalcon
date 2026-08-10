@@ -16,13 +16,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth\Adapter\Config;
 
+use Phalcon\Contracts\Auth\AuthTypes;
+
 /**
- * @phpstan-type AuthUserRow array{id?: int|string}&array<string, mixed>
+ * @phpstan-import-type auth_user_row from AuthTypes
  */
 class MemoryAdapterConfig extends AbstractAdapterConfig
 {
     /**
-     * @phpstan-param list<AuthUserRow> $users
+     * @phpstan-param list<auth_user_row> $users
      */
     public function __construct(
         protected readonly array $users = [],
@@ -32,7 +34,7 @@ class MemoryAdapterConfig extends AbstractAdapterConfig
     }
 
     /**
-     * @phpstan-return list<AuthUserRow>
+     * @phpstan-return list<auth_user_row>
      */
     public function getUsers(): array
     {
