@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Adapter;
 
+use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Logger\Adapter\Exceptions\FileOpenFailed;
 use Phalcon\Logger\Adapter\Exceptions\InvalidStreamMode;
 use Phalcon\Logger\Item;
@@ -41,6 +42,8 @@ use const PHP_EOL;
  * @property resource|null $handler
  * @property string        $mode
  * @property string        $name
+ *
+ * @phpstan-import-type logger_stream_options from LoggerTypes
  */
 class Stream extends AbstractAdapter
 {
@@ -60,6 +63,8 @@ class Stream extends AbstractAdapter
 
     /**
      * Stream constructor.
+     *
+     * @phpstan-param logger_stream_options $options
      *
      * @throws InvalidStreamMode
      */

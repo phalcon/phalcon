@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Logger;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
@@ -23,13 +24,15 @@ use Throwable;
 
 /**
  * Factory used to create adapters used for Logging
+ *
+ * @phpstan-import-type logger_adapter_options from LoggerTypes
  */
 class AdapterFactory extends AbstractFactory
 {
     /**
      * AdapterFactory constructor.
      *
-     * @param array $services
+     * @param array<string, class-string<AdapterInterface>> $services
      */
     public function __construct(array $services = [])
     {
@@ -41,7 +44,7 @@ class AdapterFactory extends AbstractFactory
      *
      * @param string $name
      * @param string $fileName
-     * @param array  $options
+     * @phpstan-param logger_adapter_options $options
      *
      * @return AdapterInterface
      * @throws BaseException
@@ -51,6 +54,7 @@ class AdapterFactory extends AbstractFactory
         string $fileName,
         array $options = []
     ): AdapterInterface {
+        /** @var class-string<AdapterInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition($fileName, $options);

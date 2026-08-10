@@ -15,6 +15,7 @@ namespace Phalcon\Logger;
 
 use DateTimeZone;
 use Exception;
+use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Exceptions\AdapterNotFound;
 use Phalcon\Logger\Exceptions\NoAdaptersConfigured;
@@ -38,17 +39,22 @@ use function strtolower;
  * files (see Phalcon\Config\Config object).
  *
  * @property AdapterInterface[] $adapters
- * @property array              $excluded
+ * @property array<array-key, bool> $excluded
  * @property int                $logLevel
  * @property string             $name
  * @property DateTimeZone       $timezone
+ *
+ * @phpstan-import-type logger_adapters from LoggerTypes
+ * @phpstan-import-type logger_context from LoggerTypes
+ * @phpstan-import-type logger_excluded from LoggerTypes
+ * @phpstan-import-type logger_levels from LoggerTypes
  */
 abstract class AbstractLogger
 {
     /**
      * The adapter stack
      *
-     * @var AdapterInterface[]
+     * @phpstan-var logger_adapters
      */
     protected array $adapters = [];
     /**
@@ -57,6 +63,8 @@ abstract class AbstractLogger
     protected ClockInterface $clock;
     /**
      * The excluded adapters for this log process
+     *
+     * @phpstan-var logger_excluded
      */
     protected array $excluded = [];
     protected int $logLevel = Enum::CUSTOM;
@@ -64,6 +72,8 @@ abstract class AbstractLogger
 
     /**
      * Constructor.
+     *
+     * @phpstan-param logger_adapters $adapters
      */
     public function __construct(
         protected string $name,
@@ -128,6 +138,8 @@ abstract class AbstractLogger
 
     /**
      * Exclude certain adapters.
+     *
+     * @phpstan-param array<array-key, array-key> $adapters
      */
     public function excludeAdapters(array $adapters = []): static
     {
@@ -169,7 +181,7 @@ abstract class AbstractLogger
     /**
      * Returns the adapter stack array
      *
-     * @return AdapterInterface[]
+     * @phpstan-return logger_adapters
      */
     public function getAdapters(): array
     {
@@ -223,6 +235,8 @@ abstract class AbstractLogger
 
     /**
      * Sets the adapters stack overriding what is already there
+     *
+     * @phpstan-param logger_adapters $adapters
      */
     public function setAdapters(array $adapters): static
     {
@@ -249,6 +263,8 @@ abstract class AbstractLogger
 
     /**
      * Adds a message to each handler for processing
+     *
+     * @phpstan-param logger_context $context
      *
      * @throws Exception
      * @throws NoAdaptersConfigured
@@ -309,8 +325,18 @@ abstract class AbstractLogger
             return $levels[$levelName] ?? Enum::CUSTOM;
         }
 
-        if (is_numeric($level) && isset($this->getLevels()[$level])) {
-            return (int)$level;
+        /**
+         * A string level has already returned above, so anything numeric
+         * reaching here is an int or a float. The offset is taken on the
+         * truncated int rather than the raw value: a float array key is
+         * deprecated as of PHP 8.1, and PHP would truncate it anyway.
+         */
+        if (is_numeric($level)) {
+            $intLevel = (int)$level;
+
+            if (isset($this->getLevels()[$intLevel])) {
+                return $intLevel;
+            }
         }
 
         return Enum::CUSTOM;
@@ -318,6 +344,8 @@ abstract class AbstractLogger
 
     /**
      * Returns an array of log levels with integer to string conversion
+     *
+     * @phpstan-return logger_levels
      */
     protected function getLevels(): array
     {

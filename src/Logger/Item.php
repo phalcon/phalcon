@@ -14,17 +14,20 @@ declare(strict_types=1);
 namespace Phalcon\Logger;
 
 use DateTimeImmutable;
+use Phalcon\Contracts\Logger\LoggerTypes;
 
 /**
  * Phalcon\Logger\Item
  *
  * Represents each item in a logging transaction
  *
- * @property array             $context
+ * @property array<string, mixed> $context
  * @property string            $message
  * @property int               $level
  * @property string            $levelName
  * @property DateTimeImmutable $dateTime
+ *
+ * @phpstan-import-type logger_context from LoggerTypes
  */
 class Item
 {
@@ -35,7 +38,7 @@ class Item
      * @param string            $levelName
      * @param int               $level
      * @param DateTimeImmutable $dateTime
-     * @param array             $context
+     * @phpstan-param logger_context $context
      */
     public function __construct(
         protected string $message,
@@ -46,6 +49,9 @@ class Item
     ) {
     }
 
+    /**
+     * @phpstan-return logger_context
+     */
     public function getContext(): array
     {
         return $this->context;

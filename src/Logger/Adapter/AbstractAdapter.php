@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Logger\Adapter;
 
+use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Logger\Exceptions\DeserializationFailed;
 use Phalcon\Logger\Exceptions\SerializationFailed;
 use Phalcon\Logger\Exceptions\TransactionAlreadyActive;
@@ -23,13 +24,15 @@ use Phalcon\Logger\Item;
 
 /**
  * Class AbstractAdapter
+ *
+ * @phpstan-import-type logger_queue from LoggerTypes
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
      * Name of the default formatter class
      *
-     * @var string
+     * @var class-string<FormatterInterface>
      */
     protected string $defaultFormatter = Line::class;
 
@@ -45,6 +48,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Array with messages queued in the transaction
+     *
+     * @phpstan-var logger_queue
      */
     protected array $queue = [];
 
@@ -75,6 +80,9 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Prevent serialization
      */
+    /**
+     * @return array<array-key, mixed>
+     */
     public function __serialize(): array
     {
         throw new SerializationFailed();
@@ -82,6 +90,9 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Prevent unserialization
+     */
+    /**
+     * @param array<array-key, mixed> $data
      */
     public function __unserialize(array $data): void
     {
@@ -97,11 +108,14 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function add(Item $item): AdapterInterface
     {
+        /**
+         * A positive limit that the queue has already reached means the
+         * queue is non-empty, so array_key_first() always yields a key.
+         */
         if ($this->queueLimit > 0 && count($this->queue) >= $this->queueLimit) {
             $firstKey = array_key_first($this->queue);
-            if ($firstKey !== null) {
-                unset($this->queue[$firstKey]);
-            }
+
+            unset($this->queue[$firstKey]);
         }
 
         $this->queue[] = $item;

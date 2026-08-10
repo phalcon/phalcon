@@ -17,6 +17,8 @@ use Phalcon\Contracts\Logger\Adapter\Adapter;
 
 /**
  * Canonical contract for Phalcon\Logger\Logger.
+ *
+ * @phpstan-import-type logger_context from LoggerTypes
  */
 interface Logger
 {
@@ -27,7 +29,7 @@ interface Logger
      * trigger the SMS alerts and wake you up.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -39,7 +41,7 @@ interface Logger
      * Example: Application component unavailable, unexpected exception.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -49,7 +51,7 @@ interface Logger
      * Detailed debug information.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -59,7 +61,7 @@ interface Logger
      * System is unusable.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -70,7 +72,7 @@ interface Logger
      * be logged and monitored.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -112,7 +114,7 @@ interface Logger
      * Example: User logs in, SQL logs.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -126,7 +128,7 @@ interface Logger
      *
      * @param mixed  $level
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -136,7 +138,7 @@ interface Logger
      * Normal but significant events.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -146,7 +148,7 @@ interface Logger
      * Extra-verbose diagnostic output.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */
@@ -159,7 +161,7 @@ interface Logger
      * that are not necessarily wrong.
      *
      * @param string $message
-     * @param array  $context
+     * @phpstan-param logger_context $context
      *
      * @return void
      */

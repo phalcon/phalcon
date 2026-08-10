@@ -16,11 +16,16 @@ namespace Phalcon\Logger;
 use DateTimeZone;
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Factory\AbstractConfigFactory;
 use Throwable;
 
 /**
  * Factory creating logger objects
+ *
+ * @phpstan-import-type logger_adapter_config from LoggerTypes
+ * @phpstan-import-type logger_adapters from LoggerTypes
+ * @phpstan-import-type logger_factory_config from LoggerTypes
  */
 class LoggerFactory extends AbstractConfigFactory
 {
@@ -37,26 +42,35 @@ class LoggerFactory extends AbstractConfigFactory
     /**
      * Factory to create an instance from a Config object
      *
+     * The adapter list lives under `options`, not at the top level.
+     *
+     * @phpstan-param ConfigInterface|logger_factory_config $config
+     *
      * @param array|ConfigInterface $config = [
-     *     'name'     => 'messages',
-     *     'adapters' => [
-     *         'adapter-name' => [
-     *              'adapter' => 'stream',
-     *              'name'    => 'file.log',
-     *              'options' => [
-     *                  'mode'     => 'ab',
-     *                  'option'   => null,
-     *                  'facility' => null
-     *              ],
+     *     'name'    => 'messages',
+     *     'options' => [
+     *         'adapters' => [
+     *             'adapter-name' => [
+     *                  'adapter' => 'stream',
+     *                  'name'    => 'file.log',
+     *                  'options' => [
+     *                      'mode'     => 'ab',
+     *                      'option'   => null,
+     *                      'facility' => null
+     *                  ],
+     *             ],
      *         ],
      *     ]
      * ]
      */
     public function load(mixed $config): Logger
     {
-        $data     = [];
-        $config   = $this->checkConfig($config);
-        $config   = $this->checkConfigElement($config, "name");
+        $data   = [];
+        $config = $this->checkConfig($config);
+
+        /** @phpstan-var logger_factory_config $config */
+        $config = $this->checkConfigElement($config, "name");
+
         $name     = $config["name"];
         $timezone = $config["timezone"] ?? null;
         $options  = $config["options"] ?? [];
@@ -79,6 +93,8 @@ class LoggerFactory extends AbstractConfigFactory
 
     /**
      * Returns a Logger object
+     *
+     * @phpstan-param logger_adapters $adapters
      *
      * @throws BaseException
      */
