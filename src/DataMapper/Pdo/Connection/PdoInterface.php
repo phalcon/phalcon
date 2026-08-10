@@ -62,7 +62,7 @@ interface PdoInterface
     /**
      * Retrieve a database connection attribute
      */
-    public function getAttribute(int $attribute);
+    public function getAttribute(int $attribute): mixed;
 
     /**
      * Is a transaction currently active? If the profiler is enabled, the
