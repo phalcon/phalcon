@@ -38,18 +38,11 @@ interface Message
 
     /**
      * Returns the correlation id used to correlate request/reply messages.
-     *
-     * @return string|null
      */
     public function getCorrelationId(): ?string;
 
     /**
      * Returns a single header value, or the default when it is not set.
-     *
-     * @param string $name
-     * @param mixed  $defaultValue
-     *
-     * @return mixed
      */
     public function getHeader(string $name, mixed $defaultValue = null): mixed;
 
@@ -62,8 +55,6 @@ interface Message
 
     /**
      * Returns the message id.
-     *
-     * @return string|null
      */
     public function getMessageId(): ?string;
 
@@ -76,25 +67,16 @@ interface Message
 
     /**
      * Returns a single property value, or the default when it is not set.
-     *
-     * @param string $name
-     * @param mixed  $defaultValue
-     *
-     * @return mixed
      */
     public function getProperty(string $name, mixed $defaultValue = null): mixed;
 
     /**
      * Returns the reply-to destination name.
-     *
-     * @return string|null
      */
     public function getReplyTo(): ?string;
 
     /**
      * Returns the timestamp (in milliseconds) or null when it is not set.
-     *
-     * @return int|null
      */
     public function getTimestamp(): ?int;
 
@@ -115,9 +97,6 @@ interface Message
 
     /**
      * Sets a single transport header.
-     *
-     * @param string $name
-     * @param mixed  $value
      */
     public function setHeader(string $name, mixed $value): void;
 
@@ -142,9 +121,6 @@ interface Message
 
     /**
      * Sets a single application property.
-     *
-     * @param string $name
-     * @param mixed  $value
      */
     public function setProperty(string $name, mixed $value): void;
 

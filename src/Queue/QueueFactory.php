@@ -89,6 +89,11 @@ class QueueFactory extends AbstractConfigFactory
         return $connectionFactory->createContext();
     }
 
+    /**
+     * Returns the exception class for the factory
+     *
+     * @return class-string<\Throwable>
+     */
     protected function getExceptionClass(): string
     {
         return Exception::class;

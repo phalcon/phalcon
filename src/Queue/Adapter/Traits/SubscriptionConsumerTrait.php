@@ -44,7 +44,6 @@ trait SubscriptionConsumerTrait
      * Milliseconds slept between poll passes.
      */
     protected int $pollInterval = 200;
-
     /**
      * Subscriptions keyed by queue name: [consumer, callback].
      *

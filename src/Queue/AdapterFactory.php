@@ -62,6 +62,11 @@ class AdapterFactory extends AbstractFactory
         return new $definition($options);
     }
 
+    /**
+     * Returns the exception class for the factory
+     *
+     * @return class-string<\Throwable>
+     */
     protected function getExceptionClass(): string
     {
         return Exception::class;

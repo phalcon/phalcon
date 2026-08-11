@@ -24,17 +24,6 @@ namespace Phalcon\Contracts\Queue;
 
 /**
  * Central registry of the array shapes used across the Queue namespace.
- *
- * This is a type registry, not a contract. It declares no members and must
- * not be implemented; it exists only so that every shape below has a single
- * definition, imported where it is needed with a phpstan-import-type tag
- * naming this interface as the source.
- *
- * Alias names are prefixed with `queue_` because PHPStan resolves imported
- * type names per file and has no namespacing for them: the prefix is what
- * keeps generic names such as `connection_options` from clashing with an
- * alias imported from another namespace into the same file.
- *
  * @phpstan-type queue_message_headers array<string, mixed>
  * @phpstan-type queue_message_properties array<string, mixed>
  * @phpstan-type queue_message_envelope array{

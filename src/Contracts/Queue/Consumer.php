@@ -40,15 +40,11 @@ interface Consumer
     /**
      * Receives a message, blocking up to timeout milliseconds (0 = block
      * until one is available). Returns null when none arrives in time.
-     *
-     * @return Message|null
      */
     public function receive(int $timeout = 0): ?Message;
 
     /**
      * Receives a message without blocking, or null when none is ready.
-     *
-     * @return Message|null
      */
     public function receiveNoWait(): ?Message;
 

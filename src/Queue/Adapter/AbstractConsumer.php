@@ -84,6 +84,8 @@ abstract class AbstractConsumer implements ConsumerInterface
 
             usleep($sleep);
         }
+
+        return null;
     }
 
     /**

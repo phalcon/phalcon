@@ -16,9 +16,11 @@ namespace Phalcon\Tag;
 use Closure;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Tag as BaseTag;
+use Stringable;
 
 use function is_array;
 use function is_object;
+use function is_scalar;
 use function is_string;
 use function method_exists;
 use function str_contains;
@@ -28,6 +30,9 @@ use function str_contains;
  *
  * Generates a SELECT HTML tag using a static array of values or a
  * Phalcon\Mvc\Model resultset
+ *
+ * @phpstan-import-type tag_parameters from BaseTag
+ * @phpstan-import-type tag_select_data from BaseTag
  */
 abstract class Select
 {
@@ -37,7 +42,9 @@ abstract class Select
     /**
      * Generates a SELECT tag
      *
-     * @param array<string, mixed>|string $parameters = [
+     * @phpstan-param tag_parameters|string $parameters
+     *
+     * @param array|string $parameters = [
      *     'id' => '',
      *     'name' => '',
      *     'value' => '',
@@ -45,7 +52,6 @@ abstract class Select
      *     'emptyValue' => '',
      *     'emptyText' => '',
      * ]
-     * @param array data
      *
      * @return string
      * @throws Exception
@@ -61,12 +67,11 @@ abstract class Select
             $params = [$parameters, $data];
         }
 
-        $id = null;
-        if (isset($params[0])) {
-            $id = $params[0];
-        } else {
-            $params[0] = $params["id"];
+        if (!isset($params[0])) {
+            $params[0] = $params["id"] ?? "";
         }
+
+        $id = self::toStringValue($params[0]);
 
         /**
          * Automatically assign the id if the name is not an array
@@ -130,12 +135,12 @@ abstract class Select
             /**
              * Create an empty value
              */
-            $code .= self::echoOption($emptyValue)
-                . $emptyText
+            $code .= self::echoOption(self::toStringValue($emptyValue))
+                . self::toStringValue($emptyText)
                 . self::OPTION_CLOSE . PHP_EOL;
         }
 
-        if (is_object($options)) {
+        if ($options instanceof ResultsetInterface) {
             /**
              * Create the SELECT's option from a resultset
              */
@@ -163,6 +168,20 @@ abstract class Select
         return $code;
     }
 
+    /**
+     * Reduces an arbitrary option value to the string the markup needs.
+     * Option data is user supplied, so anything that cannot be expressed as
+     * a string reads back as an empty string rather than aborting the tag.
+     */
+    protected static function toStringValue(mixed $value): string
+    {
+        if (is_scalar($value) || $value instanceof Stringable) {
+            return (string) $value;
+        }
+
+        return "";
+    }
+
     protected static function echoOption(string $value, bool $selected = false): string
     {
         $extra = $selected ? 'selected="selected" ' : '';
@@ -172,6 +191,8 @@ abstract class Select
 
     /**
      * Generate the OPTION tags based on an array
+     *
+     * @phpstan-param tag_select_data $data
      */
     private static function optionsFromArray(
         array $data,
@@ -182,7 +203,7 @@ abstract class Select
         $escaper = BaseTag::getEscaperService();
 
         foreach ($data as $optionValue => $optionText) {
-            $escaped = $escaper->escapeHtmlAttr((string)$optionValue);
+            $escaped = $escaper->attributes((string)$optionValue);
 
             if (is_array($optionText)) {
                 $code .= "\t<optgroup label=\""
@@ -193,7 +214,7 @@ abstract class Select
                 continue;
             }
 
-            $escapedText = $escaper->html($optionText);
+            $escapedText = $escaper->html(self::toStringValue($optionText));
 
             if (is_array($value)) {
                 if (true === in_array($optionValue, $value)) {
@@ -205,7 +226,7 @@ abstract class Select
                 }
             } else {
                 $strOptionValue = (string)$optionValue;
-                $strValue       = (string)$value;
+                $strValue       = self::toStringValue($value);
 
                 if ($strOptionValue === $strValue) {
                     $code .= self::echoOption($escaped, true)
@@ -222,6 +243,10 @@ abstract class Select
 
     /**
      * Generate the OPTION tags based on a resultset
+     *
+     * ResultsetInterface does not extend Traversable, but every resultset
+     * this is handed is iterable - the concrete Resultset implements
+     * Iterator. The local annotation below states what the contract omits.
      */
     private static function optionsFromResultset(
         ResultsetInterface $resultset,
@@ -239,20 +264,24 @@ abstract class Select
                 throw new Exception("Parameter 'using' requires two values");
             }
 
-            $usingZero = $using[0];
-            $usingOne  = $using[1];
+            $usingZero = self::toStringValue($using[0]);
+            $usingOne  = self::toStringValue($using[1]);
         }
 
         $escaper = BaseTag::getEscaperService();
-        foreach ($resultset as $option) {
+
+        /** @var ResultsetInterface&iterable<array-key, mixed> $rows */
+        $rows = $resultset;
+
+        foreach ($rows as $option) {
             if (is_array($using)) {
                 if (is_object($option)) {
                     if (true === method_exists($option, "readAttribute")) {
                         $optionValue = $option->readAttribute($usingZero);
                         $optionText  = $option->readAttribute($usingOne);
                     } else {
-                        $optionValue = $option->usingZero;
-                        $optionText  = $option->usingOne;
+                        $optionValue = $option->{$usingZero};
+                        $optionText  = $option->{$usingOne};
                     }
                 } else {
                     if (!is_array($option)) {
@@ -265,8 +294,8 @@ abstract class Select
                     $optionText  = $option[$usingOne];
                 }
 
-                $optionValue = $escaper->attributes($optionValue);
-                $optionText  = $escaper->html($optionText);
+                $optionValue = $escaper->attributes(self::toStringValue($optionValue));
+                $optionText  = $escaper->html(self::toStringValue($optionText));
 
                 /**
                  * If the value is equal to the option's value we mark it as
@@ -284,7 +313,7 @@ abstract class Select
                     }
                 } else {
                     $strOptionValue = $optionValue;
-                    $strValue       = (string)$value;
+                    $strValue       = self::toStringValue($value);
 
                     if ($strOptionValue === $strValue) {
                         $code .= self::echoOption($strOptionValue, true)
@@ -309,7 +338,9 @@ abstract class Select
                     }
 
                     $params[0] = $option;
-                    $code      .= call_user_func_array($using, $params);
+                    $code      .= self::toStringValue(
+                        call_user_func_array($using, $params)
+                    );
                 }
             }
         }
