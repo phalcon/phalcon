@@ -83,15 +83,13 @@ final class LocalParameterTest extends AbstractUnitTestCase
         );
     }
 
-    public function testImagePositionalLocalInArrayIsIgnored(): void
+    public function testImagePositionalLocalFalse(): void
     {
         /**
-         * In the PHP port this positional override sits inside the
-         * `is_string()` branch, so for an array it never runs and `local`
-         * stays at the method argument default (true).
+         * `local` is read from the positional index 1 of the array.
          */
         $this->assertSame(
-            '<img src="https://phalcon.io/img/logo.png">',
+            '<img src="img/logo.png">',
             Tag::image(['img/logo.png', false])
         );
     }
