@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Session;
 
 use InvalidArgumentException;
+use Phalcon\Contracts\Session\SessionTypes;
 use SessionHandlerInterface;
 
 /**
  * Interface for the Phalcon\Session\Manager
+ *
+ * @phpstan-import-type session_options from SessionTypes
  */
 interface ManagerInterface
 {
@@ -27,6 +30,8 @@ interface ManagerInterface
 
     /**
      * Alias: Gets a session variable from an application context
+     *
+     * @return mixed
      */
     public function __get(string $key);
 
@@ -37,6 +42,8 @@ interface ManagerInterface
 
     /**
      * Alias: Sets a session variable in an application context
+     *
+     * @param mixed $value
      */
     public function __set(string $key, $value): void;
 
@@ -57,6 +64,10 @@ interface ManagerInterface
 
     /**
      * Gets a session variable from an application context
+     *
+     * @param mixed $defaultValue
+     *
+     * @return mixed
      */
     public function get(string $key, $defaultValue = null, bool $remove = false);
 
@@ -77,6 +88,8 @@ interface ManagerInterface
 
     /**
      * Get internal options
+     *
+     * @phpstan-return session_options
      */
     public function getOptions(): array;
 
@@ -97,6 +110,8 @@ interface ManagerInterface
 
     /**
      * Sets a session variable in an application context
+     *
+     * @param mixed $value
      */
     public function set(string $key, $value): void;
 
@@ -120,6 +135,8 @@ interface ManagerInterface
 
     /**
      * Sets session's options
+     *
+     * @phpstan-param session_options $options
      */
     public function setOptions(array $options): void;
 

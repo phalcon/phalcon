@@ -55,7 +55,7 @@ class Weak extends AbstractAdapter
      */
     public function __construct(
         SerializerFactory $factory,
-        array $options = []
+        protected array $options = []
     ) {
         parent::__construct($factory, $options);
 

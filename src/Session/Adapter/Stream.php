@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Session\Adapter;
 
+use Phalcon\Contracts\Session\SessionTypes;
 use Phalcon\Session\Adapter\Exceptions\AdapterRuntimeError;
 use Phalcon\Session\Adapter\Exceptions\InvalidSavePath;
 use Phalcon\Session\Adapter\Exceptions\SavePathUnavailable;
@@ -46,9 +47,13 @@ use function file_exists;
  * $session->setAdapter($files);
  * ```
  *
- * @property array  $options
  * @property string $prefix
  * @property string $path
+ *
+ * @phpstan-import-type session_files from SessionTypes
+ * @phpstan-import-type session_stream_options from SessionTypes
+ *
+ * @phpstan-property session_stream_options $options
  */
 class Stream extends Noop
 {
@@ -59,6 +64,10 @@ class Stream extends Noop
 
     /**
      * Session options
+     *
+     * @var array<string, mixed>
+     *
+     * @phpstan-var session_stream_options
      */
     protected array $options = [];
 
@@ -80,17 +89,24 @@ class Stream extends Noop
      *     'savePath' => ''
      * ]
      *
+     * @phpstan-param session_stream_options $options
+     *
      * @throws InvalidSavePath
      * @throws SavePathUnavailable
      */
     public function __construct(array $options = [])
     {
-        $this->prefix  = $this->getArrVal($options, 'prefix', '');
+        /** @var string $prefix */
+        $prefix = $this->getArrVal($options, 'prefix', '');
+
+        $this->prefix  = $prefix;
         $this->options = $options;
 
         /**
          * Get the save_path from the passed options. If not defined
          * get it from php.ini
+         *
+         * @var string $path
          */
         $path = $this->getArrVal($options, 'savePath', $this->phpIniGet('session.save_path'));
 
@@ -167,6 +183,7 @@ class Stream extends Noop
         $data = "";
 
         if (true === $this->phpFileExists($name)) {
+            /** @var resource $pointer */
             $pointer = $this->phpFopen($name, 'r');
 
             if (true === flock($pointer, LOCK_SH)) {
@@ -214,6 +231,8 @@ class Stream extends Noop
      * @param string $pattern
      *
      * @return array|false
+     *
+     * @phpstan-return session_files|false
      */
     protected function getGlobFiles(string $pattern): array | false
     {
@@ -227,6 +246,8 @@ class Stream extends Noop
 
     /**
      * Helper method to get the name prefixed
+     *
+     * @param float|int|string $name
      */
     protected function getPrefixedName(mixed $name): string
     {

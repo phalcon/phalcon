@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Session;
 
+use Phalcon\Contracts\Session\SessionTypes;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Session\Exceptions\InvalidSessionAdapter;
@@ -34,6 +35,8 @@ use function session_status;
 
 /**
  * Session manager class
+ *
+ * @phpstan-import-type session_options from SessionTypes
  */
 class Manager implements InjectionAwareInterface, ManagerInterface
 {
@@ -43,6 +46,12 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     private SessionHandlerInterface | null $adapter = null;
     private string $name = '';
+
+    /**
+     * @var array<string, mixed>
+     *
+     * @phpstan-var session_options
+     */
     private array $options = [];
     private string $uniqueId = '';
 
@@ -52,6 +61,8 @@ class Manager implements InjectionAwareInterface, ManagerInterface
      * @param array $options = [
      *     'uniqueId' => null
      * ]
+     *
+     * @phpstan-param session_options $options
      */
     public function __construct(array $options = [])
     {
@@ -166,7 +177,7 @@ class Manager implements InjectionAwareInterface, ManagerInterface
      */
     public function getId(): string
     {
-        return session_id();
+        return (string)session_id();
     }
 
     /**
@@ -175,7 +186,7 @@ class Manager implements InjectionAwareInterface, ManagerInterface
     public function getName(): string
     {
         if ('' === $this->name) {
-            $this->name = session_name();
+            $this->name = (string)session_name();
         }
 
         return $this->name;
@@ -183,6 +194,8 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Get internal options
+     *
+     * @phpstan-return session_options
      */
     public function getOptions(): array
     {
@@ -233,6 +246,8 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Sets a session variable in an application context
+     *
+     * @param mixed $value
      */
     public function set(string $key, $value): void
     {
@@ -308,10 +323,15 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Sets session's options
+     *
+     * @phpstan-param session_options $options
      */
     public function setOptions(array $options): void
     {
-        $this->uniqueId = $this->getArrVal($options, 'uniqueId', '');
+        /** @var string $uniqueId */
+        $uniqueId = $this->getArrVal($options, 'uniqueId', '');
+
+        $this->uniqueId = $uniqueId;
         $this->options  = $options;
     }
 
@@ -343,6 +363,7 @@ class Manager implements InjectionAwareInterface, ManagerInterface
          */
         $name = $this->getName();
         if (isset($_COOKIE[$name])) {
+            /** @var string $value */
             $value = $_COOKIE[$name];
             if (!preg_match("/^[a-zA-Z0-9,-]+$/D", $value)) {
                 unset($_COOKIE[$name]);

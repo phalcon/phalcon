@@ -430,10 +430,12 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns the key requested, prefixed
+     *
+     * @param float|int|string $key
      */
-    protected function getPrefixedKey(string $key): string
+    protected function getPrefixedKey(mixed $key): string
     {
-        return $this->prefix . $this->getKeyWithoutPrefix($key);
+        return $this->prefix . $this->getKeyWithoutPrefix((string)$key);
     }
 
     /**

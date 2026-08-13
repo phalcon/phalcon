@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Session\Adapter;
 
 use Exception;
+use Phalcon\Contracts\Session\SessionTypes;
 use Phalcon\Session\Adapter\Exceptions\AdapterRuntimeError;
 use Phalcon\Storage\AdapterFactory;
+use Redis as RedisService;
 
 use function bin2hex;
 use function random_bytes;
@@ -23,6 +25,8 @@ use function usleep;
 
 /**
  * Phalcon\Session\Adapter\Redis
+ *
+ * @phpstan-import-type session_redis_options from SessionTypes
  */
 class Redis extends AbstractAdapter
 {
@@ -60,6 +64,8 @@ class Redis extends AbstractAdapter
      *                                'lockRetries'    => 100,
      *                                'lockWaitTime'   => 50000,
      * ]
+     *
+     * @phpstan-param session_redis_options $options
      *
      * @throws Exception
      */
@@ -133,8 +139,10 @@ class Redis extends AbstractAdapter
             return true;
         }
 
+        /** @var RedisService $client */
+        $client = $this->adapter->getAdapter();
+
         $this->lockKey = $lockKey;
-        $client        = $this->adapter->getAdapter();
         $token         = bin2hex(random_bytes(16));
         $attempt       = 0;
 
@@ -178,6 +186,7 @@ class Redis extends AbstractAdapter
         }
 
         $script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+        /** @var RedisService $client */
         $client = $this->adapter->getAdapter();
 
         $client->rawCommand('EVAL', $script, 1, $this->lockKey, $this->lockToken);
