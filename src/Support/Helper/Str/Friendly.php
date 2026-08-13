@@ -30,6 +30,13 @@ use function trim;
 class Friendly extends AbstractStr
 {
     /**
+     * @param string                               $text
+     * @param string                               $separator
+     * @param bool                                 $lowercase
+     * @param array<array-key, string>|string|null $replace
+     *
+     * @return string
+     *
      * @throws InvalidReplaceFormat
      */
     public function __invoke(
@@ -47,7 +54,7 @@ class Friendly extends AbstractStr
         $matrix = $this->getMatrix($replace);
 
         $text     = str_replace(array_keys($matrix), array_values($matrix), $text);
-        $friendly = preg_replace(
+        $friendly = (string) preg_replace(
             "/[^a-zA-Z0-9\\/_|+ -]/",
             "",
             $text
@@ -57,13 +64,15 @@ class Friendly extends AbstractStr
             $friendly = $this->toLower($friendly);
         }
 
-        $friendly = preg_replace("/[\\/_|+ -]+/", $separator, $friendly);
+        $friendly = (string) preg_replace("/[\\/_|+ -]+/", $separator, $friendly);
 
         return trim($friendly, $separator);
     }
 
     /**
-     * @return array
+     * @param array<array-key, string>|string $replace
+     *
+     * @return array<array-key, string>
      * @throws InvalidReplaceFormat
      */
     private function checkReplace(array | string $replace): array
@@ -76,9 +85,9 @@ class Friendly extends AbstractStr
     }
 
     /**
-     * @param mixed $replace
+     * @param array<array-key, string> $replace
      *
-     * @return array
+     * @return array<string, string>
      */
     private function getMatrix(array $replace): array
     {

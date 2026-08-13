@@ -32,6 +32,13 @@ final class ValuesTest extends AbstractTagTestCase
         $this->assertSame('Phalcon', Tag::getValue('name'));
     }
 
+    public function testGetValueFallsBackToPost(): void
+    {
+        $_POST['name'] = 'Posted';
+
+        $this->assertSame('Posted', Tag::getValue('name'));
+    }
+
     public function testGetValuePrefersTheParameters(): void
     {
         $_POST['name'] = 'Posted';
@@ -51,13 +58,6 @@ final class ValuesTest extends AbstractTagTestCase
         Tag::setDefault('name', 'Stored');
 
         $this->assertSame('Stored', Tag::getValue('name'));
-    }
-
-    public function testGetValueFallsBackToPost(): void
-    {
-        $_POST['name'] = 'Posted';
-
-        $this->assertSame('Posted', Tag::getValue('name'));
     }
 
     public function testGetValueWithNothingStoredIsNull(): void
@@ -91,16 +91,6 @@ final class ValuesTest extends AbstractTagTestCase
         $this->assertNull(Tag::getValue('name'));
     }
 
-    public function testSetDefaultThrowsForANonScalarValue(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'Only scalar values can be assigned to UI components'
-        );
-
-        Tag::setDefault('name', ['Phalcon']);
-    }
-
     public function testSetDefaultsMerged(): void
     {
         Tag::setDefaults(['one' => 'first']);
@@ -117,5 +107,15 @@ final class ValuesTest extends AbstractTagTestCase
 
         $this->assertNull(Tag::getValue('one'));
         $this->assertSame('second', Tag::getValue('two'));
+    }
+
+    public function testSetDefaultThrowsForANonScalarValue(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Only scalar values can be assigned to UI components'
+        );
+
+        Tag::setDefault('name', ['Phalcon']);
     }
 }

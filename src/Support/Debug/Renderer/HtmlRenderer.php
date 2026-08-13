@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support\Debug\Renderer;
 
 use Phalcon\Contracts\Support\Debug\Renderer;
+use Phalcon\Contracts\Support\SupportTypes;
 use Phalcon\Support\Debug\Report\BacktraceItem;
 use Phalcon\Support\Debug\Report\ExceptionReport;
 use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
@@ -27,6 +28,7 @@ use function htmlentities;
 use function implode;
 use function is_array;
 use function is_object;
+use function is_resource;
 use function is_scalar;
 use function is_string;
 use function method_exists;
@@ -43,6 +45,12 @@ use const PHP_VERSION;
  * template strings filled by the interpolator. All styling and interactivity
  * (theme, tabs, syntax highlighting, copy/editor links) are provided by the
  * external debug.css / debug.js assets.
+ *
+ * @phpstan-import-type support_debug_args from SupportTypes
+ * @phpstan-import-type support_debug_fragment from SupportTypes
+ * @phpstan-import-type support_debug_included_files from SupportTypes
+ * @phpstan-import-type support_debug_superglobal from SupportTypes
+ * @phpstan-import-type support_debug_variables from SupportTypes
  */
 class HtmlRenderer implements Renderer
 {
@@ -245,6 +253,8 @@ class HtmlRenderer implements Renderer
 
     /**
      * Produces a recursive representation of an array
+     *
+     * @phpstan-param support_debug_args $arguments
      */
     protected function getArrayDump(array $arguments, int $number = 0): string | null
     {
@@ -269,7 +279,13 @@ class HtmlRenderer implements Renderer
             } elseif (null === $argument) {
                 $varDump = 'null';
             } else {
-                $varDump = $argument;
+                /**
+                 * Only resources reach this point; they stringify to
+                 * "Resource id #n".
+                 */
+                $varDump = is_resource($argument)
+                    ? (string) $argument
+                    : gettype($argument);
             }
 
             $dump[] = '[' . $index . '] =&gt; ' . $varDump;
@@ -303,6 +319,7 @@ class HtmlRenderer implements Renderer
             $className = get_class($variable);
 
             if (true === method_exists($variable, 'dump')) {
+                /** @var support_debug_args $dumpedObject */
                 $dumpedObject = $variable->dump();
 
                 return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
@@ -348,6 +365,9 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('panelClose');
     }
 
+    /**
+     * @phpstan-param support_debug_fragment $fragment
+     */
     private function renderFragment(array $fragment): string
     {
         $firstLine = $fragment['firstLine'];
@@ -379,6 +399,9 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('codeClose');
     }
 
+    /**
+     * @phpstan-param support_debug_included_files $files
+     */
     private function renderIncludedFiles(array $files): string
     {
         $html = $this->toInterpolate($this->getTemplate('panelOpen'), ['id' => 'files'])
@@ -448,6 +471,9 @@ class HtmlRenderer implements Renderer
         return $html;
     }
 
+    /**
+     * @phpstan-param support_debug_superglobal $source
+     */
     private function renderSuperglobal(string $div, array $source): string
     {
         $html = $this->toInterpolate($this->getTemplate('panelOpen'), ['id' => $div])
@@ -524,6 +550,9 @@ class HtmlRenderer implements Renderer
         return $html . $this->getTemplate('frameClose');
     }
 
+    /**
+     * @phpstan-param support_debug_variables $variables
+     */
     private function renderVariables(array $variables): string
     {
         if (empty($variables)) {

@@ -88,14 +88,6 @@ final class RenderAttributesTest extends AbstractTagTestCase
         );
     }
 
-    public function testRenderAttributesWithoutEscapingWhenAutoescapeIsOff(): void
-    {
-        $this->assertSame(
-            '<tag id="a"b"',
-            Tag::renderAttributes('<tag', ['id' => 'a"b'])
-        );
-    }
-
     public function testRenderAttributesThrowsForAnArrayValue(): void
     {
         $this->expectException(Exception::class);
@@ -120,5 +112,13 @@ final class RenderAttributesTest extends AbstractTagTestCase
         } finally {
             fclose($handle);
         }
+    }
+
+    public function testRenderAttributesWithoutEscapingWhenAutoescapeIsOff(): void
+    {
+        $this->assertSame(
+            '<tag id="a"b"',
+            Tag::renderAttributes('<tag', ['id' => 'a"b'])
+        );
     }
 }

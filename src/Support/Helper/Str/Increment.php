@@ -21,11 +21,16 @@ use function explode;
  */
 class Increment
 {
+    /**
+     * @param string           $text
+     * @param non-empty-string $separator
+     *
+     * @return string
+     */
     public function __invoke(
         string $text,
         string $separator = '_'
     ): string {
-        /** @var array<int, string> $parts */
         $parts  = explode($separator, $text);
         $number = 1;
 

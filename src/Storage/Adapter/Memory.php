@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Storage\SerializerFactory;
 
 use function array_key_exists;
@@ -23,8 +24,12 @@ use function is_int;
 /**
  * Memory adapter
  *
- * @property array $data
- * @property array $options
+ * @phpstan-import-type storage_adapter_options from StorageTypes
+ * @phpstan-import-type storage_keys from StorageTypes
+ * @phpstan-import-type storage_memory_data from StorageTypes
+ *
+ * @phpstan-property storage_memory_data $data
+ * @phpstan-property storage_adapter_options $options
  *
  * Capabilities:
  * - Scope: per-request, in-process; nothing is shared across requests or
@@ -36,7 +41,9 @@ use function is_int;
 class Memory extends AbstractAdapter
 {
     /**
-     * @var array
+     * @var array<string, mixed>
+     *
+     * @phpstan-var storage_memory_data
      */
     protected array $data = [];
 
@@ -54,6 +61,8 @@ class Memory extends AbstractAdapter
      *
      * @param SerializerFactory $factory
      * @param array             $options
+     *
+     * @phpstan-param storage_adapter_options $options
      *
      * @throws BaseException
      */
@@ -82,6 +91,8 @@ class Memory extends AbstractAdapter
      * @param string $prefix
      *
      * @return array
+     *
+     * @phpstan-return storage_keys
      */
     public function getKeys(string $prefix = ''): array
     {
@@ -127,6 +138,7 @@ class Memory extends AbstractAdapter
         $result      = array_key_exists($prefixedKey, $this->data);
 
         if (true === $result) {
+            /** @var float|int|string $current */
             $current  = $this->data[$prefixedKey];
             $newValue = (int)$current - $value;
             $result   = $newValue;
@@ -174,6 +186,7 @@ class Memory extends AbstractAdapter
         $result      = array_key_exists($prefixedKey, $this->data);
 
         if ($result) {
+            /** @var float|int|string $current */
             $current  = $this->data[$prefixedKey];
             $newValue = (int)$current + $value;
             $result   = $newValue;
@@ -205,10 +218,7 @@ class Memory extends AbstractAdapter
             && !array_key_exists($prefixedKey, $this->data)
             && count($this->data) >= $this->maxItems
         ) {
-            $firstKey = array_key_first($this->data);
-            if (null !== $firstKey) {
-                unset($this->data[$firstKey]);
-            }
+            unset($this->data[array_key_first($this->data)]);
         }
 
         $this->data[$prefixedKey] = $content;

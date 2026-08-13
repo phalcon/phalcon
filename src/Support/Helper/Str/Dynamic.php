@@ -16,7 +16,6 @@ namespace Phalcon\Support\Helper\Str;
 use Phalcon\Support\Helper\Str\Exceptions\SyntaxError;
 
 use function explode;
-use function is_array;
 use function mb_substr_count;
 
 /**
@@ -26,6 +25,14 @@ use function mb_substr_count;
  */
 class Dynamic
 {
+    /**
+     * @param string           $text
+     * @param string           $leftDelimiter
+     * @param string           $rightDelimiter
+     * @param non-empty-string $separator
+     *
+     * @return string
+     */
     public function __invoke(
         string $text,
         string $leftDelimiter = '{',
@@ -41,10 +48,7 @@ class Dynamic
         $pattern = '/' . $left . '([^' . $left . $right . ']+)' . $right . '/';
         $matches = [];
 
-        if (
-            false !== preg_match_all($pattern, $text, $matches, 2) &&
-            is_array($matches)
-        ) {
+        if (false !== preg_match_all($pattern, $text, $matches, 2)) {
             foreach ($matches as $match) {
                 if (!isset($match[0]) || !isset($match[1])) {
                     continue;
@@ -53,7 +57,7 @@ class Dynamic
                 $words = explode($separator, $match[1]);
                 $word  = $words[array_rand($words)];
                 $sub   = preg_quote($match[0], $separator);
-                $text  = preg_replace(
+                $text  = (string) preg_replace(
                     '/' . $sub . '/',
                     $word,
                     $text,

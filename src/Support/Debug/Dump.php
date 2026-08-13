@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use JsonException;
 use Phalcon\Container\Container;
 use Phalcon\Contracts\Support\Debug\TemplateAware;
+use Phalcon\Contracts\Support\SupportTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
 use Phalcon\Support\Helper\Json\Encode;
@@ -34,6 +35,7 @@ use function get_class;
 use function get_class_methods;
 use function get_object_vars;
 use function get_parent_class;
+use function gettype;
 use function htmlentities;
 use function implode;
 use function in_array;
@@ -43,6 +45,7 @@ use function is_float;
 use function is_int;
 use function is_numeric;
 use function is_object;
+use function is_resource;
 use function is_string;
 use function mb_strlen;
 use function nl2br;
@@ -71,6 +74,8 @@ use const PHP_EOL;
  *
  * echo (new \Phalcon\Debug\Dump())->variables($foo, $bar, $baz);
  * ```
+ *
+ * @phpstan-import-type support_debug_styles from SupportTypes
  */
 class Dump implements TemplateAware
 {
@@ -78,12 +83,20 @@ class Dump implements TemplateAware
     use TemplateAwareTrait;
 
     protected bool $detailed = false;
+    /**
+     * @var array<array-key, class-string>
+     */
     protected array $methods = [];
+    /**
+     * @phpstan-var support_debug_styles
+     */
     protected array $styles = [];
     private Encode $encode;
 
     /**
      * Dump constructor.
+     *
+     * @phpstan-param support_debug_styles $styles
      */
     public function __construct(array $styles = [], bool $detailed = false)
     {
@@ -99,13 +112,16 @@ class Dump implements TemplateAware
      */
     public function all(): string
     {
-        return call_user_func_array(
+        /** @var string $output */
+        $output = call_user_func_array(
             [
                 $this,
                 'variables',
             ],
             func_get_args()
         );
+
+        return $output;
     }
 
     public function getDetailed(): bool
@@ -130,6 +146,9 @@ class Dump implements TemplateAware
 
     /**
      * Set styles for vars type
+     *
+     * @phpstan-param  support_debug_styles $styles
+     * @phpstan-return support_debug_styles
      */
     public function setStyles(array $styles = []): array
     {
@@ -291,7 +310,7 @@ class Dump implements TemplateAware
             $message = $this->getTemplate('arrayHeader') . PHP_EOL;
             $context = [
                 'style' => $this->getStyle('arr'),
-                'count' => count($variable),
+                'count' => (string) count($variable),
             ];
 
             $output .= $this->toInterpolate($message, $context);
@@ -393,7 +412,7 @@ class Dump implements TemplateAware
             $context = [
                 'style' => $this->getStyle('obj'),
                 'class' => get_class($variable),
-                'count' => count($attr),
+                'count' => (string) count($attr),
             ];
 
             $output .= str_repeat($space, $tab)
@@ -429,7 +448,7 @@ class Dump implements TemplateAware
             $message = $this->getOutputBold('Integer') . ' ' . $this->getTemplate('varParens');
             $context = [
                 'style' => $this->getStyle('int'),
-                'var'   => $variable,
+                'var'   => (string) $variable,
             ];
 
             return $output . $this->toInterpolate($message, $context);
@@ -439,7 +458,7 @@ class Dump implements TemplateAware
             $message = $this->getOutputBold('Float') . ' ' . $this->getTemplate('varParens');
             $context = [
                 'style' => $this->getStyle('float'),
-                'var'   => $variable,
+                'var'   => (string) $variable,
             ];
 
             return $output . $this->toInterpolate($message, $context);
@@ -449,8 +468,8 @@ class Dump implements TemplateAware
             $message = $this->getOutputBold('Numeric String') . ' ' . $this->getTemplate('lengthValue');
             $context = [
                 'style'  => $this->getStyle('num'),
-                'length' => mb_strlen((string)$variable),
-                'var'    => $variable,
+                'length' => (string) mb_strlen((string)$variable),
+                'var'    => (string) $variable,
             ];
 
             return $output . $this->toInterpolate($message, $context);
@@ -460,7 +479,7 @@ class Dump implements TemplateAware
             $message = $this->getOutputBold('String') . ' ' . $this->getTemplate('lengthValue');
             $context = [
                 'style'  => $this->getStyle('str'),
-                'length' => mb_strlen($variable),
+                'length' => (string) mb_strlen($variable),
                 'var'    => nl2br(htmlentities($variable, ENT_IGNORE, 'utf-8')),
             ];
 
@@ -489,7 +508,13 @@ class Dump implements TemplateAware
         $message = $this->getTemplate('varParens');
         $context = [
             'style' => $this->getStyle('other'),
-            'var'   => $variable,
+            /**
+             * Only resources reach this point; they stringify to
+             * "Resource id #n".
+             */
+            'var'   => is_resource($variable)
+                ? (string) $variable
+                : gettype($variable),
         ];
 
         return $output . $this->toInterpolate($message, $context);

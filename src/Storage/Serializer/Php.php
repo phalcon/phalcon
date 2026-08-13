@@ -55,8 +55,10 @@ class Php extends AbstractSerializer
 
             $warning = false;
             set_error_handler(
-                function () use (&$warning) {
+                function () use (&$warning): bool {
                     $warning = true;
+
+                    return true;
                 },
                 E_NOTICE | E_WARNING
             );

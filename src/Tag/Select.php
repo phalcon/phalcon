@@ -168,6 +168,13 @@ abstract class Select
         return $code;
     }
 
+    protected static function echoOption(string $value, bool $selected = false): string
+    {
+        $extra = $selected ? 'selected="selected" ' : '';
+
+        return "\t<option {$extra}value=\"" . $value . "\">";
+    }
+
     /**
      * Reduces an arbitrary option value to the string the markup needs.
      * Option data is user supplied, so anything that cannot be expressed as
@@ -180,13 +187,6 @@ abstract class Select
         }
 
         return "";
-    }
-
-    protected static function echoOption(string $value, bool $selected = false): string
-    {
-        $extra = $selected ? 'selected="selected" ' : '';
-
-        return "\t<option {$extra}value=\"" . $value . "\">";
     }
 
     /**
@@ -270,7 +270,7 @@ abstract class Select
 
         $escaper = BaseTag::getEscaperService();
 
-        /** @var ResultsetInterface&iterable<array-key, mixed> $rows */
+        /** @var iterable<array-key, mixed>&ResultsetInterface $rows */
         $rows = $resultset;
 
         foreach ($rows as $option) {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Debug;
 
+use Phalcon\Contracts\Support\SupportTypes;
 use Phalcon\Support\Debug\Report\BacktraceItem;
 use Phalcon\Support\Debug\Report\ExceptionReport;
 use Phalcon\Traits\Php\InfoTrait;
@@ -37,6 +38,12 @@ use function str_starts_with;
  * Collects the runtime data for an exception (backtrace, superglobals, included
  * files, memory, variables) into an ExceptionReport. Holds no presentation
  * logic.
+ *
+ * @phpstan-import-type support_debug_blacklist from SupportTypes
+ * @phpstan-import-type support_debug_fragment from SupportTypes
+ * @phpstan-import-type support_debug_superglobal from SupportTypes
+ * @phpstan-import-type support_debug_trace from SupportTypes
+ * @phpstan-import-type support_debug_variables from SupportTypes
  */
 class ReportBuilder
 {
@@ -44,6 +51,9 @@ class ReportBuilder
     use InfoTrait;
 
     /**
+     * @phpstan-param support_debug_blacklist $blacklist
+     * @phpstan-param support_debug_variables $data
+     *
      * @return ExceptionReport
      * @throws ReflectionException
      */
@@ -74,14 +84,15 @@ class ReportBuilder
             $items[] = $this->buildItem($trace, $showFiles, $showFileFragment);
         }
 
+        /** @var array<string, int> $requestBlacklist */
+        $requestBlacklist = $this->getArrVal($blacklist, 'request', []);
+        /** @var array<string, int> $serverBlacklist */
+        $serverBlacklist = $this->getArrVal($blacklist, 'server', []);
+
         $report
             ->setBacktrace($items)
-            ->setRequest(
-                $this->filter($_REQUEST, $this->getArrVal($blacklist, 'request', []))
-            )
-            ->setServer(
-                $this->filter($_SERVER, $this->getArrVal($blacklist, 'server', []))
-            )
+            ->setRequest($this->filter($_REQUEST, $requestBlacklist))
+            ->setServer($this->filter($_SERVER, $serverBlacklist))
             ->setIncludedFiles(get_included_files())
             ->setMemoryUsage(memory_get_usage(true))
             ->setPeakMemoryUsage(memory_get_peak_usage(true))
@@ -90,6 +101,9 @@ class ReportBuilder
         return $report;
     }
 
+    /**
+     * @phpstan-return support_debug_fragment
+     */
     private function buildFragment(string $file, int $line, bool $showFileFragment): array
     {
         $lines = file($file);
@@ -121,9 +135,11 @@ class ReportBuilder
     }
 
     /**
-     * @param array $trace
-     * @param bool  $showFiles
-     * @param bool  $showFileFragment
+     * @phpstan-param support_debug_trace $trace
+     *
+     * @param array<array-key, mixed> $trace
+     * @param bool                    $showFiles
+     * @param bool                    $showFileFragment
      *
      * @return BacktraceItem
      * @throws ReflectionException
@@ -152,7 +168,7 @@ class ReportBuilder
         $file     = null;
         $line     = null;
         $fragment = null;
-        if (isset($trace['file'])) {
+        if (isset($trace['file'], $trace['line'])) {
             $file = $trace['file'];
             $line = $trace['line'];
 
@@ -175,6 +191,11 @@ class ReportBuilder
         );
     }
 
+    /**
+     * @phpstan-param  support_debug_superglobal $source
+     * @phpstan-param  array<string, int>        $blacklist
+     * @phpstan-return support_debug_superglobal
+     */
     private function filter(array $source, array $blacklist): array
     {
         $result = [];
@@ -188,6 +209,8 @@ class ReportBuilder
     }
 
     /**
+     * @param class-string $className
+     *
      * @throws ReflectionException
      */
     private function resolveClassLink(string $className): string | null

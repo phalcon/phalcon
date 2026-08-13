@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support;
 
 use Phalcon\Contracts\Support\Debug\Renderer;
+use Phalcon\Contracts\Support\SupportTypes;
 use Phalcon\Support\Debug\Exceptions\RequestHalted;
 use Phalcon\Support\Debug\Exceptions\RuntimeWarning;
 use Phalcon\Support\Debug\Renderer\HtmlRenderer;
@@ -27,13 +28,23 @@ use function mb_strtolower;
 /**
  * Listens for uncaught exceptions and renders them. Acts as a thin coordinator
  * delegating data collection to ReportBuilder and presentation to a Renderer.
+ *
+ * @phpstan-import-type support_debug_blacklist from SupportTypes
+ * @phpstan-import-type support_debug_blacklist_input from SupportTypes
+ * @phpstan-import-type support_debug_variables from SupportTypes
  */
 class Debug
 {
     use GetTrait;
 
     protected static bool $isActive = false;
+    /**
+     * @phpstan-var support_debug_blacklist
+     */
     protected array $blacklist = ["request" => [], "server" => []];
+    /**
+     * @phpstan-var support_debug_variables
+     */
     protected array $data = [];
     protected bool $hideDocumentRoot = false;
     protected Renderer $renderer;
@@ -138,7 +149,15 @@ class Debug
      */
     public function listenExceptions(): static
     {
-        set_exception_handler([$this, 'onUncaughtException']);
+        /**
+         * PHP ignores whatever the handler returns, so the `bool` this one
+         * gives back is compatible with the `void` the signature asks for.
+         *
+         * @var callable(Throwable): void $exceptionHandler
+         */
+        $exceptionHandler = [$this, 'onUncaughtException'];
+
+        set_exception_handler($exceptionHandler);
 
         return $this;
     }
@@ -148,8 +167,19 @@ class Debug
      */
     public function listenLowSeverity(): static
     {
-        set_error_handler([$this, 'onUncaughtLowSeverity']);
-        set_exception_handler([$this, 'onUncaughtException']);
+        /**
+         * Returning nothing tells PHP to fall through to the standard error
+         * handler, which is exactly what this one does when the severity is
+         * masked out.
+         *
+         * @var callable(int, string, string, int): bool $errorHandler
+         */
+        $errorHandler = [$this, 'onUncaughtLowSeverity'];
+        /** @var callable(Throwable): void $exceptionHandler */
+        $exceptionHandler = [$this, 'onUncaughtException'];
+
+        set_error_handler($errorHandler);
+        set_exception_handler($exceptionHandler);
 
         return $this;
     }
@@ -236,10 +266,13 @@ class Debug
     /**
      * Sets if files the exception's backtrace must be showed
      *
-     * @param array $blacklist
+     * @phpstan-param support_debug_blacklist_input $blacklist
+     *
+     * @param array<array-key, mixed> $blacklist
      */
     public function setBlacklist(array $blacklist): static
     {
+        /** @var array<array-key, string> $area */
         $area     = $this->getArrVal($blacklist, 'request', []);
         $subArray = [];
         $result   = [];
@@ -249,6 +282,7 @@ class Debug
         }
 
         $result['request'] = $subArray;
+        /** @var array<array-key, string> $area */
         $area              = $this->getArrVal($blacklist, 'server', []);
         $subArray          = [];
 

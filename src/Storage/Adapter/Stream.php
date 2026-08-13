@@ -15,6 +15,7 @@ namespace Phalcon\Storage\Adapter;
 
 use FilesystemIterator;
 use Iterator;
+use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Traits\Php\FileTrait;
@@ -22,6 +23,7 @@ use Phalcon\Traits\Support\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 use function fclose;
 use function flock;
@@ -46,12 +48,9 @@ use const LOCK_SH;
  * - getKeys(): recursive directory traversal; cost grows with the entry count.
  * - Serializers: Phalcon-side only.
  *
- * @phpstan-type TOptions array{
- *     storageDir?: string,
- *     defaultSerializer?: string,
- *     lifetime?: int,
- *     prefix?: string
- * }
+ * @phpstan-import-type storage_keys from StorageTypes
+ * @phpstan-import-type storage_stream_options from StorageTypes
+ * @phpstan-import-type storage_stream_payload from StorageTypes
  */
 class Stream extends AbstractAdapter
 {
@@ -65,7 +64,7 @@ class Stream extends AbstractAdapter
     /**
      * Stream constructor.
      *
-     * @param TOptions          $options
+     * @phpstan-param storage_stream_options $options
      *
      * @throws InvalidConfiguration
      */
@@ -73,6 +72,7 @@ class Stream extends AbstractAdapter
         SerializerFactory $factory,
         array $options = []
     ) {
+        /** @var string $storageDir */
         $storageDir = $this->getArrVal($options, 'storageDir', '');
         if (empty($storageDir)) {
             throw new InvalidConfiguration(
@@ -104,6 +104,7 @@ class Stream extends AbstractAdapter
 
         $iterator = $this->getIterator($directory);
 
+        /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
             if (true === $file->isFile() && true !== $this->phpUnlink($file->getPathName())) {
                 $result = false;
@@ -115,6 +116,8 @@ class Stream extends AbstractAdapter
 
     /**
      * Stores data in the adapter
+     *
+     * @phpstan-return storage_keys
      */
     public function getKeys(string $prefix = ''): array
     {
@@ -127,6 +130,7 @@ class Stream extends AbstractAdapter
 
         $iterator = $this->getIterator($directory);
 
+        /** @var SplFileInfo $file */
         foreach ($iterator as $file) {
             if (true === $file->isFile()) {
                 $files[] = $this->prefix . $file->getFilename();
@@ -160,6 +164,7 @@ class Stream extends AbstractAdapter
             return false;
         }
 
+        /** @var float|int|string $data */
         $data = $this->doGet($key);
         $data = (int)$data - $value;
 
@@ -235,6 +240,7 @@ class Stream extends AbstractAdapter
             return false;
         }
 
+        /** @var float|int|string $data */
         $data = $this->doGet($key);
         $data = (int)$data + $value;
 
@@ -306,6 +312,8 @@ class Stream extends AbstractAdapter
     /**
      * Gets the file contents and returns an array or an error if something
      * went wrong
+     *
+     * @phpstan-return storage_stream_payload
      */
     private function getPayload(string $filepath): array
     {
@@ -334,13 +342,16 @@ class Stream extends AbstractAdapter
 
         $warning = false;
         set_error_handler(
-            function () use (&$warning) {
+            function () use (&$warning): bool {
                 $warning = true;
+
+                return true;
             },
             E_NOTICE
         );
 
         try {
+            /** @var false|storage_stream_payload $data */
             $data = unserialize($payload);
         } catch (\ValueError $e) {
             $data = [];
@@ -357,6 +368,8 @@ class Stream extends AbstractAdapter
 
     /**
      * Returns if the cache has expired for this item or not
+     *
+     * @phpstan-param storage_stream_payload $payload
      */
     private function isExpired(array $payload): bool
     {
@@ -372,6 +385,8 @@ class Stream extends AbstractAdapter
 
     /**
      * Stores an array payload on the file system
+     *
+     * @phpstan-param storage_stream_payload $payload
      */
     private function storePayload(array $payload, string $key): bool
     {

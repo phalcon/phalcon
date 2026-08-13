@@ -26,6 +26,7 @@ class Get
 
     /**
      * @param array<array-key, mixed> $collection
+     * @param array-key               $index
      */
     public function __invoke(
         array $collection,

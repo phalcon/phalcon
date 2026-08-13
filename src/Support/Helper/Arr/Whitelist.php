@@ -35,6 +35,7 @@ class Whitelist extends AbstractArr
         /**
          * Clean whitelist, just strings and integers
          */
+        /** @var array<array-key, int|string> $whiteList */
         $whiteList = $this->toFilter(
             $whiteList,
             function ($element) {

@@ -13,9 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Debug\Report;
 
+use Phalcon\Contracts\Support\SupportTypes;
+
 /**
  * Carries all data collected for an exception, ready to be rendered. Holds no
  * presentation logic.
+ *
+ * @phpstan-import-type support_debug_included_files from SupportTypes
+ * @phpstan-import-type support_debug_superglobal from SupportTypes
+ * @phpstan-import-type support_debug_variables from SupportTypes
  */
 final class ExceptionReport
 {
@@ -23,11 +29,23 @@ final class ExceptionReport
      * @var BacktraceItem[]
      */
     private array $backtrace = [];
+    /**
+     * @phpstan-var support_debug_included_files
+     */
     private array $includedFiles = [];
     private int $memoryUsage = 0;
     private int $peakMemoryUsage = 0;
+    /**
+     * @phpstan-var support_debug_superglobal
+     */
     private array $request = [];
+    /**
+     * @phpstan-var support_debug_superglobal
+     */
     private array $server = [];
+    /**
+     * @phpstan-var support_debug_variables
+     */
     private array $variables = [];
 
     public function __construct(
@@ -58,6 +76,9 @@ final class ExceptionReport
         return $this->file;
     }
 
+    /**
+     * @phpstan-return support_debug_included_files
+     */
     public function getIncludedFiles(): array
     {
         return $this->includedFiles;
@@ -83,11 +104,17 @@ final class ExceptionReport
         return $this->peakMemoryUsage;
     }
 
+    /**
+     * @phpstan-return support_debug_superglobal
+     */
     public function getRequest(): array
     {
         return $this->request;
     }
 
+    /**
+     * @phpstan-return support_debug_superglobal
+     */
     public function getServer(): array
     {
         return $this->server;
@@ -98,6 +125,9 @@ final class ExceptionReport
         return $this->uri;
     }
 
+    /**
+     * @phpstan-return support_debug_variables
+     */
     public function getVariables(): array
     {
         return $this->variables;
@@ -123,6 +153,9 @@ final class ExceptionReport
         return $this;
     }
 
+    /**
+     * @phpstan-param support_debug_included_files $includedFiles
+     */
     public function setIncludedFiles(array $includedFiles): static
     {
         $this->includedFiles = $includedFiles;
@@ -144,6 +177,9 @@ final class ExceptionReport
         return $this;
     }
 
+    /**
+     * @phpstan-param support_debug_superglobal $request
+     */
     public function setRequest(array $request): static
     {
         $this->request = $request;
@@ -151,6 +187,9 @@ final class ExceptionReport
         return $this;
     }
 
+    /**
+     * @phpstan-param support_debug_superglobal $server
+     */
     public function setServer(array $server): static
     {
         $this->server = $server;
@@ -158,6 +197,9 @@ final class ExceptionReport
         return $this;
     }
 
+    /**
+     * @phpstan-param support_debug_variables $variables
+     */
     public function setVariables(array $variables): static
     {
         $this->variables = $variables;

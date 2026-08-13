@@ -16,6 +16,7 @@ namespace Phalcon\Storage\Adapter;
 use DateInterval;
 use DateTime;
 use Exception;
+use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Storage\Serializer\SerializerInterface;
@@ -28,6 +29,9 @@ use function method_exists;
 
 /**
  * Storage AbstractAdapter
+ *
+ * @phpstan-import-type storage_keys from StorageTypes
+ * @phpstan-import-type storage_options from StorageTypes
  */
 abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
@@ -55,6 +59,12 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Name of the default TTL (time to live)
      */
     protected int $lifetime = 3600;
+
+    /**
+     * @var array<string, mixed>
+     *
+     * @phpstan-var storage_options
+     */
     protected array $options = [];
     protected string $prefix = 'ph-memo-';
     protected SerializerInterface | null $serializer = null;
@@ -70,23 +80,32 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * AbstractAdapter constructor.
+     *
+     * @phpstan-param storage_options $options
      */
     protected function __construct(
         protected SerializerFactory $serializerFactory,
         array $options = []
     ) {
+        /** @var string $defaultSerializer */
+        $defaultSerializer = $this->getArrVal($options, 'defaultSerializer', 'php');
+        /** @var int $lifetime */
+        $lifetime = $this->getArrVal($options, 'lifetime', 3600);
+        /** @var SerializerInterface|null $serializer */
+        $serializer = $this->getArrVal($options, 'serializer', null);
+
         /**
          * Lets set some defaults and options here
          */
-        $this->defaultSerializer = mb_strtolower(
-            $this->getArrVal($options, 'defaultSerializer', 'php')
-        );
-        $this->lifetime          = $this->getArrVal($options, 'lifetime', 3600);
-        $this->serializer        = $this->getArrVal($options, 'serializer', null);
+        $this->defaultSerializer = mb_strtolower($defaultSerializer);
+        $this->lifetime          = $lifetime;
+        $this->serializer        = $serializer;
         $this->stripPrefix       = (bool) $this->getArrVal($options, 'stripPrefix', true);
 
         if (isset($options['prefix'])) {
-            $this->prefix = $options['prefix'];
+            /** @var string $prefix */
+            $prefix       = $options['prefix'];
+            $this->prefix = $prefix;
         }
 
         unset(
@@ -139,6 +158,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Deletes multiple data from the adapter
+     *
+     * @phpstan-param storage_keys $keys
      */
     public function deleteMultiple(array $keys): bool
     {
@@ -192,6 +213,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns all the keys stored
+     *
+     * @phpstan-return storage_keys
      */
     abstract public function getKeys(string $prefix = ''): array;
 
@@ -291,6 +314,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Deletes multiple data from the adapter
+     *
+     * @phpstan-param storage_keys $keys
      */
     protected function doDeleteMultiple(array $keys): bool
     {
@@ -327,7 +352,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     protected function doGetData(string $key): mixed
     {
-        return $this->getAdapter()->get($key);
+        /**
+         * Every adapter that relies on this implementation is backed by a
+         * client exposing `get()`; the rest override `doGet()`/`doGetData()`.
+         *
+         * @var \Memcached|\Redis|\RedisCluster $adapter
+         */
+        $adapter = $this->getAdapter();
+
+        return $adapter->get($key);
     }
 
     /**
@@ -361,6 +394,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Filters the keys array based on global and passed prefix
+     *
+     * @phpstan-param storage_keys|false $keys
+     *
+     * @phpstan-return storage_keys
      */
     protected function getFilteredKeys($keys, string $prefix): array
     {
@@ -394,9 +431,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Returns the key requested, prefixed
      */
-    protected function getPrefixedKey(mixed $key): string
+    protected function getPrefixedKey(string $key): string
     {
-        return $this->prefix . $this->getKeyWithoutPrefix((string)$key);
+        return $this->prefix . $this->getKeyWithoutPrefix($key);
     }
 
     /**
@@ -430,6 +467,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             return $dateTime->add($ttl)->getTimestamp();
         }
 
+        /** @var float|int|string $ttl */
         return (int)$ttl;
     }
 

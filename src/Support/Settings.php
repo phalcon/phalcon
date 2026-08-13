@@ -37,7 +37,7 @@ class Settings
     /**
      * PHP-level overrides. Keys stored here take priority over ini_get().
      *
-     * @var array
+     * @var array<string, bool|int>
      */
     protected static array $overrides = [];
     /**

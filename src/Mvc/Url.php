@@ -95,7 +95,9 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *     ]
      * );
      *
-     * // Generate an absolute URL by setting the third parameter as false.
+     * // A URI that already carries a scheme is detected as remote and is
+     * // returned untouched. The third parameter is only honored when it is
+     * // explicitly true - a false reads the same as leaving it out.
      * echo $url->get(
      *     "https://phalcon.io/",
      *     null,
@@ -120,7 +122,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
         mixed $baseUri = null,
         bool $replaceArgs = false
     ): string {
-        if (null === $local) {
+        /**
+         * Only an explicitly truthy `$local` is taken as given; an omitted,
+         * null or false value is resolved from the URI instead. This mirrors
+         * the extension, where the parameter cannot tell those three apart.
+         */
+        if (true !== $local) {
             if (
                 is_string($uri) &&
                 (str_contains($uri, "//") || str_contains($uri, ":"))

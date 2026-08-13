@@ -37,9 +37,9 @@ class Encode
     use EncodeTrait;
 
     /**
-     * @param mixed $data    JSON data to parse
-     * @param int   $options Bitmask of JSON encode options.
-     * @param int   $depth   Recursion depth.
+     * @param mixed       $data    JSON data to parse
+     * @param int         $options Bitmask of JSON encode options.
+     * @param int<1, max> $depth   Recursion depth.
      *
      * @return string
      *

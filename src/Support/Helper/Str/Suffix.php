@@ -13,14 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
+use Stringable;
+
 /**
  * Suffixes the text with the supplied suffix
  */
 class Suffix
 {
     /**
-     * @param mixed  $text
-     * @param string $suffix
+     * @param scalar|Stringable|null $text
+     * @param string                 $suffix
      *
      * @return string
      */

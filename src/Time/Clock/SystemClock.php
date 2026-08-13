@@ -25,9 +25,6 @@ use function date_default_timezone_get;
 
 final class SystemClock implements ClockInterface
 {
-    /**
-     * @var DateTimeZone
-     */
     private DateTimeZone $timezone;
 
     public function __construct(DateTimeZone $timezone)

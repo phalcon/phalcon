@@ -46,6 +46,28 @@ final class InputFieldCheckedTest extends AbstractTagTestCase
         );
     }
 
+    public function testFieldIsCheckedFromThePostValue(): void
+    {
+        $_POST['name'] = 'yes';
+
+        $this->assertSame(
+            '<input type="checkbox" id="name" name="name" '
+            . 'value="yes" checked="checked">',
+            Tag::checkField('name')
+        );
+    }
+
+    public function testFieldIsCheckedFromTheStoredValue(): void
+    {
+        Tag::setDefault('name', 'yes');
+
+        $this->assertSame(
+            '<input type="checkbox" id="name" name="name" '
+            . 'value="yes" checked="checked">',
+            Tag::checkField('name')
+        );
+    }
+
     #[DataProvider('getFields')]
     public function testFieldIsCheckedWhenTheStoredValueMatches(
         string $method,
@@ -70,28 +92,6 @@ final class InputFieldCheckedTest extends AbstractTagTestCase
         $this->assertSame(
             '<input type="' . $type . '" id="name" name="name" value="yes">',
             Tag::$method(['name', 'value' => 'yes'])
-        );
-    }
-
-    public function testFieldIsCheckedFromThePostValue(): void
-    {
-        $_POST['name'] = 'yes';
-
-        $this->assertSame(
-            '<input type="checkbox" id="name" name="name" '
-            . 'value="yes" checked="checked">',
-            Tag::checkField('name')
-        );
-    }
-
-    public function testFieldIsCheckedFromTheStoredValue(): void
-    {
-        Tag::setDefault('name', 'yes');
-
-        $this->assertSame(
-            '<input type="checkbox" id="name" name="name" '
-            . 'value="yes" checked="checked">',
-            Tag::checkField('name')
         );
     }
 

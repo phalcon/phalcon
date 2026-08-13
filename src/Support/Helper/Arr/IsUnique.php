@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
+use Stringable;
+
 use function array_unique;
 use function count;
 
@@ -23,7 +25,10 @@ use function count;
 class IsUnique
 {
     /**
-     * @param array<array-key, mixed> $collection
+     * `array_unique()` compares the elements as strings, so the collection can
+     * only hold values that can be cast to one.
+     *
+     * @param array<array-key, scalar|Stringable|null> $collection
      *
      * @return bool
      */

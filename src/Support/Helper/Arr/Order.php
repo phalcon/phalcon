@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Arr;
 
 use function array_values;
+use function is_array;
 use function is_object;
 
 use const SORT_REGULAR;
@@ -63,8 +64,10 @@ class Order
         string $attribute,
         mixed $item
     ): array {
-        if (!is_object($item)) {
-            $sorted[$item[$attribute]] = $item;
+        if (is_array($item)) {
+            /** @var array-key $key */
+            $key          = $item[$attribute];
+            $sorted[$key] = $item;
         }
 
         return $sorted;
@@ -83,7 +86,9 @@ class Order
         mixed $item
     ): array {
         if (is_object($item)) {
-            $sorted[$item->$attribute] = $item;
+            /** @var array-key $key */
+            $key          = $item->$attribute;
+            $sorted[$key] = $item;
         }
 
         return $sorted;

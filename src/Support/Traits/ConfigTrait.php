@@ -14,20 +14,28 @@ declare(strict_types=1);
 namespace Phalcon\Support\Traits;
 
 use Phalcon\Config\ConfigInterface;
+use Throwable;
 
 use function is_array;
 
 trait ConfigTrait
 {
     /**
-     * @param array<string, mixed>|ConfigInterface $config
+     * Normalizes the factory configuration. The parameter is `mixed` on
+     * purpose: anything that is neither an array nor a `ConfigInterface` is
+     * rejected here at runtime.
+     *
+     * @param mixed $config
      *
      * @return array<string, mixed>
      */
     protected function checkConfig(mixed $config): array
     {
         if ($config instanceof ConfigInterface) {
-            return $config->toArray();
+            /** @var array<string, mixed> $converted */
+            $converted = $config->toArray();
+
+            return $converted;
         }
 
         if (!is_array($config)) {
@@ -37,16 +45,17 @@ trait ConfigTrait
             );
         }
 
+        /** @var array<string, mixed> $config */
         return $config;
     }
 
     /**
      * Checks if the config has a specific element
      *
-     * @param array  $config
-     * @param string $element
+     * @param array<string, mixed> $config
+     * @param string               $element
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function checkConfigElement(array $config, string $element): array
     {
@@ -63,7 +72,7 @@ trait ConfigTrait
     /**
      * Returns the exception class for the factory
      *
-     * @return string
+     * @return class-string<Throwable>
      */
     abstract protected function getExceptionClass(): string;
 }

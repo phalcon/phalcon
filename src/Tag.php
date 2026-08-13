@@ -44,16 +44,6 @@ use const PHP_EOL;
  * It provides a set of helpers to generate HTML in a dynamic way.
  * This component is a class that you can extend to add more helpers.
  *
- * The shapes below are declared here rather than in a contract: Tag is
- * deprecated as of the next major, so the types stay with the component that
- * owns them and retire with it.
- *
- * The parameter bags are keyed by `array-key`, not `string`. Every helper
- * accepts `array|string`, promotes a bare string to `[$string]`, and then
- * reads both positional (`$params[0]`, `$params[1]`) and named (`'id'`,
- * `'name'`) offsets off the same array - so integer and string keys coexist
- * by design, and no narrower key type can describe them.
- *
  * @phpstan-type tag_parameters array<array-key, mixed>
  * @phpstan-type tag_attributes array<array-key, mixed>
  * @phpstan-type tag_display_values array<array-key, scalar|null>
@@ -135,7 +125,7 @@ class Tag
      *     'id' => '',
      *     'name' => ''
      *     'value' => ''
-     *                                 ]
+     * ]
      */
     public static function colorField(array | string $parameters): string
     {
@@ -402,15 +392,8 @@ class Tag
         $escaper = self::$escaperService;
 
         if (null === $escaper) {
-            $service = self::getDI()->getShared("escaper");
-
-            if (!($service instanceof EscaperInterface)) {
-                throw new Exception(
-                    "A dependency injection container is required to access the 'escaper' service"
-                );
-            }
-
-            $escaper              = $service;
+            /** @var EscaperInterface $escaper */
+            $escaper              = self::getDI()->getShared("escaper");
             self::$escaperService = $escaper;
         }
 
@@ -484,15 +467,8 @@ class Tag
         $url = self::$urlService;
 
         if (null === $url) {
-            $service = self::getDI()->getShared("url");
-
-            if (!($service instanceof UrlInterface)) {
-                throw new Exception(
-                    "A dependency injection container is required to access the 'url' service"
-                );
-            }
-
-            $url              = $service;
+            /** @var UrlInterface $url */
+            $url              = self::getDI()->getShared("url");
             self::$urlService = $url;
         }
 
@@ -504,10 +480,8 @@ class Tag
      * predefined value using Phalcon\Tag::setDefault() or value from $_POST
      *
      * @phpstan-param tag_parameters $parameters
-     *
-     * @return mixed
      */
-    public static function getValue(int | string $name, array $parameters = [])
+    public static function getValue(int | string $name, array $parameters = []): mixed
     {
         $value = $parameters["value"] ?? null;
         if (null === $value) {
@@ -1123,7 +1097,6 @@ class Tag
             $params = $parameters;
         }
 
-        $local = true;
         if (isset($params[1])) {
             $local = (bool)$params[1];
         } else {
@@ -1356,21 +1329,6 @@ class Tag
     }
 
     /**
-     * Reduces an arbitrary helper value to the string a tag attribute, id or
-     * URI needs. Parameter bags are user supplied, so a value that cannot be
-     * expressed as a string - an array, an object without `__toString()` -
-     * reads back as an empty string rather than aborting the helper.
-     */
-    final protected static function toStringValue(mixed $value): string
-    {
-        if (is_scalar($value) || $value instanceof Stringable) {
-            return (string) $value;
-        }
-
-        return "";
-    }
-
-    /**
      * Resolves a static (asset) URL through the `url` service.
      *
      * `getStatic()` lives on Phalcon\Mvc\Url but is absent from
@@ -1412,7 +1370,6 @@ class Tag
         bool $asValue = false
     ): string {
         $params = [];
-        $id     = '';
 
         if (!is_array($parameters)) {
             $params[] = $parameters;
@@ -1423,9 +1380,9 @@ class Tag
         if (false === $asValue) {
             if (!isset($params[0])) {
                 $params[0] = $params["id"] ?? "";
-            } else {
-                $id = self::toStringValue($params[0]);
             }
+
+            $id = self::toStringValue($params[0]);
 
             if (isset($params["name"])) {
                 $name = $params["name"];
@@ -1538,5 +1495,20 @@ class Tag
         $code .= (self::$documentType > self::HTML5) ? " />" : ">";
 
         return $code;
+    }
+
+    /**
+     * Reduces an arbitrary helper value to the string a tag attribute, id or
+     * URI needs. Parameter bags are user supplied, so a value that cannot be
+     * expressed as a string - an array, an object without `__toString()` -
+     * reads back as an empty string rather than aborting the helper.
+     */
+    final protected static function toStringValue(mixed $value): string
+    {
+        if (is_scalar($value) || $value instanceof Stringable) {
+            return (string) $value;
+        }
+
+        return "";
     }
 }

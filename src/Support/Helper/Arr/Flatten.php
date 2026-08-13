@@ -61,7 +61,7 @@ class Flatten
      *
      * @return array<array-key, mixed>
      */
-    private function processArrayDeep(array $data, $item, bool $deep): array
+    private function processArrayDeep(array $data, mixed $item, bool $deep): array
     {
         if (is_array($item) && true === $deep) {
             $data = array_merge($data, $this->__invoke($item, true));
@@ -75,7 +75,7 @@ class Flatten
      *
      * @return array<array-key, mixed>
      */
-    private function processNotArray(array $data, $item): array
+    private function processNotArray(array $data, mixed $item): array
     {
         if (!is_array($item)) {
             $data[] = $item;

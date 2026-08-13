@@ -22,6 +22,7 @@ class Chunk
 {
     /**
      * @param array<array-key, mixed> $collection
+     * @param int<1, max>             $size
      *
      * @return array<array-key, mixed>
      */

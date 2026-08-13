@@ -13,11 +13,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Debug\Report;
 
+use Phalcon\Contracts\Support\SupportTypes;
+
 /**
  * Represents a single resolved frame of an exception backtrace.
+ *
+ * @phpstan-import-type support_debug_args from SupportTypes
+ * @phpstan-import-type support_debug_fragment from SupportTypes
  */
 final class BacktraceItem
 {
+    /**
+     * @phpstan-param support_debug_args          $args
+     * @phpstan-param support_debug_fragment|null $fragment
+     */
     public function __construct(
         private readonly string $functionName,
         private readonly ?string $type = null,
@@ -32,6 +41,9 @@ final class BacktraceItem
     ) {
     }
 
+    /**
+     * @phpstan-return support_debug_args
+     */
     public function getArgs(): array
     {
         return $this->args;
@@ -52,6 +64,9 @@ final class BacktraceItem
         return $this->file;
     }
 
+    /**
+     * @phpstan-return support_debug_fragment|null
+     */
     public function getFragment(): ?array
     {
         return $this->fragment;

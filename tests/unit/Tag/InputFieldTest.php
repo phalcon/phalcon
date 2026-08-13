@@ -71,6 +71,26 @@ final class InputFieldTest extends AbstractTagTestCase
         );
     }
 
+    public function testFieldUsesThePostValue(): void
+    {
+        $_POST['name'] = 'Posted';
+
+        $this->assertSame(
+            '<input type="text" id="name" name="name" value="Posted">',
+            Tag::textField('name')
+        );
+    }
+
+    public function testFieldUsesTheStoredDefaultValue(): void
+    {
+        Tag::setDefault('name', 'Stored');
+
+        $this->assertSame(
+            '<input type="text" id="name" name="name" value="Stored">',
+            Tag::textField('name')
+        );
+    }
+
     public function testFieldWithArrayNameSkipsTheAutomaticId(): void
     {
         $this->assertSame(
@@ -91,10 +111,10 @@ final class InputFieldTest extends AbstractTagTestCase
     {
         /**
          * With no positional index the `id` key becomes the first parameter,
-         * but the local id used for `name` is never filled in from it.
+         * and `name` is derived from it - the same as checkField().
          */
         $this->assertSame(
-            '<input type="text" id="name" name="">',
+            '<input type="text" id="name" name="name">',
             Tag::textField(['id' => 'name'])
         );
     }
@@ -125,26 +145,6 @@ final class InputFieldTest extends AbstractTagTestCase
         );
     }
 
-    public function testFieldUsesThePostValue(): void
-    {
-        $_POST['name'] = 'Posted';
-
-        $this->assertSame(
-            '<input type="text" id="name" name="name" value="Posted">',
-            Tag::textField('name')
-        );
-    }
-
-    public function testFieldUsesTheStoredDefaultValue(): void
-    {
-        Tag::setDefault('name', 'Stored');
-
-        $this->assertSame(
-            '<input type="text" id="name" name="name" value="Stored">',
-            Tag::textField('name')
-        );
-    }
-
     public function testImageInput(): void
     {
         $this->assertSame(
@@ -163,19 +163,19 @@ final class InputFieldTest extends AbstractTagTestCase
         );
     }
 
-    public function testSubmitButtonUsesTheFirstParameterAsValue(): void
-    {
-        $this->assertSame(
-            '<input type="submit" value="Save">',
-            Tag::submitButton('Save')
-        );
-    }
-
     public function testSubmitButtonKeepsAnExplicitValue(): void
     {
         $this->assertSame(
             '<input type="submit" value="Send">',
             Tag::submitButton(['Save', 'value' => 'Send'])
+        );
+    }
+
+    public function testSubmitButtonUsesTheFirstParameterAsValue(): void
+    {
+        $this->assertSame(
+            '<input type="submit" value="Save">',
+            Tag::submitButton('Save')
         );
     }
 

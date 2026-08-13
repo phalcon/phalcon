@@ -25,6 +25,21 @@ use Phalcon\Tag;
  */
 final class LinkToTest extends AbstractTagTestCase
 {
+    public function testLinkToWithExtraAttributes(): void
+    {
+        $this->assertSame(
+            '<a href="https://phalcon.io/admin/products" id="link"'
+            . ' class="btn">Products</a>',
+            Tag::linkTo(
+                [
+                    'admin/products',
+                    'Products',
+                    'id'    => 'link',
+                    'class' => 'btn',
+                ]
+            )
+        );
+    }
     public function testLinkToWithNamedKeys(): void
     {
         $this->assertSame(
@@ -77,22 +92,6 @@ final class LinkToTest extends AbstractTagTestCase
                     'admin/products',
                     'Products',
                     'query' => 'page=2',
-                ]
-            )
-        );
-    }
-
-    public function testLinkToWithExtraAttributes(): void
-    {
-        $this->assertSame(
-            '<a href="https://phalcon.io/admin/products" id="link"'
-            . ' class="btn">Products</a>',
-            Tag::linkTo(
-                [
-                    'admin/products',
-                    'Products',
-                    'id'    => 'link',
-                    'class' => 'btn',
                 ]
             )
         );

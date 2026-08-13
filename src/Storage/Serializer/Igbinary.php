@@ -55,12 +55,15 @@ class Igbinary extends AbstractSerializer
         } else {
             $warning = false;
             set_error_handler(
-                function () use (&$warning) {
+                function () use (&$warning): bool {
                     $warning = true;
+
+                    return true;
                 },
                 E_WARNING
             );
 
+            /** @var string $data */
             $result = $this->doUnserialize($data);
 
             restore_error_handler();

@@ -80,6 +80,16 @@ final class SelectFieldTest extends AbstractTagTestCase
         );
     }
 
+    public function testSelectFromResultsetWithoutUsingThrows(): void
+    {
+        $resultset = new FakeResultset([['id' => 1, 'name' => 'One']]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("The 'using' parameter is required");
+
+        Select::selectField(['choices', $resultset]);
+    }
+
     public function testSelectFromResultsetWithStringUsingThrows(): void
     {
         $resultset = new FakeResultset([['id' => 1, 'name' => 'One']]);
@@ -94,16 +104,6 @@ final class SelectFieldTest extends AbstractTagTestCase
                 'using' => 'id',
             ]
         );
-    }
-
-    public function testSelectFromResultsetWithoutUsingThrows(): void
-    {
-        $resultset = new FakeResultset([['id' => 1, 'name' => 'One']]);
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("The 'using' parameter is required");
-
-        Select::selectField(['choices', $resultset]);
     }
 
     public function testSelectRendersTheFullTag(): void

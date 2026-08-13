@@ -13,17 +13,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Debug\Traits;
 
+use Phalcon\Contracts\Support\SupportTypes;
+
 /**
  * Shared store for named, overridable template strings. A using class supplies
  * the embedded defaults via defaultTemplate().
  *
  * Note: this trait has no Zephir equivalent; the cphalcon mirror duplicates
  * these members in each class until Zephir supports traits.
+ *
+ * @phpstan-import-type support_debug_templates from SupportTypes
  */
 trait TemplateAwareTrait
 {
     /**
-     * @var array
+     * @phpstan-var support_debug_templates
      */
     protected array $templates = [];
 

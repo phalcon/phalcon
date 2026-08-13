@@ -75,10 +75,6 @@ class Csv extends AbstractAdapter
 
     /**
      * Check whether is defined a translation key in the internal array
-     *
-     * @param string $index
-     *
-     * @return bool
      */
     public function has(string $index): bool
     {
@@ -89,9 +85,6 @@ class Csv extends AbstractAdapter
      * Returns the translation related to the given key
      *
      * @phpstan-param translate_placeholders $placeholders
-     *
-     * @return string
-     * @throws Exception
      */
     public function query(string $translateKey, array $placeholders = []): string
     {

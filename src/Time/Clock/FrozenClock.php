@@ -32,9 +32,6 @@ use const PHP_VERSION_ID;
 
 final class FrozenClock implements ClockInterface
 {
-    /**
-     * @var DateTimeImmutable
-     */
     private DateTimeImmutable $now;
 
     public function __construct(DateTimeImmutable $now)

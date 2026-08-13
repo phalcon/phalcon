@@ -61,11 +61,13 @@ use const SORT_DESC;
  *
  * @phpstan-template T
  *
- * @property array       $data
- * @property bool        $insensitive
- * @property array       $lowerKeys
- * @property bool        $strictNull
- * @property string|null $type
+ * @implements CollectionInterface<T>
+ *
+ * @property array<string, T>      $data
+ * @property bool                  $insensitive
+ * @property array<string, string> $lowerKeys
+ * @property bool                  $strictNull
+ * @property string|null           $type
  */
 class Collection implements
     CollectionInterface,
@@ -73,20 +75,24 @@ class Collection implements
     JsonSerializable
 {
     use ArrayAccessTrait;
+    /** @use GetSetHasTrait<T> */
     use GetSetHasTrait;
 
     /**
-     * @var array<int|string, mixed>
+     * @var array<string, T>
      */
     protected array $data = [];
     /**
-     * @var array<int|string, mixed>
+     * Maps the case-insensitive key back to the original one it was stored
+     * under.
+     *
+     * @var array<string, string>
      */
     protected array $lowerKeys = [];
     /**
      * Collection constructor.
      *
-     * @phpstan-param array<int|string, mixed> $data
+     * @phpstan-param array<array-key, T> $data
      */
     public function __construct(
         array $data = [],
@@ -101,7 +107,7 @@ class Collection implements
      * Returns the state of the collection for serialization, including
      * configuration flags so the round-trip restores full state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function __serialize(): array
     {
@@ -118,16 +124,20 @@ class Collection implements
      * emitted by __serialize() and the legacy flat-array format for BC
      * with previously serialized data.
      *
-     * @param array $data
+     * @phpstan-param array<array-key, T> $data
+     *
+     * @param array<array-key, mixed> $data
      *
      * @return void
      */
     public function __unserialize(array $data): void
     {
         if (isset($data['data']) && is_array($data['data'])) {
+            $type = $data['type'] ?? null;
+
             $this->insensitive = (bool) ($data['insensitive'] ?? true);
             $this->strictNull  = (bool) ($data['strictNull'] ?? false);
-            $this->type        = $data['type'] ?? null;
+            $this->type        = is_string($type) ? $type : null;
             $this->init($data['data']);
 
             return;
@@ -321,12 +331,12 @@ class Collection implements
     /**
      * Initialize internal array
      *
-     * @phpstan-param array<int|string, mixed> $data
+     * @phpstan-param array<array-key, T> $data
      */
     public function init(array $data = []): void
     {
         foreach ($data as $key => $value) {
-            $this->setData($key, $value);
+            $this->setData((string) $key, $value);
         }
     }
 
@@ -537,7 +547,10 @@ class Collection implements
      */
     public function unserialize(string $data): void
     {
-        $this->__unserialize(unserialize($data));
+        /** @var array<array-key, T> $result */
+        $result = unserialize($data);
+
+        $this->__unserialize($result);
     }
 
     /**
@@ -572,6 +585,11 @@ class Collection implements
     /**
      * Builds a new collection of the same concrete class, carrying over the
      * configuration (insensitivity, strict-null, type) of the current one.
+     *
+     * @phpstan-template TNew
+     *
+     * @phpstan-param  array<array-key, TNew> $data
+     * @phpstan-return static<TNew>
      *
      * @param array<int|string, mixed> $data
      */

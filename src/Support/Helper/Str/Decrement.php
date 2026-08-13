@@ -21,14 +21,18 @@ use function explode;
  */
 class Decrement
 {
+    /**
+     * @param string           $text
+     * @param non-empty-string $separator
+     *
+     * @return string
+     */
     public function __invoke(
         string $text,
         string $separator = '_'
     ): string {
         $number = 0;
         $parts  = explode($separator, $text);
-        /** @var array<int, string> $parts */
-        $parts = false === $parts ? [] : $parts;
 
         if (isset($parts[1])) {
             $number = (int)$parts[1];

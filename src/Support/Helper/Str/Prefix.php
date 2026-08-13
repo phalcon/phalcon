@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Str;
 
+use Stringable;
+
 /**
  * Prefixes the text with the supplied prefix
  * @todo v7 make text string
@@ -20,8 +22,8 @@ namespace Phalcon\Support\Helper\Str;
 class Prefix
 {
     /**
-     * @param mixed  $text
-     * @param string $prefix
+     * @param scalar|Stringable|null $text
+     * @param string                 $prefix
      *
      * @return string
      */

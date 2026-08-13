@@ -18,6 +18,10 @@ use Phalcon\Support\Collection\Exceptions\ReadOnlyViolation;
 
 /**
  * A read only Collection object
+ *
+ * @phpstan-template T
+ *
+ * @extends Collection<T>
  */
 class ReadOnlyCollection extends Collection
 {
@@ -43,6 +47,8 @@ class ReadOnlyCollection extends Collection
      *
      * Temporarily disables the read-only guard so the parent class can restore
      * the collection state. The guard is re-enabled before the method returns.
+     *
+     * @param array<array-key, mixed> $data
      */
     public function __unserialize(array $data): void
     {

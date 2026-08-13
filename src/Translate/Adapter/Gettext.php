@@ -63,7 +63,7 @@ class Gettext extends AbstractAdapter
     protected string $defaultDomain = "messages";
 
     /**
-     * @phpstan-var translate_data|string
+     * @phpstan-var string|translate_data
      */
     protected array | string $directory;
 
@@ -108,17 +108,11 @@ class Gettext extends AbstractAdapter
         return $this->has($index);
     }
 
-    /**
-     * @return int
-     */
     public function getCategory(): int
     {
         return $this->category;
     }
 
-    /**
-     * @return string
-     */
     public function getDefaultDomain(): string
     {
         return $this->defaultDomain;
@@ -151,8 +145,6 @@ class Gettext extends AbstractAdapter
      * the count.
      *
      * @phpstan-param translate_placeholders $placeholders
-     *
-     * @return string
      */
     public function nquery(
         string $msgid1,
@@ -195,8 +187,6 @@ class Gettext extends AbstractAdapter
 
     /**
      * Sets the default domain
-     *
-     * @return string
      */
     public function resetDomain(): string
     {
@@ -205,8 +195,6 @@ class Gettext extends AbstractAdapter
 
     /**
      * Sets the domain default to search within when calls are made to gettext()
-     *
-     * @param string $domain
      */
     public function setDefaultDomain(string $domain): void
     {
@@ -276,8 +264,6 @@ class Gettext extends AbstractAdapter
      * ```
      *
      * @phpstan-param array<array-key, string> $localeArray
-     *
-     * @return false|string
      */
     public function setLocale(int $category, array $localeArray = []): false | string
     {
@@ -311,9 +297,6 @@ class Gettext extends AbstractAdapter
      * Validator for constructor
      *
      * @phpstan-param translate_gettext_options $options
-     *
-     * @return void
-     * @throws MissingRequiredParameter
      */
     protected function prepareOptions(array $options): void
     {

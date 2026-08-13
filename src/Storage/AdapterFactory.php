@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Storage;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Storage\Adapter\Apcu;
@@ -23,13 +24,20 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
+use Throwable;
 
+/**
+ * @phpstan-import-type storage_options from StorageTypes
+ * @phpstan-import-type storage_services from StorageTypes
+ */
 class AdapterFactory extends AbstractFactory
 {
     private SerializerFactory $serializerFactory;
 
     /**
      * AdapterFactory constructor.
+     *
+     * @param string[] $services
      */
     public function __construct(
         SerializerFactory $factory,
@@ -43,7 +51,7 @@ class AdapterFactory extends AbstractFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param array options = [
+     * @param array $options = [
      *     'servers' => [
      *         [
      *             'host' => '127.0.0.1',
@@ -64,11 +72,14 @@ class AdapterFactory extends AbstractFactory
      *     'storageDir' => '',
      * ]
      *
+     * @phpstan-param storage_options $options
+     *
      * @return AdapterInterface
      * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
+        /** @var class-string<AdapterInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition($this->serializerFactory, $options);
@@ -86,6 +97,8 @@ class AdapterFactory extends AbstractFactory
      * Returns the available adapters
      *
      * @return string[]
+     *
+     * @phpstan-return storage_services
      */
     protected function getServices(): array
     {

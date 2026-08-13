@@ -62,6 +62,20 @@ final class TitleTest extends AbstractTagTestCase
         );
     }
 
+    public function testGetTitleSeparator(): void
+    {
+        Tag::setTitleSeparator(' | ');
+
+        $this->assertSame(' | ', Tag::getTitleSeparator());
+    }
+
+    public function testGetTitleSeparatorWhenNullIsEmpty(): void
+    {
+        Tag::resetInput();
+
+        $this->assertSame('', Tag::getTitleSeparator());
+    }
+
     public function testGetTitleWithNoPartsIsEmpty(): void
     {
         $this->assertSame('', Tag::getTitle());
@@ -118,20 +132,6 @@ final class TitleTest extends AbstractTagTestCase
         Tag::setTitle('Home');
 
         $this->assertSame('Home', Tag::getTitle());
-    }
-
-    public function testGetTitleSeparator(): void
-    {
-        Tag::setTitleSeparator(' | ');
-
-        $this->assertSame(' | ', Tag::getTitleSeparator());
-    }
-
-    public function testGetTitleSeparatorWhenNullIsEmpty(): void
-    {
-        Tag::resetInput();
-
-        $this->assertSame('', Tag::getTitleSeparator());
     }
 
     public function testPrependTitleWithArrayReplacesTheParts(): void

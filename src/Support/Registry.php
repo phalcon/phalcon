@@ -68,6 +68,8 @@ use const JSON_UNESCAPED_SLASHES;
  * Internally all the magic methods (and interfaces except JsonSerializable)
  * are implemented using object handlers or similar techniques: this allows to
  * bypass relatively slow method calls.
+ *
+ * @extends Collection<mixed>
  */
 final class Registry extends Collection
 {
@@ -181,7 +183,7 @@ final class Registry extends Collection
      */
     final public function offsetExists(mixed $element): bool
     {
-        return parent::has($element);
+        return parent::has((string)$element);
     }
 
     /**
@@ -191,7 +193,7 @@ final class Registry extends Collection
      */
     final public function offsetGet(mixed $element): mixed
     {
-        return parent::get($element);
+        return parent::get((string)$element);
     }
 
     /**
@@ -211,7 +213,7 @@ final class Registry extends Collection
      */
     final public function offsetUnset(mixed $element): void
     {
-        parent::remove($element);
+        parent::remove((string)$element);
     }
 
     /**
@@ -268,7 +270,7 @@ final class Registry extends Collection
      *
      * @link https://php.net/manual/en/serializable.unserialize.php
      */
-    final public function unserialize($serialized): void
+    final public function unserialize(string $serialized): void
     {
         parent::unserialize($serialized);
     }

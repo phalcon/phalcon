@@ -14,9 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Storage\Adapter;
 
 use DateInterval;
+use Phalcon\Contracts\Storage\StorageTypes;
 
 /**
  * Interface for Phalcon\Logger adapters
+ *
+ * @phpstan-import-type storage_keys from StorageTypes
  */
 interface AdapterInterface
 {
@@ -37,6 +40,8 @@ interface AdapterInterface
 
     /**
      * Deletes multiple data from the adapter
+     *
+     * @phpstan-param storage_keys $keys
      */
     public function deleteMultiple(array $keys): bool;
 
@@ -53,6 +58,8 @@ interface AdapterInterface
 
     /**
      * Returns all the keys stored
+     *
+     * @phpstan-return storage_keys
      */
     public function getKeys(string $prefix = ''): array;
 
