@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
+use Phalcon\Contracts\Db\Adapter\Adapter as DbAdapter;
+use Phalcon\Contracts\Paginator\PaginatorTypes;
 use Phalcon\Db\Enum;
 use Phalcon\Mvc\Model\Query\Builder;
+use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Paginator\Exceptions\BuilderModelNotDefined;
 use Phalcon\Paginator\Exceptions\InvalidBuilderInstance;
 use Phalcon\Paginator\Exceptions\MissingColumnsForHaving;
@@ -23,6 +27,7 @@ use Phalcon\Paginator\RepositoryInterface;
 
 use function array_values;
 use function ceil;
+use function count;
 use function implode;
 use function intval;
 use function is_array;
@@ -51,6 +56,13 @@ use function trim;
  *     ]
  * );
  *```
+ *
+ * @phpstan-import-type paginator_columns from PaginatorTypes
+ * @phpstan-import-type paginator_config from PaginatorTypes
+ * @phpstan-import-type paginator_count_object from PaginatorTypes
+ * @phpstan-import-type paginator_count_row from PaginatorTypes
+ * @phpstan-import-type paginator_group_by from PaginatorTypes
+ * @phpstan-import-type paginator_query_sql from PaginatorTypes
  */
 class QueryBuilder extends AbstractAdapter
 {
@@ -66,7 +78,7 @@ class QueryBuilder extends AbstractAdapter
      * HAVING or GROUP BY clause. It supplies the columns for the subquery
      * that counts the grouped/having result set and is ignored otherwise.
      *
-     * @var array|string|null
+     * @var paginator_columns|null
      */
     protected array | string | null $columns = null;
 
@@ -78,7 +90,7 @@ class QueryBuilder extends AbstractAdapter
      * HAVING or GROUP BY clause (it becomes the column list of the counting
      * subquery). It has no effect on plain queries.
      *
-     * @param array $config = [
+     * @param paginator_config $config = [
      *     'limit' => 10,
      *     'builder' => null,
      *     'columns' => ''
@@ -101,7 +113,10 @@ class QueryBuilder extends AbstractAdapter
         }
 
         if (isset($config["columns"])) {
-            $this->columns = $config["columns"];
+            /** @var paginator_columns $columns */
+            $columns = $config["columns"];
+
+            $this->columns = $columns;
         }
 
         parent::__construct($config);
@@ -114,7 +129,10 @@ class QueryBuilder extends AbstractAdapter
      */
     public function getCurrentPage(): int
     {
-        return $this->page;
+        /** @var int $page */
+        $page = $this->page;
+
+        return $page;
     }
 
     /**
@@ -143,8 +161,13 @@ class QueryBuilder extends AbstractAdapter
          */
         $totalBuilder = clone $builder;
 
+        /** @var int $limit */
         $limit      = $this->limitRows;
-        $numberPage = $this->page;
+        $numberPage = (int)$this->page;
+
+        if (!$numberPage) {
+            $numberPage = 1;
+        }
 
         $number = $limit * ($numberPage - 1);
 
@@ -169,8 +192,10 @@ class QueryBuilder extends AbstractAdapter
          */
         $items     = $query->execute();
         $hasHaving = !empty($totalBuilder->getHaving());
-        $groups    = $totalBuilder->getGroupBy();
-        $hasGroup  = !empty($groups);
+
+        /** @var paginator_group_by $groups */
+        $groups   = $totalBuilder->getGroupBy();
+        $hasGroup = !empty($groups);
 
         $hasMultipleGroups = false;
 
@@ -210,16 +235,12 @@ class QueryBuilder extends AbstractAdapter
          * Change 'COUNT()' parameters, when the query contains 'GROUP BY'
          */
         if ($hasGroup) {
-            if (is_array($groups)) {
-                $groupColumn       = implode(", ", $groups);
-                $hasMultipleGroups = count($groups) > 1;
-            } else {
-                $groupColumn       = $groups;
-                $hasMultipleGroups = false;
-            }
+            $groupColumn       = implode(", ", $groups);
+            $hasMultipleGroups = count($groups) > 1;
 
             if (!$hasHaving) {
                 if (!empty($columns)) {
+                    /** @var non-falsy-string $groupColumn */
                     $groupColumn       = $columns;
                     $hasMultipleGroups = false;
                 }
@@ -266,6 +287,7 @@ class QueryBuilder extends AbstractAdapter
          * If we have having perform native count on temp table
          */
         if ($hasHaving || $hasMultipleGroups) {
+            /** @var paginator_query_sql $sql */
             $sql        = $totalQuery->getSql();
             $modelClass = $builder->getModels();
 
@@ -277,10 +299,14 @@ class QueryBuilder extends AbstractAdapter
                 $modelClass = array_values($modelClass)[0];
             }
 
+            /** @var class-string<ModelInterface<mixed>> $modelClass */
             $model     = new $modelClass();
             $dbService = $model->getReadConnectionService();
-            $db        = $totalBuilder->getDI()->get($dbService);
 
+            /** @var DbAdapter $db */
+            $db = $totalBuilder->getDI()->get($dbService);
+
+            /** @var false|paginator_count_row $row */
             $row = $db->fetchOne(
                 "SELECT COUNT(*) as \"rowcount\" FROM (" . $sql["sql"] . ") as T1",
                 Enum::FETCH_ASSOC,
@@ -290,7 +316,10 @@ class QueryBuilder extends AbstractAdapter
             $rowcount   = $row ? intval($row["rowcount"]) : 0;
             $totalPages = intval(ceil($rowcount / $limit));
         } else {
-            $result     = $totalQuery->execute();
+            /** @var ResultsetInterface $result */
+            $result = $totalQuery->execute();
+
+            /** @var paginator_count_object|null $row */
             $row        = $result->getFirst();
             $rowcount   = $row ? intval($row->rowcount) : 0;
             $totalPages = intval(ceil($rowcount / $limit));

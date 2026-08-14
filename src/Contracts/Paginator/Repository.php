@@ -25,6 +25,9 @@ namespace Phalcon\Contracts\Paginator;
  *   different meaning: `getCurrent()`/`getNext()` carry keyset cursor values
  *   rather than page numbers, and `getTotalItems()`, `getLast()` and
  *   `getPrevious()` are not computed (they return 0).
+ *
+ * @phpstan-import-type paginator_aliases from PaginatorTypes
+ * @phpstan-import-type paginator_properties from PaginatorTypes
  */
 interface Repository
 {
@@ -40,7 +43,7 @@ interface Repository
     /**
      * Gets the aliases for properties repository
      *
-     * @return array
+     * @return paginator_aliases
      */
     public function getAliases(): array;
 
@@ -115,7 +118,7 @@ interface Repository
     /**
      * Sets the aliases for properties repository
      *
-     * @param array $aliases
+     * @param paginator_aliases $aliases
      *
      * @return Repository
      */
@@ -124,7 +127,7 @@ interface Repository
     /**
      * Sets values for properties of the repository
      *
-     * @param array $properties
+     * @param paginator_properties $properties
      *
      * @return Repository
      */

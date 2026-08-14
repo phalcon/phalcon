@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Paginator;
 
 use Phalcon\Config\Config;
+use Phalcon\Contracts\Paginator\PaginatorTypes;
 use Phalcon\Factory\AbstractFactory;
-use Phalcon\Mvc\Model\Query\Builder;
 use Phalcon\Paginator\Adapter\AdapterInterface;
 use Phalcon\Paginator\Adapter\Model;
 use Phalcon\Paginator\Adapter\NativeArray;
@@ -24,17 +24,16 @@ use Phalcon\Paginator\Adapter\QueryBuilderCursor;
 use Throwable;
 
 /**
- * @phpstan-type TOptions array{
- *      adapter: string,
- *      limit?: int,
- *      page?: int,
- *      builder?: Builder
- * }
+ * @phpstan-import-type paginator_config from PaginatorTypes
+ * @phpstan-import-type paginator_factory_options from PaginatorTypes
+ * @phpstan-import-type paginator_services from PaginatorTypes
  */
 class PaginatorFactory extends AbstractFactory
 {
     /**
      * AdapterFactory constructor.
+     *
+     * @param paginator_services $services
      */
     public function __construct(array $services = [])
     {
@@ -64,13 +63,17 @@ class PaginatorFactory extends AbstractFactory
      * $paginator = (new PaginatorFactory())->load($options);
      *```
      *
-     * @param Config|TOptions $config
+     * @param Config|paginator_factory_options $config
      */
     public function load(mixed $config): AdapterInterface
     {
-        $config  = $this->checkConfig($config);
-        $config  = $this->checkConfigElement($config, "adapter");
-        $name    = $config["adapter"];
+        $config = $this->checkConfig($config);
+        $config = $this->checkConfigElement($config, "adapter");
+
+        /** @var string $name */
+        $name = $config["adapter"];
+
+        /** @var paginator_config $options */
         $options = $config["options"] ?? [];
 
         return $this->newInstance($name, $options);
@@ -78,6 +81,8 @@ class PaginatorFactory extends AbstractFactory
 
     /**
      * Create a new instance of the adapter
+     *
+     * @param paginator_config $options
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
@@ -99,7 +104,7 @@ class PaginatorFactory extends AbstractFactory
     /**
      * Returns the available adapters
      *
-     * @return string[]
+     * @return paginator_services
      */
     protected function getServices(): array
     {

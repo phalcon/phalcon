@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
+use Countable;
+use Phalcon\Contracts\Paginator\PaginatorTypes;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\RepositoryInterface;
 
@@ -84,13 +87,15 @@ use function is_object;
  *
  * $paginate = $paginator->paginate();
  *```
+ *
+ * @phpstan-import-type paginator_config from PaginatorTypes
  */
 class Model extends AbstractAdapter
 {
     /**
      * Phalcon\Paginator\Adapter\Model constructor
      *
-     * @param array $config = [
+     * @param paginator_config $config = [
      *     'model'  => null,
      *     'limit'  => 10,
      *     'page'   => 1
@@ -111,8 +116,10 @@ class Model extends AbstractAdapter
     public function paginate(): RepositoryInterface
     {
         $pageItems  = [];
-        $limit      = $this->limitRows;
-        $pageNumber = $this->page;
+        $limit      = (int)$this->limitRows;
+        $pageNumber = (int)$this->page;
+
+        /** @var class-string<ModelInterface<mixed>> $modelClass */
         $modelClass = $this->config["model"];
 
         $parameters = $this->config["parameters"] ?? [];
@@ -130,6 +137,7 @@ class Model extends AbstractAdapter
         $rowCountResult = call_user_func([$modelClass, "count"], $parameters);
 
         if (is_object($rowCountResult)) {
+            /** @var Countable $rowCountResult */
             $rowcount = (int)$rowCountResult->count();
         } else {
             $rowcount = (int)$rowCountResult;

@@ -14,16 +14,22 @@ declare(strict_types=1);
 namespace Phalcon\Messages;
 
 use JsonSerializable;
+use Phalcon\Contracts\Messages\MessagesTypes;
 
 /**
  * Class Message
  *
  * Stores a message from various components
+ *
+ * @phpstan-import-type messages_message from MessagesTypes
+ * @phpstan-import-type messages_metadata from MessagesTypes
  */
 class Message implements MessageInterface, JsonSerializable
 {
     /**
      * Phalcon\Messages\Message constructor
+     *
+     * @param messages_metadata $metaData
      */
     public function __construct(
         protected string $message,
@@ -67,7 +73,7 @@ class Message implements MessageInterface, JsonSerializable
     }
 
     /**
-     * @return array
+     * @return messages_metadata
      */
     public function getMetaData(): array
     {
@@ -84,6 +90,8 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Serializes the object for json_encode
+     *
+     * @return messages_message
      */
     public function jsonSerialize(): array
     {
@@ -128,6 +136,8 @@ class Message implements MessageInterface, JsonSerializable
 
     /**
      * Sets message metadata
+     *
+     * @param messages_metadata $metaData
      */
     public function setMetaData(array $metaData): MessageInterface
     {

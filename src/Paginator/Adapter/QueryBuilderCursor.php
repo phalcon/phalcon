@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
+use Phalcon\Contracts\Paginator\PaginatorTypes;
 use Phalcon\Mvc\Model\Query\Builder;
+use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Paginator\Exceptions\InvalidBuilderInstance;
 use Phalcon\Paginator\Exceptions\InvalidCursorColumn;
 use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
@@ -64,6 +66,9 @@ use function is_string;
  * // $page->getNext()    - cursor value to pass for the next page (0 means no more pages)
  * // $page->getCurrent() - cursor value used for this page (0 on first page)
  * ```
+ *
+ * @phpstan-import-type paginator_config from PaginatorTypes
+ * @phpstan-import-type paginator_cursor_items from PaginatorTypes
  */
 class QueryBuilderCursor extends AbstractAdapter
 {
@@ -91,7 +96,7 @@ class QueryBuilderCursor extends AbstractAdapter
     /**
      * Phalcon\Paginator\Adapter\QueryBuilderCursor
      *
-     * @param array $config = [
+     * @param paginator_config $config = [
      *     'limit'        => 10,
      *     'builder'      => null,
      *     'cursorColumn' => 'id',
@@ -147,7 +152,10 @@ class QueryBuilderCursor extends AbstractAdapter
             return 0;
         }
 
-        return (int) $this->cursor;
+        /** @var int|string $cursor */
+        $cursor = $this->cursor;
+
+        return (int) $cursor;
     }
 
     /**
@@ -185,6 +193,7 @@ class QueryBuilderCursor extends AbstractAdapter
     {
         $builder       = clone $this->builder;
         $limit         = (int) $this->limitRows;
+        /** @var int|string|null $currentCursor */
         $currentCursor = $this->cursor;
         $currentPage   = ($currentCursor === null) ? 0 : (int) $currentCursor;
 
@@ -203,9 +212,13 @@ class QueryBuilderCursor extends AbstractAdapter
          */
         $builder->limit($limit + 1);
 
-        $query  = $builder->getQuery();
+        $query = $builder->getQuery();
+
+        /** @var ResultsetInterface $result */
         $result = $query->execute();
-        $items  = $result->toArray();
+
+        /** @var paginator_cursor_items $items */
+        $items = $result->toArray();
 
         /**
          * If we received more rows than the page size a next page exists.

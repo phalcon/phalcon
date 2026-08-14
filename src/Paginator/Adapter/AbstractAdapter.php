@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Paginator\Adapter;
 
+use Phalcon\Contracts\Paginator\PaginatorTypes;
 use Phalcon\Paginator\Exception;
 use Phalcon\Paginator\Exceptions\InvalidLimit;
 use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
@@ -21,6 +22,9 @@ use Phalcon\Paginator\RepositoryInterface;
 
 /**
  * Phalcon\Paginator\Adapter\AbstractAdapter
+ *
+ * @phpstan-import-type paginator_config from PaginatorTypes
+ * @phpstan-import-type paginator_properties from PaginatorTypes
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -46,7 +50,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Constructor
      *
-     * @param array $config
+     * @param paginator_config $config
      *
      * @throws Exception
      */
@@ -59,14 +63,23 @@ abstract class AbstractAdapter implements AdapterInterface
             throw new MissingRequiredParameter("limit");
         }
 
-        $this->setLimit($config["limit"]);
+        /** @var int $limit */
+        $limit = $config["limit"];
+
+        $this->setLimit($limit);
 
         if (isset($config["page"])) {
-            $this->setCurrentPage($config["page"]);
+            /** @var int $page */
+            $page = $config["page"];
+
+            $this->setCurrentPage($page);
         }
 
         if (isset($config["repository"])) {
-            $this->setRepository($config["repository"]);
+            /** @var RepositoryInterface $repository */
+            $repository = $config["repository"];
+
+            $this->setRepository($repository);
         }
     }
 
@@ -75,7 +88,10 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getLimit(): int
     {
-        return $this->limitRows;
+        /** @var int $limitRows */
+        $limitRows = $this->limitRows;
+
+        return $limitRows;
     }
 
     /**
@@ -114,6 +130,8 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Gets current repository for pagination
+     *
+     * @param paginator_properties|null $properties
      */
     protected function getRepository(
         array | null $properties = null

@@ -13,16 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Messages\Traits;
 
+use Phalcon\Contracts\Messages\MessagesTypes;
 use Phalcon\Messages\Exceptions\MessageNotObject;
-use Phalcon\Messages\Message;
 use Phalcon\Messages\MessageInterface;
 
 /**
  * Trait MessagesHelperTrait
+ *
+ * @phpstan-import-type messages_list from MessagesTypes
  */
 trait MessagesHelperTrait
 {
+    /**
+     * @var messages_list
+     */
     protected array $messages = [];
+
     protected int $position = 0;
 
     /**
@@ -70,6 +76,7 @@ trait MessagesHelperTrait
      */
     public function offsetExists(mixed $offset): bool
     {
+        /** @var array-key $offset */
         return isset($this->messages[$offset]);
     }
 
@@ -84,6 +91,7 @@ trait MessagesHelperTrait
      */
     public function offsetGet(mixed $offset): mixed
     {
+        /** @var array-key $offset */
         return $this->messages[$offset] ?? null;
     }
 
@@ -93,8 +101,6 @@ trait MessagesHelperTrait
      *```php
      * $messages[0] = new \Phalcon\Messages\Message("This is a message");
      *```
-     *
-     * @param Message $value
      *
      * @throws MessageNotObject
      */
@@ -107,6 +113,7 @@ trait MessagesHelperTrait
         if ($offset === null) {
             $this->messages[] = $value;
         } else {
+            /** @var array-key $offset */
             $this->messages[$offset] = $value;
         }
     }
@@ -120,6 +127,7 @@ trait MessagesHelperTrait
      */
     public function offsetUnset(mixed $offset): void
     {
+        /** @var int $offset */
         if (isset($this->messages[$offset])) {
             array_splice($this->messages, $offset, 1);
         }

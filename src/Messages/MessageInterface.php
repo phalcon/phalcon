@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Messages;
 
+use Phalcon\Contracts\Messages\MessagesTypes;
+
 /**
  * Interface for Phalcon\Messages\Message
+ *
+ * @phpstan-import-type messages_metadata from MessagesTypes
  */
 interface MessageInterface
 {
@@ -44,6 +48,8 @@ interface MessageInterface
 
     /**
      * Returns message metadata
+     *
+     * @return messages_metadata
      */
     public function getMetaData(): array;
 
@@ -69,6 +75,8 @@ interface MessageInterface
 
     /**
      * Sets message metadata
+     *
+     * @param messages_metadata $metaData
      */
     public function setMetaData(array $metaData): MessageInterface;
 
