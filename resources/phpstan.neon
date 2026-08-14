@@ -12,3 +12,10 @@ parameters:
             message: "#Parameter \\#1 \\$key_or_address of method RedisCluster::flushAll\\(\\) expects string, mixed given#"
             path: ../src/Storage/Adapter/RedisCluster.php
             reportUnmatched: false
+        # The bundled stub declares the spl_autoload_register() callback as
+        # returning void, while PHP accepts any callable and discards the
+        # return value. Loader::autoload() is public API and returns bool.
+        -
+            message: "#Parameter \\#1 \\$callback of function spl_autoload_register expects \\(callable\\(string\\): void\\)\\|null, array\\{\\$this\\(Phalcon\\\\Autoload\\\\Loader\\), 'autoload'\\} given#"
+            path: ../src/Autoload/Loader.php
+            reportUnmatched: false

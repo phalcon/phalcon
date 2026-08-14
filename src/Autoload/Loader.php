@@ -15,6 +15,7 @@ namespace Phalcon\Autoload;
 
 use Phalcon\Autoload\Exceptions\LoaderDirectoriesNotArray;
 use Phalcon\Autoload\Exceptions\LoaderMethodNotCallable;
+use Phalcon\Contracts\Autoload\AutoloadTypes;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
@@ -39,8 +40,8 @@ use const DIRECTORY_SEPARATOR;
  * (namespaced or not) as well as files. It also features extension loading,
  * allowing the user to autoload files with different extensions than .php.
  *
- * @phpstan-type TNamespaces array<string, TStrings>
- * @phpstan-type TStrings array<string, string>
+ * @phpstan-import-type autoload_namespaces from AutoloadTypes
+ * @phpstan-import-type autoload_strings from AutoloadTypes
  */
 class Loader
 {
@@ -54,7 +55,7 @@ class Loader
 
     protected string | null $checkedPath = null;
     /**
-     * @var TStrings
+     * @var autoload_strings
      */
     protected array $classes = [];
     /**
@@ -62,19 +63,22 @@ class Loader
      */
     protected array $debug = [];
     /**
-     * @var TStrings
+     * @var autoload_strings
      */
     protected array $directories = [];
     /**
-     * @var TStrings
+     * @var autoload_strings
      */
     protected array $extensions = [];
     /**
-     * @var callable|string
+     * Always holds a callable. The setter accepts a callable or a callable
+     * string and rejects anything else.
+     *
+     * @var callable
      */
     protected $fileCheckingCallback = "is_file";
     /**
-     * @var TStrings
+     * @var autoload_strings
      */
     protected array $files = [];
     protected string | null $foundPath = null;
@@ -82,7 +86,7 @@ class Loader
     protected bool $isRegistered = false;
 
     /**
-     * @var TNamespaces
+     * @var autoload_namespaces
      */
     protected array $namespaces = [];
     protected int $nestingLevel = 0;
@@ -137,7 +141,7 @@ class Loader
     }
 
     /**
-     * @param string|TStrings $directories
+     * @param autoload_strings|string $directories
      */
     public function addNamespace(
         string $name,
@@ -286,7 +290,7 @@ class Loader
     /**
      * Returns the namespaces currently registered in the autoloader
      *
-     * @return TNamespaces
+     * @return autoload_namespaces
      */
     public function getNamespaces(): array
     {
@@ -333,7 +337,7 @@ class Loader
     /**
      * Register classes and their locations
      *
-     * @param TStrings $classes
+     * @param autoload_strings $classes
      */
     public function setClasses(array $classes, bool $merge = false): static
     {
@@ -351,7 +355,7 @@ class Loader
     /**
      * Register directories in which "not found" classes could be found
      *
-     * @param TStrings $directories
+     * @param autoload_strings $directories
      */
     public function setDirectories(array $directories, bool $merge = false): static
     {
@@ -367,7 +371,7 @@ class Loader
      * Sets an array of file extensions that the loader must try in each attempt
      * to locate the file
      *
-     * @param TStrings $extensions
+     * @param autoload_strings $extensions
      */
     public function setExtensions(array $extensions, bool $merge = false): static
     {
@@ -420,7 +424,7 @@ class Loader
      * Registers files that are "non-classes" hence need a "require". This is
      * very useful for including files that only have functions
      *
-     * @param TStrings $files
+     * @param autoload_strings $files
      */
     public function setFiles(array $files, bool $merge = false): static
     {
@@ -435,7 +439,7 @@ class Loader
     /**
      * Register namespaces and their related directories
      *
-     * @param TNamespaces $namespaces
+     * @param autoload_namespaces $namespaces
      */
     public function setNamespaces(array $namespaces, bool $merge = false): static
     {
@@ -515,7 +519,7 @@ class Loader
      * Traverses a collection and adds elements to it using the relevant
      * class method
      *
-     * @param TStrings $collection
+     * @param autoload_strings $collection
      */
     private function addToCollection(
         array $collection,
@@ -561,7 +565,7 @@ class Loader
      * Checks the registered directories to find the class. Includes the file if
      * found and returns true; false otherwise
      *
-     * @param TStrings $directories
+     * @param autoload_strings $directories
      *
      * @throws EventsException
      */
@@ -630,9 +634,9 @@ class Loader
      * to normalize the directories with the proper directory separator at the
      * end
      *
-     * @param string|TStrings $directories
+     * @param mixed $directories
      *
-     * @return TStrings
+     * @return autoload_strings
      */
     private function checkDirectories(
         mixed $directories,
@@ -648,6 +652,7 @@ class Loader
         }
 
         $results = [];
+        /** @var string $directory */
         foreach ($directories as $directory) {
             $directory = rtrim($directory, $dirSeparator) . $dirSeparator;
 
