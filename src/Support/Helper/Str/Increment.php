@@ -22,7 +22,7 @@ use function explode;
 class Increment
 {
     /**
-     * @param non-empty-string $separator
+     * @phpstan-param non-empty-string $separator
      */
     public function __invoke(
         string $text,

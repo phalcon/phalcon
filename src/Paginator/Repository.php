@@ -145,7 +145,7 @@ class Repository implements RepositoryInterface, JsonSerializable
      * property that has an int default, so callers passing one are handed an
      * int back.
      *
-     * @return ($defaultValue is int ? int : mixed)
+     * @phpstan-return ($defaultValue is int ? int : mixed)
      */
     protected function getProperty(string $property, mixed $defaultValue = null): mixed
     {

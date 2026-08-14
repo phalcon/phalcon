@@ -26,7 +26,7 @@ use function mb_substr_count;
 class Dynamic
 {
     /**
-     * @param non-empty-string $separator
+     * @phpstan-param non-empty-string $separator
      */
     public function __invoke(
         string $text,

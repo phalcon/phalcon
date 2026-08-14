@@ -66,8 +66,6 @@ interface Repository
 
     /**
      * Gets the items on the current page
-     *
-     * @return mixed
      */
     public function getItems(): mixed;
 

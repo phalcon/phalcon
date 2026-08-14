@@ -44,16 +44,7 @@ class Bag extends Collection implements BagInterface, InjectionAwareInterface
 {
     use InjectionAwareTrait;
 
-    /**
-     * Session Bag name
-     *
-     * @var string
-     */
     private string $name;
-
-    /**
-     * @var ManagerInterface
-     */
     private ManagerInterface $session;
 
     /**

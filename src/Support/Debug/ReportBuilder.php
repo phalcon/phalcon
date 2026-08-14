@@ -209,7 +209,7 @@ class ReportBuilder
     }
 
     /**
-     * @param class-string $className
+     * @phpstan-param class-string $className
      *
      * @throws ReflectionException
      */

@@ -25,8 +25,8 @@ class Get
     use GetTrait;
 
     /**
-     * @param array<array-key, mixed> $collection
-     * @param array-key               $index
+     * @phpstan-param array<array-key, mixed> $collection
+     * @phpstan-param array-key               $index
      */
     public function __invoke(
         array $collection,
