@@ -38,7 +38,6 @@ class NativeArray extends AbstractAdapter
     /**
      * NativeArray constructor.
      *
-     * @param InterpolatorFactory        $interpolator
      * @phpstan-param translate_array_options $options
      *
      * @throws InvalidDataType
@@ -67,9 +66,6 @@ class NativeArray extends AbstractAdapter
     /**
      * Check whether is defined a translation key in the internal array
      *
-     * @param string $index
-     *
-     * @return bool
      * @deprecated
      */
     public function exists(string $index): bool
@@ -90,7 +86,6 @@ class NativeArray extends AbstractAdapter
      *
      * @phpstan-param translate_placeholders $placeholders
      *
-     * @return string
      * @throws Exception
      */
     public function query(string $translateKey, array $placeholders = []): string

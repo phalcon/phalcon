@@ -37,11 +37,7 @@ class Encode
     use EncodeTrait;
 
     /**
-     * @param mixed       $data    JSON data to parse
-     * @param int         $options Bitmask of JSON encode options.
      * @param int<1, max> $depth   Recursion depth.
-     *
-     * @return string
      *
      * @throws JsonEncodeError if the JSON cannot be encoded.
      * @link https://www.php.net/manual/en/function.json-encode.php

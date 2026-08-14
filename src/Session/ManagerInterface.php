@@ -42,10 +42,8 @@ interface ManagerInterface
 
     /**
      * Alias: Sets a session variable in an application context
-     *
-     * @param mixed $value
      */
-    public function __set(string $key, $value): void;
+    public function __set(string $key, mixed $value): void;
 
     /**
      * Alias: Removes a session variable from an application context
@@ -64,12 +62,8 @@ interface ManagerInterface
 
     /**
      * Gets a session variable from an application context
-     *
-     * @param mixed $defaultValue
-     *
-     * @return mixed
      */
-    public function get(string $key, $defaultValue = null, bool $remove = false);
+    public function get(string $key, mixed $defaultValue = null, bool $remove = false): mixed;
 
     /**
      * Returns the stored session adapter
@@ -110,10 +104,8 @@ interface ManagerInterface
 
     /**
      * Sets a session variable in an application context
-     *
-     * @param mixed $value
      */
-    public function set(string $key, $value): void;
+    public function set(string $key, mixed $value): void;
 
     /**
      * Set the adapter for the session

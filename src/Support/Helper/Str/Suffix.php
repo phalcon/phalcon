@@ -22,9 +22,6 @@ class Suffix
 {
     /**
      * @param scalar|Stringable|null $text
-     * @param string                 $suffix
-     *
-     * @return string
      */
     public function __invoke(mixed $text, string $suffix): string
     {

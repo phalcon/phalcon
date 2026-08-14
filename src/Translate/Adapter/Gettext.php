@@ -75,7 +75,6 @@ class Gettext extends AbstractAdapter
     /**
      * Gettext constructor.
      *
-     * @param InterpolatorFactory $interpolator
      * @phpstan-param translate_gettext_options $options
      *
      * @throws Exception
@@ -98,9 +97,6 @@ class Gettext extends AbstractAdapter
     /**
      * Check whether is defined a translation key in the internal array
      *
-     * @param string $index
-     *
-     * @return bool
      * @deprecated
      */
     public function exists(string $index): bool
@@ -171,7 +167,6 @@ class Gettext extends AbstractAdapter
      *
      * @phpstan-param translate_placeholders $placeholders
      *
-     * @return string
      * @throws Exception
      */
     public function query(string $translateKey, array $placeholders = []): string

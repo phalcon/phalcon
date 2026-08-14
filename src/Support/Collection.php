@@ -125,10 +125,6 @@ class Collection implements
      * with previously serialized data.
      *
      * @phpstan-param array<array-key, T> $data
-     *
-     * @param array<array-key, mixed> $data
-     *
-     * @return void
      */
     public function __unserialize(array $data): void
     {
@@ -185,8 +181,6 @@ class Collection implements
      * collection itself to allow chaining.
      *
      * @phpstan-param callable(T, array-key): mixed $callback
-     *
-     * @param callable $callback
      */
     public function each(callable $callback): static
     {
@@ -203,8 +197,6 @@ class Collection implements
      *
      * @phpstan-param  callable(T, array-key): bool $callback
      * @phpstan-return static<T>
-     *
-     * @param callable $callback
      */
     public function filter(callable $callback): static
     {
@@ -289,7 +281,7 @@ class Collection implements
     /**
      * Returns the keys (insensitive or not) of the collection.
      *
-     * @deprecated Use {@see self::keys()} instead. Will be removed in a future major release.
+     * @deprecated Use `keys()` instead. Will be removed in a future major release.
      *
      * @return array<int|string, mixed>
      */
@@ -309,7 +301,7 @@ class Collection implements
     /**
      * Returns the values of the internal array.
      *
-     * @deprecated Use {@see self::values()} instead. Will be removed in a future major release.
+     * @deprecated Use `values()` instead. Will be removed in a future major release.
      *
      * @return array<int|string, mixed>
      */
@@ -397,8 +389,6 @@ class Collection implements
      *
      * @phpstan-param  callable(T, array-key): mixed $callback
      * @phpstan-return static<mixed>
-     *
-     * @param callable $callback
      */
     public function map(callable $callback): static
     {
@@ -416,11 +406,6 @@ class Collection implements
      * callback receives `($accumulator, $value, $key)`.
      *
      * @phpstan-param callable(mixed, T, array-key): mixed $callback
-     *
-     * @param callable $callback
-     * @param mixed    $initial
-     *
-     * @return mixed
      */
     public function reduce(callable $callback, mixed $initial = null): mixed
     {
@@ -484,9 +469,6 @@ class Collection implements
      * @phpstan-return static<T>
      *
      * @param callable|null $callback
-     * @param int           $order
-     *
-     * @return static
      */
     public function sort(callable | null $callback = null, int $order = SORT_ASC): static
     {
@@ -524,10 +506,6 @@ class Collection implements
      * JSON_UNESCAPED_SLASHES, JSON_THROW_ON_ERROR
      *
      * @see https://www.ietf.org/rfc/rfc4627.txt
-     *
-     * @param int $options `
-     *
-     * @return string
      */
     public function toJson(
         int $options = JSON_HEX_TAG |

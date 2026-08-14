@@ -267,8 +267,6 @@ class Debug
      * Sets if files the exception's backtrace must be showed
      *
      * @phpstan-param support_debug_blacklist_input $blacklist
-     *
-     * @param array<array-key, mixed> $blacklist
      */
     public function setBlacklist(array $blacklist): static
     {

@@ -25,9 +25,6 @@ use function count;
 class IsUnique
 {
     /**
-     * `array_unique()` compares the elements as strings, so the collection can
-     * only hold values that can be cast to one.
-     *
      * @param array<array-key, scalar|Stringable|null> $collection
      *
      * @return bool

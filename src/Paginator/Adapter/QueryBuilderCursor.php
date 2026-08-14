@@ -74,8 +74,6 @@ class QueryBuilderCursor extends AbstractAdapter
 {
     /**
      * Paginator's data
-     *
-     * @var Builder
      */
     protected Builder $builder;
 
@@ -88,8 +86,6 @@ class QueryBuilderCursor extends AbstractAdapter
 
     /**
      * The column used as the cursor (must be unique and indexed)
-     *
-     * @var string
      */
     protected string $cursorColumn;
 

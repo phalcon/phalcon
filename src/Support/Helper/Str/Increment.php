@@ -22,10 +22,7 @@ use function explode;
 class Increment
 {
     /**
-     * @param string           $text
      * @param non-empty-string $separator
-     *
-     * @return string
      */
     public function __invoke(
         string $text,

@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Session;
 
 use Phalcon\Contracts\Session\SessionTypes;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Session\Exceptions\InvalidSessionAdapter;
 use Phalcon\Session\Exceptions\InvalidSessionId;
 use Phalcon\Session\Exceptions\InvalidSessionName;
@@ -38,15 +37,13 @@ use function session_status;
  *
  * @phpstan-import-type session_options from SessionTypes
  */
-class Manager implements InjectionAwareInterface, ManagerInterface
+class Manager extends AbstractInjectionAware implements ManagerInterface
 {
     use GetTrait;
     use HeaderTrait;
-    use InjectionAwareTrait;
 
     private SessionHandlerInterface | null $adapter = null;
     private string $name = '';
-
     /**
      * @var array<string, mixed>
      *
@@ -57,10 +54,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Manager constructor.
-     *
-     * @param array $options = [
-     *     'uniqueId' => null
-     * ]
      *
      * @phpstan-param session_options $options
      */
@@ -246,8 +239,6 @@ class Manager implements InjectionAwareInterface, ManagerInterface
 
     /**
      * Sets a session variable in an application context
-     *
-     * @param mixed $value
      */
     public function set(string $key, $value): void
     {

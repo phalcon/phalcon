@@ -23,9 +23,6 @@ class Prefix
 {
     /**
      * @param scalar|Stringable|null $text
-     * @param string                 $prefix
-     *
-     * @return string
      */
     public function __invoke(mixed $text, string $prefix): string
     {

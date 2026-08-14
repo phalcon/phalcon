@@ -51,8 +51,6 @@ class Memory extends AbstractAdapter
      * Maximum number of items retained in the in-memory store.
      * 0 (default) keeps the original unbounded behavior; a positive
      * value drops the oldest entry FIFO before a new key is stored.
-     *
-     * @var int
      */
     protected int $maxItems = 0;
 

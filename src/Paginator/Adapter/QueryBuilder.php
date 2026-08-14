@@ -68,8 +68,6 @@ class QueryBuilder extends AbstractAdapter
 {
     /**
      * Paginator's data
-     *
-     * @var Builder
      */
     protected Builder $builder;
 

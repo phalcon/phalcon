@@ -50,8 +50,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * EventType prefix.
-     *
-     * @var string
      */
     protected string $eventType = "storage";
 
@@ -73,8 +71,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * adapter prefix is applied. Disable when keys are externally
      * generated identifiers that may legitimately start with the prefix
      * text (e.g. session ids).
-     *
-     * @var bool
      */
     protected bool $stripPrefix = true;
 

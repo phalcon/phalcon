@@ -30,12 +30,7 @@ use function trim;
 class Friendly extends AbstractStr
 {
     /**
-     * @param string                               $text
-     * @param string                               $separator
-     * @param bool                                 $lowercase
      * @param array<array-key, string>|string|null $replace
-     *
-     * @return string
      *
      * @throws InvalidReplaceFormat
      */

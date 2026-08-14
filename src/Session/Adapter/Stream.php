@@ -47,8 +47,6 @@ use function file_exists;
  * $session->setAdapter($files);
  * ```
  *
- * @property string $prefix
- * @property string $path
  *
  * @phpstan-import-type session_files from SessionTypes
  * @phpstan-import-type session_stream_options from SessionTypes
@@ -64,8 +62,6 @@ class Stream extends Noop
 
     /**
      * Session options
-     *
-     * @var array<string, mixed>
      *
      * @phpstan-var session_stream_options
      */
@@ -83,11 +79,6 @@ class Stream extends Noop
 
     /**
      * Constructor
-     *
-     * @param array $options = [
-     *     'prefix' => '',
-     *     'savePath' => ''
-     * ]
      *
      * @phpstan-param session_stream_options $options
      *

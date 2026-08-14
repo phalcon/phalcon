@@ -157,10 +157,7 @@ class HelperFactory extends AbstractFactory
     }
 
     /**
-     * @param string                  $name
-     * @param array<array-key, mixed> $arguments
-     *
-     * @return mixed
+     * @phpstan-param array<array-key, mixed> $arguments
      *
      * @throws Exception
      */
@@ -175,8 +172,6 @@ class HelperFactory extends AbstractFactory
     }
 
     /**
-     * @param string $name
-     *
      * @return object
      *
      * @throws Exception

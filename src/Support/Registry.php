@@ -123,8 +123,6 @@ final class Registry extends Collection
 
     /**
      * Count elements of an object
-     *
-     * @link https://php.net/manual/en/countable.count.php
      */
     final public function count(): int
     {
@@ -168,8 +166,6 @@ final class Registry extends Collection
 
     /**
      * Specify data which should be serialized to JSON
-     *
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
      */
     final public function jsonSerialize(): array
     {
@@ -178,8 +174,6 @@ final class Registry extends Collection
 
     /**
      * Whether a offset exists
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetexists.php
      */
     final public function offsetExists(mixed $element): bool
     {
@@ -188,8 +182,6 @@ final class Registry extends Collection
 
     /**
      * Offset to retrieve
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetget.php
      */
     final public function offsetGet(mixed $element): mixed
     {
@@ -198,8 +190,6 @@ final class Registry extends Collection
 
     /**
      * Offset to set
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetset.php
      */
     final public function offsetSet(mixed $element, mixed $value): void
     {
@@ -208,8 +198,6 @@ final class Registry extends Collection
 
     /**
      * Offset to unset
-     *
-     * @link https://php.net/manual/en/arrayaccess.offsetunset.php
      */
     final public function offsetUnset(mixed $element): void
     {
@@ -226,8 +214,6 @@ final class Registry extends Collection
 
     /**
      * String representation of object
-     *
-     * @link https://php.net/manual/en/serializable.serialize.php
      */
     final public function serialize(): string | null
     {
@@ -256,8 +242,6 @@ final class Registry extends Collection
      * The default string uses the following options for json_encode
      *
      * JSON_HEX_TAG, JSON_HEX_APOS, JSON_HEX_AMP, JSON_HEX_QUOT, JSON_UNESCAPED_SLASHES
-     *
-     * @see https://www.ietf.org/rfc/rfc4627.txt
      */
     final public function toJson(
         int $options = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES
@@ -266,9 +250,7 @@ final class Registry extends Collection
     }
 
     /**
-     * Constructs the object
-     *
-     * @link https://php.net/manual/en/serializable.unserialize.php
+     * Unserializes the object
      */
     final public function unserialize(string $serialized): void
     {

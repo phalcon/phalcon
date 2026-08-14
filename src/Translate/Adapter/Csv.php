@@ -63,9 +63,6 @@ class Csv extends AbstractAdapter
     /**
      * Check whether is defined a translation key in the internal array
      *
-     * @param string $index
-     *
-     * @return bool
      * @deprecated
      */
     public function exists(string $index): bool
