@@ -531,7 +531,6 @@ class Imagick extends AbstractAdapter
                 Imagick::CHANNEL_ALPHA
             );
 
-            // @phpstan-ignore notIdentical.alwaysTrue (the frame cursor is internal to Imagick)
             if (true !== $current->nextImage()) {
                 break;
             }
@@ -562,7 +561,6 @@ class Imagick extends AbstractAdapter
                 throw new CompositeFailed();
             }
 
-            // @phpstan-ignore notIdentical.alwaysTrue (the frame cursor is internal to Imagick)
             if (true !== $current->nextImage()) {
                 break;
             }
@@ -838,13 +836,19 @@ class Imagick extends AbstractAdapter
             $draw->setGravity($gravity);
         }
 
+        /**
+         * The branches above leave the offsets untouched when offsetX is the
+         * integer 0, so normalize them to the integers annotateImage() needs.
+         */
+        $offsetX = (int)$offsetX;
+        $offsetY = (int)$offsetY;
+
         /** @var ImagickNative $image */
         $image = $this->image;
 
         $image->setIteratorIndex(0);
 
         while (true) {
-            // @phpstan-ignore argument.type (offsetY stays boolean when offsetX is 0)
             $image->annotateImage($draw, $offsetX, $offsetY, 0, $text);
 
             if (true !== $image->nextImage()) {
