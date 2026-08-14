@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Http\Cookie;
 
+use Phalcon\Contracts\Http\HttpTypes;
+
 /**
  * Interface for Phalcon\Http\Cookie
+ *
+ * @phpstan-import-type http_cookie_options from HttpTypes
  */
 interface CookieInterface
 {
@@ -45,6 +49,8 @@ interface CookieInterface
 
     /**
      * Returns the current cookie's options
+     *
+     * @phpstan-return http_cookie_options
      */
     public function getOptions(): array;
 
@@ -96,6 +102,8 @@ interface CookieInterface
 
     /**
      * Sets the cookie's options
+     *
+     * @phpstan-param http_cookie_options $options
      */
     public function setOptions(array $options): CookieInterface;
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Http\Response;
 
 use IteratorAggregate;
+use Phalcon\Contracts\Http\HttpTypes;
 use Traversable;
 
 use function array_key_exists;
@@ -21,9 +22,16 @@ use function str_contains;
 
 /**
  * This class is a bag to manage the response headers
+ *
+ * @phpstan-import-type http_response_headers from HttpTypes
+ *
+ * @implements IteratorAggregate<string, string|null>
  */
 class Headers implements HeadersInterface, IteratorAggregate
 {
+    /**
+     * @phpstan-var http_response_headers
+     */
     protected array $headers = [];
     protected bool $isSent = false;
 
@@ -46,7 +54,7 @@ class Headers implements HeadersInterface, IteratorAggregate
     }
 
     /**
-     * @return Traversable
+     * @return Traversable<string, string|null>
      */
     public function getIterator(): Traversable
     {
@@ -136,6 +144,8 @@ class Headers implements HeadersInterface, IteratorAggregate
 
     /**
      * Returns the current headers as an array
+     *
+     * @phpstan-return http_response_headers
      */
     public function toArray(): array
     {

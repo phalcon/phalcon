@@ -17,7 +17,9 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use Phalcon\Contracts\Http\HttpTypes;
 use Phalcon\Http\Request\Exceptions\NullKeyException;
+use Stringable;
 use Traversable;
 
 use function array_key_exists;
@@ -35,15 +37,23 @@ use function is_array;
  * The ArrayAccess append form (`$bag[] = $value`) is rejected with a
  * NullKeyException: the append form supplies no explicit key, so the write
  * could never be addressed by the caller.
+ *
+ * @phpstan-import-type http_bag_items from HttpTypes
+ *
+ * @implements ArrayAccess<int|string, mixed>
+ * @implements IteratorAggregate<int|string, mixed>
  */
 abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
 {
+    /**
+     * @phpstan-var http_bag_items
+     */
     protected array $items = [];
 
     /**
      * AbstractBag constructor.
      *
-     * @param array $items
+     * @phpstan-param http_bag_items $items
      */
     public function __construct(array $items = [])
     {
@@ -53,7 +63,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns all the elements of the bag
      *
-     * @return array
+     * @phpstan-return http_bag_items
      */
     public function all(): array
     {
@@ -79,6 +89,9 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag as an array. The default value is
      * returned if the element is not set or is not an array
+     *
+     * @phpstan-param  http_bag_items $defaultValue
+     * @phpstan-return http_bag_items
      */
     public function getArray(int | string $key, array $defaultValue = []): array
     {
@@ -108,9 +121,10 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     {
         $key = $this->normalizeKey($key);
 
-        return isset($this->items[$key])
-            ? (float)$this->items[$key]
-            : $defaultValue;
+        /** @var scalar|null $value */
+        $value = $this->items[$key] ?? null;
+
+        return isset($value) ? (float)$value : $defaultValue;
     }
 
     /**
@@ -121,15 +135,16 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     {
         $key = $this->normalizeKey($key);
 
-        return isset($this->items[$key])
-            ? (int)$this->items[$key]
-            : $defaultValue;
+        /** @var scalar|null $value */
+        $value = $this->items[$key] ?? null;
+
+        return isset($value) ? (int)$value : $defaultValue;
     }
 
     /**
      * Returns the iterator of the bag
      *
-     * @return Traversable
+     * @return Traversable<int|string, mixed>
      */
     public function getIterator(): Traversable
     {
@@ -144,9 +159,10 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     {
         $key = $this->normalizeKey($key);
 
-        return isset($this->items[$key])
-            ? (string)$this->items[$key]
-            : $defaultValue;
+        /** @var scalar|Stringable|null $value */
+        $value = $this->items[$key] ?? null;
+
+        return isset($value) ? (string)$value : $defaultValue;
     }
 
     /**
@@ -162,7 +178,10 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetExists(mixed $offset): bool
     {
-        return $this->has((string)$offset);
+        /** @var scalar|Stringable|null $key */
+        $key = $offset;
+
+        return $this->has((string)$key);
     }
 
     /**
@@ -170,7 +189,10 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetGet(mixed $offset): mixed
     {
-        return $this->get((string)$offset);
+        /** @var scalar|Stringable|null $key */
+        $key = $offset;
+
+        return $this->get((string)$key);
     }
 
     /**
@@ -183,7 +205,10 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
             throw new NullKeyException();
         }
 
-        $this->set((string)$offset, $value);
+        /** @var scalar|Stringable $key */
+        $key = $offset;
+
+        $this->set((string)$key, $value);
     }
 
     /**
@@ -191,7 +216,10 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      */
     public function offsetUnset(mixed $offset): void
     {
-        $this->remove((string)$offset);
+        /** @var scalar|Stringable|null $key */
+        $key = $offset;
+
+        $this->remove((string)$key);
     }
 
     /**
@@ -214,9 +242,8 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      * Normalizes the items at construction time. Identity in the base;
      * subclasses can override it to normalize keys
      *
-     * @param array $items
-     *
-     * @return array
+     * @phpstan-param  http_bag_items $items
+     * @phpstan-return http_bag_items
      */
     protected function normalizeItems(array $items): array
     {

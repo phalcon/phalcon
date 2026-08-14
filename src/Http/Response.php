@@ -35,6 +35,7 @@ use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\UrlTrait;
+use Stringable;
 
 use function addcslashes;
 use function array_keys;
@@ -109,7 +110,10 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function appendContent(mixed $content): ResponseInterface
     {
-        $this->content = $this->getContent() . $content;
+        /** @var scalar|Stringable|null $appended */
+        $appended = $content;
+
+        $this->content = $this->getContent() . $appended;
 
         return $this;
     }
@@ -128,7 +132,10 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function getCookies(): CookiesInterface
     {
-        return $this->cookies;
+        /** @var CookiesInterface $cookies */
+        $cookies = $this->cookies;
+
+        return $cookies;
     }
 
     /**
@@ -136,10 +143,10 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function getDI(): DiInterface
     {
-        /** @var DiInterface|null $container */
         $container = $this->container;
 
         if (null === $container) {
+            /** @var DiInterface|null $container */
             $container = Di::getDefault();
 
             if (null === $container) {
@@ -314,10 +321,10 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
             throw new ResponseAlreadySent();
         }
 
-        $this
-            ->sendHeaders()
-            ->sendCookies()
-        ;
+        /** @var ResponseInterface $response */
+        $response = $this->sendHeaders();
+
+        $response->sendCookies();
 
         /**
          * Output the response body
@@ -518,6 +525,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
         if (true === $attachment) {
             // mbstring is a non-default extension
             if ($this->phpFunctionExists('mb_detect_encoding')) {
+                /** @var string $basePathEncoding */
                 $basePathEncoding = mb_detect_encoding(
                     $basePath,
                     mb_detect_order(),
@@ -571,7 +579,10 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function setHeader(string $name, mixed $value): ResponseInterface
     {
-        $this->headers->set($name, (string) $value);
+        /** @var scalar|Stringable|null $headerValue */
+        $headerValue = $value;
+
+        $this->headers->set($name, (string) $headerValue);
 
         return $this;
     }
@@ -581,10 +592,12 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function setHeaders(HeadersInterface $headers): ResponseInterface
     {
-        $data = $headers->toArray();
+        /** @var Headers $bag */
+        $bag  = $headers;
+        $data = $bag->toArray();
 
         foreach ($data as $name => $value) {
-            $this->headers->set($name, $value);
+            $this->headers->set($name, (string) $value);
         }
 
         return $this;
@@ -607,9 +620,12 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
         int $jsonOptions = 0,
         int $depth = 512
     ): ResponseInterface {
+        /** @var int<1, max> $jsonDepth */
+        $jsonDepth = $depth;
+
         $this
             ->setContentType('application/json')
-            ->setContent($this->encode->__invoke($content, $jsonOptions, $depth))
+            ->setContent($this->encode->__invoke($content, $jsonOptions, $jsonDepth))
         ;
 
         return $this;

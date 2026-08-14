@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Http\Response;
 
+use Phalcon\Contracts\Http\HttpTypes;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
 use Phalcon\Http\Cookie;
 use Phalcon\Http\Cookie\CookieInterface;
+use Phalcon\Http\Response as HttpResponse;
 use Phalcon\Http\Response\Exceptions\ResponseServiceUnavailable;
 use Phalcon\Http\Traits\EncryptionAwareTrait;
 
@@ -70,11 +72,17 @@ use function headers_sent;
  *     }
  * );
  * ```
+ *
+ * @phpstan-import-type http_cookie_bag from HttpTypes
+ * @phpstan-import-type http_cookie_options from HttpTypes
  */
 class Cookies extends AbstractInjectionAware implements CookiesInterface
 {
     use EncryptionAwareTrait;
 
+    /**
+     * @phpstan-var http_cookie_bag
+     */
     protected array $cookies = [];
     protected bool $isRegistered = false;
     protected bool $isSent = false;
@@ -148,7 +156,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
          */
         $container = $this->checkGetContainer();
 
-        /** @var CookieInterface $cookie */
+        /** @var Cookie $cookie */
         $cookie = $container->get("Phalcon\\Http\\Cookie", [$name]);
 
         /**
@@ -169,6 +177,8 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
     /**
      * Gets all cookies from the bag
+     *
+     * @phpstan-return http_cookie_bag
      */
     public function getCookies(): array
     {
@@ -242,6 +252,8 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      *     (int) $tomorrow->format('U'),
      * );
      * ```
+     *
+     * @phpstan-param http_cookie_options $options
      */
     public function set(
         string $name,
@@ -259,8 +271,11 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
         $encryption = $this->useEncryption;
 
         if (!isset($this->cookies[$name])) {
-            /** @var CookieInterface $cookie */
-            $cookie = $this->container->get(
+            /** @var DiInterface $container */
+            $container = $this->container;
+
+            /** @var Cookie $cookie */
+            $cookie = $container->get(
                 "Phalcon\\Http\\Cookie",
                 [$name, $value, $expire, $path, $secure, $domain, $httpOnly, $options]
             );
@@ -268,7 +283,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
             /**
              * Pass the DI to created cookies
              */
-            $cookie->setDI($this->container);
+            $cookie->setDI($container);
 
             /**
              * Enable encryption in the cookie
@@ -280,7 +295,7 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
 
             $this->cookies[$name] = $cookie;
         } else {
-            /** @var CookieInterface $cookie */
+            /** @var Cookie $cookie */
             $cookie = $this->cookies[$name];
             /**
              * Override any settings in the cookie
@@ -300,7 +315,9 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
          */
         if (true !== $this->isRegistered) {
             $container = $this->checkGetContainer();
-            $response  = $container->getShared('response');
+
+            /** @var HttpResponse $response */
+            $response = $container->getShared('response');
 
             /**
              * Pass the cookies bag to the response so it can send the headers

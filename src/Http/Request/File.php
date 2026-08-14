@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Http\Request;
 
+use Phalcon\Contracts\Http\HttpTypes;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 
 use function defined;
@@ -47,6 +48,8 @@ use const PATHINFO_EXTENSION;
  *     }
  * }
  *```
+ *
+ * @phpstan-import-type http_uploaded_file from HttpTypes
  */
 class File implements FileInterface
 {
@@ -63,21 +66,35 @@ class File implements FileInterface
 
     /**
      * Constructor
+     *
+     * @phpstan-param http_uploaded_file $file
      */
     public function __construct(array $file, string $key = '')
     {
         if (isset($file['name'])) {
-            $this->name = $file['name'];
+            /** @var string $name */
+            $name = $file['name'];
+
+            $this->name = $name;
 
             if (defined('PATHINFO_EXTENSION')) {
-                $this->extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $this->extension = pathinfo($name, PATHINFO_EXTENSION);
             }
         }
 
-        $this->tmpName = $this->getArrVal($file, 'tmp_name', $this->tmpName);
-        $this->size    = $this->getArrVal($file, 'size', $this->size);
-        $this->type    = $this->getArrVal($file, 'type', $this->type);
-        $this->error   = $this->getArrVal($file, 'error', $this->error);
+        /** @var string $tmpName */
+        $tmpName = $this->getArrVal($file, 'tmp_name', $this->tmpName);
+        /** @var int $size */
+        $size = $this->getArrVal($file, 'size', $this->size);
+        /** @var string $type */
+        $type = $this->getArrVal($file, 'type', $this->type);
+        /** @var int $error */
+        $error = $this->getArrVal($file, 'error', $this->error);
+
+        $this->tmpName = $tmpName;
+        $this->size    = $size;
+        $this->type    = $type;
+        $this->error   = $error;
 
         if (!empty($key)) {
             $this->key = $key;
@@ -118,7 +135,9 @@ class File implements FileInterface
             if (false !== $finfo) {
                 $mime = finfo_file($finfo, $this->tmpName);
 
-                $this->realType = $mime;
+                if (false !== $mime) {
+                    $this->realType = $mime;
+                }
             }
         }
 

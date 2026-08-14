@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Http;
 
+use Phalcon\Contracts\Encryption\Crypt\Crypt as CryptContract;
+use Phalcon\Contracts\Http\HttpTypes;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Cookie\CookieInterface;
@@ -32,6 +34,10 @@ use function time;
 
 /**
  * Provide OO wrappers to manage a HTTP cookie.
+ *
+ * @phpstan-import-type http_cookie_definition from HttpTypes
+ * @phpstan-import-type http_cookie_options from HttpTypes
+ * @phpstan-import-type http_setcookie_options from HttpTypes
  */
 class Cookie extends AbstractInjectionAware implements CookieInterface, Stringable
 {
@@ -50,6 +56,8 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
 
     /**
      * Phalcon\Http\Cookie constructor.
+     *
+     * @phpstan-param http_cookie_options $options
      */
     public function __construct(
         protected string $name,
@@ -71,7 +79,10 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
      */
     public function __toString(): string
     {
-        return (string)$this->getValue();
+        /** @var scalar|Stringable|null $value */
+        $value = $this->getValue();
+
+        return (string)$value;
     }
 
     /**
@@ -130,6 +141,8 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
 
     /**
      * Returns the current cookie's options
+     *
+     * @phpstan-return http_cookie_options
      */
     public function getOptions(): array
     {
@@ -173,6 +186,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                 return $defaultValue;
             }
 
+            /** @var string $value */
             $value          = $_COOKIE[$this->name];
             $decryptedValue = $value;
             if (true === $this->useEncryption) {
@@ -186,6 +200,9 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                     throw new CryptInterfaceRequired();
                 }
 
+                /** @var CryptContract $cryptService */
+                $cryptService = $crypt;
+
                 /**
                  * Verify the cookie's value if the sign key was set
                  */
@@ -193,7 +210,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                     /**
                      * Decrypt the value also decoding it with base64
                      */
-                    $decryptedValue = $crypt->decryptBase64(
+                    $decryptedValue = $cryptService->decryptBase64(
                         $value,
                         $this->signKey
                     );
@@ -201,7 +218,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                     /**
                      * Decrypt the value also decoding it with base64
                      */
-                    $decryptedValue = $crypt->decryptBase64($value);
+                    $decryptedValue = $cryptService->decryptBase64($value);
                 }
             }
 
@@ -221,7 +238,10 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                     $this->filter = $filter;
                 }
 
-                return $this->filter->sanitize($decryptedValue, $filters);
+                /** @var array<array-key, mixed>|string $sanitizers */
+                $sanitizers = $filters;
+
+                return $this->filter->sanitize($decryptedValue, $sanitizers);
             }
 
             /**
@@ -245,6 +265,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
         if (true !== $this->isRestored) {
             $session = $this->getStartedSession();
             if (null !== $session) {
+                /** @var http_cookie_definition $definition */
                 $definition = $session->get($this->getSessionKEy());
 
                 $this->expire   = $definition['expire'] ?? $this->expire;
@@ -291,7 +312,11 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
             }
         }
 
-        $encryptValue = $this->value;
+        /** @var scalar|Stringable|null $rawValue */
+        $rawValue = $this->value;
+
+        /** @var string $encryptValue */
+        $encryptValue = $rawValue;
         if (true === $this->useEncryption && !empty($this->value)) {
             if (null === $this->container) {
                 throw new FilterServiceUnavailable();
@@ -303,17 +328,20 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                 throw new CryptInterfaceRequired();
             }
 
+            /** @var CryptContract $cryptService */
+            $cryptService = $crypt;
+
             /**
              * Encrypt the value also coding it with base64.
              * Sign the cookie's value if the sign key was set
              */
             if (is_string($this->signKey)) {
-                $encryptValue = $crypt->encryptBase64(
-                    (string)$this->value,
+                $encryptValue = $cryptService->encryptBase64(
+                    (string)$rawValue,
                     $this->signKey
                 );
             } else {
-                $encryptValue = $crypt->encryptBase64((string)$this->value);
+                $encryptValue = $cryptService->encryptBase64((string)$rawValue);
             }
         }
 
@@ -365,6 +393,8 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
 
     /**
      * Sets the cookie's options
+     *
+     * @phpstan-param http_cookie_options $options
      */
     public function setOptions(array $options): CookieInterface
     {
@@ -464,6 +494,9 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
         }
     }
 
+    /**
+     * @phpstan-return http_setcookie_options
+     */
     private function getCookieOptions(int $expiresDefault): array
     {
         $options             = $this->options;
@@ -473,7 +506,10 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
         $options['secure']   = $this->getArrVal($options, 'secure', $this->secure);
         $options['httponly'] = $this->getArrVal($options, 'httponly', $this->httpOnly);
 
-        return $options;
+        /** @var http_setcookie_options $cookieOptions */
+        $cookieOptions = $options;
+
+        return $cookieOptions;
     }
 
     /**
@@ -497,6 +533,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
             return null;
         }
 
+        /** @var SessionManagerInterface $session */
         $session = $this->container->getShared("session");
 
         if (true !== $session->exists()) {

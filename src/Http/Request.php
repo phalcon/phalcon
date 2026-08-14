@@ -14,8 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Http;
 
 use Phalcon\Contracts\Http\AttributeRequest;
+use Phalcon\Contracts\Http\HttpTypes;
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Filter\Filter;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Http\Message\RequestMethodInterface;
 use Phalcon\Http\Request\Bag\AttributeBag;
@@ -80,6 +83,17 @@ use const UPLOAD_ERR_OK;
  * // An array of languages the client accepts
  * $request->getLanguages();
  *```
+ *
+ * @phpstan-import-type http_basic_auth from HttpTypes
+ * @phpstan-import-type http_digest_auth from HttpTypes
+ * @phpstan-import-type http_form_data from HttpTypes
+ * @phpstan-import-type http_parameter_filters from HttpTypes
+ * @phpstan-import-type http_php_files from HttpTypes
+ * @phpstan-import-type http_quality_part from HttpTypes
+ * @phpstan-import-type http_request_headers from HttpTypes
+ * @phpstan-import-type http_smooth_file from HttpTypes
+ * @phpstan-import-type http_uploaded_file from HttpTypes
+ * @phpstan-import-type http_uploaded_files from HttpTypes
  */
 class Request extends AbstractInjectionAware implements RequestInterface, RequestMethodInterface, AttributeRequest
 {
@@ -89,10 +103,19 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     protected AttributeBag | null $attributes = null;
     protected FilterInterface | null $filterService = null;
     protected bool $methodOverride = false;
+    /**
+     * @phpstan-var http_form_data|null
+     */
     protected array | null $postCache = null;
+    /**
+     * @phpstan-var http_parameter_filters
+     */
     protected array $queryFilters = [];
     protected string $rawBody = '';
     protected bool $strictHostCheck = false;
+    /**
+     * @phpstan-var list<string>
+     */
     protected array $trustedProxies = [];
     protected string $trustedProxyHeader = '';
 
@@ -130,6 +153,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Gets an array with mime/types and their quality accepted by the
      * browser/client from _SERVER["HTTP_ACCEPT"]
+     *
+     * @phpstan-return list<http_quality_part>
      */
     public function getAcceptableContent(): array
     {
@@ -161,6 +186,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Gets auth info accepted by the browser/client from
      * $_SERVER["PHP_AUTH_USER"]
+     *
+     * @phpstan-return http_basic_auth|null
      */
     public function getBasicAuth(): array | null
     {
@@ -234,6 +261,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         if ($trustForwardedHeader) {
             // If trustedProxyHeader is not empty, it takes priority before we check for X-Forwarded-For
             if ($this->trustedProxyHeader !== "") {
+                /** @var string|null $trustedProxyHeaderIp */
                 $trustedProxyHeaderIp = $_SERVER[$this->trustedProxyHeader] ?? null;
                 if ($trustedProxyHeaderIp) {
                     return $trustedProxyHeaderIp;
@@ -245,6 +273,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                 return $address;
             }
             // if either trustedProxies are empty or we trust the proxy, parse the header HTTP_X_FORWARDED_FOR
+            /** @var string|null $forwarded */
             $forwarded = $_SERVER["HTTP_X_FORWARDED_FOR"] ?? null;
             if (!empty($forwarded)) {
                 // X-Forwarded-For contains ips, we continue parsing the header
@@ -271,6 +300,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Gets a charsets array and their quality accepted by the browser/client
      * from _SERVER["HTTP_ACCEPT_CHARSET"]
+     *
+     * @phpstan-return list<http_quality_part>
      */
     public function getClientCharsets(): array
     {
@@ -282,19 +313,25 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function getContentType(): string | null
     {
-        return $_SERVER['CONTENT_TYPE'] ?? null;
+        /** @var string|null $contentType */
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? null;
+
+        return $contentType;
     }
 
     /**
      * Gets auth info accepted by the browser/client from
      * $_SERVER["PHP_AUTH_DIGEST"]
+     *
+     * @phpstan-return http_digest_auth
      */
     public function getDigestAuth(): array
     {
         $auth = [];
         if (isset($_SERVER['PHP_AUTH_DIGEST'])) {
             $matches = [];
-            $digest  = $_SERVER['PHP_AUTH_DIGEST'];
+            /** @var string $digest */
+            $digest = $_SERVER['PHP_AUTH_DIGEST'];
 
             if (
                 !preg_match_all(
@@ -326,7 +363,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         bool $notAllowEmpty = false,
         bool $noRecursive = false
     ): mixed {
-        $filters = $this->queryFilters[$methodKey][$name] ?? [];
+        $filters = $this->queryFilters[$methodKey][(string)$name] ?? [];
 
         return $this->{$method}(
             $name,
@@ -421,11 +458,17 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         $name = strtoupper(strtr($header, '-', '_'));
 
         if (isset($_SERVER[$name])) {
-            return $_SERVER[$name];
+            /** @var string $value */
+            $value = $_SERVER[$name];
+
+            return $value;
         }
 
         if (isset($_SERVER['HTTP_' . $name])) {
-            return $_SERVER['HTTP_' . $name];
+            /** @var string $prefixed */
+            $prefixed = $_SERVER['HTTP_' . $name];
+
+            return $prefixed;
         }
 
         return '';
@@ -444,6 +487,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      *
      * echo $headers["Authorization"]; // Basic cGhhbGNvbjpzZWNyZXQ=
      * </code>
+     *
+     * @phpstan-return http_request_headers
      */
     public function getHeaders(): array
     {
@@ -558,6 +603,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             $cleanHost = strtolower(trim($host));
 
             if (str_contains($cleanHost, ':')) {
+                /** @var string $cleanHost */
                 $cleanHost = preg_replace(
                     "/:[[:digit:]]+$/",
                     '',
@@ -595,11 +641,16 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function getHTTPReferer(): string
     {
-        return $_SERVER['HTTP_REFERER'] ?? '';
+        /** @var string $referer */
+        $referer = $_SERVER['HTTP_REFERER'] ?? '';
+
+        return $referer;
     }
 
     /**
      * Gets decoded JSON HTTP raw request body
+     *
+     * @phpstan-return array<array-key, mixed>|bool|stdClass
      */
     public function getJsonRawBody(bool $associative = false): array | bool | stdClass
     {
@@ -609,12 +660,17 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             $rawBody = '{}';
         }
 
-        return (new Decode())->__invoke($rawBody, $associative);
+        /** @var array<array-key, mixed>|bool|stdClass $decoded */
+        $decoded = (new Decode())->__invoke($rawBody, $associative);
+
+        return $decoded;
     }
 
     /**
      * Gets languages array and their quality accepted by the browser/client
      * from _SERVER["HTTP_ACCEPT_LANGUAGE"]
+     *
+     * @phpstan-return list<http_quality_part>
      */
     public function getLanguages(): array
     {
@@ -638,7 +694,9 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             return self::METHOD_GET;
         }
 
-        $returnMethod = strtoupper($_SERVER['REQUEST_METHOD']);
+        /** @var string $requestMethod */
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $returnMethod  = strtoupper($requestMethod);
 
         if (self::METHOD_POST === $returnMethod) {
             $overriddenMethod = $this->getHeader('X-HTTP-METHOD-OVERRIDE');
@@ -649,7 +707,9 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                 true === $this->methodOverride &&
                 isset($_REQUEST['_method'])
             ) {
-                $returnMethod = strtoupper($_REQUEST['_method']);
+                /** @var string $overrideParameter */
+                $overrideParameter = $_REQUEST['_method'];
+                $returnMethod      = strtoupper($overrideParameter);
             }
         }
 
@@ -836,7 +896,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             /**
              * We need store the read raw body because it can't be read again
              */
-            $this->rawBody = $this->phpFileGetContents('php://input');
+            /** @var string $rawBody */
+            $rawBody = $this->phpFileGetContents('php://input');
+
+            $this->rawBody = $rawBody;
         }
 
         return $this->rawBody;
@@ -857,7 +920,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function getServer(string $name): string | null
     {
-        return $_SERVER[$name] ?? null;
+        /** @var string|null $value */
+        $value = $_SERVER[$name] ?? null;
+
+        return $value;
     }
 
     /**
@@ -889,18 +955,28 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         bool $onlySuccessful = false,
         bool $namedKeys = false
     ): array {
-        $files      = [];
+        $files = [];
+        /** @var http_php_files $superFiles */
         $superFiles = $_FILES;
 
         if (!empty($superFiles)) {
             foreach ($superFiles as $prefix => $input) {
                 if (is_array($input['name'])) {
+                    /** @var array<array-key, mixed> $types */
+                    $types = $input["type"];
+                    /** @var array<array-key, mixed> $tmpNames */
+                    $tmpNames = $input["tmp_name"];
+                    /** @var array<array-key, mixed> $sizes */
+                    $sizes = $input["size"];
+                    /** @var array<array-key, mixed> $errors */
+                    $errors = $input["error"];
+
                     $smoothInput = $this->smoothFiles(
                         $input["name"],
-                        $input["type"],
-                        $input["tmp_name"],
-                        $input["size"],
-                        $input["error"],
+                        $types,
+                        $tmpNames,
+                        $sizes,
+                        $errors,
                         $prefix
                     );
 
@@ -1008,7 +1084,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function hasPatch(string $name): bool
     {
-        return array_key_exists($name, $this->getPatch());
+        /** @var http_form_data $data */
+        $data = $this->getPatch();
+
+        return array_key_exists($name, $data);
     }
 
     /**
@@ -1016,7 +1095,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function hasPost(string $name): bool
     {
-        return array_key_exists($name, $this->getPost());
+        /** @var http_form_data $data */
+        $data = $this->getPost();
+
+        return array_key_exists($name, $data);
     }
 
     /**
@@ -1024,7 +1106,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function hasPut(string $name): bool
     {
-        return array_key_exists($name, $this->getPut());
+        /** @var http_form_data $data */
+        $data = $this->getPut();
+
+        return array_key_exists($name, $data);
     }
 
     /**
@@ -1094,7 +1179,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     public function isJson(): bool
     {
         return $this->hasServer("CONTENT_TYPE") &&
-            stripos($this->getServer("CONTENT_TYPE"), "json") !== false;
+            stripos((string)$this->getServer("CONTENT_TYPE"), "json") !== false;
     }
 
     /**
@@ -1102,6 +1187,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      * When strict is true it checks if validated methods are real HTTP methods
      *
      * @todo check the $methods type - refactor this !!
+     *
+     * @param mixed $methods
      */
     public function isMethod(mixed $methods, bool $strict = false): bool
     {
@@ -1250,7 +1337,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     public function numFiles(bool $onlySuccessful = false): int
     {
         $numberFiles = 0;
-        $files       = $_FILES;
+        /** @var http_php_files $files */
+        $files = $_FILES;
 
         if (empty($files)) {
             return 0;
@@ -1258,6 +1346,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
         foreach ($files as $file) {
             if (isset($file['error'])) {
+                /** @var array<array-key, mixed>|int $error */
                 $error = $file['error'];
 
                 if (
@@ -1292,6 +1381,9 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Sets automatic sanitizers/filters for a particular field and for
      * particular methods
+     *
+     * @phpstan-param list<string> $filters
+     * @phpstan-param list<string> $scope
      */
     public function setParameterFilters(
         string $name,
@@ -1302,6 +1394,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             throw new MissingFilters($name);
         }
 
+        /** @var Filter $filterService */
         $filterService = $this->getFilterService();
         foreach ($filters as $sanitizer) {
             if (true !== $filterService->has($sanitizer)) {
@@ -1339,6 +1432,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Set a trusted proxy list for X-Forwarded-For header
+     *
+     * @phpstan-param list<string> $trustedProxies
      */
     public function setTrustedProxies(array $trustedProxies): static
     {
@@ -1346,6 +1441,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
         // sanitize IPs
         foreach ($trustedProxies as $trustedProxy) {
+            /** @var false|string $filtered */
             $filtered = $filterService->sanitize($trustedProxy, "ip");
             if ($filtered !== false) {
                 $this->trustedProxies[] = $filtered;
@@ -1373,6 +1469,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Process a request header and return the one with best quality
+     *
+     * @phpstan-param list<http_quality_part> $qualityParts
      */
     protected function getBestQuality(
         array $qualityParts,
@@ -1383,15 +1481,18 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         $selectedName = '';
 
         foreach ($qualityParts as $accept) {
+            /** @var string $acceptName */
+            $acceptName = $accept[$name];
+
             if (0 === $counter) {
                 $quality      = (float)$accept['quality'];
-                $selectedName = $accept[$name];
+                $selectedName = $acceptName;
             } else {
                 $acceptQuality = (float)$accept['quality'];
 
                 if ($acceptQuality > $quality) {
                     $quality      = $acceptQuality;
-                    $selectedName = $accept[$name];
+                    $selectedName = $acceptName;
                 }
             }
 
@@ -1404,6 +1505,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Helper to get data from superglobals, applying filters if needed.
      * If no parameters are given the superglobal is returned.
+     *
+     * @phpstan-param http_form_data $source
      */
     protected function getHelper(
         array $source,
@@ -1431,10 +1534,13 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         }
 
         if (null !== $filters) {
+            /** @var array<array-key, mixed>|string $sanitizers */
+            $sanitizers = $filters;
+
             $filterService = $this->getFilterService();
             $value         = $filterService->sanitize(
                 $value,
-                $filters,
+                $sanitizers,
                 $noRecursive
             );
 
@@ -1453,6 +1559,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Process a request header and return an array of values with their
      * qualities
+     *
+     * @phpstan-return list<http_quality_part>
      */
     protected function getQualityHeader(
         string $serverIndex,
@@ -1462,6 +1570,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         $serverValue   = $this->getServer($serverIndex);
         $serverValue   = (null === $serverValue) ? '' : $serverValue;
 
+        /** @var list<string> $parts */
         $parts = preg_split(
             "/,\\s*/",
             $serverValue,
@@ -1471,6 +1580,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
         foreach ($parts as $part) {
             $headerParts = [];
+            /** @var list<string> $headerSplit */
             $headerSplit = preg_split(
                 "/\s*;\s*/",
                 trim($part),
@@ -1538,7 +1648,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     {
         $parts       = explode('/', $cidr);
         $subnet      = $parts[0];
-        $maskLength  = $parts[1];
+        $maskLength  = (int)$parts[1];
 
         $ipBin     = inet_pton($ip);
         $subnetBin = inet_pton($subnet);
@@ -1547,14 +1657,18 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             return false; // Invalid IP
         }
 
-        $ipBits        = unpack("H*", $ipBin);
-        $subnetBits    = unpack("H*", $subnetBin);
+        /** @var array<int, string> $ipBits */
+        $ipBits = unpack("H*", $ipBin);
+        /** @var array<int, string> $subnetBits */
+        $subnetBits = unpack("H*", $subnetBin);
 
         $ipBits     = $ipBits[1];
         $subnetBits = $subnetBits[1];
 
         // Convert hex string to binary string
-        $ipBits     = hex2bin(str_pad($ipBits, strlen($ipBits), "0"));
+        /** @var string $ipBits */
+        $ipBits = hex2bin(str_pad($ipBits, strlen($ipBits), "0"));
+        /** @var string $subnetBits */
         $subnetBits = hex2bin(str_pad($subnetBits, strlen($subnetBits), "0"));
 
         $maskBytes     = (int)floor($maskLength / 8);
@@ -1580,6 +1694,8 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Resolve authorization headers.
+     *
+     * @phpstan-return http_request_headers
      */
     protected function resolveAuthorizationHeaders(): array
     {
@@ -1590,7 +1706,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             null !== $this->container &&
             null === $this->eventsManager
         ) {
-            $this->eventsManager = $this->container->getShared('eventsManager');
+            /** @var EventsManagerInterface $eventsManager */
+            $eventsManager = $this->container->getShared('eventsManager');
+
+            $this->eventsManager = $eventsManager;
         }
 
         if (null !== $this->eventsManager) {
@@ -1602,7 +1721,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             );
 
             if (is_array($resolved)) {
-                $headers = array_merge($headers, $resolved);
+                /** @var http_request_headers $resolvedHeaders */
+                $resolvedHeaders = $resolved;
+
+                $headers = array_merge($headers, $resolvedHeaders);
             }
         }
 
@@ -1648,10 +1770,13 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
         if (!isset($headers['Authorization'])) {
             if (isset($headers['Php-Auth-User'])) {
+                /** @var string $authUser */
+                $authUser = $headers['Php-Auth-User'];
+                /** @var string $authPassword */
+                $authPassword = $headers['Php-Auth-Pw'];
+
                 $headers['Authorization'] = 'Basic '
-                    . base64_encode(
-                        $headers['Php-Auth-User'] . ':' . $headers['Php-Auth-Pw']
-                    );
+                    . base64_encode($authUser . ':' . $authPassword);
             } elseif (isset($headers['Php-Auth-Digest'])) {
                 $headers['Authorization'] = $headers['Php-Auth-Digest'];
             }
@@ -1667,7 +1792,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             );
 
             if (is_array($resolved)) {
-                $headers = array_merge($headers, $resolved);
+                /** @var http_request_headers $resolvedHeaders */
+                $resolvedHeaders = $resolved;
+
+                $headers = array_merge($headers, $resolvedHeaders);
             }
         }
 
@@ -1676,6 +1804,13 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Smooth out $_FILES to have plain array with all files uploaded
+     *
+     * @phpstan-param  array<array-key, mixed> $names
+     * @phpstan-param  array<array-key, mixed> $types
+     * @phpstan-param  array<array-key, mixed> $tmpNames
+     * @phpstan-param  array<array-key, mixed> $sizes
+     * @phpstan-param  array<array-key, mixed> $errors
+     * @phpstan-return list<http_smooth_file>
      */
     protected function smoothFiles(
         array $names,
@@ -1701,12 +1836,21 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             }
 
             if (is_array($name)) {
+                /** @var array<array-key, mixed> $childTypes */
+                $childTypes = $types[$index];
+                /** @var array<array-key, mixed> $childTmpNames */
+                $childTmpNames = $tmpNames[$index];
+                /** @var array<array-key, mixed> $childSizes */
+                $childSizes = $sizes[$index];
+                /** @var array<array-key, mixed> $childErrors */
+                $childErrors = $errors[$index];
+
                 $parentFiles = $this->smoothFiles(
                     $name,
-                    $types[$index],
-                    $tmpNames[$index],
-                    $sizes[$index],
-                    $errors[$index],
+                    $childTypes,
+                    $childTmpNames,
+                    $childSizes,
+                    $childErrors,
                     $key
                 );
 
@@ -1729,7 +1873,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                 throw new FilterServiceUnavailable();
             }
 
-            $this->filterService = $this->container->getShared("filter");
+            /** @var FilterInterface $filterService */
+            $filterService = $this->container->getShared("filter");
+
+            $this->filterService = $filterService;
         }
 
         return $this->filterService;
@@ -1737,12 +1884,15 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Parses multipart/form-data from the raw body.
+     *
+     * @phpstan-return http_form_data
      */
     private function getFormData(): array
     {
         preg_match('/boundary=(.*)$/is', (string) $this->getContentType(), $matches);
 
-        $boundary = $matches[1];
+        $boundary = $matches[1] ?? '';
+        /** @var list<string> $bodyParts */
         $bodyParts = preg_split('/\R?-+' . preg_quote($boundary, '/') . '/s', $this->getRawBody());
 
         array_pop($bodyParts);
@@ -1754,8 +1904,11 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                 continue;
             }
 
-            $splited     = preg_split('/\R\R/', $bodyPart, 2);
-            $headers     = [];
+            /** @var list<string> $splited */
+            $splited = preg_split('/\R\R/', $bodyPart, 2);
+            /** @var array<string, array<int|string, string>|string> $headers */
+            $headers = [];
+            /** @var list<string> $headerParts */
             $headerParts = preg_split('/\R/s', $splited[0], -1, PREG_SPLIT_NO_EMPTY);
 
             foreach ($headerParts as $headerPart) {
@@ -1769,26 +1922,34 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
                 if (strpos($headerValue, ';') !== false) {
                     $explodedHeader = explode(';', $headerValue);
+                    /** @var array<int|string, string> $headerValues */
+                    $headerValues = $headers[$headerName] ?? [];
 
                     foreach ($explodedHeader as $part) {
-                        $part = preg_replace('/"/', '', trim($part));
+                        /** @var string $cleanPart */
+                        $cleanPart = preg_replace('/"/', '', trim($part));
 
-                        if (strpos($part, '=') !== false) {
-                            $explodedPart = explode('=', $part, 2);
+                        if (strpos($cleanPart, '=') !== false) {
+                            $explodedPart = explode('=', $cleanPart, 2);
                             $namePart     = strtolower(trim($explodedPart[0]));
                             $valuePart    = trim(trim($explodedPart[1]), '"');
 
-                            $headers[$headerName][$namePart] = $valuePart;
+                            $headerValues[$namePart] = $valuePart;
                         } else {
-                            $headers[$headerName][] = $part;
+                            $headerValues[] = $cleanPart;
                         }
                     }
+
+                    $headers[$headerName] = $headerValues;
                 } else {
                     $headers[$headerName] = $headerValue;
                 }
             }
 
-            $dataset[$headers['content-disposition']['name']] = $splited[1];
+            /** @var array<int|string, string> $disposition */
+            $disposition = $headers['content-disposition'] ?? [];
+
+            $dataset[$disposition['name'] ?? ''] = $splited[1];
         }
 
         return $dataset;
@@ -1796,6 +1957,9 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Return post data from rawBody, form data, or urlencoded form data
+     *
+     * @phpstan-param  http_form_data|null $data
+     * @phpstan-return http_form_data
      */
     private function getPostData(array | null $data): array
     {
@@ -1846,6 +2010,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     private function isValidPublicIp(string $forwardedIp): false | string
     {
         $filterService = $this->getFilterService();
+        /** @var false|string $filtered */
         $filtered = $filterService->sanitize($forwardedIp, [
             "ip" => [
                 "filter" => FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
@@ -1857,6 +2022,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Helper to build the uploaded files array
+     *
+     * @phpstan-param  http_uploaded_files $files
+     * @phpstan-param  http_uploaded_file  $input
+     * @phpstan-return http_uploaded_files
      */
     private function processFiles(
         array $files,
