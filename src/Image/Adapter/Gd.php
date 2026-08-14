@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Image\Adapter;
 
 use GdImage;
+use Phalcon\Contracts\Image\ImageTypes;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 use Phalcon\Image\Exceptions\ExtensionNotLoaded;
@@ -110,6 +111,11 @@ use const PATHINFO_EXTENSION;
  * the Imagick adapter: blur() applies repeated 3x3 Gaussian convolutions
  * (the radius is the number of passes), while sharpen and reflection use GD's
  * own scales. Switching the factory backend can change the rendered output.
+ *
+ * @extends AbstractAdapter<GdImage>
+ *
+ * @phpstan-import-type image_crop_rectangle from ImageTypes
+ * @phpstan-import-type image_text_bounds from ImageTypes
  */
 class Gd extends AbstractAdapter
 {
@@ -142,7 +148,7 @@ class Gd extends AbstractAdapter
         $this->type = 0;
 
         if (true === $this->phpFileExists($this->file)) {
-            $this->realpath = realpath($this->file);
+            $this->realpath = (string)realpath($this->file);
             $imageInfo      = getimagesize($this->file);
 
             if (false !== $imageInfo) {
@@ -156,33 +162,36 @@ class Gd extends AbstractAdapter
 
             switch ($this->type) {
                 case IMAGETYPE_GIF:
-                    $this->image = imagecreatefromgif($this->file);
+                    $image = imagecreatefromgif($this->file);
                     break;
 
                 case IMAGETYPE_JPEG:
                 case IMAGETYPE_JPEG2000:
-                    $this->image = imagecreatefromjpeg($this->file);
+                    $image = imagecreatefromjpeg($this->file);
                     break;
 
                 case IMAGETYPE_PNG:
-                    $this->image = imagecreatefrompng($this->file);
+                    $image = imagecreatefrompng($this->file);
                     break;
 
                 case IMAGETYPE_WEBP:
-                    $this->image = imagecreatefromwebp($this->file);
+                    $image = imagecreatefromwebp($this->file);
                     break;
 
                 case IMAGETYPE_WBMP:
-                    $this->image = imagecreatefromwbmp($this->file);
+                    $image = imagecreatefromwbmp($this->file);
                     break;
 
                 case IMAGETYPE_XBM:
-                    $this->image = imagecreatefromxbm($this->file);
+                    $image = imagecreatefromxbm($this->file);
                     break;
 
                 default:
                     throw new UnsupportedImageType($this->mime);
             }
+
+            /** @var GdImage $image */
+            $this->image = $image;
 
             imagesavealpha($this->image, true);
         } else {
@@ -190,7 +199,14 @@ class Gd extends AbstractAdapter
                 throw new ImageLoadFailed($this->file);
             }
 
-            $this->image = imagecreatetruecolor($width, $height);
+            /**
+             * @var positive-int $height
+             * @var positive-int $width
+             */
+            $image = imagecreatetruecolor($width, $height);
+
+            /** @var GdImage $image */
+            $this->image = $image;
 
             imagealphablending($this->image, true);
             imagesavealpha($this->image, true);
@@ -215,6 +231,7 @@ class Gd extends AbstractAdapter
      * Creates a blank true-color canvas of the given dimensions, without the
      * load-or-create ambiguity of the constructor.
      *
+     * @phpstan-return AbstractAdapter<GdImage>
      * @throws Exception
      */
     public static function create(int $width, int $height): AbstractAdapter
@@ -231,7 +248,7 @@ class Gd extends AbstractAdapter
             throw new ExtensionNotLoaded("GD");
         }
 
-        $version = null;
+        $version = "";
 
         if (defined("GD_VERSION")) {
             $version = GD_VERSION;
@@ -239,10 +256,13 @@ class Gd extends AbstractAdapter
             $info    = gd_info();
             $matches = null;
 
+            /** @var string $reported */
+            $reported = $info["GD Version"];
+
             if (
                 preg_match(
                     "/\\d+\\.\\d+(?:\\.\\d+)?/",
-                    $info["GD Version"],
+                    $reported,
                     $matches
                 )
             ) {
@@ -259,7 +279,10 @@ class Gd extends AbstractAdapter
         int $blue,
         int $opacity
     ): void {
-        $opacity    = (int)round(abs(($opacity * 127 / 100) - 127));
+        /** @var int<0, 127> $opacity */
+        $opacity = (int)round(abs(($opacity * 127 / 100) - 127));
+
+        /** @var GdImage $image */
         $image      = $this->image;
         $background = $this->processCreate($this->width, $this->height);
 
@@ -290,21 +313,29 @@ class Gd extends AbstractAdapter
 
     protected function processBlur(int $radius): void
     {
+        /** @var GdImage $image */
+        $image = $this->image;
+
         $counter = 0;
         while ($counter < $radius) {
-            imagefilter($this->image, IMG_FILTER_GAUSSIAN_BLUR);
+            imagefilter($image, IMG_FILTER_GAUSSIAN_BLUR);
 
             $counter++;
         }
     }
 
     /**
-     * @return false|GdImage|resource
+     * @phpstan-return GdImage
      */
     protected function processCreate(int $width, int $height)
     {
+        /**
+         * @var positive-int $height
+         * @var positive-int $width
+         */
         $image = imagecreatetruecolor($width, $height);
 
+        /** @var GdImage $image */
         imagealphablending($image, false);
         imagesavealpha($image, true);
 
@@ -317,6 +348,7 @@ class Gd extends AbstractAdapter
         int $offsetX,
         int $offsetY
     ): void {
+        /** @var image_crop_rectangle $rect */
         $rect = [
             "x"      => $offsetX,
             "y"      => $offsetY,
@@ -324,7 +356,11 @@ class Gd extends AbstractAdapter
             "height" => $height,
         ];
 
-        $image = imagecrop($this->image, $rect);
+        /** @var GdImage $current */
+        $current = $this->image;
+
+        /** @var GdImage $image */
+        $image = imagecrop($current, $rect);
 
         $this->image  = $image;
         $this->width  = imagesx($image);
@@ -333,19 +369,29 @@ class Gd extends AbstractAdapter
 
     protected function processFlip(int $direction): void
     {
+        /** @var GdImage $image */
+        $image = $this->image;
+
         if ($direction === Enum::HORIZONTAL) {
-            imageflip($this->image, IMG_FLIP_HORIZONTAL);
+            imageflip($image, IMG_FLIP_HORIZONTAL);
         } else {
-            imageflip($this->image, IMG_FLIP_VERTICAL);
+            imageflip($image, IMG_FLIP_VERTICAL);
         }
     }
 
     protected function processMask(AdapterInterface $mask)
     {
-        $maskImage  = imagecreatefromstring($mask->render());
+        /** @var GdImage $maskImage */
+        $maskImage = imagecreatefromstring($mask->render());
+
+        /** @var GdImage $current */
+        $current = $this->image;
+
         $maskWidth  = (int)imagesx($maskImage);
         $maskHeight = (int)imagesy($maskImage);
-        $alpha      = 127;
+
+        /** @var int<0, 127> $alpha */
+        $alpha = 127;
 
         imagesavealpha($maskImage, true);
 
@@ -353,6 +399,7 @@ class Gd extends AbstractAdapter
 
         imagesavealpha($newImage, true);
 
+        /** @var int<0, max> $color */
         $color = imagecolorallocatealpha(
             $newImage,
             0,
@@ -364,7 +411,14 @@ class Gd extends AbstractAdapter
         imagefill($newImage, 0, 0, $color);
 
         if ($this->width !== $maskWidth || $this->height !== $maskHeight) {
-            $tempImage = imagecreatetruecolor($this->width, $this->height);
+            /** @var positive-int $width */
+            $width = $this->width;
+
+            /** @var positive-int $height */
+            $height = $this->height;
+
+            /** @var GdImage $tempImage */
+            $tempImage = imagecreatetruecolor($width, $height);
 
             imagecopyresampled(
                 $tempImage,
@@ -386,19 +440,22 @@ class Gd extends AbstractAdapter
         while ($x < $this->width) {
             $y = 0;
             while ($y < $this->height) {
+                /** @var int<0, max> $index */
                 $index = imagecolorat($maskImage, $x, $y);
                 $color = imagecolorsforindex($maskImage, $index);
 
-                if (isset($color["red"])) {
-                    $alpha = 127 - intval($color["red"] / 2);
-                }
+                /** @var int<0, 127> $alpha */
+                $alpha = 127 - intval($color["red"] / 2);
 
-                $index = imagecolorat($this->image, $x, $y);
-                $color = imagecolorsforindex($this->image, $index);
+                /** @var int<0, max> $index */
+                $index = imagecolorat($current, $x, $y);
+                $color = imagecolorsforindex($current, $index);
                 $red   = $color["red"];
                 $green = $color["green"];
                 $blue  = $color["blue"];
-                $color = imagecolorallocatealpha(
+
+                /** @var int<0, max> $pixel */
+                $pixel = imagecolorallocatealpha(
                     $newImage,
                     $red,
                     $green,
@@ -406,7 +463,7 @@ class Gd extends AbstractAdapter
                     $alpha
                 );
 
-                imagesetpixel($newImage, $x, $y, $color);
+                imagesetpixel($newImage, $x, $y, $pixel);
 
                 $y++;
             }
@@ -419,6 +476,9 @@ class Gd extends AbstractAdapter
 
     protected function processPixelate(int $amount): void
     {
+        /** @var GdImage $image */
+        $image = $this->image;
+
         $x = 0;
 
         while ($x < $this->width) {
@@ -432,12 +492,13 @@ class Gd extends AbstractAdapter
                     break;
                 }
 
-                $color = imagecolorat($this->image, $x1, $y1);
+                /** @var int<0, max> $color */
+                $color = imagecolorat($image, $x1, $y1);
                 $x2    = $x + $amount;
                 $y2    = $y + $amount;
 
                 imagefilledrectangle(
-                    $this->image,
+                    $image,
                     $x,
                     $y,
                     $x2,
@@ -457,7 +518,11 @@ class Gd extends AbstractAdapter
         int $opacity,
         bool $fadeIn
     ): void {
+        /** @var int<0, 127> $opacity */
         $opacity = (int)round(abs(($opacity * 127 / 100) - 127));
+
+        /** @var GdImage $image */
+        $image = $this->image;
 
         if ($opacity < 127) {
             $stepping = (127 - $opacity) / $height;
@@ -472,7 +537,7 @@ class Gd extends AbstractAdapter
 
         imagecopy(
             $reflection,
-            $this->image,
+            $image,
             0,
             0,
             0,
@@ -500,7 +565,7 @@ class Gd extends AbstractAdapter
 
             imagecopy(
                 $line,
-                $this->image,
+                $image,
                 0,
                 0,
                 0,
@@ -539,28 +604,31 @@ class Gd extends AbstractAdapter
 
     protected function processRender(string $extension, int $quality): false | string
     {
+        /** @var GdImage $image */
+        $image = $this->image;
+
         $extension = strtolower($extension);
 
         ob_start();
         switch ($extension) {
             case "gif":
-                imagegif($this->image);
+                imagegif($image);
                 break;
             case "jpg":
             case "jpeg":
-                imagejpeg($this->image, null, $quality);
+                imagejpeg($image, null, $quality);
                 break;
             case "png":
-                imagepng($this->image);
+                imagepng($image);
                 break;
             case "wbmp":
-                imagewbmp($this->image);
+                imagewbmp($image);
                 break;
             case "webp":
-                imagewebp($this->image);
+                imagewebp($image);
                 break;
             case "xbm":
-                imagexbm($this->image, null);
+                imagexbm($image, null);
                 break;
             default:
                 throw new UnsupportedImageType($extension);
@@ -571,11 +639,19 @@ class Gd extends AbstractAdapter
 
     protected function processResize(int $width, int $height): void
     {
+        /** @var GdImage $current */
+        $current = $this->image;
+
+        /**
+         * @var positive-int $height
+         * @var positive-int $width
+         */
         $image = imagecreatetruecolor($width, $height);
 
+        /** @var GdImage $image */
         imagealphablending($image, false);
         imagesavealpha($image, true);
-        imagecopyresampled($image, $this->image, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
+        imagecopyresampled($image, $current, 0, 0, 0, 0, $width, $height, $this->width, $this->height);
 
         $this->image  = $image;
         $this->width  = imagesx($image);
@@ -584,16 +660,21 @@ class Gd extends AbstractAdapter
 
     protected function processRotate(int $degrees): void
     {
+        /** @var GdImage $current */
+        $current = $this->image;
+
+        /** @var int<0, max> $transparent */
         $transparent = imagecolorallocatealpha(
-            $this->image,
+            $current,
             0,
             0,
             0,
             127
         );
 
+        /** @var GdImage $image */
         $image = imagerotate(
-            $this->image,
+            $current,
             360 - $degrees,
             $transparent
         );
@@ -604,7 +685,7 @@ class Gd extends AbstractAdapter
         $height = imagesy($image);
 
         $copy = imagecopymerge(
-            $this->image,
+            $current,
             $image,
             0,
             0,
@@ -626,19 +707,22 @@ class Gd extends AbstractAdapter
      */
     protected function processSave(string $file, int $quality): bool
     {
+        /** @var GdImage $image */
+        $image = $this->image;
+
         /** @var string $extension */
         $extension = pathinfo($file, PATHINFO_EXTENSION);
 
         // If no extension is given, revert to the original type.
         if (empty($extension)) {
-            $extension = image_type_to_extension($this->type, false);
+            $extension = (string)image_type_to_extension($this->type, false);
         }
 
         $extension = strtolower($extension);
         switch ($extension) {
             case "gif":
                 $this->type = IMAGETYPE_GIF;
-                imagegif($this->image, $file);
+                imagegif($image, $file);
                 break;
             case "jpg":
             case "jpeg":
@@ -646,26 +730,26 @@ class Gd extends AbstractAdapter
 
                 if ($quality >= 0) {
                     $quality = $this->checkHighLow($quality, 1);
-                    imagejpeg($this->image, $file, $quality);
+                    imagejpeg($image, $file, $quality);
                 } else {
-                    imagejpeg($this->image, $file);
+                    imagejpeg($image, $file);
                 }
                 break;
             case "png":
                 $this->type = IMAGETYPE_PNG;
-                imagepng($this->image, $file);
+                imagepng($image, $file);
                 break;
             case "wbmp":
                 $this->type = IMAGETYPE_WBMP;
-                imagewbmp($this->image, $file);
+                imagewbmp($image, $file);
                 break;
             case "webp":
                 $this->type = IMAGETYPE_WEBP;
-                imagewebp($this->image, $file);
+                imagewebp($image, $file);
                 break;
             case "xbm":
                 $this->type = IMAGETYPE_XBM;
-                imagexbm($this->image, $file);
+                imagexbm($image, $file);
                 break;
             default:
                 throw new UnsupportedImageType($extension);
@@ -686,15 +770,18 @@ class Gd extends AbstractAdapter
             [-1, -1, -1],
         ];
 
+        /** @var GdImage $image */
+        $image = $this->image;
+
         $result = imageconvolution(
-            $this->image,
+            $image,
             $matrix,
             $amount - 8,
             0
         );
         if (true === $result) {
-            $this->width  = imagesx($this->image);
-            $this->height = imagesy($this->image);
+            $this->width  = imagesx($image);
+            $this->height = imagesy($image);
         }
     }
 
@@ -712,6 +799,9 @@ class Gd extends AbstractAdapter
         int $size,
         string | null $fontFile = null
     ): void {
+        /** @var GdImage $image */
+        $image = $this->image;
+
         $bottomLeftX = 0;
         $bottomLeftY = 0;
         $topRightX   = 0;
@@ -719,9 +809,11 @@ class Gd extends AbstractAdapter
         $offsetX     = (int)$offsetX;
         $offsetY     = (int)$offsetY;
 
+        /** @var int<0, 127> $opacity */
         $opacity = (int)round(abs(($opacity * 127 / 100) - 127));
 
         if (!empty($fontFile)) {
+            /** @var false|image_text_bounds $space */
             $space = imagettfbbox($size, 0, $fontFile, $text);
 
             if (false === $space) {
@@ -746,8 +838,9 @@ class Gd extends AbstractAdapter
                 $offsetY = $this->height - $height + $offsetY;
             }
 
+            /** @var int<0, max> $color */
             $color = imagecolorallocatealpha(
-                $this->image,
+                $image,
                 $red,
                 $green,
                 $blue,
@@ -756,7 +849,7 @@ class Gd extends AbstractAdapter
 
             $angle = 0;
             imagettftext(
-                $this->image,
+                $image,
                 $size,
                 $angle,
                 $offsetX,
@@ -777,8 +870,9 @@ class Gd extends AbstractAdapter
                 $offsetY = $this->height - $height + $offsetY;
             }
 
+            /** @var int<0, max> $color */
             $color = imagecolorallocatealpha(
-                $this->image,
+                $image,
                 $red,
                 $green,
                 $blue,
@@ -786,7 +880,7 @@ class Gd extends AbstractAdapter
             );
 
             imagestring(
-                $this->image,
+                $image,
                 $size,
                 $offsetX,
                 $offsetY,
@@ -802,7 +896,11 @@ class Gd extends AbstractAdapter
         int $offsetY,
         int $opacity
     ): void {
+        /** @var GdImage $overlay */
         $overlay = imagecreatefromstring($watermark->render());
+
+        /** @var GdImage $image */
+        $image = $this->image;
 
         imagesavealpha($overlay, true);
 
@@ -810,12 +908,14 @@ class Gd extends AbstractAdapter
         $height = (int)imagesy($overlay);
 
         if ($opacity < 100) {
+            /** @var int<0, 127> $opacity */
             $opacity = (int)round(
                 abs(
                     ($opacity * 127 / 100) - 127
                 )
             );
 
+            /** @var int<0, max> $color */
             $color = imagecolorallocatealpha(
                 $overlay,
                 127,
@@ -829,10 +929,10 @@ class Gd extends AbstractAdapter
             imagefilledrectangle($overlay, 0, 0, $width, $height, $color);
         }
 
-        imagealphablending($this->image, true);
+        imagealphablending($image, true);
 
         $copy = imagecopy(
-            $this->image,
+            $image,
             $overlay,
             $offsetX,
             $offsetY,

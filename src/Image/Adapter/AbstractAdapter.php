@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Image\Adapter;
 
+use Phalcon\Contracts\Image\ImageTypes;
 use Phalcon\Image\Enum;
 use Phalcon\Image\Exception;
 use Phalcon\Image\Exceptions\InvalidColor;
@@ -34,6 +35,11 @@ use const PATHINFO_EXTENSION;
 
 /**
  * All image adapters must use this class
+ *
+ * @template TImage of object
+ *
+ * @phpstan-import-type image_channel from ImageTypes
+ * @phpstan-import-type image_color_channels from ImageTypes
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -41,7 +47,10 @@ abstract class AbstractAdapter implements AdapterInterface
     protected int $height;
 
     /**
-     * @var mixed|null
+     * The handle of the underlying backend. Every adapter assigns it in its
+     * constructor and releases it in its destructor.
+     *
+     * @var TImage|null
      */
     protected mixed $image = null;
 
@@ -144,7 +153,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * @return object|null
+     * @return TImage|null
      */
     public function getImage()
     {
@@ -236,7 +245,10 @@ abstract class AbstractAdapter implements AdapterInterface
 
         $quality = $this->checkHighLow($quality, 1);
 
-        return $this->processRender($extension, $quality);
+        /** @var string $rendered */
+        $rendered = $this->processRender($extension, $quality);
+
+        return $rendered;
     }
 
     /**
@@ -343,6 +355,12 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Add a text to an image with a specified opacity
      *
+     * The offsets accept `false` to centre the text on that axis, so they are
+     * wider than the `int` the interface documents.
+     *
+     * @phpstan-param bool|int $offsetX
+     * @phpstan-param bool|int $offsetY
+     *
      * @throws Exception
      */
     public function text(
@@ -408,6 +426,10 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Renders the supplied colour onto the image as the background. Channels
      * are 0-255; the opacity is the validated 0-100 value.
+     *
+     * @phpstan-param image_channel $red
+     * @phpstan-param image_channel $green
+     * @phpstan-param image_channel $blue
      */
     abstract protected function processBackground(
         int $red,
@@ -441,6 +463,8 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Composites the supplied image as a mask onto this one. The mask is read
      * through its public render() output, so it may be any adapter backend.
+     *
+     * @phpstan-return void
      */
     abstract protected function processMask(AdapterInterface $mask);
 
@@ -463,6 +487,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Renders the image to a binary string. The extension is non-empty and the
      * quality is already clamped to 1-100. Returns the encoded bytes.
      *
+     * @phpstan-return false|string
      * @throws Exception
      */
     abstract protected function processRender(string $extension, int $quality);
@@ -493,6 +518,12 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Renders text onto the image. The opacity is clamped to 0-100 and the
      * colour is supplied as separate 0-255 channels.
+     *
+     * @phpstan-param bool|int $offsetX
+     * @phpstan-param bool|int $offsetY
+     * @phpstan-param image_channel $red
+     * @phpstan-param image_channel $green
+     * @phpstan-param image_channel $blue
      *
      * @throws Exception
      */
@@ -584,7 +615,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $color
      *
-     * @return array
+     * @phpstan-return image_color_channels
      * @throws InvalidColor
      */
     private function parseColor(string $color): array
@@ -597,16 +628,19 @@ abstract class AbstractAdapter implements AdapterInterface
         }
 
         if (strlen($color) === 3) {
-            $color = preg_replace("/./", "$0$0", $color);
+            $color = (string)preg_replace("/./", "$0$0", $color);
         }
 
         if (1 !== preg_match("/^[0-9a-fA-F]{6}$/", $color)) {
             throw new InvalidColor($color);
         }
 
-        return array_map(
+        /** @var image_color_channels $channels */
+        $channels = array_map(
             "hexdec",
             str_split($color, 2)
         );
+
+        return $channels;
     }
 }

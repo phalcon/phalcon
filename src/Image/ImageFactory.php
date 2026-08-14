@@ -15,6 +15,7 @@ namespace Phalcon\Image;
 
 use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Image\ImageTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
@@ -23,11 +24,16 @@ use Throwable;
 
 /**
  * Factory to create adapters for image manipulation
+ *
+ * @phpstan-import-type image_factory_config from ImageTypes
+ * @phpstan-import-type image_factory_services from ImageTypes
  */
 class ImageFactory extends AbstractFactory
 {
     /**
      * Constructor
+     *
+     * @phpstan-param image_factory_services $services
      */
     public function __construct(array $services = [])
     {
@@ -37,7 +43,9 @@ class ImageFactory extends AbstractFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface config = [
+     * @phpstan-param ConfigInterface|image_factory_config $config
+     *
+     * @param array|ConfigInterface $config = [
      *     'adapter' => 'gd',
      *     'file' => 'image.jpg',
      *     'height' => null,
@@ -48,6 +56,8 @@ class ImageFactory extends AbstractFactory
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");
+
+        /** @phpstan-var image_factory_config $config */
         $config = $this->checkConfigElement($config, "file");
 
         $name = $config["adapter"];
@@ -74,7 +84,10 @@ class ImageFactory extends AbstractFactory
     ): AdapterInterface {
         $definition = $this->getService($name);
 
-        return new $definition($file, $width, $height);
+        /** @var AdapterInterface $adapter */
+        $adapter = new $definition($file, $width, $height);
+
+        return $adapter;
     }
 
     /**
@@ -87,6 +100,8 @@ class ImageFactory extends AbstractFactory
 
     /**
      * Returns the available adapters
+     *
+     * @phpstan-return image_factory_services
      *
      * @return string[]
      */

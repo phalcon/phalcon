@@ -60,6 +60,8 @@ use const IMAGETYPE_GIF;
  * Visual semantics differ from the Gd adapter: blur() maps the radius to a
  * blur sigma, while sharpen and reflection use ImageMagick's own scales.
  * Switching the factory backend can change the rendered output.
+ *
+ * @extends AbstractAdapter<ImagickNative>
  */
 class Imagick extends AbstractAdapter
 {
@@ -112,7 +114,7 @@ class Imagick extends AbstractAdapter
         $this->image = new ImagickNative();
 
         if (true === $this->phpFileExists($this->file)) {
-            $this->realpath = realpath($this->file);
+            $this->realpath = (string)realpath($this->file);
 
             if (true !== $this->image->readImage($this->realpath)) {
                 throw new ImageLoadFailed($this->file);
@@ -172,6 +174,7 @@ class Imagick extends AbstractAdapter
      * Creates a blank transparent canvas of the given dimensions, without the
      * load-or-create ambiguity of the constructor.
      *
+     * @phpstan-return AbstractAdapter<ImagickNative>
      * @throws Exception
      * @throws ImagickException
      */
@@ -184,6 +187,7 @@ class Imagick extends AbstractAdapter
      * This method scales the images using liquid rescaling method. Only support
      * Imagick
      *
+     * @phpstan-return AbstractAdapter<ImagickNative>
      * @throws Exception
      * @throws ImagickException
      */
@@ -193,6 +197,7 @@ class Imagick extends AbstractAdapter
         int $deltaX = 0,
         int $rigidity = 0
     ): AbstractAdapter {
+        /** @var ImagickNative $image */
         $image = $this->image;
 
         $image->setIteratorIndex(0);
@@ -233,8 +238,11 @@ class Imagick extends AbstractAdapter
         /**
          * The constants are all integers and are 0-6
          */
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
         if ($type >= 0 && $type <= 6) {
-            $this->image->setResourceLimit($type, $limit);
+            $image->setResourceLimit($type, $limit);
         } else {
             throw new ResourceTypeError();
         }
@@ -260,7 +268,10 @@ class Imagick extends AbstractAdapter
         $pixel2        = new ImagickPixel("transparent");
         $background    = new ImagickNative();
 
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         while (true) {
             $background->newImage($this->width, $this->height, $pixel1);
@@ -284,11 +295,11 @@ class Imagick extends AbstractAdapter
             );
 
             $background->setColorspace(
-                $this->image->getColorspace()
+                $image->getColorspace()
             );
 
             $result = $background->compositeImage(
-                $this->image,
+                $image,
                 Imagick::COMPOSITE_DISSOLVE,
                 0,
                 0
@@ -298,13 +309,13 @@ class Imagick extends AbstractAdapter
                 throw new CompositeFailed();
             }
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
 
-        $this->image->clear();
-        $this->image->destroy();
+        $image->clear();
+        $image->destroy();
 
         $this->image = $background;
     }
@@ -316,12 +327,15 @@ class Imagick extends AbstractAdapter
      */
     protected function processBlur(int $radius): void
     {
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         while (true) {
-            $this->image->blurImage($radius, 100);
+            $image->blurImage($radius, 100);
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -338,6 +352,7 @@ class Imagick extends AbstractAdapter
         int $offsetX,
         int $offsetY
     ): void {
+        /** @var ImagickNative $image */
         $image = $this->image;
 
         $image->setIteratorIndex(0);
@@ -364,12 +379,15 @@ class Imagick extends AbstractAdapter
     {
         $method = ($direction === Enum::HORIZONTAL) ? "flipImage" : "flopImage";
 
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         while (true) {
-            $this->image->$method();
+            $image->$method();
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -385,13 +403,16 @@ class Imagick extends AbstractAdapter
     {
         $image = new ImagickNative();
 
+        /** @var ImagickNative $current */
+        $current = $this->image;
+
         $image->readImageBlob($mask->render());
-        $this->image->setIteratorIndex(0);
+        $current->setIteratorIndex(0);
 
         while (true) {
-            $this->image->setImageMatte(true);
+            $current->setImageMatte(true);
 
-            $return = $this->image->compositeImage(
+            $return = $current->compositeImage(
                 $image,
                 self::COMPOSITE_DSTIN,
                 0,
@@ -402,7 +423,7 @@ class Imagick extends AbstractAdapter
                 throw new CompositeFailed();
             }
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $current->nextImage()) {
                 break;
             }
         }
@@ -421,13 +442,16 @@ class Imagick extends AbstractAdapter
         $width  = (int) ($this->width / $amount);
         $height = (int) ($this->height / $amount);
 
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         while (true) {
-            $this->image->scaleImage($width, $height);
-            $this->image->scaleImage($this->width, $this->height);
+            $image->scaleImage($width, $height);
+            $image->scaleImage($this->width, $this->height);
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -444,10 +468,13 @@ class Imagick extends AbstractAdapter
         int $opacity,
         bool $fadeIn
     ): void {
+        /** @var ImagickNative $current */
+        $current = $this->image;
+
         if ($this->version >= 30100) {
-            $reflection = clone $this->image;
+            $reflection = clone $current;
         } else {
-            $reflection = clone $this->image->clone();
+            $reflection = clone $current->clone();
         }
 
         $reflection->setIteratorIndex(0);
@@ -469,7 +496,7 @@ class Imagick extends AbstractAdapter
                 0
             );
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $current->nextImage()) {
                 break;
             }
         }
@@ -504,7 +531,8 @@ class Imagick extends AbstractAdapter
                 Imagick::CHANNEL_ALPHA
             );
 
-            if (true !== $this->image->nextImage()) {
+            // @phpstan-ignore notIdentical.alwaysTrue (the frame cursor is internal to Imagick)
+            if (true !== $current->nextImage()) {
                 break;
             }
         }
@@ -513,18 +541,18 @@ class Imagick extends AbstractAdapter
 
         $image  = new ImagickNative();
         $pixel  = new ImagickPixel();
-        $height = $this->image->getImageHeight() + $height;
+        $height = $current->getImageHeight() + $height;
 
-        $this->image->setIteratorIndex(0);
+        $current->setIteratorIndex(0);
 
         while (true) {
             $image->newImage($this->width, $height, $pixel);
             $image->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
 
-            $image->setColorspace($this->image->getColorspace());
-            $image->setImageDelay($this->image->getImageDelay());
+            $image->setColorspace($current->getColorspace());
+            $image->setImageDelay($current->getImageDelay());
             $return = $image->compositeImage(
-                $this->image,
+                $current,
                 Imagick::COMPOSITE_SRC,
                 0,
                 0
@@ -534,7 +562,8 @@ class Imagick extends AbstractAdapter
                 throw new CompositeFailed();
             }
 
-            if (true !== $this->image->nextImage()) {
+            // @phpstan-ignore notIdentical.alwaysTrue (the frame cursor is internal to Imagick)
+            if (true !== $current->nextImage()) {
                 break;
             }
         }
@@ -561,12 +590,12 @@ class Imagick extends AbstractAdapter
 
         $reflection->destroy();
 
-        $this->image->clear();
-        $this->image->destroy();
+        $current->clear();
+        $current->destroy();
 
         $this->image  = $image;
-        $this->width  = $this->image->getImageWidth();
-        $this->height = $this->image->getImageHeight();
+        $this->width  = $image->getImageWidth();
+        $this->height = $image->getImageHeight();
     }
 
     /**
@@ -576,6 +605,7 @@ class Imagick extends AbstractAdapter
      */
     protected function processRender(string $extension, int $quality): string
     {
+        /** @var ImagickNative $image */
         $image = $this->image;
 
         $image->setFormat($extension);
@@ -606,7 +636,9 @@ class Imagick extends AbstractAdapter
      */
     protected function processResize(int $width, int $height): void
     {
+        /** @var ImagickNative $image */
         $image = $this->image;
+
         $image->setIteratorIndex(0);
 
         while (true) {
@@ -628,27 +660,30 @@ class Imagick extends AbstractAdapter
      */
     protected function processRotate(int $degrees): void
     {
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         $pixel = new ImagickPixel();
 
         while (true) {
-            $this->image->rotateImage($pixel, $degrees);
+            $image->rotateImage($pixel, $degrees);
 
-            $this->image->setImagePage(
+            $image->setImagePage(
                 $this->width,
                 $this->height,
                 0,
                 0
             );
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
 
-        $this->width  = $this->image->getImageWidth();
-        $this->height = $this->image->getImageHeight();
+        $this->width  = $image->getImageWidth();
+        $this->height = $image->getImageHeight();
     }
 
     /**
@@ -658,37 +693,42 @@ class Imagick extends AbstractAdapter
      */
     protected function processSave(string $file, int $quality): bool
     {
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
         /** @var string $extension */
         $extension = pathinfo($file, PATHINFO_EXTENSION);
 
-        $this->image->setFormat($extension);
-        $this->image->setImageFormat($extension);
+        $image->setFormat($extension);
+        $image->setImageFormat($extension);
 
-        $this->type = $this->image->getImageType();
-        $this->mime = "image/" . $this->image->getImageFormat();
+        $this->type = $image->getImageType();
+        $this->mime = "image/" . $image->getImageFormat();
 
         $extension = strtolower($extension);
         switch ($extension) {
             case "gif":
-                $this->image->optimizeImageLayers();
+                $image->optimizeImageLayers();
+
+                /** @var resource $fp */
                 $fp = fopen($file, "w");
 
-                $this->image->writeImagesFile($fp);
+                $image->writeImagesFile($fp);
 
                 fclose($fp);
 
                 return true;
             case "jpg":
             case "jpeg":
-                $this->image->setImageCompression(Imagick::COMPRESSION_JPEG);
+                $image->setImageCompression(Imagick::COMPRESSION_JPEG);
         }
 
         if ($quality >= 0) {
             $quality = $this->checkHighLow($quality, 1);
-            $this->image->setImageCompressionQuality($quality);
+            $image->setImageCompressionQuality($quality);
         }
 
-        $this->image->writeImage($file);
+        $image->writeImage($file);
 
         return true;
     }
@@ -703,12 +743,15 @@ class Imagick extends AbstractAdapter
         $amount = ($amount < 5) ? 5 : $amount;
         $amount = ($amount * 3.0) / 100;
 
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         while (true) {
-            $this->image->sharpenImage(0, $amount);
+            $image->sharpenImage(0, $amount);
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -795,12 +838,16 @@ class Imagick extends AbstractAdapter
             $draw->setGravity($gravity);
         }
 
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $image */
+        $image = $this->image;
+
+        $image->setIteratorIndex(0);
 
         while (true) {
-            $this->image->annotateImage($draw, $offsetX, $offsetY, 0, $text);
+            // @phpstan-ignore argument.type (offsetY stays boolean when offsetX is 0)
+            $image->annotateImage($draw, $offsetX, $offsetY, 0, $text);
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $image->nextImage()) {
                 break;
             }
         }
@@ -830,10 +877,13 @@ class Imagick extends AbstractAdapter
             Imagick::CHANNEL_ALPHA
         );
 
-        $this->image->setIteratorIndex(0);
+        /** @var ImagickNative $current */
+        $current = $this->image;
+
+        $current->setIteratorIndex(0);
 
         while (true) {
-            $return = $this->image->compositeImage(
+            $return = $current->compositeImage(
                 $image,
                 Imagick::COMPOSITE_OVER,
                 $offsetX,
@@ -844,7 +894,7 @@ class Imagick extends AbstractAdapter
                 throw new CompositeFailed();
             }
 
-            if (true !== $this->image->nextImage()) {
+            if (true !== $current->nextImage()) {
                 break;
             }
         }
