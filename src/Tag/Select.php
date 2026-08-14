@@ -338,9 +338,8 @@ abstract class Select
                     }
 
                     $params[0] = $option;
-                    $code      .= self::toStringValue(
-                        call_user_func_array($using, $params)
-                    );
+                    $executed  = call_user_func_array($using, $params);
+                    $code      .= self::toStringValue($executed);
                 }
             }
         }
