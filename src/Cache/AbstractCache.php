@@ -18,6 +18,7 @@ use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Redis as RedisService;
 use Throwable;
 use Traversable;
 
@@ -120,6 +121,8 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
     /**
      * Deletes multiple cache items in a single operation.
+     *
+     * @phpstan-param iterable<array-key, string> $keys
      */
     protected function doDeleteMultiple(iterable $keys): bool
     {
@@ -159,6 +162,10 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
     /**
      * Obtains multiple cache items by their unique keys.
+     *
+     * @phpstan-param iterable<array-key, string> $keys
+     *
+     * @phpstan-return array<string, mixed>
      */
     protected function doGetMultiple(iterable $keys, mixed $defaultValue = null): iterable
     {
@@ -166,7 +173,12 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
         $this->fireManagerEvent("cache:beforeGetMultiple", $keys);
 
-        if ($this->adapter instanceof Redis) {
+        /**
+         * The adapter is read into a local variable because calls such as
+         * `checkKey()` below discard the type narrowed by `instanceof`.
+         */
+        $adapter = $this->adapter;
+        if ($adapter instanceof Redis) {
             /**
              * Validate every key and collect them into an array (this also
              * handles Traversable inputs), so `mget()` and `array_combine()`
@@ -185,12 +197,23 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
                 $keysArray[] = $element;
             }
 
-            $serializer = $this->adapter->getSerializer();
-            $results    = $this->adapter->getAdapter()->mget($keysArray);
-            $results    = array_map(
+            $serializer = $adapter->getSerializer();
+            /** @var RedisService $connection */
+            $connection = $adapter->getAdapter();
+            /** @var array<array-key, mixed> $results */
+            $results = $connection->mget($keysArray);
+            $results = array_map(
                 function ($element) use ($serializer, $defaultValue) {
                     if (false === $element) {
                         return $defaultValue;
+                    }
+
+                    /**
+                     * No serializer means the raw value is returned, the same
+                     * as the Storage adapters do.
+                     */
+                    if (null === $serializer) {
+                        return $element;
                     }
 
                     $serializer->unserialize($element);
@@ -206,7 +229,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
                 },
                 $results
             );
-            $results    = array_combine($keysArray, $results);
+            $results = array_combine($keysArray, $results);
         } else {
             $results = [];
             /** @var string $element */
@@ -258,6 +281,9 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
+     *
+     * @phpstan-param iterable<string, mixed> $values
+     * @phpstan-param DateInterval|int|null   $ttl
      */
     protected function doSetMultiple(iterable $values, mixed $ttl = null): bool
     {

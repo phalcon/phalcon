@@ -49,6 +49,8 @@ class Cache extends AbstractCache
 
     /**
      * Deletes multiple cache items in a single operation.
+     *
+     * @phpstan-param iterable<array-key, string> $keys
      */
     public function deleteMultiple(iterable $keys): bool
     {
@@ -65,6 +67,10 @@ class Cache extends AbstractCache
 
     /**
      * Obtains multiple cache items by their unique keys.
+     *
+     * @phpstan-param iterable<array-key, string> $keys
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getMultiple(iterable $keys, mixed $defaultValue = null): iterable
     {
@@ -93,6 +99,8 @@ class Cache extends AbstractCache
 
     /**
      * Persists a set of key => value pairs in the cache, with an optional TTL.
+     *
+     * @phpstan-param iterable<string, mixed> $values
      */
     public function setMultiple(
         iterable $values,

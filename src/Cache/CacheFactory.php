@@ -15,11 +15,14 @@ namespace Phalcon\Cache;
 
 use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Factory\AbstractConfigFactory;
 use Throwable;
 
 /**
  * Creates a new Cache class
+ *
+ * @phpstan-import-type storage_adapter_options from StorageTypes
  */
 class CacheFactory extends AbstractConfigFactory
 {
@@ -34,7 +37,7 @@ class CacheFactory extends AbstractConfigFactory
     /**
      * Factory to create an instance from a Config object
      *
-     * @param array|ConfigInterface $config = [
+     * @param array<string, mixed>|ConfigInterface $config = [
      *     'adapter' => 'apcu',
      *     'options' => [
      *         'servers' => [
@@ -70,6 +73,12 @@ class CacheFactory extends AbstractConfigFactory
         $name    = $config['adapter'];
         $options = $config['options'] ?? [];
 
+        if (!is_array($options)) {
+            $options = [];
+        }
+
+        /** @phpstan-var storage_adapter_options $options */
+
         return $this->newInstance($name, $options);
     }
 
@@ -96,6 +105,8 @@ class CacheFactory extends AbstractConfigFactory
      *      'prefix'            => 'phalcon',
      *      'storageDir'        => '',
      * ]
+     *
+     * @phpstan-param storage_adapter_options $options
      *
      * @return CacheInterface
      * @throws Exception
