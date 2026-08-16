@@ -18,8 +18,9 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exceptions\InvalidCallbackReturn;
 use Phalcon\Filter\Validation\ValidatorInterface;
+use ReflectionFunction;
 
-use function call_user_func;
+use function call_user_func_array;
 use function is_bool;
 use function is_callable;
 
@@ -105,19 +106,31 @@ class Callback extends AbstractValidator
 
             /**
              * Snapshot the message state so a setTemplate()/setTemplates()
-             * call inside the bound closure cannot leak into later
-             * validations that reuse this validator instance. Restored below
-             * once the failure message (if any) has been built.
+             * call inside the callback cannot leak into later validations
+             * that reuse this validator instance. Restored below once the
+             * failure message (if any) has been built.
              */
             $savedTemplate  = $this->template;
             $savedChanged   = $this->templateChanged;
             $savedTemplates = $this->templates;
 
+            /**
+             * Send this validator to the closure as a second argument, but
+             * only if the closure accepts it. The `$this` of the closure does
+             * not change. Thus a closure that you write in a class keeps the
+             * object that made it.
+             */
+            $arguments = [$data];
+
             if ($callback instanceof Closure) {
-                $callback = Closure::bind($callback, $this);
+                $reflection = new ReflectionFunction($callback);
+
+                if ($reflection->getNumberOfParameters() > 1) {
+                    $arguments[] = $this;
+                }
             }
 
-            $returnedValue = call_user_func($callback, $data);
+            $returnedValue = call_user_func_array($callback, $arguments);
 
             if (is_bool($returnedValue) && !$returnedValue) {
                 $validation->appendMessage(
