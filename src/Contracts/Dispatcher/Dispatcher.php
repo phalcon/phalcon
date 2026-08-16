@@ -63,8 +63,8 @@ interface Dispatcher
     /**
      * Gets a param by its name or numeric index
      *
-     * @param int|string        $param
-     * @param array|string|null $filters
+     * @phpstan-param mixed $param
+     * @phpstan-param mixed $filters
      *
      * @return mixed
      * @deprecated Use getParameter() instead
@@ -73,17 +73,17 @@ interface Dispatcher
      * implementation accepts; the two will be aligned in the next major
      * version.
      */
-    public function getParam(int | string $param, array | string | null $filters = null): mixed;
+    public function getParam(mixed $param, mixed $filters = null): mixed;
 
     /**
      * Gets a param by its name or numeric index
      *
-     * @param int|string        $param
-     * @param array|string|null $filters
+     * @phpstan-param mixed $param
+     * @phpstan-param mixed $filters
      *
      * @return mixed
      */
-    public function getParameter(int | string $param, array | string | null $filters = null): mixed;
+    public function getParameter(mixed $param, mixed $filters = null): mixed;
 
     /**
      * Gets action params
@@ -105,12 +105,12 @@ interface Dispatcher
     /**
      * Check if a param exists
      *
-     * @param int|string $param
+     * @phpstan-param mixed $param
      *
      * @return bool
      * @deprecated Use hasParameter() instead
      */
-    public function hasParam(int | string $param): bool;
+    public function hasParam(mixed $param): bool;
 
     /**
      * Checks if the dispatch loop is finished or has more pendent
@@ -186,21 +186,21 @@ interface Dispatcher
     /**
      * Set a param by its name or numeric index
      *
-     * @param int|string $param
+     * @phpstan-param mixed $param
      * @param mixed      $value
      *
      * @return void
      * @deprecated Use setParameter() instead
      */
-    public function setParam(int | string $param, mixed $value): void;
+    public function setParam(mixed $param, mixed $value): void;
 
     /**
      * Sets action params to be dispatched
      *
-     * @param array $parameters
+     * @param array $params
      *
      * @return void
      * @deprecated Use setParameters() instead
      */
-    public function setParams(array $parameters): void;
+    public function setParams(array $params): void;
 }

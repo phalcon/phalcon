@@ -27,110 +27,76 @@ interface RouteInterface
 {
     /**
      * Set the routing delimiter
-     *
-     * @param string $delimiter
-     *
-     * @return mixed
      */
-    public static function delimiter(string $delimiter);
+    public static function delimiter(?string $delimiter = null);
 
     /**
      * Get routing delimiter
-     *
-     * @return string
      */
-    public static function getDelimiter(): string;
+    public static function getDelimiter(): ?string;
 
     /**
      * Resets the internal route id generator
-     *
-     * @return void
      */
     public static function reset(): void;
+
     /**
      * Replaces placeholders from pattern returning a valid PCRE regular
      * expression
-     *
-     * @param string $pattern
-     *
-     * @return string
      */
     public function compilePattern(string $pattern): string;
 
     /**
      * Returns the route's pattern
-     *
-     * @return string
      */
     public function getCompiledPattern(): string;
 
     /**
      * Returns the route's description
-     *
-     * @return string
      */
     public function getDescription(): string;
 
     /**
      * Returns the route's name
-     *
-     * @return string
      */
     public function getName(): string;
 
     /**
      * Returns the paths
-     *
-     * @return array
      */
     public function getPaths(): array;
 
     /**
      * Returns the route's pattern
-     *
-     * @return string
      */
     public function getPattern(): string;
 
     /**
      * Returns the paths using positions as keys and names as values
-     *
-     * @return array
      */
     public function getReversedPaths(): array;
 
     /**
      * Returns the route's id
-     *
-     * @return string
      */
     public function getRouteId(): string;
 
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string       $pattern
-     * @param array|string $paths
+     * @param array|string|null paths
      *
      * @return void
      */
-    public function reConfigure(string $pattern, array | string $paths = []): void;
+    public function reConfigure(string $pattern, mixed $paths = null): void;
 
     /**
      * Sets the route's description
-     *
-     * @param string $description
-     *
-     * @return RouteInterface
      */
     public function setDescription(string $description): RouteInterface;
 
     /**
      * Sets the route's name
-     *
-     * @param string $name
-     *
-     * @return RouteInterface
      */
     public function setName(string $name): RouteInterface;
 }

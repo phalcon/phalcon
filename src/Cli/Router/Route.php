@@ -39,67 +39,32 @@ class Route implements RouteInterface
 {
     use UncamelizeTrait;
 
-    public const DEFAULT_DELIMITER = " ";
-
     /**
      * @var string
      */
-    protected static string $delimiterPath = self::DEFAULT_DELIMITER;
-    /**
-     * @var int
-     */
+    public const DEFAULT_DELIMITER = " ";
+    protected static ?string $delimiterPath = self::DEFAULT_DELIMITER;
     protected static int $uniqueId = 0;
 
     /**
      * @var mixed|null
      */
     protected mixed $beforeMatch = null;
-
-    /**
-     * @var string
-     */
     protected string $compiledPattern = "";
-
-    /**
-     * @var array
-     */
     protected array $converters = [];
-
-    /**
-     * @var string
-     */
-    protected string $delimiter;
-
-    /**
-     * @var string
-     */
+    protected ?string $delimiter;
     protected string $description = "";
-    /**
-     * @var string
-     */
     protected string $name = "";
-    /**
-     * @var array
-     */
     protected array $paths = [];
-    /**
-     * @var string
-     */
     protected string $pattern = "";
-    /**
-     * @var string
-     */
     protected string $routeId;
 
     /**
      * Constructor
      *
-     * @param string       $pattern
-     * @param array|string $paths
-     *
-     * @throws Exception
+     * @param array|string paths
      */
-    public function __construct(string $pattern, array | string $paths = [])
+    public function __construct(string $pattern, mixed $paths = null)
     {
         // Get the delimiter from the static member delimiterPath
         $this->delimiter = self::$delimiterPath;
@@ -123,22 +88,16 @@ class Route implements RouteInterface
      * are created: routes built before and after a change keep their own
      * delimiter, and `Console::setArgument()` reads the current value when it
      * parses arguments.
-     *
-     * @param string $delimiter
-     *
-     * @return void
      */
-    public static function delimiter(string $delimiter): void
+    public static function delimiter(?string $delimiter = null): void
     {
         self::$delimiterPath = $delimiter;
     }
 
     /**
      * Get routing delimiter
-     *
-     * @return string
      */
-    public static function getDelimiter(): string
+    public static function getDelimiter(): ?string
     {
         return self::$delimiterPath;
     }
@@ -149,8 +108,6 @@ class Route implements RouteInterface
      * Intended for test isolation only. The router keys its route map by the
      * route id, so resetting the sequence while a router still holds routes
      * makes newly created routes overwrite existing entries.
-     *
-     * @return void
      */
     public static function reset(): void
     {
@@ -163,8 +120,6 @@ class Route implements RouteInterface
      * If the callback returns false the route is treated as not matched
      *
      * @param mixed $callback
-     *
-     * @return RouteInterface
      */
     public function beforeMatch(mixed $callback): RouteInterface
     {
@@ -180,10 +135,6 @@ class Route implements RouteInterface
     /**
      * Replaces placeholders from pattern returning a valid PCRE regular
      * expression
-     *
-     * @param string $pattern
-     *
-     * @return string
      */
     public function compilePattern(string $pattern): string
     {
@@ -223,12 +174,9 @@ class Route implements RouteInterface
      * Adds a converter to perform an additional transformation for certain
      * parameter
      *
-     * @param string   $name
      * @param callable $converter
-     *
-     * @return RouteInterface
      */
-    public function convert(string $name, callable $converter): RouteInterface
+    public function convert(string $name, $converter): RouteInterface
     {
         $this->converters[$name] = $converter;
 
@@ -237,10 +185,6 @@ class Route implements RouteInterface
 
     /**
      * Extracts parameters from a string
-     *
-     * @param string $pattern
-     *
-     * @return array|bool
      */
     public function extractNamedParams(string $pattern): array | bool
     {
@@ -386,8 +330,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the 'before match' callback if any
-     *
-     * @return mixed
      */
     public function getBeforeMatch(): mixed
     {
@@ -396,8 +338,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's compiled pattern
-     *
-     * @return string
      */
     public function getCompiledPattern(): string
     {
@@ -406,8 +346,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the router converter
-     *
-     * @return array
      */
     public function getConverters(): array
     {
@@ -416,8 +354,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's description
-     *
-     * @return string
      */
     public function getDescription(): string
     {
@@ -426,8 +362,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -436,8 +370,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths
-     *
-     * @return array
      */
     public function getPaths(): array
     {
@@ -446,8 +378,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's pattern
-     *
-     * @return string
      */
     public function getPattern(): string
     {
@@ -456,8 +386,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths using positions as keys and names as values
-     *
-     * @return array
      */
     public function getReversedPaths(): array
     {
@@ -466,8 +394,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's id
-     *
-     * @return string
      */
     public function getRouteId(): string
     {
@@ -477,14 +403,14 @@ class Route implements RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string       $pattern
-     * @param array|string $paths
-     *
-     * @return void
-     * @throws Exception
+     * @param array|string|null paths
      */
-    public function reConfigure(string $pattern, array | string $paths = []): void
+    public function reConfigure(string $pattern, $paths = null): void
     {
+        if (null === $paths) {
+            $paths = [];
+        }
+
         if (is_string($paths)) {
             $moduleName = null;
             $taskName   = null;
@@ -611,10 +537,6 @@ class Route implements RouteInterface
 
     /**
      * Sets the route's description
-     *
-     * @param string $description
-     *
-     * @return RouteInterface
      */
     public function setDescription(string $description): RouteInterface
     {
@@ -634,10 +556,6 @@ class Route implements RouteInterface
      *     ]
      * )->setName("about");
      *```
-     *
-     * @param string $name
-     *
-     * @return RouteInterface
      */
     public function setName(string $name): RouteInterface
     {

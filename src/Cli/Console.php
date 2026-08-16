@@ -15,13 +15,10 @@ namespace Phalcon\Cli;
 
 use Closure;
 use Phalcon\Application\AbstractApplication;
-use Phalcon\Cli\Console\Exception;
 use Phalcon\Cli\Console\Exceptions\ContainerRequired;
 use Phalcon\Cli\Console\Exceptions\InvalidModuleDefinition;
 use Phalcon\Cli\Console\Exceptions\ModuleDefinitionPathNotFound;
 use Phalcon\Cli\Router\Route;
-use Phalcon\Di\DiInterface;
-use Phalcon\Events\Exception as EventsException;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_merge;
@@ -47,24 +44,13 @@ class Console extends AbstractApplication
     /**
      * @var array|string
      */
-    protected array | string $arguments = [];
-
-    /**
-     * @var array
-     */
+    protected mixed $arguments = [];
     protected array $options = [];
 
     /**
      * Handle the whole command-line tasks
-     *
-     * @param array $arguments
-     *
-     * @return bool|mixed|null
-     * @throws Exception
-     * @throws Router\Exception
-     * @throws EventsException
      */
-    public function handle(array $arguments = [])
+    public function handle(?array $arguments = null)
     {
         if (null === $this->container) {
             throw new ContainerRequired();
@@ -79,11 +65,7 @@ class Console extends AbstractApplication
         }
 
         /** @var Router $router */
-        if ($this->container instanceof DiInterface) {
-            $router = $this->container->getShared("router");
-        } else {
-            $router = $this->container->get("router");
-        }
+        $router = $this->container->getShared("router");
 
         if (empty($arguments) && !empty($this->arguments)) {
             $router->handle($this->arguments);
@@ -184,11 +166,7 @@ class Console extends AbstractApplication
         }
 
         /** @var Dispatcher $dispatcher */
-        if ($this->container instanceof DiInterface) {
-            $dispatcher = $this->container->getShared("dispatcher");
-        } else {
-            $dispatcher = $this->container->get("dispatcher");
-        }
+        $dispatcher = $this->container->getShared("dispatcher");
 
         $dispatcher->setModuleName($moduleName);
         $dispatcher->setTaskName($router->getTaskName());
@@ -209,15 +187,9 @@ class Console extends AbstractApplication
 
     /**
      * Set a specific argument
-     *
-     * @param array $arguments
-     * @param bool  $str
-     * @param bool  $shift
-     *
-     * @return $this
      */
     public function setArgument(
-        array $arguments = [],
+        ?array $arguments = null,
         bool $str = true,
         bool $shift = true
     ): static {

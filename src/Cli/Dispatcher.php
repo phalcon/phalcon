@@ -15,10 +15,8 @@ namespace Phalcon\Cli;
 
 use Exception;
 use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
-use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
 use Phalcon\Filter\Exception as FilterException;
-use Phalcon\Filter\Filter;
 
 use function array_merge;
 use function array_values;
@@ -48,22 +46,9 @@ use function call_user_func_array;
  */
 class Dispatcher extends CliDispatcher implements DispatcherInterface
 {
-    /**
-     * @var string
-     */
     protected string $defaultAction = "main";
-    /**
-     * @var string
-     */
     protected string $defaultHandler = "main";
-    /**
-     * @var string
-     */
     protected string $handlerSuffix = "Task";
-
-    /**
-     * @var array
-     */
     protected array $options = [];
 
     /**
@@ -72,12 +57,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      * The CLI options collected by the dispatcher are appended to the
      * positional `parameters` before the call, so a task action receives any
      * options as trailing arguments after its declared parameters.
-     *
-     * @param mixed  $handler
-     * @param string $actionMethod
-     * @param array  $parameters
-     *
-     * @return mixed
      */
     public function callActionMethod(
         mixed $handler,
@@ -97,20 +76,16 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Returns the active task in the dispatcher
-     *
-     * @return TaskInterface|null
      */
-    public function getActiveTask(): ?TaskInterface
+    public function getActiveTask(): TaskInterface
     {
         return $this->activeHandler;
     }
 
     /**
      * Returns the latest dispatched controller
-     *
-     * @return TaskInterface|null
      */
-    public function getLastTask(): ?TaskInterface
+    public function getLastTask(): TaskInterface
     {
         return $this->lastHandler;
     }
@@ -120,15 +95,11 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      *
      * @param int|string   $option
      * @param array|string $filters
-     * @param mixed|null   $defaultValue
-     *
-     * @return mixed
-     * @throws DispatcherException
-     * @throws FilterException
+     * @param mixed        $defaultValue
      */
     public function getOption(
-        int | string $option,
-        array | string | null $filters = null,
+        mixed $option,
+        mixed $filters = null,
         mixed $defaultValue = null
     ): mixed {
         if (!isset($this->options[$option])) {
@@ -146,20 +117,13 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
             DispatcherException::EXCEPTION_NO_DI
         );
 
-        /** @var Filter $filter */
-        if ($this->container instanceof DiInterface) {
-            $filter = $this->container->getShared("filter");
-        } else {
-            $filter = $this->container->get("filter");
-        }
+        $filter = $this->container->getShared("filter");
 
         return $filter->sanitize($optionValue, $filters);
     }
 
     /**
      * Get dispatched options
-     *
-     * @return array
      */
     public function getOptions(): array
     {
@@ -168,8 +132,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Gets last dispatched task name
-     *
-     * @return string
      */
     public function getTaskName(): string
     {
@@ -178,8 +140,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Gets the default task suffix
-     *
-     * @return string
      */
     public function getTaskSuffix(): string
     {
@@ -188,22 +148,14 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Check if an option exists
-     *
-     * @param int|string $option
-     *
-     * @return bool
      */
-    public function hasOption(int | string $option): bool
+    public function hasOption(mixed $option): bool
     {
         return isset($this->options[$option]);
     }
 
     /**
      * Sets the default task name
-     *
-     * @param string $taskName
-     *
-     * @return void
      */
     public function setDefaultTask(string $taskName): void
     {
@@ -212,10 +164,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Set the options to be dispatched
-     *
-     * @param array $options
-     *
-     * @return void
      */
     public function setOptions(array $options): void
     {
@@ -224,10 +172,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Sets the task name to be dispatched
-     *
-     * @param string $taskName
-     *
-     * @return void
      */
     public function setTaskName(string $taskName): void
     {
@@ -236,10 +180,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Sets the default task suffix
-     *
-     * @param string $taskSuffix
-     *
-     * @return void
      */
     public function setTaskSuffix(string $taskSuffix): void
     {
@@ -248,10 +188,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Handles a user exception
-     *
-     * @param Exception $exception
-     *
-     * @return false|void
      */
     protected function handleException(Exception $exception)
     {
@@ -262,12 +198,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Throws an internal exception
-     *
-     * @param string $message
-     * @param int    $exceptionCode
-     *
-     * @return false
-     * @throws DispatcherException
      */
     protected function throwDispatchException(string $message, int $exceptionCode = 0)
     {

@@ -18,7 +18,7 @@ use Phalcon\Cli\Router\RouteInterface;
 /**
  * Interface for Phalcon\Cli\Router
  *
- * @psalm-type TDefaults = array{
+ * @psalm-type TDefaults array{
  *      module?: string,
  *      task?: string,
  *      action?: string,
@@ -30,24 +30,17 @@ interface RouterInterface
     /**
      * Adds a route to the router on any HTTP method
      *
-     * @param string       $pattern
-     * @param array|string $paths
-     *
-     * @return RouteInterface
+     * @phpstan-param array|string|null $paths
      */
-    public function add(string $pattern, array | string $paths = []): RouteInterface;
+    public function add(string $pattern, mixed $paths = null): RouteInterface;
 
     /**
      * Returns processed action name
-     *
-     * @return string
      */
     public function getActionName(): string;
 
     /**
      * Returns the route that matches the handled URI
-     *
-     * @return RouteInterface|null
      */
     public function getMatchedRoute(): RouteInterface | null;
 
@@ -60,22 +53,17 @@ interface RouterInterface
 
     /**
      * Returns processed module name
-     *
-     * @return string
      */
     public function getModuleName(): string;
 
     /**
      * Returns processed extra params
-     *
-     * @return array
      */
     public function getParameters(): array;
 
     /**
      * Returns processed extra params
      *
-     * @return array
      * @deprecated Use getParameters() instead
      */
     public function getParams(): array;
@@ -83,18 +71,13 @@ interface RouterInterface
     /**
      * Returns a route object by its id
      *
-     * @param string $routeId
-     *
-     * @return bool|RouteInterface
+     * @todo change param type to string
+     * @phpstan-param string $id
      */
-    public function getRouteById(string $routeId): bool | RouteInterface;
+    public function getRouteById(mixed $id): bool | RouteInterface;
 
     /**
      * Returns a route object by its name
-     *
-     * @param string $name
-     *
-     * @return bool|RouteInterface
      */
     public function getRouteByName(string $name): bool | RouteInterface;
 
@@ -107,66 +90,46 @@ interface RouterInterface
 
     /**
      * Returns processed task name
-     *
-     * @return string
      */
     public function getTaskName(): string;
 
     /**
      * Handles routing information received from the rewrite engine.
      *
-     * When `arguments` is a string, it is matched against the registered
-     * routes. When it is an array, matching is bypassed entirely: the array is
-     * treated as the already-resolved module/task/action/params, so
-     * `wasMatched()` stays false and `getMatchedRoute()` returns null even
+     * When `arguments` is a string (or null), it is matched against the
+     * registered routes. When it is an array, matching is bypassed entirely:
+     * the array is treated as the already-resolved module/task/action/params,
+     * so `wasMatched()` stays false and `getMatchedRoute()` returns null even
      * though routing succeeded.
      *
-     * @param array|string $arguments
-     *
-     * @return RouterInterface
+     * @param array|string|null $arguments
      */
-    public function handle(array | string $arguments = []): RouterInterface;
+    public function handle(mixed $arguments = null);
 
     /**
      * Sets the default action name
-     *
-     * @param string $actionName
-     *
-     * @return RouterInterface
      */
     public function setDefaultAction(string $actionName): RouterInterface;
 
     /**
      * Sets the name of the default module
-     *
-     * @param string $moduleName
-     *
-     * @return RouterInterface
      */
     public function setDefaultModule(string $moduleName): RouterInterface;
 
     /**
      * Sets an array of default paths
      *
-     * @param TDefaults $defaults
-     *
-     * @return RouterInterface
+     * @phpstan-param TDefaults $defaults
      */
     public function setDefaults(array $defaults): RouterInterface;
 
     /**
      * Sets the default task name
-     *
-     * @param string $taskName
-     *
-     * @return RouterInterface
      */
     public function setDefaultTask(string $taskName): RouterInterface;
 
     /**
      * Check if the router matches any of the defined routes
-     *
-     * @return bool
      */
     public function wasMatched(): bool;
 }

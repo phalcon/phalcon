@@ -72,128 +72,48 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 {
     use EventsAwareTrait;
 
-    /**
-     * @var string
-     */
     protected string $actionName = "";
-
-    /**
-     * @var string
-     */
     protected string $actionSuffix = "Action";
 
     /**
      * @var object|null
      */
     protected $activeHandler = null;
-
-    /**
-     * @var array
-     */
     protected array $activeMethodMap = [];
-
-    /**
-     * @var array
-     */
     protected array $camelCaseMap = [];
-
-    /**
-     * @var string
-     */
     protected string $defaultAction = "";
-
-    /**
-     * @var string
-     */
     protected string $defaultHandler = "";
-
-    /**
-     * @var string
-     */
     protected string $defaultNamespace = "";
-
-    /**
-     * @var bool
-     */
     protected bool $finished = false;
-
-    /**
-     * @var bool
-     */
     protected bool $forwarded = false;
-
-    /**
-     * @var array
-     */
     protected array $handlerHashes = [];
-
-    /**
-     * @var array
-     */
     protected array $handlerHookCache = [];
-
-    /**
-     * @var string
-     */
     protected string $handlerName = "";
-
-    /**
-     * @var string
-     */
     protected string $handlerSuffix = "";
-
-    /**
-     * @var bool
-     */
     protected bool $isControllerInitialize = false;
-
     /**
-     * @var mixed|null
+     * @var mixed
      */
     protected mixed $lastHandler = null;
-
-    /**
-     * @var BinderInterface|null
-     */
     protected ?BinderInterface $modelBinder = null;
-
-    /**
-     * @var bool
-     */
     protected bool $modelBinding = false;
-
-    /**
-     * @var string
-     */
-    protected string $moduleName = "";
-
-    /**
-     * @var string
-     */
+    protected ?string $moduleName = "";
     protected string $namespaceName = "";
-
-    /**
-     * @var array
-     */
     protected array $params = [];
-
     /**
      * @var string
      */
     protected string $previousActionName = "";
-
     /**
      * @var string
      */
     protected string $previousHandlerName = "";
-
     /**
      * @var string
      */
     protected string $previousNamespaceName = "";
-
     /**
-     * @var mixed|null
+     * @todo fix the type in v7
      */
     protected mixed $returnedValue = null;
 
@@ -236,8 +156,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             /**
              * The `dispatch:beforeCallAction` observer may replace the handler
              * and/or the action (see the hook-channel notes on this class). The
-             * loop's own `is_callable()` check ran against the original pair, so
-             * re-validate the (possibly mutated) callable here. A substituted,
+             * loop's own `is_callable()` check ran against the *original* pair,
+             * so re-validate the (possibly mutated) callable here. A substituted,
              * non-existent target then fails through the dispatcher's own
              * EXCEPTION_ACTION_NOT_FOUND channel instead of producing a raw
              * call_user_func_array() fatal.
@@ -277,10 +197,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Process the results of the router by calling into the appropriate
      * controller action(s) including any routing data or injected parameters.
      *
-     * @return mixed
-     * @throws Exception
+     * @return mixed Returns the dispatched handler class (the Controller for Mvc dispatching or a Task
+     *               for CLI dispatching) or <tt>false</tt> if an exception occurred and the operation was
+     *               stopped by returning <tt>false</tt> in the exception handler.
+     *
+     * @throws \Exception if any uncaught or unhandled exception occurs during the dispatcher process.
      */
-    public function dispatch()
+    public function dispatch(): mixed
     {
         $container = $this->container;
 
@@ -299,6 +222,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
         if ($hasEventsManager) {
             try {
+                // Calling beforeDispatchLoop event
+                // Note: Allow user to forward in the beforeDispatchLoop.
                 if (
                     $eventsManager->fire("dispatch:beforeDispatchLoop", $this) === false &&
                     $this->finished !== false
@@ -306,15 +231,35 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     return false;
                 }
             } catch (Exception $e) {
+                // Exception occurred in beforeDispatchLoop.
+
+                /**
+                 * The user can optionally forward now in the
+                 * `dispatch:beforeException` event or return <tt>false</tt> to
+                 * handle the exception and prevent it from bubbling. In the
+                 * event the user does forward but does or does not return
+                 * false, we assume the forward takes precedence. The returning
+                 * false intuitively makes more sense when inside the dispatch
+                 * loop and technically we are not here. Therefore, returning
+                 * false only impacts whether non-forwarded exceptions are
+                 * silently handled or bubbled up the stack. Note that this
+                 * behavior is slightly different than other subsequent events
+                 * handled inside the dispatch loop.
+                 */
+
                 $status = $this->handleException($e);
 
                 if ($this->finished !== false) {
+                    // No forwarding
                     if ($status === false) {
                         return false;
                     }
 
+                    // Otherwise, bubble Exception
                     throw $e;
                 }
+
+                // Otherwise, user forwarded, continue
             }
         }
 
@@ -326,6 +271,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         while (!$this->finished) {
             $numberDispatches++;
 
+            // Throw an exception after 256 consecutive forwards
             if ($numberDispatches === 256) {
                 $this->throwDispatchException(
                     "Dispatcher has detected a cyclic routing causing stability problems",
@@ -341,6 +287,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
             if ($hasEventsManager) {
                 try {
+                    // Calling "dispatch:beforeDispatch" event
                     if (
                         $eventsManager->fire("dispatch:beforeDispatch", $this) === false ||
                         $this->finished === false
@@ -361,11 +308,20 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
             $handlerClass = $this->getHandlerClass();
 
+            /**
+             * Handlers are retrieved as shared instances from the Service
+             * Container
+             */
             $hasService = (bool) $container->has($handlerClass);
             if (!$hasService) {
+                /**
+                 * DI does not have a service with that name, try to load it
+                 * using an autoloader
+                 */
                 $hasService = class_exists($handlerClass);
             }
 
+            // If the service can be loaded we throw an exception
             if (!$hasService) {
                 $status = $this->throwDispatchException(
                     $handlerClass . " handler class cannot be loaded",
@@ -381,6 +337,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
             $handler = $container->getShared($handlerClass);
 
+            // Handlers must be only objects
             if (!is_object($handler)) {
                 $status = $this->throwDispatchException(
                     "Invalid handler returned from the services container",
@@ -394,6 +351,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 break;
             }
 
+            // Check if the handler is new (hasn't been initialized).
             $handlerHash  = spl_object_hash($handler);
             $isNewHandler = !isset($this->handlerHashes[$handlerHash]);
 
@@ -418,7 +376,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             $handlerName   = $this->handlerName;
             $actionName    = $this->actionName;
 
+            /**
+             * Check if the params is an array
+             */
             if (!is_array($this->params)) {
+                /**
+                 * An invalid parameter variable was passed throw an exception
+                 */
                 $status = $this->throwDispatchException(
                     "Action parameters must be an Array",
                     PhalconException::EXCEPTION_INVALID_PARAMS
@@ -431,6 +395,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 break;
             }
 
+            // Check if the method exists in the handler
             $actionMethod = $this->getActiveMethod();
 
             if (!is_callable([$handler, $actionMethod])) {
@@ -444,6 +409,10 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     }
                 }
 
+                /**
+                 * Try to throw an exception when an action isn't defined on the
+                 * object
+                 */
                 $status = $this->throwDispatchException(
                     "Action '" . $actionName . "' was not found on handler '" . $handlerName . "'",
                     PhalconException::EXCEPTION_ACTION_NOT_FOUND
@@ -456,8 +425,21 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 break;
             }
 
+            /**
+             * In order to ensure that the `initialize()` gets called we'll
+             * destroy the current handlerClass from the DI container in the
+             * event that an error occurs and we continue out of this block.
+             * This is necessary because there is a disjoin between retrieval of
+             * the instance and the execution of the `initialize()` event. From
+             * a coding perspective, it would have made more sense to probably
+             * put the `initialize()` prior to the beforeExecuteRoute which
+             * would have solved this. However, for posterity, and to remain
+             * consistency, we'll ensure the default and documented behavior
+             * works correctly.
+             */
             if ($hasEventsManager) {
                 try {
+                    // Calling "dispatch:beforeExecuteRoute" event
                     if (
                         $eventsManager->fire("dispatch:beforeExecuteRoute", $this) === false ||
                         $this->finished === false
@@ -480,6 +462,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
             if ($hookCache[0]) {
                 try {
+                    // Calling "beforeExecuteRoute" as direct method
                     if (
                         $handler->beforeExecuteRoute($this) === false ||
                         $this->finished === false
@@ -500,6 +483,25 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 }
             }
 
+            /**
+             * Call the "initialize" method just once per request
+             *
+             * Note: The `dispatch:afterInitialize` event is called regardless
+             *       of the presence of an `initialize()` method. The naming is
+             *       poor; however, the intent is for a more global "constructor
+             *       is ready to go" or similarly "__onConstruct()" methodology.
+             *
+             * Note (historical): the `initialize()` call and the
+             * `dispatch:afterInitialize` event ideally would run *before* the
+             * `beforeExecuteRoute` event/method blocks. This was a bug in the
+             * original design that could not be changed due to widespread
+             * implementation. The reordering was once slated for 4.0 but never
+             * shipped; it remains deferred to a future major version, where the
+             * BC break is acceptable and the container-eviction workaround below
+             * can be removed along with it.
+             *
+             * @see https://github.com/phalcon/cphalcon/pull/13112
+             */
             if ($isNewHandler) {
                 if ($hookCache[1]) {
                     try {
@@ -509,6 +511,14 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     } catch (Exception $e) {
                         $this->isControllerInitialize = false;
 
+                        /**
+                         * If this is a dispatch exception (e.g. From
+                         * forwarding) ensure we don't handle this twice. In
+                         * order to ensure this does not happen all other
+                         * exceptions thrown outside this method in this class
+                         * should not call "throwDispatchException" but instead
+                         * throw a normal Exception.
+                         */
                         if (
                             $this->handleException($e) === false ||
                             $this->finished === false
@@ -522,6 +532,10 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
                 $this->isControllerInitialize = false;
 
+                /**
+                 * Refresh in case initialize() attached an events manager to
+                 * the dispatcher when none existed at dispatch() entry.
+                 */
                 if (
                     !$hasEventsManager &&
                     null !== $this->eventsManager &&
@@ -531,6 +545,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     $hasEventsManager = true;
                 }
 
+                /**
+                 * Calling "dispatch:afterInitialize" event
+                 */
                 if ($eventsManager) {
                     try {
                         if (
@@ -582,24 +599,39 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                     continue;
                 }
 
+                /**
+                 * Check if the user made a forward in the listener
+                 */
                 if ($this->finished === false) {
                     continue;
                 }
             }
 
+            /**
+             * Calling afterBinding as callback and event
+             */
             if ($hookCache[2]) {
                 if ($handler->afterBinding($this) === false) {
                     continue;
                 }
 
+                /**
+                 * Check if the user made a forward in the listener
+                 */
                 if ($this->finished === false) {
                     continue;
                 }
             }
 
+            /**
+             * Save the current handler
+             */
             $this->lastHandler = $handler;
 
             try {
+                /**
+                 * We update the latest value produced by the latest handler
+                 */
                 $this->returnedValue = $this->callActionMethod(
                     $handler,
                     $actionMethod,
@@ -620,6 +652,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 throw $e;
             }
 
+            /**
+             * Calling "dispatch:afterExecuteRoute" event
+             */
             if ($hasEventsManager) {
                 try {
                     if (
@@ -640,6 +675,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 }
             }
 
+            /**
+             * Calling "afterExecuteRoute" as direct method
+             */
             if ($hookCache[3]) {
                 try {
                     if (
@@ -660,10 +698,15 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 }
             }
 
+            // Calling "dispatch:afterDispatch" event
             if ($hasEventsManager) {
                 try {
                     $eventsManager->fire("dispatch:afterDispatch", $this, $value);
                 } catch (Exception $e) {
+                    /**
+                     * Still check for finished here as we want to prioritize
+                     * `forwarding()` calls
+                     */
                     if (
                         $this->handleException($e) === false ||
                         $this->finished === false
@@ -678,12 +721,16 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
         if ($hasEventsManager) {
             try {
+                // Calling "dispatch:afterDispatchLoop" event
+                // Note: We don't worry about forwarding in after dispatch loop.
                 $eventsManager->fire("dispatch:afterDispatchLoop", $this);
             } catch (Exception $e) {
+                // Exception occurred in afterDispatchLoop.
                 if ($this->handleException($e) === false) {
                     return false;
                 }
 
+                // Otherwise, bubble Exception
                 throw $e;
             }
         }
@@ -702,36 +749,45 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *     ]
      * );
      * ```
-     *
-     * @param array $forward
-     *
-     * @return void
-     * @throws PhalconException
      */
     public function forward(array $forward): void
     {
         if ($this->isControllerInitialize === true) {
+            /**
+             * Note: Important that we do not throw a "throwDispatchException"
+             * call here. This is important because it would allow the
+             * application to break out of the defined logic inside the
+             * dispatcher which handles all dispatch exceptions.
+             */
             throw new ForwardInInitializeForbidden();
         }
 
+        /**
+         * Save current values as previous to ensure calls to getPrevious
+         * methods don't return null.
+         */
         $this->previousNamespaceName = $this->namespaceName;
         $this->previousHandlerName   = $this->handlerName;
         $this->previousActionName    = $this->actionName;
 
+        // Check if we need to forward to another namespace
         if (isset($forward["namespace"])) {
             $this->namespaceName = $forward["namespace"];
         }
 
+        // Check if we need to forward to another controller.
         if (isset($forward["controller"])) {
             $this->handlerName = $forward["controller"];
         } elseif (isset($forward["task"])) {
             $this->handlerName = $forward["task"];
         }
 
+        // Check if we need to forward to another action
         if (isset($forward["action"])) {
             $this->actionName = $forward["action"];
         }
 
+        // Check if we need to forward changing the current parameters
         if (isset($forward["params"])) {
             $this->params = $forward["params"];
         }
@@ -742,8 +798,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets the latest dispatched action name
-     *
-     * @return string
      */
     public function getActionName(): string
     {
@@ -752,8 +806,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets the default action suffix
-     *
-     * @return string
      */
     public function getActionSuffix(): string
     {
@@ -762,8 +814,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Returns the current method to be/executed in the dispatcher
-     *
-     * @return string
      */
     public function getActiveMethod(): string
     {
@@ -783,7 +833,16 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Returns bound models from binder instance
      *
-     * @return array
+     * ```php
+     * class UserController extends Controller
+     * {
+     *     public function showAction(User $user)
+     *     {
+     *         // return array with $user
+     *         $boundModels = $this->dispatcher->getBoundModels();
+     *     }
+     * }
+     * ```
      */
     public function getBoundModels(): array
     {
@@ -796,8 +855,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Returns the default namespace
-     *
-     * @return string
      */
     public function getDefaultNamespace(): string
     {
@@ -807,8 +864,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Possible class name that will be located to dispatch the request
-     *
-     * @return string
      */
     public function getHandlerClass(): string
     {
@@ -818,12 +873,14 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         $handlerName   = $this->handlerName;
         $namespaceName = $this->namespaceName;
 
+        // We don't camelize the classes if they are in namespaces
         if (!str_contains($handlerName, "\\")) {
             $camelizedClass = $this->toCamelCase($handlerName);
         } else {
             $camelizedClass = $handlerName;
         }
 
+        // Create the complete controller class name prepending the namespace
         if ($namespaceName) {
             if (!str_ends_with($namespaceName, "\\")) {
                 $namespaceName .= "\\";
@@ -839,8 +896,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets the default handler suffix
-     *
-     * @return string
      */
     public function getHandlerSuffix(): string
     {
@@ -849,8 +904,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets model binder
-     *
-     * @return BinderInterface|null
      */
     public function getModelBinder(): ?BinderInterface
     {
@@ -859,8 +912,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets the module where the controller class is
-     *
-     * @return string|null
      */
     public function getModuleName(): ?string
     {
@@ -869,8 +920,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets a namespace to be prepended to the current handler name
-     *
-     * @return string
      */
     public function getNamespaceName(): string
     {
@@ -880,22 +929,21 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets a param by its name or numeric index
      *
-     * @param int|string        $param
-     * @param array|string|null $filters
-     * @param mixed             $defaultValue
+     * @phpstan-param mixed $param
+     * @phpstan-param mixed $filters
+     * @phpstan-param mixed $defaultValue
      *
-     * @return mixed
      * @deprecated Use getParameter() instead
      *
-     * Note: The interface declares `getParam($param, $filters = null)` without
-     * the `$defaultValue` argument, so code typed against `DispatcherInterface`
+     * Note: The interface declares `getParam(param, filters = null)` without the
+     * `defaultValue` argument, so code typed against `DispatcherInterface`
      * cannot use the default-value feature. This signature drift is intentional
      * for now; the interface and implementation will be aligned in the next
      * major version.
      */
     public function getParam(
-        int | string $param,
-        array | string | null $filters = null,
+        mixed $param,
+        mixed $filters = null,
         mixed $defaultValue = null
     ): mixed {
         return $this->getParameter($param, $filters, $defaultValue);
@@ -904,15 +952,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets a param by its name or numeric index
      *
-     * @param int|string        $param
-     * @param array|string|null $filters
-     * @param mixed             $defaultValue
-     *
-     * @return mixed
+     * @phpstan-param mixed $param
+     * @phpstan-param mixed $filters
+     * @phpstan-param mixed $defaultValue
      */
     public function getParameter(
-        int | string $param,
-        array | string | null $filters = null,
+        mixed $param,
+        mixed $filters = null,
         mixed $defaultValue = null
     ): mixed {
         if (!isset($this->params[$param])) {
@@ -939,8 +985,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets action params
-     *
-     * @return array
      */
     public function getParameters(): array
     {
@@ -950,7 +994,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets action params
      *
-     * @return array
      * @deprecated Use getParameters() instead
      */
     public function getParams(): array
@@ -960,8 +1003,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets previous dispatched action name
-     *
-     * @return string
      */
     public function getPreviousActionName(): string
     {
@@ -970,8 +1011,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets previous dispatched handler name
-     *
-     * @return string
      */
     public function getPreviousHandlerName(): string
     {
@@ -980,8 +1019,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Gets previous dispatched namespace name
-     *
-     * @return string
      */
     public function getPreviousNamespaceName(): string
     {
@@ -990,8 +1027,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Returns value returned by the latest dispatched action
-     *
-     * @return mixed
      */
     public function getReturnedValue(): mixed
     {
@@ -1001,12 +1036,11 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Check if a param exists
      *
-     * @param int|string $param
+     * @phpstan-param mixed $param
      *
-     * @return bool
      * @deprecated Use hasParameter() instead
      */
-    public function hasParam(int | string $param): bool
+    public function hasParam(mixed $param): bool
     {
         return $this->hasParameter($param);
     }
@@ -1014,11 +1048,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Check if a param exists
      *
-     * @param int|string $param
-     *
-     * @return bool
+     * @phpstan-param mixed $param
      */
-    public function hasParameter(int | string $param): bool
+    public function hasParameter(mixed $param): bool
     {
         return isset($this->params[$param]);
     }
@@ -1026,8 +1058,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Checks if the dispatch loop is finished or has more pendent
      * controllers/tasks to dispatch
-     *
-     * @return bool
      */
     public function isFinished(): bool
     {
@@ -1036,10 +1066,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the action name to be dispatched
-     *
-     * @param string $actionName
-     *
-     * @return void
      */
     public function setActionName(string $actionName): void
     {
@@ -1048,10 +1074,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the default action suffix
-     *
-     * @param string $actionSuffix
-     *
-     * @return void
      */
     public function setActionSuffix(string $actionSuffix): void
     {
@@ -1060,10 +1082,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the default action name
-     *
-     * @param string $actionName
-     *
-     * @return void
      */
     public function setDefaultAction(string $actionName): void
     {
@@ -1072,10 +1090,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the default namespace
-     *
-     * @param string $defaultNamespace
-     *
-     * @return void
      */
     public function setDefaultNamespace(string $defaultNamespace): void
     {
@@ -1085,10 +1099,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the default suffix for the handler
-     *
-     * @param string $handlerSuffix
-     *
-     * @return void
      */
     public function setHandlerSuffix(string $handlerSuffix): void
     {
@@ -1098,10 +1108,21 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Enable model binding during dispatch
      *
-     * @param BinderInterface $modelBinder
-     * @param mixed           $cache
+     * ```php
+     * $di->set(
+     *     'dispatcher',
+     *     function() {
+     *         $dispatcher = new Dispatcher();
      *
-     * @return DispatcherInterface
+     *         $dispatcher->setModelBinder(
+     *             new Binder(),
+     *             'cache'
+     *         );
+     *
+     *         return $dispatcher;
+     *     }
+     * );
+     * ```
      */
     public function setModelBinder(
         BinderInterface $modelBinder,
@@ -1123,10 +1144,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the module where the controller is (only informative)
-     *
-     * @param string|null $moduleName
-     *
-     * @return void
      */
     public function setModuleName(string | null $moduleName = null): void
     {
@@ -1135,10 +1152,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the namespace where the controller class is
-     *
-     * @param string $namespaceName
-     *
-     * @return void
      */
     public function setNamespaceName(string $namespaceName): void
     {
@@ -1148,36 +1161,23 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Set a param by its name or numeric index
      *
-     * @param int|string $param
-     * @param mixed      $value
-     *
-     * @return void
      * @deprecated Use setParameter() instead
      */
-    public function setParam(int | string $param, mixed $value): void
+    public function setParam(mixed $param, mixed $value): void
     {
         $this->setParameter($param, $value);
     }
 
     /**
      * Set a param by its name or numeric index
-     *
-     * @param int|string $param
-     * @param mixed      $value
-     *
-     * @return void
      */
-    public function setParameter(int | string $param, mixed $value): void
+    public function setParameter(mixed $param, mixed $value): void
     {
         $this->params[$param] = $value;
     }
 
     /**
      * Sets action params to be dispatched
-     *
-     * @param array $params
-     *
-     * @return void
      */
     public function setParameters(array $params): void
     {
@@ -1187,9 +1187,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Sets action params to be dispatched
      *
-     * @param array $params
-     *
-     * @return void
      * @deprecated Use setParameters() instead
      */
     public function setParams(array $params): void
@@ -1199,10 +1196,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets the latest returned value by an action manually
-     *
-     * @param mixed $value
-     *
-     * @return void
      */
     public function setReturnedValue(mixed $value): void
     {
@@ -1211,8 +1204,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Check if the current executed action was forwarded by another one
-     *
-     * @return bool
      */
     public function wasForwarded(): bool
     {
@@ -1220,52 +1211,60 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     }
 
     /**
-     * Handles a user exception
+     * Handles a user exception triggered inside the dispatch loop.
      *
-     * @param Exception $exception
+     * Subclasses implement the namespace-specific behavior (typically firing
+     * the `dispatch:beforeException` event so listeners may forward or swallow
+     * the exception).
      *
-     * @return mixed
+     * @param \Exception exception
+     *
+     * @return mixed Return `false` to signal that the exception was handled
+     *               (swallowed) and the current loop iteration should stop.
+     *               Any other return value (including null) lets the caller
+     *               bubble the exception, unless a forward was requested
+     *               (`finished === false`).
      */
     abstract protected function handleException(Exception $exception);
 
     /**
      * Set empty properties to their defaults (where defaults are available)
-     *
-     * @return void
      */
     protected function resolveEmptyProperties(): void
     {
+        // If the current namespace is null we use the default namespace
         if (!$this->namespaceName) {
             $this->namespaceName = $this->defaultNamespace;
         }
 
+        // If the handler is null we use the default handler
         if (!$this->handlerName) {
             $this->handlerName = $this->defaultHandler;
         }
 
+        // If the action is null we use the default action
         if (!$this->actionName) {
             $this->actionName = $this->defaultAction;
         }
     }
 
     /**
-     * Throws an internal exception
+     * Throws an internal dispatch exception.
      *
-     * @param string $message
-     * @param int    $exceptionCode
+     * Subclasses build the namespace-specific exception and route it through
+     * handleException() before throwing it when it was not handled.
      *
-     * @return mixed
+     * @param string message
+     * @param int    exceptionCode
+     *
+     * @return mixed Returns `false` when handleException() swallowed the
+     *               exception; otherwise the method throws and does not return.
      */
     abstract protected function throwDispatchException(
         string $message,
         int $exceptionCode = 0
     );
 
-    /**
-     * @param string $input
-     *
-     * @return string
-     */
     protected function toCamelCase(string $input): string
     {
         $camelCaseInput = $this->camelCaseMap[$input] ?? null;

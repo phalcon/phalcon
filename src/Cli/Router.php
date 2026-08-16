@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Cli;
 
-use Phalcon\Cli\Router\Exception;
 use Phalcon\Cli\Router\Exceptions\BeforeMatchNotCallable;
+use Phalcon\Cli\Router\Exceptions\RouterArgumentsInvalidType;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
 use Phalcon\Di\AbstractInjectionAware;
@@ -51,72 +51,24 @@ use function substr;
  */
 class Router extends AbstractInjectionAware implements RouterInterface
 {
-    /**
-     * @var string
-     */
     protected string $action = "";
-
-    /**
-     * @var string
-     */
     protected string $defaultAction = "";
-
-    /**
-     * @var string
-     */
     protected string $defaultModule = "";
-
-    /**
-     * @var array
-     */
     protected array $defaultParams = [];
-
-    /**
-     * @var string
-     */
     protected string $defaultTask = "";
-
-    /**
-     * @var RouteInterface|null
-     */
     protected ?RouteInterface $matchedRoute = null;
-
     /**
      * @var array<array-key, string>
      */
     protected array $matches = [];
-
-    /**
-     * @var string
-     */
     protected string $module = "";
-
-    /**
-     * @var array
-     */
     protected array $parameters = [];
-
-    /**
-     * @var array
-     */
     protected array $routes = [];
-
-    /**
-     * @var string
-     */
     protected string $task = "";
-
-    /**
-     * @var bool
-     */
     protected bool $wasMatched = false;
 
     /**
      * Phalcon\Cli\Router constructor
-     *
-     * @param bool $defaultRoutes
-     *
-     * @throws Exception
      */
     public function __construct(bool $defaultRoutes = true)
     {
@@ -148,26 +100,18 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * $router->add("/about", "About::main");
      *```
      *
-     * @param string       $pattern
-     * @param array|string $paths
-     *
-     * @return RouteInterface
-     * @throws Exception
+     * @phpstan-param array|string|null $paths
      */
-    public function add(string $pattern, array | string $paths = []): RouteInterface
+    public function add(string $pattern, mixed $paths = null): RouteInterface
     {
         $route   = new Route($pattern, $paths);
-        $routeId = $route->getRouteId();
-
-        $this->routes[$routeId] = $route;
+        $this->routes[$route->getRouteId()] = $route;
 
         return $route;
     }
 
     /**
      * Returns processed action name
-     *
-     * @return string
      */
     public function getActionName(): string
     {
@@ -176,8 +120,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Returns the route that matches the handled URI
-     *
-     * @return RouteInterface|null
      */
     public function getMatchedRoute(): RouteInterface | null
     {
@@ -196,8 +138,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Returns processed module name
-     *
-     * @return string
      */
     public function getModuleName(): string
     {
@@ -206,8 +146,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Returns processed extra params
-     *
-     * @return array
      */
     public function getParameters(): array
     {
@@ -217,7 +155,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
     /**
      * Returns processed extra params
      *
-     * @return array
      * @deprecated Use {@see getParameters()} instead.
      */
     public function getParams(): array
@@ -227,22 +164,14 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Returns a route object by its id
-     *
-     * @param string $routeId
-     *
-     * @return bool|RouteInterface
      */
-    public function getRouteById(string $routeId): bool | RouteInterface
+    public function getRouteById(mixed $id): bool | RouteInterface
     {
-        return $this->routes[$routeId] ?? false;
+        return $this->routes[$id] ?? false;
     }
 
     /**
      * Returns a route object by its name
-     *
-     * @param string $name
-     *
-     * @return bool|RouteInterface
      */
     public function getRouteByName(string $name): bool | RouteInterface
     {
@@ -268,8 +197,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Returns processed task name
-     *
-     * @return string
      */
     public function getTaskName(): string
     {
@@ -279,21 +206,28 @@ class Router extends AbstractInjectionAware implements RouterInterface
     /**
      * Handles routing information received from command-line arguments
      *
-     * @param array|string $arguments
-     *
-     * @return RouterInterface
-     * @throws Exception
+     * @param array|string|null $arguments
      */
-    public function handle(array | string $arguments = []): RouterInterface
+    public function handle(mixed $arguments = null)
     {
         $routeFound         = false;
         $parts              = [];
         $params             = [];
-        $matches            = [];
+        $matches            = null;
         $this->wasMatched   = false;
         $this->matchedRoute = null;
 
         if (!is_array($arguments)) {
+            if (!is_string($arguments) && $arguments !== null) {
+                throw new RouterArgumentsInvalidType(gettype($arguments));
+            }
+
+            /**
+             * Zephir gives `preg_match()` the null subject as an empty
+             * string. PHP rejects it, so make the empty string explicit.
+             */
+            $arguments = (string) $arguments;
+
             $reverseRoutes = array_reverse($this->routes);
             foreach ($reverseRoutes as $route) {
                 /**
@@ -474,10 +408,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Sets the default action name
-     *
-     * @param string $actionName
-     *
-     * @return RouterInterface
      */
     public function setDefaultAction(string $actionName): static
     {
@@ -488,10 +418,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Sets the name of the default module
-     *
-     * @param string $moduleName
-     *
-     * @return RouterInterface
      */
     public function setDefaultModule(string $moduleName): static
     {
@@ -515,8 +441,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
      *```
      *
      * @param TDefaults $defaults
-     *
-     * @return RouterInterface
      */
     public function setDefaults(array $defaults): static
     {
@@ -530,10 +454,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Sets the default controller name
-     *
-     * @param string $taskName
-     *
-     * @return RouterInterface
      */
     public function setDefaultTask(string $taskName): static
     {
@@ -544,8 +464,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Checks if the router matches any of the defined routes
-     *
-     * @return bool
      */
     public function wasMatched(): bool
     {
