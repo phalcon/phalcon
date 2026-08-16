@@ -19,3 +19,34 @@ parameters:
             message: "#Parameter \\#1 \\$callback of function spl_autoload_register expects \\(callable\\(string\\): void\\)\\|null, array\\{\\$this\\(Phalcon\\\\Autoload\\\\Loader\\), 'autoload'\\} given#"
             path: ../src/Autoload/Loader.php
             reportUnmatched: false
+        # The dispatch loop sets `finished` to true, then fires events and
+        # handler hooks. Any listener or hook may call forward(), which sets
+        # it back to false. PHPStan cannot follow that re-entry, so it still
+        # believes the property holds the value last assigned here.
+        -
+            message: "#Strict comparison using [!=]== between true and false will always evaluate to (true|false)#"
+            path: ../src/Dispatcher/AbstractDispatcher.php
+            reportUnmatched: false
+        # `handlerHookCache` caches the method_exists() probes once per handler
+        # class, so the presence check and the call sit in different
+        # statements. PHPStan only narrows an object on an inline
+        # method_exists() call.
+        -
+            message: "#Call to an undefined method object::(beforeExecuteRoute|initialize|afterBinding|afterExecuteRoute)\\(\\)#"
+            path: ../src/Dispatcher/AbstractDispatcher.php
+            reportUnmatched: false
+        # `params` is a typed array property here, so the guard is unreachable
+        # in PHP. It is kept because the Zephir property is untyped, where the
+        # same guard is live and raises EXCEPTION_INVALID_PARAMS.
+        -
+            message: "#Call to function is_array\\(\\) with array<mixed> will always evaluate to true#"
+            path: ../src/Dispatcher/AbstractDispatcher.php
+            reportUnmatched: false
+        # `registerModules()` documents the shape it expects but does not
+        # validate it, so a module definition can still be any type at run
+        # time. These guards are what reports that, and they are live in the
+        # Zephir implementation where the modules array is untyped.
+        -
+            message: "#(Call to function is_object\\(\\) with Closure will always evaluate to true|Result of && is always false|Instanceof between Closure and Closure will always evaluate to true)#"
+            path: ../src/Cli/Console.php
+            reportUnmatched: false

@@ -14,12 +14,16 @@ declare(strict_types=1);
 namespace Phalcon\Dispatcher;
 
 use Exception;
+use Phalcon\Cache\Adapter\AdapterInterface;
+use Phalcon\Contracts\Dispatcher\DispatcherTypes;
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\Exception as PhalconException;
 use Phalcon\Dispatcher\Exceptions\ForwardInInitializeForbidden;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Filter\FilterInterface;
 use Phalcon\Mvc\Model\Binder;
 use Phalcon\Mvc\Model\BinderInterface;
 use Phalcon\Support\Collection;
@@ -67,6 +71,14 @@ use function str_ends_with;
  *    those keys to change *what* gets invoked; the substituted callable is
  *    re-validated before the call. `dispatch:afterCallAction` receives the
  *    same Collection plus a `result` key.
+ *
+ * @phpstan-import-type dispatcher_bound_models from DispatcherTypes
+ * @phpstan-import-type dispatcher_forward from DispatcherTypes
+ * @phpstan-import-type dispatcher_handler_hooks from DispatcherTypes
+ * @phpstan-import-type dispatcher_handler_hashes from DispatcherTypes
+ * @phpstan-import-type dispatcher_hook_cache from DispatcherTypes
+ * @phpstan-import-type dispatcher_method_map from DispatcherTypes
+ * @phpstan-import-type dispatcher_params from DispatcherTypes
  */
 abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
 {
@@ -79,14 +91,26 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * @var object|null
      */
     protected $activeHandler = null;
+    /**
+     * @phpstan-var dispatcher_method_map
+     */
     protected array $activeMethodMap = [];
+    /**
+     * @phpstan-var dispatcher_method_map
+     */
     protected array $camelCaseMap = [];
     protected string $defaultAction = "";
     protected string $defaultHandler = "";
     protected string $defaultNamespace = "";
     protected bool $finished = false;
     protected bool $forwarded = false;
+    /**
+     * @phpstan-var dispatcher_handler_hashes
+     */
     protected array $handlerHashes = [];
+    /**
+     * @phpstan-var dispatcher_hook_cache
+     */
     protected array $handlerHookCache = [];
     protected string $handlerName = "";
     protected string $handlerSuffix = "";
@@ -99,6 +123,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     protected bool $modelBinding = false;
     protected ?string $moduleName = "";
     protected string $namespaceName = "";
+    /**
+     * @phpstan-var dispatcher_params
+     */
     protected array $params = [];
     /**
      * @var string
@@ -120,7 +147,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * @param mixed  $handler
      * @param string $actionMethod
-     * @param array  $params
+     *
+     * @phpstan-param dispatcher_params $params
      *
      * @return mixed
      */
@@ -133,10 +161,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         $altAction  = $actionMethod;
         $altParams  = $params;
 
-        if (
-            null !== $this->eventsManager &&
-            $this->eventsManager instanceof ManagerInterface
-        ) {
+        if (null !== $this->eventsManager) {
             $observer = new Collection([
                 "handler" => $handler,
                 "action"  => $actionMethod,
@@ -172,15 +197,16 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             }
         }
 
+        /** @var callable $callable */
+        $callable = [$altHandler, $altAction];
+        /** @phpstan-var dispatcher_params $altParams */
+
         $result = call_user_func_array(
-            [$altHandler, $altAction],
+            $callable,
             array_values($altParams)
         );
 
-        if (
-            null !== $this->eventsManager &&
-            $this->eventsManager instanceof ManagerInterface
-        ) {
+        if (null !== $this->eventsManager) {
             $observer["result"] = $result;
 
             $this->eventsManager->fire(
@@ -216,11 +242,10 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             return false;
         }
 
-        $eventsManager    = $this->eventsManager;
-        $hasEventsManager = is_object($eventsManager);
-        $this->finished   = true;
+        $eventsManager  = $this->eventsManager;
+        $this->finished = true;
 
-        if ($hasEventsManager) {
+        if (null !== $eventsManager) {
             try {
                 // Calling beforeDispatchLoop event
                 // Note: Allow user to forward in the beforeDispatchLoop.
@@ -285,7 +310,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
             $this->resolveEmptyProperties();
 
-            if ($hasEventsManager) {
+            if (null !== $eventsManager) {
                 try {
                     // Calling "dispatch:beforeDispatch" event
                     if (
@@ -399,7 +424,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             $actionMethod = $this->getActiveMethod();
 
             if (!is_callable([$handler, $actionMethod])) {
-                if ($hasEventsManager) {
+                if (null !== $eventsManager) {
                     if ($eventsManager->fire("dispatch:beforeNotFoundAction", $this) === false) {
                         continue;
                     }
@@ -437,7 +462,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
              * consistency, we'll ensure the default and documented behavior
              * works correctly.
              */
-            if ($hasEventsManager) {
+            if (null !== $eventsManager) {
                 try {
                     // Calling "dispatch:beforeExecuteRoute" event
                     if (
@@ -537,12 +562,10 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                  * the dispatcher when none existed at dispatch() entry.
                  */
                 if (
-                    !$hasEventsManager &&
-                    null !== $this->eventsManager &&
-                    $this->eventsManager instanceof ManagerInterface
+                    null === $eventsManager &&
+                    null !== $this->eventsManager
                 ) {
-                    $eventsManager    = $this->eventsManager;
-                    $hasEventsManager = true;
+                    $eventsManager = $this->eventsManager;
                 }
 
                 /**
@@ -569,7 +592,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 }
             }
 
-            if ($this->modelBinding) {
+            if ($this->modelBinding && null !== $this->modelBinder) {
                 $modelBinder  = $this->modelBinder;
                 $bindCacheKey = "_PHMB_" . $handlerClass . "_" . $actionMethod;
 
@@ -594,7 +617,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
              * are returning `false` (cancel) and `forward()` (`finished` flips
              * to `false`). This asymmetry is by design, not an oversight.
              */
-            if ($hasEventsManager) {
+            if (null !== $eventsManager) {
                 if ($eventsManager->fire("dispatch:afterBinding", $this) === false) {
                     continue;
                 }
@@ -655,7 +678,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             /**
              * Calling "dispatch:afterExecuteRoute" event
              */
-            if ($hasEventsManager) {
+            if (null !== $eventsManager) {
                 try {
                     if (
                         $eventsManager->fire("dispatch:afterExecuteRoute", $this, $value) === false ||
@@ -699,7 +722,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             }
 
             // Calling "dispatch:afterDispatch" event
-            if ($hasEventsManager) {
+            if (null !== $eventsManager) {
                 try {
                     $eventsManager->fire("dispatch:afterDispatch", $this, $value);
                 } catch (Exception $e) {
@@ -719,7 +742,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             }
         }
 
-        if ($hasEventsManager) {
+        if (null !== $eventsManager) {
             try {
                 // Calling "dispatch:afterDispatchLoop" event
                 // Note: We don't worry about forwarding in after dispatch loop.
@@ -843,6 +866,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *     }
      * }
      * ```
+     *
+     * @phpstan-return dispatcher_bound_models
      */
     public function getBoundModels(): array
     {
@@ -929,7 +954,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets a param by its name or numeric index
      *
-     * @phpstan-param mixed $param
+     * @phpstan-param array-key $param
      * @phpstan-param mixed $filters
      * @phpstan-param mixed $defaultValue
      *
@@ -952,7 +977,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Gets a param by its name or numeric index
      *
-     * @phpstan-param mixed $param
+     * @phpstan-param array-key $param
      * @phpstan-param mixed $filters
      * @phpstan-param mixed $defaultValue
      */
@@ -978,7 +1003,11 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             );
         }
 
-        $filter = $this->container->getShared("filter");
+        /** @var DiInterface $container */
+        $container = $this->container;
+        /** @var FilterInterface $filter */
+        $filter = $container->getShared("filter");
+        /** @var array<array-key, mixed>|string $filters */
 
         return $filter->sanitize($paramValue, $filters);
     }
@@ -1036,7 +1065,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Check if a param exists
      *
-     * @phpstan-param mixed $param
+     * @phpstan-param array-key $param
      *
      * @deprecated Use hasParameter() instead
      */
@@ -1048,7 +1077,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * Check if a param exists
      *
-     * @phpstan-param mixed $param
+     * @phpstan-param array-key $param
      */
     public function hasParameter(mixed $param): bool
     {
@@ -1129,10 +1158,13 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         mixed $cache = null
     ): DispatcherInterface {
         if (is_string($cache)) {
-            $cache = $this->container->get($cache);
+            /** @var DiInterface $container */
+            $container = $this->container;
+            $cache     = $container->get($cache);
         }
 
         if (null !== $cache) {
+            /** @var AdapterInterface $cache */
             $modelBinder->setCache($cache);
         }
 
@@ -1170,6 +1202,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Set a param by its name or numeric index
+     *
+     * @phpstan-param array-key $param
      */
     public function setParameter(mixed $param, mixed $value): void
     {
@@ -1178,6 +1212,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     /**
      * Sets action params to be dispatched
+     *
+     * @phpstan-param dispatcher_params $params
      */
     public function setParameters(array $params): void
     {
@@ -1217,7 +1253,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * the `dispatch:beforeException` event so listeners may forward or swallow
      * the exception).
      *
-     * @param \Exception exception
+     * @param \Exception $exception
      *
      * @return mixed Return `false` to signal that the exception was handled
      *               (swallowed) and the current loop iteration should stop.
@@ -1254,8 +1290,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Subclasses build the namespace-specific exception and route it through
      * handleException() before throwing it when it was not handled.
      *
-     * @param string message
-     * @param int    exceptionCode
+     * @param string $message
+     * @param int    $exceptionCode
      *
      * @return mixed Returns `false` when handleException() swallowed the
      *               exception; otherwise the method throws and does not return.
@@ -1274,7 +1310,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 "",
                 array_map(
                     "ucfirst",
-                    preg_split("/[_-]+/", $input)
+                    preg_split("/[_-]+/", $input) ?: []
                 )
             );
 

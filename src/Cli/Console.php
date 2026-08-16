@@ -19,6 +19,8 @@ use Phalcon\Cli\Console\Exceptions\ContainerRequired;
 use Phalcon\Cli\Console\Exceptions\InvalidModuleDefinition;
 use Phalcon\Cli\Console\Exceptions\ModuleDefinitionPathNotFound;
 use Phalcon\Cli\Router\Route;
+use Phalcon\Contracts\Cli\CliTypes;
+use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_merge;
@@ -36,19 +38,30 @@ use function trim;
 
 /**
  * This component allows to create CLI applications using Phalcon
+ *
+ * @phpstan-import-type cli_arguments from CliTypes
+ * @phpstan-import-type cli_options from CliTypes
+ * @phpstan-import-type cli_parameters from CliTypes
  */
 class Console extends AbstractApplication
 {
     use FileTrait;
 
     /**
-     * @var array|string
+     * @phpstan-var cli_arguments
      */
     protected mixed $arguments = [];
+    /**
+     * @phpstan-var cli_options
+     */
     protected array $options = [];
 
     /**
      * Handle the whole command-line tasks
+     *
+     * @phpstan-param cli_parameters|null $arguments
+     *
+     * @return mixed
      */
     public function handle(?array $arguments = null)
     {
@@ -126,6 +139,7 @@ class Console extends AbstractApplication
                     }
                 }
 
+                /** @var ModuleDefinitionInterface $moduleObject */
                 $moduleObject = $this->container->get($className);
 
                 /**
@@ -187,6 +201,8 @@ class Console extends AbstractApplication
 
     /**
      * Set a specific argument
+     *
+     * @phpstan-param cli_parameters|null $arguments
      */
     public function setArgument(
         ?array $arguments = null,
@@ -196,6 +212,8 @@ class Console extends AbstractApplication
         $args       = [];
         $opts       = [];
         $handleArgs = [];
+
+        $arguments = $arguments ?? [];
 
         if (true === $shift && !empty($arguments)) {
             array_shift($arguments);
@@ -222,7 +240,8 @@ class Console extends AbstractApplication
         }
 
         if (true === $str) {
-            $this->arguments = implode(Route::getDelimiter(), $args);
+            /** @var list<string> $args */
+            $this->arguments = implode((string) Route::getDelimiter(), $args);
         } else {
             if (!empty($args)) {
                 $handleArgs["task"] = array_shift($args);

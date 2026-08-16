@@ -15,8 +15,11 @@ namespace Phalcon\Cli;
 
 use Exception;
 use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
+use Phalcon\Contracts\Cli\CliTypes;
+use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
 use Phalcon\Filter\Exception as FilterException;
+use Phalcon\Filter\FilterInterface;
 
 use function array_merge;
 use function array_values;
@@ -43,12 +46,17 @@ use function call_user_func_array;
  *
  * $handle = $dispatcher->dispatch();
  * ```
+ *
+ * @phpstan-import-type cli_options from CliTypes
  */
 class Dispatcher extends CliDispatcher implements DispatcherInterface
 {
     protected string $defaultAction = "main";
     protected string $defaultHandler = "main";
     protected string $handlerSuffix = "Task";
+    /**
+     * @phpstan-var cli_options
+     */
     protected array $options = [];
 
     /**
@@ -68,10 +76,10 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         $params = array_values($parameters);
         $params = array_merge($params, $this->options);
 
-        return call_user_func_array(
-            [$handler, $actionMethod],
-            $params
-        );
+        /** @var callable $callable */
+        $callable = [$handler, $actionMethod];
+
+        return call_user_func_array($callable, $params);
     }
 
     /**
@@ -79,7 +87,10 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      */
     public function getActiveTask(): TaskInterface
     {
-        return $this->activeHandler;
+        /** @var TaskInterface $activeHandler */
+        $activeHandler = $this->activeHandler;
+
+        return $activeHandler;
     }
 
     /**
@@ -87,15 +98,18 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
      */
     public function getLastTask(): TaskInterface
     {
-        return $this->lastHandler;
+        /** @var TaskInterface $lastHandler */
+        $lastHandler = $this->lastHandler;
+
+        return $lastHandler;
     }
 
     /**
      * Gets an option by its name or numeric index
      *
-     * @param int|string   $option
-     * @param array|string $filters
-     * @param mixed        $defaultValue
+     * @phpstan-param array-key $option
+     * @phpstan-param mixed     $filters
+     * @phpstan-param mixed     $defaultValue
      */
     public function getOption(
         mixed $option,
@@ -117,13 +131,19 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
             DispatcherException::EXCEPTION_NO_DI
         );
 
-        $filter = $this->container->getShared("filter");
+        /** @var DiInterface $container */
+        $container = $this->container;
+        /** @var FilterInterface $filter */
+        $filter = $container->getShared("filter");
+        /** @var array<array-key, mixed>|string $filters */
 
         return $filter->sanitize($optionValue, $filters);
     }
 
     /**
      * Get dispatched options
+     *
+     * @phpstan-return cli_options
      */
     public function getOptions(): array
     {
@@ -148,6 +168,8 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Check if an option exists
+     *
+     * @phpstan-param array-key $option
      */
     public function hasOption(mixed $option): bool
     {
@@ -164,6 +186,8 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
     /**
      * Set the options to be dispatched
+     *
+     * @phpstan-param cli_options $options
      */
     public function setOptions(array $options): void
     {

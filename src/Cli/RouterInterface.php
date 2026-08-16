@@ -14,23 +14,20 @@ declare(strict_types=1);
 namespace Phalcon\Cli;
 
 use Phalcon\Cli\Router\RouteInterface;
+use Phalcon\Contracts\Cli\CliTypes;
 
 /**
  * Interface for Phalcon\Cli\Router
  *
- * @psalm-type TDefaults array{
- *      module?: string,
- *      task?: string,
- *      action?: string,
- *      params?: string
- * }
+ * @phpstan-import-type cli_parameters from CliTypes
+ * @phpstan-import-type cli_router_defaults from CliTypes
  */
 interface RouterInterface
 {
     /**
      * Adds a route to the router on any HTTP method
      *
-     * @phpstan-param array|string|null $paths
+     * @phpstan-param mixed $paths
      */
     public function add(string $pattern, mixed $paths = null): RouteInterface;
 
@@ -58,6 +55,8 @@ interface RouterInterface
 
     /**
      * Returns processed extra params
+     *
+     * @phpstan-return cli_parameters
      */
     public function getParameters(): array;
 
@@ -65,6 +64,8 @@ interface RouterInterface
      * Returns processed extra params
      *
      * @deprecated Use getParameters() instead
+     *
+     * @phpstan-return cli_parameters
      */
     public function getParams(): array;
 
@@ -102,7 +103,9 @@ interface RouterInterface
      * so `wasMatched()` stays false and `getMatchedRoute()` returns null even
      * though routing succeeded.
      *
-     * @param array|string|null $arguments
+     * @phpstan-param mixed $arguments
+     *
+     * @return mixed
      */
     public function handle(mixed $arguments = null);
 
@@ -119,7 +122,7 @@ interface RouterInterface
     /**
      * Sets an array of default paths
      *
-     * @phpstan-param TDefaults $defaults
+     * @phpstan-param cli_router_defaults $defaults
      */
     public function setDefaults(array $defaults): RouterInterface;
 

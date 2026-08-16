@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Cli\Router;
 
+use Phalcon\Contracts\Cli\CliTypes;
+
 /**
  * Interface for Phalcon\Cli\Router\Route
  *
@@ -22,11 +24,16 @@ namespace Phalcon\Cli\Router;
  * implementable contract. The fluent route API used in practice -
  * `beforeMatch()`, `getBeforeMatch()`, `convert()`, and `getConverters()` - is
  * declared on the concrete `Route` class, not here.
+ *
+ * @phpstan-import-type cli_route_paths from CliTypes
+ * @phpstan-import-type cli_route_reversed_paths from CliTypes
  */
 interface RouteInterface
 {
     /**
      * Set the routing delimiter
+     *
+     * @return void
      */
     public static function delimiter(?string $delimiter = null);
 
@@ -64,6 +71,9 @@ interface RouteInterface
     /**
      * Returns the paths
      */
+    /**
+     * @phpstan-return cli_route_paths
+     */
     public function getPaths(): array;
 
     /**
@@ -73,6 +83,9 @@ interface RouteInterface
 
     /**
      * Returns the paths using positions as keys and names as values
+     */
+    /**
+     * @phpstan-return cli_route_reversed_paths
      */
     public function getReversedPaths(): array;
 
@@ -84,7 +97,7 @@ interface RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param array|string|null paths
+     * @phpstan-param mixed $paths
      *
      * @return void
      */

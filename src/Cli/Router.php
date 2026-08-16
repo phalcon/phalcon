@@ -17,6 +17,7 @@ use Phalcon\Cli\Router\Exceptions\BeforeMatchNotCallable;
 use Phalcon\Cli\Router\Exceptions\RouterArgumentsInvalidType;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
+use Phalcon\Contracts\Cli\CliTypes;
 use Phalcon\Di\AbstractInjectionAware;
 
 use function array_merge;
@@ -47,13 +48,19 @@ use function substr;
  *
  * echo $router->getTaskName();
  *```
- * @phpstan-import-type TDefaults from RouterInterface
+ * @phpstan-import-type cli_parameters from CliTypes
+ * @phpstan-import-type cli_route_paths from CliTypes
+ * @phpstan-import-type cli_router_defaults from CliTypes
+ * @phpstan-import-type cli_routes from CliTypes
  */
 class Router extends AbstractInjectionAware implements RouterInterface
 {
     protected string $action = "";
     protected string $defaultAction = "";
     protected string $defaultModule = "";
+    /**
+     * @phpstan-var cli_parameters
+     */
     protected array $defaultParams = [];
     protected string $defaultTask = "";
     protected ?RouteInterface $matchedRoute = null;
@@ -62,7 +69,13 @@ class Router extends AbstractInjectionAware implements RouterInterface
      */
     protected array $matches = [];
     protected string $module = "";
+    /**
+     * @phpstan-var cli_parameters
+     */
     protected array $parameters = [];
+    /**
+     * @phpstan-var cli_routes
+     */
     protected array $routes = [];
     protected string $task = "";
     protected bool $wasMatched = false;
@@ -100,7 +113,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * $router->add("/about", "About::main");
      *```
      *
-     * @phpstan-param array|string|null $paths
+     * @phpstan-param mixed $paths
      */
     public function add(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -146,6 +159,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
 
     /**
      * Returns processed extra params
+     *
+     * @phpstan-return cli_parameters
      */
     public function getParameters(): array
     {
@@ -156,6 +171,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * Returns processed extra params
      *
      * @deprecated Use {@see getParameters()} instead.
+     *
+     * @phpstan-return cli_parameters
      */
     public function getParams(): array
     {
@@ -188,7 +205,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
     /**
      * Returns all the routes defined in the router
      *
-     * @return Route[]
+     * @phpstan-return cli_routes
      */
     public function getRoutes(): array
     {
@@ -206,7 +223,9 @@ class Router extends AbstractInjectionAware implements RouterInterface
     /**
      * Handles routing information received from command-line arguments
      *
-     * @param array|string|null $arguments
+     * @phpstan-param mixed $arguments
+     *
+     * @return mixed
      */
     public function handle(mixed $arguments = null)
     {
@@ -350,6 +369,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
             $parts = $arguments;
         }
 
+        /** @phpstan-var cli_route_paths $parts */
+
         /**
          * Check for a module
          */
@@ -378,12 +399,21 @@ class Router extends AbstractInjectionAware implements RouterInterface
          * Check for parameters
          */
         if (isset($parts["params"])) {
+            /** @var mixed $params */
             $params = $parts["params"];
             if (!is_array($params)) {
-                $strParams = substr((string)$params, 1);
+                /** @var int|string $params */
+                $strParams = substr((string) $params, 1);
 
                 if ($strParams) {
-                    $params = explode(Route::getDelimiter(), $strParams);
+                    /**
+                     * A null or empty delimiter is a misconfiguration; it
+                     * fails the same way in the Zephir implementation.
+                     *
+                     * @var non-empty-string $delimiter
+                     */
+                    $delimiter = (string) Route::getDelimiter();
+                    $params    = explode($delimiter, $strParams);
                 } else {
                     $params = [];
                 }
@@ -398,9 +428,9 @@ class Router extends AbstractInjectionAware implements RouterInterface
             $params = $parts;
         }
 
-        $this->module     = $moduleName;
-        $this->task       = $taskName;
-        $this->action     = $actionName;
+        $this->module     = (string) $moduleName;
+        $this->task       = (string) $taskName;
+        $this->action     = (string) $actionName;
         $this->parameters = $params;
 
         return $this;
@@ -440,7 +470,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      * );
      *```
      *
-     * @param TDefaults $defaults
+     * @phpstan-param cli_router_defaults $defaults
      */
     public function setDefaults(array $defaults): static
     {

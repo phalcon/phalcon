@@ -14,11 +14,13 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Dispatcher\DispatcherTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as BaseDispatcher;
 use Phalcon\Dispatcher\Exception as DispatcherException;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Dispatcher\Exception;
 use Phalcon\Mvc\Dispatcher\Exceptions\ResponseServiceUnavailable;
 
@@ -41,6 +43,8 @@ use Phalcon\Mvc\Dispatcher\Exceptions\ResponseServiceUnavailable;
  *
  * $controller = $dispatcher->dispatch();
  *```
+ *
+ * @phpstan-import-type dispatcher_forward from DispatcherTypes
  */
 class Dispatcher extends BaseDispatcher implements DispatcherInterface
 {
@@ -118,7 +122,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      * );
      * ```
      *
-     * @param array $forward
+     * @phpstan-param dispatcher_forward $forward
      *
      * @return void
      * @throws EventsException
@@ -138,7 +142,10 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getActiveController(): ControllerInterface | null
     {
-        return $this->activeHandler;
+        /** @var ControllerInterface|null $activeHandler */
+        $activeHandler = $this->activeHandler;
+
+        return $activeHandler;
     }
 
     /**
@@ -169,7 +176,10 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     public function getLastController(): ControllerInterface | null
     {
-        return $this->lastHandler;
+        /** @var ControllerInterface|null $lastHandler */
+        $lastHandler = $this->lastHandler;
+
+        return $lastHandler;
     }
 
     /**
@@ -260,11 +270,10 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
             Exception::EXCEPTION_NO_DI
         );
 
-        if ($this->container instanceof DiInterface) {
-            $response = $this->container->getShared("response");
-        } else {
-            $response = $this->container->get("response");
-        }
+        /** @var DiInterface $container */
+        $container = $this->container;
+        /** @var ResponseInterface $response */
+        $response = $container->getShared("response");
 
         /**
          * Dispatcher exceptions automatically sends a 404 status

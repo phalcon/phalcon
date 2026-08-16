@@ -15,6 +15,7 @@ namespace Phalcon\Cli\Router;
 
 use Phalcon\Cli\Router\Exceptions\BeforeMatchNotCallable;
 use Phalcon\Cli\Router\Exceptions\InvalidRoutePaths;
+use Phalcon\Contracts\Cli\CliTypes;
 use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 
 use function array_flip;
@@ -34,6 +35,11 @@ use function substr;
 
 /**
  * This class represents every route added to the router
+ *
+ * @phpstan-import-type cli_route_converters from CliTypes
+ * @phpstan-import-type cli_route_extracted from CliTypes
+ * @phpstan-import-type cli_route_paths from CliTypes
+ * @phpstan-import-type cli_route_reversed_paths from CliTypes
  */
 class Route implements RouteInterface
 {
@@ -51,10 +57,16 @@ class Route implements RouteInterface
      */
     protected mixed $beforeMatch = null;
     protected string $compiledPattern = "";
+    /**
+     * @phpstan-var cli_route_converters
+     */
     protected array $converters = [];
     protected ?string $delimiter;
     protected string $description = "";
     protected string $name = "";
+    /**
+     * @phpstan-var cli_route_paths
+     */
     protected array $paths = [];
     protected string $pattern = "";
     protected string $routeId;
@@ -62,7 +74,7 @@ class Route implements RouteInterface
     /**
      * Constructor
      *
-     * @param array|string paths
+     * @phpstan-param mixed $paths
      */
     public function __construct(string $pattern, mixed $paths = null)
     {
@@ -138,18 +150,20 @@ class Route implements RouteInterface
      */
     public function compilePattern(string $pattern): string
     {
+        $delimiter = (string) $this->delimiter;
+
         // If a pattern contains ':', maybe there are placeholders to replace
         if (str_contains($pattern, ":")) {
             // This is a pattern for valid identifiers
-            $idPattern = $this->delimiter . "([a-zA-Z0-9\\_\\-]+)";
+            $idPattern = $delimiter . "([a-zA-Z0-9\\_\\-]+)";
             $map       = [
-                ":delimiter"                    => $this->delimiter,
-                $this->delimiter . ":module"    => $idPattern,
-                $this->delimiter . ":task"      => $idPattern,
-                $this->delimiter . ":namespace" => $idPattern,
-                $this->delimiter . ":action"    => $idPattern,
-                $this->delimiter . ":params"    => "(" . $this->delimiter . ".*)?",
-                $this->delimiter . ":int"       => $this->delimiter . "([0-9]+)",
+                ":delimiter"                 => $delimiter,
+                $delimiter . ":module"       => $idPattern,
+                $delimiter . ":task"         => $idPattern,
+                $delimiter . ":namespace"    => $idPattern,
+                $delimiter . ":action"       => $idPattern,
+                $delimiter . ":params"       => "(" . $delimiter . ".*)?",
+                $delimiter . ":int"          => $delimiter . "([0-9]+)",
             ];
 
             $pattern = str_replace(
@@ -185,6 +199,8 @@ class Route implements RouteInterface
 
     /**
      * Extracts parameters from a string
+     *
+     * @phpstan-return cli_route_extracted|false
      */
     public function extractNamedParams(string $pattern): array | bool
     {
@@ -347,6 +363,9 @@ class Route implements RouteInterface
     /**
      * Returns the router converter
      */
+    /**
+     * @phpstan-return cli_route_converters
+     */
     public function getConverters(): array
     {
         return $this->converters;
@@ -371,6 +390,9 @@ class Route implements RouteInterface
     /**
      * Returns the paths
      */
+    /**
+     * @phpstan-return cli_route_paths
+     */
     public function getPaths(): array
     {
         return $this->paths;
@@ -386,6 +408,9 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths using positions as keys and names as values
+     */
+    /**
+     * @phpstan-return cli_route_reversed_paths
      */
     public function getReversedPaths(): array
     {
@@ -403,7 +428,7 @@ class Route implements RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param array|string|null paths
+     * @phpstan-param mixed $paths
      */
     public function reConfigure(string $pattern, $paths = null): void
     {
@@ -494,7 +519,7 @@ class Route implements RouteInterface
                 /**
                  * The route has named parameters, so we need to extract them
                  */
-                /** @var array $extracted */
+                /** @phpstan-var cli_route_extracted $extracted */
                 $extracted   = $this->extractNamedParams($pattern);
                 $pcrePattern = $extracted[0];
                 $routePaths  = array_merge($routePaths, $extracted[1]);
@@ -511,7 +536,7 @@ class Route implements RouteInterface
             if (str_contains($pattern, ":delimiter")) {
                 $pattern = str_replace(
                     ":delimiter",
-                    $this->delimiter,
+                    (string) $this->delimiter,
                     $pattern
                 );
             }
@@ -532,6 +557,7 @@ class Route implements RouteInterface
         /**
          * Update the route's paths
          */
+        /** @phpstan-var cli_route_paths $routePaths */
         $this->paths = $routePaths;
     }
 
