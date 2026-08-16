@@ -80,6 +80,7 @@ use Phalcon\Http\RequestInterface;
  * RFC 9110 both leave path structure entirely to the origin server.
  *
  * @phpstan-import-type adr_action_params from ADRTypes
+ * @phpstan-import-type adr_located_route from ADRTypes
  * @phpstan-import-type adr_middleware_map from ADRTypes
  * @phpstan-import-type adr_middleware_names from ADRTypes
  * @phpstan-import-type adr_route_candidate from ADRTypes
@@ -357,7 +358,7 @@ final class Router implements RouterInterface
      * The first derived candidate whose class actually exists, together with
      * the segments the walk did not consume.
      *
-     * @phpstan-return array{0: class-string, 1: list<string>}|null
+     * @phpstan-return adr_located_route|null
      */
     protected function locate(string $method, string $path): ?array
     {

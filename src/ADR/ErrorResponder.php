@@ -36,6 +36,7 @@ use Throwable;
  * mapped to statuses deterministically: an exact class match first, then the
  * ancestor chain, so map ordering never matters.
  *
+ * @phpstan-import-type adr_error_details from ADRTypes
  * @phpstan-import-type adr_exception_map from ADRTypes
  */
 final class ErrorResponder
@@ -106,7 +107,7 @@ final class ErrorResponder
     }
 
     /**
-     * @return array{message: string, trace?: string, ref: string}
+     * @phpstan-return adr_error_details
      */
     protected function details(
         Throwable $exception,

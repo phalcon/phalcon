@@ -41,6 +41,7 @@ use Phalcon\Http\ResponseInterface;
  * (`AdrProvider`) registered. Type-hinted dependencies autowire; only scalar
  * parameters need to be declared via `define()`.
  *
+ * @phpstan-import-type adr_definition_params from ADRTypes
  * @phpstan-import-type adr_middleware_map from ADRTypes
  */
 final class Application implements ApplicationInterface
@@ -81,7 +82,7 @@ final class Application implements ApplicationInterface
      * (usually scalar) parameters are declared. Lazy values (e.g.
      * `new Phalcon\Container\Resolver\Lazy\Env(...)`) may be passed as values.
      *
-     * @param array<string, mixed> $parameters
+     * @phpstan-param adr_definition_params $parameters
      */
     public function define(string $className, array $parameters = []): static
     {

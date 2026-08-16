@@ -102,7 +102,7 @@ abstract class Select
             }
 
             $emptyText = $params["emptyText"] ?? "Choose...";
-            if (true === $params["emptyText"]) {
+            if (isset($params["emptyText"])) {
                 unset($params["emptyText"]);
             }
 
@@ -120,7 +120,7 @@ abstract class Select
                 throw new Exception("The 'using' parameter is required");
             }
 
-            if (!is_array($using) && is_string($using)) {
+            if (!is_array($using) && !is_object($using)) {
                 throw new Exception(
                     "The 'using' parameter should be an array"
                 );
@@ -140,7 +140,7 @@ abstract class Select
                 . self::OPTION_CLOSE . PHP_EOL;
         }
 
-        if ($options instanceof ResultsetInterface) {
+        if (is_object($options)) {
             /**
              * Create the SELECT's option from a resultset
              */

@@ -38,11 +38,24 @@ namespace Phalcon\Contracts\ADR;
  * @phpstan-type adr_route_attributes array<array-key, string>
  * @phpstan-type adr_filtered_attributes array<array-key, mixed>
  * @phpstan-type adr_route_candidate array{0: string, 1: list<string>}
+ * @phpstan-type adr_located_route array{0: class-string, 1: list<string>}
  * @phpstan-type adr_middleware_names list<class-string>
  * @phpstan-type adr_middleware_map array<string, adr_middleware_names>
  * @phpstan-type adr_exception_map array<string, string>
+ * @phpstan-type adr_error_details array{
+ *     message: string,
+ *     trace?: string,
+ *     ref: string,
+ * }
  * @phpstan-type adr_status_map array<string, int>
  * @phpstan-type adr_input_data array<array-key, mixed>
+ * @phpstan-type adr_view_data array{
+ *     extras: mixed,
+ *     result: mixed,
+ *     messages: mixed,
+ *     status: mixed,
+ * }
+ * @phpstan-type adr_definition_params array<string, mixed>
  * @phpstan-type adr_cors_config array{
  *     origins?: list<string>,
  *     methods?: list<string>,
@@ -50,6 +63,7 @@ namespace Phalcon\Contracts\ADR;
  *     credentials?: bool,
  *     maxAge?: int,
  * }
+ * @phpstan-type adr_allowed_methods array<int, string>
  */
 interface ADRTypes
 {

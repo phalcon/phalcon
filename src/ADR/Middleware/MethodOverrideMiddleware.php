@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Middleware;
 
+use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Handler;
 use Phalcon\Contracts\ADR\Middleware;
 use Phalcon\Contracts\Http\AttributeRequest;
@@ -37,11 +38,13 @@ use function strtoupper;
  *
  * The flag lives on `Phalcon\Http\Request`, not on the request contract, so a
  * request implementation that does not carry it is simply passed through.
+ *
+ * @phpstan-import-type adr_allowed_methods from ADRTypes
  */
 class MethodOverrideMiddleware implements Middleware
 {
     /**
-     * @var array<int, string>
+     * @phpstan-var adr_allowed_methods
      */
     protected array $allowed = ['DELETE', 'PATCH', 'PUT'];
 
