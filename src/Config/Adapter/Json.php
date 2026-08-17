@@ -15,13 +15,14 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exceptions\CannotLoadConfigFile;
+use Phalcon\Contracts\Config\ConfigTypes;
 use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Traits\Php\FileTrait;
 
 use function basename;
 
 /**
- * Reads JSON files and converts them to Phalcon\Config objects.
+ * Reads JSON files and converts them to Phalcon\Config\Config objects.
  *
  * Given the following configuration file:
  *
@@ -39,6 +40,8 @@ use function basename;
  * echo $config->phalcon->baseuri;
  * echo $config->models->metadata;
  *```
+ *
+ * @phpstan-import-type config_data from ConfigTypes
  */
 class Json extends Config
 {
@@ -46,8 +49,6 @@ class Json extends Config
 
     /**
      * Json constructor.
-     *
-     * @param string $filePath
      *
      * @throws CannotLoadConfigFile
      */
@@ -59,8 +60,9 @@ class Json extends Config
             throw new CannotLoadConfigFile(basename($filePath));
         }
 
-        parent::__construct(
-            (new Decode())->__invoke($content, true)
-        );
+        /** @var config_data $data */
+        $data = (new Decode())->__invoke($content, true);
+
+        parent::__construct($data);
     }
 }

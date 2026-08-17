@@ -21,7 +21,6 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\Exception as PhalconException;
 use Phalcon\Dispatcher\Exceptions\ForwardInInitializeForbidden;
 use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Filter\FilterInterface;
 use Phalcon\Mvc\Model\Binder;
@@ -74,7 +73,6 @@ use function str_ends_with;
  *
  * @phpstan-import-type dispatcher_bound_models from DispatcherTypes
  * @phpstan-import-type dispatcher_forward from DispatcherTypes
- * @phpstan-import-type dispatcher_handler_hooks from DispatcherTypes
  * @phpstan-import-type dispatcher_handler_hashes from DispatcherTypes
  * @phpstan-import-type dispatcher_hook_cache from DispatcherTypes
  * @phpstan-import-type dispatcher_method_map from DispatcherTypes

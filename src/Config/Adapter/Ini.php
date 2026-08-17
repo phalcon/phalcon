@@ -16,6 +16,7 @@ namespace Phalcon\Config\Adapter;
 use Phalcon\Config\Config;
 use Phalcon\Config\Exception;
 use Phalcon\Config\Exceptions\CannotLoadConfigFile;
+use Phalcon\Contracts\Config\ConfigTypes;
 use Phalcon\Traits\Php\IniTrait;
 
 use function basename;
@@ -29,7 +30,7 @@ use function substr;
 use const INI_SCANNER_RAW;
 
 /**
- * Reads ini files and converts them to Phalcon\Config objects.
+ * Reads ini files and converts them to Phalcon\Config\Config objects.
  *
  * Given the next configuration file:
  *
@@ -69,6 +70,8 @@ use const INI_SCANNER_RAW;
  *     INI_SCANNER_NORMAL
  * );
  * ```
+ *
+ * @phpstan-import-type config_data from ConfigTypes
  */
 class Ini extends Config
 {
@@ -130,8 +133,14 @@ class Ini extends Config
      *
      * @return array|float|int|mixed|string|null
      */
-    protected function cast($ini)
+    protected function cast(mixed $ini): mixed
     {
+        /**
+         * `parse_ini_file()` yields strings and nested arrays only; the mixed
+         * signature mirrors the untyped Zephir parameter.
+         *
+         * @var config_data|string $ini
+         */
         if (is_array($ini)) {
             return $this->castArray($ini);
         }
@@ -171,9 +180,9 @@ class Ini extends Config
     }
 
     /**
-     * @param array $ini
+     * @phpstan-param config_data $ini
      *
-     * @return array
+     * @phpstan-return config_data
      */
     protected function castArray(array $ini): array
     {
@@ -190,7 +199,7 @@ class Ini extends Config
      * @param string $path
      * @param mixed  $value
      *
-     * @return array
+     * @phpstan-return config_data
      */
     protected function parseIniString(string $path, $value): array
     {

@@ -15,12 +15,13 @@ namespace Phalcon\Config\Adapter;
 
 use Phalcon\Config\Config;
 use Phalcon\Config\Exceptions\CannotLoadConfigFile;
+use Phalcon\Contracts\Config\ConfigTypes;
 
 use function basename;
 use function is_file;
 
 /**
- * Reads php files and converts them to Phalcon\Config objects.
+ * Reads php files and converts them to Phalcon\Config\Config objects.
  *
  * Given the next configuration file:
  *
@@ -53,13 +54,13 @@ use function is_file;
  * echo $config->phalcon->controllersDir;
  * echo $config->database->username;
  *```
+ *
+ * @phpstan-import-type config_data from ConfigTypes
  */
 class Php extends Config
 {
     /**
      * Php constructor.
-     *
-     * @param string $filePath
      *
      * @throws CannotLoadConfigFile
      */
@@ -69,8 +70,9 @@ class Php extends Config
             throw new CannotLoadConfigFile(basename($filePath));
         }
 
-        parent::__construct(
-            require $filePath
-        );
+        /** @var config_data $data */
+        $data = require $filePath;
+
+        parent::__construct($data);
     }
 }

@@ -18,7 +18,6 @@ use Phalcon\Cli\Dispatcher\Exception as DispatcherException;
 use Phalcon\Contracts\Cli\CliTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
-use Phalcon\Filter\Exception as FilterException;
 use Phalcon\Filter\FilterInterface;
 
 use function array_merge;

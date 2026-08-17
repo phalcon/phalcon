@@ -23,7 +23,7 @@ use Phalcon\Traits\Php\YamlTrait;
 use function basename;
 
 /**
- * Reads YAML files and converts them to Phalcon\Config objects.
+ * Reads YAML files and converts them to Phalcon\Config\Config objects.
  *
  * Given the following configuration file:
  *

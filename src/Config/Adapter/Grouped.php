@@ -16,15 +16,15 @@ namespace Phalcon\Config\Adapter;
 use Phalcon\Config\Config;
 use Phalcon\Config\ConfigFactory;
 use Phalcon\Config\ConfigInterface;
-use Phalcon\Config\Exception;
 use Phalcon\Config\Exceptions\GroupedAdapterRequiresArray;
+use Phalcon\Contracts\Config\ConfigTypes;
 
 use function is_string;
 
 /**
  * Reads multiple files (or arrays) and merges them all together.
  *
- * See `Phalcon\Config\Factory::load` To load Config Adapter class using 'adapter' option.
+ * See `Phalcon\Config\ConfigFactory::load` To load Config Adapter class using 'adapter' option.
  *
  * ```php
  * use Phalcon\Config\Adapter\Grouped;
@@ -71,27 +71,29 @@ use function is_string;
  *     ],
  * );
  * ```
+ *
+ * @phpstan-import-type config_grouped_entries from ConfigTypes
+ * @phpstan-import-type config_options from ConfigTypes
  */
 class Grouped extends Config
 {
     /**
      * Grouped constructor.
      *
-     * @param array              $arrayConfig
+     * @phpstan-param config_grouped_entries $arrayConfig
+     *
      * @param string             $defaultAdapter
      * @param ConfigFactory|null $factory        Factory used to load file
      *                                           based fragments; a default
      *                                           one is created when not
      *                                           provided
-     *
-     * @throws Exception
      */
     public function __construct(
         array $arrayConfig,
         string $defaultAdapter = 'php',
         ConfigFactory | null $factory = null
     ) {
-        parent::__construct();
+        parent::__construct([]);
 
         $configFactory = $factory ?? new ConfigFactory();
 
@@ -100,11 +102,13 @@ class Grouped extends Config
 
             // Set to default adapter if passed as string
             if ($configName instanceof ConfigInterface) {
+                /** @var ConfigInterface $configInstance */
                 $this->merge($configInstance);
 
                 continue;
             }
 
+            /** @var config_options $configInstance */
             if (is_string($configName)) {
                 if ('' === $defaultAdapter) {
                     $this->merge(
@@ -129,13 +133,9 @@ class Grouped extends Config
 
                 $configArray    = $configInstance['config'];
                 $configInstance = new Config($configArray, $this->insensitive);
-
-                $this->merge($configInstance);
-
-                continue;
+            } else {
+                $configInstance = $configFactory->load($configInstance);
             }
-
-            $configInstance = $configFactory->load($configInstance);
 
             $this->merge($configInstance);
         }

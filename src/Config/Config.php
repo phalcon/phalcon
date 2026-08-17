@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Config;
 
+use Phalcon\Config\Exceptions\InvalidMergeData;
+use Phalcon\Contracts\Config\ConfigTypes;
 use Phalcon\Support\Collection;
 
 use function array_shift;
@@ -28,7 +30,7 @@ use function method_exists;
  * code.
  *
  *```php
- * $config = new \Phalcon\Config(
+ * $config = new \Phalcon\Config\Config(
  *     [
  *         "database" => [
  *             "adapter"  => "Mysql",
@@ -45,6 +47,10 @@ use function method_exists;
  *     ]
  * );
  *```
+ *
+ * @extends Collection<mixed>
+ *
+ * @phpstan-import-type config_data from ConfigTypes
  */
 class Config extends Collection implements ConfigInterface
 {
@@ -69,7 +75,7 @@ class Config extends Collection implements ConfigInterface
      * Merges a configuration into the current one
      *
      *```php
-     * $appConfig = new \Phalcon\Config(
+     * $appConfig = new \Phalcon\Config\Config(
      *     [
      *         "database" => [
      *             "host" => "localhost",
@@ -80,26 +86,26 @@ class Config extends Collection implements ConfigInterface
      * $globalConfig->merge($appConfig);
      *```
      *
-     * @param array|ConfigInterface $toMerge
+     * @phpstan-param config_data|ConfigInterface $toMerge
      *
      * @return ConfigInterface
      * @throws Exception
      */
-    public function merge(array | ConfigInterface $toMerge): ConfigInterface
+    public function merge(mixed $toMerge): ConfigInterface
     {
+        if (is_array($toMerge)) {
+            $target = $toMerge;
+        } elseif ($toMerge instanceof ConfigInterface) {
+            $target = $toMerge->toArray();
+        } else {
+            throw new InvalidMergeData();
+        }
+
         $source = $this->toArray();
 
         $this->clear();
 
-        if (is_array($toMerge)) {
-            $result = $this->internalMerge($source, $toMerge);
-
-            $this->init($result);
-
-            return $this;
-        }
-
-        $result = $this->internalMerge($source, $toMerge->toArray());
+        $result = $this->internalMerge($source, $target);
 
         $this->init($result);
 
@@ -123,7 +129,7 @@ class Config extends Collection implements ConfigInterface
         string $path,
         mixed $defaultValue = null,
         string | null $delimiter = null
-    ) {
+    ): mixed {
         if (true === $this->has($path)) {
             return $this->get($path);
         }
@@ -136,7 +142,12 @@ class Config extends Collection implements ConfigInterface
         $config = clone $this;
         $keys   = explode($delimiter, $path);
 
-        while ([] !== $keys) {
+        /**
+         * `explode()` always yields at least one key, and the `empty($keys)`
+         * test below returns before the list can run out. The loop therefore
+         * only leaves through a `break` or a `return`.
+         */
+        while (true) {
             $key = array_shift($keys);
 
             if (true !== $config->has($key)) {
@@ -147,6 +158,12 @@ class Config extends Collection implements ConfigInterface
                 return $config->get($key);
             }
 
+            /**
+             * A leaf value here means the path goes deeper than the data;
+             * it fails the same way in the Zephir implementation.
+             *
+             * @var ConfigInterface|null $config
+             */
             $config = $config->get($key);
 
             if (empty($config)) {
@@ -166,7 +183,7 @@ class Config extends Collection implements ConfigInterface
      */
     public function setPathDelimiter(string | null $delimiter = null): ConfigInterface
     {
-        $this->pathDelimiter = $delimiter;
+        $this->pathDelimiter = (string) $delimiter;
 
         return $this;
     }
@@ -259,6 +276,12 @@ class Config extends Collection implements ConfigInterface
      */
     protected function setData(mixed $element, mixed $value): void
     {
+        /**
+         * The mixed signature mirrors the untyped Zephir parameter; a
+         * collection key is always an int or a string.
+         *
+         * @var int|string $element
+         */
         if (!is_array($value)) {
             $this->validateType($value);
         }
@@ -275,10 +298,8 @@ class Config extends Collection implements ConfigInterface
                 $this->strictNull,
                 $this->type
             );
-
-            return;
+        } else {
+            $this->data[$element] = $value;
         }
-
-        $this->data[$element] = $value;
     }
 }
