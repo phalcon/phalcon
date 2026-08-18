@@ -24,6 +24,11 @@ use Phalcon\Messages\Message;
  * be at least min, and at most max.
  * Since Phalcon v4.0 this validator works like a container
  *
+ * The "includedMinimum" and "includedMaximum" options are true by
+ * default. Set an option to false to exclude that boundary. The two
+ * options are independent of each other. The "included" option sets
+ * the two boundaries together and has precedence.
+ *
  * ```php
  * use Phalcon\Filter\Validation;
  * use Phalcon\Filter\Validation\Validator\StringLength as StringLength;
@@ -89,11 +94,11 @@ class StringLength extends AbstractValidatorComposite
      *                       'min'             => 100,
      *                       'message'         => '',
      *                       'messageMinimum'  => '',
-     *                       'included'        => '',
-     *                       'includedMinimum' => false,
+     *                       'included'        => true,
+     *                       'includedMinimum' => true,
      *                       'max'             => 1000,
      *                       'messageMaximum'  => '',
-     *                       'includedMaximum' => false,
+     *                       'includedMaximum' => true,
      *                       ]
      */
     public function __construct(array $options = [])
@@ -101,28 +106,43 @@ class StringLength extends AbstractValidatorComposite
         $included = null;
         $message  = null;
 
+        /**
+         * The generic options apply to both validators. Read them before the
+         * loop, because each branch removes them from the options
+         */
+        $hasIncluded = isset($options["included"]);
+        $hasMessage  = isset($options["message"]);
+
+        if ($hasIncluded) {
+            $included = $options["included"];
+        }
+
+        if ($hasMessage) {
+            $message = $options["message"];
+        }
+
         // create individual validators
         foreach ($options as $key => $value) {
             if (strcasecmp($key, "min") === 0) {
                 // get custom message
-                if (isset($options["message"])) {
-                    $message = $options["message"];
-                } elseif (isset($options["messageMinimum"])) {
-                    $message = $options["messageMinimum"];
+                $messageMinimum = $message;
+
+                if (!$hasMessage && isset($options["messageMinimum"])) {
+                    $messageMinimum = $options["messageMinimum"];
                 }
 
                 // get included option
-                if (isset($options["included"])) {
-                    $included = $options["included"];
-                } elseif (isset($options["includedMinimum"])) {
-                    $included = $options["includedMinimum"];
+                $includedMinimum = $included;
+
+                if (!$hasIncluded && isset($options["includedMinimum"])) {
+                    $includedMinimum = $options["includedMinimum"];
                 }
 
                 $validator = new Min(
                     [
                         "min"      => $value,
-                        "message"  => $message,
-                        "included" => $included,
+                        "message"  => $messageMinimum,
+                        "included" => $includedMinimum,
                     ]
                 );
 
@@ -133,24 +153,24 @@ class StringLength extends AbstractValidatorComposite
                 unset($options["includedMinimum"]);
             } elseif (strcasecmp($key, "max") === 0) {
                 // get custom message
-                if (isset($options["message"])) {
-                    $message = $options["message"];
-                } elseif (isset($options["messageMaximum"])) {
-                    $message = $options["messageMaximum"];
+                $messageMaximum = $message;
+
+                if (!$hasMessage && isset($options["messageMaximum"])) {
+                    $messageMaximum = $options["messageMaximum"];
                 }
 
                 // get included option
-                if (isset($options["included"])) {
-                    $included = $options["included"];
-                } elseif (isset($options["includedMaximum"])) {
-                    $included = $options["includedMaximum"];
+                $includedMaximum = $included;
+
+                if (!$hasIncluded && isset($options["includedMaximum"])) {
+                    $includedMaximum = $options["includedMaximum"];
                 }
 
                 $validator = new Max(
                     [
                         "max"      => $value,
-                        "message"  => $message,
-                        "included" => $included,
+                        "message"  => $messageMaximum,
+                        "included" => $includedMaximum,
                     ]
                 );
 

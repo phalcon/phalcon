@@ -27,6 +27,11 @@ use function strlen;
  * The test is passed if for a string's length L, L<=max, i.e. L must
  * be at most max.
  *
+ * The "included" option is true by default. Set the option to false
+ * for L<max, i.e. L must be less than max. The "includedMaximum" option
+ * is an alias of "included". If you set the two options, "included" has
+ * precedence.
+ *
  * ```php
  * use Phalcon\Filter\Validation;
  * use Phalcon\Filter\Validation\Validator\StringLength\Max;
@@ -115,7 +120,18 @@ class Max extends AbstractValidator
             $maximum = $maximum[$field];
         }
 
-        $included = $this->getOption("included");
+        /**
+         * "includedMaximum" is an alias of "included". The maximum is
+         * inclusive if no option is set. hasOption() uses isset(), thus a
+         * null value also counts as not set
+         */
+        $included = true;
+
+        if ($this->hasOption("included")) {
+            $included = $this->getOption("included");
+        } elseif ($this->hasOption("includedMaximum")) {
+            $included = $this->getOption("includedMaximum");
+        }
 
         if (is_array($included)) {
             $included = (bool)$included[$field];

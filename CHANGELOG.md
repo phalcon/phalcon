@@ -2,6 +2,26 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
+## [6.0.0 beta 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta7) (2026-xx-xx)
+
+### Changed
+
+- Changed `Phalcon\Filter\Validation\Validator\Callback` to stop binding the callback closure to the validator; to set the message from inside the callback ([#17255](https://github.com/phalcon/cphalcon/issues/17255)), declare a second parameter and call `$validator->setTemplate()` instead of `$this->setTemplate()` [#17499](https://github.com/phalcon/cphalcon/issues/17499) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- Changed `Phalcon\Filter\Validation\Validator\StringLength`, `Phalcon\Filter\Validation\Validator\StringLength\Min` and `Phalcon\Filter\Validation\Validator\StringLength\Max` to treat `min` and `max` as inclusive when the `included` option is not set, matching the class documentation and the behavior before 5.7.0; set `included` to `false` for exclusive boundaries [#17503](https://github.com/phalcon/cphalcon/issues/17503) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+
+### Added
+
+- Added `includedMinimum` and `includedMaximum` as aliases of the `included` option in `Phalcon\Filter\Validation\Validator\StringLength\Min` and `Phalcon\Filter\Validation\Validator\StringLength\Max`, so the option names of the `StringLength` container also work on the two validators directly. `included` has precedence if you set both [#17503](https://github.com/phalcon/cphalcon/issues/17503) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+
+### Fixed
+
+- Fixed `Phalcon\Filter\Validation\Validator\Callback` rebinding `$this` in callback closures; the validator is now passed as a second argument to closures that declare one [#17499](https://github.com/phalcon/cphalcon/issues/17499) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- Fixed `Phalcon\Filter\Validation\Validator\StringLength\Min` and `Phalcon\Filter\Validation\Validator\StringLength\Max` rejecting a string with a length exactly equal to `min` or `max` when the `included` option was not set, a regression introduced in 5.7.0 [#17503](https://github.com/phalcon/cphalcon/issues/17503) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- Fixed `Phalcon\Filter\Validation\Validator\StringLength` giving the `includedMinimum`/`includedMaximum` and `messageMinimum`/`messageMaximum` option of one boundary to the validator of the other boundary [#17503](https://github.com/phalcon/cphalcon/issues/17503) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+
+### Removed
+
+
 ## [6.0.0 beta 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta6) (2026-08-02)
 
 ### Changed
@@ -96,7 +116,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ## [6.0.0 beta 1](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta1) (2026-07-24)
 
-### Changed 
+### Changed
 
 - Changed `Phalcon\Mvc\Model::getRelated()` and `Phalcon\Mvc\Model::isRelationshipLoaded()` to test the relation cache with `array_key_exists()` instead of `isset()`, so a to-one relation that resolves to no record is no longer re-queried on every access [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
 - Changed `Phalcon\Mvc\Model\Manager::mergeFindParameters()` from `final protected` to `final public static` [#17331](https://github.com/phalcon/cphalcon/issues/17331)
