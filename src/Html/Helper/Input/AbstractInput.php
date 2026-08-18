@@ -80,7 +80,7 @@ abstract class AbstractInput extends AbstractHelper
     public function __toString()
     {
         $closeTag = '';
-        if ($this->doctype->getType() > Doctype::HTML5) {
+        if (null !== $this->doctype && $this->doctype->getType() > Doctype::HTML5) {
             $closeTag = '/';
         }
 
