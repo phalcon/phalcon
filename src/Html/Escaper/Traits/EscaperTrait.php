@@ -99,18 +99,17 @@ trait EscaperTrait
     /**
      * Normalizes a string's encoding to UTF-32, used by the CSS and JS
      * escapers before invoking the escape routines.
-     *
-     * @param string $input
-     *
-     * @return string
      */
     final public function normalizeEncoding(string $input): string
     {
-        return mb_convert_encoding(
+        /** @phpstan-var string $converted */
+        $converted = mb_convert_encoding(
             $input,
             'UTF-32',
             $this->detectEncoding($input)
         );
+
+        return $converted;
     }
 
     /**

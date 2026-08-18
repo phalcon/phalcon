@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 use Phalcon\Contracts\Html\Helper\Input\SelectData;
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Helper\AbstractList;
 
 use function is_array;
@@ -25,6 +26,9 @@ use function is_numeric;
 
 /**
  * Class Select
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_select_attributes from HtmlTypes
  *
  * @property string $elementTag
  * @property bool   $inOptGroup
@@ -56,12 +60,7 @@ class Select extends AbstractList
     /**
      * Add an element to the list
      *
-     * @param string      $text
-     * @param string|null $value
-     * @param array       $attributes
-     * @param bool        $raw
-     *
-     * @return Select
+     * @phpstan-param html_attributes $attributes
      */
     public function add(
         string $text,
@@ -88,12 +87,7 @@ class Select extends AbstractList
     /**
      * Add a placeholder to the element
      *
-     * @param string      $text
-     * @param string|null $value
-     * @param array       $attributes
-     * @param bool        $raw
-     *
-     * @return static
+     * @phpstan-param html_attributes $attributes
      */
     public function addPlaceholder(
         string $text,
@@ -125,9 +119,6 @@ class Select extends AbstractList
      * Flat entries: key = option value, value = label string.
      * Optgroup entries: key = group label, value = [value => label] array.
      *
-     * @param SelectData $data
-     *
-     * @return Select
      */
     public function fromData(SelectData $data): static
     {
@@ -155,10 +146,7 @@ class Select extends AbstractList
     /**
      * Creates an option group
      *
-     * @param string|null $label
-     * @param array       $attributes
-     *
-     * @return Select
+     * @phpstan-param html_attributes $attributes
      */
     public function optGroup(
         string | null $label = null,
@@ -193,9 +181,6 @@ class Select extends AbstractList
      * as `<option value="" disabled selected>$text</option>`, matching the
      * common HTML idiom for "Choose..."-style prompts.
      *
-     * @param string $text
-     *
-     * @return Select
      */
     public function placeholder(string $text): static
     {
@@ -217,11 +202,6 @@ class Select extends AbstractList
         return $this;
     }
 
-    /**
-     * @param string $selected
-     *
-     * @return Select
-     */
     public function selected(string $selected): static
     {
         $this->selected = $selected;
@@ -234,10 +214,6 @@ class Select extends AbstractList
      * the previously stored `selected` value. Defaults to loose (`==`),
      * matching the round-tripping fix in `AbstractChecked` so mixed
      * int/string form data marks the right option as selected.
-     *
-     * @param bool $flag
-     *
-     * @return Select
      */
     public function strict(bool $flag = true): static
     {
@@ -263,10 +239,7 @@ class Select extends AbstractList
     }
 
     /**
-     * @param string $label
-     * @param array  $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     protected function optGroupStart(string $label, array $attributes): string
     {
@@ -279,10 +252,9 @@ class Select extends AbstractList
      * Checks if the value has been passed and if it is the same as the
      * value stored in the object
      *
-     * @param array       $attributes
-     * @param string|null $value
+     * @phpstan-param html_attributes $attributes
      *
-     * @return array
+     * @phpstan-return html_attributes
      */
     private function processValue(
         array $attributes,

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Helper\AbstractHelper;
 use Phalcon\Html\Helper\Doctype;
 
@@ -25,14 +26,17 @@ use function array_merge;
 /**
  * Class AbstractInput
  *
- * @property array  $attributes
+ * @phpstan-import-type html_attributes from HtmlTypes
+ *
+ * @phpstan-property html_attributes $attributes
+ *
  * @property string $type
  * @property string $value
  */
 abstract class AbstractInput extends AbstractHelper
 {
     /**
-     * @var array
+     * @phpstan-var html_attributes
      */
     protected array $attributes = [];
     /**
@@ -43,7 +47,7 @@ abstract class AbstractInput extends AbstractHelper
     /**
      * @param string      $name
      * @param string|null $value
-     * @param array       $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return static
      */
@@ -93,10 +97,6 @@ abstract class AbstractInput extends AbstractHelper
 
     /**
      * Sets the value of the element
-     *
-     * @param string|null $value
-     *
-     * @return AbstractInput
      */
     public function setValue(string | null $value = null): static
     {

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Helper\AbstractHelper;
 
 use function array_merge;
@@ -39,6 +40,10 @@ use const PHP_EOL;
  * The $checked parameter is resolved by the concrete subclass:
  *   - CheckboxGroup compares against an array of selected values
  *   - RadioGroup compares against a single scalar value
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_group_definition from HtmlTypes
+ * @phpstan-import-type html_group_options from HtmlTypes
  */
 abstract class AbstractGroup extends AbstractHelper
 {
@@ -53,12 +58,12 @@ abstract class AbstractGroup extends AbstractHelper
     protected string $name = '';
 
     /**
-     * @var array
+     * @phpstan-var html_group_options
      */
     protected array $options = [];
 
     /**
-     * @var array
+     * @phpstan-var html_attributes
      */
     protected array $sharedAttributes = [];
 
@@ -68,12 +73,8 @@ abstract class AbstractGroup extends AbstractHelper
     protected string $type = 'checkbox';
 
     /**
-     * @param string               $name
-     * @param array<string, mixed> $options
-     * @param mixed                $checked
-     * @param array<string, mixed> $attributes
-     *
-     * @return static
+     * @phpstan-param html_group_options $options
+     * @phpstan-param html_attributes     $attributes
      */
     public function __invoke(
         string $name,
@@ -103,7 +104,7 @@ abstract class AbstractGroup extends AbstractHelper
                 continue;
             }
 
-            /** @var array<string, mixed>|string $definition */
+            /** @phpstan-var html_group_definition $definition */
             $lines[] = $this->renderItem((string) $value, $definition);
         }
 
@@ -126,10 +127,7 @@ abstract class AbstractGroup extends AbstractHelper
     /**
      * Renders a single input + optional label pair.
      *
-     * @param string       $value
-     * @param array<string, mixed>|string $definition
-     *
-     * @return string
+     * @phpstan-param html_group_definition $definition
      */
     protected function renderItem(string $value, array | string $definition): string
     {

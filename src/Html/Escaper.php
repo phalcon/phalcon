@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\AttributeEscaper;
 use Phalcon\Html\Escaper\CssEscaper;
 use Phalcon\Html\Escaper\EscaperInterface;
@@ -51,6 +52,8 @@ use const ENT_SUBSTITUTE;
  *
  * echo $escaped; // font\2D family\3A \20 \3C Verdana\3E
  *```
+ *
+ * @phpstan-import-type html_escaper_input from HtmlTypes
  *
  * @property AttributeEscaper $attributeEscaper
  * @property CssEscaper       $cssEscaper
@@ -120,9 +123,7 @@ class Escaper implements EscaperInterface
     /**
      * Escapes a HTML attribute string or array. Delegates to `AttributeEscaper`.
      *
-     * @param array|string|null $input
-     *
-     * @return string
+     * @phpstan-param html_escaper_input $input
      */
     public function attributes(mixed $input = null): string
     {
@@ -311,8 +312,6 @@ class Escaper implements EscaperInterface
 
     /**
      * @param AttributeEscaper $escaper
-     *
-     * @return Escaper
      */
     public function setAttributeEscaper(AttributeEscaper $escaper): static
     {
@@ -323,8 +322,6 @@ class Escaper implements EscaperInterface
 
     /**
      * @param CssEscaper $escaper
-     *
-     * @return Escaper
      */
     public function setCssEscaper(CssEscaper $escaper): static
     {
@@ -341,8 +338,6 @@ class Escaper implements EscaperInterface
      *```
      *
      * @param bool $doubleEncode
-     *
-     * @return Escaper
      */
     public function setDoubleEncode(bool $doubleEncode): static
     {
@@ -363,8 +358,6 @@ class Escaper implements EscaperInterface
      *```
      *
      * @param string $encoding
-     *
-     * @return EscaperInterface
      */
     public function setEncoding(string $encoding): static
     {
@@ -385,8 +378,6 @@ class Escaper implements EscaperInterface
      *```
      *
      * @param int $flags
-     *
-     * @return EscaperInterface
      */
     public function setFlags(int $flags): static
     {
@@ -401,8 +392,6 @@ class Escaper implements EscaperInterface
 
     /**
      * @param HtmlEscaper $escaper
-     *
-     * @return Escaper
      */
     public function setHtmlEscaper(HtmlEscaper $escaper): static
     {
@@ -420,8 +409,6 @@ class Escaper implements EscaperInterface
      *
      * @param int $flags
      *
-     * @return EscaperInterface
-     *
      * @deprecated
      */
     public function setHtmlQuoteType(int $flags): static
@@ -431,8 +418,6 @@ class Escaper implements EscaperInterface
 
     /**
      * @param JsEscaper $escaper
-     *
-     * @return Escaper
      */
     public function setJsEscaper(JsEscaper $escaper): static
     {
@@ -443,8 +428,6 @@ class Escaper implements EscaperInterface
 
     /**
      * @param UrlEscaper $escaper
-     *
-     * @return Escaper
      */
     public function setUrlEscaper(UrlEscaper $escaper): static
     {

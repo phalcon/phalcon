@@ -11,8 +11,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 /**
  * Class Base
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Base extends AbstractHelper
 {
@@ -20,7 +24,7 @@ class Base extends AbstractHelper
      * Produce a `<base/>` tag.
      *
      * @param string|null $href
-     * @param array       $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return string
      */

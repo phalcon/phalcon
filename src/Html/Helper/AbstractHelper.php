@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 
 use function array_intersect_key;
@@ -30,6 +31,9 @@ use function trim;
 use const PHP_EOL;
 
 /**
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_element_store from HtmlTypes
+ *
  * @property string           $delimiter
  * @property EscaperInterface $escaper
  * @property string           $indent
@@ -93,11 +97,9 @@ abstract class AbstractHelper
      * removing any existing entry for that key. This guarantees the
      * attribute is always present and appears first in the rendered output.
      *
-     * @param string $key
-     * @param string $value
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      *
-     * @return array
+     * @phpstan-return html_attributes
      */
     protected function injectAttribute(
         string $key,
@@ -112,10 +114,10 @@ abstract class AbstractHelper
     /**
      * Keeps all the attributes sorted - same order all the time
      *
-     * @param array $overrides
-     * @param array $attributes
+     * @phpstan-param html_attributes $overrides
+     * @phpstan-param html_attributes $attributes
      *
-     * @return array
+     * @phpstan-return html_attributes
      */
     protected function orderAttributes(
         array $overrides,
@@ -150,10 +152,7 @@ abstract class AbstractHelper
      * Traverses an array and calls the method defined in the first element
      * with attributes as the second, returning the resulting string
      *
-     * @param array  $elements
-     * @param string $delimiter
-     *
-     * @return string
+     * @phpstan-param html_element_store $elements
      */
     protected function renderArrayElements(
         array $elements,
@@ -172,9 +171,7 @@ abstract class AbstractHelper
     /**
      * Renders all the attributes
      *
-     * @param array $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     protected function renderAttributes(array $attributes): string
     {
@@ -198,10 +195,7 @@ abstract class AbstractHelper
     /**
      * Renders an element
      *
-     * @param string $tag
-     * @param array  $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     protected function renderElement(
         string $tag,
@@ -213,12 +207,7 @@ abstract class AbstractHelper
     /**
      * Renders an element
      *
-     * @param string $tag
-     * @param string $text
-     * @param array  $attributes
-     * @param bool   $raw
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     protected function renderFullElement(
         string $tag,
@@ -236,11 +225,7 @@ abstract class AbstractHelper
     /**
      * Renders a tag
      *
-     * @param string $tag
-     * @param array  $attributes
-     * @param string $close
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     protected function renderTag(
         string $tag,
@@ -261,10 +246,7 @@ abstract class AbstractHelper
     /**
      * Produces a self close tag i.e. <img />
      *
-     * @param string $tag
-     * @param array  $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     protected function selfClose(string $tag, array $attributes = []): string
     {

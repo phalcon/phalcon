@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Helper\Doctype;
 
@@ -35,15 +36,23 @@ use function strtolower;
  * mixed int/string form input round-trips correctly (e.g. `value=0` against
  * `checked="0"`). Strict (`===`) matching is available via `strict(true)`.
  *
- * @property array $label
- * @property bool  $strict
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_checked_label from HtmlTypes
+ *
+ * @phpstan-property html_checked_label $label
+ *
+ * @property bool $strict
  */
 abstract class AbstractChecked extends AbstractInput
 {
     /**
-     * @var array
+     * @phpstan-var html_checked_label
      */
-    protected array $label = [];
+    protected array $label = [
+        'start' => '',
+        'text'  => '',
+        'end'   => '',
+    ];
 
     /**
      * @var bool
@@ -59,12 +68,6 @@ abstract class AbstractChecked extends AbstractInput
         ?Doctype $doctype = null
     ) {
         parent::__construct($escaper, $doctype);
-
-        $this->label = [
-            'start' => '',
-            'text'  => '',
-            'end'   => '',
-        ];
     }
 
     /**
@@ -100,7 +103,7 @@ abstract class AbstractChecked extends AbstractInput
      * pseudo-attribute, if present, becomes the label text and is stripped
      * from the rendered attributes.
      *
-     * @param array $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return static
      */

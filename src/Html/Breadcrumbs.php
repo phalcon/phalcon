@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 use function array_keys;
 use function end;
 use function implode;
@@ -29,7 +31,10 @@ use function str_replace;
  * The resulting HTML when calling `render()` will have each breadcrumb enclosed
  * in `<dt>` tags, while the whole string is enclosed in `<dl>` tags.
  *
- * @property array  $elements
+ * @phpstan-import-type html_breadcrumb_elements from HtmlTypes
+ *
+ * @phpstan-property html_breadcrumb_elements $elements
+ *
  * @property string $separator
  * @property string $template
  *
@@ -41,7 +46,7 @@ class Breadcrumbs
     /**
      * Keeps all the breadcrumbs
      *
-     * @var array
+     * @phpstan-var html_breadcrumb_elements
      */
     private array $elements = [];
 
@@ -74,10 +79,6 @@ class Breadcrumbs
      * the same link - including two link-less crumbs, which share the empty
      * string key - keeps only the last one.
      *
-     * @param string $label
-     * @param string $link
-     *
-     * @return Breadcrumbs
      */
     public function add(string $label, string $link = ''): static
     {
@@ -194,10 +195,6 @@ class Breadcrumbs
 
     /**
      * Set the separator
-     *
-     * @param string $separator
-     *
-     * @return Breadcrumbs
      */
     public function setSeparator(string $separator): static
     {
@@ -209,7 +206,7 @@ class Breadcrumbs
     /**
      * Returns the internal breadcrumbs array
      *
-     * @return array
+     * @phpstan-return html_breadcrumb_elements
      */
     public function toArray(): array
     {

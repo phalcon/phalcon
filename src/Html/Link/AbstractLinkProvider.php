@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Contracts\Html\Link\LinkTypes;
 use Phalcon\Html\Link\Interfaces\LinkInterface;
 
 use function in_array;
@@ -20,19 +21,25 @@ use function is_a;
 use function spl_object_hash;
 
 /**
- * @property array $links
+ * @phpstan-import-type link_collection from LinkTypes
+ * @phpstan-import-type link_list from LinkTypes
+ *
+ * @phpstan-property link_collection $links
  */
 abstract class AbstractLinkProvider
 {
     /**
-     * @var array
+     * @phpstan-var link_collection
      */
     protected array $links = [];
 
     /**
      * LinkProvider constructor.
      *
-     * @param array $links
+     * The guard keeps foreign objects out of the collection. It stays live in
+     * the Zephir implementation, where the array is untyped.
+     *
+     * @phpstan-param array<array-key, object> $links
      */
     public function __construct(array $links = [])
     {
@@ -41,6 +48,7 @@ abstract class AbstractLinkProvider
                 is_a($link, LinkInterface::class) ||
                 is_a($link, "Psr\\Link\\LinkInterface")
             ) {
+                /** @phpstan-var LinkInterface $link */
                 $this->links[$this->getKey($link)] = $link;
             }
         }
@@ -52,7 +60,7 @@ abstract class AbstractLinkProvider
      * The iterable may be an array or any PHP \Traversable object. If no links
      * are available, an empty array or \Traversable MUST be returned.
      *
-     * @return array
+     * @phpstan-return link_collection
      */
     protected function doGetLinks(): array
     {
@@ -67,9 +75,7 @@ abstract class AbstractLinkProvider
      * with that relationship are available, an empty array or \Traversable
      * MUST be returned.
      *
-     * @param string $rel
-     *
-     * @return array
+     * @phpstan-return link_list
      */
     protected function doGetLinksByRel(string $rel): array
     {
@@ -91,10 +97,7 @@ abstract class AbstractLinkProvider
      * normally without errors. The link is present if $link is === identical
      * to a link object already in the collection.
      *
-     * @param mixed $link A link object that should be included in this
-     *                    collection.
-     *
-     * @return $this
+     * @phpstan-param LinkInterface $link
      */
     protected function doWithLink(mixed $link): static
     {
@@ -113,9 +116,7 @@ abstract class AbstractLinkProvider
      * without errors. The link is present if $link is === identical to a link
      * object already in the collection.
      *
-     * @param mixed $link The link to remove.
-     *
-     * @return $this
+     * @phpstan-param LinkInterface $link
      */
     protected function doWithoutLink(mixed $link): static
     {
@@ -130,9 +131,7 @@ abstract class AbstractLinkProvider
     /**
      * Returns the object hash key
      *
-     * @param mixed $link
-     *
-     * @return string
+     * @phpstan-param object $link
      */
     protected function getKey(mixed $link): string
     {

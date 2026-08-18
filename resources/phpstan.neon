@@ -58,3 +58,42 @@ parameters:
             message: "#Call to function is_array\\(\\) with array<mixed> will always evaluate to true#"
             path: ../src/Config/ConfigFactory.php
             reportUnmatched: false
+        # `Attributes` is a Collection users populate freely, so a value stays
+        # `mixed` after the array/resource guards that raise
+        # AttributeNotRenderable. `AttributeEscaper::escape()` takes `mixed`
+        # natively; only the documented shape looks narrower.
+        -
+            message: "#Parameter \\#1 \\$input of method Phalcon\\\\Html\\\\Escaper\\\\AttributeEscaper::escape\\(\\) expects .*, mixed given#"
+            path: ../src/Html/Attributes.php
+            reportUnmatched: false
+        # `renderArrayElements()` dispatches by method name into the concrete
+        # helper, so the callable and its return type are only known at run
+        # time. The names come from `AbstractSeries::$store`, whose entries
+        # each name a render method the subclass provides.
+        -
+            message: "#(Binary operation \"\\.\" between string and mixed results in an error|Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\): mixed, array\\{\\$this\\(Phalcon\\\\Html\\\\Helper\\\\AbstractHelper\\), string\\} given)#"
+            path: ../src/Html/Helper/AbstractHelper.php
+            reportUnmatched: false
+        # `EscaperInterface::attributes()` still declares `string` while the
+        # `Escaper` implementation it always resolves to takes `mixed`. Its own
+        # docblock records that the widened signature lands in the next major.
+        # Until then a bool or numeric attribute value is valid at run time.
+        -
+            message: "#Parameter \\#1 \\$input of method Phalcon\\\\Html\\\\Escaper\\\\EscaperInterface::attributes\\(\\) expects string, .* given#"
+            path: ../src/Html/Helper/AbstractHelper.php
+            reportUnmatched: false
+        # The two group entries in the `@method` block already sit at the
+        # 120-character limit with a bare `array`, so no value type - aliased
+        # or spelled out - fits, and PHPStan cannot parse a wrapped `@method`
+        # signature. The 45 other entries carry their shapes.
+        -
+            message: "#PHPDoc tag @method for method input(Checkbox|Radio)Group\\(\\) parameter \\#\\d+ \\$\\w+ with no value type specified in iterable type array#"
+            path: ../src/Html/TagFactory.php
+            reportUnmatched: false
+        # `newInstance()` is a service locator returning `object`. Every helper
+        # it builds is invokable, but the registry is keyed by service name, so
+        # the `__invoke()` on the resolved instance cannot be proven statically.
+        -
+            message: "#Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\): mixed, array\\{object, '__invoke'\\} given#"
+            path: ../src/Html/TagFactory.php
+            reportUnmatched: false

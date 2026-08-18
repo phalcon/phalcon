@@ -17,10 +17,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 use function array_merge;
 
 /**
  * Class Script
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Script extends AbstractSeries
 {
@@ -28,7 +32,7 @@ class Script extends AbstractSeries
      * Add an element to the list
      *
      * @param string $href
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      * @param int    $position
      *
      * @return static
@@ -67,7 +71,7 @@ class Script extends AbstractSeries
      * attributes supplied are placed on the wrapping tag. The script body
      * is treated as raw HTML (it is JavaScript, not user-supplied text).
      *
-     * @param array $attributes
+     * @phpstan-param html_attributes $attributes
      * @param int   $position
      *
      * @return static
@@ -96,10 +100,9 @@ class Script extends AbstractSeries
     /**
      * Returns the necessary attributes
      *
-     * @param string $src
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      *
-     * @return array
+     * @phpstan-return html_attributes
      */
     protected function getAttributes(string $src, array $attributes): array
     {

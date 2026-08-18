@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
@@ -27,6 +28,8 @@ use function array_merge;
 /**
  * Generates a <link rel="preload"> tag for resource hinting.
  * If a ResponseInterface is provided, also sets the HTTP Link header.
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Preload extends AbstractHelper
 {
@@ -44,7 +47,7 @@ class Preload extends AbstractHelper
     /**
      * @param string $href
      * @param string $type
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return string
      */

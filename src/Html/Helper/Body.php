@@ -17,15 +17,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 /**
  * Class Body
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Body extends AbstractHelper
 {
     /**
      * Produce a `<body>` tag.
      *
-     * @param array $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return string
      */

@@ -17,10 +17,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 use function array_merge;
 
 /**
  * Creates <link> tags
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Link extends Style
 {
@@ -28,7 +32,7 @@ class Link extends Style
      * Add an element to the list
      *
      * @param string $href
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      * @param int    $position
      *
      * @return static
@@ -54,10 +58,9 @@ class Link extends Style
     /**
      * Returns the necessary attributes
      *
-     * @param string                $href
-     * @param array<string, string> $attributes
+     * @phpstan-param html_attributes $attributes
      *
-     * @return array<string, string>
+     * @phpstan-return html_attributes
      */
     protected function getAttributes(string $href, array $attributes): array
     {

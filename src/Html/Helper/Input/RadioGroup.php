@@ -32,10 +32,6 @@ class RadioGroup extends AbstractGroup
 
     /**
      * Returns true when $value loosely equals the checked scalar.
-     *
-     * @param string $value
-     *
-     * @return bool
      */
     protected function isChecked(string $value): bool
     {
@@ -43,6 +39,9 @@ class RadioGroup extends AbstractGroup
             return false;
         }
 
-        return (string) $this->checked === $value;
+        /** @phpstan-var scalar $checked */
+        $checked = $this->checked;
+
+        return (string) $checked === $value;
     }
 }

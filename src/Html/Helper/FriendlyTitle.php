@@ -43,12 +43,7 @@ class FriendlyTitle extends AbstractHelper
     }
 
     /**
-     * @param string       $text
-     * @param string       $separator
-     * @param bool         $lowercase
-     * @param mixed|null   $replace
-     *
-     * @return string
+     * @phpstan-param array<array-key, string>|string|null $replace
      */
     public function __invoke(
         string $text,

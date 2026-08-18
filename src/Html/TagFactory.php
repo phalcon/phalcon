@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Phalcon\Html;
 
 use Closure;
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Html\Exceptions\ServiceNotRegistered;
 use Phalcon\Html\Helper\Anchor;
@@ -66,70 +67,75 @@ use function call_user_func_array;
  * so each entry in the @method block below describes the result of calling
  * `$factory->serviceName(...)` rather than `newInstance("serviceName")`.
  *
- * @method string        a(string $href, string $text, array $attributes = [], bool $raw = false)
- * @method string        aRaw(string $href, string $text, array $attributes = [])
- * @method string        base(string $href, array $attributes = [])
- * @method string        body(array $attributes = [])
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_group_options from HtmlTypes
+ * @phpstan-import-type html_factory_instances from HtmlTypes
+ * @phpstan-import-type html_factory_services from HtmlTypes
+ *
+ * @method string        a(string $href, string $text, html_attributes $attributes = [], bool $raw = false)
+ * @method string        aRaw(string $href, string $text, html_attributes $attributes = [])
+ * @method string        base(string $href, html_attributes $attributes = [])
+ * @method string        body(html_attributes $attributes = [])
  * @method Breadcrumbs   breadcrumbs(string $indent = '    ', string $delimiter = "\n")
- * @method string        button(string $text, array $attributes = [], bool $raw = false)
- * @method string        buttonRaw(string $text, array $attributes = [])
+ * @method string        button(string $text, html_attributes $attributes = [], bool $raw = false)
+ * @method string        buttonRaw(string $text, html_attributes $attributes = [])
  * @method string        close(string $tag, bool $raw = false)
  * @method Doctype       doctype(int $type = Doctype::HTML5, string $delimiter = "\n")
- * @method string        element(string $tag, string $text, array $attributes = [], bool $raw = false)
- * @method string        elementRaw(string $tag, string $text, array $attributes = [])
- * @method string        form(array $attributes = [])
+ * @method string        element(string $tag, string $text, html_attributes $attributes = [], bool $raw = false)
+ * @method string        elementRaw(string $tag, string $text, html_attributes $attributes = [])
+ * @method string        form(html_attributes $attributes = [])
  * @method string        friendlyTitle(string $text, string $separator = '-', bool $lower = true, mixed $replace = null)
- * @method string        img(string $src, array $attributes = [])
- * @method Checkbox      inputCheckbox(string $name, string $value = null, array $attributes = [])
+ * @method string        img(string $src, html_attributes $attributes = [])
+ * @method Checkbox      inputCheckbox(string $name, string $value = null, html_attributes $attributes = [])
  * @method CheckboxGroup inputCheckboxGroup(string $name, array $options, mixed $checked = null, array $attributes = [])
- * @method Generic       inputColor(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputDate(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputDateTime(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputDateTimeLocal(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputEmail(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputFile(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputHidden(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputImage(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputInput(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputMonth(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputNumeric(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputPassword(string $name, string $value = null, array $attributes = [])
- * @method Radio         inputRadio(string $name, string $value = null, array $attributes = [])
+ * @method Generic       inputColor(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputDate(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputDateTime(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputDateTimeLocal(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputEmail(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputFile(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputHidden(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputImage(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputInput(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputMonth(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputNumeric(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputPassword(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Radio         inputRadio(string $name, string $value = null, html_attributes $attributes = [])
  * @method RadioGroup    inputRadioGroup(string $name, array $options, mixed $checked = null, array $attributes = [])
- * @method Generic       inputRange(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputSearch(string $name, string $value = null, array $attributes = [])
- * @method Select        inputSelect(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputSubmit(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputTel(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputText(string $name, string $value = null, array $attributes = [])
- * @method Textarea      inputTextarea(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputTime(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputUrl(string $name, string $value = null, array $attributes = [])
- * @method Generic       inputWeek(string $name, string $value = null, array $attributes = [])
- * @method string        label(string $label, array $attributes = [], bool $raw = false)
- * @method string        labelRaw(string $label, array $attributes = [])
+ * @method Generic       inputRange(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputSearch(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Select        inputSelect(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputSubmit(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputTel(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputText(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Textarea      inputTextarea(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputTime(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputUrl(string $name, string $value = null, html_attributes $attributes = [])
+ * @method Generic       inputWeek(string $name, string $value = null, html_attributes $attributes = [])
+ * @method string        label(string $label, html_attributes $attributes = [], bool $raw = false)
+ * @method string        labelRaw(string $label, html_attributes $attributes = [])
  * @method Link          link(string $indent = '    ', string $delimiter = "\n")
  * @method Meta          meta(string $indent = '    ', string $delimiter = "\n")
- * @method Ol            ol(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method Ol            olRaw(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method string        preload(string $href, string $type = 'style', array $attributes = [])
+ * @method Ol            ol(string $indent = '    ', string $delimiter = null, html_attributes $attributes = [])
+ * @method Ol            olRaw(string $indent = '    ', string $delimiter = null, html_attributes $attributes = [])
+ * @method string        preload(string $href, string $type = 'style', html_attributes $attributes = [])
  * @method Script        script(string $indent = '    ', string $delimiter = "\n")
  * @method Style         style(string $indent = '    ', string $delimiter = "\n")
- * @method string        tag(string $name, array $attributes = [])
+ * @method string        tag(string $name, html_attributes $attributes = [])
  * @method Title         title(string $indent = '    ', string $delimiter = "\n")
- * @method Ul            ul(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method Ul            ulRaw(string $indent = '    ', string $delimiter = null, array $attributes = [])
- * @method string        voidTag(string $name, array $attributes = [])
+ * @method Ul            ul(string $indent = '    ', string $delimiter = null, html_attributes $attributes = [])
+ * @method Ul            ulRaw(string $indent = '    ', string $delimiter = null, html_attributes $attributes = [])
+ * @method string        voidTag(string $name, html_attributes $attributes = [])
  */
 class TagFactory
 {
     /**
-     * @var array
+     * @phpstan-var html_factory_services
      */
     protected array $factories = [];
 
     /**
-     * @var array
+     * @phpstan-var html_factory_instances
      */
     protected array $instances = [];
     /**
@@ -140,12 +146,10 @@ class TagFactory
     /**
      * TagFactory constructor.
      *
-     * @param EscaperInterface         $escaper
-     * @param array<string, Closure>   $services  Map of service name to a
-     *                                            zero-arg Closure that
-     *                                            returns the helper instance.
-     * @param ResponseInterface|null   $response
-     * @param UrlInterface|null        $url
+     * `$services` maps a service name to a zero-arg Closure that returns the
+     * helper instance.
+     *
+     * @phpstan-param html_factory_services $services
      */
     public function __construct(
         private readonly EscaperInterface $escaper,
@@ -164,10 +168,8 @@ class TagFactory
     /**
      * Magic call to make the helper objects available as methods.
      *
-     * @param string $name
-     * @param array  $arguments
+     * @phpstan-param array<int, mixed> $arguments
      *
-     * @return mixed
      * @throws \Phalcon\Html\Exception
      */
     public function __call(string $name, array $arguments): mixed
@@ -178,9 +180,6 @@ class TagFactory
     }
 
     /**
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -190,10 +189,9 @@ class TagFactory
     /**
      * Create or return a cached instance of the helper.
      *
-     * @param string $name
-     *
-     * @return object
      * @throws \Phalcon\Html\Exception
+     *
+     * @phpstan-return ($name is 'doctype' ? Doctype : object)
      */
     public function newInstance(string $name): object
     {
@@ -213,9 +211,6 @@ class TagFactory
      * the first matching `newInstance()` call and its return value is cached.
      * Passing a new definition clears any cached instance so the next call to
      * `newInstance()` rebuilds it.
-     *
-     * @param string  $name
-     * @param Closure $definition
      */
     public function set(string $name, Closure $definition): void
     {
@@ -227,7 +222,7 @@ class TagFactory
      * Default service recipes. Every entry is a callable that returns a
      * fully-constructed helper instance. Services are built lazily and cached.
      *
-     * @return array
+     * @phpstan-return html_factory_services
      */
     protected function getDefaultServices(): array
     {

@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Exception;
 
 /**
@@ -24,12 +25,14 @@ use Phalcon\Html\Exception;
  * tag name without a dedicated helper. For an open + content + close tag
  * use `Element` instead. For self-closing void tags (img, br, hr, etc.)
  * use `VoidTag`.
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Tag extends AbstractHelper
 {
     /**
      * @param string $name
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return string
      * @throws Exception

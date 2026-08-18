@@ -17,18 +17,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 /**
  * Class Meta
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Meta extends AbstractSeries
 {
     /**
      * Add an element to the list
      *
-     * @param array $attributes
+     * @phpstan-param html_attributes $attributes
      * @param int   $pos
-     *
-     * @return Meta
      */
     public function add(array $attributes = [], int $pos = -1): static
     {
@@ -51,8 +53,6 @@ class Meta extends AbstractSeries
      * @param string $httpEquiv
      * @param string $content
      * @param int    $pos
-     *
-     * @return Meta
      */
     public function addHttp(string $httpEquiv, string $content, int $pos = -1): static
     {
@@ -63,8 +63,6 @@ class Meta extends AbstractSeries
      * @param string $name
      * @param string $content
      * @param int    $pos
-     *
-     * @return Meta
      */
     public function addName(string $name, string $content, int $pos = -1): static
     {
@@ -77,8 +75,6 @@ class Meta extends AbstractSeries
      * @param string $name
      * @param string $content
      * @param int    $pos
-     *
-     * @return Meta
      */
     public function addProperty(string $name, string $content, int $pos = -1): static
     {
@@ -100,8 +96,6 @@ class Meta extends AbstractSeries
      * @param string $value
      * @param string $content
      * @param int    $pos
-     *
-     * @return Meta
      */
     private function addElement(
         string $element,

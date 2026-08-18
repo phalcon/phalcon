@@ -17,15 +17,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 use const PHP_EOL;
 
 /**
  * Class AbstractList
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_element_store from HtmlTypes
  */
 abstract class AbstractList extends AbstractHelper
 {
     /**
-     * @var array
+     * @phpstan-var html_attributes
      */
     protected array $attributes = [];
 
@@ -35,16 +40,12 @@ abstract class AbstractList extends AbstractHelper
     protected string $elementTag = 'li';
 
     /**
-     * @var array
+     * @phpstan-var html_element_store
      */
     protected array $store = [];
 
     /**
-     * @param string      $indent
-     * @param string|null $delimiter
-     * @param array       $attributes
-     *
-     * @return static
+     * @phpstan-param html_attributes $attributes
      */
     public function __invoke(
         string $indent = '    ',

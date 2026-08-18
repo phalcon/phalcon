@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Escaper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 use function htmlspecialchars;
 use function implode;
 use function is_array;
@@ -27,13 +29,13 @@ use function trim;
  * Escapes either a single attribute value (string) or an associative array
  * of attribute pairs. Boolean `true` becomes a bare key (e.g. `disabled`);
  * `false` and `null` skip the entry; arrays are joined with a space.
+ *
+ * @phpstan-import-type html_escaper_input from HtmlTypes
  */
 class AttributeEscaper extends AbstractEscaper
 {
     /**
-     * @param array|string|null $input
-     *
-     * @return string
+     * @phpstan-param html_escaper_input $input
      */
     public function __invoke(mixed $input = null): string
     {
@@ -41,9 +43,7 @@ class AttributeEscaper extends AbstractEscaper
     }
 
     /**
-     * @param array|string|null $input
-     *
-     * @return string
+     * @phpstan-param html_escaper_input $input
      */
     public function escape(mixed $input = null): string
     {

@@ -17,8 +17,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 /**
  * Class Img
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Img extends AbstractHelper
 {
@@ -26,7 +30,7 @@ class Img extends AbstractHelper
      * Produce a <img> tag.
      *
      * @param string $src
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return string
      */

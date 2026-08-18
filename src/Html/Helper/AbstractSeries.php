@@ -17,27 +17,29 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 /**
- * @property array $attributes
- * @property array $store
+ * @phpstan-import-type html_attributes from HtmlTypes
+ * @phpstan-import-type html_element_entry from HtmlTypes
+ * @phpstan-import-type html_element_store from HtmlTypes
+ *
+ * @phpstan-property html_attributes    $attributes
+ * @phpstan-property html_element_store $store
  */
 abstract class AbstractSeries extends AbstractHelper
 {
     /**
-     * @var array
+     * @phpstan-var html_attributes
      */
     protected array $attributes = [];
 
     /**
-     * @var array
+     * @phpstan-var html_element_store
      */
     protected array $store = [];
 
     /**
-     * @param string      $indent
-     * @param string|null $delimiter
-     *
-     * @return static
      */
     public function __invoke(
         string $indent = '    ',
@@ -95,8 +97,7 @@ abstract class AbstractSeries extends AbstractHelper
      * existing entries are not overwritten. The store is ksort()ed in
      * `__toString`, so positions act as a sort key, not a strict address.
      *
-     * @param array $entry
-     * @param int   $pos
+     * @phpstan-param html_element_entry $entry
      */
     protected function pushOrPlace(array $entry, int $pos = -1): void
     {

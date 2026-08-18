@@ -36,7 +36,8 @@ class Textarea extends AbstractInput
     {
         $attributes       = $this->attributes;
         $this->attributes = [];
-        $value            = $attributes['value'] ?? '';
+        /** @phpstan-var string $value */
+        $value = $attributes['value'] ?? '';
 
         unset($attributes['type']);
         unset($attributes['value']);

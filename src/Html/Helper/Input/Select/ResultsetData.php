@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input\Select;
 
 use Phalcon\Contracts\Html\Helper\Input\SelectData;
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Exceptions\InvalidResultsetValue;
 use Phalcon\Html\Exceptions\UsingRequiresTwoValues;
 use Phalcon\Mvc\Model\ResultsetInterface;
@@ -27,22 +28,27 @@ use function count;
 use function is_callable;
 use function method_exists;
 
+/**
+ * @phpstan-import-type html_select_attributes from HtmlTypes
+ * @phpstan-import-type html_select_attributes_map from HtmlTypes
+ * @phpstan-import-type html_select_options from HtmlTypes
+ * @phpstan-import-type html_select_using from HtmlTypes
+ */
 class ResultsetData implements SelectData
 {
     /**
-     * @var array|null
+     * @phpstan-var html_select_attributes|null
      */
     protected ?array $resolvedAttributes = null;
 
     /**
-     * @var array|null
+     * @phpstan-var html_select_options|null
      */
     protected ?array $resolvedOptions = null;
 
     /**
-     * @param ResultsetInterface $resultset
-     * @param array              $using
-     * @param array              $attributesMap
+     * @phpstan-param html_select_using            $using
+     * @phpstan-param html_select_attributes_map   $attributesMap
      */
     public function __construct(
         protected ResultsetInterface $resultset,
@@ -57,7 +63,7 @@ class ResultsetData implements SelectData
     /**
      * Returns per-option attribute maps, keyed by option value.
      *
-     * @return array
+     * @phpstan-return html_select_attributes
      */
     public function getAttributes(): array
     {
@@ -65,11 +71,11 @@ class ResultsetData implements SelectData
             $this->resolve();
         }
 
-        return $this->resolvedAttributes;
+        return $this->resolvedAttributes ?? [];
     }
 
     /**
-     * @return array
+     * @phpstan-return html_select_options
      */
     public function getOptions(): array
     {
@@ -77,17 +83,14 @@ class ResultsetData implements SelectData
             $this->resolve();
         }
 
-        return $this->resolvedOptions;
+        return $this->resolvedOptions ?? [];
     }
 
     /**
      * Reads a property from the row, supporting both objects (via
      * `readAttribute` when available) and plain arrays.
      *
-     * @param mixed  $option
-     * @param string $field
-     *
-     * @return mixed
+     * @phpstan-param array<array-key, mixed>|object $option
      */
     protected function readField(mixed $option, string $field): mixed
     {
@@ -115,12 +118,17 @@ class ResultsetData implements SelectData
         $options = [];
         $attrs   = [];
 
-        foreach ($this->resultset as $option) {
+        /** @phpstan-var ResultsetInterface&iterable<array-key, mixed> $resultset */
+        $resultset = $this->resultset;
+
+        foreach ($resultset as $option) {
             if (!is_object($option) && !is_array($option)) {
                 throw new InvalidResultsetValue();
             }
 
+            /** @phpstan-var array-key $optionValue */
             $optionValue = $this->readField($option, $usingZero);
+            /** @phpstan-var string $optionText */
             $optionText  = $this->readField($option, $usingOne);
 
             $options[$optionValue] = $optionText;
@@ -129,6 +137,7 @@ class ResultsetData implements SelectData
                 $optionAttrs = [];
 
                 foreach ($this->attributesMap as $attrName => $attrSpec) {
+                    /** @phpstan-var scalar|null $attrValue */
                     $attrValue = is_callable($attrSpec)
                         ? call_user_func($attrSpec, $option)
                         : $attrSpec;

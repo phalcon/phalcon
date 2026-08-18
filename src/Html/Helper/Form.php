@@ -17,15 +17,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
+
 /**
  * Class Form
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Form extends AbstractHelper
 {
     /**
      * Produce a <form> tag.
      *
-     * @param array $attributes
+     * @phpstan-param html_attributes $attributes
      *
      * @return string
      */

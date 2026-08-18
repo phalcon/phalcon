@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Contracts\Html\Link\LinkTypes;
 use Phalcon\Html\Link\Interfaces\EvolvableLinkInterface;
 
 /**
  * Class Phalcon\Html\Link\EvolvableLink
+ *
+ * @phpstan-import-type link_attribute_value from LinkTypes
  */
 class EvolvableLink extends Link implements EvolvableLinkInterface
 {
@@ -26,10 +29,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      * If the specified attribute is already present, it will be overwritten
      * with the new value.
      *
-     * @param string $attribute The attribute to include.
-     * @param mixed  $value     The value of the attribute to set.
-     *
-     * @return $this
+     * @phpstan-param link_attribute_value $value
      */
     public function withAttribute(string $attribute, mixed $value): static
     {
@@ -50,8 +50,6 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * An implementing library SHOULD evaluate a passed object to a string
      * immediately rather than waiting for it to be returned later.
-     *
-     * @return $this
      */
     public function withHref(string $href): static
     {
@@ -63,10 +61,6 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * If the specified attribute is not present, this method MUST return
      * normally without errors.
-     *
-     * @param string $attribute The attribute to remove.
-     *
-     * @return $this
      */
     public function withoutAttribute(string $attribute): static
     {
@@ -78,10 +72,6 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * If the specified rel is already not present, this method MUST return
      * normally without errors.
-     *
-     * @param string $rel The relationship value to exclude.
-     *
-     * @return $this
      */
     public function withoutRel(string $rel): static
     {
@@ -93,10 +83,6 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * If the specified rel is already present, this method MUST return
      * normally without errors, but without adding the rel a second time.
-     *
-     * @param string $rel The relationship value to add.
-     *
-     * @return $this
      */
     public function withRel(string $rel): static
     {

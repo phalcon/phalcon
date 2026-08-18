@@ -25,22 +25,23 @@ use const PHP_EOL;
 /**
  * Class Title
  *
- * @property array  $append
+ * @phpstan-property list<string> $append
+ * @phpstan-property list<string> $prepend
+ *
  * @property string $delimiter
  * @property string $indent
- * @property array  $prepend
  * @property string $title
  * @property string $separator
  */
 class Title extends AbstractHelper
 {
     /**
-     * @var array
+     * @phpstan-var list<string>
      */
     protected array $append = [];
 
     /**
-     * @var array
+     * @phpstan-var list<string>
      */
     protected array $prepend = [];
 
@@ -101,11 +102,6 @@ class Title extends AbstractHelper
 
     /**
      * Appends text to current document title
-     *
-     * @param string $text
-     * @param bool   $raw
-     *
-     * @return Title
      */
     public function append(string $text, bool $raw = false): static
     {

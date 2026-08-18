@@ -17,10 +17,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 
 /**
  * Class Label
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  *
  * @property bool $forceRaw
  */
@@ -50,7 +53,7 @@ class Label extends AbstractHelper
      * Produce a `<label>` tag.
      *
      * @param string $label
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      * @param bool   $raw
      *
      * @return string

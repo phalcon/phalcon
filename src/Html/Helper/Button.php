@@ -17,10 +17,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 
 /**
  * Class Button
+ *
+ * @phpstan-import-type html_attributes from HtmlTypes
  *
  * @property bool $forceRaw
  */
@@ -43,7 +46,7 @@ class Button extends AbstractHelper
      * Produce a `<button>` tag.
      *
      * @param string $text
-     * @param array  $attributes
+     * @phpstan-param html_attributes $attributes
      * @param bool   $raw
      *
      * @return string

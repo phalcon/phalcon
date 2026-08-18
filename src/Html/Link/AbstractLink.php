@@ -13,18 +13,24 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Link;
 
+use Phalcon\Contracts\Html\Link\LinkTypes;
 use Phalcon\Support\Collection;
 
 /**
- * @property Collection $attributes
- * @property string     $href
- * @property Collection $rels
- * @property bool       $templated
+ * @phpstan-import-type link_attribute_value from LinkTypes
+ * @phpstan-import-type link_attributes from LinkTypes
+ * @phpstan-import-type link_rels from LinkTypes
+ *
+ * @phpstan-property Collection<link_attribute_value> $attributes
+ * @phpstan-property Collection<bool>                 $rels
+ *
+ * @property string $href
+ * @property bool   $templated
  */
 abstract class AbstractLink
 {
     /**
-     * @var Collection
+     * @phpstan-var Collection<link_attribute_value>
      */
     protected Collection $attributes;
 
@@ -34,7 +40,7 @@ abstract class AbstractLink
     protected string $href = "";
 
     /**
-     * @var Collection
+     * @phpstan-var Collection<bool>
      */
     protected Collection $rels;
 
@@ -46,9 +52,7 @@ abstract class AbstractLink
     /**
      * Link constructor.
      *
-     * @param string $rel
-     * @param string $href
-     * @param array  $attributes
+     * @phpstan-param link_attributes $attributes
      */
     public function __construct(
         string $rel = "",
@@ -68,14 +72,18 @@ abstract class AbstractLink
     /**
      * Returns a list of attributes that describe the target URI.
      *
-     * @return array
-     *   A key-value list of attributes, where the key is a string and the value
-     *  is either a PHP primitive or an array of PHP strings. If no values are
-     *  found an empty array MUST be returned.
+     * A key-value list of attributes, where the key is a string and the value
+     * is either a PHP primitive or an array of PHP strings. If no values are
+     * found an empty array MUST be returned.
+     *
+     * @phpstan-return link_attributes
      */
     protected function doGetAttributes(): array
     {
-        return $this->attributes->toArray();
+        /** @phpstan-var link_attributes $attributes */
+        $attributes = $this->attributes->toArray();
+
+        return $attributes;
     }
 
     /**
@@ -88,8 +96,6 @@ abstract class AbstractLink
      * - A URI template as defined by RFC 6570.
      *
      * If a URI template is returned, isTemplated() MUST return True.
-     *
-     * @return string
      */
     protected function doGetHref(): string
     {
@@ -102,18 +108,19 @@ abstract class AbstractLink
      * This method returns 0 or more relationship types for a link, expressed
      * as an array of strings.
      *
-     * @return string[]
+     * @phpstan-return link_rels
      */
     protected function doGetRels(): array
     {
-        return $this->rels->getKeys(false);
+        /** @phpstan-var link_rels $rels */
+        $rels = $this->rels->getKeys(false);
+
+        return $rels;
     }
 
     /**
-     * Returns whether this is a templated link.
-     *
-     * @return bool
-     *   True if this link object is templated, False otherwise.
+     * Returns whether this is a templated link. True if this link object is
+     * templated, False otherwise.
      */
     protected function doIsTemplated(): bool
     {
@@ -121,10 +128,9 @@ abstract class AbstractLink
     }
 
     /**
-     * @param string $key
-     * @param mixed  $value
+     * @phpstan-param link_attribute_value $value
      *
-     * @return $this
+     * @phpstan-return static
      */
     protected function doWithAttribute(string $key, mixed $value): self
     {
@@ -136,9 +142,7 @@ abstract class AbstractLink
     }
 
     /**
-     * @param string $href
-     *
-     * @return $this
+     * @phpstan-return static
      */
     protected function doWithHref(string $href): self
     {
@@ -151,9 +155,7 @@ abstract class AbstractLink
     }
 
     /**
-     * @param string $key
-     *
-     * @return $this
+     * @phpstan-return static
      */
     protected function doWithoutAttribute(string $key): self
     {
@@ -165,9 +167,7 @@ abstract class AbstractLink
     }
 
     /**
-     * @param string $key
-     *
-     * @return $this
+     * @phpstan-return static
      */
     protected function doWithoutRel(string $key): self
     {
@@ -179,9 +179,7 @@ abstract class AbstractLink
     }
 
     /**
-     * @param string $key
-     *
-     * @return $this
+     * @phpstan-return static
      */
     protected function doWithRel(string $key): self
     {
@@ -196,10 +194,6 @@ abstract class AbstractLink
      * Determines if a href is a templated link or not.
      *
      * @see https://tools.ietf.org/html/rfc6570
-     *
-     * @param string $href
-     *
-     * @return bool
      */
     protected function hrefIsTemplated(string $href): bool
     {

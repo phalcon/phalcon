@@ -18,18 +18,22 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input\Select;
 
 use Phalcon\Contracts\Html\Helper\Input\SelectData;
+use Phalcon\Contracts\Html\HtmlTypes;
 
 /**
  * Wraps a plain PHP array as a SELECT data provider.
  *
  * Keys are option values; string values are labels;
  * array values define optgroups.
+ *
+ * @phpstan-import-type html_select_attributes from HtmlTypes
+ * @phpstan-import-type html_select_options from HtmlTypes
  */
 class ArrayData implements SelectData
 {
     /**
-     * @param array $data
-     * @param array $attributes
+     * @phpstan-param html_select_options    $data
+     * @phpstan-param html_select_attributes $attributes
      */
     public function __construct(
         protected array $data = [],
@@ -38,7 +42,7 @@ class ArrayData implements SelectData
     }
 
     /**
-     * @return array
+     * @phpstan-return html_select_attributes
      */
     public function getAttributes(): array
     {
@@ -46,7 +50,7 @@ class ArrayData implements SelectData
     }
 
     /**
-     * @return array
+     * @phpstan-return html_select_options
      */
     public function getOptions(): array
     {
