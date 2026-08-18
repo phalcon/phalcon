@@ -104,6 +104,8 @@ class Connection extends AbstractConnection
     public function connect(): void
     {
         if (!$this->pdo) {
+            $this->fireBefore(Events::BEFORE_CONNECT);
+
             // connect
             $this->profiler->start(__FUNCTION__);
 
@@ -117,6 +119,8 @@ class Connection extends AbstractConnection
 
             $this->profiler->finish();
 
+            $this->fireManagerEvent(Events::AFTER_CONNECT, null, false);
+
             // connection-time queries
             foreach ($queries as $query) {
                 $this->exec($query);
@@ -129,10 +133,14 @@ class Connection extends AbstractConnection
      */
     public function disconnect(): void
     {
+        $this->fireBefore(Events::BEFORE_DISCONNECT);
+
         $this->profiler->start(__FUNCTION__);
 
         $this->pdo = null;
 
         $this->profiler->finish();
+
+        $this->fireManagerEvent(Events::AFTER_DISCONNECT, null, false);
     }
 }

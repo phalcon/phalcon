@@ -18,17 +18,24 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo;
 
+use Phalcon\Contracts\Events\EventsAware;
 use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
+use Phalcon\Events\Traits\EventsAwareTrait;
 
 use function array_rand;
 use function call_user_func;
 
 /**
  * Manages Connection instances for default, read, and write connections.
+ *
+ * The locator gives its events manager to each connection that it returns,
+ * so connections that are built on demand also fire the DataMapper events.
  */
-class ConnectionLocator implements ConnectionLocatorInterface
+class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 {
+    use EventsAwareTrait;
+
     /**
      * A default Connection connection factory/instance.
      */
@@ -73,7 +80,7 @@ class ConnectionLocator implements ConnectionLocatorInterface
      */
     public function getMaster(): ConnectionInterface
     {
-        return $this->master;
+        return $this->applyEventsManager($this->master);
     }
 
     /**
@@ -176,6 +183,28 @@ class ConnectionLocator implements ConnectionLocatorInterface
             $this->instances          = $instances;
         }
 
-        return $instances[$instanceName];
+        return $this->applyEventsManager($instances[$instanceName]);
+    }
+
+    /**
+     * Gives the locator's events manager to a connection. Does nothing when
+     * the locator has no manager, or when the connection does not accept
+     * one. It is safe to call this more than once on the same connection.
+     *
+     * @param ConnectionInterface $connection
+     *
+     * @return ConnectionInterface
+     */
+    private function applyEventsManager(
+        ConnectionInterface $connection
+    ): ConnectionInterface {
+        if (
+            null !== $this->eventsManager &&
+            $connection instanceof EventsAware
+        ) {
+            $connection->setEventsManager($this->eventsManager);
+        }
+
+        return $connection;
     }
 }

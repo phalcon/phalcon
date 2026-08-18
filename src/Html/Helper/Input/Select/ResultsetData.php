@@ -118,7 +118,7 @@ class ResultsetData implements SelectData
         $options = [];
         $attrs   = [];
 
-        /** @phpstan-var ResultsetInterface&iterable<array-key, mixed> $resultset */
+        /** @phpstan-var iterable<array-key, mixed>&ResultsetInterface $resultset */
         $resultset = $this->resultset;
 
         foreach ($resultset as $option) {
