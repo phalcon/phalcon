@@ -2,7 +2,7 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
-## [6.0.0 beta 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta7) (2026-xx-xx)
+## [6.0.0 beta 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta7) (2026-08-19)
 
 ### Changed
 
@@ -22,9 +22,11 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - Fixed `Phalcon\Filter\Validation\Validator\StringLength\Min` and `Phalcon\Filter\Validation\Validator\StringLength\Max` rejecting a string with a length exactly equal to `min` or `max` when the `included` option was not set, a regression introduced in 5.7.0 [#17503](https://github.com/phalcon/cphalcon/issues/17503) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
 - Fixed `Phalcon\Filter\Validation\Validator\StringLength` giving the `includedMinimum`/`includedMaximum` and `messageMinimum`/`messageMaximum` option of one boundary to the validator of the other boundary [#17503](https://github.com/phalcon/cphalcon/issues/17503) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
 - Fixed `Phalcon\Html\Helper\Input\Generic`, `Phalcon\Html\Helper\Input\Checkbox` and `Phalcon\Html\Helper\Input\Radio` throwing an error when you build them directly without a `Phalcon\Html\Helper\Doctype`, which their constructor accepts as optional. `Phalcon\Html\Helper\Input\AbstractInput::__toString()` now renders HTML5 when there is no doctype, the same as `Phalcon\Html\Helper\VoidTag` and the same as a default `Doctype`. Helpers that come from `Phalcon\Html\TagFactory` always get a doctype, so their output does not change [#17507](https://github.com/phalcon/cphalcon/issues/17507) [[doc]](https://docs.phalcon.io/6.0/html-tagfactory/)
+- Fixed `Phalcon\Image\Adapter\Imagick::background()`, `reflection()`, `text()` and `watermark()` discarding any opacity below 100, and `sharpen()` rounding its amount down, because the division by 100 was stored back in the integer parameter; `watermark()` left the image unchanged for every opacity except 100 [#17510](https://github.com/phalcon/cphalcon/issues/17510) [[doc]](https://docs.phalcon.io/6.0/image/)
+- Fixed `Phalcon\Image\Adapter\Imagick` never coalescing the frames of a GIF, because the constructor compared `getImageType()`, an Imagick `IMGTYPE_*` value, against `IMAGETYPE_GIF`; the width and the height of an animated GIF now describe the canvas instead of whichever sub frame the cursor was on [#17510](https://github.com/phalcon/cphalcon/issues/17510) [[doc]](https://docs.phalcon.io/6.0/image/)
+- Fixed `Phalcon\Image\Adapter\Imagick::render()` returning the current frame alone for a GIF, and `save()` failing with `no encode delegate for this image format` after an operation that rebuilds the image; both now mark every frame with the format, which `setImageFormat()` applies to the current frame only [#17510](https://github.com/phalcon/cphalcon/issues/17510) [[doc]](https://docs.phalcon.io/6.0/image/)
 
 ### Removed
-
 
 ## [6.0.0 beta 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta6) (2026-08-02)
 
