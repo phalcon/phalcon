@@ -31,8 +31,7 @@ use Phalcon\Traits\Php\FileTrait;
 use function is_bool;
 use function is_int;
 use function strtolower;
-
-use const IMAGETYPE_GIF;
+use function strtoupper;
 
 /**
  * Phalcon\Image\Adapter\Imagick
@@ -66,24 +65,6 @@ use const IMAGETYPE_GIF;
 class Imagick extends AbstractAdapter
 {
     use FileTrait;
-
-    private const ALPHACHANNEL_SET   = 8;
-    private const CHANNEL_ALPHA      = 8;
-    private const COMPOSITE_DISSOLVE = 28;
-    private const COMPOSITE_DSTIN    = 23;
-    private const COMPOSITE_DSTOUT   = 24;
-    private const COMPOSITE_OVER     = 40;
-    private const COMPOSITE_SRC      = 48;
-    private const COMPRESSION_JPEG   = 8;
-    private const EVALUATE_MULTIPLY  = 7;
-    private const GRAVITY_CENTER     = 5;
-    private const GRAVITY_EAST       = 6;
-    private const GRAVITY_NORTH      = 2;
-    private const GRAVITY_NORTHEAST  = 3;
-    private const GRAVITY_SOUTH      = 8;
-    private const GRAVITY_SOUTHEAST  = 9;
-    private const GRAVITY_WEST       = 4;
-    private const IMAGICK_EXTNUM     = 30700;
 
     protected int $version = 0;
 
@@ -121,14 +102,15 @@ class Imagick extends AbstractAdapter
             }
 
             if (!$this->image->getImageAlphaChannel()) {
-                $this->image->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
+                $this->image->setImageAlphaChannel(ImagickNative::ALPHACHANNEL_SET);
             }
             $this->type = $this->image->getImageType();
 
             /**
-             * GIF
+             * GIF. The format, not the image type: getImageType() reports an
+             * Imagick IMGTYPE_* value, which never equals an IMAGETYPE_* one.
              */
-            if ($this->image->getImageType() == IMAGETYPE_GIF) {
+            if ("GIF" === strtoupper($this->image->getImageFormat())) {
                 $image = $this->image->coalesceImages();
 
                 $this->image->clear();
@@ -261,12 +243,11 @@ class Imagick extends AbstractAdapter
         int $blue,
         int $opacity
     ): void {
-        $localOpacity  = $opacity;
-        $localOpacity /= 100;
-        $color         = sprintf("rgb(%d, %d, %d)", $red, $green, $blue);
-        $pixel1        = new ImagickPixel($color);
-        $pixel2        = new ImagickPixel("transparent");
-        $background    = new ImagickNative();
+        $localOpacity = (float)$opacity / 100;
+        $color        = sprintf("rgb(%d, %d, %d)", $red, $green, $blue);
+        $pixel1       = new ImagickPixel($color);
+        $pixel2       = new ImagickPixel("transparent");
+        $background   = new ImagickNative();
 
         /** @var ImagickNative $image */
         $image = $this->image;
@@ -279,7 +260,7 @@ class Imagick extends AbstractAdapter
             try {
                 if (true !== $background->getImageAlphaChannel()) {
                     $background->setImageAlphaChannel(
-                        Imagick::ALPHACHANNEL_SET
+                        ImagickNative::ALPHACHANNEL_SET
                     );
                 }
             } catch (ImagickException) {
@@ -289,9 +270,9 @@ class Imagick extends AbstractAdapter
             $background->setImageBackgroundColor($pixel2);
 
             $background->evaluateImage(
-                Imagick::EVALUATE_MULTIPLY,
+                ImagickNative::EVALUATE_MULTIPLY,
                 $localOpacity,
-                Imagick::CHANNEL_ALPHA
+                ImagickNative::CHANNEL_ALPHA
             );
 
             $background->setColorspace(
@@ -300,7 +281,7 @@ class Imagick extends AbstractAdapter
 
             $result = $background->compositeImage(
                 $image,
-                Imagick::COMPOSITE_DISSOLVE,
+                ImagickNative::COMPOSITE_DISSOLVE,
                 0,
                 0
             );
@@ -414,7 +395,7 @@ class Imagick extends AbstractAdapter
 
             $return = $current->compositeImage(
                 $image,
-                self::COMPOSITE_DSTIN,
+                ImagickNative::COMPOSITE_DSTIN,
                 0,
                 0
             );
@@ -510,13 +491,13 @@ class Imagick extends AbstractAdapter
             $pseudo
         );
 
-        $opacity /= 100;
+        $fadeOpacity = (float)$opacity / 100;
         $reflection->setIteratorIndex(0);
 
         while (true) {
             $return = $reflection->compositeImage(
                 $fade,
-                Imagick::COMPOSITE_DSTOUT,
+                ImagickNative::COMPOSITE_DSTOUT,
                 0,
                 0
             );
@@ -526,9 +507,9 @@ class Imagick extends AbstractAdapter
             }
 
             $reflection->evaluateImage(
-                Imagick::EVALUATE_MULTIPLY,
-                $opacity,
-                Imagick::CHANNEL_ALPHA
+                ImagickNative::EVALUATE_MULTIPLY,
+                $fadeOpacity,
+                ImagickNative::CHANNEL_ALPHA
             );
 
             if (true !== $reflection->nextImage()) {
@@ -547,13 +528,13 @@ class Imagick extends AbstractAdapter
 
         while (true) {
             $image->newImage($this->width, $height, $pixel);
-            $image->setImageAlphaChannel(Imagick::ALPHACHANNEL_SET);
+            $image->setImageAlphaChannel(ImagickNative::ALPHACHANNEL_SET);
 
             $image->setColorspace($current->getColorspace());
             $image->setImageDelay($current->getImageDelay());
             $return = $image->compositeImage(
                 $current,
-                Imagick::COMPOSITE_SRC,
+                ImagickNative::COMPOSITE_SRC,
                 0,
                 0
             );
@@ -573,7 +554,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $image->compositeImage(
                 $reflection,
-                Imagick::COMPOSITE_OVER,
+                ImagickNative::COMPOSITE_OVER,
                 0,
                 $this->height
             );
@@ -617,11 +598,17 @@ class Imagick extends AbstractAdapter
         $extension = strtolower($extension);
         switch ($extension) {
             case "gif":
+                $this->setFramesFormat($image, $extension);
+
                 $image->optimizeImageLayers();
-                break;
+
+                /**
+                 * A blob of the current frame alone loses the animation
+                 */
+                return $image->getImagesBlob();
             case "jpg":
             case "jpeg":
-                $image->setImageCompression(Imagick::COMPRESSION_JPEG);
+                $image->setImageCompression(ImagickNative::COMPRESSION_JPEG);
                 $image->setImageCompressionQuality($quality);
         }
 
@@ -707,6 +694,8 @@ class Imagick extends AbstractAdapter
         $extension = strtolower($extension);
         switch ($extension) {
             case "gif":
+                $this->setFramesFormat($image, $extension);
+
                 $image->optimizeImageLayers();
 
                 /** @var resource $fp */
@@ -719,7 +708,7 @@ class Imagick extends AbstractAdapter
                 return true;
             case "jpg":
             case "jpeg":
-                $image->setImageCompression(Imagick::COMPRESSION_JPEG);
+                $image->setImageCompression(ImagickNative::COMPRESSION_JPEG);
         }
 
         if ($quality >= 0) {
@@ -740,7 +729,7 @@ class Imagick extends AbstractAdapter
     protected function processSharpen(int $amount): void
     {
         $amount = ($amount < 5) ? 5 : $amount;
-        $amount = ($amount * 3.0) / 100;
+        $sigma  = (float)$amount * 3.0 / 100;
 
         /** @var ImagickNative $image */
         $image = $this->image;
@@ -748,7 +737,7 @@ class Imagick extends AbstractAdapter
         $image->setIteratorIndex(0);
 
         while (true) {
-            $image->sharpenImage(0, $amount);
+            $image->sharpenImage(0, $sigma);
 
             if (true !== $image->nextImage()) {
                 break;
@@ -774,9 +763,9 @@ class Imagick extends AbstractAdapter
         int $size,
         string | null $fontFile = null
     ): void {
-        $opacity = $opacity / 100;
-        $draw    = new ImagickDraw();
-        $color   = sprintf("rgb(%d, %d, %d)", $red, $green, $blue);
+        $textOpacity = (float)$opacity / 100;
+        $draw        = new ImagickDraw();
+        $color       = sprintf("rgb(%d, %d, %d)", $red, $green, $blue);
 
         $draw->setFillColor(new ImagickPixel($color));
 
@@ -788,8 +777,8 @@ class Imagick extends AbstractAdapter
             $draw->setFontSize($size);
         }
 
-        if ($opacity) {
-            $draw->setfillopacity($opacity);
+        if ($textOpacity) {
+            $draw->setfillopacity($textOpacity);
         }
 
         $gravity = null;
@@ -797,14 +786,14 @@ class Imagick extends AbstractAdapter
             if (is_bool($offsetY)) {
                 $offsetX = 0;
                 $offsetY = 0;
-                $gravity = self::GRAVITY_CENTER;
+                $gravity = ImagickNative::GRAVITY_CENTER;
             } elseif (is_int($offsetY)) {
                 $y = $offsetY;
 
-                $gravity = (true === $offsetX && $y < 0) ? Imagick::GRAVITY_SOUTHEAST : $gravity;
-                $gravity = (true === $offsetX && $y >= 0) ? Imagick::GRAVITY_NORTHEAST : $gravity;
-                $gravity = (true !== $offsetX && $y < 0) ? Imagick::GRAVITY_SOUTH : $gravity;
-                $gravity = (true !== $offsetX && $y >= 0) ? Imagick::GRAVITY_NORTH : $gravity;
+                $gravity = (true === $offsetX && $y < 0) ? ImagickNative::GRAVITY_SOUTHEAST : $gravity;
+                $gravity = (true === $offsetX && $y >= 0) ? ImagickNative::GRAVITY_NORTHEAST : $gravity;
+                $gravity = (true !== $offsetX && $y < 0) ? ImagickNative::GRAVITY_SOUTH : $gravity;
+                $gravity = (true !== $offsetX && $y >= 0) ? ImagickNative::GRAVITY_NORTH : $gravity;
 
                 $offsetX = 0;
                 $offsetY = ($y < 0) ? $y * -1 : $offsetY;
@@ -814,10 +803,10 @@ class Imagick extends AbstractAdapter
 
             if ($offsetX) {
                 if (is_bool($offsetY)) {
-                    $gravity = (true === $offsetY && $x < 0) ? Imagick::GRAVITY_SOUTHEAST : $gravity;
-                    $gravity = (true === $offsetY && $x >= 0) ? Imagick::GRAVITY_SOUTH : $gravity;
-                    $gravity = (true !== $offsetY && $x < 0) ? Imagick::GRAVITY_EAST : $gravity;
-                    $gravity = (true !== $offsetY && $x >= 0) ? Imagick::GRAVITY_WEST : $gravity;
+                    $gravity = (true === $offsetY && $x < 0) ? ImagickNative::GRAVITY_SOUTHEAST : $gravity;
+                    $gravity = (true === $offsetY && $x >= 0) ? ImagickNative::GRAVITY_SOUTH : $gravity;
+                    $gravity = (true !== $offsetY && $x < 0) ? ImagickNative::GRAVITY_EAST : $gravity;
+                    $gravity = (true !== $offsetY && $x >= 0) ? ImagickNative::GRAVITY_WEST : $gravity;
 
                     $offsetY = 0;
                     $offsetX = ($x < 0) ? $x * -1 : $offsetX;
@@ -827,8 +816,8 @@ class Imagick extends AbstractAdapter
                     $offsetX = ($x < 0) ? $x * -1 : 0;
                     $offsetY = ($y < 0) ? $y * -1 : $offsetY;
 
-                    $gravity = ($y < 0) ? Imagick::GRAVITY_SOUTHEAST : $gravity;
-                    $gravity = ($y >= 0) ? Imagick::GRAVITY_NORTHEAST : $gravity;
+                    $gravity = ($y < 0) ? ImagickNative::GRAVITY_SOUTHEAST : $gravity;
+                    $gravity = ($y >= 0) ? ImagickNative::GRAVITY_NORTHEAST : $gravity;
                 }
             }
         }
@@ -872,14 +861,14 @@ class Imagick extends AbstractAdapter
         int $offsetY,
         int $opacity
     ): void {
-        $opacity = $opacity / 100;
-        $image   = new ImagickNative();
+        $watermarkOpacity = (float)$opacity / 100;
+        $image            = new ImagickNative();
 
         $image->readImageBlob($watermark->render());
         $image->evaluateImage(
-            Imagick::EVALUATE_MULTIPLY,
-            $opacity,
-            Imagick::CHANNEL_ALPHA
+            ImagickNative::EVALUATE_MULTIPLY,
+            $watermarkOpacity,
+            ImagickNative::CHANNEL_ALPHA
         );
 
         /** @var ImagickNative $current */
@@ -890,7 +879,7 @@ class Imagick extends AbstractAdapter
         while (true) {
             $return = $current->compositeImage(
                 $image,
-                Imagick::COMPOSITE_OVER,
+                ImagickNative::COMPOSITE_OVER,
                 $offsetX,
                 $offsetY
             );
@@ -921,7 +910,34 @@ class Imagick extends AbstractAdapter
         }
 
         if (defined("Imagick::IMAGICK_EXTNUM")) {
-            $this->version = Imagick::IMAGICK_EXTNUM;
+            $this->version = ImagickNative::IMAGICK_EXTNUM;
         }
+    }
+
+    /**
+     * Marks every frame with the format.
+     *
+     * setImageFormat() marks the current frame only, and a wand built with
+     * newImage() carries no format at all, which stops a multi frame write.
+     *
+     * @param ImagickNative $image
+     * @param string        $extension
+     *
+     * @return void
+     * @throws ImagickException
+     */
+    private function setFramesFormat(ImagickNative $image, string $extension): void
+    {
+        $image->setIteratorIndex(0);
+
+        while (true) {
+            $image->setImageFormat($extension);
+
+            if (true !== $image->nextImage()) {
+                break;
+            }
+        }
+
+        $image->setFormat($extension);
     }
 }
