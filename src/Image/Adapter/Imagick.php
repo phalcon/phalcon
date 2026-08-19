@@ -496,7 +496,7 @@ class Imagick extends AbstractAdapter
                 0
             );
 
-            if (true !== $current->nextImage()) {
+            if (true !== $reflection->nextImage()) {
                 break;
             }
         }
@@ -531,18 +531,19 @@ class Imagick extends AbstractAdapter
                 Imagick::CHANNEL_ALPHA
             );
 
-            if (true !== $current->nextImage()) {
+            if (true !== $reflection->nextImage()) {
                 break;
             }
         }
 
         $fade->destroy();
 
-        $image  = new ImagickNative();
-        $pixel  = new ImagickPixel();
-        $height = $current->getImageHeight() + $height;
+        $image = new ImagickNative();
+        $pixel = new ImagickPixel();
 
         $current->setIteratorIndex(0);
+
+        $height = $current->getImageHeight() + $height;
 
         while (true) {
             $image->newImage($this->width, $height, $pixel);
