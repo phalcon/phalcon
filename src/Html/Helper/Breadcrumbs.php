@@ -79,9 +79,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * AbstractHelper constructor.
-     *
-     * @param EscaperInterface  $escaper
-     * @param UrlInterface|null $url
      */
     public function __construct(
         EscaperInterface $escaper,
