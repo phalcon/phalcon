@@ -24,14 +24,6 @@ use const PHP_EOL;
 
 /**
  * Class Title
- *
- * @phpstan-property list<string> $append
- * @phpstan-property list<string> $prepend
- *
- * @property string $delimiter
- * @property string $indent
- * @property string $title
- * @property string $separator
  */
 class Title extends AbstractHelper
 {
@@ -39,35 +31,21 @@ class Title extends AbstractHelper
      * @phpstan-var list<string>
      */
     protected array $append = [];
-
     /**
      * @phpstan-var list<string>
      */
     protected array $prepend = [];
-
-    /**
-     * @var string
-     */
     protected string $separator = '';
-
-    /**
-     * @var string
-     */
     protected string $title = '';
 
     /**
      * Sets the separator and returns the object back
-     *
-     * @param string $indent
-     * @param string $delimiter
-     *
-     * @return static
      */
     public function __invoke(
         string $indent = '    ',
-        string $delimiter = PHP_EOL
+        ?string $delimiter = null
     ): static {
-        $this->delimiter = $delimiter;
+        $this->delimiter = null === $delimiter ? PHP_EOL : $delimiter;
         $this->indent    = $indent;
 
         return $this;
@@ -75,8 +53,6 @@ class Title extends AbstractHelper
 
     /**
      * Returns the title tags
-     *
-     * @return string
      */
     public function __toString()
     {
@@ -114,8 +90,6 @@ class Title extends AbstractHelper
 
     /**
      * Returns the title
-     *
-     * @return string
      */
     public function get(): string
     {
@@ -124,11 +98,6 @@ class Title extends AbstractHelper
 
     /**
      * Prepends text to current document title
-     *
-     * @param string $text
-     * @param bool   $raw
-     *
-     * @return static
      */
     public function prepend(string $text, bool $raw = false): static
     {
@@ -141,11 +110,6 @@ class Title extends AbstractHelper
 
     /**
      * Sets the title
-     *
-     * @param string $text
-     * @param bool   $raw
-     *
-     * @return static
      */
     public function set(string $text, bool $raw = false): static
     {
@@ -158,11 +122,6 @@ class Title extends AbstractHelper
 
     /**
      * Sets the separator
-     *
-     * @param string $separator
-     * @param bool   $raw
-     *
-     * @return static
      */
     public function setSeparator(string $separator, bool $raw = false): static
     {

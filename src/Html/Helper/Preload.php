@@ -33,10 +33,6 @@ use function array_merge;
  */
 class Preload extends AbstractHelper
 {
-    /**
-     * @param EscaperInterface       $escaper
-     * @param ResponseInterface|null $response
-     */
     public function __construct(
         EscaperInterface $escaper,
         protected ?ResponseInterface $response = null
@@ -45,11 +41,7 @@ class Preload extends AbstractHelper
     }
 
     /**
-     * @param string $href
-     * @param string $type
      * @phpstan-param html_attributes $attributes
-     *
-     * @return string
      */
     public function __invoke(
         string $href,

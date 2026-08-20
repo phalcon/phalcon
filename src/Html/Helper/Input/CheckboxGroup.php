@@ -28,17 +28,10 @@ use function is_array;
  */
 class CheckboxGroup extends AbstractGroup
 {
-    /**
-     * @var string
-     */
     protected string $type = 'checkbox';
 
     /**
      * Returns true when $value appears in the checked list.
-     *
-     * @param string $value
-     *
-     * @return bool
      */
     protected function isChecked(string $value): bool
     {

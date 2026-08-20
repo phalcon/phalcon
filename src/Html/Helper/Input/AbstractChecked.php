@@ -18,10 +18,7 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper\Input;
 
 use Phalcon\Contracts\Html\HtmlTypes;
-use Phalcon\Html\Escaper\EscaperInterface;
-use Phalcon\Html\Helper\Doctype;
 
-use function array_key_exists;
 use function array_merge;
 use function is_string;
 use function strtolower;
@@ -38,10 +35,6 @@ use function strtolower;
  *
  * @phpstan-import-type html_attributes from HtmlTypes
  * @phpstan-import-type html_checked_label from HtmlTypes
- *
- * @phpstan-property html_checked_label $label
- *
- * @property bool $strict
  */
 abstract class AbstractChecked extends AbstractInput
 {
@@ -53,29 +46,12 @@ abstract class AbstractChecked extends AbstractInput
         'text'  => '',
         'end'   => '',
     ];
-
-    /**
-     * @var bool
-     */
     protected bool $strict = false;
-
-    /**
-     * @param EscaperInterface $escaper
-     * @param Doctype|null     $doctype
-     */
-    public function __construct(
-        EscaperInterface $escaper,
-        ?Doctype $doctype = null
-    ) {
-        parent::__construct($escaper, $doctype);
-    }
 
     /**
      * Returns the HTML for the input, optionally surrounded by the label
      * fragment configured via `label()` and preceded by the hidden companion
      * input emitted when an `unchecked` attribute is supplied.
-     *
-     * @return string
      */
     public function __toString()
     {
@@ -104,8 +80,6 @@ abstract class AbstractChecked extends AbstractInput
      * from the rendered attributes.
      *
      * @phpstan-param html_attributes $attributes
-     *
-     * @return static
      */
     public function label(array $attributes = []): static
     {
@@ -134,10 +108,6 @@ abstract class AbstractChecked extends AbstractInput
      * checked. Defaults to loose (`==`), which matches typical form-input
      * round-tripping where types may differ between the source data and the
      * value rendered into the markup.
-     *
-     * @param bool $flag
-     *
-     * @return static
      */
     public function strict(bool $flag = true): static
     {
@@ -156,32 +126,30 @@ abstract class AbstractChecked extends AbstractInput
     protected function processChecked(): void
     {
         $attributes = $this->attributes;
+        $checked    = $attributes['checked'] ?? null;
 
-        if (!array_key_exists('checked', $attributes)) {
-            return;
-        }
-
-        $checked = $attributes['checked'];
         unset($attributes['checked']);
 
-        $matched = false;
+        if (null !== $checked) {
+            $matched = false;
 
-        if ($checked === true) {
-            $matched = true;
-        } elseif (is_string($checked) && strtolower($checked) === 'checked') {
-            $matched = true;
-        } else {
-            $value = $attributes['value'] ?? null;
-
-            if ($this->strict) {
-                $matched = $checked === $value;
+            if ($checked === true) {
+                $matched = true;
+            } elseif (is_string($checked) && strtolower($checked) === 'checked') {
+                $matched = true;
             } else {
-                $matched = $checked == $value;
-            }
-        }
+                $value = $attributes['value'] ?? null;
 
-        if ($matched) {
-            $attributes['checked'] = 'checked';
+                if ($this->strict) {
+                    $matched = $checked === $value;
+                } else {
+                    $matched = $checked == $value;
+                }
+            }
+
+            if ($matched) {
+                $attributes['checked'] = 'checked';
+            }
         }
 
         $this->attributes = $attributes;
@@ -190,8 +158,6 @@ abstract class AbstractChecked extends AbstractInput
     /**
      * Returns the markup for the optional hidden companion input that lets
      * a checkbox/radio submit a value when unchecked.
-     *
-     * @return string
      */
     protected function processUnchecked(): string
     {

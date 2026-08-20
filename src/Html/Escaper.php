@@ -54,47 +54,18 @@ use const ENT_SUBSTITUTE;
  *```
  *
  * @phpstan-import-type html_escaper_input from HtmlTypes
- *
- * @property AttributeEscaper $attributeEscaper
- * @property CssEscaper       $cssEscaper
- * @property HtmlEscaper      $htmlEscaper
- * @property JsEscaper        $jsEscaper
- * @property UrlEscaper       $urlEscaper
  */
 class Escaper implements EscaperInterface
 {
-    /**
-     * @var AttributeEscaper
-     */
     protected AttributeEscaper $attributeEscaper;
-
-    /**
-     * @var CssEscaper
-     */
     protected CssEscaper $cssEscaper;
-
-    /**
-     * @var HtmlEscaper
-     */
     protected HtmlEscaper $htmlEscaper;
-
-    /**
-     * @var JsEscaper
-     */
     protected JsEscaper $jsEscaper;
-
-    /**
-     * @var UrlEscaper
-     */
     protected UrlEscaper $urlEscaper;
 
     /**
      * Constructor. Accepts the legacy scalar params for backward compatibility
      * and fans them out to every sub-escaper so existing code keeps working.
-     *
-     * @param string $encoding
-     * @param int    $flags
-     * @param bool   $doubleEncode
      */
     public function __construct(
         string $encoding = 'utf-8',
@@ -132,10 +103,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Escape CSS strings. Delegates to `CssEscaper`.
-     *
-     * @param string $input
-     *
-     * @return string
      */
     public function css(string $input): string
     {
@@ -144,10 +111,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Detects the character encoding of a string. Delegates to `HtmlEscaper`.
-     *
-     * @param string $input
-     *
-     * @return string|null
      */
     final public function detectEncoding(string $input): string | null
     {
@@ -155,10 +118,6 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * @param string $input
-     *
-     * @return string
-     *
      * @deprecated
      */
     public function escapeCss(string $input): string
@@ -167,10 +126,6 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * @param string $input
-     *
-     * @return string
-     *
      * @deprecated
      */
     public function escapeHtml(?string $input = null): string
@@ -179,10 +134,6 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * @param string $input
-     *
-     * @return string
-     *
      * @deprecated
      */
     public function escapeHtmlAttr(?string $input = null): string
@@ -191,10 +142,6 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * @param string $input
-     *
-     * @return string
-     *
      * @deprecated
      */
     public function escapeJs(string $input): string
@@ -203,10 +150,6 @@ class Escaper implements EscaperInterface
     }
 
     /**
-     * @param string $input
-     *
-     * @return string
-     *
      * @deprecated
      */
     public function escapeUrl(string $input): string
@@ -232,8 +175,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Returns the encoding from the HtmlEscaper.
-     *
-     * @return string
      */
     public function getEncoding(): string
     {
@@ -242,8 +183,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Returns the flags from the HtmlEscaper.
-     *
-     * @return int
      */
     public function getFlags(): int
     {
@@ -288,10 +227,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Escape javascript strings. Delegates to `JsEscaper`.
-     *
-     * @param string $input
-     *
-     * @return string
      */
     public function js(string $input): string
     {
@@ -300,10 +235,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Normalizes a string's encoding to UTF-32. Delegates to `HtmlEscaper`.
-     *
-     * @param string $input
-     *
-     * @return string
      */
     final public function normalizeEncoding(string $input): string
     {
@@ -332,12 +263,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Sets the double_encode flag. Fans out to all sub-escapers.
-     *
-     *```php
-     * $escaper->setDoubleEncode(false);
-     *```
-     *
-     * @param bool $doubleEncode
      */
     public function setDoubleEncode(bool $doubleEncode): static
     {
@@ -352,12 +277,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Sets the encoding. Fans out to all sub-escapers.
-     *
-     *```php
-     * $escaper->setEncoding("utf-8");
-     *```
-     *
-     * @param string $encoding
      */
     public function setEncoding(string $encoding): static
     {
@@ -372,12 +291,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Sets the htmlspecialchars flags. Fans out to all sub-escapers.
-     *
-     *```php
-     * $escaper->setFlags(ENT_XHTML);
-     *```
-     *
-     * @param int $flags
      */
     public function setFlags(int $flags): static
     {
@@ -402,12 +315,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Sets the HTML quoting type for htmlspecialchars.
-     *
-     *```php
-     * $escaper->setHtmlQuoteType(ENT_XHTML);
-     *```
-     *
-     * @param int $flags
      *
      * @deprecated
      */
@@ -438,10 +345,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Escapes a URL. Delegates to `UrlEscaper`.
-     *
-     * @param string $input
-     *
-     * @return string
      */
     public function url(string $input): string
     {

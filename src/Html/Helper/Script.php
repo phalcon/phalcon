@@ -31,13 +31,9 @@ class Script extends AbstractSeries
     /**
      * Add an element to the list
      *
-     * @param string $href
      * @phpstan-param html_attributes $attributes
-     * @param int    $position
-     *
-     * @return static
      */
-    public function add(string $href, array $attributes = [], int $position = -1): static
+    public function add(string $url, array $attributes = [], int $position = -1): static
     {
         $this->pushOrPlace(
             [
@@ -45,7 +41,7 @@ class Script extends AbstractSeries
                 [
                     $this->getTag(),
                     '',
-                    $this->getAttributes($href, $attributes),
+                    $this->getAttributes($url, $attributes),
                 ],
                 $this->indent(),
             ],
@@ -72,9 +68,6 @@ class Script extends AbstractSeries
      * is treated as raw HTML (it is JavaScript, not user-supplied text).
      *
      * @phpstan-param html_attributes $attributes
-     * @param int   $position
-     *
-     * @return static
      */
     public function endInternal(array $attributes = [], int $position = -1): static
     {
@@ -104,10 +97,10 @@ class Script extends AbstractSeries
      *
      * @phpstan-return html_attributes
      */
-    protected function getAttributes(string $src, array $attributes): array
+    protected function getAttributes(string $url, array $attributes): array
     {
         $required = [
-            'src'  => $src,
+            'src'  => $url,
             'type' => 'application/javascript',
         ];
 
@@ -116,9 +109,6 @@ class Script extends AbstractSeries
         return array_merge($required, $attributes);
     }
 
-    /**
-     * @return string
-     */
     protected function getTag(): string
     {
         return 'script';

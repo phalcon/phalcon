@@ -51,25 +51,15 @@ abstract class AbstractGroup extends AbstractHelper
      * @var mixed
      */
     protected mixed $checked = null;
-
-    /**
-     * @var string
-     */
     protected string $name = '';
-
     /**
      * @phpstan-var html_group_options
      */
     protected array $options = [];
-
     /**
      * @phpstan-var html_attributes
      */
     protected array $sharedAttributes = [];
-
-    /**
-     * @var string
-     */
     protected string $type = 'checkbox';
 
     /**
@@ -92,8 +82,6 @@ abstract class AbstractGroup extends AbstractHelper
 
     /**
      * Renders the group of inputs as a string.
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -129,11 +117,12 @@ abstract class AbstractGroup extends AbstractHelper
      *
      * @phpstan-param html_group_definition $definition
      */
-    protected function renderItem(string $value, array | string $definition): string
+    protected function renderItem(string $value, mixed $definition): string
     {
         if (is_array($definition)) {
-            $label     = $definition['label'] ?? null;
-            $labelText  = is_string($label) ? $label : $value;
+            $labelText  = isset($definition['label']) && is_string($definition['label'])
+                ? $definition['label']
+                : $value;
             $itemExtras = $definition;
             unset($itemExtras['label']);
         } else {

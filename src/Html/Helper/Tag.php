@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 use Phalcon\Contracts\Html\HtmlTypes;
-use Phalcon\Html\Exception;
 
 /**
  * Generic open-tag escape hatch. Renders just `<name attr="...">` for any
@@ -31,11 +30,7 @@ use Phalcon\Html\Exception;
 class Tag extends AbstractHelper
 {
     /**
-     * @param string $name
      * @phpstan-param html_attributes $attributes
-     *
-     * @return string
-     * @throws Exception
      */
     public function __invoke(string $name, array $attributes = []): string
     {

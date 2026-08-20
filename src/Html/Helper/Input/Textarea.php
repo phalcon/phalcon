@@ -22,15 +22,10 @@ namespace Phalcon\Html\Helper\Input;
  */
 class Textarea extends AbstractInput
 {
-    /**
-     * @var string
-     */
     protected string $type = 'textarea';
 
     /**
      * Returns the HTML for the input.
-     *
-     * @return string
      */
     public function __toString()
     {

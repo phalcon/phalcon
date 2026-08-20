@@ -20,6 +20,7 @@ use Phalcon\Html\Link\Interfaces\LinkInterface;
  * Class Phalcon\Html\Link\Link
  *
  * @phpstan-import-type link_attributes from LinkTypes
+ * @phpstan-import-type link_rels from LinkTypes
  */
 class Link extends AbstractLink implements LinkInterface
 {
@@ -47,8 +48,6 @@ class Link extends AbstractLink implements LinkInterface
      * - A URI template as defined by RFC 6570.
      *
      * If a URI template is returned, isTemplated() MUST return True.
-     *
-     * @return string
      */
     public function getHref(): string
     {
@@ -61,7 +60,7 @@ class Link extends AbstractLink implements LinkInterface
      * This method returns 0 or more relationship types for a link, expressed
      * as an array of strings.
      *
-     * @return string[]
+     * @phpstan-return link_rels
      */
     public function getRels(): array
     {
@@ -70,9 +69,6 @@ class Link extends AbstractLink implements LinkInterface
 
     /**
      * Returns whether this is a templated link.
-     *
-     * @return bool
-     *   True if this link object is templated, False otherwise.
      */
     public function isTemplated(): bool
     {

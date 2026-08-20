@@ -23,8 +23,6 @@ use function spl_object_hash;
 /**
  * @phpstan-import-type link_collection from LinkTypes
  * @phpstan-import-type link_list from LinkTypes
- *
- * @phpstan-property link_collection $links
  */
 abstract class AbstractLinkProvider
 {

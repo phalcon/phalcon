@@ -24,16 +24,9 @@ use Phalcon\Html\Escaper\EscaperInterface;
  * Class Ol
  *
  * @phpstan-import-type html_attributes from HtmlTypes
- *
- * @property bool $forceRaw
  */
 class Ol extends AbstractList
 {
-    /**
-     * @param EscaperInterface $escaper
-     * @param Doctype|null     $doctype
-     * @param bool             $forceRaw
-     */
     public function __construct(
         EscaperInterface $escaper,
         ?Doctype $doctype = null,
@@ -45,11 +38,7 @@ class Ol extends AbstractList
     /**
      * Add an element to the list
      *
-     * @param string $text
      * @phpstan-param html_attributes $attributes
-     * @param bool   $raw
-     *
-     * @return static
      */
     public function add(
         string $text,
@@ -70,9 +59,6 @@ class Ol extends AbstractList
         return $this;
     }
 
-    /**
-     * @return string
-     */
     protected function getTag(): string
     {
         return 'ol';

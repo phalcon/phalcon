@@ -30,8 +30,6 @@ class Body extends AbstractHelper
      * Produce a `<body>` tag.
      *
      * @phpstan-param html_attributes $attributes
-     *
-     * @return string
      */
     public function __invoke(array $attributes = []): string
     {

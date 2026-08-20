@@ -48,15 +48,10 @@ class Doctype
 
     /**
      * Produce a <doctype> tag
-     *
-     * @param int    $type
-     * @param string $delimiter
-     *
-     * @return static
      */
     public function __invoke(
         int $type = self::HTML5,
-        string $delimiter = PHP_EOL
+        string $delimiter = "\n"
     ): static {
         $this->type      = $type;
         $this->delimiter = $delimiter;
@@ -64,9 +59,6 @@ class Doctype
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $prefix = "<!DOCTYPE html PUBLIC \"-//W3C//DTD ";
@@ -97,9 +89,6 @@ class Doctype
         return $map[$this->type] ?? "<!DOCTYPE html>" . $dlm;
     }
 
-    /**
-     * @return int
-     */
     public function getType(): int
     {
         return $this->type;

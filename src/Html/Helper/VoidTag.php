@@ -18,7 +18,6 @@ declare(strict_types=1);
 namespace Phalcon\Html\Helper;
 
 use Phalcon\Contracts\Html\HtmlTypes;
-use Phalcon\Html\Exception;
 
 /**
  * Generic void-tag escape hatch. Renders a self-closing tag for any name
@@ -30,11 +29,7 @@ use Phalcon\Html\Exception;
 class VoidTag extends AbstractHelper
 {
     /**
-     * @param string $name
      * @phpstan-param html_attributes $attributes
-     *
-     * @return string
-     * @throws Exception
      */
     public function __invoke(string $name, array $attributes = []): string
     {

@@ -24,21 +24,11 @@ use Phalcon\Html\Escaper\EscaperInterface;
  * Class Label
  *
  * @phpstan-import-type html_attributes from HtmlTypes
- *
- * @property bool $forceRaw
  */
 class Label extends AbstractHelper
 {
-    /**
-     * @var bool
-     */
     protected bool $forceRaw = false;
 
-    /**
-     * @param EscaperInterface $escaper
-     * @param Doctype|null     $doctype
-     * @param bool             $forceRaw
-     */
     public function __construct(
         EscaperInterface $escaper,
         ?Doctype $doctype = null,
@@ -52,11 +42,7 @@ class Label extends AbstractHelper
     /**
      * Produce a `<label>` tag.
      *
-     * @param string $label
      * @phpstan-param html_attributes $attributes
-     * @param bool   $raw
-     *
-     * @return string
      */
     public function __invoke(
         string $label,

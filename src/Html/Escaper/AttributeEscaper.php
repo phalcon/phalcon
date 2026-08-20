@@ -83,10 +83,6 @@ class AttributeEscaper extends AbstractEscaper
 
     /**
      * Encodes a single key/value via `htmlspecialchars`.
-     *
-     * @param string $input
-     *
-     * @return string
      */
     protected function escapeValue(string $input): string
     {

@@ -33,11 +33,6 @@ use function str_replace;
  *
  * @phpstan-import-type html_breadcrumb_elements from HtmlTypes
  *
- * @phpstan-property html_breadcrumb_elements $elements
- *
- * @property string $separator
- * @property string $template
- *
  * @deprecated Will be removed in future version
  * Use {@see \Phalcon\Html\Helper\Breadcrumbs} instead.
  */
@@ -49,20 +44,14 @@ class Breadcrumbs
      * @phpstan-var html_breadcrumb_elements
      */
     private array $elements = [];
-
     /**
      * Crumb separator
-     *
-     * @var string
      */
-    private $separator = " / ";
-
+    private string $separator = " / ";
     /**
      * The HTML template to use to render the breadcrumbs.
-     *
-     * @var string
      */
-    private $template = '<dt><a href="%link%">%label%</a></dt>';
+    private string $template = '<dt><a href="%link%">%label%</a></dt>';
 
     /**
      * Adds a new crumb.
@@ -78,7 +67,6 @@ class Breadcrumbs
      * Crumbs are stored keyed by their link, so adding two crumbs that share
      * the same link - including two link-less crumbs, which share the empty
      * string key - keeps only the last one.
-     *
      */
     public function add(string $label, string $link = ''): static
     {
@@ -101,8 +89,6 @@ class Breadcrumbs
 
     /**
      * Returns the separator
-     *
-     * @return string
      */
     public function getSeparator(): string
     {
@@ -118,8 +104,6 @@ class Breadcrumbs
      * // remove a crumb without an url (last link)
      * $breadcrumbs->remove();
      * ```
-     *
-     * @param string $link
      */
     public function remove(string $link): void
     {
@@ -132,8 +116,6 @@ class Breadcrumbs
      * ```php
      * echo $breadcrumbs->render();
      * ```
-     *
-     * @return string
      */
     public function render(): string
     {

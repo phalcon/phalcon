@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper;
 
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
@@ -32,58 +33,38 @@ use const PHP_EOL;
  * The resulting HTML when calling `render()` will have each breadcrumb enclosed
  * in `<li>` tags, while the whole string is enclosed in `<nav>` and `<ol>` tags.
  *
- * @phpstan-type TTemplate array{
- *      main: string,
- *      line: string,
- *      last: string,
- * }
- *
- * @phpstan-type TElement array{
- *      attributes: array<string, string>,
- *      icon: string,
- *      link: string,
- *      text: string,
- * }
+ * @phpstan-import-type html_breadcrumb_attributes from HtmlTypes
+ * @phpstan-import-type html_breadcrumb_data from HtmlTypes
+ * @phpstan-import-type html_breadcrumb_element from HtmlTypes
+ * @phpstan-import-type html_breadcrumb_template from HtmlTypes
  */
 class Breadcrumbs extends AbstractHelper
 {
     use InterpolateTrait;
 
     /**
-     * @var string
-     */
-    protected string $delimiter = PHP_EOL;
-    /**
-     * @var string
-     */
-    protected string $indent = '    ';
-    /**
-     * @var array<string, string>
+     * @phpstan-var html_breadcrumb_attributes
      */
     private array $attributes = [];
     /**
      * Keeps all the breadcrumbs
      *
-     * @var array<int, TElement>
+     * @phpstan-var html_breadcrumb_data
      */
     private array $data = [];
     /**
      * Link prefix prepended to every non-empty link during rendering.
      * Auto-populated from the Url service when one is injected.
-     *
-     * @var string
      */
     private string $prefix = '';
     /**
      * Crumb separator
-     *
-     * @var string
      */
     private string $separator = "<li>/</li>";
     /**
      * The HTML template to use to render the breadcrumbs.
      *
-     * @var TTemplate
+     * @phpstan-var html_breadcrumb_template
      */
     private array $template = [
         'main' => "
@@ -111,11 +92,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * Sets the indent and delimiter and returns the object back
-     *
-     * @param string      $indent
-     * @param string|null $delimiter
-     *
-     * @return static
      */
     public function __invoke(
         string $indent = '    ',
@@ -141,12 +117,7 @@ class Breadcrumbs extends AbstractHelper
      * $breadcrumbs->add("Users");
      * ```
      *
-     * @param string                $text
-     * @param string                $link
-     * @param string                $icon
-     * @param array<string, string> $attributes
-     *
-     * @return static
+     * @phpstan-param html_breadcrumb_attributes $attributes
      */
     public function add(
         string $text,
@@ -180,8 +151,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * Clear the attributes of the parent element
-     *
-     * @return $this
      */
     public function clearAttributes(): static
     {
@@ -193,7 +162,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Get the attributes of the parent element
      *
-     * @return array<string, string>
+     * @phpstan-return html_breadcrumb_attributes
      */
     public function getAttributes(): array
     {
@@ -202,8 +171,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * Returns the link prefix.
-     *
-     * @return string
      */
     public function getPrefix(): string
     {
@@ -212,8 +179,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * Returns the separator
-     *
-     * @return string
      */
     public function getSeparator(): string
     {
@@ -223,7 +188,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Return the current template
      *
-     * @return TTemplate
+     * @phpstan-return html_breadcrumb_template
      */
     public function getTemplate(): array
     {
@@ -237,10 +202,6 @@ class Breadcrumbs extends AbstractHelper
      * // Remove the second element
      * $breadcrumbs->remove(2);
      * ```
-     *
-     * @param int $index
-     *
-     * @return void
      */
     public function remove(int $index): void
     {
@@ -253,8 +214,6 @@ class Breadcrumbs extends AbstractHelper
      * ```php
      * echo $breadcrumbs->render();
      * ```
-     *
-     * @return string
      */
     public function render(): string
     {
@@ -298,9 +257,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Set the attributes for the parent element
      *
-     * @param array<string, string> $attributes
-     *
-     * @return $this
+     * @phpstan-param html_breadcrumb_attributes $attributes
      */
     public function setAttributes(array $attributes): static
     {
@@ -312,10 +269,6 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Set the link prefix prepended to every non-empty link during rendering.
      * When a Url service was injected, calling this method replaces it.
-     *
-     * @param string $prefix
-     *
-     * @return static
      */
     public function setPrefix(string $prefix): static
     {
@@ -327,10 +280,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * Set the separator
-     *
-     * @param string $separator
-     *
-     * @return static
      */
     public function setSeparator(string $separator): static
     {
@@ -341,12 +290,6 @@ class Breadcrumbs extends AbstractHelper
 
     /**
      * Set the HTML template
-     *
-     * @param string $main
-     * @param string $line
-     * @param string $last
-     *
-     * @return static
      */
     public function setTemplate(
         string $main,
@@ -365,7 +308,7 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Returns the internal breadcrumbs array
      *
-     * @return array<int, TElement>
+     * @phpstan-return html_breadcrumb_data
      */
     public function toArray(): array
     {
@@ -373,10 +316,7 @@ class Breadcrumbs extends AbstractHelper
     }
 
     /**
-     * @param string   $template
-     * @param TElement $element
-     *
-     * @return string
+     * @phpstan-param html_breadcrumb_element $element
      */
     private function getLink(
         string $template,
@@ -406,14 +346,12 @@ class Breadcrumbs extends AbstractHelper
     /**
      * Processes attributes
      *
-     * @param array<string, string> $attributes
-     *
-     * @return string
+     * @phpstan-param html_breadcrumb_attributes $attributes
      */
     private function processAttributes(array $attributes): string
     {
-        $attributes = $this->renderAttributes($attributes);
+        $attributesRendered = $this->renderAttributes($attributes);
 
-        return rtrim(!empty($attributes) ? ' ' . $attributes : '');
+        return rtrim(!empty($attributesRendered) ? ' ' . $attributesRendered : '');
     }
 }

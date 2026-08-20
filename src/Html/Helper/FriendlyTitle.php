@@ -27,14 +27,8 @@ use Phalcon\Support\Helper\Str\Friendly;
  */
 class FriendlyTitle extends AbstractHelper
 {
-    /**
-     * @var Friendly
-     */
     protected Friendly $friendly;
 
-    /**
-     * @param EscaperInterface $escaper
-     */
     public function __construct(EscaperInterface $escaper)
     {
         parent::__construct($escaper);

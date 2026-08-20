@@ -33,12 +33,7 @@ abstract class AbstractList extends AbstractHelper
      * @phpstan-var html_attributes
      */
     protected array $attributes = [];
-
-    /**
-     * @var string
-     */
     protected string $elementTag = 'li';
-
     /**
      * @phpstan-var html_element_store
      */
@@ -53,7 +48,7 @@ abstract class AbstractList extends AbstractHelper
         array $attributes = []
     ): static {
         $this->attributes = $attributes;
-        $this->delimiter  = null === $delimiter ? PHP_EOL : $delimiter;
+        $this->delimiter  = empty($delimiter) ? PHP_EOL : $delimiter;
         $this->indent     = $indent;
         $this->store      = [];
 
@@ -62,8 +57,6 @@ abstract class AbstractList extends AbstractHelper
 
     /**
      * Generates and returns the HTML for the list.
-     *
-     * @return string
      */
     public function __toString()
     {
@@ -88,9 +81,6 @@ abstract class AbstractList extends AbstractHelper
     /**
      *
      * Returns the tag name.
-     *
-     * @return string
-     *
      */
-    abstract protected function getTag();
+    abstract protected function getTag(): string;
 }

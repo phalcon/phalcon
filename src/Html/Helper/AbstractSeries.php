@@ -23,9 +23,6 @@ use Phalcon\Contracts\Html\HtmlTypes;
  * @phpstan-import-type html_attributes from HtmlTypes
  * @phpstan-import-type html_element_entry from HtmlTypes
  * @phpstan-import-type html_element_store from HtmlTypes
- *
- * @phpstan-property html_attributes    $attributes
- * @phpstan-property html_element_store $store
  */
 abstract class AbstractSeries extends AbstractHelper
 {
@@ -33,7 +30,6 @@ abstract class AbstractSeries extends AbstractHelper
      * @phpstan-var html_attributes
      */
     protected array $attributes = [];
-
     /**
      * @phpstan-var html_element_store
      */
@@ -56,8 +52,6 @@ abstract class AbstractSeries extends AbstractHelper
      * their integer key first, so an asset registered with a lower position
      * renders before one registered with a higher position regardless of
      * registration order.
-     *
-     * @return string
      */
     public function __toString()
     {
@@ -72,8 +66,6 @@ abstract class AbstractSeries extends AbstractHelper
 
     /**
      * Resets the internal store.
-     *
-     * @return $this
      */
     public function reset(): static
     {
@@ -99,15 +91,15 @@ abstract class AbstractSeries extends AbstractHelper
      *
      * @phpstan-param html_element_entry $entry
      */
-    protected function pushOrPlace(array $entry, int $pos = -1): void
+    protected function pushOrPlace(array $entry, int $position = -1): void
     {
-        if ($pos < 0) {
+        if ($position < 0) {
             $this->store[] = $entry;
 
             return;
         }
 
-        $key = $pos;
+        $key = $position;
         while (isset($this->store[$key])) {
             $key++;
         }

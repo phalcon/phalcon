@@ -29,32 +29,12 @@ use function is_numeric;
  *
  * @phpstan-import-type html_attributes from HtmlTypes
  * @phpstan-import-type html_select_attributes from HtmlTypes
- *
- * @property string $elementTag
- * @property bool   $inOptGroup
- * @property string $selected
- * @property bool   $strict
  */
 class Select extends AbstractList
 {
-    /**
-     * @var string
-     */
     protected string $elementTag = 'option';
-
-    /**
-     * @var bool
-     */
     protected bool $inOptGroup = false;
-
-    /**
-     * @var string
-     */
     protected string $selected = '';
-
-    /**
-     * @var bool
-     */
     protected bool $strict = false;
 
     /**
@@ -222,17 +202,11 @@ class Select extends AbstractList
         return $this;
     }
 
-    /**
-     * @return string
-     */
     protected function getTag(): string
     {
         return 'select';
     }
 
-    /**
-     * @return string
-     */
     protected function optGroupEnd(): string
     {
         return '</optgroup>';
@@ -241,8 +215,10 @@ class Select extends AbstractList
     /**
      * @phpstan-param html_attributes $attributes
      */
-    protected function optGroupStart(string $label, array $attributes): string
-    {
+    protected function optGroupStart(
+        string $label,
+        array $attributes
+    ): string {
         $attributes['label'] = $label;
 
         return $this->renderTag('optgroup', $attributes);

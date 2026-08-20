@@ -25,9 +25,6 @@ namespace Phalcon\Html\Helper\Input;
  */
 class RadioGroup extends AbstractGroup
 {
-    /**
-     * @var string
-     */
     protected string $type = 'radio';
 
     /**

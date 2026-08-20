@@ -27,11 +27,6 @@ use function array_merge;
  * Class AbstractInput
  *
  * @phpstan-import-type html_attributes from HtmlTypes
- *
- * @phpstan-property html_attributes $attributes
- *
- * @property string $type
- * @property string $value
  */
 abstract class AbstractInput extends AbstractHelper
 {
@@ -39,17 +34,10 @@ abstract class AbstractInput extends AbstractHelper
      * @phpstan-var html_attributes
      */
     protected array $attributes = [];
-    /**
-     * @var string
-     */
     protected string $type = 'text';
 
     /**
-     * @param string      $name
-     * @param string|null $value
      * @phpstan-param html_attributes $attributes
-     *
-     * @return static
      */
     public function __invoke(
         string $name,
@@ -74,8 +62,6 @@ abstract class AbstractInput extends AbstractHelper
 
     /**
      * Returns the HTML for the input.
-     *
-     * @return string
      */
     public function __toString()
     {

@@ -29,10 +29,7 @@ class Img extends AbstractHelper
     /**
      * Produce a <img> tag.
      *
-     * @param string $src
      * @phpstan-param html_attributes $attributes
-     *
-     * @return string
      */
     public function __invoke(string $src, array $attributes = []): string
     {

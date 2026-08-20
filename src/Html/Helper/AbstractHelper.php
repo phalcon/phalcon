@@ -33,33 +33,15 @@ use const PHP_EOL;
 /**
  * @phpstan-import-type html_attributes from HtmlTypes
  * @phpstan-import-type html_element_store from HtmlTypes
- *
- * @property string           $delimiter
- * @property EscaperInterface $escaper
- * @property string           $indent
- * @property int              $indentLevel
  */
 abstract class AbstractHelper
 {
-    /**
-     * @var string
-     */
     protected string $delimiter = PHP_EOL;
-
-    /**
-     * @var string
-     */
     protected string $indent = '    ';
-
-    /**
-     * @var int
-     */
     protected int $indentLevel = 1;
 
     /**
      * AbstractHelper constructor.
-     *
-     * @param EscaperInterface $escaper
      */
     public function __construct(
         protected EscaperInterface $escaper,
@@ -69,11 +51,6 @@ abstract class AbstractHelper
 
     /**
      * Produces a closing tag
-     *
-     * @param string $tag
-     * @param bool   $raw
-     *
-     * @return string
      */
     protected function close(string $tag, bool $raw = false): string
     {
@@ -238,9 +215,9 @@ abstract class AbstractHelper
             $escapedAttrs = ' ' . rtrim($this->renderAttributes($attrs));
         }
 
-        $close = empty(trim($close)) ? '' : ' ' . trim($close);
+        $localClose = empty(trim($close)) ? '' : ' ' . trim($close);
 
-        return '<' . $tag . $escapedAttrs . $close . '>';
+        return '<' . $tag . $escapedAttrs . $localClose . '>';
     }
 
     /**

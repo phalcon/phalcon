@@ -26,17 +26,11 @@ interface AttributesInterface
 {
     /**
      * Get Attributes
-     *
-     * @return Attributes
      */
     public function getAttributes(): Attributes;
 
     /**
      * Set Attributes
-     *
-     * @param Attributes $attributes
-     *
-     * @return AttributesInterface
      */
     public function setAttributes(Attributes $attributes): AttributesInterface;
 }

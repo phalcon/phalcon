@@ -28,23 +28,11 @@ use const ENT_SUBSTITUTE;
  * Shared encoding/flags state and the encoding detection/normalization
  * utilities used by the per-context escaper objects (`HtmlEscaper`,
  * `AttributeEscaper`, `CssEscaper`, `JsEscaper`, `UrlEscaper`).
- *
- * @property bool   $doubleEncode
- * @property string $encoding
- * @property int    $flags
  */
 trait EscaperTrait
 {
-    /**
-     * @var bool
-     */
     protected bool $doubleEncode = true;
-
-    /**
-     * @var string
-     */
     protected string $encoding = 'utf-8';
-
     /**
      * ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401
      *
@@ -63,6 +51,14 @@ trait EscaperTrait
      */
     final public function detectEncoding(string $input): string | null
     {
+        /**
+         * An empty string is a basic charset. Return early, because the
+         * strict detection below reports it as UTF-32.
+         */
+        if ('' === $input) {
+            return 'ASCII';
+        }
+
         foreach (['UTF-32', 'UTF-8', 'ISO-8859-1', 'ASCII'] as $charset) {
             if (false !== mb_detect_encoding($input, $charset, true)) {
                 return $charset;
@@ -72,25 +68,16 @@ trait EscaperTrait
         return mb_detect_encoding($input) ?: null;
     }
 
-    /**
-     * @return bool
-     */
     public function getDoubleEncode(): bool
     {
         return $this->doubleEncode;
     }
 
-    /**
-     * @return string
-     */
     public function getEncoding(): string
     {
         return $this->encoding;
     }
 
-    /**
-     * @return int
-     */
     public function getFlags(): int
     {
         return $this->flags;
@@ -114,8 +101,6 @@ trait EscaperTrait
 
     /**
      * @param bool $doubleEncode
-     *
-     * @return static
      */
     public function setDoubleEncode(bool $doubleEncode): static
     {
@@ -126,8 +111,6 @@ trait EscaperTrait
 
     /**
      * @param string $encoding
-     *
-     * @return static
      */
     public function setEncoding(string $encoding): static
     {
@@ -138,8 +121,6 @@ trait EscaperTrait
 
     /**
      * @param int $flags
-     *
-     * @return static
      */
     public function setFlags(int $flags): static
     {

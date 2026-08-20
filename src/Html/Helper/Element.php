@@ -24,16 +24,9 @@ use Phalcon\Html\Escaper\EscaperInterface;
  * Class Element
  *
  * @phpstan-import-type html_attributes from HtmlTypes
- *
- * @property bool $forceRaw
  */
 class Element extends AbstractHelper
 {
-    /**
-     * @param EscaperInterface $escaper
-     * @param Doctype|null     $doctype
-     * @param bool             $forceRaw
-     */
     public function __construct(
         EscaperInterface $escaper,
         ?Doctype $doctype = null,
@@ -45,12 +38,7 @@ class Element extends AbstractHelper
     /**
      * Produce a tag.
      *
-     * @param string $tag
-     * @param string $text
      * @phpstan-param html_attributes $attributes
-     * @param bool   $raw
-     *
-     * @return string
      */
     public function __invoke(
         string $tag,

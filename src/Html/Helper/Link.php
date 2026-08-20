@@ -31,20 +31,16 @@ class Link extends Style
     /**
      * Add an element to the list
      *
-     * @param string $href
      * @phpstan-param html_attributes $attributes
-     * @param int    $position
-     *
-     * @return static
      */
-    public function add(string $href, array $attributes = [], int $position = -1): static
+    public function add(string $url, array $attributes = [], int $position = -1): static
     {
         $this->pushOrPlace(
             [
                 'renderTag',
                 [
                     $this->getTag(),
-                    $this->getAttributes($href, $attributes),
+                    $this->getAttributes($url, $attributes),
                     '/',
                 ],
                 $this->indent(),
@@ -62,10 +58,10 @@ class Link extends Style
      *
      * @phpstan-return html_attributes
      */
-    protected function getAttributes(string $href, array $attributes): array
+    protected function getAttributes(string $url, array $attributes): array
     {
         $required = [
-            'href' => $href,
+            'href' => $url,
         ];
 
         unset($attributes['href']);

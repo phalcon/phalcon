@@ -20,12 +20,6 @@ use Phalcon\Support\Collection;
  * @phpstan-import-type link_attribute_value from LinkTypes
  * @phpstan-import-type link_attributes from LinkTypes
  * @phpstan-import-type link_rels from LinkTypes
- *
- * @phpstan-property Collection<link_attribute_value> $attributes
- * @phpstan-property Collection<bool>                 $rels
- *
- * @property string $href
- * @property bool   $templated
  */
 abstract class AbstractLink
 {
@@ -33,20 +27,11 @@ abstract class AbstractLink
      * @phpstan-var Collection<link_attribute_value>
      */
     protected Collection $attributes;
-
-    /**
-     * @var string
-     */
     protected string $href = "";
-
     /**
      * @phpstan-var Collection<bool>
      */
     protected Collection $rels;
-
-    /**
-     * @var bool
-     */
     protected bool $templated = false;
 
     /**
@@ -113,7 +98,7 @@ abstract class AbstractLink
     protected function doGetRels(): array
     {
         /** @phpstan-var link_rels $rels */
-        $rels = $this->rels->getKeys(false);
+        $rels = $this->rels->keys(false);
 
         return $rels;
     }
@@ -129,10 +114,8 @@ abstract class AbstractLink
 
     /**
      * @phpstan-param link_attribute_value $value
-     *
-     * @phpstan-return static
      */
-    protected function doWithAttribute(string $key, mixed $value): self
+    protected function doWithAttribute(string $key, mixed $value): static
     {
         $newInstance = clone $this;
 
@@ -141,10 +124,7 @@ abstract class AbstractLink
         return $newInstance;
     }
 
-    /**
-     * @phpstan-return static
-     */
-    protected function doWithHref(string $href): self
+    protected function doWithHref(string $href): static
     {
         $newInstance = clone $this;
 
@@ -154,10 +134,7 @@ abstract class AbstractLink
         return $newInstance;
     }
 
-    /**
-     * @phpstan-return static
-     */
-    protected function doWithoutAttribute(string $key): self
+    protected function doWithoutAttribute(string $key): static
     {
         $newInstance = clone $this;
 
@@ -166,10 +143,7 @@ abstract class AbstractLink
         return $newInstance;
     }
 
-    /**
-     * @phpstan-return static
-     */
-    protected function doWithoutRel(string $key): self
+    protected function doWithoutRel(string $key): static
     {
         $newInstance = clone $this;
 
@@ -178,10 +152,7 @@ abstract class AbstractLink
         return $newInstance;
     }
 
-    /**
-     * @phpstan-return static
-     */
-    protected function doWithRel(string $key): self
+    protected function doWithRel(string $key): static
     {
         $newInstance = clone $this;
 

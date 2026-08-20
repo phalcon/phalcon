@@ -30,9 +30,8 @@ class Meta extends AbstractSeries
      * Add an element to the list
      *
      * @phpstan-param html_attributes $attributes
-     * @param int   $pos
      */
-    public function add(array $attributes = [], int $pos = -1): static
+    public function add(array $attributes = [], int $position = -1): static
     {
         $this->pushOrPlace(
             [
@@ -43,71 +42,47 @@ class Meta extends AbstractSeries
                 ],
                 $this->indent(),
             ],
-            $pos
+            $position
         );
 
         return $this;
     }
 
-    /**
-     * @param string $httpEquiv
-     * @param string $content
-     * @param int    $pos
-     */
-    public function addHttp(string $httpEquiv, string $content, int $pos = -1): static
+    public function addHttp(string $httpEquiv, string $content, int $position = -1): static
     {
-        return $this->addElement('http-equiv', $httpEquiv, $content, $pos);
+        return $this->addElement('http-equiv', $httpEquiv, $content, $position);
     }
 
-    /**
-     * @param string $name
-     * @param string $content
-     * @param int    $pos
-     */
-    public function addName(string $name, string $content, int $pos = -1): static
+    public function addName(string $name, string $content, int $position = -1): static
     {
-        $this->addElement('name', $name, $content, $pos);
+        $this->addElement('name', $name, $content, $position);
 
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @param string $content
-     * @param int    $pos
-     */
-    public function addProperty(string $name, string $content, int $pos = -1): static
+    public function addProperty(string $name, string $content, int $position = -1): static
     {
-        $this->addElement('property', $name, $content, $pos);
+        $this->addElement('property', $name, $content, $position);
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
     protected function getTag(): string
     {
         return 'meta';
     }
 
-    /**
-     * @param string $element
-     * @param string $value
-     * @param string $content
-     * @param int    $pos
-     */
     private function addElement(
         string $element,
         string $value,
         string $content,
-        int $pos = -1
+        int $position = -1
     ): static {
         $attributes = [
             $element  => $value,
             'content' => $content,
         ];
 
-        return $this->add($attributes, $pos);
+        return $this->add($attributes, $position);
     }
 }

@@ -34,10 +34,6 @@ use function unpack;
  * Each concrete context (`HtmlEscaper`, `AttributeEscaper`, `CssEscaper`,
  * `JsEscaper`, `UrlEscaper`) extends this so that callers can configure
  * one context without affecting the others.
- *
- * @property bool   $doubleEncode
- * @property string $encoding
- * @property int    $flags
  */
 abstract class AbstractEscaper
 {

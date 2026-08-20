@@ -31,7 +31,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      *
      * @phpstan-param link_attribute_value $value
      */
-    public function withAttribute(string $attribute, mixed $value): static
+    public function withAttribute(mixed $attribute, mixed $value): static
     {
         return $this->doWithAttribute($attribute, $value);
     }
@@ -70,7 +70,7 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
     /**
      * Returns an instance with the specified relationship excluded.
      *
-     * If the specified rel is already not present, this method MUST return
+     * If the specified rel is not present, this method MUST return
      * normally without errors.
      */
     public function withoutRel(string $rel): static

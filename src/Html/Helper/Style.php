@@ -28,19 +28,12 @@ use function array_merge;
  */
 class Style extends AbstractSeries
 {
-    /**
-     * @var bool
-     */
     private bool $isStyle = false;
 
     /**
      * Add an element to the list
      *
-     * @param string $url
      * @phpstan-param html_attributes $attributes
-     * @param int    $position
-     *
-     * @return static
      */
     public function add(string $url, array $attributes = [], int $position = -1): static
     {
@@ -62,10 +55,6 @@ class Style extends AbstractSeries
 
     /**
      * Sets if this is a style or link tag
-     *
-     * @param bool $flag
-     *
-     * @return $this
      */
     public function setStyle(bool $flag): static
     {
@@ -99,9 +88,6 @@ class Style extends AbstractSeries
         return array_merge($required, $attributes);
     }
 
-    /**
-     * @return string
-     */
     protected function getTag(): string
     {
         return true === $this->isStyle ? "style" : "link";
