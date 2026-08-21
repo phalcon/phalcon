@@ -15,44 +15,28 @@ namespace Phalcon\Acl\Traits;
 
 /**
  * This class defines role/component names and their descriptions
- *
- * @property string      $name
- * @property string|null $description
  */
 trait ItemTrait
 {
     /**
      * Role/Component description
-     *
-     * @var string|null
      */
-    private string | null $description = null;
+    protected string | null $description = null;
     /**
      * Role/Component name
-     *
-     * @var string
      */
-    private string $name;
+    protected string $name;
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDescription(): string | null
     {
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

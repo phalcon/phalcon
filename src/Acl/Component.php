@@ -14,22 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Acl;
 
 use Phalcon\Acl\Exceptions\ForbiddenWildcard;
-use Phalcon\Acl\Traits\ItemTrait;
 
 /**
  * This class defines component entity and its description
  */
-class Component implements ComponentInterface
+class Component extends AbstractElement implements ComponentInterface
 {
-    use ItemTrait;
-
     /**
      * Component constructor.
-     *
-     * @param string $name
-     * @param string $description
-     *
-     * @throws ForbiddenWildcard
      */
     public function __construct(string $name, string | null $description = null)
     {

@@ -17,6 +17,7 @@ use Phalcon\Acl\Component;
 use Phalcon\Acl\Enum;
 use Phalcon\Acl\Exceptions\InvalidSnapshot;
 use Phalcon\Acl\Role;
+use Phalcon\Contracts\Acl\AclTypes;
 use Phalcon\Contracts\Acl\Adapter\Persistable;
 use Phalcon\Storage\Adapter\AdapterInterface as StorageInterface;
 
@@ -43,31 +44,16 @@ use function is_object;
  *
  * @see Persistable
  *
- * @phpstan-type TSnapshot array{
- *     version?: int,
- *     access?: array<string, int>,
- *     accessList?: array<string, bool>,
- *     components?: array<string, string|null>,
- *     componentsNames?: array<string, bool>,
- *     roles?: array<string, string|null>,
- *     roleInherits?: array<string, array<int, string>>,
- *     defaultAccess?: int,
- *     noArgumentsDefaultAction?: int
- * }
+ * @phpstan-import-type acl_snapshot from AclTypes
  */
 class Storage extends Memory implements Persistable
 {
     public const SNAPSHOT_VERSION = 1;
 
-    /**
-     * @param StorageInterface $storage
-     * @param string           $key
-     */
     public function __construct(
         protected StorageInterface $storage,
         protected string $key = 'acl-data'
     ) {
-        parent::__construct();
 
         $this->load();
     }
@@ -77,8 +63,6 @@ class Storage extends Memory implements Persistable
      * in-memory state. Returns false when no compatible snapshot exists; throws
      * Phalcon\Acl\Exceptions\InvalidSnapshot on an incompatible version or a
      * malformed structure.
-     *
-     * @return bool
      */
     public function load(): bool
     {
@@ -96,9 +80,12 @@ class Storage extends Memory implements Persistable
             return false;
         }
 
-        if ($data['version'] != self::SNAPSHOT_VERSION) {
+        /** @var int|string $version */
+        $version = $data['version'];
+
+        if ($version != self::SNAPSHOT_VERSION) {
             throw new InvalidSnapshot(
-                "Incompatible ACL snapshot version '" . $data['version']
+                "Incompatible ACL snapshot version '" . $version
                 . "'; expected '" . self::SNAPSHOT_VERSION . "'"
             );
         }
@@ -114,7 +101,7 @@ class Storage extends Memory implements Persistable
             throw new InvalidSnapshot('Malformed ACL snapshot structure');
         }
 
-        /** @var TSnapshot $data */
+        /** @var acl_snapshot $data */
         $roles = [];
         foreach ($data['roles'] as $name => $description) {
             $roles[$name] = new Role($name, $description);
@@ -141,23 +128,21 @@ class Storage extends Memory implements Persistable
      * Persists the policy snapshot. Closure-backed access keys are written as
      * DENY (fail closed); roles/components are written as scalar name =>
      * description maps for serializer independence.
-     *
-     * @return bool
      */
     public function save(): bool
     {
-        $access = $this->access ?? [];
-        foreach (array_keys($this->functions ?? []) as $accessKey) {
+        $access = $this->access;
+        foreach (array_keys($this->functions) as $accessKey) {
             $access[$accessKey] = Enum::DENY;
         }
 
         $components = [];
-        foreach ($this->components ?? [] as $componentName => $componentObject) {
+        foreach ($this->components as $componentName => $componentObject) {
             $components[$componentName] = $componentObject->getDescription();
         }
 
         $roles = [];
-        foreach ($this->roles ?? [] as $roleName => $roleObject) {
+        foreach ($this->roles as $roleName => $roleObject) {
             $roles[$roleName] = $roleObject->getDescription();
         }
 
@@ -170,7 +155,7 @@ class Storage extends Memory implements Persistable
                 'components'               => $components,
                 'componentsNames'          => $this->componentsNames,
                 'roles'                    => $roles,
-                'roleInherits'             => $this->roleInherits ?? [],
+                'roleInherits'             => $this->roleInherits,
                 'defaultAccess'            => $this->defaultAccess,
                 'noArgumentsDefaultAction' => $this->noArgumentsDefaultAction,
             ]

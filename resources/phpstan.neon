@@ -90,6 +90,15 @@ parameters:
             message: "#PHPDoc tag @method for method input(Checkbox|Radio)Group\\(\\) parameter \\#\\d+ \\$\\w+ with no value type specified in iterable type array#"
             path: ../src/Html/TagFactory.php
             reportUnmatched: false
+        # `invokeRule()` gets the rule that `allow()` or `deny()` stored, which
+        # is any `callable`. `ReflectionFunction` takes only `Closure|string`,
+        # so an array callable fails at run time. The Zephir source has the
+        # same hole, where the parameter is `var`. A narrower parameter type is
+        # a next major change.
+        -
+            message: "#Parameter \\#1 \\$function of class ReflectionFunction constructor expects Closure\\|string, callable\\(\\): mixed given#"
+            path: ../src/Acl/Adapter/Memory.php
+            reportUnmatched: false
         # `newInstance()` is a service locator returning `object`. Every helper
         # it builds is invokable, but the registry is keyed by service name, so
         # the `__invoke()` on the resolved instance cannot be proven statically.

@@ -13,20 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Acl\Adapter;
 
-use Phalcon\Acl\ComponentAwareInterface;
 use Phalcon\Acl\ComponentInterface;
-use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
+use Phalcon\Contracts\Acl\AclTypes;
 
 /**
  * Canonical contract for Phalcon\Acl adapters
  *
- * @phpstan-type TComponent = array<string, ComponentInterface>
- * @phpstan-type TRole = array<string, RoleInterface>
- * @phpstan-type TRoleToInherit = RoleInterface|TRole|string
- * @phpstan-type TAccessList = array<int|string, string>|string
- * @phpstan-type TRoleName = RoleAwareInterface|RoleInterface|string
- * @phpstan-type TComponentName = ComponentAwareInterface|ComponentInterface|string
+ * @phpstan-import-type acl_access_list from AclTypes
+ * @phpstan-import-type acl_component_name from AclTypes
+ * @phpstan-import-type acl_components from AclTypes
+ * @phpstan-import-type acl_role_name from AclTypes
+ * @phpstan-import-type acl_role_to_inherit from AclTypes
+ * @phpstan-import-type acl_roles from AclTypes
  */
 interface Adapter
 {
@@ -37,7 +36,7 @@ interface Adapter
      * `delete` etc. or a list of them.
      *
      * @param ComponentInterface|string $componentObject
-     * @param TAccessList               $accessList
+     * @param acl_access_list           $accessList
      *
      * @return bool
      */
@@ -52,7 +51,7 @@ interface Adapter
      * @param string  $componentName
      * @param mixed   $accessList
      *
-     * @phpstan-param TAccessList $accessList
+     * @phpstan-param acl_access_list $accessList
      *
      * @return bool
      */
@@ -64,8 +63,8 @@ interface Adapter
     /**
      * Add a role which inherits from an existing role
      *
-     * @param string         $roleName
-     * @param TRoleToInherit $roleToInherit
+     * @param string              $roleName
+     * @param acl_role_to_inherit $roleToInherit
      *
      * @return bool
      */
@@ -78,8 +77,8 @@ interface Adapter
      * Adds a role to the ACL list. The second parameter lets to inherit access
      * from an existing role
      *
-     * @param mixed               $roleObject
-     * @param TRoleToInherit|null $accessInherits
+     * @param mixed                    $roleObject
+     * @param acl_role_to_inherit|null $accessInherits
      *
      * @phpstan-param RoleInterface|string $roleObject
      *
@@ -93,10 +92,10 @@ interface Adapter
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
      *
-     * @param string        $roleName
-     * @param string        $componentName
-     * @param TAccessList   $access
-     * @param callable|null $function
+     * @param string          $roleName
+     * @param string          $componentName
+     * @param acl_access_list $access
+     * @param callable|null   $function
      *
      * @return void
      */
@@ -110,10 +109,10 @@ interface Adapter
     /**
      * Deny access to a role on a component. You can use `*` as wildcard
      *
-     * @param string        $roleName
-     * @param string        $componentName
-     * @param TAccessList   $access
-     * @param callable|null $function
+     * @param string          $roleName
+     * @param string          $componentName
+     * @param acl_access_list $access
+     * @param callable|null   $function
      *
      * @return void
      */
@@ -127,8 +126,8 @@ interface Adapter
     /**
      * Removes access from a component
      *
-     * @param string      $componentName
-     * @param TAccessList $accessList
+     * @param string          $componentName
+     * @param acl_access_list $accessList
      *
      * @return void
      */
@@ -163,7 +162,7 @@ interface Adapter
     /**
      * Return an array with every component registered in the list
      *
-     * @return TComponent
+     * @return acl_components
      */
     public function getComponents(): array | null;
 
@@ -192,7 +191,7 @@ interface Adapter
     /**
      * Return an array with every role registered in the list
      *
-     * @return TRole
+     * @return acl_roles
      */
     public function getRoles(): array | null;
 
@@ -204,8 +203,8 @@ interface Adapter
      * @param string                   $access
      * @param array<int|string, mixed> $parameters
      *
-     * @phpstan-param TRoleName      $roleName
-     * @phpstan-param TComponentName $componentName
+     * @phpstan-param acl_role_name      $roleName
+     * @phpstan-param acl_component_name $componentName
      *
      * @return bool
      */
