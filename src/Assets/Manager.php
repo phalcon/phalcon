@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets;
 
-use Exception as BaseException;
 use Phalcon\Assets\Asset\Css as AssetCss;
 use Phalcon\Assets\Asset\Js as AssetJs;
 use Phalcon\Assets\Exceptions\AssetSourceTargetCollision;
@@ -25,11 +24,12 @@ use Phalcon\Assets\Exceptions\InvalidTargetPath;
 use Phalcon\Assets\Exceptions\TargetPathIsDirectory;
 use Phalcon\Assets\Inline\Css as InlineCss;
 use Phalcon\Assets\Inline\Js as InlineJs;
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Contracts\Assets\AssetsTypes;
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Html\Helper\Link;
 use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
+use Phalcon\Mvc\Url;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
@@ -42,27 +42,20 @@ use const PHP_EOL;
 /**
  * Manages collections of CSS/JavaScript assets
  *
- * @phpstan-type TOptions array{
- *      sourceBasePath?: string,
- *      targetBasePath?: string
- * }
- *
- * @phpstan-type TParameters array{
- *      local?: bool,
- *      type?: string,
- *      rel?: string,
- *      string?: string,
- *      0?: string,
- *      1?: string
- * }
+ * @phpstan-import-type assets_asset_list from AssetsTypes
+ * @phpstan-import-type assets_attributes from AssetsTypes
+ * @phpstan-import-type assets_callback from AssetsTypes
+ * @phpstan-import-type assets_collections from AssetsTypes
+ * @phpstan-import-type assets_filters from AssetsTypes
+ * @phpstan-import-type assets_options from AssetsTypes
+ * @phpstan-import-type assets_parameters from AssetsTypes
  */
-class Manager implements InjectionAwareInterface
+class Manager extends AbstractInjectionAware
 {
     use FileTrait;
-    use InjectionAwareTrait;
 
     /**
-     * @var array<string, Collection>
+     * @var assets_collections
      */
     protected array $collections = [];
     protected bool $implicitOutput = true;
@@ -71,7 +64,7 @@ class Manager implements InjectionAwareInterface
      * Manager constructor.
      *
      * @param TagFactory $tagFactory
-     * @param TOptions   $options
+     * @param assets_options $options
      */
     public function __construct(
         protected TagFactory $tagFactory,
@@ -111,7 +104,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Adds a CSS asset to the 'css' collection
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function addCss(
         string $path,
@@ -161,7 +154,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Adds an inline CSS to the 'css' collection
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function addInlineCss(
         string $content,
@@ -179,7 +172,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Adds an inline JavaScript to the 'js' collection
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function addInlineJs(
         string $content,
@@ -202,7 +195,7 @@ class Manager implements InjectionAwareInterface
      * $assets->addJs("https://jquery.my-cdn.com/jquery.js", false);
      *```
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function addJs(
         string $path,
@@ -222,8 +215,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Creates/Returns a collection of assets
-     *
-     * @param string $name
      */
     public function collection(string $name): Collection
     {
@@ -233,9 +224,11 @@ class Manager implements InjectionAwareInterface
     /**
      * Creates/Returns a collection of assets by type
      *
-     * @param AssetInterface[] $assets
+     * The `instanceof` guard below is the validation, so the parameter stays a
+     * plain array here.
      *
-     * @return AssetInterface[]
+     * @param  array<array-key, mixed> $assets
+     * @return assets_asset_list
      */
     public function collectionAssetsByType(array $assets, string $type): array
     {
@@ -262,7 +255,6 @@ class Manager implements InjectionAwareInterface
      * }
      * ```
      *
-     * @param string $name
      * @deprecated
      */
     public function exists(string $name): bool
@@ -276,11 +268,6 @@ class Manager implements InjectionAwareInterface
      * ```php
      * $scripts = $assets->get("js");
      * ```
-     *
-     * @param string $name
-     *
-     * @return Collection
-     * @throws Exception
      */
     public function get(string $name): Collection
     {
@@ -294,7 +281,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Returns existing collections in the manager
      *
-     * @return array<string, Collection>
+     * @return assets_collections
      */
     public function getCollections(): array
     {
@@ -303,8 +290,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Returns the CSS collection of assets
-     *
-     * @return Collection
      */
     public function getCss(): Collection
     {
@@ -313,8 +298,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Returns the CSS collection of assets
-     *
-     * @return Collection
      */
     public function getJs(): Collection
     {
@@ -324,7 +307,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Returns the manager options
      *
-     * @return TOptions
+     * @return assets_options
      */
     public function getOptions(): array
     {
@@ -348,12 +331,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Traverses a collection calling the callback to generate its HTML
-     *
-     * @param Collection $collection
-     * @param string     $type
-     *
-     * @return string|null
-     * @throws Exception
      */
     public function output(Collection $collection, string $type): string | null
     {
@@ -579,7 +556,7 @@ class Manager implements InjectionAwareInterface
             $collection = $this->get($name);
         }
 
-        return $this->output($collection, 'css');
+        return (string)$this->output($collection, 'css');
     }
 
     /**
@@ -591,7 +568,7 @@ class Manager implements InjectionAwareInterface
      * @return string
      * @throws Exception
      */
-    public function outputInline(Collection $collection, string $type): string
+    public function outputInline(Collection $collection, mixed $type): string
     {
         $output        = "";
         $html          = "";
@@ -649,8 +626,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Prints the HTML for inline CSS
-     *
-     * @throws Exception
      */
     public function outputInlineCss(string | null $name = null): string
     {
@@ -664,8 +639,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Prints the HTML for inline JS
-     *
-     * @throws Exception
      */
     public function outputInlineJs(string | null $name = null): string
     {
@@ -679,11 +652,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Prints the HTML for JS assets
-     *
-     * @param string|null $name
-     *
-     * @return string
-     * @throws Exception
      */
     public function outputJs(string | null $name = null): string
     {
@@ -692,7 +660,7 @@ class Manager implements InjectionAwareInterface
             $collection = $this->get($name);
         }
 
-        return $this->output($collection, 'js');
+        return (string)$this->output($collection, 'js');
     }
 
     /**
@@ -712,7 +680,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Sets the manager options
      *
-     * @param TOptions $options
+     * @param assets_options $options
      */
     public function setOptions(array $options): static
     {
@@ -735,6 +703,11 @@ class Manager implements InjectionAwareInterface
      * Applies the collection filters to the content. Filtering only happens
      * when `$mustFilter` is true; every filter must be a `FilterInterface`
      * instance.
+     *
+     * The `instanceof` guard below is the validation, so the parameter stays a
+     * plain array here.
+     *
+     * @param array<array-key, mixed> $filters
      *
      * @throws InvalidFilter
      */
@@ -803,7 +776,7 @@ class Manager implements InjectionAwareInterface
     /**
      * Builds a LINK[rel="stylesheet"] tag
      *
-     * @throws BaseException
+     * @throws Exception
      */
     private function cssLink(mixed $parameters = [], bool $local = true): string
     {
@@ -817,11 +790,13 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
-     * @param array<Manager|string> $callback
-     * @param array<string, string> $attributes
+     * The native type stays `mixed`, matching the Zephir `var callback`.
+     *
+     * @param assets_callback   $callback
+     * @param assets_attributes $attributes
      */
     private function doCallback(
-        array $callback,
+        mixed $callback,
         array $attributes,
         string $prefixedPath,
         bool $local
@@ -840,7 +815,10 @@ class Manager implements InjectionAwareInterface
         /**
          * Call the callback to generate the HTML
          */
-        return call_user_func_array($callback, $parameters);
+        /** @var string $html */
+        $html = call_user_func_array($callback, $parameters);
+
+        return $html;
     }
 
     /**
@@ -874,10 +852,10 @@ class Manager implements InjectionAwareInterface
     }
 
     /**
-     * @param Collection                       $collection
-     * @param string                           $completeTargetPath
-     * @param array<array-key, Manager|string> $callback
-     * @param string                           $output
+     * @param Collection       $collection
+     * @param string           $completeTargetPath
+     * @param assets_callback  $callback
+     * @param string           $output
      *
      * @return string
      */
@@ -967,7 +945,7 @@ class Manager implements InjectionAwareInterface
      * @param bool  $local
      *
      * @return string
-     * @throws BaseException
+     * @throws Exception
      */
     private function jsLink(mixed $parameters = [], bool $local = true): string
     {
@@ -982,8 +960,6 @@ class Manager implements InjectionAwareInterface
 
     /**
      * Processes common parameters for js/css link generation
-     *
-     * @throws BaseException
      */
     private function processParameters(
         mixed $parameters,
@@ -1037,7 +1013,9 @@ class Manager implements InjectionAwareInterface
          */
         if (true === $local) {
             if (null !== $this->container && $this->container->has("url")) {
-                $tag = $this->container->get("url")->getStatic($tag);
+                /** @var Url $url */
+                $url = $this->container->get("url");
+                $tag = $url->getStatic($tag);
             } else {
                 $tag = "/" . ltrim($tag, "/");
             }
@@ -1047,6 +1025,7 @@ class Manager implements InjectionAwareInterface
         $helper = $this->tagFactory->newInstance($helperClass);
 
         $helper->__invoke(""); // no indentation
+        /** @var assets_parameters $params */
         $helper->add($tag, $params);
 
         $output = (string)$helper;

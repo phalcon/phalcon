@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Assets;
 
 use Phalcon\Assets\Traits\AttributesTrait;
+use Phalcon\Contracts\Assets\AssetsTypes;
 use Phalcon\Traits\Php\HashTrait;
 
 /**
@@ -22,6 +23,8 @@ use Phalcon\Traits\Php\HashTrait;
  *```php
  * $inline = new \Phalcon\Assets\Inline("js", "alert('hello world');");
  *```
+ *
+ * @phpstan-import-type assets_attributes from AssetsTypes
  */
 class Inline implements AssetInterface
 {
@@ -31,7 +34,7 @@ class Inline implements AssetInterface
     /**
      * Inline constructor.
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function __construct(
         protected string $type,
@@ -50,16 +53,6 @@ class Inline implements AssetInterface
         $key = $this->getType() . ':' . $this->getContent();
 
         return $this->phpHash("sha256", $key);
-    }
-
-    /**
-     * Gets extra HTML attributes.
-     *
-     * @return array<string, string>
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
     }
 
     /**
@@ -95,7 +88,7 @@ class Inline implements AssetInterface
     /**
      * Sets extra HTML attributes
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function setAttributes(array $attributes): AssetInterface
     {

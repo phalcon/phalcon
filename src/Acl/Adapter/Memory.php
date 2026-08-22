@@ -829,7 +829,7 @@ class Memory extends AbstractAdapter
      * matches. The native type is the wider `bool|string` that the Zephir
      * `string | bool` maps to.
      *
-     * @return string|false
+     * @return false|string
      */
     private function canAccess(
         string $roleName,

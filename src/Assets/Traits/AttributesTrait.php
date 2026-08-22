@@ -13,27 +13,31 @@ declare(strict_types=1);
 
 namespace Phalcon\Assets\Traits;
 
+use Phalcon\Contracts\Assets\AssetsTypes;
+
 /**
  * Shared HTML-attributes state for asset objects (`Asset`, `Inline`,
  * `Collection`).
  *
- * @todo v7 - share setAttributes here too (blocked: Collection is not an
- *       AssetInterface, so the return type diverges)
+ * @phpstan-import-type assets_attributes from AssetsTypes
+ *
+ * @todo set attributes to have a default array when introduced in zephir
+ * @todo v7 - share setAttributes here too (blocked: Collection is not an AssetInterface, so the return type diverges)
  */
 trait AttributesTrait
 {
     /**
-     * @var array<string, string>
+     * @var assets_attributes|null
      */
-    protected array $attributes = [];
+    protected ?array $attributes = null;
 
     /**
      * Gets extra HTML attributes.
      *
-     * @return array<string, string>
+     * @return assets_attributes
      */
     public function getAttributes(): array
     {
-        return $this->attributes;
+        return (array) $this->attributes;
     }
 }

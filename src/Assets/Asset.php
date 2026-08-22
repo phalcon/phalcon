@@ -16,6 +16,7 @@ namespace Phalcon\Assets;
 use Phalcon\Assets\Exceptions\CannotReadAsset;
 use Phalcon\Assets\Traits\AttributesTrait;
 use Phalcon\Assets\Traits\SourceTargetTrait;
+use Phalcon\Contracts\Assets\AssetsTypes;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Php\HashTrait;
 
@@ -25,6 +26,8 @@ use Phalcon\Traits\Php\HashTrait;
  *```php
  * $asset = new \Phalcon\Assets\Asset("js", "js/jquery.js");
  *```
+ *
+ * @phpstan-import-type assets_attributes from AssetsTypes
  */
 class Asset implements AssetInterface
 {
@@ -36,7 +39,7 @@ class Asset implements AssetInterface
     /**
      * Asset constructor.
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function __construct(
         protected string $type,
@@ -62,23 +65,8 @@ class Asset implements AssetInterface
     }
 
     /**
-     * Gets extra HTML attributes.
-     *
-     * @return array<string, string>
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
      * Returns the content of the asset as an string
      * Optionally a base path where the asset is located can be set
-     *
-     * @param string|null $basePath
-     *
-     * @return string
-     * @throws Exception
      */
     public function getContent(string | null $basePath = null): string
     {
@@ -129,10 +117,6 @@ class Asset implements AssetInterface
 
     /**
      * Returns the complete location where the asset is located
-     *
-     * @param string|null $basePath
-     *
-     * @return string
      */
     public function getRealSourcePath(string | null $basePath = null): string
     {
@@ -150,10 +134,6 @@ class Asset implements AssetInterface
 
     /**
      * Returns the complete location where the asset must be written
-     *
-     * @param string|null $basePath
-     *
-     * @return string
      */
     public function getRealTargetPath(string | null $basePath = null): string
     {
@@ -184,8 +164,6 @@ class Asset implements AssetInterface
 
     /**
      * Returns the real target uri for the generated HTML
-     *
-     * @return string
      */
     public function getRealTargetUri(): string
     {
@@ -205,8 +183,6 @@ class Asset implements AssetInterface
 
     /**
      * Gets the asset's type.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -215,8 +191,6 @@ class Asset implements AssetInterface
 
     /**
      * Gets the asset's version.
-     *
-     * @return string|null
      */
     public function getVersion(): string | null
     {
@@ -225,8 +199,6 @@ class Asset implements AssetInterface
 
     /**
      * Checks if the asset is using auto version
-     *
-     * @return bool
      */
     public function isAutoVersion(): bool
     {
@@ -235,10 +207,6 @@ class Asset implements AssetInterface
 
     /**
      * Sets extra HTML attributes
-     *
-     * @param array<string, string> $attributes
-     *
-     * @return AssetInterface
      */
     public function setAttributes(array $attributes): AssetInterface
     {
@@ -247,11 +215,6 @@ class Asset implements AssetInterface
         return $this;
     }
 
-    /**
-     * @param bool $flag
-     *
-     * @return AssetInterface
-     */
     public function setAutoVersion(bool $flag): AssetInterface
     {
         $this->isAutoVersion = $flag;
@@ -261,10 +224,6 @@ class Asset implements AssetInterface
 
     /**
      * Sets if the asset must be filtered or not
-     *
-     * @param bool $filter
-     *
-     * @return AssetInterface
      */
     public function setFilter(bool $filter): AssetInterface
     {
@@ -276,10 +235,6 @@ class Asset implements AssetInterface
 
     /**
      * Sets the asset's path
-     *
-     * @param string $path
-     *
-     * @return AssetInterface
      */
     public function setPath(string $path): AssetInterface
     {
@@ -290,10 +245,6 @@ class Asset implements AssetInterface
 
     /**
      * Sets the asset's type
-     *
-     * @param string $type
-     *
-     * @return AssetInterface
      */
     public function setType(string $type): AssetInterface
     {
@@ -304,10 +255,6 @@ class Asset implements AssetInterface
 
     /**
      * Sets the asset's version
-     *
-     * @param string $version
-     *
-     * @return AssetInterface
      */
     public function setVersion(string $version): AssetInterface
     {
@@ -316,25 +263,18 @@ class Asset implements AssetInterface
         return $this;
     }
 
-    /**
-     * @param string $property
-     *
-     * @return string
-     */
     private function checkPath(string $property): string
     {
         if (true === empty($this->$property)) {
             return $this->path;
         }
 
-        return $this->$property;
+        /** @var string $value */
+        $value = $this->$property;
+
+        return $value;
     }
 
-    /**
-     * @param string $completePath
-     *
-     * @throws Exception
-     */
     private function throwException(string $completePath): void
     {
         throw new CannotReadAsset($completePath);

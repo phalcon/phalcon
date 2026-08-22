@@ -14,16 +14,19 @@ declare(strict_types=1);
 namespace Phalcon\Assets\Inline;
 
 use Phalcon\Assets\Inline as InlineBase;
+use Phalcon\Contracts\Assets\AssetsTypes;
 
 /**
  * Represents an inline JavaScript
+ *
+ * @phpstan-import-type assets_attributes from AssetsTypes
  */
 class Js extends InlineBase
 {
     /**
      * Js constructor.
      *
-     * @param array<string, string> $attributes
+     * @param assets_attributes $attributes
      */
     public function __construct(
         string $content,
