@@ -382,6 +382,12 @@ abstract class Dialect implements DialectInterface
              * Resolve literal OR placeholder expressions
              */
             case "literal":
+                if (isset($expression["escape"]) && $expression["escape"]) {
+                    return "'"
+                        . $this->escapeStringLiteral($expression["value"])
+                        . "'";
+                }
+
                 return $expression["value"];
 
             case "placeholder":
@@ -933,6 +939,20 @@ abstract class Dialect implements DialectInterface
         }
 
         return $column->getType();
+    }
+
+    /**
+     * Escape a string literal for a single quoted SQL string. The standard
+     * way doubles the single quotes. A dialect where the backslash is an
+     * escape character must override this method.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    protected function escapeStringLiteral(string $value): string
+    {
+        return str_replace("'", "''", $value);
     }
 
     /**

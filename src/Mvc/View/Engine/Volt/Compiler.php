@@ -60,6 +60,7 @@ use function lcfirst;
 use function method_exists;
 use function ord;
 use function preg_replace;
+use function preg_replace_callback;
 use function realpath;
 use function serialize;
 use function sprintf;
@@ -1393,7 +1394,22 @@ class Compiler implements InjectionAwareInterface
                     );
 
                     if (isset($singleExpr["name"])) {
-                        $items[] = "'" . $singleExpr["name"] . "' => " . $singleExprCode;
+                        /**
+                         * Escape the quotes that are not part of an escape
+                         * sequence. This prevents the key from closing the
+                         * string and adding code to the compiled template.
+                         */
+                        $items[] = "'"
+                            . preg_replace_callback(
+                                "/\\\\.|'/s",
+                                function ($matches) {
+                                    return "\\" === substr($matches[0], 0, 1)
+                                        ? $matches[0]
+                                        : "\\" . $matches[0];
+                                },
+                                $singleExpr["name"]
+                            )
+                            . "' => " . $singleExprCode;
                     } else {
                         $items[] = $singleExprCode;
                     }
@@ -1509,11 +1525,42 @@ class Compiler implements InjectionAwareInterface
 
                 case Opcode::STRING->value:
                     if ($doubleQuotes === false) {
+                        /**
+                         * Escape the quotes that are not part of an escape
+                         * sequence. This prevents the value from closing the
+                         * string and adding code to the compiled template.
+                         */
                         $exprCode = "'"
-                            . preg_replace("/(?<!\\\\)'/", "\\\\'", $expr["value"])
+                            . preg_replace_callback(
+                                "/\\\\.|'/s",
+                                function ($matches) {
+                                    return "\\" === substr($matches[0], 0, 1)
+                                        ? $matches[0]
+                                        : "\\" . $matches[0];
+                                },
+                                $expr["value"]
+                            )
                             . "'";
                     } else {
-                        $exprCode = "\"" . $expr["value"] . "\"";
+                        /**
+                         * Read the value as escape sequences and single
+                         * characters. Keep the escape sequences as they are,
+                         * so that PHP can interpret them. Escape the quotes
+                         * and the dollar signs that are not part of an escape
+                         * sequence. This prevents the value from closing the
+                         * string and adding code to the compiled template.
+                         */
+                        $exprCode = "\""
+                            . preg_replace_callback(
+                                "/\\\\.|[\"$]/s",
+                                function ($matches) {
+                                    return "\\" === substr($matches[0], 0, 1)
+                                        ? $matches[0]
+                                        : "\\" . $matches[0];
+                                },
+                                $expr["value"]
+                            )
+                            . "\"";
                     }
                     break;
 

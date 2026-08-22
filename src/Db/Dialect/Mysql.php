@@ -25,6 +25,7 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
 use function implode;
+use function str_replace;
 
 /**
  * Generates database specific SQL for the MySQL RDBMS
@@ -773,5 +774,23 @@ class Mysql extends Dialect
 
         return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`='"
             . $viewName . "' AND `TABLE_SCHEMA` = DATABASE()";
+    }
+
+    /**
+     * Escape a string literal for a single quoted SQL string. MySQL treats the
+     * backslash as an escape character, so it must be doubled together with the
+     * single quote.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    protected function escapeStringLiteral(string $value): string
+    {
+        return str_replace(
+            ["\\", "'"],
+            ["\\\\", "''"],
+            $value
+        );
     }
 }

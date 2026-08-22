@@ -70,6 +70,7 @@ use Phalcon\Mvc\Model\Query\Exceptions\UnknownModelOrAlias;
 use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlExpression;
 use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlExpressionType;
 use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlStatement;
+use Phalcon\Mvc\Model\Query\Exceptions\UnsafeIdentifier;
 use Phalcon\Mvc\Model\Query\Exceptions\UpdateMultipleNotSupported;
 use Phalcon\Mvc\Model\Query\Exceptions\WriteConnectionMissing;
 use Phalcon\Mvc\Model\Query\Status;
@@ -91,6 +92,7 @@ use function is_object;
 use function is_subclass_of;
 use function lcfirst;
 use function method_exists;
+use function preg_match;
 use function str_replace;
 
 /**
@@ -2040,24 +2042,22 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                     if ($quoting) {
                         /**
-                         * Check if static literals have single quotes and
-                         * escape them
+                         * Keep the raw value and let the dialect escape it for
+                         * its own SQL syntax. Escaping here does not know the
+                         * target database, and a wrong escape lets the value
+                         * close the string and add SQL code.
                          */
-                        if (str_contains($value, "'")) {
-                            $escapedValue = $this->ormSingleQuotes($value);
-                        } else {
-                            $escapedValue = $value;
-                        }
-
-                        $exprValue = "'" . $escapedValue . "'";
+                        $exprReturn = [
+                            "type"   => "literal",
+                            "value"  => $value,
+                            "escape" => true,
+                        ];
                     } else {
-                        $exprValue = $value;
+                        $exprReturn = [
+                            "type"  => "literal",
+                            "value" => $value,
+                        ];
                     }
-
-                    $exprReturn = [
-                        "type"  => "literal",
-                        "value" => $exprValue,
-                    ];
 
                     break;
 
@@ -2345,6 +2345,15 @@ class Query implements QueryInterface, InjectionAwareInterface
                     break;
 
                 case Opcode::RAW_QUALIFIED->value:
+                    /**
+                     * A raw qualified name reaches this point only as a CAST
+                     * or CONVERT type. It must be a plain identifier, so a
+                     * crafted type cannot add SQL to the compiled statement.
+                     */
+                    if (!preg_match('/^\\\\?[a-zA-Z_][a-zA-Z0-9_\\\\:]*$/', $expr["name"])) {
+                        throw new UnsafeIdentifier($expr["name"], $this->phql);
+                    }
+
                     $exprReturn = [
                         "type"  => "literal",
                         "value" => $expr["name"],
@@ -2503,6 +2512,16 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     final protected function getFunctionCall(array $expr): array
     {
+        $name = $expr["name"];
+
+        /**
+         * A function name must be a plain identifier, so a crafted name
+         * cannot add SQL to the compiled statement.
+         */
+        if (!preg_match('/^\\\\?[a-zA-Z_][a-zA-Z0-9_\\\\:]*$/', $name)) {
+            throw new UnsafeIdentifier($name, $this->phql);
+        }
+
         if (isset($expr["arguments"])) {
             $arguments = $expr["arguments"];
             $distinct  = isset($expr["distinct"]) ? 1 : 0;

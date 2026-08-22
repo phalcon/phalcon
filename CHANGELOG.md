@@ -2,6 +2,19 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
+## [6.0.0 beta 8](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta8) (2026-08-22)
+
+### Changed
+
+### Added
+
+### Fixed
+
+- Single-quoted string emission in Volt Compiler.
+- Quoted parameters in PHQL/Query
+
+### Removed
+
 ## [6.0.0 beta 7](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta7) (2026-08-19)
 
 ### Changed
