@@ -133,10 +133,12 @@ abstract class Select
 
         if ($useEmpty) {
             /**
-             * Create an empty value
+             * Create an empty value. Escape it the same way as the real
+             * options so a crafted emptyValue/emptyText cannot inject markup.
              */
-            $code .= self::echoOption(self::toStringValue($emptyValue))
-                . self::toStringValue($emptyText)
+            $escaper = BaseTag::getEscaperService();
+            $code .= self::echoOption($escaper->attributes(self::toStringValue($emptyValue)))
+                . $escaper->html(self::toStringValue($emptyText))
                 . self::OPTION_CLOSE . PHP_EOL;
         }
 

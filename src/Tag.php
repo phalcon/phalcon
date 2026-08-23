@@ -35,6 +35,7 @@ use function is_resource;
 use function is_scalar;
 use function is_string;
 use function method_exists;
+use function preg_replace;
 use function str_replace;
 
 use const PHP_EOL;
@@ -918,6 +919,13 @@ class Tag
                 $escaped = (null !== $escaper)
                     ? $escaper->attributes(self::toStringValue($value))
                     : self::toStringValue($value);
+
+                /**
+                 * The key is an attribute name. Remove the characters that end
+                 * a name so a crafted key cannot add more attributes or close
+                 * the tag.
+                 */
+                $key = preg_replace('~[\s/=<>"\']~', '', $key);
 
                 $newCode .= " " . $key . "=\"" . $escaped . "\"";
             }
