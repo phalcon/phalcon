@@ -2,6 +2,19 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
+## [6.0.0 beta 9](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta9) (2026-xx-xx)
+
+### Changed
+
+### Added
+
+### Fixed
+
+- Backslash breakout in the Html Escaper `js()` output.
+- Attribute name splitting in the Html Escaper `attributes()` array keys.
+
+### Removed
+
 ## [6.0.0 beta 8](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta8) (2026-08-22)
 
 ### Changed

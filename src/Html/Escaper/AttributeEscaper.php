@@ -22,6 +22,7 @@ use Phalcon\Contracts\Html\HtmlTypes;
 use function htmlspecialchars;
 use function implode;
 use function is_array;
+use function preg_replace;
 use function rtrim;
 use function trim;
 
@@ -62,6 +63,13 @@ class AttributeEscaper extends AbstractEscaper
             }
 
             $key = trim($key);
+
+            /**
+             * The key is an attribute name. Remove the characters that end an
+             * attribute name (white space, "/", "=") so a crafted key cannot
+             * add more attributes.
+             */
+            $key = preg_replace('~[\s/=]~', '', $key);
 
             if (is_array($value)) {
                 $value = implode(' ', $value);

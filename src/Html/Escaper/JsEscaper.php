@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Escaper;
 
+use function str_replace;
+
 /**
  * Escapes a string for use inside a JavaScript context by replacing
  * non-alphanumeric characters with their hexadecimal escape sequence.
@@ -44,6 +46,15 @@ class JsEscaper extends AbstractEscaper
             return '';
         }
 
-        return $this->escapeMulti($this->normalizeEncoding($input), '\\x', '', true);
+        /**
+         * The escaper keeps a backslash as is. Double it first so it cannot
+         * escape the delimiter of the surrounding JavaScript string.
+         */
+        return $this->escapeMulti(
+            $this->normalizeEncoding(str_replace('\\', '\\\\', $input)),
+            '\\x',
+            '',
+            true
+        );
     }
 }
