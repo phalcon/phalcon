@@ -706,7 +706,7 @@ class Tag
         );
 
         return self::renderAttributes("<a", $params)
-            . ">" . self::toStringValue($text) . "</a>";
+            . ">" . htmlspecialchars(self::toStringValue($text)) . "</a>";
     }
 
     /**
@@ -1163,6 +1163,12 @@ class Tag
         bool $onlyStart = false,
         bool $useEol = false
     ): string {
+        /**
+         * The tag name is a raw structural position. Remove the characters
+         * that end a name or the tag so a crafted name cannot inject markup.
+         */
+        $tagName = (string) preg_replace("~[\\s/=<>\"']~", "", $tagName);
+
         $params = is_array($parameters) ? $parameters : [$parameters];
 
         $localCode = self::renderAttributes("<" . $tagName, $params);
@@ -1188,6 +1194,12 @@ class Tag
      */
     public static function tagHtmlClose(string $tagName, bool $useEol = false): string
     {
+        /**
+         * The tag name is a raw structural position. Remove the characters
+         * that end a name or the tag so a crafted name cannot inject markup.
+         */
+        $tagName = (string) preg_replace("~[\\s/=<>\"']~", "", $tagName);
+
         if (true === $useEol) {
             return "</" . $tagName . ">" . PHP_EOL;
         }

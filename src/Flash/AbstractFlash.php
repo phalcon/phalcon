@@ -22,9 +22,11 @@ use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
+use function htmlspecialchars;
 use function is_array;
 use function is_string;
 
+use const ENT_QUOTES;
 use const PHP_EOL;
 
 /**
@@ -411,8 +413,12 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             return $message;
         }
 
-        $cssClasses     = $this->checkClasses($this->cssClasses, $type);
-        $cssIconClasses = $this->checkClasses($this->cssIconClasses, $type);
+        /**
+         * The class lands in a `class="…"` attribute. Escape it so a crafted
+         * class cannot break out of the attribute.
+         */
+        $cssClasses     = htmlspecialchars($this->checkClasses($this->cssClasses, $type), ENT_QUOTES, 'utf-8');
+        $cssIconClasses = htmlspecialchars($this->checkClasses($this->cssIconClasses, $type), ENT_QUOTES, 'utf-8');
 
         return $this->toInterpolate(
             $this->getTemplate($cssClasses, $cssIconClasses),

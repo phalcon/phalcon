@@ -288,7 +288,7 @@ class HtmlRenderer implements Renderer
                     : gettype($argument);
             }
 
-            $dump[] = '[' . $index . '] =&gt; ' . $varDump;
+            $dump[] = '[' . $this->escapeString((string) $index) . '] =&gt; ' . $varDump;
         }
 
         return implode(', ', $dump);
