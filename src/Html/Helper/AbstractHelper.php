@@ -24,6 +24,7 @@ use function array_intersect_key;
 use function array_merge;
 use function call_user_func_array;
 use function is_string;
+use function preg_replace;
 use function rtrim;
 use function str_repeat;
 use function trim;
@@ -54,9 +55,21 @@ abstract class AbstractHelper
      */
     protected function close(string $tag, bool $raw = false): string
     {
-        $tag = $raw ? $tag : $this->escaper->html($tag);
+        $tag = $raw ? $tag : $this->escapeName($tag);
 
         return '</' . $tag . '>';
+    }
+
+    /**
+     * Removes the characters that end a tag or attribute name (white space,
+     * "/", "=") and escapes the rest, so a crafted name cannot break out of
+     * its position.
+     */
+    protected function escapeName(string $name): string
+    {
+        return $this->escaper->html(
+            (string) preg_replace('~[\s/=]~', '', $name)
+        );
     }
 
     /**
@@ -155,6 +168,8 @@ abstract class AbstractHelper
         $result = '';
         foreach ($attributes as $key => $value) {
             if (is_string($key) && null !== $value) {
+                $key = $this->escapeName($key);
+
                 if (true === $value) {
                     $result .= $key . ' ';
                 } else {
@@ -217,7 +232,7 @@ abstract class AbstractHelper
 
         $localClose = empty(trim($close)) ? '' : ' ' . trim($close);
 
-        return '<' . $tag . $escapedAttrs . $localClose . '>';
+        return '<' . $this->escapeName($tag) . $escapedAttrs . $localClose . '>';
     }
 
     /**

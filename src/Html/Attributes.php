@@ -91,6 +91,10 @@ class Attributes extends Collection implements RenderInterface
                     throw new AttributeNotRenderable($key, gettype($value));
                 }
 
+                $key = $escaper->escape(
+                    (string) preg_replace('~[\s/=]~', '', $key)
+                );
+
                 $result .= $key . "=\""
                     . $escaper->escape($value)
                     . "\" ";
