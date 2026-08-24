@@ -499,8 +499,8 @@ class Postgresql extends Dialect
             . "JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid ) des "
             . "ON ( des.objsubid = C.ordinal_position "
             . "AND C.table_schema = des.nspname AND C.TABLE_NAME = des.relname ) "
-            . "WHERE c.table_schema='" . $schemaName
-            . "' AND c.table_name='" . $tableName
+            . "WHERE c.table_schema='" . $this->escapeStringLiteral($schemaName)
+            . "' AND c.table_name='" . $this->escapeStringLiteral($tableName)
             . "' ORDER BY c.ordinal_position";
     }
 
@@ -527,7 +527,7 @@ class Postgresql extends Dialect
             . "AND a.attrelid = t.oid "
             . "AND a.attnum = ANY(ix.indkey) "
             . "AND t.relkind = 'r' "
-            . "AND t.relname = '" . $tableName . "' "
+            . "AND t.relname = '" . $this->escapeStringLiteral($tableName) . "' "
             . "ORDER BY t.relname, i.relname;";
     }
 
@@ -566,8 +566,8 @@ class Postgresql extends Dialect
             . "AND tc.constraint_name = rc.constraint_name "
             . "AND tc.constraint_type = 'FOREIGN KEY' "
             . "WHERE constraint_type = 'FOREIGN KEY' "
-            . "AND tc.table_schema = '" . $schemaName . "' "
-            . "AND tc.table_name='" . $tableName . "'";
+            . "AND tc.table_schema = '" . $this->escapeStringLiteral($schemaName) . "' "
+            . "AND tc.table_name='" . $this->escapeStringLiteral($tableName) . "'";
     }
 
     /**
@@ -1044,7 +1044,7 @@ class Postgresql extends Dialect
 
         return "SELECT table_name "
             . "FROM information_schema.tables "
-            . "WHERE table_schema = '" . $schemaName . "' "
+            . "WHERE table_schema = '" . $this->escapeStringLiteral($schemaName) . "' "
             . "ORDER BY table_name";
     }
 
@@ -1063,7 +1063,7 @@ class Postgresql extends Dialect
 
         return "SELECT viewname AS view_name "
             . "FROM pg_views "
-            . "WHERE schemaname = '" . $schemaName . "' "
+            . "WHERE schemaname = '" . $this->escapeStringLiteral($schemaName) . "' "
             . "ORDER BY view_name";
     }
 
@@ -1275,8 +1275,8 @@ class Postgresql extends Dialect
         return "SELECT CASE "
             . "WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
             . "FROM information_schema.tables "
-            . "WHERE table_schema = '" . $schemaName . "' "
-            . "AND table_name='" . $tableName . "'";
+            . "WHERE table_schema = '" . $this->escapeStringLiteral($schemaName) . "' "
+            . "AND table_name='" . $this->escapeStringLiteral($tableName) . "'";
     }
 
     /**
@@ -1294,10 +1294,10 @@ class Postgresql extends Dialect
         $sql = "SELECT obj_description(c.oid, 'pg_class') AS table_comment "
             . "FROM pg_class c "
             . "JOIN pg_namespace n ON n.oid = c.relnamespace "
-            . "WHERE c.relname = '" . $tableName . "' AND ";
+            . "WHERE c.relname = '" . $this->escapeStringLiteral($tableName) . "' AND ";
 
         if (!empty($schemaName)) {
-            return $sql . "n.nspname = '" . $schemaName . "'";
+            return $sql . "n.nspname = '" . $this->escapeStringLiteral($schemaName) . "'";
         }
 
         return $sql . "n.nspname = current_schema()";
@@ -1337,8 +1337,8 @@ class Postgresql extends Dialect
         return "SELECT "
             . "CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
             . "FROM pg_views "
-            . "WHERE viewname='" . $viewName
-            . "' AND schemaname='" . $schemaName . "'";
+            . "WHERE viewname='" . $this->escapeStringLiteral($viewName)
+            . "' AND schemaname='" . $this->escapeStringLiteral($schemaName) . "'";
     }
 
     /**

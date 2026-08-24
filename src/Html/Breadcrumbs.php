@@ -22,6 +22,7 @@ use Phalcon\Contracts\Html\HtmlTypes;
 use function array_keys;
 use function end;
 use function implode;
+use function htmlspecialchars;
 use function str_replace;
 
 /**
@@ -144,8 +145,8 @@ class Breadcrumbs
                     '%link%',
                 ],
                 [
-                    $element,
-                    $url,
+                    htmlspecialchars((string) $element),
+                    htmlspecialchars((string) $url),
                 ],
                 $template
             );
@@ -155,7 +156,7 @@ class Breadcrumbs
          * Check if this is the "Home" element i.e. count() = 0
          */
         if (!empty($elements)) {
-            $output[] = '<dt>' . $lastLabel . '</dt>';
+            $output[] = '<dt>' . htmlspecialchars((string) $lastLabel) . '</dt>';
         } else {
             $output[] = str_replace(
                 [
@@ -163,8 +164,8 @@ class Breadcrumbs
                     '%link%',
                 ],
                 [
-                    $lastLabel,
-                    $lastUrl,
+                    htmlspecialchars((string) $lastLabel),
+                    htmlspecialchars((string) $lastUrl),
                 ],
                 $template
             );

@@ -678,14 +678,22 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
         $quotes  = $this->getQuoteNames();
 
         if (!is_array($element)) {
-            $element = (string)$element;
+            $element = str_replace(
+                $quotes["find"],
+                $quotes["replace"],
+                (string)$element
+            );
 
             return $quotes["prefix"] . $element . $quotes["suffix"];
         }
 
         // quote array values, not keys, then combine with commas
         foreach ($value as $key => $element) {
-            $element        = (string)$element;
+            $element        = str_replace(
+                $quotes["find"],
+                $quotes["replace"],
+                (string)$element
+            );
             $elements[$key] = $quotes["prefix"] . $element . $quotes["suffix"];
         }
 

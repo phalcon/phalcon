@@ -115,8 +115,19 @@ class WkbParser
         return (float) $arr[1];
     }
 
-    protected function readGeometry(int $outerSrid): GeometryInterface
+    protected function readGeometry(int $outerSrid, int $depth = 0): GeometryInterface
     {
+        /**
+         * A GeometryCollection may nest, and this parser compiles to a native
+         * C function in cphalcon, so unbounded nesting exhausts the process
+         * stack. Cap the depth to fail loudly instead of crashing (CWE-674).
+         */
+        if ($depth > 32) {
+            throw new InvalidWkb(
+                "geometry nesting exceeds the maximum supported depth"
+            );
+        }
+
         $byteOrder = $this->readByte();
         $little    = ($byteOrder === 1);
         $typeWord  = $this->readUint32($little);
@@ -163,7 +174,7 @@ class WkbParser
                 $items = [];
 
                 for ($i = 0; $i < $count; $i++) {
-                    $items[] = $this->readGeometry($srid);
+                    $items[] = $this->readGeometry($srid, $depth + 1);
                 }
 
                 if ($baseType === 4) {

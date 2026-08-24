@@ -247,11 +247,15 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
         if (true === $externalRedirect) {
             $header = $location;
         } else {
-            if (str_contains($location, '://')) {
-                $matched = preg_match("/^[^:\\/?#]++:/", $location);
-                if ($matched) {
-                    $header = $location;
-                }
+            /**
+             * A local redirect (externalRedirect = false) must not honor an
+             * absolute or protocol-relative target, otherwise a request-derived
+             * value such as "//evil.tld" or "http://evil.tld" becomes an open
+             * redirect (CWE-601). Drop such a target and route through the local
+             * url service instead.
+             */
+            if (preg_match("~^(?:[a-z][a-z0-9+.\\-]*:|//)~i", $location)) {
+                $location = '';
             }
         }
 

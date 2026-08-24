@@ -261,7 +261,7 @@ class Mysql extends Dialect
         string | null $schemaName = null
     ): string {
         $schemaClause = $schemaName
-            ? "'" . $schemaName . "'"
+            ? "'" . $this->escapeStringLiteral($schemaName) . "'"
             : 'DATABASE()';
 
         /**
@@ -280,7 +280,7 @@ class Mysql extends Dialect
             . "GENERATION_EXPRESSION AS `GenerationExpression` "
             . "FROM `INFORMATION_SCHEMA`.`COLUMNS` "
             . "WHERE `TABLE_SCHEMA` = " . $schemaClause . " "
-            . "AND `TABLE_NAME` = '" . $tableName . "' "
+            . "AND `TABLE_NAME` = '" . $this->escapeStringLiteral($tableName) . "' "
             . "ORDER BY `ORDINAL_POSITION`";
     }
 
@@ -324,13 +324,13 @@ class Mysql extends Dialect
 
         if (!empty($schemaName)) {
             $sql .= "KCU.CONSTRAINT_SCHEMA = '"
-                . $schemaName
+                . $this->escapeStringLiteral($schemaName)
                 . "' AND KCU.TABLE_NAME = '"
-                . $tableName
+                . $this->escapeStringLiteral($tableName)
                 . "'";
         } else {
             $sql .= "KCU.CONSTRAINT_SCHEMA = DATABASE() "
-                . "AND KCU.TABLE_NAME = '" . $tableName . "'";
+                . "AND KCU.TABLE_NAME = '" . $this->escapeStringLiteral($tableName) . "'";
         }
 
         return $sql;
@@ -576,7 +576,7 @@ class Mysql extends Dialect
      */
     public function listTables(string | null $schemaName = null): string
     {
-        $schema = empty($schemaName) ? "" : " FROM " . $this->delimit($schemaName);
+        $schema = empty($schemaName) ? "" : " FROM " . $this->escape($schemaName);
 
         return "SHOW TABLES" . $schema;
     }
@@ -709,11 +709,13 @@ class Mysql extends Dialect
     ): string {
         if (!empty($schemaName)) {
             return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME`= '"
-                . $tableName . "' AND `TABLE_SCHEMA` = '" . $schemaName . "'";
+                . $this->escapeStringLiteral($tableName)
+                . "' AND `TABLE_SCHEMA` = '"
+                . $this->escapeStringLiteral($schemaName) . "'";
         }
 
         return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`TABLES` WHERE `TABLE_NAME` = '"
-            . $tableName . "' AND `TABLE_SCHEMA` = DATABASE()";
+            . $this->escapeStringLiteral($tableName) . "' AND `TABLE_SCHEMA` = DATABASE()";
     }
 
     /**
@@ -735,7 +737,7 @@ class Mysql extends Dialect
             . "TABLES.TABLE_COMMENT AS table_comment "
             . "FROM INFORMATION_SCHEMA.TABLES WHERE "
             . "TABLES.TABLE_SCHEMA = " . $this->getMysqlSchemaString($schemaName) . " "
-            . "AND TABLES.TABLE_NAME = '" . $tableName . "'";
+            . "AND TABLES.TABLE_NAME = '" . $this->escapeStringLiteral($tableName) . "'";
     }
 
     /**
@@ -769,11 +771,13 @@ class Mysql extends Dialect
     ): string {
         if (!empty($schemaName)) {
             return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`= '"
-                . $viewName . "' AND `TABLE_SCHEMA`='" . $schemaName . "'";
+                . $this->escapeStringLiteral($viewName)
+                . "' AND `TABLE_SCHEMA`='"
+                . $this->escapeStringLiteral($schemaName) . "'";
         }
 
         return "SELECT IF(COUNT(*) > 0, 1, 0) FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_NAME`='"
-            . $viewName . "' AND `TABLE_SCHEMA` = DATABASE()";
+            . $this->escapeStringLiteral($viewName) . "' AND `TABLE_SCHEMA` = DATABASE()";
     }
 
     /**

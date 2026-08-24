@@ -1995,9 +1995,13 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     {
         foreach ($this->trustedProxies as $trusted) {
             if (strpos($trusted, '/') !== false) {
-                return $this->isIpAddressInCIDR($ip, $trusted);
+                if ($this->isIpAddressInCIDR($ip, $trusted)) {
+                    return true;
+                }
             } else {
-                return $ip === $trusted;
+                if ($ip === $trusted) {
+                    return true;
+                }
             }
         }
 

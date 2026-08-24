@@ -394,7 +394,7 @@ class Sqlite extends Dialect
          *   0 = ordinary, 1 = hidden (virtual table internal),
          *   2 = VIRTUAL generated, 3 = STORED generated.
          */
-        return "PRAGMA table_xinfo('" . $tableName . "')";
+        return "PRAGMA table_xinfo('" . $this->escapeStringLiteral($tableName) . "')";
     }
 
     /**
@@ -406,7 +406,7 @@ class Sqlite extends Dialect
      */
     public function describeIndex(string $index): string
     {
-        return "PRAGMA index_info('" . $index . "')";
+        return "PRAGMA index_info('" . $this->escapeStringLiteral($index) . "')";
     }
 
     /**
@@ -421,7 +421,7 @@ class Sqlite extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        return "PRAGMA index_list('" . $tableName . "')";
+        return "PRAGMA index_list('" . $this->escapeStringLiteral($tableName) . "')";
     }
 
     /**
@@ -436,7 +436,7 @@ class Sqlite extends Dialect
         string $tableName,
         string | null $schemaName = null
     ): string {
-        return "PRAGMA foreign_key_list('" . $tableName . "')";
+        return "PRAGMA foreign_key_list('" . $this->escapeStringLiteral($tableName) . "')";
     }
 
     /**
@@ -924,7 +924,7 @@ class Sqlite extends Dialect
     ): string {
         return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END "
             . "FROM sqlite_master "
-            . "WHERE type='table' AND tbl_name='" . $tableName . "'";
+            . "WHERE type='table' AND tbl_name='" . $this->escapeStringLiteral($tableName) . "'";
     }
 
     /**
@@ -971,6 +971,6 @@ class Sqlite extends Dialect
     public function viewExists(string $viewName, string | null $schemaName = null): string
     {
         return "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM "
-            . "sqlite_master WHERE type='view' AND tbl_name='" . $viewName . "'";
+            . "sqlite_master WHERE type='view' AND tbl_name='" . $this->escapeStringLiteral($viewName) . "'";
     }
 }

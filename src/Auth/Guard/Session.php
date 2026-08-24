@@ -157,6 +157,12 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
     {
         $this->fireManagerEvent('auth:beforeLogin', null, false);
 
+        /**
+         * Rotate the session id when the privilege level changes
+         * (anonymous -> authenticated) to defeat session fixation (CWE-384).
+         */
+        $this->session->regenerateId();
+
         $this->session->set($this->getName(), $user->getAuthIdentifier());
 
         if ($remember) {
@@ -268,6 +274,12 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
             $fromRecaller = $this->userFromRecaller($recaller);
             if ($fromRecaller !== null) {
                 $this->user = $fromRecaller;
+
+                /**
+                 * Promotion from the remember cookie is also a privilege
+                 * change, so rotate the session id here too (CWE-384).
+                 */
+                $this->session->regenerateId();
                 $this->session->set($this->getName(), $fromRecaller->getAuthIdentifier());
             }
         }
@@ -369,10 +381,19 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
             JSON_THROW_ON_ERROR
         );
 
+        /**
+         * The remember cookie is a bearer credential: keep it off JavaScript
+         * (httpOnly) and, on a secure request, off plaintext transports
+         * (secure) (CWE-1004 / CWE-614).
+         */
         $this->cookies->set(
             $this->getRememberName(),
             $payload,
-            $this->clock->now()->getTimestamp() + $this->config->getRememberTtl()
+            $this->clock->now()->getTimestamp() + $this->config->getRememberTtl(),
+            '/',
+            $this->request->isSecure(),
+            '',
+            true
         );
     }
 

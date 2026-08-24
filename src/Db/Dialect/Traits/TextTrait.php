@@ -332,7 +332,7 @@ trait TextTrait
     {
         return empty($schemaName)
             ? 'DATABASE()' :
-            $this->delimit($schemaName, "'");
+            "'" . $this->escapeStringLiteral($schemaName) . "'";
     }
 
     /**
