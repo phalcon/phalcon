@@ -1382,17 +1382,43 @@ class Query implements QueryInterface, InjectionAwareInterface
          * verbatim (unescaped), so a RawValue must never wrap untrusted data.
          * See Phalcon\Db\RawValue.
          */
+        $rawWildcards = [];
         foreach ($processed as $wildcard => $value) {
             if ($value instanceof RawValue) {
-                if (substr((string) $wildcard, 0, 1) === ":") {
-                    $sqlSelect = str_replace((string) $wildcard, (string) $value, $sqlSelect);
-                } else {
-                    $sqlSelect = str_replace(":" . $wildcard, (string) $value, $sqlSelect);
-                }
-
-                unset($processed[$wildcard]);
-                unset($processedTypes[$wildcard]);
+                $rawWildcards[] = $wildcard;
             }
+        }
+
+        /**
+         * Replace the longest wildcard first and anchor the match with a word
+         * boundary, so a name that is a prefix of another (":APL0" vs
+         * ":APL01") cannot corrupt the longer one. A callback keeps the value
+         * literal, avoiding preg_replace back-reference expansion of a "$" or
+         * "\" inside the RawValue.
+         */
+        usort(
+            $rawWildcards,
+            function ($a, $b) {
+                return strlen((string) $b) - strlen((string) $a);
+            }
+        );
+
+        foreach ($rawWildcards as $wildcard) {
+            $rawValue    = (string) $processed[$wildcard];
+            $placeholder = substr((string) $wildcard, 0, 1) === ":"
+                ? substr((string) $wildcard, 1)
+                : (string) $wildcard;
+
+            $sqlSelect = preg_replace_callback(
+                "/:" . preg_quote($placeholder, "/") . "\\b/",
+                function ($matches) use ($rawValue) {
+                    return $rawValue;
+                },
+                $sqlSelect
+            );
+
+            unset($processed[$wildcard]);
+            unset($processedTypes[$wildcard]);
         }
 
         /**
