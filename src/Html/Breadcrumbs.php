@@ -21,8 +21,8 @@ use Phalcon\Contracts\Html\HtmlTypes;
 
 use function array_keys;
 use function end;
-use function implode;
 use function htmlspecialchars;
+use function implode;
 use function str_replace;
 
 /**

@@ -15,7 +15,6 @@ namespace Phalcon\Encryption\Crypt\Padding;
 
 use function chr;
 use function ord;
-use function rand;
 use function strlen;
 use function substr;
 
