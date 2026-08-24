@@ -575,20 +575,22 @@ abstract class Dialect implements DialectInterface
     public function limit(string $sqlQuery, mixed $number): string
     {
         /**
-         * LIMIT and OFFSET are always integers; cast them so a request-derived
-         * pagination value reaching this low-level API cannot inject SQL.
+         * A bound placeholder (":name" / "?N") is emitted unchanged so it can
+         * be bound by PDO; any other value is coerced to an integer, so a
+         * request-derived pagination value reaching this low-level API cannot
+         * inject SQL.
          */
         if (is_array($number)) {
-            $sqlQuery .= " LIMIT " . (int) $number[0];
+            $sqlQuery .= " LIMIT " . $this->getLimitValue($number[0]);
 
             if (isset($number[1]) && strlen((string) $number[1])) {
-                $sqlQuery .= " OFFSET " . (int) $number[1];
+                $sqlQuery .= " OFFSET " . $this->getLimitValue($number[1]);
             }
 
             return $sqlQuery;
         }
 
-        return $sqlQuery . " LIMIT " . (int) $number;
+        return $sqlQuery . " LIMIT " . $this->getLimitValue($number);
     }
 
     /**
@@ -1085,6 +1087,26 @@ abstract class Dialect implements DialectInterface
         }
 
         return implode(', ', $parts);
+    }
+
+    /**
+     * Renders a LIMIT/OFFSET value: a bound placeholder passes through, any
+     * other value is coerced to an integer to prevent SQL injection.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function getLimitValue(mixed $value): string
+    {
+        if (
+            is_string($value) &&
+            (substr($value, 0, 1) === ":" || substr($value, 0, 1) === "?")
+        ) {
+            return $value;
+        }
+
+        return (string) (int) $value;
     }
 
     /**
