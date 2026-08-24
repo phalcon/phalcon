@@ -24,8 +24,19 @@ class Redirect
 {
     public function __construct(
         protected string $url,
-        protected int $status = 302
+        protected int $status = 302,
+        protected bool $external = false
     ) {
+    }
+
+    /**
+     * Whether the target is an explicit external redirect. Internal (the
+     * default) redirects refuse an absolute or protocol-relative target so a
+     * request-derived value cannot become an open redirect (CWE-601).
+     */
+    public function external(): bool
+    {
+        return $this->external;
     }
 
     public static function permanent(string $url): Redirect

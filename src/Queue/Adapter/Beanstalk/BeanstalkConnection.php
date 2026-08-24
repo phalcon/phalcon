@@ -152,6 +152,7 @@ class BeanstalkConnection
      */
     public function ignoreTube(string $tube): bool
     {
+        $this->assertValidTube($tube);
         $this->write("ignore " . $tube);
 
         $result = ($this->readStatus()[0] ?? "") === "WATCHING";
@@ -289,6 +290,7 @@ class BeanstalkConnection
      */
     public function statsTube(string $tube): array | false
     {
+        $this->assertValidTube($tube);
         $this->write("stats-tube " . $tube);
 
         $response = $this->readStatus();
@@ -317,6 +319,7 @@ class BeanstalkConnection
      */
     public function useTube(string $tube): bool
     {
+        $this->assertValidTube($tube);
         $this->write("use " . $tube);
 
         $result = ($this->readStatus()[0] ?? "") === "USING";
@@ -333,6 +336,7 @@ class BeanstalkConnection
      */
     public function watchTube(string $tube): bool
     {
+        $this->assertValidTube($tube);
         $this->write("watch " . $tube);
 
         $result = ($this->readStatus()[0] ?? "") === "WATCHING";
@@ -358,6 +362,19 @@ class BeanstalkConnection
         $packet = $data . "\r\n";
 
         return fwrite($connection, $packet, strlen($packet));
+    }
+
+    /**
+     * Reject a tube name that could break out of the protocol command line.
+     * A Beanstalkd tube name is at most 200 bytes from a fixed character set
+     * and must not start with a hyphen; a name carrying CR/LF (or any other
+     * out-of-charset byte) would inject arbitrary Beanstalkd commands.
+     */
+    private function assertValidTube(string $tube): void
+    {
+        if (!preg_match('%^[A-Za-z0-9+/;.$_()][A-Za-z0-9+/;.$_()-]{0,199}$%', $tube)) {
+            throw new Exception("Invalid tube name");
+        }
     }
 
     /**

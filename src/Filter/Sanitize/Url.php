@@ -31,6 +31,27 @@ class Url implements Sanitizer
      */
     public function __invoke($input)
     {
-        return filter_var($input, FILTER_SANITIZE_URL);
+        $sanitized = (string) filter_var($input, FILTER_SANITIZE_URL);
+
+        /**
+         * FILTER_SANITIZE_URL keeps the scheme intact, so a dangerous scheme
+         * such as "javascript:", "data:" or "vbscript:" survives and becomes
+         * XSS when the value is emitted into an href/src. Drop the value when
+         * its scheme is not on the safe allow-list. An empty scheme (a
+         * relative URL) is allowed.
+         */
+        $scheme = (string) parse_url($sanitized, PHP_URL_SCHEME);
+
+        if (
+            $scheme !== "" &&
+            !in_array(
+                strtolower($scheme),
+                ["http", "https", "ftp", "ftps", "mailto", "tel"]
+            )
+        ) {
+            return "";
+        }
+
+        return $sanitized;
     }
 }

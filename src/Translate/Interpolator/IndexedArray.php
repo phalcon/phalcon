@@ -27,7 +27,19 @@ class IndexedArray implements InterpolatorInterface
         array $placeholders = []
     ): string {
         if (!empty($placeholders)) {
-            return vsprintf($translation, $placeholders);
+            /**
+             * vsprintf() treats the translation as a format string. When the
+             * translation is a fallback (e.g. a missing, possibly
+             * request-derived key) its format specifiers may not match the
+             * given arguments, which would raise a ValueError. Return the
+             * translation unchanged in that case so a crafted key cannot turn
+             * into a format-string error / DoS (CWE-134).
+             */
+            try {
+                return vsprintf($translation, $placeholders);
+            } catch (\ValueError $e) {
+                return $translation;
+            }
         }
 
         return $translation;

@@ -572,19 +572,23 @@ abstract class Dialect implements DialectInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array | int $number): string
+    public function limit(string $sqlQuery, mixed $number): string
     {
+        /**
+         * LIMIT and OFFSET are always integers; cast them so a request-derived
+         * pagination value reaching this low-level API cannot inject SQL.
+         */
         if (is_array($number)) {
-            $sqlQuery .= " LIMIT " . $number[0];
+            $sqlQuery .= " LIMIT " . (int) $number[0];
 
             if (isset($number[1]) && strlen((string) $number[1])) {
-                $sqlQuery .= " OFFSET " . $number[1];
+                $sqlQuery .= " OFFSET " . (int) $number[1];
             }
 
             return $sqlQuery;
         }
 
-        return $sqlQuery . " LIMIT " . $number;
+        return $sqlQuery . " LIMIT " . (int) $number;
     }
 
     /**

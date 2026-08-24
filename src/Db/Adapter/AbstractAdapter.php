@@ -1241,7 +1241,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @return string
      */
-    public function limit(string $sqlQuery, array | int $number): string
+    public function limit(string $sqlQuery, mixed $number): string
     {
         return $this->dialect->limit($sqlQuery, $number);
     }

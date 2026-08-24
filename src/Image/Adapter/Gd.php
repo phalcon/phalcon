@@ -140,18 +140,26 @@ class Gd extends AbstractAdapter
     public function __construct(
         string $file,
         int | null $width = null,
-        int | null $height = null
+        int | null $height = null,
+        int $maxPixels = 0
     ) {
         $this->check();
 
-        $this->file = $file;
-        $this->type = 0;
+        $this->file      = $file;
+        $this->type      = 0;
+        $this->maxPixels = $maxPixels > 0 ? $maxPixels : self::DEFAULT_MAX_PIXELS;
 
         if (true === $this->phpFileExists($this->file)) {
             $this->realpath = (string)realpath($this->file);
             $imageInfo      = getimagesize($this->file);
 
             if (false !== $imageInfo) {
+                /**
+                 * Reject an oversized image from its header dimensions before
+                 * imagecreatefrom*() allocates the pixel buffer (CWE-409).
+                 */
+                $this->assertPixelLimit((int)$imageInfo[0], (int)$imageInfo[1]);
+
                 $this->width  = $imageInfo[0];
                 $this->height = $imageInfo[1];
                 $this->type   = $imageInfo[2];

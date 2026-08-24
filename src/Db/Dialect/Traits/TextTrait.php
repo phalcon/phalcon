@@ -19,7 +19,6 @@ use Phalcon\Db\Index;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 
-use function addcslashes;
 use function explode;
 use function implode;
 use function is_float;
@@ -126,9 +125,9 @@ trait TextTrait
             ) {
                 $sql = ' DEFAULT ' . $defaultValue;
             } else {
-                $sql = ' DEFAULT "'
-                    . addcslashes($defaultValue, '"')
-                    . '"';
+                $sql = " DEFAULT '"
+                    . $this->escapeStringLiteral((string)$defaultValue)
+                    . "'";
             }
         }
 

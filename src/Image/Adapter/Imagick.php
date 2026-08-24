@@ -87,15 +87,31 @@ class Imagick extends AbstractAdapter
     public function __construct(
         string $file,
         int | null $width = null,
-        int | null $height = null
+        int | null $height = null,
+        int $maxPixels = 0
     ) {
         $this->check();
 
-        $this->file  = $file;
-        $this->image = new ImagickNative();
+        $this->file      = $file;
+        $this->image     = new ImagickNative();
+        $this->maxPixels = $maxPixels > 0 ? $maxPixels : self::DEFAULT_MAX_PIXELS;
 
         if (true === $this->phpFileExists($this->file)) {
             $this->realpath = (string)realpath($this->file);
+
+            /**
+             * Read only the header first and reject an oversized image by its
+             * dimensions before readImage() decodes the full pixel buffer
+             * (CWE-409).
+             */
+            if (true === $this->image->pingImage($this->realpath)) {
+                $this->assertPixelLimit(
+                    (int)$this->image->getImageWidth(),
+                    (int)$this->image->getImageHeight()
+                );
+
+                $this->image->clear();
+            }
 
             if (true !== $this->image->readImage($this->realpath)) {
                 throw new ImageLoadFailed($this->file);

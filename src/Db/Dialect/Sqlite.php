@@ -32,7 +32,6 @@ use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
-use function addcslashes;
 use function is_array;
 use function strtoupper;
 use function substr;
@@ -102,7 +101,7 @@ class Sqlite extends Dialect
             } elseif (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
                 $sql .= " DEFAULT CURRENT_TIMESTAMP";
             } else {
-                $sql .= ' DEFAULT "' . addcslashes((string)$defaultValue, '"') . '"';
+                $sql .= " DEFAULT '" . $this->escapeStringLiteral((string)$defaultValue) . "'";
             }
         }
 
@@ -264,9 +263,9 @@ class Sqlite extends Dialect
                     } elseif (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
                         $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
                     } else {
-                        $columnLine .= " DEFAULT \""
-                            . addcslashes((string)$defaultValue, "\"")
-                            . "\"";
+                        $columnLine .= " DEFAULT '"
+                            . $this->escapeStringLiteral((string)$defaultValue)
+                            . "'";
                     }
                 }
             }
@@ -745,18 +744,18 @@ class Sqlite extends Dialect
                 if (!empty($typeValues)) {
                     if (is_array($typeValues)) {
                         foreach ($typeValues as $value) {
-                            $valueSql .= "\""
-                                . addcslashes($value, "\"")
-                                . "\", ";
+                            $valueSql .= "'"
+                                . $this->escapeStringLiteral($value)
+                                . "', ";
                         }
 
                         $columnSql .= "("
                             . substr($valueSql, 0, -2)
                             . ")";
                     } else {
-                        $columnSql .= "(\""
-                            . addcslashes($typeValues, "\"")
-                            . "\")";
+                        $columnSql .= "('"
+                            . $this->escapeStringLiteral($typeValues)
+                            . "')";
                     }
                 }
         }

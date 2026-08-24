@@ -25,7 +25,6 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\ReferenceInterface;
 
-use function addcslashes;
 use function is_array;
 use function strtoupper;
 use function substr;
@@ -1001,7 +1000,7 @@ class Postgresql extends Dialect
                         $valueSql = "";
                         foreach ($typeValues as $value) {
                             $valueSql .= "'"
-                                . addcslashes($value, "\'")
+                                . $this->escapeStringLiteral($value)
                                 . "', ";
                         }
 
@@ -1010,7 +1009,7 @@ class Postgresql extends Dialect
                             . ")";
                     } else {
                         $columnSql .= "('"
-                            . addcslashes($typeValues, "\'")
+                            . $this->escapeStringLiteral($typeValues)
                             . "')";
                     }
                 }
@@ -1385,7 +1384,7 @@ class Postgresql extends Dialect
             $preparedValue = (string)$defaultValue;
         } else {
             $preparedValue = "'"
-                . addcslashes($defaultValue, "\'")
+                . $this->escapeStringLiteral($defaultValue)
                 . "'";
         }
 

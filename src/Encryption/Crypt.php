@@ -234,28 +234,53 @@ class Crypt implements CryptInterface
             $cipherText = mb_substr($input, $ivLength, null, "8bit");
         }
 
+        if (true === $this->useSigning) {
+            /**
+             * Blind the CBC padding oracle (CWE-649): an OpenSSL padding
+             * failure and an HMAC mismatch must be indistinguishable. Tolerate
+             * a decrypt failure, always compute the HMAC (over the padded
+             * plaintext, before unpadding) so the timing does not leak which
+             * one happened, and report a single generic error. hash_equals()
+             * keeps the comparison constant-time.
+             */
+            try {
+                $decrypted = $this->decryptGcmCcmAuth(
+                    $mode,
+                    $cipherText,
+                    $decryptKey,
+                    $iv
+                );
+            } catch (DecryptionFailed $e) {
+                $decrypted = false;
+            }
+
+            if (
+                true !== $this->phpHashEquals(
+                    $this->phpHashHmac(
+                        $hashAlgorithm,
+                        false === $decrypted ? "" : $decrypted,
+                        $decryptKey,
+                        true
+                    ),
+                    $digest
+                ) || false === $decrypted
+            ) {
+                throw new Mismatch("Hash does not match.");
+            }
+
+            return $this->decryptGetUnpadded(
+                $mode,
+                $blockSize,
+                $decrypted
+            );
+        }
+
         $decrypted = $this->decryptGcmCcmAuth(
             $mode,
             $cipherText,
             $decryptKey,
             $iv
         );
-
-        if (true === $this->useSigning) {
-            /**
-             * Checks on the decrypted message digest using the HMAC method.
-             * The check runs against the padded plaintext, before unpadding,
-             * and uses hash_equals() so that the comparison is constant-time.
-             */
-            if (
-                true !== $this->phpHashEquals(
-                    $this->phpHashHmac($hashAlgorithm, $decrypted, $decryptKey, true),
-                    $digest
-                )
-            ) {
-                throw new Mismatch("Hash does not match.");
-            }
-        }
 
         return $this->decryptGetUnpadded(
             $mode,
