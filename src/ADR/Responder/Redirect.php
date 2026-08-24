@@ -29,16 +29,6 @@ class Redirect
     ) {
     }
 
-    /**
-     * Whether the target is an explicit external redirect. Internal (the
-     * default) redirects refuse an absolute or protocol-relative target so a
-     * request-derived value cannot become an open redirect (CWE-601).
-     */
-    public function external(): bool
-    {
-        return $this->external;
-    }
-
     public static function permanent(string $url): Redirect
     {
         return new self($url, 301);
@@ -52,6 +42,16 @@ class Redirect
     public static function temporary(string $url): Redirect
     {
         return new self($url, 302);
+    }
+
+    /**
+     * Whether the target is an explicit external redirect. Internal (the
+     * default) redirects refuse an absolute or protocol-relative target so a
+     * request-derived value cannot become an open redirect (CWE-601).
+     */
+    public function external(): bool
+    {
+        return $this->external;
     }
 
     public function status(): int
