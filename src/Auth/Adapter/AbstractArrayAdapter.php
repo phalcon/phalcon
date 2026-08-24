@@ -151,10 +151,15 @@ abstract class AbstractArrayAdapter extends AbstractAdapter
 
             $rowValue = $row[$key] ?? null;
 
+            /**
+             * Compare in constant time so a non-password credential (for
+             * example a bearer token) cannot be recovered byte by byte through
+             * response timing (CWE-208).
+             */
             if (
                 !is_scalar($rowValue)
                 || !is_scalar($value)
-                || (string) $rowValue !== (string) $value
+                || !hash_equals((string) $rowValue, (string) $value)
             ) {
                 return false;
             }

@@ -18,6 +18,7 @@ use Iterator;
 use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
@@ -56,6 +57,7 @@ class Stream extends AbstractAdapter
 {
     use DirFromFileTrait;
     use DirSeparatorTrait;
+    use FilePathTrait;
     use FileTrait;
 
     protected string $prefix = 'ph-strm';
@@ -292,7 +294,12 @@ class Stream extends AbstractAdapter
      */
     private function getFilepath(string $key): string
     {
-        return $this->getDir($key) . $this->getKeyWithoutPrefix($key);
+        /**
+         * Remove path separators from the key so a crafted key cannot climb
+         * out of the storage directory (CWE-22).
+         */
+        return $this->getDir($key)
+            . $this->prepareVirtualPath($this->getKeyWithoutPrefix($key));
     }
 
     /**
@@ -351,15 +358,21 @@ class Stream extends AbstractAdapter
         );
 
         try {
-            /** @var false|storage_stream_payload $data */
-            $data = unserialize($payload);
+            /**
+             * The payload is only ever a metadata array (the stored value is a
+             * nested serialized string). Refuse to build any object so a
+             * crafted cache file cannot fire magic methods on read (CWE-502).
+             *
+             * @var false|storage_stream_payload $data
+             */
+            $data = unserialize($payload, ['allowed_classes' => false]);
         } catch (\ValueError $e) {
             $data = [];
         }
 
         restore_error_handler();
 
-        if (true === $warning || false === $data) {
+        if (true === $warning || !is_array($data)) {
             $data = [];
         }
 

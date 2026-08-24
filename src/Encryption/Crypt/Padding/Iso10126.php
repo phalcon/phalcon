@@ -34,7 +34,7 @@ class Iso10126 implements PadInterface
         $padding = "";
         $length  = $paddingSize - 2;
         for ($counter = 0; $counter <= $length; $counter++) {
-            $padding .= chr(rand() % 256);
+            $padding .= random_bytes(1);
         }
 
         $padding .= chr($paddingSize);

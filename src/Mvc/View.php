@@ -654,6 +654,20 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * Call engine render, this checks in every registered engine for the
          * partial
          */
+        /**
+         * Drop "." and ".." path segments so a crafted partial path cannot
+         * climb out of the partials directory, while still allowing
+         * sub-directories and absolute paths (CWE-22).
+         */
+        $segments = [];
+        foreach (explode('/', $partialPath) as $segment) {
+            if ($segment !== '.' && $segment !== '..') {
+                $segments[] = $segment;
+            }
+        }
+
+        $partialPath = implode('/', $segments);
+
         $this->engineRender(
             $this->loadTemplateEngines(),
             $this->partialsDir . $partialPath,
