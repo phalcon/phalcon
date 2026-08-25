@@ -2,6 +2,20 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
+## [6.0.0 beta 10](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta10) (2026-08-25)
+
+### Changed
+
+- The PHPUnit configuration now fails the run on notices, deprecations and PHPUnit deprecations, and prints the details of every triggering test.
+- Added regression tests for the security hardening changes that had no failing-on-revert coverage.
+
+### Added
+
+### Fixed
+
+- `Phalcon\Db\Dialect\Mysql::getColumnDefinition()` appended `VARCHAR` to a custom string type and ignored `typeValues`, so ENUM/SET columns rendered as `ENUMVARCHAR` instead of `ENUM('a', 'b')`; the method now mirrors cphalcon, including the escaping of the values.
+- Stale shadow flag clean-up in `Phalcon\Mvc\Router` now checks the entry exists before removing it, in sync with cphalcon [#17527](https://github.com/phalcon/cphalcon/issues/17527).
+
 ## [6.0.0 beta 9](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta9) (2026-08-24)
 
 ### Changed

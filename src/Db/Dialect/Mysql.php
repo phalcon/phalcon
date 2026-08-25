@@ -21,11 +21,14 @@ use Phalcon\Db\Dialect\Traits\TextTrait;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\MissingDefinitionKey;
 use Phalcon\Db\Exceptions\MysqlOnConflictNotSupported;
+use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
 
 use function implode;
+use function is_array;
 use function str_replace;
+use function substr;
 
 /**
  * Generates database specific SQL for the MySQL RDBMS
@@ -488,65 +491,314 @@ class Mysql extends Dialect
         $columnSql  = $this->checkColumnTypeSql($column);
         $columnType = $this->checkColumnType($column);
 
-        /**
-         * The Column checks for the correct type
-         */
-        $columnSql .= match ($columnType) {
-            Column::TYPE_BIGINTEGER    => "BIGINT",
-            Column::TYPE_BIT           => "BIT",
-            Column::TYPE_BLOB          => "BLOB",
-            Column::TYPE_BOOLEAN       => "TINYINT(1)",
-            Column::TYPE_CHAR          => "CHAR",
-            Column::TYPE_DATE          => "DATE",
-            Column::TYPE_DATETIME      => "DATETIME",
-            Column::TYPE_DECIMAL       => "DECIMAL",
-            Column::TYPE_DOUBLE        => "DOUBLE",
-            Column::TYPE_ENUM          => "ENUM",
-            Column::TYPE_FLOAT         => "FLOAT",
-            Column::TYPE_INTEGER       => "INT",
-            Column::TYPE_JSON          => "JSON",
-            Column::TYPE_LONGBLOB      => "LONGBLOB",
-            Column::TYPE_LONGTEXT      => "LONGTEXT",
-            Column::TYPE_MEDIUMBLOB    => "MEDIUMBLOB",
-            Column::TYPE_MEDIUMINTEGER => "MEDIUMINT",
-            Column::TYPE_MEDIUMTEXT    => "MEDIUMTEXT",
-            Column::TYPE_SMALLINTEGER  => "SMALLINT",
-            Column::TYPE_TEXT          => "TEXT",
-            Column::TYPE_TIME          => "TIME",
-            Column::TYPE_TIMESTAMP     => "TIMESTAMP",
-            Column::TYPE_TINYBLOB      => "TINYBLOB",
-            Column::TYPE_TINYINTEGER   => "TINYINT",
-            Column::TYPE_TINYTEXT      => "TINYTEXT",
-            Column::TYPE_GEOMETRY      => "GEOMETRY",
-            Column::TYPE_POINT         => "POINT",
-            Column::TYPE_LINESTRING    => "LINESTRING",
-            Column::TYPE_POLYGON       => "POLYGON",
-            Column::TYPE_MULTIPOINT    => "MULTIPOINT",
-            Column::TYPE_MULTILINESTRING    => "MULTILINESTRING",
-            Column::TYPE_MULTIPOLYGON       => "MULTIPOLYGON",
-            Column::TYPE_GEOMETRYCOLLECTION => "GEOMETRYCOLLECTION",
-            default                    => "VARCHAR",
-        };
+        switch ($columnType) {
+            case Column::TYPE_BIGINTEGER:
+                if (empty($columnSql)) {
+                    $columnSql .= "BIGINT";
+                }
 
-        $columnSql .= match ($columnType) {
-            Column::TYPE_BIGINTEGER,
-            Column::TYPE_BIT,
-            Column::TYPE_CHAR,
-            Column::TYPE_DATETIME,
-            Column::TYPE_ENUM,
-            Column::TYPE_INTEGER,
-            Column::TYPE_MEDIUMINTEGER,
-            Column::TYPE_SMALLINTEGER,
-            Column::TYPE_TINYINTEGER,
-            Column::TYPE_TIME,
-            Column::TYPE_TIMESTAMP,
-            Column::TYPE_VARCHAR,
-            Column::TYPE_DECIMAL,
-            Column::TYPE_DOUBLE,
-            Column::TYPE_FLOAT => $this->checkColumnSizeAndScale($column)
-                . $this->checkColumnUnsigned($column),
-            default            => '',
-        };
+                $columnSql .= $this->getColumnSize($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_BIT:
+                if (empty($columnSql)) {
+                    $columnSql .= "BIT";
+                }
+
+                $columnSql .= $this->getColumnSize($column);
+
+                break;
+
+            case Column::TYPE_BLOB:
+                if (empty($columnSql)) {
+                    $columnSql .= "BLOB";
+                }
+
+                break;
+
+            case Column::TYPE_BOOLEAN:
+                if (empty($columnSql)) {
+                    $columnSql .= "TINYINT(1)";
+                }
+
+                break;
+
+            case Column::TYPE_CHAR:
+                if (empty($columnSql)) {
+                    $columnSql .= "CHAR";
+                }
+
+                $columnSql .= $this->getColumnSize($column);
+
+                break;
+
+            case Column::TYPE_DATE:
+                if (empty($columnSql)) {
+                    $columnSql .= "DATE";
+                }
+
+                break;
+
+            case Column::TYPE_DATETIME:
+                if (empty($columnSql)) {
+                    $columnSql .= "DATETIME";
+                }
+
+                if ($column->getSize() > 0) {
+                    $columnSql .= $this->getColumnSize($column);
+                }
+
+                break;
+
+            case Column::TYPE_DECIMAL:
+                if (empty($columnSql)) {
+                    $columnSql .= "DECIMAL";
+                }
+
+                $columnSql .= $this->getColumnSizeAndScale($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_DOUBLE:
+                if (empty($columnSql)) {
+                    $columnSql .= "DOUBLE";
+                }
+
+                $columnSql .= $this->checkColumnSizeAndScale($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_ENUM:
+                if (empty($columnSql)) {
+                    $columnSql .= "ENUM";
+                }
+
+                $columnSql .= $this->getColumnSize($column);
+
+                break;
+
+            case Column::TYPE_FLOAT:
+                if (empty($columnSql)) {
+                    $columnSql .= "FLOAT";
+                }
+
+                $columnSql .= $this->checkColumnSizeAndScale($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_INTEGER:
+                if (empty($columnSql)) {
+                    $columnSql .= "INT";
+                }
+
+                $columnSql .= $this->getColumnSize($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_JSON:
+                if (empty($columnSql)) {
+                    $columnSql .= "JSON";
+                }
+
+                break;
+
+            case Column::TYPE_LONGBLOB:
+                if (empty($columnSql)) {
+                    $columnSql .= "LONGBLOB";
+                }
+
+                break;
+
+            case Column::TYPE_LONGTEXT:
+                if (empty($columnSql)) {
+                    $columnSql .= "LONGTEXT";
+                }
+
+                break;
+
+            case Column::TYPE_MEDIUMBLOB:
+                if (empty($columnSql)) {
+                    $columnSql .= "MEDIUMBLOB";
+                }
+
+                break;
+
+            case Column::TYPE_MEDIUMINTEGER:
+                if (empty($columnSql)) {
+                    $columnSql .= "MEDIUMINT";
+                }
+
+                $columnSql .= $this->getColumnSize($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_MEDIUMTEXT:
+                if (empty($columnSql)) {
+                    $columnSql .= "MEDIUMTEXT";
+                }
+
+                break;
+
+            case Column::TYPE_SMALLINTEGER:
+                if (empty($columnSql)) {
+                    $columnSql .= "SMALLINT";
+                }
+
+                $columnSql .= $this->getColumnSize($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_TEXT:
+                if (empty($columnSql)) {
+                    $columnSql .= "TEXT";
+                }
+
+                break;
+
+            case Column::TYPE_TIME:
+                if (empty($columnSql)) {
+                    $columnSql .= "TIME";
+                }
+
+                if ($column->getSize() > 0) {
+                    $columnSql .= $this->getColumnSize($column);
+                }
+
+                break;
+
+            case Column::TYPE_TIMESTAMP:
+                if (empty($columnSql)) {
+                    $columnSql .= "TIMESTAMP";
+                }
+
+                if ($column->getSize() > 0) {
+                    $columnSql .= $this->getColumnSize($column);
+                }
+
+                break;
+
+            case Column::TYPE_TINYBLOB:
+                if (empty($columnSql)) {
+                    $columnSql .= "TINYBLOB";
+                }
+
+                break;
+
+            case Column::TYPE_TINYINTEGER:
+                if (empty($columnSql)) {
+                    $columnSql .= "TINYINT";
+                }
+
+                $columnSql .= $this->getColumnSize($column)
+                    . $this->checkColumnUnsigned($column);
+
+                break;
+
+            case Column::TYPE_TINYTEXT:
+                if (empty($columnSql)) {
+                    $columnSql .= "TINYTEXT";
+                }
+
+                break;
+
+            case Column::TYPE_VARCHAR:
+                if (empty($columnSql)) {
+                    $columnSql .= "VARCHAR";
+                }
+
+                $columnSql .= $this->getColumnSize($column);
+
+                break;
+
+            case Column::TYPE_GEOMETRY:
+                if (empty($columnSql)) {
+                    $columnSql .= "GEOMETRY";
+                }
+
+                break;
+
+            case Column::TYPE_POINT:
+                if (empty($columnSql)) {
+                    $columnSql .= "POINT";
+                }
+
+                break;
+
+            case Column::TYPE_LINESTRING:
+                if (empty($columnSql)) {
+                    $columnSql .= "LINESTRING";
+                }
+
+                break;
+
+            case Column::TYPE_POLYGON:
+                if (empty($columnSql)) {
+                    $columnSql .= "POLYGON";
+                }
+
+                break;
+
+            case Column::TYPE_MULTIPOINT:
+                if (empty($columnSql)) {
+                    $columnSql .= "MULTIPOINT";
+                }
+
+                break;
+
+            case Column::TYPE_MULTILINESTRING:
+                if (empty($columnSql)) {
+                    $columnSql .= "MULTILINESTRING";
+                }
+
+                break;
+
+            case Column::TYPE_MULTIPOLYGON:
+                if (empty($columnSql)) {
+                    $columnSql .= "MULTIPOLYGON";
+                }
+
+                break;
+
+            case Column::TYPE_GEOMETRYCOLLECTION:
+                if (empty($columnSql)) {
+                    $columnSql .= "GEOMETRYCOLLECTION";
+                }
+
+                break;
+
+            default:
+                if (empty($columnSql)) {
+                    throw new UnrecognizedDataType("MySQL", $column->getName());
+                }
+
+                $typeValues = $column->getTypeValues();
+                if (!empty($typeValues)) {
+                    if (is_array($typeValues)) {
+                        $valueSql = "";
+                        foreach ($typeValues as $value) {
+                            $valueSql .= "'"
+                                . $this->escapeStringLiteral($value)
+                                . "', ";
+                        }
+
+                        $columnSql .= "("
+                            . substr($valueSql, 0, -2)
+                            . ")";
+                    } else {
+                        $columnSql .= "('"
+                            . $this->escapeStringLiteral($typeValues)
+                            . "')";
+                    }
+                }
+        }
 
         return $columnSql;
     }
