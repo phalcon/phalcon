@@ -140,6 +140,36 @@ final class FireTest extends AbstractUnitTestCase
     }
 
     /**
+     * The fifth fire() argument overrides setStopOnFalse() for one call:
+     * `true` makes a listener's `false` final, `false` keeps last-wins.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
+     */
+    public function testEventsManagerFireStopOnFalsePerCall(): void
+    {
+        $manager = new Manager();
+        $source  = new stdClass();
+
+        $manager->attach('auth:check', function () {
+            return false;
+        });
+        $manager->attach('auth:check', function () {
+            return true;
+        });
+
+        // Manager default: last non-null wins.
+        $this->assertTrue($manager->fire('auth:check', $source));
+        // Per-call stop-on-false: the denial is final.
+        $this->assertFalse($manager->fire('auth:check', $source, null, true, true));
+
+        // The override works both ways.
+        $manager->setStopOnFalse(true);
+        $this->assertFalse($manager->fire('auth:check', $source));
+        $this->assertTrue($manager->fire('auth:check', $source, null, true, false));
+    }
+
+    /**
      * Tests Phalcon\Events\Manager :: fire() - with priorities
      *
      * @return void
