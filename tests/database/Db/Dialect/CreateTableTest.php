@@ -150,6 +150,27 @@ final class CreateTableTest extends AbstractDatabaseTestCase
         $this->assertSame($expected, $actual);
     }
 
+    #[Group('mysql')]
+    public function testDbDialectCreateTableEscapesComment(): void
+    {
+        $dialect = new Mysql();
+        $column  = new Column(
+            'note',
+            [
+                'type'    => Column::TYPE_VARCHAR,
+                'size'    => 10,
+                'comment' => "O'Brien\\ \"x\"); DROP TABLE secrets;--",
+            ]
+        );
+
+        $actual = $dialect->createTable('table', 'schema', ['columns' => [$column]]);
+
+        $expected = 'CREATE TABLE `schema`.`table` (' . PHP_EOL
+            . "\t`note` VARCHAR(10) NOT NULL COMMENT 'O''Brien\\\\ \"x\"); DROP TABLE secrets;--'" . PHP_EOL
+            . ')';
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * Tests Phalcon\Db\Dialect :: createTable - exception
      *

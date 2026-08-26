@@ -81,13 +81,18 @@ class Numericality extends AbstractValidator
     {
         // Dump spaces in the string if we have any
         $value   = $validation->getValue($field);
-        $value   = (string)$value;
 //        $value   = str_replace(" ", "", $value);
         $pattern = "/((^[-]?[0-9,]+(\\.[0-9]+)?$)|(^[-]?[0-9.]+(,[0-9]+)?$))/";
 
         if ($this->allowEmpty($field, $value)) {
             return true;
         }
+
+        if ($this->rejectNonStringable($validation, $field, $value)) {
+            return false;
+        }
+
+        $value = (string) $value;
 
         if (!preg_match($pattern, $value)) {
             $validation->appendMessage(

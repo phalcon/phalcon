@@ -107,6 +107,10 @@ class Min extends AbstractValidator
             return true;
         }
 
+        if ($this->rejectNonStringable($validation, $field, $value)) {
+            return false;
+        }
+
         // Check if mbstring is available to calculate the correct length
         if ($this->phpFunctionExists("mb_strlen")) {
             $length = mb_strlen((string)$value);

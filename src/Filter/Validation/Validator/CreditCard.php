@@ -86,6 +86,10 @@ class CreditCard extends AbstractValidator
             return true;
         }
 
+        if ($this->rejectNonStringable($validation, $field, $value)) {
+            return false;
+        }
+
         $valid = $this->verifyByLuhnAlgorithm((string)$value);
 
         if (!$valid) {

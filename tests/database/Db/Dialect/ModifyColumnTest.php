@@ -144,6 +144,26 @@ final class ModifyColumnTest extends AbstractDatabaseTestCase
         $this->assertSame($expected, $actual);
     }
 
+    #[Group('mysql')]
+    public function testDbDialectModifyColumnEscapesComment(): void
+    {
+        $dialect = new Mysql();
+        $column  = new Column(
+            'note',
+            [
+                'type'    => Column::TYPE_VARCHAR,
+                'size'    => 10,
+                'comment' => "O'Brien\\ \"x\"); DROP TABLE secrets;--",
+            ]
+        );
+
+        $actual = $dialect->modifyColumn('table', 'schema', $column);
+
+        $expected = 'ALTER TABLE `schema`.`table` MODIFY `note` VARCHAR(10) NOT NULL '
+            . "COMMENT 'O''Brien\\\\ \"x\"); DROP TABLE secrets;--'";
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * Tests Phalcon\Db\Dialect :: modifyColumn
      *

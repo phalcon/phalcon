@@ -67,7 +67,7 @@ trait TextTrait
     {
         return empty($column->getComment())
             ? ''
-            : ' COMMENT ' . $this->delimit($column->getComment(), "'");
+            : " COMMENT '" . $this->escapeStringLiteral($column->getComment()) . "'";
     }
 
     /**

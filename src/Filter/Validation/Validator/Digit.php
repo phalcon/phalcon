@@ -85,6 +85,10 @@ class Digit extends AbstractValidator
             return true;
         }
 
+        if ($this->rejectNonStringable($validation, $field, $value)) {
+            return false;
+        }
+
         if (is_int($value) || ctype_digit((string)$value)) {
             return true;
         }

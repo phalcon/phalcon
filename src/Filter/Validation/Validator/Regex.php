@@ -92,6 +92,10 @@ class Regex extends AbstractValidator
             return true;
         }
 
+        if ($this->rejectNonStringable($validation, $field, $value)) {
+            return false;
+        }
+
         $pattern = $this->getOption("pattern");
 
         if (is_array($pattern)) {

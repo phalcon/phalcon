@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Storage\Serializer;
 
+use __PHP_Incomplete_Class;
 use Phalcon\Storage\Serializer\Exceptions\InvalidUnserializationInput;
 use Phalcon\Traits\Php\SerializeTrait;
 
@@ -28,6 +29,23 @@ class Php extends AbstractSerializer
     use SerializeTrait;
 
     /**
+     * Classes that unserialize() may instantiate: true (any class, the PHP
+     * default), false (none) or a list of class names. Stored bytes that
+     * try to build another class are rejected on read.
+     *
+     * @var array<int, string>|bool
+     */
+    protected array | bool $allowedClasses = true;
+
+    /**
+     * @return array<int, string>|bool
+     */
+    public function getAllowedClasses(): array | bool
+    {
+        return $this->allowedClasses;
+    }
+
+    /**
      * Serializes data
      *
      * @return bool|float|int|string|null
@@ -39,6 +57,19 @@ class Php extends AbstractSerializer
         }
 
         return $this->phpSerialize($this->data);
+    }
+
+    /**
+     * Restricts the classes that unserialize() may instantiate (see the
+     * "allowed_classes" option of unserialize()).
+     *
+     * @param array<int, string>|bool $allowedClasses
+     */
+    public function setAllowedClasses(array | bool $allowedClasses): static
+    {
+        $this->allowedClasses = $allowedClasses;
+
+        return $this;
     }
 
     /**
@@ -63,11 +94,22 @@ class Php extends AbstractSerializer
                 E_NOTICE | E_WARNING
             );
 
-            $result = $this->phpUnserialize($data);
+            $result = $this->phpUnserialize(
+                $data,
+                ['allowed_classes' => $this->allowedClasses]
+            );
 
             restore_error_handler();
 
-            if (true === $warning || false === $result) {
+            /**
+             * A class outside the allow-list comes back as
+             * __PHP_Incomplete_Class: treat it as a failed unserialize.
+             */
+            if (
+                true === $warning
+                || false === $result
+                || $result instanceof __PHP_Incomplete_Class
+            ) {
                 $this->isSuccess = false;
                 $result          = "";
             } else {
