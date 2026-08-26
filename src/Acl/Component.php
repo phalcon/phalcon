@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl;
 
+use Phalcon\Acl\Exceptions\ForbiddenDelimiter;
 use Phalcon\Acl\Exceptions\ForbiddenWildcard;
 
 /**
@@ -27,6 +28,10 @@ class Component extends AbstractElement implements ComponentInterface
     {
         if ('*' === $name) {
             throw new ForbiddenWildcard('component');
+        }
+
+        if (str_contains($name, '!')) {
+            throw new ForbiddenDelimiter('component');
         }
 
         $this->name        = $name;

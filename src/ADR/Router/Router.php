@@ -28,6 +28,7 @@ use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
 use Phalcon\Http\RequestInterface;
+use ReflectionClass;
 
 /**
  * Convention router. `method + static path -> Action class`; the path tail
@@ -49,6 +50,8 @@ use Phalcon\Http\RequestInterface;
  * ## Guarantees
  *
  * - One path names exactly one class; that class names exactly one path.
+ * - The derived name must equal the declared class name byte for byte. A
+ *   class that only resolves case-insensitively is not a match.
  * - `classFor()` and `pathFor()` are pure functions of their input. Neither
  *   touches the filesystem, and neither consults any Action but the one it was
  *   given, so adding or deleting an Action can never move another one's URL.
@@ -367,7 +370,17 @@ final class Router implements RouterInterface
         foreach ($candidates as $candidate) {
             $className = $candidate[0];
 
-            if (class_exists($className)) {
+            if (!class_exists($className)) {
+                continue;
+            }
+
+            /**
+             * PHP resolves class names case-insensitively, so a path with a
+             * different letter case (or an injected word separator) can load
+             * the canonical class under a name that the middleware map does
+             * not match. Only the exact declared name is a match.
+             */
+            if ((new ReflectionClass($className))->getName() === $className) {
                 return [$className, $candidate[1]];
             }
         }

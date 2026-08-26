@@ -13,14 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Auth\Internal;
 
+use Closure;
 use Phalcon\Container\Exceptions\Exception as ContainerException;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Exception as DiException;
+use Phalcon\Di\Service;
 use TypeError;
 
 use function class_exists;
 use function implode;
+use function is_object;
 
 /**
  * Internal single source of truth for resolving services from either the
@@ -106,9 +109,10 @@ final class ContainerResolver
 
     /**
      * Resolves a fresh instance: new() on the Container (bypasses the
-     * instance cache); get() on the legacy Di (fresh for unregistered or
-     * non-shared services). On Di, an unregistered but existing class is
-     * still built via the class builder.
+     * instance cache); on the legacy Di, get() for unregistered or
+     * non-shared services, and a rebuild from the definition for shared
+     * services (Di::get() would return the cached instance). On Di, an
+     * unregistered but existing class is still built via the class builder.
      *
      * @throws ContainerException
      */
@@ -137,6 +141,30 @@ final class ContainerResolver
         }
 
         try {
+            if (true === $container->has($name)) {
+                $service = $container->getService($name);
+
+                /**
+                 * A shared service is cached by the Di. Gates carry
+                 * per-activation state, so build a new instance from the same
+                 * definition. A definition that is an already built object
+                 * can never be fresh.
+                 */
+                if (true === $service->isShared()) {
+                    $definition = $service->getDefinition();
+
+                    if (is_object($definition) && !($definition instanceof Closure)) {
+                        throw new ContainerException(
+                            "Cannot resolve a fresh '" . $name
+                            . "': it is registered in the Di as a shared instance"
+                        );
+                    }
+
+                    /** @var object */
+                    return (new Service($definition, false))->resolve(null, $container);
+                }
+            }
+
             /** @var object */
             return $container->get($name);
         } catch (DiException $e) {

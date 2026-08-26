@@ -372,7 +372,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             /**
              * Calling beforeHandle routing
              */
-            if (false === $this->fireManagerEvent("micro:beforeHandleRoute")) {
+            if (false === $this->fireManagerEvent("micro:beforeHandleRoute", null, true, true)) {
                 return false;
             }
 
@@ -415,7 +415,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                     /**
                      * Calling beforeExecuteRoute event
                      */
-                    if (false === $this->fireManagerEvent("micro:beforeExecuteRoute")) {
+                    if (false === $this->fireManagerEvent("micro:beforeExecuteRoute", null, true, true)) {
                         return false;
                     }
 

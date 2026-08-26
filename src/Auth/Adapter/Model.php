@@ -19,6 +19,7 @@ namespace Phalcon\Auth\Adapter;
 use Phalcon\Auth\Adapter\Config\ModelAdapterConfig;
 use Phalcon\Auth\Exception;
 use Phalcon\Auth\Exceptions\DoesNotImplement;
+use Phalcon\Auth\Exceptions\InvalidCredentialKey;
 use Phalcon\Auth\Internal\Options;
 use Phalcon\Contracts\Auth\Adapter\RememberAdapter;
 use Phalcon\Contracts\Auth\AuthRemember;
@@ -85,6 +86,14 @@ class Model extends AbstractAdapter implements RememberAdapter
         foreach ($credentials as $key => $value) {
             if ($key === 'password') {
                 continue;
+            }
+
+            /**
+             * The key becomes a PHQL column and a placeholder name, so it
+             * must be a plain identifier.
+             */
+            if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', (string) $key)) {
+                throw new InvalidCredentialKey((string) $key);
             }
 
             $conditions[] = '[' . $key . '] = :' . $key . ':';

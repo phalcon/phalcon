@@ -301,8 +301,18 @@ class Stream extends AbstractAdapter
          * than prepareVirtualPath because the latter also lower-cases the key,
          * which would no longer match the stored file name.
          */
-        return $this->getDir($key)
-            . str_replace(['/', '\\', ':'], '_', $this->getKeyWithoutPrefix($key));
+        $plain = $this->getKeyWithoutPrefix($key);
+        $name  = str_replace(['/', '\\', ':'], '_', $plain);
+
+        /**
+         * A key with a path separator gets a hash suffix, so it cannot share
+         * a file with a key that spells the "_" replacement itself.
+         */
+        if (str_contains($plain, '/') || str_contains($plain, '\\') || str_contains($plain, ':')) {
+            $name .= '_' . sha1($plain);
+        }
+
+        return $this->getDir($key) . $name;
     }
 
     /**

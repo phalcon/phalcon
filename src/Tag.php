@@ -378,7 +378,7 @@ class Tag
             ? $parameters["escape"]
             : self::$autoEscape;
 
-        if (true !== $autoescape) {
+        if (!$autoescape) {
             return null;
         }
 

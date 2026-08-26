@@ -51,15 +51,28 @@ abstract class AbstractEventsAware
      * @param string     $eventName
      * @param mixed|null $data
      * @param bool       $cancellable
+     * @param bool       $stopOnFalse Make a listener's `false` final for
+     *                                this call (concrete Manager only)
      *
      * @return bool|mixed
      */
     protected function fireManagerEvent(
         string $eventName,
         mixed $data = null,
-        bool $cancellable = true
+        bool $cancellable = true,
+        bool $stopOnFalse = false
     ): mixed {
         if (null !== $this->eventsManager) {
+            /**
+             * A security boundary asks for stop-on-false so a listener's
+             * denial cannot be overwritten by a later listener. Only the
+             * concrete Manager knows the per-call override; a custom
+             * ManagerInterface keeps its own semantics.
+             */
+            if ($stopOnFalse && $this->eventsManager instanceof Manager) {
+                return $this->eventsManager->fire($eventName, $this, $data, $cancellable, true);
+            }
+
             return $this->eventsManager->fire($eventName, $this, $data, $cancellable);
         }
 

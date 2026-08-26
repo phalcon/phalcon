@@ -657,10 +657,11 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         /**
          * Drop "." and ".." path segments so a crafted partial path cannot
          * climb out of the partials directory, while still allowing
-         * sub-directories and absolute paths (CWE-22).
+         * sub-directories and absolute paths (CWE-22). Backslashes are
+         * separators on Windows, so they are normalized first.
          */
         $segments = [];
-        foreach (explode('/', $partialPath) as $segment) {
+        foreach (explode('/', str_replace('\\', '/', $partialPath)) as $segment) {
             if ($segment !== '.' && $segment !== '..') {
                 $segments[] = $segment;
             }

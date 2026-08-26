@@ -96,6 +96,7 @@ class Token extends AbstractGuard
     public function setRequest(RequestInterface $request): static
     {
         $this->request = $request;
+        $this->user    = null;
 
         return $this;
     }

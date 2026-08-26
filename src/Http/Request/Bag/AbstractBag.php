@@ -71,6 +71,14 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
+     * Removes all the elements of the bag
+     */
+    public function clear(): void
+    {
+        $this->items = [];
+    }
+
+    /**
      * Returns the number of elements in the bag
      */
     public function count(): int

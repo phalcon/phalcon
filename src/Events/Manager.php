@@ -409,8 +409,16 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
         string $eventType,
         object $source,
         mixed $data = null,
-        bool $cancelable = true
+        bool $cancelable = true,
+        ?bool $stopOnFalse = null
     ): mixed {
+        /**
+         * Per-call override of setStopOnFalse(): `true` makes a listener's
+         * `false` final for this fire only, `false` keeps last-wins, `null`
+         * uses the manager setting. Not part of the Manager contract.
+         */
+        $stop = $stopOnFalse ?? $this->stopOnFalse;
+
         // Manager-level kill switch.
         if ($this->halted) {
             return null;
@@ -487,12 +495,13 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                     $source,
                     $data,
                     $cancelable,
-                    $collect
+                    $collect,
+                    $stop
                 );
             }
 
             if (
-                !($this->stopOnFalse && $cancelable && false === $status)
+                !($stop && $cancelable && false === $status)
                 && $hasFullQueue
                 && (!$cancelable || !$event->isStopped())
             ) {
@@ -503,7 +512,8 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                     $source,
                     $data,
                     $cancelable,
-                    $collect
+                    $collect,
+                    $stop
                 );
             }
         } catch (Throwable $ex) {
@@ -600,7 +610,8 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                     $source,
                     $data,
                     $cancelable,
-                    true
+                    true,
+                    $this->stopOnFalse
                 );
             }
 
@@ -616,7 +627,8 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                     $source,
                     $data,
                     $cancelable,
-                    true
+                    true,
+                    $this->stopOnFalse
                 );
             }
         } catch (Throwable $ex) {
@@ -656,7 +668,8 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
             $event->getSource(),
             $event->getData(),
             $event->isCancelable(),
-            $this->collect
+            $this->collect,
+            $this->stopOnFalse
         );
     }
 
@@ -1174,7 +1187,8 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
         mixed $source,
         mixed $data,
         bool $cancelable,
-        bool $collect
+        bool $collect,
+        bool $stopOnFalse
     ): mixed {
         $status    = null;
         $queueSize = count($queue);
@@ -1217,7 +1231,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                 $this->responses[] = $ret;
             }
 
-            if ($this->stopOnFalse && $cancelable && false === $ret) {
+            if ($stopOnFalse && $cancelable && false === $ret) {
                 return false;
             }
 
@@ -1260,7 +1274,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                 $this->responses[] = $ret;
             }
 
-            if ($this->stopOnFalse && $cancelable && false === $ret) {
+            if ($stopOnFalse && $cancelable && false === $ret) {
                 return false;
             }
 

@@ -24,6 +24,7 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
 use function array_slice;
 use function asort;
 use function call_user_func;
+use function extract;
 use function in_array;
 use function is_array;
 use function is_object;
@@ -251,15 +252,19 @@ class Volt extends AbstractEngine implements EventsAwareInterface
         $compiledTemplatePath = $compiler->getCompiledTemplatePath();
 
         /**
-         * Export the variables the current symbol table
+         * Include the compiled template inside a closure whose only locals
+         * carry reserved names, so a parameter cannot replace the file path.
+         * The closure is bound to $this, so templates keep using it.
          */
-        if (is_array($params)) {
-            foreach ($params as $key => $value) {
-                ${$key} = $value;
+        $include = function (string $__path, mixed $__params): void {
+            if (is_array($__params)) {
+                extract($__params, EXTR_SKIP);
             }
-        }
 
-        require $compiledTemplatePath;
+            require $__path;
+        };
+
+        $include->call($this, $compiledTemplatePath, $params);
 
         if ($mustClean) {
             $this->view->setContent(ob_get_contents());

@@ -63,10 +63,22 @@ class Security extends AbstractInjectionAware implements SecurityContract
      */
     public const CRYPT_EXT_DES    = 2;
     /**
-     * @deprecated Weak legacy algorithm. To be removed.
+     * Weak legacy algorithm, easier to brute-force than bcrypt or Argon2. Use
+     * `CRYPT_DEFAULT` (bcrypt) or the Argon2 algorithms and rehash stored
+     * passwords on login. To be removed in a future major version.
      */
     public const CRYPT_MD5        = 3;
+    /**
+     * Weak legacy algorithm, easier to brute-force than bcrypt or Argon2. Use
+     * `CRYPT_DEFAULT` (bcrypt) or the Argon2 algorithms and rehash stored
+     * passwords on login. To be removed in a future major version.
+     */
     public const CRYPT_SHA256     = 8;
+    /**
+     * Weak legacy algorithm, easier to brute-force than bcrypt or Argon2. Use
+     * `CRYPT_DEFAULT` (bcrypt) or the Argon2 algorithms and rehash stored
+     * passwords on login. To be removed in a future major version.
+     */
     public const CRYPT_SHA512     = 9;
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.

@@ -78,6 +78,7 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
             Options::stringOrNull($options, 'name'),
             Options::stringOrNull($options, 'rememberName'),
             is_scalar($rememberTtl) ? (int) $rememberTtl : null,
+            (bool) ($options['rememberSecure'] ?? true),
         );
 
         return new static(
@@ -202,11 +203,18 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         $this->fireManagerEvent('auth:beforeLogout', ['user' => $current], false);
 
         $recaller = $this->recaller();
-        if ($recaller !== null && $current instanceof AuthRemember) {
-            $token    = $recaller->getToken();
-            $tokenRow = $current->getRememberToken($token);
-            $tokenRow?->delete();
+        if ($recaller !== null) {
+            if ($current instanceof AuthRemember) {
+                $token    = $recaller->getToken();
+                $tokenRow = $current->getRememberToken($token);
+                $tokenRow?->delete();
+            }
 
+            /**
+             * The cookie can belong to another account (account switch).
+             * Remove it whatever the current user is, so the next request
+             * cannot promote it back into a session.
+             */
             if ($this->cookies->has($this->getRememberName())) {
                 $this->cookies->delete($this->getRememberName());
             }
@@ -390,15 +398,17 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
 
         /**
          * The remember cookie is a bearer credential: keep it off JavaScript
-         * (httpOnly) and, on a secure request, off plaintext transports
-         * (secure) (CWE-1004 / CWE-614).
+         * (httpOnly) and off plaintext transports (secure) (CWE-1004 /
+         * CWE-614). The Secure flag comes from the configuration, not from
+         * the request scheme, so a TLS-terminating proxy that reports plain
+         * HTTP to the backend cannot downgrade it.
          */
         $this->cookies->set(
             $this->getRememberName(),
             $payload,
             $this->clock->now()->getTimestamp() + $this->config->getRememberTtl(),
             '/',
-            $this->request->isSecure(),
+            $this->config->getRememberSecure(),
             '',
             true
         );
@@ -415,10 +425,14 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
             return null;
         }
 
+        /**
+         * Compare the stored user agent with the one of the current request,
+         * not with the value carried by the cookie itself.
+         */
         $resolved = $this->adapter->retrieveByToken(
             $id,
             $recaller->getToken(),
-            $recaller->getUserAgent()
+            (string) $this->request->getUserAgent()
         );
 
         $this->viaRemember = $resolved !== null;

@@ -136,7 +136,7 @@ class Validator
         ;
 
         foreach ($audience as $item) {
-            if (true !== in_array($item, $tokenAudience)) {
+            if (true !== in_array($item, $tokenAudience, true)) {
                 $this->errors[] = "Validation: audience not allowed";
             }
         }

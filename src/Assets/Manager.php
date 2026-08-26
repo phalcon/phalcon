@@ -533,6 +533,14 @@ class Manager extends AbstractInjectionAware
             true === $join
         ) {
             /**
+             * A symbolic link at the target file sends the write outside the
+             * assets directory. Refuse it.
+             */
+            if (true === is_link($completeTargetPath)) {
+                throw new InvalidAssetTargetPath($completeTargetPath);
+            }
+
+            /**
              * Write the file using file_put_contents. This respects the
              * openbase-dir also writes to streams
              */

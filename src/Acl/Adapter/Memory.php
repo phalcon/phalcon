@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Acl\Adapter;
 
+use Closure;
 use Phalcon\Acl\Component;
 use Phalcon\Acl\ComponentAwareInterface;
 use Phalcon\Acl\ComponentInterface;
@@ -20,6 +21,7 @@ use Phalcon\Acl\Enum;
 use Phalcon\Acl\Exceptions\AccessRuleNotFound;
 use Phalcon\Acl\Exceptions\CircularInheritanceError;
 use Phalcon\Acl\Exceptions\ElementNotFound;
+use Phalcon\Acl\Exceptions\ForbiddenDelimiter;
 use Phalcon\Acl\Exceptions\InvalidAccessList;
 use Phalcon\Acl\Exceptions\InvalidComponentImplementation;
 use Phalcon\Acl\Exceptions\InvalidRoleImplementation;
@@ -45,6 +47,7 @@ use function is_array;
 use function is_callable;
 use function is_object;
 use function is_string;
+use function str_contains;
 use function trigger_error;
 
 use const E_USER_WARNING;
@@ -265,6 +268,10 @@ class Memory extends AbstractAdapter
 
         /** @var array<int|string, string> $accessList */
         foreach ($accessList as $accessName) {
+            if (str_contains($accessName, '!')) {
+                throw new ForbiddenDelimiter('access');
+            }
+
             $accessKey = $this->buildAccessKey($componentName, $accessName);
             if (!isset($this->accessList[$accessKey])) {
                 $this->accessList[$accessKey] = true;
@@ -310,6 +317,10 @@ class Memory extends AbstractAdapter
             $roleInheritName = $inheritRole;
             if ($inheritRole instanceof RoleInterface) {
                 $roleInheritName = $inheritRole->getName();
+            }
+
+            if (!is_string($roleInheritName) && !is_int($roleInheritName)) {
+                throw new InvalidRoleType();
             }
 
             /**
@@ -654,13 +665,14 @@ class Memory extends AbstractAdapter
         $this->activeFunction  = null;
 
         $this->activeFunctionCustomArgumentsCount = 0;
+        $this->accessGranted                      = Enum::DENY;
 
         $beforeData = [
             'role'      => $roleName,
             'component' => $componentName,
             'access'    => $access,
         ];
-        if (false === $this->fireManagerEvent('acl:beforeCheckAccess', $beforeData)) {
+        if (false === $this->fireManagerEvent('acl:beforeCheckAccess', $beforeData, true, true)) {
             return false;
         }
 
@@ -680,20 +692,6 @@ class Memory extends AbstractAdapter
             $funcAccess = $this->functions[$accessKey] ?? null;
         }
 
-        /**
-         * Check in the inherits roles
-         */
-        $this->accessGranted = $haveAccess ?? Enum::DENY;
-        $this->fireManagerEvent(
-            'acl:afterCheckAccess',
-            [
-                'role'      => $roleName,
-                'component' => $componentName,
-                'access'    => $access,
-                'granted'   => $this->accessGranted,
-            ]
-        );
-
         $this->activeKey      = false === $accessKey ? null : $accessKey;
         $this->activeFunction = $funcAccess;
 
@@ -704,14 +702,12 @@ class Memory extends AbstractAdapter
              */
             $this->activeKey = $this->buildKey($roleName, $componentName, $access);
 
-            return $this->defaultAccess === Enum::ALLOW;
-        }
-
-        /**
-         * If we have funcAccess then do all the checks for it
-         */
-        if (is_callable($funcAccess)) {
-            return $this->invokeRule(
+            $allowed = $this->defaultAccess === Enum::ALLOW;
+        } elseif (is_callable($funcAccess)) {
+            /**
+             * If we have funcAccess then do all the checks for it
+             */
+            $allowed = $this->invokeRule(
                 $funcAccess,
                 $haveAccess,
                 $parameters,
@@ -721,9 +717,27 @@ class Memory extends AbstractAdapter
                 $componentName,
                 $access
             );
+        } else {
+            $allowed = $haveAccess == Enum::ALLOW;
         }
 
-        return $haveAccess == Enum::ALLOW;
+        /**
+         * Report the final decision - after the default action and the rule
+         * callback are applied - so listeners see the same result as the
+         * caller.
+         */
+        $this->accessGranted = $allowed ? Enum::ALLOW : Enum::DENY;
+        $this->fireManagerEvent(
+            'acl:afterCheckAccess',
+            [
+                'role'      => $roleName,
+                'component' => $componentName,
+                'access'    => $access,
+                'granted'   => $this->accessGranted,
+            ]
+        );
+
+        return $allowed;
     }
 
     /**
@@ -956,7 +970,7 @@ class Memory extends AbstractAdapter
         $hasComponent = false;
         $hasRole      = false;
 
-        $reflectionFunction   = new ReflectionFunction($funcAccess);
+        $reflectionFunction   = new ReflectionFunction(Closure::fromCallable($funcAccess));
         $reflectionParameters = $reflectionFunction->getParameters();
         $parameterNumber      = count($reflectionParameters);
 
@@ -977,7 +991,11 @@ class Memory extends AbstractAdapter
             $reflectionType   = $reflectionParameter->getType();
             $parameterToCheck = $reflectionParameter->getName();
 
-            if (null !== $reflectionType && $reflectionType instanceof ReflectionNamedType) {
+            if (
+                null !== $reflectionType
+                && $reflectionType instanceof ReflectionNamedType
+                && !$reflectionType->isBuiltin()
+            ) {
                 /** @var class-string $className */
                 $className       = $reflectionType->getName();
                 $reflectionClass = new ReflectionClass($className);

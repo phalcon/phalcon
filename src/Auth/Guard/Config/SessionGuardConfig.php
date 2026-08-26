@@ -36,6 +36,7 @@ class SessionGuardConfig extends AbstractGuardConfig
 
     private readonly string $name;
     private readonly string $rememberName;
+    private readonly bool $rememberSecure;
     private readonly int $rememberTtl;
 
     /**
@@ -46,6 +47,7 @@ class SessionGuardConfig extends AbstractGuardConfig
         ?string $name = null,
         ?string $rememberName = null,
         ?int $rememberTtl = null,
+        bool $rememberSecure = true,
     ) {
         $this->validateNonEmpty('suffix', $suffix);
         $this->validateNonEmpty('name', $name);
@@ -54,6 +56,7 @@ class SessionGuardConfig extends AbstractGuardConfig
         $this->name         = $name ?? $this->derive('auth', $suffix);
         $this->rememberName = $rememberName ?? $this->derive('remember', $suffix);
         $this->rememberTtl  = $rememberTtl ?? self::DEFAULT_REMEMBER_TTL;
+        $this->rememberSecure = $rememberSecure;
 
         if ($this->name === $this->rememberName) {
             throw new SessionNamesMustDiffer();
@@ -68,6 +71,16 @@ class SessionGuardConfig extends AbstractGuardConfig
     public function getRememberName(): string
     {
         return $this->rememberName;
+    }
+
+    /**
+     * Whether the remember-me cookie carries the Secure flag. Defaults to
+     * true: the cookie is a bearer credential. Set it to false only for a
+     * deployment that serves plain HTTP on purpose.
+     */
+    public function getRememberSecure(): bool
+    {
+        return $this->rememberSecure;
     }
 
     public function getRememberTtl(): int

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Events\Traits;
 
 use Phalcon\Events\Exception as EventsException;
+use Phalcon\Events\Manager;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\PsrEventInterface;
 
@@ -63,9 +64,23 @@ trait EventsAwareTrait
     protected function fireManagerEvent(
         string $eventName,
         mixed $data = null,
-        bool $cancellable = true
+        bool $cancellable = true,
+        bool $stopOnFalse = false
     ) {
         if (null !== $this->eventsManager) {
+            /**
+             * A security boundary asks for stop-on-false so a listener's
+             * denial cannot be overwritten by a later listener. Only the
+             * concrete Manager knows the per-call override; a custom
+             * ManagerInterface keeps its own semantics.
+             */
+            if ($stopOnFalse && $this->eventsManager instanceof Manager) {
+                return $this
+                    ->eventsManager
+                    ->fire($eventName, $this, $data, $cancellable, true)
+                ;
+            }
+
             return $this
                 ->eventsManager
                 ->fire($eventName, $this, $data, $cancellable)

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
+use function extract;
 use function is_array;
 use function ob_clean;
 use function ob_get_contents;
@@ -35,18 +36,19 @@ class Php extends AbstractEngine
         }
 
         /**
-         * Create the variables in local symbol table
+         * Include the template inside a closure whose only locals carry
+         * reserved names, so a parameter cannot replace the file path. The
+         * closure is bound to $this, so templates keep using it.
          */
-        if (is_array($params)) {
-            foreach ($params as $key => $value) {
-                ${$key} = $value;
+        $include = function (string $__path, mixed $__params): void {
+            if (is_array($__params)) {
+                extract($__params, EXTR_SKIP);
             }
-        }
 
-        /**
-         * Require the file
-         */
-        require $path;
+            require $__path;
+        };
+
+        $include->call($this, $path, $params);
 
         if (true === $mustClean) {
             $this->view->setContent(ob_get_contents());

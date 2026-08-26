@@ -472,7 +472,19 @@ class Compiler implements InjectionAwareInterface
                          * Unserialize the array blocks code
                          */
                         if ($blocksCode) {
-                            $compilation = unserialize($blocksCode);
+                            $compilation = unserialize($blocksCode, ['allowed_classes' => false]);
+
+                            /**
+                             * The cache holds nested arrays only. Anything
+                             * else is a damaged or planted file: recompile.
+                             */
+                            if (!is_array($compilation)) {
+                                $compilation = $this->compileFile(
+                                    $templatePath,
+                                    $compiledTemplatePath,
+                                    $extendsMode
+                                );
+                            }
                         } else {
                             $compilation = [];
                         }

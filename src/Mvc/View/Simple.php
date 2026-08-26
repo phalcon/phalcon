@@ -352,10 +352,11 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
         /**
          * Drop "." and ".." path segments so a crafted view path cannot climb
          * out of the views directory, while still allowing sub-directories and
-         * absolute paths (CWE-22).
+         * absolute paths (CWE-22). Backslashes are separators on Windows, so
+         * they are normalized first.
          */
         $segments = [];
-        foreach (explode('/', $path) as $segment) {
+        foreach (explode('/', str_replace('\\', '/', $path)) as $segment) {
             if ($segment !== '.' && $segment !== '..') {
                 $segments[] = $segment;
             }

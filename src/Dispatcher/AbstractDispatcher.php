@@ -312,7 +312,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 try {
                     // Calling "dispatch:beforeDispatch" event
                     if (
-                        $eventsManager->fire("dispatch:beforeDispatch", $this) === false ||
+                        $this->fireManagerEvent("dispatch:beforeDispatch", null, true, true) === false ||
                         $this->finished === false
                     ) {
                         continue;
@@ -464,7 +464,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
                 try {
                     // Calling "dispatch:beforeExecuteRoute" event
                     if (
-                        $eventsManager->fire("dispatch:beforeExecuteRoute", $this) === false ||
+                        $this->fireManagerEvent("dispatch:beforeExecuteRoute", null, true, true) === false ||
                         $this->finished === false
                     ) {
                         $container->remove($handlerClass);

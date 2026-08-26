@@ -39,8 +39,21 @@ class Url implements Sanitizer
          * XSS when the value is emitted into an href/src. Drop the value when
          * its scheme is not on the safe allow-list. An empty scheme (a
          * relative URL) is allowed.
+         *
+         * Decode HTML entities before the check, so an obfuscated scheme
+         * such as "java&#115;cript:" cannot hide from parse_url(). A parse
+         * failure (false) is not a relative URL: fail closed.
          */
-        $scheme = (string) parse_url($sanitized, PHP_URL_SCHEME);
+        $parsed = parse_url(
+            html_entity_decode($sanitized, ENT_QUOTES | ENT_HTML5),
+            PHP_URL_SCHEME
+        );
+
+        if ($parsed === false) {
+            return "";
+        }
+
+        $scheme = (string) $parsed;
 
         if (
             $scheme !== "" &&

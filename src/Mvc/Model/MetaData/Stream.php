@@ -70,7 +70,7 @@ class Stream extends MetaData
         if (null === $key) {
             return null;
         }
-        $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
+        $path = $this->getFilePath($key);
         if (false === file_exists($path)) {
             return null;
         }
@@ -90,7 +90,7 @@ class Stream extends MetaData
     {
         $option = Settings::get('orm.exception_on_failed_metadata_save');
         try {
-            $path = $this->metaDataDir . $this->prepareVirtualPath($key) . ".php";
+            $path = $this->getFilePath($key);
 
             if (
                 false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")
@@ -100,6 +100,22 @@ class Stream extends MetaData
         } catch (\Exception) {
             $this->throwWriteException($option);
         }
+    }
+
+    /**
+     * Builds the cache file path. Namespace separators become "_", so a
+     * name that itself contains "_" gets a hash suffix; otherwise "A\\B"
+     * and "A_B" would share one file.
+     */
+    private function getFilePath(string $key): string
+    {
+        $name = $this->prepareVirtualPath($key);
+
+        if (str_contains($key, '_')) {
+            $name .= '_' . sha1($key);
+        }
+
+        return $this->metaDataDir . $name . '.php';
     }
 
     /**

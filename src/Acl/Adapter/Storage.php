@@ -20,6 +20,7 @@ use Phalcon\Acl\Role;
 use Phalcon\Contracts\Acl\AclTypes;
 use Phalcon\Contracts\Acl\Adapter\Persistable;
 use Phalcon\Storage\Adapter\AdapterInterface as StorageInterface;
+use Throwable;
 
 use function array_keys;
 use function get_object_vars;
@@ -101,15 +102,47 @@ class Storage extends Memory implements Persistable
             throw new InvalidSnapshot('Malformed ACL snapshot structure');
         }
 
-        /** @var acl_snapshot $data */
-        $roles = [];
-        foreach ($data['roles'] as $name => $description) {
-            $roles[$name] = new Role($name, $description);
+        /**
+         * Validate everything before any state is replaced, so a bad
+         * snapshot never leaves the adapter half loaded.
+         */
+        $defaultAccess            = $data['defaultAccess'] ?? Enum::DENY;
+        $noArgumentsDefaultAction = $data['noArgumentsDefaultAction'] ?? Enum::DENY;
+
+        if (
+            ($defaultAccess !== Enum::ALLOW && $defaultAccess !== Enum::DENY)
+            || ($noArgumentsDefaultAction !== Enum::ALLOW && $noArgumentsDefaultAction !== Enum::DENY)
+        ) {
+            throw new InvalidSnapshot('Malformed ACL snapshot default action');
         }
 
-        $components = [];
-        foreach ($data['components'] as $name => $description) {
-            $components[$name] = new Component($name, $description);
+        foreach ($data['roleInherits'] as $inherits) {
+            if (!is_array($inherits)) {
+                throw new InvalidSnapshot('Malformed ACL snapshot role inheritance');
+            }
+
+            foreach ($inherits as $inherit) {
+                if (!is_string($inherit) && !is_int($inherit)) {
+                    throw new InvalidSnapshot('Malformed ACL snapshot role inheritance');
+                }
+            }
+        }
+
+        /** @var acl_snapshot $data */
+        try {
+            $roles = [];
+            foreach ($data['roles'] as $name => $description) {
+                $roles[$name] = new Role((string) $name, $description);
+            }
+
+            $components = [];
+            foreach ($data['components'] as $name => $description) {
+                $components[$name] = new Component((string) $name, $description);
+            }
+        } catch (Throwable $e) {
+            throw new InvalidSnapshot(
+                'Malformed ACL snapshot element: ' . $e->getMessage()
+            );
         }
 
         $this->access                   = $data['access'];
@@ -118,8 +151,8 @@ class Storage extends Memory implements Persistable
         $this->componentsNames          = $data['componentsNames'];
         $this->roles                    = $roles;
         $this->roleInherits             = $data['roleInherits'];
-        $this->defaultAccess            = $data['defaultAccess'] ?? Enum::DENY;
-        $this->noArgumentsDefaultAction = $data['noArgumentsDefaultAction'] ?? Enum::DENY;
+        $this->defaultAccess            = $defaultAccess;
+        $this->noArgumentsDefaultAction = $noArgumentsDefaultAction;
 
         return true;
     }
@@ -165,10 +198,16 @@ class Storage extends Memory implements Persistable
     /**
      * Recursively converts stdClass into nested arrays so a snapshot stored
      * through an object-decoding serializer (e.g. JSON) is read back the same
-     * way as the array-decoding serializers (php, igbinary, msgpack).
+     * way as the array-decoding serializers (php, igbinary, msgpack). A
+     * snapshot is at most three levels deep; a deeper (or cyclic) graph is
+     * rejected.
      */
-    private function normalizeToArray(mixed $value): mixed
+    private function normalizeToArray(mixed $value, int $depth = 0): mixed
     {
+        if ($depth > 4) {
+            throw new InvalidSnapshot('ACL snapshot nesting is too deep');
+        }
+
         if (is_object($value)) {
             $value = get_object_vars($value);
         }
@@ -179,7 +218,7 @@ class Storage extends Memory implements Persistable
 
         $result = [];
         foreach ($value as $key => $item) {
-            $result[$key] = $this->normalizeToArray($item);
+            $result[$key] = $this->normalizeToArray($item, $depth + 1);
         }
 
         return $result;
