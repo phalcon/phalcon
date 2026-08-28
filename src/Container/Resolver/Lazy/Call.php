@@ -39,7 +39,7 @@ class Call extends Lazy
      * @param callable $callableObject
      */
     public function __construct(
-        protected callable $callableObject
+        protected mixed $callableObject
     ) {
     }
 
