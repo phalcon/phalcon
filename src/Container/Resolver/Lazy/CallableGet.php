@@ -33,6 +33,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Contracts\Container\Service\Collection;
+
 class CallableGet extends Lazy
 {
     public function __construct(
@@ -42,16 +44,14 @@ class CallableGet extends Lazy
 
     /**
      * Resolve to a closure on a get()
-     *
-     * @param object $ioc
-     *
-     * @return mixed
      */
     public function resolve(object $ioc): mixed
     {
         return function () use ($ioc) {
+            /** @var string $id */
             $id = $this->resolveArgument($ioc, $this->id);
 
+            /** @var Collection $ioc */
             return $ioc->get($id);
         };
     }

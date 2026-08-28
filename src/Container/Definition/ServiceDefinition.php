@@ -37,36 +37,47 @@ use Phalcon\Container\Exceptions\FrozenDefinition;
 use Phalcon\Container\Exceptions\InvalidExtender;
 use Phalcon\Container\Exceptions\NoClassSet;
 use Phalcon\Container\Exceptions\NoFactorySet;
+use Phalcon\Contracts\Container\ContainerTypes;
+use Phalcon\Contracts\Container\Ioc\IocContainer;
 use Phalcon\Contracts\Container\Resolver\Resolvable;
+use Phalcon\Contracts\Container\Service\Collection;
 use ReflectionClass;
 use ReflectionException;
 
 use function in_array;
 use function method_exists;
 
+/**
+ * @phpstan-import-type container_arguments from ContainerTypes
+ * @phpstan-import-type container_extenders from ContainerTypes
+ * @phpstan-import-type container_tags from ContainerTypes
+ */
 class ServiceDefinition
 {
     /**
-     * @var array<array-key, mixed>
+     * @phpstan-var container_arguments
      */
     protected array $arguments = [];
     protected string | null $className = null;
     /**
-     * @var array
+     * @phpstan-var container_arguments
      */
     protected array $constructorArgs = [];
 
     protected object | null $container = null;
     /**
-     * @var array<array-key, callable>
+     * @phpstan-var container_extenders
      */
-    protected array $extenders  = [];
+    protected array $extenders = [];
+    /**
+     * @var callable|null
+     */
     protected mixed $factory    = null;
     protected bool $frozen      = false;
     protected bool $isCacheable = false;
     protected string $lifetime  = ServiceLifetime::SCOPED;
     /**
-     * @var array<array-key, string>
+     * @phpstan-var container_tags
      */
     protected array $tags = [];
 
@@ -80,9 +91,6 @@ class ServiceDefinition
     /**
      * Adds an extender
      *
-     * @param callable $extender
-     *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function addExtender(callable $extender): static
@@ -96,9 +104,6 @@ class ServiceDefinition
     /**
      * Adds a tag
      *
-     * @param string $tag
-     *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function addTag(string $tag): static
@@ -122,16 +127,17 @@ class ServiceDefinition
     /**
      * Builds a service and returns the instance back
      *
-     * @param object $container
-     *
-     * @return object
      * @throws ReflectionException
      */
     public function buildService(object $container): object
     {
         if ($this->hasFactory()) {
-            $instance = ($this->factory)($container);
+            /** @var callable $factory */
+            $factory = $this->factory;
+            /** @var object $instance */
+            $instance = $factory($container);
         } else {
+            /** @var class-string $className */
             $className  = $this->className ?? $this->serviceName;
             $args       = $this->resolveArgs($container, $this->constructorArgs);
             $reflection = new ReflectionClass($className);
@@ -139,6 +145,7 @@ class ServiceDefinition
         }
 
         foreach ($this->extenders as $extender) {
+            /** @var object $instance */
             $instance = $extender($instance, $container);
         }
 
@@ -148,9 +155,6 @@ class ServiceDefinition
     /**
      * Freezes the container
      *
-     * @param object $container
-     *
-     * @return void
      * @throws ReflectionException
      */
     public function freeze(object $container): void
@@ -164,12 +168,14 @@ class ServiceDefinition
             method_exists($container, 'isAutowireEnabled') &&
             $container->isAutowireEnabled()
         ) {
+            /** @var class-string $className */
             $className   = $this->className ?? $this->serviceName;
             $reflection  = new ReflectionClass($className);
             $constructor = $reflection->getConstructor();
             $params      = $constructor !== null ? $constructor->getParameters() : [];
 
             if (method_exists($container, 'getResolver')) {
+                /** @var Collection $container */
                 $this->constructorArgs = $container->getResolver()->resolveParameters(
                     $container,
                     $params,
@@ -186,7 +192,7 @@ class ServiceDefinition
     /**
      * Returns the arguments
      *
-     * @return array
+     * @phpstan-return container_arguments
      */
     public function getArguments(): array
     {
@@ -196,7 +202,6 @@ class ServiceDefinition
     /**
      * Returns the class
      *
-     * @return string
      * @throws NoClassSet
      */
     public function getClass(): string
@@ -211,7 +216,7 @@ class ServiceDefinition
     /**
      * Returns the constructor arguments
      *
-     * @return array
+     * @phpstan-return container_arguments
      */
     public function getConstructorArgs(): array
     {
@@ -221,7 +226,7 @@ class ServiceDefinition
     /**
      * Returns the extenders
      *
-     * @return array<array-key, callable>
+     * @phpstan-return container_extenders
      */
     public function getExtenders(): array
     {
@@ -231,7 +236,6 @@ class ServiceDefinition
     /**
      * Returns the factory
      *
-     * @return callable
      * @throws NoFactorySet
      */
     public function getFactory(): callable
@@ -245,8 +249,6 @@ class ServiceDefinition
 
     /**
      * Returns the lifetime
-     *
-     * @return string
      */
     public function getLifetime(): string
     {
@@ -255,8 +257,6 @@ class ServiceDefinition
 
     /**
      * Returns the name of the service
-     *
-     * @return string
      */
     public function getServiceName(): string
     {
@@ -266,7 +266,7 @@ class ServiceDefinition
     /**
      * Returns the tags
      *
-     * @return array<array-key, string>
+     * @phpstan-return container_tags
      */
     public function getTags(): array
     {
@@ -275,8 +275,6 @@ class ServiceDefinition
 
     /**
      * Returns the type
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -285,8 +283,6 @@ class ServiceDefinition
 
     /**
      * Does it have a class
-     *
-     * @return bool
      */
     public function hasClass(): bool
     {
@@ -295,8 +291,6 @@ class ServiceDefinition
 
     /**
      * Do we have extenders
-     *
-     * @return bool
      */
     public function hasExtenders(): bool
     {
@@ -305,8 +299,6 @@ class ServiceDefinition
 
     /**
      * Does it have a factory
-     *
-     * @return bool
      */
     public function hasFactory(): bool
     {
@@ -315,8 +307,6 @@ class ServiceDefinition
 
     /**
      * Is it cacheable
-     *
-     * @return bool
      */
     public function isCacheable(): bool
     {
@@ -325,8 +315,6 @@ class ServiceDefinition
 
     /**
      * Is it frozen
-     *
-     * @return bool
      */
     public function isFrozen(): bool
     {
@@ -339,10 +327,9 @@ class ServiceDefinition
      * @param int|string $param
      * @param mixed      $value
      *
-     * @return $this
      * @throws FrozenDefinition
      */
-    public function setArgument(int | string $param, mixed $value): static
+    public function setArgument(mixed $param, mixed $value): static
     {
         $this->checkFrozen();
         $this->arguments[$param] = $value;
@@ -355,7 +342,6 @@ class ServiceDefinition
      *
      * @param string $className
      *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function setClass(string $className): static
@@ -368,10 +354,6 @@ class ServiceDefinition
 
     /**
      * Set the container
-     *
-     * @param object $container
-     *
-     * @return $this
      */
     public function setContainer(object $container): static
     {
@@ -383,9 +365,8 @@ class ServiceDefinition
     /**
      * Set extenders
      *
-     * @param array<array-key, callable> $extenders
+     * @phpstan-param container_arguments $extenders
      *
-     * @return $this
      * @throws FrozenDefinition
      * @throws InvalidExtender
      */
@@ -399,6 +380,7 @@ class ServiceDefinition
             }
         }
 
+        /** @var container_extenders $extenders */
         $this->extenders = $extenders;
 
         return $this;
@@ -407,9 +389,6 @@ class ServiceDefinition
     /**
      * Set a factory
      *
-     * @param callable $factory
-     *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function setFactory(callable $factory): static
@@ -422,9 +401,7 @@ class ServiceDefinition
 
     /**
      * Set cachable
-     * @param bool $isCacheable
      *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function setIsCacheable(bool $isCacheable): static
@@ -438,9 +415,6 @@ class ServiceDefinition
     /**
      * Set lifetime
      *
-     * @param string $lifetime
-     *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function setLifetime(string $lifetime): static
@@ -454,7 +428,6 @@ class ServiceDefinition
     /**
      * Unset class
      *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function unsetClass(): static
@@ -468,7 +441,6 @@ class ServiceDefinition
     /**
      * Unset extenders
      *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function unsetExtenders(): static
@@ -482,7 +454,6 @@ class ServiceDefinition
     /**
      * Unset the factory
      *
-     * @return $this
      * @throws FrozenDefinition
      */
     public function unsetFactory(): static
@@ -496,7 +467,6 @@ class ServiceDefinition
     /**
      * Check if frozen
      *
-     * @return void
      * @throws FrozenDefinition
      */
     protected function checkFrozen(): void
@@ -509,10 +479,8 @@ class ServiceDefinition
     /**
      * Resolve arguments
      *
-     * @param object $container
-     * @param array  $args
-     *
-     * @return array
+     * @phpstan-param  container_arguments $args
+     * @phpstan-return container_arguments
      */
     private function resolveArgs(object $container, array $args): array
     {
@@ -527,6 +495,7 @@ class ServiceDefinition
              * this scope.
              */
             if ($arg instanceof Resolvable) {
+                /** @var IocContainer $container */
                 $resolved[$key] = $arg->resolve($container);
             } else {
                 $resolved[$key] = $arg;

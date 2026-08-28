@@ -46,9 +46,6 @@ class Env extends Lazy
     /**
      * Resolve an environment variable
      *
-     * @param object $ioc
-     *
-     * @return mixed
      * @throws EnvNotDefined
      */
     public function resolve(object $ioc): mixed
@@ -58,12 +55,8 @@ class Env extends Lazy
 
     /**
      * Cast a value to the defined type (if any)
-     *
-     * @param string $value
-     *
-     * @return mixed
      */
-    protected function cast(string $value): mixed
+    protected function cast(mixed $value): mixed
     {
         if ($this->vartype !== null) {
             settype($value, $this->vartype);
@@ -75,7 +68,6 @@ class Env extends Lazy
     /**
      * Return the env value
      *
-     * @return string
      * @throws EnvNotDefined
      */
     protected function getEnv(): string
@@ -86,6 +78,9 @@ class Env extends Lazy
             throw new EnvNotDefined($this->varname);
         }
 
-        return $envs[$this->varname];
+        /** @var string $value */
+        $value = $envs[$this->varname];
+
+        return $value;
     }
 }

@@ -32,13 +32,21 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Container\Service;
 
+use Phalcon\Contracts\Container\ContainerTypes;
 use Phalcon\Contracts\Container\Ioc\IocContainer;
 
+/**
+ * @phpstan-import-type container_extenders from ContainerTypes
+ */
 interface Definition
 {
     public function addExtender(callable $extender): static;
     public function buildService(IocContainer $ioc): object;
     public function getClass(): string;
+
+    /**
+     * @phpstan-return container_extenders
+     */
     public function getExtenders(): array;
     public function getFactory(): callable;
     public function getLifetime(): string;
@@ -49,7 +57,7 @@ interface Definition
     public function setClass(string $className): static;
 
     /**
-     * @param array<array-key, callable> $extenders
+     * @phpstan-param container_extenders $extenders
      */
     public function setExtenders(array $extenders): static;
     public function setFactory(callable $factory): static;

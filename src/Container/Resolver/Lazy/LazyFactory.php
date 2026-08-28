@@ -33,10 +33,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Contracts\Container\ContainerTypes;
+
+/**
+ * @phpstan-import-type container_arguments from ContainerTypes
+ * @phpstan-import-type container_values from ContainerTypes
+ */
 class LazyFactory
 {
     /**
-     * @param array<array-key, mixed> $values
+     * @phpstan-param container_values $values
      *
      * @return ArrayValues
      */
@@ -76,8 +82,8 @@ class LazyFactory
     }
 
     /**
-     * @param string                  $function
-     * @param array<array-key, mixed> $args
+     * @phpstan-param callable-string     $functionName
+     * @phpstan-param container_arguments $args
      *
      * @return FunctionCall
      */
@@ -92,9 +98,7 @@ class LazyFactory
     }
 
     /**
-     * @param string                  $id
-     * @param string                  $method
-     * @param array<array-key, mixed> $args
+     * @phpstan-param container_arguments $args
      *
      * @return GetCall
      */
@@ -104,9 +108,7 @@ class LazyFactory
     }
 
     /**
-     * @param string                  $id
-     * @param string                  $method
-     * @param array<array-key, mixed> $args
+     * @phpstan-param container_arguments $args
      *
      * @return NewCall
      */
@@ -121,9 +123,7 @@ class LazyFactory
     }
 
     /**
-     * @param string                  $className
-     * @param string                  $method
-     * @param array<array-key, mixed> $args
+     * @phpstan-param container_arguments $args
      *
      * @return StaticCall
      */

@@ -33,6 +33,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Contracts\Container\Service\Collection;
+
 class Get extends Lazy
 {
     public function __construct(
@@ -42,15 +44,13 @@ class Get extends Lazy
 
     /**
      * Resolve a shared instance
-     *
-     * @param object $ioc
-     *
-     * @return mixed
      */
     public function resolve(object $ioc): mixed
     {
+        /** @var string $id */
         $id = $this->resolveArgument($ioc, $this->id);
 
+        /** @var Collection $ioc */
         return $ioc->get($id);
     }
 }

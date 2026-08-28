@@ -33,12 +33,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Contracts\Container\ContainerTypes;
+
+/**
+ * @phpstan-import-type container_arguments from ContainerTypes
+ */
 class StaticCall extends Lazy
 {
     /**
-     * @param Lazy|string             $className
-     * @param string                  $method
-     * @param array<array-key, mixed> $arguments
+     * @phpstan-param Lazy|string         $className
+     * @phpstan-param container_arguments $arguments
      */
     public function __construct(
         protected Lazy | string $className,
@@ -49,16 +53,16 @@ class StaticCall extends Lazy
 
     /**
      * Resolve a static method call
-     *
-     * @param object $ioc
-     *
-     * @return mixed
      */
     public function resolve(object $ioc): mixed
     {
+        /** @var class-string $className */
         $className = $this->resolveArgument($ioc, $this->className);
         $arguments = $this->resolveArguments($ioc, $this->arguments);
 
-        return call_user_func_array([$className, $this->method], $arguments);
+        /** @var callable $callback */
+        $callback = [$className, $this->method];
+
+        return call_user_func_array($callback, $arguments);
     }
 }

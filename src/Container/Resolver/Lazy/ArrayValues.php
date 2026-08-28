@@ -37,11 +37,18 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
+use Phalcon\Contracts\Container\ContainerTypes;
 
+/**
+ * @phpstan-import-type container_values from ContainerTypes
+ *
+ * @implements ArrayAccess<array-key, mixed>
+ * @implements IteratorAggregate<array-key, mixed>
+ */
 class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
-     * @param array<array-key, mixed> $values
+     * @phpstan-param container_values $values
      */
     public function __construct(
         protected array $values = []
@@ -53,11 +60,17 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
         return count($this->values);
     }
 
+    /**
+     * @return ArrayIterator<array-key, mixed>
+     */
     public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->values);
     }
 
+    /**
+     * @param iterable<array-key, mixed> $values
+     */
     public function merge(iterable $values): void
     {
         foreach ($values as $key => $value) {
@@ -69,16 +82,25 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
         }
     }
 
+    /**
+     * @phpstan-param array-key $offset
+     */
     public function offsetExists(mixed $offset): bool
     {
         return array_key_exists($offset, $this->values);
     }
 
+    /**
+     * @phpstan-param array-key $offset
+     */
     public function offsetGet(mixed $offset): mixed
     {
         return $this->values[$offset];
     }
 
+    /**
+     * @phpstan-param array-key|null $offset
+     */
     public function offsetSet(mixed $offset, mixed $value): void
     {
         if ($offset === null) {
@@ -88,6 +110,9 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
         }
     }
 
+    /**
+     * @phpstan-param array-key $offset
+     */
     public function offsetUnset(mixed $offset): void
     {
         unset($this->values[$offset]);
@@ -96,9 +121,7 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
     /**
      * Resolve to an array, where each element has itself been lazy-resolved.
      *
-     * @param object $ioc
-     *
-     * @return array<array-key, mixed>
+     * @phpstan-return container_values
      */
     public function resolve(object $ioc): array
     {
@@ -119,10 +142,8 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
     }
 
     /**
-     * @param object                  $ioc
-     * @param array<array-key, mixed> $values
-     *
-     * @return array
+     * @phpstan-param  container_values $values
+     * @phpstan-return container_values
      */
     protected function resolveValues(object $ioc, array $values): array
     {

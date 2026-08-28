@@ -35,17 +35,16 @@ namespace Phalcon\Container\Resolver\Lazy;
 
 class Call extends Lazy
 {
+    /**
+     * @param callable $callableObject
+     */
     public function __construct(
-        protected mixed $callableObject
+        protected callable $callableObject
     ) {
     }
 
     /**
      * Resolve the callable
-     *
-     * @param object $ioc
-     *
-     * @return mixed
      */
     public function resolve(object $ioc): mixed
     {

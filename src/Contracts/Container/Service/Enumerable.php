@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Container\Service;
 
+use Phalcon\Contracts\Container\ContainerTypes;
+
 /**
  * Optional capability contract for a container that can report the services it
  * holds. Callers detect support with `instanceof`.
@@ -29,6 +31,9 @@ namespace Phalcon\Contracts\Container\Service;
  * Container, so it depends on a published contract rather than on an
  * implementation detail that is free to change.
  */
+/**
+ * @phpstan-import-type container_service_names from ContainerTypes
+ */
 interface Enumerable
 {
     /**
@@ -36,7 +41,7 @@ interface Enumerable
      * only exist as an alias, a pre-set instance or a parameter are not
      * included.
      *
-     * @return array<int, string>
+     * @phpstan-return container_service_names
      */
     public function getServiceNames(): array;
 }

@@ -33,6 +33,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Contracts\Container\Service\Collection;
+
 class CallableNew extends Lazy
 {
     public function __construct(
@@ -42,16 +44,14 @@ class CallableNew extends Lazy
 
     /**
      * Resolve to a closure on a new()
-     *
-     * @param object $ioc
-     *
-     * @return mixed
      */
     public function resolve(object $ioc): mixed
     {
         return function () use ($ioc) {
+            /** @var string $id */
             $id = $this->resolveArgument($ioc, $this->id);
 
+            /** @var Collection $ioc */
             return $ioc->new($id);
         };
     }

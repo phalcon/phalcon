@@ -1375,12 +1375,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "2bf7e4ed34800901b18da175877a766892b06666"
+                "reference": "4a2c8c2453cb22b69b3ad1291512aaa5665d1b06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/2bf7e4ed34800901b18da175877a766892b06666",
-                "reference": "2bf7e4ed34800901b18da175877a766892b06666",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/4a2c8c2453cb22b69b3ad1291512aaa5665d1b06",
+                "reference": "4a2c8c2453cb22b69b3ad1291512aaa5665d1b06",
                 "shasum": ""
             },
             "require": {
@@ -1444,7 +1444,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-26T21:30:00+00:00"
+            "time": "2026-08-27T18:03:00+00:00"
         },
         {
             "name": "phalcon/quill",
@@ -1516,16 +1516,16 @@
         },
         {
             "name": "phalcon/talon",
-            "version": "v1.0.2",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/talon.git",
-                "reference": "21d9bfa6b334fe137a041967ea9e7bc18dbdc575"
+                "reference": "02e017c369e454bf04979d4ea0a06c1eb715e0c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/talon/zipball/21d9bfa6b334fe137a041967ea9e7bc18dbdc575",
-                "reference": "21d9bfa6b334fe137a041967ea9e7bc18dbdc575",
+                "url": "https://api.github.com/repos/phalcon/talon/zipball/02e017c369e454bf04979d4ea0a06c1eb715e0c5",
+                "reference": "02e017c369e454bf04979d4ea0a06c1eb715e0c5",
                 "shasum": ""
             },
             "require": {
@@ -1542,7 +1542,7 @@
                 "friendsofphp/php-cs-fixer": "^3",
                 "pds/composer-script-names": "^1",
                 "pds/skeleton": "^1",
-                "phalcon/phalcon": "^6.0@alpha || ^6.0 || ^6.0 || ^6.0",
+                "phalcon/phalcon": "^6.0@beta || ^6.0",
                 "phpstan/phpstan": "^2",
                 "phpunit/phpcov": "^9",
                 "phpunit/phpunit": "^10.5",
@@ -1578,7 +1578,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/talon/issues",
-                "source": "https://github.com/phalcon/talon/tree/v1.0.2"
+                "source": "https://github.com/phalcon/talon/tree/v1.0.3"
             },
             "funding": [
                 {
@@ -1590,7 +1590,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-09T00:57:08+00:00"
+            "time": "2026-08-28T14:58:27+00:00"
         },
         {
             "name": "phalcon/volt",
@@ -1598,12 +1598,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "a6987e935c7009fac81ed7fb48258cd785988905"
+                "reference": "1c0bb97defb0e3612cfd0afa9dcf471a33bdf69d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/a6987e935c7009fac81ed7fb48258cd785988905",
-                "reference": "a6987e935c7009fac81ed7fb48258cd785988905",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/1c0bb97defb0e3612cfd0afa9dcf471a33bdf69d",
+                "reference": "1c0bb97defb0e3612cfd0afa9dcf471a33bdf69d",
                 "shasum": ""
             },
             "require": {
@@ -1675,7 +1675,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-26T21:31:10+00:00"
+            "time": "2026-08-27T17:56:49+00:00"
         },
         {
             "name": "phar-io/manifest",
