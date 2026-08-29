@@ -15,8 +15,12 @@ namespace Phalcon\Forms;
 
 use Countable;
 use Iterator;
+use Phalcon\Contracts\Forms\FormsTypes;
 use Phalcon\Contracts\Forms\Schema;
+use Phalcon\Contracts\Html\HtmlTypes;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
+use Phalcon\Filter\FilterInterface;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Forms\Element\Check;
@@ -37,6 +41,16 @@ use function strtolower;
 
 /**
  * This component allows to build forms using an object-oriented interface
+ *
+ * @phpstan-import-type forms_data from FormsTypes
+ * @phpstan-import-type forms_elements from FormsTypes
+ * @phpstan-import-type forms_elements_indexed from FormsTypes
+ * @phpstan-import-type forms_options from FormsTypes
+ * @phpstan-import-type forms_schema_definition from FormsTypes
+ * @phpstan-import-type forms_whitelist from FormsTypes
+ * @phpstan-import-type html_attributes from HtmlTypes
+ *
+ * @implements Iterator<int, ElementInterface>
  */
 class Form extends Injectable implements Countable, Iterator, AttributesInterface
 {
@@ -48,15 +62,15 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     protected Attributes $attributes;
 
     /**
-     * @var array
+     * @var forms_data
      */
     protected array $data = [];
     /**
-     * @var array
+     * @var forms_elements
      */
     protected array $elements = [];
     /**
-     * @var array
+     * @var forms_elements_indexed
      */
     protected array $elementsIndexed = [];
     /**
@@ -64,7 +78,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     protected object | null $entity = null;
     /**
-     * @var array
+     * @var forms_data
      */
     protected array $filteredData = [];
     /**
@@ -72,7 +86,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     protected Messages $messages;
     /**
-     * @var array
+     * @var forms_options
      */
     protected array $options = [];
     /**
@@ -90,14 +104,17 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     protected ValidationInterface | null $validation = null;
 
     /**
-     * @var array
+     * @var forms_whitelist
      */
     protected array $whitelist = [];
 
     /**
      * Phalcon\Forms\Form constructor
+     *
+     * @param mixed         $entity
+     * @param forms_options $userOptions
      */
-    public function __construct($entity = null, array $userOptions = [])
+    public function __construct(mixed $entity = null, array $userOptions = [])
     {
         if ($entity !== null && !is_object($entity)) {
             throw new InvalidEntity();
@@ -182,9 +199,9 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Binds data to the entity
      *
-     * @param array       $data
-     * @param object|null $entity
-     * @param array       $whitelist
+     * @param forms_data      $data
+     * @param object|null     $entity
+     * @param forms_whitelist $whitelist
      *
      * @return $this
      * @throws Exception
@@ -222,6 +239,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                 $element instanceof Check &&
                 $element->hasUncheckedValue()
             ) {
+                /** @var string $dataKey */
                 $dataKey = $element->getAttribute('name') ?? $elementName;
                 if (!array_key_exists($dataKey, $data)) {
                     $data[$dataKey] = $element->getUncheckedValue();
@@ -267,7 +285,9 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             $filteredValue = $value;
             if ($filters) {
                 if (!is_object($filter)) {
+                    /** @var DiInterface $container */
                     $container = $this->getDI();
+                    /** @var FilterInterface $filter */
                     $filter    = $container->getShared("filter");
                 }
 
@@ -322,7 +342,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Clears every element in the form to its default value
      *
-     * @param array|string|null $fields
+     * @param array<array-key, string>|string|null $fields
      *
      * @return $this
      */
@@ -417,7 +437,10 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     public function getAction(): string
     {
-        return (string)$this->getAttributes()->get("action");
+        /** @var string|null $action */
+        $action = $this->getAttributes()->get("action");
+
+        return (string)$action;
     }
 
     /**
@@ -546,7 +569,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Returns the options for the element
      *
-     * @return array
+     * @return forms_options
      */
     public function getUserOptions(): array
     {
@@ -657,7 +680,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * return array
      *
-     * @return array
+     * @return forms_whitelist
      */
     public function getWhitelist(): array
     {
@@ -692,13 +715,12 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Validates the form
      *
-     * @param array       $data
-     * @param object|null $entity
-     * @param array       $whitelist
+     * @param forms_data      $data
+     * @param object|null     $entity
+     * @param forms_whitelist $whitelist
      *
      * @return bool
      * @throws Exception
-     * @throws ValidationException
      */
     public function isValid(
         array $data = [],
@@ -816,8 +838,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Generate the label of an element added to the form including HTML
      *
-     * @param string $name
-     * @param array  $attributes
+     * @param string          $name
+     * @param html_attributes $attributes
      *
      * @return string
      * @throws Exception
@@ -844,6 +866,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     public function load(Schema $schema, FormsLocator $locator): static
     {
+        /** @var forms_schema_definition $definition */
         foreach ($schema->load() as $definition) {
             $type = strtolower((string) $definition['type']);
 
@@ -851,6 +874,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             $attributes = (array) ($definition['attributes'] ?? []);
             $options    = (array) ($definition['options'] ?? []);
 
+            /** @var ElementInterface $element */
             $element = ($locator->getElement($type))($name, $options, $attributes);
 
             if (!empty($definition['label'])) {
@@ -914,8 +938,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Renders a specific item in the form
      *
-     * @param string $name
-     * @param array  $attributes
+     * @param string          $name
+     * @param html_attributes $attributes
      *
      * @return string
      * @throws Exception
@@ -1012,7 +1036,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Sets options for the element
      *
-     * @param array $options
+     * @param forms_options $options
      *
      * @return $this
      */
@@ -1040,7 +1064,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * Sets the default whitelist
      *
-     * @param array $whitelist
+     * @param forms_whitelist $whitelist
      *
      * @return $this
      */

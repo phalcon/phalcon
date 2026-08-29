@@ -106,3 +106,20 @@ parameters:
             message: "#Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\): mixed, array\\{object, '__invoke'\\} given#"
             path: ../src/Html/TagFactory.php
             reportUnmatched: false
+        # The loaders only prove that the decoded document is an array. The
+        # per-entry shape is checked in `ArrayLoader::validateDefinition()`,
+        # which PHPStan cannot follow back to the constructor argument. The
+        # loader chain is reworked in the next major.
+        -
+            message: "#Parameter \\#1 \\$definitions of class Phalcon\\\\Forms\\\\Loader\\\\ArrayLoader constructor expects array<int, array<string, mixed>>, (list|array<mixed, mixed>) given#"
+            paths:
+                - ../src/Forms/Loader/JsonLoader.php
+                - ../src/Forms/Loader/YamlLoader.php
+            reportUnmatched: false
+        # `setFilters()` takes `array|string` natively, so the type guard is
+        # unreachable in PHP. It is kept because the Zephir parameter is `var`,
+        # where the same guard is live and raises `InvalidFilterType`.
+        -
+            message: "#(Call to function is_array\\(\\) with array<array<mixed>\\|string> will always evaluate to true|Result of && is always false)#"
+            path: ../src/Forms/Element/AbstractElement.php
+            reportUnmatched: false

@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
+use Phalcon\Contracts\Forms\FormsTypes;
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Di\Di;
+use Phalcon\Di\DiInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Exceptions\FormElementNameRequired;
@@ -22,19 +25,26 @@ use Phalcon\Forms\Form;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
+use Stringable;
 
 /**
  * This is a base class for form elements
+ *
+ * @phpstan-import-type forms_attributes from FormsTypes
+ * @phpstan-import-type forms_filters from FormsTypes
+ * @phpstan-import-type forms_options from FormsTypes
+ * @phpstan-import-type forms_validators from FormsTypes
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 abstract class AbstractElement implements ElementInterface
 {
     /**
-     * @var array
+     * @var forms_attributes
      */
     protected array $attributes = [];
 
     /**
-     * @var array
+     * @var forms_filters
      */
     protected array $filters = [];
 
@@ -61,7 +71,7 @@ abstract class AbstractElement implements ElementInterface
     protected string $name;
 
     /**
-     * @var array
+     * @var forms_options
      */
     protected array $options = [];
 
@@ -71,7 +81,7 @@ abstract class AbstractElement implements ElementInterface
     protected TagFactory | null $tagFactory = null;
 
     /**
-     * @var array
+     * @var forms_validators
      */
     protected array $validators = [];
 
@@ -83,8 +93,8 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Constructor
      *
-     * @param string $name       Attribute name (value of 'name' attribute of HTML element)
-     * @param array  $attributes Additional HTML element attributes
+     * @param string           $name       Attribute name (value of 'name' attribute of HTML element)
+     * @param forms_attributes $attributes Additional HTML element attributes
      */
     public function __construct(string $name, array $attributes = [])
     {
@@ -141,8 +151,8 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Adds a group of validators
      *
-     * @param ValidatorInterface[] $validators
-     * @param bool                 $merge
+     * @param array<array-key, mixed> $validators
+     * @param bool                    $merge
      *
      * @return ElementInterface
      */
@@ -207,7 +217,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the default attributes for the element
      *
-     * @return array
+     * @return forms_attributes
      */
     public function getAttributes(): array
     {
@@ -227,7 +237,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the element filters
      *
-     * @return array
+     * @return forms_filters
      */
     public function getFilters(): array
     {
@@ -303,7 +313,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the options for the element
      *
-     * @return array
+     * @return forms_options
      */
     public function getUserOptions(): array
     {
@@ -313,7 +323,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the validators registered for the element
      *
-     * @return ValidatorInterface[]
+     * @return forms_validators
      */
     public function getValidators(): array
     {
@@ -353,7 +363,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Generate the HTML to label the element
      *
-     * @param array $attributes
+     * @param html_attributes $attributes
      *
      * @return string
      */
@@ -363,6 +373,7 @@ abstract class AbstractElement implements ElementInterface
          * Check if there is an "id" attribute defined
          */
         $tagFactory = $this->getLocalTagFactory();
+        /** @var string $name */
         $name       = $this->attributes["id"] ?? $this->name;
 
         if (!isset($attributes["for"])) {
@@ -384,12 +395,13 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Renders the element widget returning HTML
      *
-     * @param array $attributes
+     * @param html_attributes $attributes
      *
      * @return string
      */
     public function render(array $attributes = []): string
     {
+        /** @var scalar|null $value */
         $value      = $this->getValue();
         $method     = $this->method;
         $tagFactory = $this->getLocalTagFactory();
@@ -405,7 +417,10 @@ abstract class AbstractElement implements ElementInterface
 
         $merged = array_merge($this->attributes, $attributes);
 
-        return (string)$tagFactory->{$method}($this->name, $value, $merged);
+        /** @var string|Stringable $result */
+        $result = $tagFactory->{$method}($this->name, $value, $merged);
+
+        return (string)$result;
     }
 
     /**
@@ -428,7 +443,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets default attributes for the element
      *
-     * @param array $attributes
+     * @param forms_attributes $attributes
      *
      * @return ElementInterface
      */
@@ -457,7 +472,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets the element filters
      *
-     * @param array|string $filters
+     * @param forms_filters|string $filters
      *
      * @return ElementInterface
      */
@@ -567,7 +582,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets options for the element
      *
-     * @param array $options
+     * @param forms_options $options
      *
      * @return ElementInterface
      */
@@ -595,9 +610,11 @@ abstract class AbstractElement implements ElementInterface
              * Check the DI container
              */
             if (null === $tagFactory) {
+                /** @var DiInterface|null $container */
                 $container = Di::getDefault();
 
                 if (null !== $container && true === $container->has("tag")) {
+                    /** @var TagFactory $tagFactory */
                     $tagFactory = $container->getShared("tag");
                 }
             }

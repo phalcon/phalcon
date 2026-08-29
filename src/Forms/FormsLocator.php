@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms;
 
+use Phalcon\Contracts\Forms\FormsTypes;
 use Phalcon\Forms\Element\Check;
 use Phalcon\Forms\Element\CheckGroup;
 use Phalcon\Forms\Element\Date;
@@ -43,6 +44,11 @@ use Phalcon\Forms\Exceptions\UnknownFormElementType;
  * Each callable has the signature `fn(string $name, array $options, array $attributes): ElementInterface`.
  * Default types are seeded by `getDefaultServices()`. Users may add or override
  * types with `setElement()`.
+ *
+ * @phpstan-import-type forms_locator_element_factory from FormsTypes
+ * @phpstan-import-type forms_locator_elements from FormsTypes
+ * @phpstan-import-type forms_locator_factories from FormsTypes
+ * @phpstan-import-type forms_locator_factory from FormsTypes
  */
 class FormsLocator
 {
@@ -50,7 +56,7 @@ class FormsLocator
      * Element type → factory callable.
      * fn(string $name, array $options, array $attributes): ElementInterface
      *
-     * @var array<string, callable>
+     * @var forms_locator_elements
      */
     private array $elements;
 
@@ -58,7 +64,7 @@ class FormsLocator
      * Form name → factory callable.
      * fn(?object $entity): Form
      *
-     * @var array<string, callable>
+     * @var forms_locator_factories
      */
     private array $factories = [];
 
@@ -70,7 +76,7 @@ class FormsLocator
     private array $instances = [];
 
     /**
-     * @param array<string, callable> $definitions  name → callable map for the form registry
+     * @param forms_locator_factories $definitions  name → callable map for the form registry
      */
     public function __construct(array $definitions = [])
     {
@@ -119,7 +125,7 @@ class FormsLocator
      *
      * @param string $type
      *
-     * @return callable  fn(string $name, array $options, array $attributes): ElementInterface
+     * @return forms_locator_element_factory  fn(string $name, array $options, array $attributes): ElementInterface
      * @throws Exception
      */
     public function getElement(string $type): callable
@@ -162,8 +168,8 @@ class FormsLocator
      * Form instance. Replacing a registration clears any cached instance so
      * the next get() call rebuilds from the new factory.
      *
-     * @param string   $name
-     * @param callable $factory
+     * @param string                $name
+     * @param forms_locator_factory $factory
      */
     public function set(string $name, callable $factory): void
     {
@@ -177,8 +183,8 @@ class FormsLocator
      * The callable must accept (string $name, array $options, array $attributes)
      * and return an ElementInterface instance.
      *
-     * @param string   $type
-     * @param callable $factory
+     * @param string                        $type
+     * @param forms_locator_element_factory $factory
      */
     public function setElement(string $type, callable $factory): void
     {
@@ -194,7 +200,7 @@ class FormsLocator
      *
      * Each value is a callable: fn(string $name, array $options, array $attributes): ElementInterface
      *
-     * @return array<string, callable>
+     * @return forms_locator_elements
      */
     protected function getDefaultServices(): array
     {

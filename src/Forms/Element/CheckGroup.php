@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
+use Phalcon\Contracts\Forms\FormsTypes;
+use Phalcon\Contracts\Html\HtmlTypes;
+use Phalcon\Html\Helper\Input\CheckboxGroup;
+
 /**
  * Component for a group of INPUT[type=checkbox] elements.
  *
@@ -23,20 +27,24 @@ namespace Phalcon\Forms\Element;
  *   ['value' => 'Label']
  * or with per-item attributes:
  *   ['value' => ['label' => 'Label', 'disabled' => true]]
+ *
+ * @phpstan-import-type forms_attributes from FormsTypes
+ * @phpstan-import-type forms_group_options from FormsTypes
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class CheckGroup extends AbstractElement
 {
     /**
-     * @var array
+     * @var forms_group_options
      */
     protected array $optionsValues = [];
 
     /**
      * Constructor
      *
-     * @param string $name
-     * @param array  $options
-     * @param array  $attributes
+     * @param string              $name
+     * @param forms_group_options $options
+     * @param forms_attributes    $attributes
      */
     public function __construct(
         string $name,
@@ -55,7 +63,7 @@ class CheckGroup extends AbstractElement
     /**
      * Returns the group options
      *
-     * @return array
+     * @return forms_group_options
      */
     public function getOptions(): array
     {
@@ -65,14 +73,16 @@ class CheckGroup extends AbstractElement
     /**
      * Renders the checkbox group returning HTML
      *
-     * @param array $attributes
+     * @param html_attributes $attributes
      *
      * @return string
      */
     public function render(array $attributes = []): string
     {
         $value   = $this->getValue();
+        /** @var html_attributes $merged */
         $merged  = array_merge($this->attributes, $attributes);
+        /** @var CheckboxGroup $helper */
         $helper  = $this->getLocalTagFactory()->newInstance('inputCheckboxGroup');
 
         return (string) $helper($this->name, $this->optionsValues, $value, $merged);
@@ -81,7 +91,7 @@ class CheckGroup extends AbstractElement
     /**
      * Sets the group options
      *
-     * @param array $options
+     * @param forms_group_options $options
      *
      * @return ElementInterface
      */

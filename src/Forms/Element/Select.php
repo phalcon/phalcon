@@ -13,26 +13,32 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Element;
 
+use Phalcon\Contracts\Forms\FormsTypes;
+use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Tag\Select as SelectTag;
 
 use function is_array;
 
 /**
  * Component SELECT (choice) for forms
+ *
+ *  @phpstan-import-type forms_attributes from FormsTypes
+ *@phpstan-import-type forms_select_options from FormsTypes
+ * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Select extends AbstractElement
 {
     /**
-     * @var array|object|null
+     * @var forms_select_options|object|null
      */
     protected array | object | null $optionsValues = null;
 
     /**
      * Constructor
      *
-     * @param string            $name
-     * @param array|object|null $options
-     * @param array             $attributes
+     * @param string                           $name
+     * @param forms_select_options|object|null $options
+     * @param forms_attributes                 $attributes
      */
     public function __construct(
         string $name,
@@ -73,9 +79,9 @@ class Select extends AbstractElement
     /**
      * Returns the choices' options
      *
-     * @return array|object
+     * @return forms_select_options|object|null
      */
-    public function getOptions(): array | object
+    public function getOptions(): mixed
     {
         return $this->optionsValues;
     }
@@ -83,7 +89,7 @@ class Select extends AbstractElement
     /**
      * Renders the element widget returning HTML
      *
-     * @param array $attributes
+     * @param html_attributes $attributes
      *
      * @return string
      */
@@ -101,7 +107,7 @@ class Select extends AbstractElement
     /**
      * Set the choice's options
      *
-     * @param array|object $options
+     * @param forms_select_options|object $options
      *
      * @return ElementInterface
      */
@@ -116,9 +122,9 @@ class Select extends AbstractElement
      * Returns an array of prepared attributes for Phalcon\Html\TagFactory
      * helpers according to the element parameters
      *
-     * @param array $attributes
+     * @param html_attributes $attributes
      *
-     * @return array
+     * @return array<array-key, mixed>
      */
     protected function prepareAttributes(array $attributes = []): array
     {
