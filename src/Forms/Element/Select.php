@@ -47,18 +47,24 @@ class Select extends AbstractElement
     /**
      * Adds an option to the current options
      *
-     * @param array|string $option
+     * @param mixed $option
      *
      * @return ElementInterface
      */
-    public function addOption(array | string $option): ElementInterface
+    public function addOption(mixed $option): ElementInterface
     {
-        if (is_array($option)) {
-            foreach ($option as $key => $value) {
-                $this->optionsValues[$key] = $value;
+        if (null === $this->optionsValues) {
+            $this->optionsValues = [];
+        }
+
+        if (is_array($this->optionsValues)) {
+            if (is_array($option)) {
+                foreach ($option as $key => $value) {
+                    $this->optionsValues[$key] = $value;
+                }
+            } else {
+                $this->optionsValues[] = $option;
             }
-        } else {
-            $this->optionsValues[] = $option;
         }
 
         return $this;

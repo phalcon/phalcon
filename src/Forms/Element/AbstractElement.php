@@ -118,15 +118,7 @@ abstract class AbstractElement implements ElementInterface
      */
     public function addFilter(string $filter): ElementInterface
     {
-        $filters = $this->filters;
-
-        if (is_array($filters)) {
-            $this->filters[] = $filter;
-        } elseif (is_string($filters)) {
-            $this->filters = [$filters, $filter];
-        } else {
-            $this->filters = [$filter];
-        }
+        $this->filters[] = $filter;
 
         return $this;
     }

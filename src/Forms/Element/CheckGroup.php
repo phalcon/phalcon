@@ -29,7 +29,7 @@ class CheckGroup extends AbstractElement
     /**
      * @var array
      */
-    protected array $options = [];
+    protected array $optionsValues = [];
 
     /**
      * Constructor
@@ -47,7 +47,7 @@ class CheckGroup extends AbstractElement
             $name .= '[]';
         }
 
-        $this->options = $options;
+        $this->optionsValues = $options;
 
         parent::__construct($name, $attributes);
     }
@@ -59,7 +59,7 @@ class CheckGroup extends AbstractElement
      */
     public function getOptions(): array
     {
-        return $this->options;
+        return $this->optionsValues;
     }
 
     /**
@@ -75,7 +75,7 @@ class CheckGroup extends AbstractElement
         $merged  = array_merge($this->attributes, $attributes);
         $helper  = $this->getLocalTagFactory()->newInstance('inputCheckboxGroup');
 
-        return (string) $helper($this->name, $this->options, $value, $merged);
+        return (string) $helper($this->name, $this->optionsValues, $value, $merged);
     }
 
     /**
@@ -87,7 +87,7 @@ class CheckGroup extends AbstractElement
      */
     public function setOptions(array $options): ElementInterface
     {
-        $this->options = $options;
+        $this->optionsValues = $options;
 
         return $this;
     }
