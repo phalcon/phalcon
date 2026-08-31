@@ -22,13 +22,9 @@ use Phalcon\Forms\Exceptions\FormNotRegistered;
 class Manager
 {
     /**
-     * @var array<string, Form>
+     * @phpstan-var array<string, Form>
      */
     protected array $forms = [];
-
-    /**
-     * @var FormsLocator
-     */
     protected FormsLocator $locator;
 
     /**
@@ -43,11 +39,6 @@ class Manager
 
     /**
      * Creates a form registering it in the forms manager
-     *
-     * @param string      $name
-     * @param object|null $entity
-     *
-     * @return Form
      */
     public function create(string $name, object | null $entity = null): Form
     {
@@ -59,11 +50,6 @@ class Manager
 
     /**
      * Returns a form by its name
-     *
-     * @param string $name
-     *
-     * @return Form
-     * @throws Exception
      */
     public function get(string $name): Form
     {
@@ -76,8 +62,6 @@ class Manager
 
     /**
      * Returns the FormsLocator instance.
-     *
-     * @return FormsLocator
      */
     public function getLocator(): FormsLocator
     {
@@ -86,10 +70,6 @@ class Manager
 
     /**
      * Checks if a form is registered in the forms manager
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -100,11 +80,6 @@ class Manager
      * Creates a form from a Schema source, registers it in the manager,
      * and registers a factory in the locator for entity-aware retrieval.
      *
-     * @param string      $name
-     * @param Schema      $schema
-     * @param object|null $entity
-     *
-     * @return Form
      * @throws Exception
      */
     public function loadForm(
@@ -126,11 +101,6 @@ class Manager
 
     /**
      * Registers a form in the Forms Manager
-     *
-     * @param string $name
-     * @param Form   $form
-     *
-     * @return $this
      */
     public function set(string $name, Form $form): static
     {

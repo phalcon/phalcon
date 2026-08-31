@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Hidden extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputHidden";
 }

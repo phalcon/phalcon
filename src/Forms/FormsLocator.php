@@ -54,15 +54,13 @@ class FormsLocator
 {
     /**
      * Element type → factory callable.
-     * fn(string $name, array $options, array $attributes): ElementInterface
      *
-     * @var forms_locator_elements
+     * @phpstan-var forms_locator_elements
      */
     private array $elements;
 
     /**
      * Form name → factory callable.
-     * fn(?object $entity): Form
      *
      * @var forms_locator_factories
      */
@@ -71,12 +69,12 @@ class FormsLocator
     /**
      * Cached entity-less form instances.
      *
-     * @var array<string, Form>
+     * @phpstan-var array<string, Form>
      */
     private array $instances = [];
 
     /**
-     * @param forms_locator_factories $definitions  name → callable map for the form registry
+     * @phpstan-param forms_locator_factories $definitions
      */
     public function __construct(array $definitions = [])
     {
@@ -87,20 +85,14 @@ class FormsLocator
         }
     }
 
-    // -----------------------------------------------------------------------
-    // Form registry
-    // -----------------------------------------------------------------------
-
     /**
      * Returns the named form.
      *
      * Without an entity the result is lazily created and cached.
      * With an entity a fresh form is always produced.
      *
-     * @param string      $name
      * @param object|null $entity
      *
-     * @return Form
      * @throws Exception
      */
     public function get(string $name, object | null $entity = null): Form
@@ -123,10 +115,7 @@ class FormsLocator
     /**
      * Returns the factory callable for the given element type.
      *
-     * @param string $type
-     *
-     * @return forms_locator_element_factory  fn(string $name, array $options, array $attributes): ElementInterface
-     * @throws Exception
+     * @phpstan-return forms_locator_element_factory
      */
     public function getElement(string $type): callable
     {
@@ -139,10 +128,6 @@ class FormsLocator
 
     /**
      * Checks whether a named form factory is registered.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -151,10 +136,6 @@ class FormsLocator
 
     /**
      * Checks whether an element type is registered.
-     *
-     * @param string $type
-     *
-     * @return bool
      */
     public function hasElement(string $type): bool
     {
@@ -168,8 +149,7 @@ class FormsLocator
      * Form instance. Replacing a registration clears any cached instance so
      * the next get() call rebuilds from the new factory.
      *
-     * @param string                $name
-     * @param forms_locator_factory $factory
+     * @phpstan-param forms_locator_factory $factory
      */
     public function set(string $name, callable $factory): void
     {
@@ -183,24 +163,19 @@ class FormsLocator
      * The callable must accept (string $name, array $options, array $attributes)
      * and return an ElementInterface instance.
      *
-     * @param string                        $type
-     * @param forms_locator_element_factory $factory
+     * @phpstan-param forms_locator_element_factory $factory
      */
     public function setElement(string $type, callable $factory): void
     {
         $this->elements[$type] = $factory;
     }
 
-    // -----------------------------------------------------------------------
-    // Default element services
-    // -----------------------------------------------------------------------
-
     /**
      * Returns the built-in element type factories.
      *
      * Each value is a callable: fn(string $name, array $options, array $attributes): ElementInterface
      *
-     * @return forms_locator_elements
+     * @phpstan-return forms_locator_elements
      */
     protected function getDefaultServices(): array
     {

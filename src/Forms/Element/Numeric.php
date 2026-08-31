@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Numeric extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputNumeric";
 }

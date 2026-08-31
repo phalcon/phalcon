@@ -18,19 +18,11 @@ namespace Phalcon\Forms\Element;
  */
 class Check extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputCheckbox";
-
     /**
      * @var mixed
      */
     protected mixed $uncheckedValue = null;
-
-    /**
-     * @var bool
-     */
     protected bool $uncheckedValueSet = false;
 
     /**

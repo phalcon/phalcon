@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class File extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputFile";
 }

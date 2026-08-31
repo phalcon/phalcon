@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Submit extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputSubmit";
 }

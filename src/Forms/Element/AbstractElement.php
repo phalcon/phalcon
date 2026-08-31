@@ -47,39 +47,16 @@ abstract class AbstractElement implements ElementInterface
      * @var forms_filters
      */
     protected array $filters = [];
-
-    /**
-     * @var Form|null
-     */
     protected Form | null $form = null;
-
-    /**
-     * @var string|null
-     */
     protected string | null $label = null;
-    /**
-     * @var Messages
-     */
     protected Messages $messages;
-    /**
-     * @var string
-     */
     protected string $method = "inputText";
-    /**
-     * @var string
-     */
     protected string $name;
-
     /**
      * @var forms_options
      */
     protected array $options = [];
-
-    /**
-     * @var TagFactory|null
-     */
     protected TagFactory | null $tagFactory = null;
-
     /**
      * @var forms_validators
      */
@@ -93,8 +70,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Constructor
      *
-     * @param string           $name       Attribute name (value of 'name' attribute of HTML element)
-     * @param forms_attributes $attributes Additional HTML element attributes
+     * @phpstan-param forms_attributes $attributes
      */
     public function __construct(string $name, array $attributes = [])
     {
@@ -111,8 +87,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Magic method __toString renders the widget without attributes
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -121,10 +95,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Adds a filter to current list of filters
-     *
-     * @param string $filter
-     *
-     * @return ElementInterface
      */
     public function addFilter(string $filter): ElementInterface
     {
@@ -135,10 +105,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Adds a validator to the element
-     *
-     * @param ValidatorInterface $validator
-     *
-     * @return ElementInterface
      */
     public function addValidator(
         ValidatorInterface $validator
@@ -151,10 +117,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Adds a group of validators
      *
-     * @param array<array-key, mixed> $validators
-     * @param bool                    $merge
-     *
-     * @return ElementInterface
+     * @phpstan-param array<array-key, mixed> $validators
      */
     public function addValidators(
         array $validators,
@@ -175,10 +138,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Appends a message to the internal message list
-     *
-     * @param MessageInterface $message
-     *
-     * @return ElementInterface
      */
     public function appendMessage(MessageInterface $message): ElementInterface
     {
@@ -189,8 +148,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Clears element to its default value
-     *
-     * @return ElementInterface
      */
     public function clear(): ElementInterface
     {
@@ -201,11 +158,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the value of an attribute if present
-     *
-     * @param string     $attribute
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     public function getAttribute(
         string $attribute,
@@ -217,7 +169,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the default attributes for the element
      *
-     * @return forms_attributes
+     * @phpstan-return forms_attributes
      */
     public function getAttributes(): array
     {
@@ -226,8 +178,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the default value assigned to the element
-     *
-     * @return mixed
      */
     public function getDefault(): mixed
     {
@@ -237,7 +187,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the element filters
      *
-     * @return forms_filters
+     * @phpstan-return forms_filters
      */
     public function getFilters(): array
     {
@@ -246,8 +196,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the parent form to the element
-     *
-     * @return Form|null
      */
     public function getForm(): Form | null
     {
@@ -256,8 +204,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the element label
-     *
-     * @return string|null
      */
     public function getLabel(): string | null
     {
@@ -265,10 +211,8 @@ abstract class AbstractElement implements ElementInterface
     }
 
     /**
-     * Returns the messages that belong to the element. The element needs to
-     * be attached to a form
-     *
-     * @return Messages
+     * Returns the messages that belongs to the element
+     * The element needs to be attached to a form
      */
     public function getMessages(): Messages
     {
@@ -277,8 +221,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the element name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -287,8 +229,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the tagFactory; throws exception if not present
-     *
-     * @return TagFactory|null
      */
     public function getTagFactory(): TagFactory | null
     {
@@ -297,11 +237,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the value of an option if present
-     *
-     * @param string     $option
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     public function getUserOption(
         string $option,
@@ -313,7 +248,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the options for the element
      *
-     * @return forms_options
+     * @phpstan-return forms_options
      */
     public function getUserOptions(): array
     {
@@ -323,7 +258,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Returns the validators registered for the element
      *
-     * @return forms_validators
+     * @phpstan-return forms_validators
      */
     public function getValidators(): array
     {
@@ -332,8 +267,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the element's value
-     *
-     * @return mixed
      */
     public function getValue(): mixed
     {
@@ -352,8 +285,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Checks whether there are messages attached to the element
-     *
-     * @return bool
      */
     public function hasMessages(): bool
     {
@@ -363,9 +294,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Generate the HTML to label the element
      *
-     * @param html_attributes $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     public function label(array $attributes = []): string
     {
@@ -395,9 +324,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Renders the element widget returning HTML
      *
-     * @param html_attributes $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     public function render(array $attributes = []): string
     {
@@ -425,11 +352,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets a default attribute for the element
-     *
-     * @param string $attribute
-     * @param mixed  $value
-     *
-     * @return ElementInterface
      */
     public function setAttribute(
         string $attribute,
@@ -443,9 +365,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets default attributes for the element
      *
-     * @param forms_attributes $attributes
-     *
-     * @return ElementInterface
+     * @phpstan-param forms_attributes $attributes
      */
     public function setAttributes(array $attributes): ElementInterface
     {
@@ -457,10 +377,6 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets a default value in case the form does not use an entity
      * or there is no value available for the element in _POST
-     *
-     * @param mixed $value
-     *
-     * @return ElementInterface
      */
     public function setDefault(mixed $value): ElementInterface
     {
@@ -472,9 +388,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets the element filters
      *
-     * @param forms_filters|string $filters
-     *
-     * @return ElementInterface
+     * @phpstan-param forms_filters|string $filters
      */
     public function setFilters(
         array | string $filters
@@ -494,10 +408,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets the parent form to the element
-     *
-     * @param Form $form
-     *
-     * @return ElementInterface
      */
     public function setForm(Form $form): ElementInterface
     {
@@ -508,10 +418,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets the element label
-     *
-     * @param string $label
-     *
-     * @return ElementInterface
      */
     public function setLabel(string $label): ElementInterface
     {
@@ -522,10 +428,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets the validation messages related to the element
-     *
-     * @param Messages $messages
-     *
-     * @return ElementInterface
      */
     public function setMessages(Messages $messages): ElementInterface
     {
@@ -536,10 +438,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets the element name
-     *
-     * @param string $name
-     *
-     * @return ElementInterface
      */
     public function setName(string $name): ElementInterface
     {
@@ -550,10 +448,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets the TagFactory
-     *
-     * @param TagFactory $tagFactory
-     *
-     * @return $this
      */
     public function setTagFactory(TagFactory $tagFactory): static
     {
@@ -564,11 +458,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets an option for the element
-     *
-     * @param string $option
-     * @param mixed  $value
-     *
-     * @return ElementInterface
      */
     public function setUserOption(
         string $option,
@@ -582,9 +471,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Sets options for the element
      *
-     * @param forms_options $options
-     *
-     * @return ElementInterface
+     * @phpstan-param forms_options $options
      */
     public function setUserOptions(array $options): ElementInterface
     {
@@ -595,8 +482,6 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Returns the tagFactory; throws exception if not present
-     *
-     * @return TagFactory
      */
     protected function getLocalTagFactory(): TagFactory
     {

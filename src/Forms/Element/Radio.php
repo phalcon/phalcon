@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Radio extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputRadio";
 }

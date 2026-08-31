@@ -27,7 +27,7 @@ use Phalcon\Contracts\Html\HtmlTypes;
 class Form extends AbstractHelper
 {
     /**
-     * Produce a <form> tag.
+     * Produce a `<form>` tag.
      *
      * @phpstan-param html_attributes $attributes
      *

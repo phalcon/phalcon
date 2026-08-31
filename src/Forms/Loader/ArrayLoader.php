@@ -32,7 +32,7 @@ class ArrayLoader implements Schema
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @phpstan-return array<int, array<string, mixed>>
      * @throws Exception
      */
     public function load(): array
@@ -45,9 +45,6 @@ class ArrayLoader implements Schema
     }
 
     /**
-     * @param mixed $definition
-     * @param int   $index
-     *
      * @throws Exception
      */
     protected function validateDefinition(mixed $definition, int $index): void

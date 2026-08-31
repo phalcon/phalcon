@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Password extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputPassword";
 }

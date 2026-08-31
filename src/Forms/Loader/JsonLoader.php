@@ -13,17 +13,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Forms\Loader;
 
+use InvalidArgumentException;
 use Phalcon\Contracts\Forms\Schema;
 use Phalcon\Forms\Exception;
 use Phalcon\Forms\Exceptions\InvalidJsonSchema;
 use Phalcon\Forms\Exceptions\JsonSchemaNotArray;
+use Phalcon\Support\Helper\Json\Decode;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_is_list;
 use function is_array;
 use function is_file;
 use function is_readable;
-use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -46,7 +47,7 @@ class JsonLoader implements Schema
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @phpstan-return array<int, array<string, mixed>>
      * @throws Exception
      */
     public function load(): array
@@ -58,9 +59,9 @@ class JsonLoader implements Schema
         }
 
         try {
-            $definitions = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            throw new InvalidJsonSchema($e->getMessage());
+            $definitions = (new Decode())->__invoke($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (InvalidArgumentException $ex) {
+            throw new InvalidJsonSchema($ex->getMessage());
         }
 
         if (!is_array($definitions) || !array_is_list($definitions)) {

@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Email extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputEmail";
 }

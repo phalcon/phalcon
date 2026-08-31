@@ -42,9 +42,8 @@ class CheckGroup extends AbstractElement
     /**
      * Constructor
      *
-     * @param string              $name
-     * @param forms_group_options $options
-     * @param forms_attributes    $attributes
+     * @phpstan-param forms_group_options $options
+     * @phpstan-param forms_attributes $attributes
      */
     public function __construct(
         string $name,
@@ -63,7 +62,7 @@ class CheckGroup extends AbstractElement
     /**
      * Returns the group options
      *
-     * @return forms_group_options
+     * @phpstan-return forms_group_options
      */
     public function getOptions(): array
     {
@@ -73,9 +72,7 @@ class CheckGroup extends AbstractElement
     /**
      * Renders the checkbox group returning HTML
      *
-     * @param html_attributes $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     public function render(array $attributes = []): string
     {
@@ -91,9 +88,7 @@ class CheckGroup extends AbstractElement
     /**
      * Sets the group options
      *
-     * @param forms_group_options $options
-     *
-     * @return ElementInterface
+     * @phpstan-param forms_group_options $options
      */
     public function setOptions(array $options): ElementInterface
     {

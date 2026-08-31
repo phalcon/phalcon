@@ -477,7 +477,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * Returns the available headers in the request
      *
-     * <code>
+     * ```php
      * $_SERVER = [
      *     "PHP_AUTH_USER" => "phalcon",
      *     "PHP_AUTH_PW"   => "secret",
@@ -486,7 +486,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      * $headers = $request->getHeaders();
      *
      * echo $headers["Authorization"]; // Basic cGhhbGNvbjpzZWNyZXQ=
-     * </code>
+     * ```
      *
      * @phpstan-return http_request_headers
      */

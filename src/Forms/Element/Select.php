@@ -22,27 +22,28 @@ use function is_array;
 /**
  * Component SELECT (choice) for forms
  *
- *  @phpstan-import-type forms_attributes from FormsTypes
- *@phpstan-import-type forms_select_options from FormsTypes
+ * @phpstan-import-type forms_attributes from FormsTypes
+ * @phpstan-import-type forms_select_options from FormsTypes
  * @phpstan-import-type html_attributes from HtmlTypes
  */
 class Select extends AbstractElement
 {
     /**
-     * @var forms_select_options|object|null
+     * @var array|object|null
+     *
+     * @phpstan-var forms_select_options|object|null
      */
-    protected array | object | null $optionsValues = null;
+    protected mixed $optionsValues = null;
 
     /**
      * Constructor
      *
-     * @param string                           $name
-     * @param forms_select_options|object|null $options
-     * @param forms_attributes                 $attributes
+     * @phpstan-param forms_select_options|object|null $options
+     * @phpstan-param forms_attributes $attributes
      */
     public function __construct(
         string $name,
-        array | object | null $options = null,
+        mixed $options = null,
         array $attributes = []
     ) {
         $this->optionsValues = $options;
@@ -54,8 +55,6 @@ class Select extends AbstractElement
      * Adds an option to the current options
      *
      * @param mixed $option
-     *
-     * @return ElementInterface
      */
     public function addOption(mixed $option): ElementInterface
     {
@@ -79,7 +78,7 @@ class Select extends AbstractElement
     /**
      * Returns the choices' options
      *
-     * @return forms_select_options|object|null
+     * @phpstan-return forms_select_options|object|null
      */
     public function getOptions(): mixed
     {
@@ -89,9 +88,7 @@ class Select extends AbstractElement
     /**
      * Renders the element widget returning HTML
      *
-     * @param html_attributes $attributes
-     *
-     * @return string
+     * @phpstan-param html_attributes $attributes
      */
     public function render(array $attributes = []): string
     {
@@ -107,9 +104,7 @@ class Select extends AbstractElement
     /**
      * Set the choice's options
      *
-     * @param forms_select_options|object $options
-     *
-     * @return ElementInterface
+     * @phpstan-param forms_select_options|object $options
      */
     public function setOptions(array | object $options): ElementInterface
     {
@@ -122,9 +117,8 @@ class Select extends AbstractElement
      * Returns an array of prepared attributes for Phalcon\Html\TagFactory
      * helpers according to the element parameters
      *
-     * @param html_attributes $attributes
-     *
-     * @return array<array-key, mixed>
+     * @phpstan-param html_attributes $attributes
+     * @phpstan-return array<array-key, mixed>
      */
     protected function prepareAttributes(array $attributes = []): array
     {

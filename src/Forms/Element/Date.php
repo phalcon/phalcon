@@ -18,8 +18,5 @@ namespace Phalcon\Forms\Element;
  */
 class Date extends AbstractElement
 {
-    /**
-     * @var string
-     */
     protected string $method = "inputDate";
 }

@@ -56,7 +56,7 @@ use const FILTER_VALIDATE_EMAIL;
  * );
  * ```
  *
- *
+ * ```php
  * $validator->add(
  *     "täst@example.com",
  *     new EmailValidator(
