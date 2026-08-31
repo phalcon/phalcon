@@ -112,6 +112,7 @@ abstract class AbstractFlash extends AbstractInjectionAware implements FlashInte
     /**
      * Returns the flag that defines whether to automatically use HTML or not
      *
+     */
     public function getAutomaticHtml(): bool
     {
         return $this->automaticHtml;
