@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
+use Phalcon\Contracts\Flash\FlashTypes;
 use Phalcon\Flash\Exceptions\SessionServiceUnavailable;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface;
@@ -25,6 +26,8 @@ use Phalcon\Session\ManagerInterface;
  * Class Session
  *
  * @package Phalcon\Flash
+ *
+ * @phpstan-import-type flash_session_messages from FlashTypes
  */
 class Session extends AbstractFlash
 {
@@ -33,17 +36,10 @@ class Session extends AbstractFlash
      */
     public const SESSION_KEY = "_flashMessages";
 
-    /**
-     * @var string
-     */
     protected string $sessionKey = '';
 
     /**
      * Session constructor.
-     *
-     * @param EscaperInterface|null $escaper
-     * @param ManagerInterface|null $session
-     * @param string|null           $sessionKey
      */
     public function __construct(
         EscaperInterface | null $escaper = null,
@@ -72,10 +68,10 @@ class Session extends AbstractFlash
      * @param string|null $type
      * @param bool        $remove
      *
-     * @return array
+     * @phpstan-return ($type is null ? flash_session_messages : list<mixed>)
      * @throws Exception
      */
-    public function getMessages(string | null $type = null, bool $remove = true): array
+    public function getMessages(mixed $type = null, bool $remove = true): array
     {
         return $this->getSessionMessages($remove, $type);
     }
@@ -96,9 +92,12 @@ class Session extends AbstractFlash
             null !== $this->container &&
             true === $this->container->has("session")
         ) {
-            $this->sessionService = $this->container->getShared("session");
+            /** @var ManagerInterface $session */
+            $session = $this->container->getShared("session");
 
-            return $this->sessionService;
+            $this->sessionService = $session;
+
+            return $session;
         }
 
         throw new SessionServiceUnavailable();
@@ -107,9 +106,6 @@ class Session extends AbstractFlash
     /**
      * Checks whether there are messages
      *
-     * @param string|null $type
-     *
-     * @return bool
      * @throws Exception
      */
     public function has(string | null $type = null): bool
@@ -126,10 +122,6 @@ class Session extends AbstractFlash
     /**
      * Adds a message to the session flasher
      *
-     * @param string $type
-     * @param mixed  $message
-     *
-     * @return string|null
      * @throws Exception
      */
     public function message(string $type, $message): string | null
@@ -149,8 +141,6 @@ class Session extends AbstractFlash
 
     /**
      * Prints the messages in the session flasher
-     *
-     * @param bool $remove
      *
      * @throws Exception
      */
@@ -179,7 +169,7 @@ class Session extends AbstractFlash
      * @param bool        $remove
      * @param string|null $type
      *
-     * @return array
+     * @phpstan-return ($type is null ? flash_session_messages : list<mixed>)
      * @throws Exception
      */
     protected function getSessionMessages(bool $remove, string | null $type = null): array
@@ -193,6 +183,8 @@ class Session extends AbstractFlash
         if (!is_array($messages)) {
             $messages = [];
         }
+
+        /** @var flash_session_messages $messages */
 
         if (!empty($type)) {
             if (isset($messages[$type])) {
@@ -218,9 +210,9 @@ class Session extends AbstractFlash
     /**
      * Stores the messages in session
      *
-     * @param array $messages
+     * @phpstan-param  flash_session_messages $messages
+     * @phpstan-return flash_session_messages
      *
-     * @return array
      * @throws Exception
      */
     protected function setSessionMessages(array $messages): array

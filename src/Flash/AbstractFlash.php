@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Flash;
 
-use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Contracts\Flash\FlashTypes;
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Flash\Exceptions\EscaperServiceUnavailable;
 use Phalcon\Flash\Exceptions\FlashMessageNotStringOrArray;
-use Phalcon\Flash\Traits\FlashGettersTrait;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
@@ -38,21 +37,34 @@ use const PHP_EOL;
  * $flash->error("Cannot open the file");
  *```
  *
- * Class AbstractFlash
- *
- * @package Phalcon\Flash
+ * @phpstan-import-type flash_messages from FlashTypes
+ * @phpstan-import-type flash_css_classes from FlashTypes
  */
-abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
+abstract class AbstractFlash extends AbstractInjectionAware implements FlashInterface
 {
-    use FlashGettersTrait;
-    use InjectionAwareTrait;
     use InterpolateTrait;
+
+    protected bool $autoescape = true;
+    protected bool $automaticHtml = true;
+    /**
+     * @phpstan-var flash_css_classes
+     */
+    protected array $cssClasses = [];
+    /**
+     * @phpstan-var flash_css_classes
+     */
+    protected array $cssIconClasses = [];
+    protected string $customTemplate = '';
+    protected EscaperInterface | null $escaperService = null;
+    protected bool $implicitFlush = true;
+    /**
+     * @phpstan-var flash_messages
+     */
+    protected array $messages = [];
+    protected SessionInterface | null $sessionService = null;
 
     /**
      * AbstractFlash constructor.
-     *
-     * @param EscaperInterface|null $escaper
-     * @param SessionInterface|null $session
      */
     public function __construct(
         EscaperInterface | null $escaper = null,
@@ -70,15 +82,19 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
+     * Clears accumulated messages when implicit flush is disabled
+     */
+    public function clear(): void
+    {
+        $this->messages = [];
+    }
+
+    /**
      * Shows a HTML error message
      *
      *```php
      * $flash->error("This is an error");
      *```
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function error(string $message): string | null
     {
@@ -86,9 +102,55 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     }
 
     /**
+     * Returns the flag that defines whether to automatically escape content or not
+     */
+    public function getAutoescape(): bool
+    {
+        return $this->autoescape;
+    }
+
+    /**
+     * Returns the flag that defines whether to automatically use HTML or not
+     *
+    public function getAutomaticHtml(): bool
+    {
+        return $this->automaticHtml;
+    }
+
+    /**
+     * Returns the array of the CSS classes for formatting messages. The key is
+     * the type of message and the value is the CSS class
+     *
+     * @phpstan-return flash_css_classes
+     */
+    public function getCssClasses(): array
+    {
+        return $this->cssClasses;
+    }
+
+    /**
+     * Returns the array of the icon CSS classes for formatting messages. The
+     * key is the type of message and the value is the icon CSS class
+     *
+     * @phpstan-return flash_css_classes
+     */
+    public function getCssIconClasses(): array
+    {
+        return $this->cssIconClasses;
+    }
+
+    /**
+     * Returns the custom template for formatting messages
+
+     */
+    public function getCustomTemplate(): string
+    {
+        return $this->customTemplate;
+    }
+
+    /**
      * Returns the Escaper Service
      *
-     * @return EscaperInterface
      * @throws Exception
      */
     public function getEscaperService(): EscaperInterface
@@ -101,9 +163,12 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             null !== $this->container &&
             true === $this->container->has("escaper")
         ) {
-            $this->escaperService = $this->container->getShared("escaper");
+            /** @var EscaperInterface $escaper */
+            $escaper = $this->container->getShared("escaper");
 
-            return $this->escaperService;
+            $this->escaperService = $escaper;
+
+            return $escaper;
         }
 
         throw new EscaperServiceUnavailable();
@@ -113,13 +178,8 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * Outputs a message. Delivery semantics differ per implementation:
      * `Direct` renders and emits immediately, `Session` stores the raw
      * message for output on a later request.
-     *
-     * @param string $type
-     * @param mixed  $message
-     *
-     * @return string|null
      */
-    abstract public function message(string $type, $message): string | null;
+    abstract public function message(string $type, mixed $message): string | null;
 
     /**
      * Shows a HTML notice/information message
@@ -127,10 +187,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *```php
      * $flash->notice("This is an information");
      *```
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function notice(string $message): string | null
     {
@@ -144,10 +200,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * $flash->outputMessage("error", $message);
      *```
      *
-     * @param string       $type
-     * @param array|string $message
-     *
-     * @return string|null
      * @throws Exception
      */
     public function outputMessage(string $type, mixed $message): string | null
@@ -165,6 +217,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
             $message = [$message];
         }
 
+        /** @var array<array-key, string> $message */
         foreach ($message as $item) {
             $prepared = $this->prepareEscapedMessage($item);
             $html     = $this->prepareHtmlMessage($type, $prepared);
@@ -186,10 +239,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 
     /**
      * Set the autoescape mode in generated HTML
-     *
-     * @param bool $autoescape
-     *
-     * @return $this
      */
     public function setAutoescape(bool $autoescape): static
     {
@@ -200,10 +249,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 
     /**
      * Set if the output must be implicitly formatted with HTML
-     *
-     * @param bool $automaticHtml
-     *
-     * @return $this
      */
     public function setAutomaticHtml(bool $automaticHtml): static
     {
@@ -215,9 +260,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     /**
      * Set an array with CSS classes to format the messages
      *
-     * @param array $cssClasses
-     *
-     * @return $this
+     * @phpstan-param flash_css_classes $cssClasses
      */
     public function setCssClasses(array $cssClasses): static
     {
@@ -229,9 +272,7 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     /**
      * Set an array with CSS classes to format the icon messages
      *
-     * @param array $cssIconClasses
-     *
-     * @return $this
+     * @phpstan-param flash_css_classes $cssIconClasses
      */
     public function setCssIconClasses(array $cssIconClasses): static
     {
@@ -242,10 +283,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 
     /**
      * Set a custom template for showing the messages
-     *
-     * @param string $customTemplate
-     *
-     * @return $this
      */
     public function setCustomTemplate(string $customTemplate): static
     {
@@ -256,10 +293,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
 
     /**
      * Sets the Escaper Service
-     *
-     * @param EscaperInterface $escaperService
-     *
-     * @return $this
      */
     public function setEscaperService(EscaperInterface $escaperService): static
     {
@@ -275,10 +308,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * Note: `output()` is an echo API and requires implicit flush to remain
      * enabled (the default). With implicit flush disabled, `message()` returns
      * the rendered string while `output()` does not emit it.
-     *
-     * @param bool $implicitFlush
-     *
-     * @return $this
      */
     public function setImplicitFlush(bool $implicitFlush): static
     {
@@ -293,10 +322,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *```php
      * $flash->success("The process was finished successfully");
      *```
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function success(string $message): string | null
     {
@@ -309,10 +334,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      *```php
      * $flash->warning("Hey, this is important");
      *```
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function warning(string $message): string | null
     {
@@ -323,34 +344,22 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
      * Checks the collection and returns the content as a string
      * (array is joined)
      *
-     * @param array  $collection
-     * @param string $type
-     *
-     * @return string
+     * @phpstan-param flash_css_classes $collection
      */
     private function checkClasses(array $collection, string $type): string
     {
         $content = $collection[$type] ?? '';
 
-        if (!empty($content)) {
-            if (!is_array($content)) {
-                $content = [$content];
-            }
-
-            $content = implode(' ', $content);
+        if (!is_array($content)) {
+            $content = [$content];
         }
 
-        return $content;
+        return implode(' ', $content);
     }
 
     /**
      * Returns the template for the CSS classes (with icon classes). It will
      * either be the custom one (defined) or the default
-     *
-     * @param string $cssClasses
-     * @param string $cssIconClasses
-     *
-     * @return string
      */
     private function getTemplate(string $cssClasses, string $cssIconClasses): string
     {
@@ -381,11 +390,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     /**
      * Returns the message escaped if the autoEscape is true, otherwise the
      * original message is returned
-     *
-     * @param string $message
-     *
-     * @return string
-     * @throws Exception
      */
     private function prepareEscapedMessage(string $message): string
     {
@@ -401,11 +405,6 @@ abstract class AbstractFlash implements FlashInterface, InjectionAwareInterface
     /**
      * Prepares the HTML output for the message. If automaticHtml is not set
      * then the original message is returned
-     *
-     * @param string $type
-     * @param string $message
-     *
-     * @return string
      */
     private function prepareHtmlMessage(string $type, string $message): string
     {
