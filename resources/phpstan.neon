@@ -123,3 +123,11 @@ parameters:
             message: "#(Call to function is_array\\(\\) with array<array<mixed>\\|string> will always evaluate to true|Result of && is always false)#"
             path: ../src/Forms/Element/AbstractElement.php
             reportUnmatched: false
+        # `ElementInterface::label()` declares no parameter, as in the Zephir
+        # source, while `AbstractElement::label()` takes the attributes and
+        # `Form::label()` passes them. The interface is widened in the next
+        # major.
+        -
+            message: "#Method Phalcon\\\\Forms\\\\Element\\\\ElementInterface::label\\(\\) invoked with 1 parameter, 0 required#"
+            path: ../src/Forms/Form.php
+            reportUnmatched: false
