@@ -649,8 +649,8 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @phpstan-param forms_whitelist $whitelist
      */
     public function isValid(
-        array $data = [],
-        ?object $entity = null,
+        mixed $data = null,
+        mixed $entity = null,
         array $whitelist = []
     ): bool {
         if (empty($this->elements)) {
@@ -892,7 +892,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @param object $entity
      */
-    public function setEntity(object $entity): static
+    public function setEntity(mixed $entity): static
     {
         $this->entity = $entity;
 

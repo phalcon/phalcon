@@ -57,7 +57,7 @@ class FormsLocator
      *
      * @phpstan-var forms_locator_elements
      */
-    private array $elements;
+    private array $elements = [];
 
     /**
      * Form name → factory callable.
