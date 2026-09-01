@@ -29,7 +29,7 @@ class IntVal implements Sanitizer
      *
      * @return int
      */
-    public function __invoke(mixed $input): int
+    public function __invoke(mixed $input)
     {
         return (int)filter_var($input, FILTER_SANITIZE_NUMBER_INT);
     }

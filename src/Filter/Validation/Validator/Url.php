@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 
@@ -53,6 +54,8 @@ use const FILTER_VALIDATE_URL;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class Url extends AbstractValidator
 {
@@ -64,7 +67,7 @@ class Url extends AbstractValidator
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -74,18 +77,28 @@ class Url extends AbstractValidator
     /**
      * Executes the validation
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         $value = $validation->getValue($field);
         if (true === $this->allowEmpty($field, $value)) {
             return true;
         }
 
         if (isset($this->options["options"])) {
+            /** @phpstan-var array<string, mixed>|int $filterOptions */
+            $filterOptions = $this->options["options"];
+
             $result = filter_var(
                 $value,
                 FILTER_VALIDATE_URL,
-                $this->options["options"]
+                $filterOptions
             );
         } else {
             $result = filter_var($value, FILTER_VALIDATE_URL);

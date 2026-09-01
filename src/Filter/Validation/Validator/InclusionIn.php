@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exceptions\InvalidDomainOption;
@@ -62,6 +63,8 @@ use function is_bool;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class InclusionIn extends AbstractValidator
 {
@@ -73,7 +76,7 @@ class InclusionIn extends AbstractValidator
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -84,12 +87,19 @@ class InclusionIn extends AbstractValidator
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         $value = $validation->getValue($field);
         if ($this->allowEmpty($field, $value)) {
             return true;
@@ -98,6 +108,7 @@ class InclusionIn extends AbstractValidator
         /**
          * A domain is an array with a list of valid values
          */
+        /** @phpstan-var array<array-key, mixed>|null $domain */
         $domain = $this->getOption("domain");
 
         if (isset($domain[$field])) {
@@ -127,6 +138,8 @@ class InclusionIn extends AbstractValidator
 
         /**
          * Check if the value is contained by the array
+         *
+         * @phpstan-var array<array-key, string> $domain
          */
         if (!in_array($value, $domain, $strict)) {
             $replacePairs = [

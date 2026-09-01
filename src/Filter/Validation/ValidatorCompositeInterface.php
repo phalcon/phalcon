@@ -13,15 +13,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 
 /**
  * This is a base class for combined fields validators
+ *
+ * @phpstan-import-type filter_validators from FilterTypes
  */
 interface ValidatorCompositeInterface
 {
     /**
      * Executes the validation
+     *
+     * @phpstan-return filter_validators
      */
     public function getValidators(): array;
 
@@ -29,9 +34,9 @@ interface ValidatorCompositeInterface
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool;
+    public function validate(Validation $validation, mixed $field): bool;
 }

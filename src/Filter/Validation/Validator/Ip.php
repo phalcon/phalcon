@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
@@ -76,6 +77,8 @@ use const FILTER_VALIDATE_IP;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class Ip extends AbstractValidator
 {
@@ -90,7 +93,7 @@ class Ip extends AbstractValidator
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -101,31 +104,41 @@ class Ip extends AbstractValidator
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         $value = $validation->getValue($field);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }
 
+        /** @phpstan-var array<string, int>|int $version */
         $version = $this->getOption("version", FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6);
         if (is_array($version)) {
             $version = $version[$field];
         }
 
-        $allowPrivate = $this->getOption("allowPrivate") ? 0 : FILTER_FLAG_NO_PRIV_RANGE;
+        $allowPrivate = $this->getOption("allowPrivate", false);
         if (is_array($allowPrivate)) {
             $allowPrivate = $allowPrivate[$field];
         }
+        $allowPrivate = $allowPrivate ? 0 : FILTER_FLAG_NO_PRIV_RANGE;
 
-        $allowReserved = $this->getOption("allowReserved") ? 0 : FILTER_FLAG_NO_RES_RANGE;
+        $allowReserved = $this->getOption("allowReserved", false);
         if (is_array($allowReserved)) {
             $allowReserved = $allowReserved[$field];
         }
+        $allowReserved = $allowReserved ? 0 : FILTER_FLAG_NO_RES_RANGE;
 
         $options = [
             "options" => [

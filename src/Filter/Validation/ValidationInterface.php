@@ -13,24 +13,30 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
 
 /**
  * Interface for the Phalcon\Filter\Validation component
+ *
+ * @phpstan-import-type filter_validation_labels from FilterTypes
+ * @phpstan-import-type filter_validation_validators from FilterTypes
+ * @phpstan-import-type filter_validation_whitelist from FilterTypes
+ * @phpstan-import-type filter_validators from FilterTypes
  */
 interface ValidationInterface
 {
     /**
      * Adds a validator to a field
      *
-     * @param array|string       $field
+     * @param mixed              $field
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
      */
     public function add(
-        array | string $field,
+        mixed $field,
         ValidatorInterface $validator
     ): ValidationInterface;
 
@@ -49,24 +55,25 @@ interface ValidationInterface
      * Assigns the data to an entity
      * The entity is used to obtain the validation values
      *
-     * @param object        $entity
-     * @param array|object|null  $data
-     * @param array         $whitelist
+     * @param mixed $entity
+     * @param mixed $data
+     *
+     * @phpstan-param filter_validation_whitelist $whitelist
      *
      * @return ValidationInterface
      */
     public function bind(
-        object $entity,
-        array | object | null $data,
+        mixed $entity,
+        mixed $data,
         array $whitelist = []
     ): ValidationInterface;
 
     /**
      * Returns the bound entity
      *
-     * @return object|null
+     * @return mixed
      */
-    public function getEntity(): object | null;
+    public function getEntity(): mixed;
 
     /**
      * Returns all the filters or a specific one
@@ -96,7 +103,7 @@ interface ValidationInterface
     /**
      * Returns the validators added to the validation
      *
-     * @return array
+     * @phpstan-return filter_validation_validators
      */
     public function getValidators(): array;
 
@@ -112,13 +119,13 @@ interface ValidationInterface
     /**
      * Alias of `add` method
      *
-     * @param array|string       $field
+     * @param mixed              $field
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
      */
     public function rule(
-        array | string $field,
+        mixed $field,
         ValidatorInterface $validator
     ): ValidationInterface;
 
@@ -126,7 +133,8 @@ interface ValidationInterface
      * Adds the validators to a field
      *
      * @param string $field
-     * @param array  $validators
+     *
+     * @phpstan-param filter_validators $validators
      *
      * @return ValidationInterface
      */
@@ -139,34 +147,35 @@ interface ValidationInterface
      * Adds filters to the field
      *
      * @param string       $field
-     * @param array|string $filters
+     * @param mixed        $filters
      *
      * @return ValidationInterface
      */
     public function setFilters(
         string $field,
-        array | string $filters
+        mixed $filters
     ): ValidationInterface;
 
     /**
      * Adds labels for fields
      *
-     * @param array $labels
+     * @phpstan-param filter_validation_labels $labels
      */
     public function setLabels(array $labels): void;
 
     /**
      * Validate a set of data according to a set of rules
      *
-     * @param array|object|null $data
-     * @param object|null       $entity
-     * @param array             $whitelist
+     * @param mixed $data
+     * @param mixed $entity
+     *
+     * @phpstan-param filter_validation_whitelist $whitelist
      *
      * @return false|Messages
      */
     public function validate(
-        array | object | null $data = null,
-        object | null $entity = null,
+        mixed $data = null,
+        mixed $entity = null,
         array $whitelist = []
     ): false | Messages;
 }

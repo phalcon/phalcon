@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Traits;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Exceptions\NoValidatorsInComposite;
@@ -22,32 +23,36 @@ use function get_class;
 /**
  * Shared validator collection state and combined validation for composite
  * validators.
+ *
+ * @phpstan-import-type filter_validators from FilterTypes
  */
 trait ValidatorCompositeTrait
 {
     /**
-     * @var array
+     * @phpstan-var filter_validators|null
+     *
+     * @todo Use a default [] once Zephir supports array trait defaults
      */
-    protected array $validators = [];
+    protected array | null $validators = null;
 
     /**
-     * @return array
+     * @phpstan-return filter_validators
      */
     public function getValidators(): array
     {
-        return $this->validators;
+        return (array)$this->validators;
     }
 
     /**
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      * @throws Exception
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
         if (empty($this->getValidators())) {
             throw new NoValidatorsInComposite(get_class($this));

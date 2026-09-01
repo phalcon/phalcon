@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
+use Phalcon\Contracts\Filter\FilterTypes;
+
 /**
  * Class FilterFactory
  *
  * @package Phalcon\Filter
+ *
+ * @phpstan-import-type filter_mapper from FilterTypes
  */
 class FilterFactory
 {
@@ -35,6 +39,8 @@ class FilterFactory
      * Returns the available adapters
      *
      * @return string[]
+     *
+     * @phpstan-return filter_mapper
      */
     protected function getServices(): array
     {

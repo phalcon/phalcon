@@ -30,7 +30,7 @@ class Email implements Sanitizer
      *
      * @return string
      */
-    public function __invoke(mixed $input): string
+    public function __invoke(mixed $input)
     {
         return (string)filter_var(
             $input,

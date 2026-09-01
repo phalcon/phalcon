@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 
@@ -56,6 +57,8 @@ use function is_array;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class Identical extends AbstractValidator
 {
@@ -67,7 +70,7 @@ class Identical extends AbstractValidator
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -78,12 +81,19 @@ class Identical extends AbstractValidator
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         $accepted = false;
         $valid    = false;
         $value    = $validation->getValue($field);

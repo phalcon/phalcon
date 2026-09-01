@@ -79,7 +79,7 @@ class Di extends stdClass implements DiInterface
      *
      * @var object|null
      */
-    protected static object | null $defaultContainer = null;
+    protected static DiInterface | null $defaultContainer = null;
 
     /**
      * List of service aliases
@@ -152,9 +152,9 @@ class Di extends stdClass implements DiInterface
     /**
      * Return the latest DI created
      *
-     * @return object|null
+     * @return DiInterface|null
      */
-    public static function getDefault(): object | null
+    public static function getDefault(): DiInterface | null
     {
         return self::$defaultContainer;
     }
@@ -173,11 +173,11 @@ class Di extends stdClass implements DiInterface
      * Set a default dependency injection container to be obtained into static
      * methods
      *
-     * @param object $container
+     * @param DiInterface $container
      *
      * @return void
      */
-    public static function setDefault(object $container): void
+    public static function setDefault(DiInterface $container): void
     {
         self::$defaultContainer = $container;
     }
@@ -211,12 +211,12 @@ class Di extends stdClass implements DiInterface
      * Resolves the service based on its configuration
      *
      * @param string     $name
-     * @param array|null $parameters
+     * @param mixed $parameters
      *
      * @return mixed
      * @throws Exception
      */
-    public function get(string $name, array | null $parameters = null): mixed
+    public function get(string $name, mixed $parameters = null): mixed
     {
         $instance = null;
         $service  = null;
@@ -366,12 +366,12 @@ class Di extends stdClass implements DiInterface
      * requests for this service will return the same instance
      *
      * @param string     $name
-     * @param array|null $parameters
+     * @param mixed $parameters
      *
      * @return mixed
      * @throws DiException
      */
-    public function getShared(string $name, array | null $parameters = null): mixed
+    public function getShared(string $name, mixed $parameters = null): mixed
     {
         /**
          * Resolve the alias, if any

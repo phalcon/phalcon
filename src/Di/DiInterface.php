@@ -23,7 +23,7 @@ interface DiInterface extends ArrayAccess
     /**
      * Return the last DI created
      */
-    public static function getDefault(): object | null;
+    public static function getDefault(): DiInterface | null;
 
     /**
      * Resets the internal default DI
@@ -34,9 +34,9 @@ interface DiInterface extends ArrayAccess
      * Set a default dependency injection container to be obtained into static
      * methods
      *
-     * @param object $container
+     * @param DiInterface $container
      */
-    public static function setDefault(object $container): void;
+    public static function setDefault(DiInterface $container): void;
     /**
      * Attempts to register a service in the services container
      * Only is successful if a service hasn't been registered previously
@@ -61,11 +61,11 @@ interface DiInterface extends ArrayAccess
      * Resolves the service based on its configuration
      *
      * @param string     $name
-     * @param array|null $parameters
+     * @param mixed $parameters
      *
      * @return mixed
      */
-    public function get(string $name, array | null $parameters = null): mixed;
+    public function get(string $name, mixed $parameters = null): mixed;
 
     /**
      * Returns a service definition without resolving
@@ -96,11 +96,11 @@ interface DiInterface extends ArrayAccess
      * Returns a shared service based on their configuration
      *
      * @param string     $name
-     * @param array|null $parameters
+     * @param mixed $parameters
      *
      * @return mixed
      */
-    public function getShared(string $name, array | null $parameters = null): mixed;
+    public function getShared(string $name, mixed $parameters = null): mixed;
 
     /**
      * Check whether the DI contains a service by a name

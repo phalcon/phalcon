@@ -13,10 +13,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
+use Phalcon\Contracts\Filter\FilterTypes;
+use Phalcon\Di\Di;
 use Phalcon\Di\Exception as DiException;
 use Phalcon\Di\Injectable;
 use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
 use Phalcon\Filter\Validation\Exception as ValidationException;
+use Phalcon\Filter\Validation\Exceptions\FilterServiceUnavailable;
+use Phalcon\Filter\Validation\Exceptions\InvalidFieldType;
+use Phalcon\Filter\Validation\Exceptions\InvalidFilterService;
+use Phalcon\Filter\Validation\Exceptions\InvalidValidationData;
+use Phalcon\Filter\Validation\Exceptions\InvalidValidator;
+use Phalcon\Filter\Validation\Exceptions\InvalidValidatorScope;
+use Phalcon\Filter\Validation\Exceptions\NoDataToValidate;
+use Phalcon\Filter\Validation\Exceptions\ValidationEntityNotObject;
 use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Messages\MessageInterface;
@@ -34,6 +44,16 @@ use function property_exists;
 
 /**
  * Allows to validate data using custom or built-in validators
+ *
+ * @phpstan-import-type filter_validation_combined_validators from FilterTypes
+ * @phpstan-import-type filter_validation_data from FilterTypes
+ * @phpstan-import-type filter_validation_default_messages from FilterTypes
+ * @phpstan-import-type filter_validation_filters from FilterTypes
+ * @phpstan-import-type filter_validation_labels from FilterTypes
+ * @phpstan-import-type filter_validation_validators from FilterTypes
+ * @phpstan-import-type filter_validation_values from FilterTypes
+ * @phpstan-import-type filter_validation_whitelist from FilterTypes
+ * @phpstan-import-type filter_validators from FilterTypes
  */
 class Validation extends Injectable implements ValidationInterface
 {
@@ -42,17 +62,17 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Default messages for validators, keyed by validator class name
      *
-     * @var array
+     * @phpstan-var filter_validation_default_messages
      */
     protected static array $defaultMessages = [];
 
     /**
-     * @var array
+     * @phpstan-var filter_validation_combined_validators
      */
     protected array $combinedFieldsValidators = [];
 
     /**
-     * @var array|object
+     * @phpstan-var filter_validation_data
      */
     protected array | object | null $data = null;
 
@@ -62,12 +82,12 @@ class Validation extends Injectable implements ValidationInterface
     protected object | null $entity = null;
 
     /**
-     * @var array
+     * @phpstan-var filter_validation_filters
      */
     protected array $filters = [];
 
     /**
-     * @var array
+     * @phpstan-var filter_validation_labels
      */
     protected array $labels = [];
 
@@ -79,26 +99,26 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * List of validators
      *
-     * @var array
+     * @phpstan-var filter_validation_validators
      */
     protected array $validators = [];
 
     /**
      * Calculated values
      *
-     * @var array
+     * @phpstan-var filter_validation_values
      */
     protected array $values = [];
 
     /**
-     * @var array
+     * @phpstan-var filter_validation_whitelist
      */
     protected array $whitelist = [];
 
     /**
      * Phalcon\Filter\Validation constructor
      *
-     * @param array $validators
+     * @phpstan-param filter_validation_validators $validators
      */
     public function __construct(array $validators = [])
     {
@@ -146,9 +166,9 @@ class Validation extends Injectable implements ValidationInterface
      * own message; a message set on the validator instance still wins. Calls
      * are merged, so defaults can be registered incrementally.
      *
-     * @param array $messages
+     * @phpstan-param filter_validation_default_messages $messages
      *
-     * @return array
+     * @phpstan-return filter_validation_default_messages
      */
     public static function setDefaultMessages(array $messages = []): array
     {
@@ -160,19 +180,25 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Adds a validator to a field
      *
-     * @param array|string       $field
+     * @param mixed              $field
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
+     *
+     * @phpstan-return static
      * @throws ValidationException
      */
     public function add(
-        array | string $field,
+        mixed $field,
         ValidatorInterface $validator
     ): static {
         if (is_array($field)) {
-            // Uniqueness validator for combination of fields is
-            // handled differently
+            /**
+             * A field list holds field names. Uniqueness validator for
+             * combination of fields is handled differently
+             *
+             * @var array<array-key, string> $field
+             */
             if ($validator instanceof AbstractCombinedFieldsValidator) {
                 $this->combinedFieldsValidators[] = [$field, $validator];
             } else {
@@ -180,8 +206,10 @@ class Validation extends Injectable implements ValidationInterface
                     $this->validators[$singleField][] = $validator;
                 }
             }
-        } else {
+        } elseif (is_string($field)) {
             $this->validators[$field][] = $validator;
+        } else {
+            throw new InvalidFieldType();
         }
 
         return $this;
@@ -193,6 +221,8 @@ class Validation extends Injectable implements ValidationInterface
      * @param MessageInterface $message
      *
      * @return ValidationInterface
+     *
+     * @phpstan-return static
      */
     public function appendMessage(
         MessageInterface $message
@@ -214,19 +244,23 @@ class Validation extends Injectable implements ValidationInterface
      * $validation->validate();
      * ```
      *
-     * @param object|null $entity the entity object to assign data to
-     * @param array|object|null $data the data that needs to be validated
-     * @param array $whitelist only allow these fields to be mutated when entity is used
+     * @param mixed $entity the entity object to assign data to
+     * @param mixed $data the data that needs to be validated
+     *
+     * @phpstan-param filter_validation_data      $data
+     * @phpstan-param filter_validation_whitelist $whitelist
+     *
      * @return ValidationInterface
+     *
+     * @phpstan-return static
      */
     public function bind(
-        object | null $entity,
-        array | object | null $data,
+        mixed $entity,
+        mixed $data,
         array $whitelist = []
     ): static {
-        $this->setEntity($entity);
-
         $this->data = $data;
+        $this->setEntity($entity);
 
         // if data is not an array / object, entity is null, or data is empty, then no need to proceed further
         if (
@@ -237,8 +271,33 @@ class Validation extends Injectable implements ValidationInterface
             return $this;
         }
 
-        $filterService = $this->getDI()->get('filter');
+        /**
+         * `setEntity()` throws unless the value is an object, so the local
+         * holds the same object as the property from here on.
+         *
+         * @phpstan-var object $entity
+         */
+        $container = $this->getDI();
 
+        if (null === $container) {
+            $container = Di::getDefault();
+
+            if (null === $container) {
+                throw new FilterServiceUnavailable();
+            }
+        }
+
+        $filterService = $container->getShared("filter");
+
+        if (!is_object($filterService)) {
+            throw new InvalidFilterService();
+        }
+
+        /**
+         * Mirrors the `<FilterInterface>` cast in the Zephir source.
+         *
+         * @var FilterInterface $filterService
+         */
         if (empty($whitelist)) {
             $whitelist = $this->whitelist;
         }
@@ -269,11 +328,11 @@ class Validation extends Injectable implements ValidationInterface
              */
             $method = "set" . $this->toCamelize($field);
 
-            if (method_exists($this->entity, $method)) {
-                $this->entity->{$method}($value);
-            } elseif (method_exists($this->entity, "writeAttribute")) {
-                $this->entity->writeAttribute($field, $value);
-            } elseif (property_exists($this->entity, $field)) {
+            if (method_exists($entity, $method)) {
+                $entity->{$method}($value);
+            } elseif (method_exists($entity, "writeAttribute")) {
+                $entity->writeAttribute($field, $value);
+            } elseif (property_exists($entity, $field)) {
                 $entity->{$field} = $value;
             }
         }
@@ -294,9 +353,9 @@ class Validation extends Injectable implements ValidationInterface
     }
 
     /**
-     * @return array|object
+     * @return mixed
      */
-    public function getData(): array | object
+    public function getData(): mixed
     {
         return $this->data;
     }
@@ -304,9 +363,9 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Returns the bound entity
      *
-     * @return object|null
+     * @return mixed
      */
-    public function getEntity(): object | null
+    public function getEntity(): mixed
     {
         return $this->entity;
     }
@@ -330,16 +389,22 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Get label for field
      *
-     * @param array|string $field
+     * @param mixed        $field
      *
      * @return string
      */
-    public function getLabel(array | string $field): string
+    public function getLabel(mixed $field): string
     {
         if (is_array($field)) {
+            /** @phpstan-var array<array-key, string> $field */
             return implode(", ", $field);
         }
 
+        /**
+         * A single field is a field name.
+         *
+         * @var string $field
+         */
         return $this->labels[$field] ?? $field;
     }
 
@@ -356,7 +421,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Returns the validators added to the validation
      *
-     * @return array
+     * @phpstan-return filter_validation_validators
      */
     public function getValidators(): array
     {
@@ -384,8 +449,11 @@ class Validation extends Injectable implements ValidationInterface
                 $value        = $this->getValueByData($this->data, $field);
             }
         } else {
-            if (null === $this->data) {
-                throw new ValidationException("There is no data to validate");
+            if (
+                gettype($this->data) != "array" &&
+                gettype($this->data) != "object"
+            ) {
+                throw new NoDataToValidate();
             }
 
             $value = $this->getValueByData($this->data, $field);
@@ -400,11 +468,27 @@ class Validation extends Injectable implements ValidationInterface
             !empty($this->filters[$field])
         ) {
             $fieldFilters = $this->filters[$field];
-            /**
-             * This will throw an exception if the service is not there
-             */
-            $filterService = $this->getDI()->get('filter');
+            $container    = $this->getDI();
 
+            if (null === $container) {
+                $container = Di::getDefault();
+
+                if (null === $container) {
+                    throw new FilterServiceUnavailable();
+                }
+            }
+
+            $filterService = $container->getShared("filter");
+
+            if (!is_object($filterService)) {
+                throw new InvalidFilterService();
+            }
+
+            /**
+             * Mirrors the `<FilterInterface>` cast in the Zephir source.
+             *
+             * @var FilterInterface $filterService
+             */
             $value = $filterService->sanitize($value, $fieldFilters);
 
             /**
@@ -436,13 +520,13 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Gets the value to validate in the array/object data source
      *
-     * @param array|object $data
+     * @param mixed        $data
      * @param string       $field
      *
      * @return mixed
      */
     public function getValueByData(
-        array | object $data,
+        mixed $data,
         string $field
     ): mixed {
         if (isset($this->values[$field])) {
@@ -459,15 +543,22 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Gets the value to validate in the object entity source
      *
-     * @param object $entity
+     * @param mixed  $entity
      * @param string $field
      *
      * @return mixed
      */
     public function getValueByEntity(
-        object $entity,
+        mixed $entity,
         string $field
     ): mixed {
+        /**
+         * The entity is only read when `getValue()` has one, so it is an
+         * object here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var object $entity
+         */
         $method = "get" . $this->toCamelize($field);
 
         if (true === method_exists($entity, $method)) {
@@ -484,15 +575,17 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Alias of `add` method
      *
-     * @param array|string       $field
+     * @param mixed              $field
      * @param ValidatorInterface $validator
      *
      * @return ValidationInterface
+     *
+     * @phpstan-return static
      * @throws ValidationException
      * @todo remove this
      */
     public function rule(
-        array | string $field,
+        mixed $field,
         ValidatorInterface $validator
     ): static {
         return $this->add($field, $validator);
@@ -501,14 +594,17 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Adds the validators to a field
      *
-     * @param array|string $field
-     * @param array        $validators
+     * @param mixed        $field
+     *
+     * @phpstan-param filter_validators $validators
      *
      * @return ValidationInterface
+     *
+     * @phpstan-return static
      * @throws ValidationException
      */
     public function rules(
-        array | string $field,
+        mixed $field,
         array $validators
     ): static {
         foreach ($validators as $validator) {
@@ -523,34 +619,46 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Sets the bound entity
      *
-     * @param object|null $entity
+     * @param mixed       $entity
      *
      * @return void
      */
-    public function setEntity(object | null $entity): void
+    public function setEntity(mixed $entity): void
     {
+        if (!is_object($entity)) {
+            throw new ValidationEntityNotObject();
+        }
+
         $this->entity = $entity;
     }
 
     /**
      * Adds filters to the field
      *
-     * @param array|string $field
-     * @param array|string $filters
+     * @param mixed        $field
+     * @param mixed        $filters
      *
      * @return ValidationInterface
+     *
+     * @phpstan-return static
      */
     public function setFilters(
-        array | string $field,
-        array | string $filters
+        mixed $field,
+        mixed $filters
     ): static {
-        $fields = $field;
-        if (!is_array($field)) {
-            $fields = [$field];
-        }
-
-        foreach ($fields as $singleField) {
-            $this->filters[$singleField] = $filters;
+        if (is_array($field)) {
+            /**
+             * A field list holds field names.
+             *
+             * @var array<array-key, string> $field
+             */
+            foreach ($field as $singleField) {
+                $this->filters[$singleField] = $filters;
+            }
+        } elseif (is_string($field)) {
+            $this->filters[$field] = $filters;
+        } else {
+            throw new InvalidFieldType();
         }
 
         return $this;
@@ -559,7 +667,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Adds labels for fields
      *
-     * @param array $labels
+     * @phpstan-param filter_validation_labels $labels
      */
     public function setLabels(array $labels): void
     {
@@ -569,7 +677,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Sets the validator array
      *
-     * @param array $validators
+     * @phpstan-param filter_validation_validators $validators
      *
      * @return $this
      */
@@ -599,16 +707,17 @@ class Validation extends Injectable implements ValidationInterface
      * $validation->validate($_POST, $entity, $fields);
      * ```
      *
-     * @param array|object|null $data the data that needs to be validated
-     * @param object|null $entity the entity object to assign data to
-     * @param array $whitelist only allow these fields to be mutated when entity is used
+     * @param mixed $data the data that needs to be validated
+     * @param mixed $entity the entity object to assign data to
+     *
+     * @phpstan-param filter_validation_whitelist $whitelist
      *
      * @return false|Messages
      * @throws ValidationException
      */
     public function validate(
-        array | object | null $data = null,
-        object | null $entity = null,
+        mixed $data = null,
+        mixed $entity = null,
         array $whitelist = []
     ): false | Messages {
         /**
@@ -623,6 +732,13 @@ class Validation extends Injectable implements ValidationInterface
 
         if (null !== $data) {
             // if data is provided
+            if (
+                gettype($data) != "array" &&
+                gettype($data) != "object"
+            ) {
+                throw new InvalidValidationData();
+            }
+
             $this->data = $data;
         } elseif (!empty($this->data)) {
             // else, if data === null, but we have this->data from bind(), reuse this->data
@@ -639,22 +755,31 @@ class Validation extends Injectable implements ValidationInterface
          */
         if (
             true === method_exists($this, "beforeValidation") &&
-            false === $this->beforeValidation($data, $entity)
+            false === $this->beforeValidation(
+                $data,
+                $this->entity,
+                $this->messages
+            )
         ) {
             return false;
         }
 
         foreach ($this->validators as $field => $validators) {
+            /**
+             * Each entry holds the validators registered for the field.
+             *
+             * @var iterable<array-key, mixed> $validators
+             */
             foreach ($validators as $validator) {
                 if (!is_object($validator)) {
-                    throw new ValidationException(
-                        "One of the validators is not valid"
-                    );
+                    throw new InvalidValidator();
                 }
 
                 /**
                  * Call internal validations, if it returns true, then skip the
                  * current validator
+                 *
+                 * @phpstan-var ValidatorInterface $validator
                  */
                 if (true === $this->preChecking($field, $validator)) {
                     continue;
@@ -674,19 +799,21 @@ class Validation extends Injectable implements ValidationInterface
 
         foreach ($this->combinedFieldsValidators as $scope) {
             if (!is_array($scope)) {
-                throw new ValidationException("The validator scope is not valid");
+                throw new InvalidValidatorScope();
             }
 
             $field     = $scope[0];
             $validator = $scope[1];
 
             if (!is_object($validator)) {
-                throw new ValidationException("One of the validators is not valid");
+                throw new InvalidValidator();
             }
 
             /**
              * Call internal validations, if it returns true, then skip the
              * current validator
+             *
+             * @phpstan-var ValidatorInterface $validator
              */
             if (true === $this->preChecking($field, $validator)) {
                 continue;
@@ -707,7 +834,7 @@ class Validation extends Injectable implements ValidationInterface
          * Get the messages generated by the validators
          */
         if (true === method_exists($this, "afterValidation")) {
-            $this->afterValidation($data, $entity);
+            $this->afterValidation($data, $this->entity, $this->messages);
         }
 
         return $this->messages;
@@ -716,14 +843,14 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Internal validations, if it returns true, then skip the current validator
      *
-     * @param array|string       $field
+     * @param mixed              $field
      * @param ValidatorInterface $validator
      *
      * @return bool
      * @throws ValidationException
      */
     protected function preChecking(
-        array | string $field,
+        mixed $field,
         ValidatorInterface $validator
     ): bool {
         $results = [];
@@ -739,6 +866,7 @@ class Validation extends Injectable implements ValidationInterface
                 return true;
             }
         } else {
+            /** @phpstan-var string $field */
             $allowEmpty = $validator->getOption("allowEmpty", false);
 
             if ($allowEmpty) {
@@ -747,7 +875,10 @@ class Validation extends Injectable implements ValidationInterface
                  * (AbstractValidator::isAllowEmpty() or an override)
                  */
                 if (true === method_exists($validator, "isAllowEmpty")) {
-                    return $validator->isAllowEmpty($this, $field);
+                    /** @phpstan-var bool $isAllowEmpty */
+                    $isAllowEmpty = $validator->isAllowEmpty($this, $field);
+
+                    return $isAllowEmpty;
                 }
 
                 /**

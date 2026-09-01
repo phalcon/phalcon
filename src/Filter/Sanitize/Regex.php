@@ -30,9 +30,9 @@ class Regex implements Sanitizer
      * @return string|string[]|null
      */
     public function __invoke(
-        array | string $input,
-        array | string $pattern,
-        array | string $replace
+        mixed $input,
+        mixed $pattern,
+        mixed $replace
     ) {
         return preg_replace($pattern, $replace, $input);
     }

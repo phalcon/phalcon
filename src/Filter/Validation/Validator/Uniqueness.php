@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
+use Phalcon\Di\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractCombinedFieldsValidator;
 use Phalcon\Filter\Validation\Exception;
@@ -20,7 +23,9 @@ use Phalcon\Filter\Validation\Exceptions\UniquenessConversionMustBeArray;
 use Phalcon\Filter\Validation\Exceptions\UniquenessModelRequired;
 use Phalcon\Filter\Validation\Exceptions\UniquenessOnlyForPhalconModel;
 use Phalcon\Messages\Message;
+use Phalcon\Mvc\EntityInterface;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
 
@@ -99,6 +104,12 @@ use function range;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_uniqueness_column_map from FilterTypes
+ * @phpstan-import-type filter_uniqueness_fields from FilterTypes
+ * @phpstan-import-type filter_uniqueness_params from FilterTypes
+ * @phpstan-import-type filter_uniqueness_values from FilterTypes
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class Uniqueness extends AbstractCombinedFieldsValidator
 {
@@ -108,14 +119,14 @@ class Uniqueness extends AbstractCombinedFieldsValidator
     protected string | null $template = "Field :field must be unique";
 
     /**
-     * @var array|null
+     * @phpstan-var filter_uniqueness_column_map|null
      */
     private array | null $columnMap = null;
 
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -161,7 +172,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      *
      * @return bool
      */
-    public function validate(Validation $validation, array | string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
         if (!$this->isUniqueness($validation, $field)) {
             $validation->appendMessage(
@@ -184,13 +195,21 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      */
     protected function getColumnNameReal(mixed $record, string $field): string
     {
+        /**
+         * `isUniqueness()` only reaches the model path for a model record.
+         *
+         * @var EntityInterface&InjectionAwareInterface&ModelInterface<mixed> $record
+         */
         // Caching columnMap
         if (Settings::get("orm.column_renaming") && !$this->columnMap) {
-            $this->columnMap = $record
-                ->getDI()
-                ->getShared("modelsMetadata")
-                ->getColumnMap($record)
-            ;
+            /** @var DiInterface $container */
+            $container = $record->getDI();
+            /** @var MetaDataInterface $metaData */
+            $metaData = $container->getShared("modelsMetadata");
+            /** @var filter_uniqueness_column_map|null $columnMap */
+            $columnMap = $metaData->getColumnMap($record);
+
+            $this->columnMap = $columnMap;
         }
 
         if (is_array($this->columnMap) && isset($this->columnMap[$field])) {
@@ -202,14 +221,14 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
     /**
      * @param Validation   $validation
-     * @param array|string $field
+     * @param mixed        $field
      *
      * @return bool
      * @throws Exception
      */
     protected function isUniqueness(
         Validation $validation,
-        array | string $field
+        mixed $field
     ): bool {
 //
 // @todo: Restore when new Collection is reintroduced
@@ -223,11 +242,21 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         $values  = [];
         $convert = $this->getOption("convert");
 
+        /**
+         * A field list holds field names.
+         *
+         * @var array<array-key, string> $field
+         */
         foreach ($field as $singleField) {
             $values[$singleField] = $validation->getValue($singleField);
         }
 
         if (null !== $convert) {
+            /**
+             * The `convert` option is a callable that reshapes the values.
+             *
+             * @var callable(array<array-key, mixed>): mixed $convert
+             */
             $values = $convert($values);
 
             if (!is_array($values)) {
@@ -235,7 +264,12 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             }
         }
 
-        /** @var Model|null $record */
+        /**
+         * The values are keyed by field name.
+         *
+         * @var filter_uniqueness_values $values
+         */
+
         $record = $this->getOption("model");
 
         if (empty($record) || !is_object($record)) {
@@ -356,16 +390,22 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      * Uniqueness method used for model
      *
      * @param mixed $record
-     * @param array $field
-     * @param array $values
      *
-     * @return array<string, list<string>|string>
+     * @phpstan-param filter_uniqueness_fields $field
+     * @phpstan-param filter_uniqueness_values $values
+     *
+     * @phpstan-return filter_uniqueness_params
      */
     protected function isUniquenessModel(
         mixed $record,
         array $field,
         array $values
-    ): array {
+    ) {
+        /**
+         * `isUniqueness()` only reaches this method for a model record.
+         *
+         * @var EntityInterface&InjectionAwareInterface&ModelInterface<mixed> $record
+         */
         $exceptConditions = [];
         $index            = 0;
         $params           = [
@@ -379,6 +419,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
             $notInValues = [];
             $value       = $values[$singleField];
 
+            /** @var string $attribute */
             $attribute = $this->getOption("attribute", $singleField);
             $attribute = $this->getColumnNameReal($record, $attribute);
 
@@ -397,9 +438,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                 ) {
                     foreach ($except as $exceptKey => $fieldExcept) {
                         $notInValues = [];
-                        $attribute   = $this->getColumnNameReal(
+                        /** @var string $exceptAttribute */
+                        $exceptAttribute = $this->getOption("attribute", $exceptKey);
+                        $attribute       = $this->getColumnNameReal(
                             $record,
-                            $this->getOption("attribute", $exceptKey)
+                            $exceptAttribute
                         );
 
                         if (is_array($fieldExcept)) {
@@ -420,9 +463,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                         }
                     }
                 } elseif (count($field) === 1) {
-                    $attribute = $this->getColumnNameReal(
+                    /** @var string $firstAttribute */
+                    $firstAttribute = $this->getOption("attribute", $field[0]);
+                    $attribute      = $this->getColumnNameReal(
                         $record,
-                        $this->getOption("attribute", $field[0])
+                        $firstAttribute
                     );
 
                     if (is_array($except)) {
@@ -443,9 +488,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                     }
                 } elseif (count($field) > 1) {
                     foreach ($field as $item) {
-                        $attribute = $this->getColumnNameReal(
+                        /** @var string $itemAttribute */
+                        $itemAttribute = $this->getOption("attribute", $item);
+                        $attribute     = $this->getColumnNameReal(
                             $record,
-                            $this->getOption("attribute", $item)
+                            $itemAttribute
                         );
 
                         if (is_array($except)) {
@@ -473,8 +520,18 @@ class Uniqueness extends AbstractCombinedFieldsValidator
          * If the operation is update, there must be values in the object
          */
         if ($record->getDirtyState() == Model::DIRTY_STATE_PERSISTENT) {
-            $metaData = $record->getDI()->getShared("modelsMetadata");
+            /** @var DiInterface $container */
+            $container = $record->getDI();
+            /** @var MetaDataInterface $metaData */
+            $metaData = $container->getShared("modelsMetadata");
+
             $attributes = $metaData->getPrimaryKeyAttributes($record);
+
+            /**
+             * The metadata service returns the primary key column names.
+             *
+             * @var array<array-key, string> $attributes
+             */
             foreach ($attributes as $primaryField) {
                 $params["conditions"][] = $this->getColumnNameReal(
                     $record,

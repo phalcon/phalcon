@@ -32,7 +32,7 @@ class BoolVal implements Sanitizer
      *
      * @return bool
      */
-    public function __invoke(mixed $input): bool
+    public function __invoke(mixed $input)
     {
         $trueArray  = ['true', 'on', 'yes', 'y', '1'];
         $falseArray = ['false', 'off', 'no', 'n', '0'];

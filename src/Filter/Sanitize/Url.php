@@ -29,7 +29,7 @@ class Url implements Sanitizer
      *
      * @return string
      */
-    public function __invoke($input)
+    public function __invoke(mixed $input)
     {
         $sanitized = (string) filter_var($input, FILTER_SANITIZE_URL);
 

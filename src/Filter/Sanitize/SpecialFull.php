@@ -29,8 +29,16 @@ class SpecialFull implements Sanitizer
      *
      * @return string
      */
-    public function __invoke(mixed $input): string
+    public function __invoke(mixed $input)
     {
-        return (string)filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        /**
+         * The filter encodes the value and returns the encoded string, or
+         * false when it fails.
+         *
+         * @phpstan-var false|string $sanitized
+         */
+        $sanitized = filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        return (string)$sanitized;
     }
 }

@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 
 /**
  * Interface for Phalcon\Filter\Validation\AbstractValidator
+ *
+ * @phpstan-import-type filter_validator_templates from FilterTypes
  */
 interface ValidatorInterface
 {
@@ -43,7 +46,7 @@ interface ValidatorInterface
     /**
      * Get message templates
      *
-     * @return array
+     * @phpstan-return filter_validator_templates
      */
     public function getTemplates(): array;
 
@@ -68,7 +71,7 @@ interface ValidatorInterface
     /**
      * Clear current template and set new from an array,
      *
-     * @param array $templates
+     * @phpstan-param filter_validator_templates $templates
      *
      * @return ValidatorInterface
      */
@@ -78,9 +81,9 @@ interface ValidatorInterface
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool;
+    public function validate(Validation $validation, mixed $field): bool;
 }

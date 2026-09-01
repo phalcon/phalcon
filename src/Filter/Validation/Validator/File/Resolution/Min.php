@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator\File\Resolution;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
 use Phalcon\Messages\Message;
@@ -64,6 +65,10 @@ use function is_array;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
+ *
+ * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 class Min extends AbstractFile
 {
@@ -75,7 +80,7 @@ class Min extends AbstractFile
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -86,19 +91,40 @@ class Min extends AbstractFile
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         // Check file upload
         if (false === $this->checkUpload($validation, $field)) {
             return false;
         }
 
-        $value  = $validation->getValue($field);
-        $tmp    = getimagesize($value["tmp_name"]);
+        /**
+         * `checkUpload()` rejects anything that is not a usable uploaded
+         * file, so the value is a $_FILES entry from here on.
+         *
+         * @var filter_uploaded_file $value
+         */
+        $value = $validation->getValue($field);
+        $tmp   = getimagesize($value["tmp_name"]);
+
+        // The file cannot be read as an image
+        if (false === $tmp) {
+            $this->appendMessageValid($validation, $field);
+
+            return false;
+        }
+
         $width  = $tmp[0];
         $height = $tmp[1];
 
@@ -108,6 +134,7 @@ class Min extends AbstractFile
             $resolution = $resolution[$field];
         }
 
+        /** @phpstan-var string $resolution */
         $resolutionArray = explode("x", $resolution);
         $minWidth        = $resolutionArray[0];
         $minHeight       = $resolutionArray[1];
@@ -124,10 +151,6 @@ class Min extends AbstractFile
             $result = $width <= $minWidth || $height <= $minHeight;
         } else {
             $result = $width < $minWidth || $height < $minHeight;
-        }
-
-        if (is_array($resolution)) {
-            $resolution = $resolution[$field];
         }
 
         if ($result) {

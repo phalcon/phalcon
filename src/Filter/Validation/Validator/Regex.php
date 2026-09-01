@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
@@ -58,6 +59,8 @@ use function preg_match;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class Regex extends AbstractValidator
 {
@@ -69,7 +72,7 @@ class Regex extends AbstractValidator
     /**
      * Constructor
      *
-     * @param array $options
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
@@ -80,12 +83,19 @@ class Regex extends AbstractValidator
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         $matches = null;
         $value   = $validation->getValue($field);
         if ($this->allowEmpty($field, $value)) {
@@ -96,6 +106,7 @@ class Regex extends AbstractValidator
             return false;
         }
 
+        /** @phpstan-var array<string, string>|string $pattern */
         $pattern = $this->getOption("pattern");
 
         if (is_array($pattern)) {
@@ -105,7 +116,7 @@ class Regex extends AbstractValidator
         /**
          * Since PHP8.1 $value can't be null.
          */
-        if ($value !== null && preg_match($pattern, $value, $matches)) {
+        if ($value !== null && preg_match($pattern, (string)$value, $matches)) {
             $failed = $matches[0] != $value;
         } else {
             $failed = true;

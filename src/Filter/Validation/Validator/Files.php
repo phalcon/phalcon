@@ -15,6 +15,7 @@ namespace Phalcon\Filter\Validation\Validator;
 
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Messages\Messages;
 
 use function is_array;
 
@@ -84,13 +85,20 @@ class Files extends AbstractValidator
      * Executes the validation, delegating each file to a `File` validator.
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      * @throws Validation\Exception
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         $value     = $validation->getValue($field);
         $files     = $this->normalizeFiles($value);
         $validator = new File($this->options);
@@ -99,6 +107,12 @@ class Files extends AbstractValidator
             $inner = new Validation();
             $inner->add($field, $validator);
 
+            /**
+             * `Validation` declares no `beforeValidation()` hook, so `validate()`
+             * never takes the `false` branch here.
+             *
+             * @var Messages $messages
+             */
             $messages = $inner->validate([$field => $single]);
 
             if ($messages->count() > 0) {
@@ -119,7 +133,7 @@ class Files extends AbstractValidator
      *
      * @param mixed $value
      *
-     * @return array
+     * @return list<mixed>
      */
     protected function normalizeFiles(mixed $value): array
     {
@@ -133,15 +147,50 @@ class Files extends AbstractValidator
             return [$value];
         }
 
-        $files = [];
+        /**
+         * A transposed multi-file node holds one parallel array per key.
+         *
+         * @var array<array-key, mixed> $names
+         */
+        $names = $value["name"];
+        /** @var array<array-key, mixed> $types */
+        $types = $value["type"] ?? [];
+        /** @var array<array-key, mixed> $tmpNames */
+        $tmpNames = $value["tmp_name"] ?? [];
+        /** @var array<array-key, mixed> $sizes */
+        $sizes = $value["size"] ?? [];
+        /** @var array<array-key, mixed> $errors */
+        $errors = $value["error"] ?? [];
+        $files  = [];
 
-        foreach ($value["name"] as $index => $name) {
+        foreach ($names as $index => $name) {
+            $type    = null;
+            $tmpName = null;
+            $size    = null;
+            $error   = null;
+
+            if (isset($types[$index])) {
+                $type = $types[$index];
+            }
+
+            if (isset($tmpNames[$index])) {
+                $tmpName = $tmpNames[$index];
+            }
+
+            if (isset($sizes[$index])) {
+                $size = $sizes[$index];
+            }
+
+            if (isset($errors[$index])) {
+                $error = $errors[$index];
+            }
+
             $files[] = [
                 "name"     => $name,
-                "type"     => $value["type"][$index] ?? null,
-                "tmp_name" => $value["tmp_name"][$index] ?? null,
-                "size"     => $value["size"][$index] ?? null,
-                "error"    => $value["error"][$index] ?? null,
+                "type"     => $type,
+                "tmp_name" => $tmpName,
+                "size"     => $size,
+                "error"    => $error,
             ];
         }
 

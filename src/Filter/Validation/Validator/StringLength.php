@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation\AbstractValidatorComposite;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
@@ -84,6 +85,8 @@ use Phalcon\Messages\Message;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class StringLength extends AbstractValidatorComposite
 {
@@ -100,6 +103,7 @@ class StringLength extends AbstractValidatorComposite
      *                       'messageMaximum'  => '',
      *                       'includedMaximum' => true,
      *                       ]
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {

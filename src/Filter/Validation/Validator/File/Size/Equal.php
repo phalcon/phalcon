@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator\File\Size;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
 
@@ -59,6 +60,8 @@ use Phalcon\Filter\Validation\Validator\File\AbstractFile;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 class Equal extends AbstractFile
 {
@@ -71,19 +74,33 @@ class Equal extends AbstractFile
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      * @throws Validation\Exception
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         // Check file upload
         if (true !== $this->checkUpload($validation, $field)) {
             return false;
         }
 
+        /**
+         * `checkUpload()` rejects anything that is not a usable uploaded
+         * file, so the value is a $_FILES entry from here on.
+         *
+         * @var filter_uploaded_file $value
+         */
         $value = $validation->getValue($field);
+        /** @phpstan-var string $size */
         $size  = $this->checkArray($this->getOption("size"), $field);
 
         $bytes    = round($this->getFileSizeInBytes($size), 6);

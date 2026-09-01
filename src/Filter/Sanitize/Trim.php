@@ -27,7 +27,7 @@ class Trim implements Sanitizer
      *
      * @return string
      */
-    public function __invoke(string $input): string
+    public function __invoke(string $input)
     {
         return trim($input);
     }

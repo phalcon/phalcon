@@ -28,7 +28,7 @@ class Remove implements Sanitizer
      *
      * @return string|string[]
      */
-    public function __invoke(array | string $input, array | string $replace)
+    public function __invoke(mixed $input, mixed $replace)
     {
         return str_replace($replace, "", $input);
     }

@@ -121,16 +121,15 @@ abstract class AbstractFile extends AbstractValidator
         Validation $validation,
         string $field
     ): bool {
+        /** @phpstan-var array{error?: int, tmp_name?: string}|null $value */
         $value = $validation->getValue($field);
 
         if (
-            is_array($value) &&
-            (
-                !isset($value["error"]) ||
-                !isset($value["tmp_name"]) ||
-                $value["error"] !== UPLOAD_ERR_OK ||
-                true !== $this->checkIsUploadedFile($value["tmp_name"])
-            )
+            !is_array($value) ||
+            !isset($value["error"]) ||
+            !isset($value["tmp_name"]) ||
+            $value["error"] !== UPLOAD_ERR_OK ||
+            true !== $this->checkIsUploadedFile($value["tmp_name"])
         ) {
             $label        = $this->prepareLabel($validation, $field);
             $replacePairs = [
@@ -168,26 +167,12 @@ abstract class AbstractFile extends AbstractValidator
         $value = $validation->getValue($field);
 
         if (
-            is_array($value) &&
-            (
-                !isset($value["name"]) ||
-                !isset($value["type"]) ||
-                !isset($value["size"])
-            )
+            !is_array($value) ||
+            !isset($value["name"]) ||
+            !isset($value["type"]) ||
+            !isset($value["size"])
         ) {
-            $label        = $this->prepareLabel($validation, $field);
-            $replacePairs = [
-                ":field" => $label,
-            ];
-
-            $validation->appendMessage(
-                new Message(
-                    strtr($this->getMessageValid(), $replacePairs),
-                    $field,
-                    get_class($this),
-                    $this->prepareCode($field)
-                )
-            );
+            $this->appendMessageValid($validation, $field);
 
             return false;
         }
@@ -213,6 +198,12 @@ abstract class AbstractFile extends AbstractValidator
         $post   = $_POST;
         $files  = $_FILES;
         $method = $server["REQUEST_METHOD"] ?? "GET";
+        /**
+         * PHP fills `CONTENT_LENGTH` from the request header, so it is a
+         * numeric string when it is present.
+         *
+         * @phpstan-var int|string $length
+         */
         $length = $server["CONTENT_LENGTH"] ?? 0;
 
         // Upload is larger than PHP allowed size (post_max_size or upload_max_filesize)
@@ -280,7 +271,7 @@ abstract class AbstractFile extends AbstractValidator
             $unit = $matches[2];
         }
 
-        return floatval($matches[1]) * pow(2, $byteUnits[$unit]);
+        return floatval($matches[1] ?? 0) * pow(2, $byteUnits[$unit]);
     }
 
     /**
@@ -366,6 +357,33 @@ abstract class AbstractFile extends AbstractValidator
     public function setMessageValid(string $message): void
     {
         $this->messageValid = $message;
+    }
+
+    /**
+     * Appends the "file is not valid" message for the field
+     *
+     * @param Validation $validation
+     * @param string     $field
+     *
+     * @return void
+     */
+    protected function appendMessageValid(
+        Validation $validation,
+        string $field
+    ): void {
+        $label        = $this->prepareLabel($validation, $field);
+        $replacePairs = [
+            ":field" => $label,
+        ];
+
+        $validation->appendMessage(
+            new Message(
+                strtr($this->getMessageValid(), $replacePairs),
+                $field,
+                get_class($this),
+                $this->prepareCode($field)
+            )
+        );
     }
 
     /**

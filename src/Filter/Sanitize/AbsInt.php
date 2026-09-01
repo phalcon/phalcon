@@ -31,7 +31,7 @@ class AbsInt implements Sanitizer
      *
      * @return int
      */
-    public function __invoke(mixed $input): int
+    public function __invoke(mixed $input)
     {
         return (int)abs(
             intval(

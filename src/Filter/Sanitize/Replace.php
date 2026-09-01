@@ -24,13 +24,13 @@ class Replace implements Sanitizer
 {
     /**
      * @param string|string[] $input
-     * @param string|string[] $source
-     * @param string|string[] $target
+     * @param string|string[] $from
+     * @param string|string[] $to
      *
      * @return string|string[]
      */
-    public function __invoke($input, $source, $target)
+    public function __invoke(mixed $input, mixed $from, mixed $to)
     {
-        return str_replace($source, $target, $input);
+        return str_replace($from, $to, $input);
     }
 }

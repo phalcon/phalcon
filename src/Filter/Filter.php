@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter;
 
+use Phalcon\Contracts\Filter\FilterTypes;
+use Phalcon\Contracts\Filter\Sanitizer;
 use Phalcon\Filter\Exceptions\FilterNotRegistered;
 use Phalcon\Filter\Sanitize\AbsInt;
 use Phalcon\Filter\Sanitize\Alnum;
@@ -30,6 +32,7 @@ use Phalcon\Filter\Sanitize\Replace;
 use Phalcon\Filter\Sanitize\Special;
 use Phalcon\Filter\Sanitize\SpecialFull;
 use Phalcon\Filter\Sanitize\StringVal;
+use Phalcon\Filter\Sanitize\StringValLegacy;
 use Phalcon\Filter\Sanitize\Striptags;
 use Phalcon\Filter\Sanitize\Trim;
 use Phalcon\Filter\Sanitize\Upper;
@@ -52,54 +55,63 @@ use function is_string;
  * @method string       email(string $input)
  * @method float        float(mixed $input)
  * @method int          int(string $input)
- * @method false|string ip(string $input, int $filter = FILTER_FLAG_NONE)
+ * @method false|string ip(string $input, int $filter = 0)
  * @method string       lower(string $input)
  * @method string       lowerfirst(string $input)
  * @method mixed        regex(mixed $input, mixed $pattern, mixed $replace)
  * @method mixed        remove(mixed $input, mixed $replace)
- * @method mixed        replace(mixed $input, mixed $source, mixed $target)
+ * @method mixed        replace(mixed $input, mixed $from, mixed $to)
  * @method string       special(string $input)
  * @method string       specialfull(string $input)
  * @method string       string(string $input)
+ * @method string       stringlegacy(mixed $input)
  * @method string       striptags(string $input)
  * @method string       trim(string $input)
  * @method string       upper(string $input)
  * @method string       upperFirst(string $input)
  * @method string|null  upperWords(string $input)
  * @method string|null  url(string $input)
+ *
+ * @phpstan-import-type filter_mapper from FilterTypes
+ * @phpstan-import-type filter_sanitizer_params from FilterTypes
+ * @phpstan-import-type filter_sanitizer_split from FilterTypes
+ * @phpstan-import-type filter_sanitizers from FilterTypes
+ * @phpstan-import-type filter_services from FilterTypes
+ * @phpstan-import-type filter_values from FilterTypes
  */
 class Filter implements FilterInterface
 {
-    public const FILTER_ABSINT      = 'absint';
-    public const FILTER_ALNUM       = 'alnum';
-    public const FILTER_ALPHA       = 'alpha';
-    public const FILTER_BOOL        = 'bool';
-    public const FILTER_EMAIL       = 'email';
-    public const FILTER_FLOAT       = 'float';
-    public const FILTER_INT         = 'int';
-    public const FILTER_IP          = 'ip';
-    public const FILTER_LOWER       = 'lower';
-    public const FILTER_LOWERFIRST  = 'lowerfirst';
-    public const FILTER_REGEX       = 'regex';
-    public const FILTER_REMOVE      = 'remove';
-    public const FILTER_REPLACE     = 'replace';
-    public const FILTER_SPECIAL     = 'special';
-    public const FILTER_SPECIALFULL = 'specialfull';
-    public const FILTER_STRING      = 'string';
-    public const FILTER_STRIPTAGS   = 'striptags';
-    public const FILTER_TRIM        = 'trim';
-    public const FILTER_UPPER       = 'upper';
-    public const FILTER_UPPERFIRST  = 'upperfirst';
-    public const FILTER_UPPERWORDS  = 'upperwords';
-    public const FILTER_URL         = 'url';
+    public const FILTER_ABSINT        = 'absint';
+    public const FILTER_ALNUM         = 'alnum';
+    public const FILTER_ALPHA         = 'alpha';
+    public const FILTER_BOOL          = 'bool';
+    public const FILTER_EMAIL         = 'email';
+    public const FILTER_FLOAT         = 'float';
+    public const FILTER_INT           = 'int';
+    public const FILTER_IP            = 'ip';
+    public const FILTER_LOWER         = 'lower';
+    public const FILTER_LOWERFIRST    = 'lowerfirst';
+    public const FILTER_REGEX         = 'regex';
+    public const FILTER_REMOVE        = 'remove';
+    public const FILTER_REPLACE       = 'replace';
+    public const FILTER_SPECIAL       = 'special';
+    public const FILTER_SPECIALFULL   = 'specialfull';
+    public const FILTER_STRING        = 'string';
+    public const FILTER_STRING_LEGACY = 'stringlegacy';
+    public const FILTER_STRIPTAGS     = 'striptags';
+    public const FILTER_TRIM          = 'trim';
+    public const FILTER_UPPER         = 'upper';
+    public const FILTER_UPPERFIRST    = 'upperfirst';
+    public const FILTER_UPPERWORDS    = 'upperwords';
+    public const FILTER_URL           = 'url';
 
     /**
-     * @var array<string, string>
+     * @phpstan-var filter_mapper
      */
     protected array $mapper = [];
 
     /**
-     * @var array<string, FilterInterface>
+     * @phpstan-var filter_services
      */
     protected array $services = [];
 
@@ -107,6 +119,8 @@ class Filter implements FilterInterface
      * Filter constructor.
      *
      * @param array<string, string> $mapper
+     *
+     * @phpstan-param filter_mapper $mapper
      */
     public function __construct(array $mapper = [])
     {
@@ -135,32 +149,35 @@ class Filter implements FilterInterface
      * add its `FILTER_*` constant and its entry here.
      *
      * @return string[]
+     *
+     * @phpstan-return filter_mapper
      */
     public static function getDefaultMapper(): array
     {
         return [
-            self::FILTER_ABSINT      => AbsInt::class,
-            self::FILTER_ALNUM       => Alnum::class,
-            self::FILTER_ALPHA       => Alpha::class,
-            self::FILTER_BOOL        => BoolVal::class,
-            self::FILTER_EMAIL       => Email::class,
-            self::FILTER_FLOAT       => FloatVal::class,
-            self::FILTER_INT         => IntVal::class,
-            self::FILTER_IP          => Ip::class,
-            self::FILTER_LOWER       => Lower::class,
-            self::FILTER_LOWERFIRST  => LowerFirst::class,
-            self::FILTER_REGEX       => Regex::class,
-            self::FILTER_REMOVE      => Remove::class,
-            self::FILTER_REPLACE     => Replace::class,
-            self::FILTER_SPECIAL     => Special::class,
-            self::FILTER_SPECIALFULL => SpecialFull::class,
-            self::FILTER_STRING      => StringVal::class,
-            self::FILTER_STRIPTAGS   => Striptags::class,
-            self::FILTER_TRIM        => Trim::class,
-            self::FILTER_UPPER       => Upper::class,
-            self::FILTER_UPPERFIRST  => UpperFirst::class,
-            self::FILTER_UPPERWORDS  => UpperWords::class,
-            self::FILTER_URL         => Url::class,
+            self::FILTER_ABSINT        => AbsInt::class,
+            self::FILTER_ALNUM         => Alnum::class,
+            self::FILTER_ALPHA         => Alpha::class,
+            self::FILTER_BOOL          => BoolVal::class,
+            self::FILTER_EMAIL         => Email::class,
+            self::FILTER_FLOAT         => FloatVal::class,
+            self::FILTER_INT           => IntVal::class,
+            self::FILTER_IP            => Ip::class,
+            self::FILTER_LOWER         => Lower::class,
+            self::FILTER_LOWERFIRST    => LowerFirst::class,
+            self::FILTER_REGEX         => Regex::class,
+            self::FILTER_REMOVE        => Remove::class,
+            self::FILTER_REPLACE       => Replace::class,
+            self::FILTER_SPECIAL       => Special::class,
+            self::FILTER_SPECIALFULL   => SpecialFull::class,
+            self::FILTER_STRING        => StringVal::class,
+            self::FILTER_STRING_LEGACY => StringValLegacy::class,
+            self::FILTER_STRIPTAGS     => Striptags::class,
+            self::FILTER_TRIM          => Trim::class,
+            self::FILTER_UPPER         => Upper::class,
+            self::FILTER_UPPERFIRST    => UpperFirst::class,
+            self::FILTER_UPPERWORDS    => UpperWords::class,
+            self::FILTER_URL           => Url::class,
         ];
     }
 
@@ -171,6 +188,9 @@ class Filter implements FilterInterface
      * @param string $name
      *
      * @return mixed
+     *
+     * @phpstan-return Sanitizer
+     *
      * @throws Exception
      */
     public function get(string $name): mixed
@@ -210,16 +230,17 @@ class Filter implements FilterInterface
      * (e.g. `trim`). When `$noRecursive` is `true`, the whole array is
      * passed to the sanitizer as a single value.
      *
-     * @param mixed                                 $value
-     * @param array<array-key, array|string>|string $sanitizers
-     * @param bool                                  $noRecursive
+     * @param mixed $value
+     * @param bool  $noRecursive
+     *
+     * @phpstan-param filter_sanitizers|string $sanitizers
      *
      * @return array|false|mixed|null
      * @throws Exception
      */
     public function sanitize(
         mixed $value,
-        array | string $sanitizers,
+        mixed $sanitizers,
         bool $noRecursive = false
     ): mixed {
         /**
@@ -277,6 +298,8 @@ class Filter implements FilterInterface
      *
      * @param string $name
      * @param mixed  $service
+     *
+     * @phpstan-param class-string<Sanitizer>|Sanitizer $service
      */
     public function set(string $name, mixed $service): void
     {
@@ -288,7 +311,7 @@ class Filter implements FilterInterface
     /**
      * Loads the objects in the internal mapper array
      *
-     * @param array $mapper
+     * @phpstan-param filter_mapper $mapper
      */
     protected function init(array $mapper): void
     {
@@ -300,9 +323,13 @@ class Filter implements FilterInterface
     /**
      * @param mixed $definition
      *
+     * @phpstan-param class-string<Sanitizer>|Sanitizer $definition
+     *
      * @return mixed
+     *
+     * @phpstan-return Sanitizer
      */
-    private function createInstance($definition)
+    private function createInstance(mixed $definition)
     {
         if (is_string($definition)) {
             return new $definition();
@@ -312,9 +339,10 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @param array $sanitizers
      * @param mixed $value
      * @param bool  $noRecursive
+     *
+     * @phpstan-param filter_sanitizers $sanitizers
      *
      * @return array|false|mixed|null
      * @throws Exception
@@ -371,11 +399,12 @@ class Filter implements FilterInterface
     /**
      * Processes the array values with the relevant sanitizers
      *
-     * @param array  $values
      * @param string $sanitizerName
-     * @param array  $sanitizerParams
      *
-     * @return array
+     * @phpstan-param filter_values           $values
+     * @phpstan-param filter_sanitizer_params $sanitizerParams
+     *
+     * @phpstan-return filter_values
      * @throws Exception
      */
     private function processArrayValues(
@@ -399,8 +428,10 @@ class Filter implements FilterInterface
     /**
      * @param mixed  $value
      * @param string $sanitizerName
-     * @param array  $sanitizerParams
      * @param bool   $noRecursive
+     *
+     * @phpstan-param filter_values             $value
+     * @phpstan-param filter_sanitizer_params   $sanitizerParams
      *
      * @return array|mixed
      * @throws Exception
@@ -431,7 +462,8 @@ class Filter implements FilterInterface
     /**
      * @param mixed  $value
      * @param string $sanitizerName
-     * @param array  $sanitizerParams
+     *
+     * @phpstan-param filter_sanitizer_params $sanitizerParams
      *
      * @return array|false|mixed
      * @throws Exception
@@ -457,13 +489,14 @@ class Filter implements FilterInterface
      *
      * @param mixed  $value
      * @param string $sanitizerName
-     * @param array  $sanitizerParams
+     *
+     * @phpstan-param filter_sanitizer_params $sanitizerParams
      *
      * @return false|mixed
      * @throws Exception
      */
     private function sanitizer(
-        $value,
+        mixed $value,
         string $sanitizerName,
         array $sanitizerParams = []
     ) {
@@ -480,14 +513,14 @@ class Filter implements FilterInterface
         $sanitizerObject = $this->get($sanitizerName);
         $params          = array_merge([$value], $sanitizerParams);
 
-        return call_user_func_array($sanitizerObject, $params);
+        return call_user_func_array([$sanitizerObject, "__invoke"], $params);
     }
 
     /**
      * @param mixed $sanitizerKey
      * @param mixed $sanitizer
      *
-     * @return array
+     * @phpstan-return filter_sanitizer_split
      */
     private function splitSanitizerParameters(mixed $sanitizerKey, mixed $sanitizer): array
     {
@@ -496,9 +529,11 @@ class Filter implements FilterInterface
          * is the name of the sanitizer.
          */
         if (is_array($sanitizer)) {
+            /** @phpstan-var string $sanitizerKey */
             return [$sanitizerKey, $sanitizer];
         }
 
+        /** @phpstan-var string $sanitizer */
         return [$sanitizer, []];
     }
 }

@@ -1,0 +1,50 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE.txt
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Filter\Sanitize;
+
+use Phalcon\Contracts\Filter\Sanitizer;
+
+use function filter_var;
+
+use const PHP_MAJOR_VERSION;
+use const PHP_MINOR_VERSION;
+
+/**
+ * Sanitizes a value to string using `filter_var()`. The filter provides
+ * backwards compatibility with versions prior to v5. For PHP higher or equal to
+ * 8.1, the filter will remain the string unchanged. If anything other than a
+ * string is passed, the method will return false
+ */
+class StringValLegacy implements Sanitizer
+{
+    /**
+     * @param string $input The text to sanitize
+     *
+     * @return false|string
+     */
+    public function __invoke(mixed $input)
+    {
+        $major = PHP_MAJOR_VERSION;
+        $minor = PHP_MINOR_VERSION;
+
+        if (
+            $major < 8 ||
+            ($major === 8 && $minor === 0)
+        ) {
+            return filter_var($input, 513);
+        }
+
+        return $input;
+    }
+}

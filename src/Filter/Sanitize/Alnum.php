@@ -27,7 +27,7 @@ class Alnum implements Sanitizer
      *
      * @return string|string[]|null
      */
-    public function __invoke(array | string $input)
+    public function __invoke(mixed $input)
     {
         return preg_replace("/[^A-Za-z0-9]/", "", $input);
     }

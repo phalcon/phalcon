@@ -131,3 +131,35 @@ parameters:
             message: "#Method Phalcon\\\\Forms\\\\Element\\\\ElementInterface::label\\(\\) invoked with 1 parameter, 0 required#"
             path: ../src/Forms/Form.php
             reportUnmatched: false
+        # `bind()` accepts an array or an object as the data source, and a
+        # plain object is iterated by its public properties - the same as the
+        # Zephir `for..in`, which walks the property table rather than calling
+        # the Iterator methods. PHPStan has no type for that, so the check is
+        # silenced instead of asserting a Traversable the value does not have.
+        -
+            message: "#Argument of an invalid type array<mixed>\\|object supplied for foreach, only iterables are supported#"
+            path: ../src/Filter/Validation.php
+            reportUnmatched: false
+        # `rules()` documents its list as validators, but does not validate it.
+        # The guard is what skips anything else, and it is live in the Zephir
+        # implementation where the array is untyped.
+        -
+            message: "#Instanceof between Phalcon\\\\Filter\\\\Validation\\\\ValidatorInterface and Phalcon\\\\Filter\\\\Validation\\\\ValidatorInterface will always evaluate to true#"
+            path: ../src/Filter/Validation.php
+            reportUnmatched: false
+        # The sanitizer keeps the pre-8.1 behavior of `filter_var()`. PHPStan
+        # resolves `PHP_MAJOR_VERSION` and `PHP_MINOR_VERSION` to the version
+        # it runs on, so the version guard looks dead to it while it is live
+        # on every other version.
+        -
+            message: "#(Comparison operation \"<\" between 8 and 8 is always false|Result of (\\|\\||&&) is always false|Strict comparison using === between (8 and 8|int<1, 5> and 0) will always evaluate to (true|false))#"
+            path: ../src/Filter/Sanitize/StringValLegacy.php
+            reportUnmatched: false
+        # `isUniquenessModel()` reaches the branch inside a `foreach` over the
+        # field list, so PHPStan knows the list is not empty and reads the
+        # count guard as redundant. It is kept as the third arm of the chain,
+        # as in the Zephir source.
+        -
+            message: "#Comparison operation \">\" between int<2, max> and 1 is always true#"
+            path: ../src/Filter/Validation/Validator/Uniqueness.php
+            reportUnmatched: false

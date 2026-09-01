@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation\AbstractValidatorComposite;
 use Phalcon\Filter\Validation\Validator\File\MimeType;
 use Phalcon\Filter\Validation\Validator\File\Resolution\AspectRatio;
@@ -22,7 +23,6 @@ use Phalcon\Filter\Validation\Validator\File\Resolution\Min as MinResolution;
 use Phalcon\Filter\Validation\Validator\File\Size\Equal as EqualFileSize;
 use Phalcon\Filter\Validation\Validator\File\Size\Max as MaxFileSize;
 use Phalcon\Filter\Validation\Validator\File\Size\Min as MinFileSize;
-use Phalcon\Filter\Validation\ValidatorInterface;
 
 /**
  * Checks if a value has a correct file
@@ -93,6 +93,8 @@ use Phalcon\Filter\Validation\ValidatorInterface;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_validator_options from FilterTypes
  */
 class File extends AbstractValidatorComposite
 {
@@ -125,345 +127,170 @@ class File extends AbstractValidatorComposite
      *                       'messageIniSize'         => '',
      *                       'messageValid'           => '',
      *                       ]
+     * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
     {
-        $fileEmpty = (string)($options["messageFileEmpty"] ?? null);
-        $iniSize   = (string)($options["messageIniSize"] ?? null);
-        $valid     = (string)($options["messageValid"] ?? null);
+        $allowWildcards   = false;
+        $messageFileEmpty = null;
+        $messageIniSize   = null;
+        $messageValid     = null;
 
-        $this
-            ->processFileAllowedType($options, $fileEmpty, $iniSize, $valid)
-            ->processFileSizeEquals($options, $fileEmpty, $iniSize, $valid)
-            ->processFileSizeMax($options, $fileEmpty, $iniSize, $valid)
-            ->processFileSizeMin($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionEqual($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionMax($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionMin($options, $fileEmpty, $iniSize, $valid)
-            ->processFileResolutionAspectRatio($options, $fileEmpty, $iniSize, $valid)
-        ;
+        if (isset($options["messageFileEmpty"])) {
+            /**
+             * The option holds the message that the sub validator shows.
+             *
+             * @phpstan-var string $messageFileEmpty
+             */
+            $messageFileEmpty = $options["messageFileEmpty"];
+            unset($options["messageFileEmpty"]);
+        }
 
-        unset(
-            $options["messageMinSize"],
-            $options["includedMinSize"],
-            $options["maxSize"],
-            $options["messageSize"],
-            $options["includedSize"],
-            $options["equalSize"],
-            $options["messageEqualSize"],
-            $options["allowedTypes"],
-            $options["allowWildcards"],
-            $options["messageType"],
-            $options["maxResolution"],
-            $options["includedMaxResolution"],
-            $options["messageMaxResolution"],
-            $options["minResolution"],
-            $options["includedMinResolution"],
-            $options["messageMinResolution"],
-            $options["equalResolution"],
-            $options["messageEqualResolution"],
-            $options["aspectRatio"],
-            $options["messageAspectRatio"]
-        );
+        if (isset($options["messageIniSize"])) {
+            /**
+             * The option holds the message that the sub validator shows.
+             *
+             * @phpstan-var string $messageIniSize
+             */
+            $messageIniSize = $options["messageIniSize"];
+            unset($options["messageIniSize"]);
+        }
+
+        if (isset($options["messageValid"])) {
+            /**
+             * The option holds the message that the sub validator shows.
+             *
+             * @phpstan-var string $messageValid
+             */
+            $messageValid = $options["messageValid"];
+            unset($options["messageValid"]);
+        }
+
+        if (isset($options["allowWildcards"])) {
+            $allowWildcards = (bool)$options["allowWildcards"];
+            unset($options["allowWildcards"]);
+        }
+
+        // create individual validators
+        foreach ($options as $key => $value) {
+            $key = (string)$key;
+
+            // min file size
+            if (strcasecmp($key, "minSize") === 0) {
+                $validator = new MinFileSize(
+                    [
+                        "size"     => $value,
+                        "message"  => $options["messageMinSize"] ?? null,
+                        "included" => $options["includedMinSize"] ?? null,
+                    ]
+                );
+
+                unset($options["minSize"]);
+                unset($options["messageMinSize"]);
+                unset($options["includedMinSize"]);
+            } elseif (strcasecmp($key, "maxSize") === 0) {
+                // max file size
+                $validator = new MaxFileSize(
+                    [
+                        "size"     => $value,
+                        "message"  => $options["messageSize"] ?? null,
+                        "included" => $options["includedSize"] ?? null,
+                    ]
+                );
+
+                unset($options["maxSize"]);
+                unset($options["messageSize"]);
+                unset($options["includedSize"]);
+            } elseif (strcasecmp($key, "equalSize") === 0) {
+                // equal file size
+                $validator = new EqualFileSize(
+                    [
+                        "size"    => $value,
+                        "message" => $options["messageEqualSize"] ?? null,
+                    ]
+                );
+
+                unset($options["equalSize"]);
+                unset($options["messageEqualSize"]);
+            } elseif (strcasecmp($key, "allowedTypes") === 0) {
+                // mime types
+                $validator = new MimeType(
+                    [
+                        "types"          => $value,
+                        "message"        => $options["messageType"] ?? null,
+                        "allowWildcards" => $allowWildcards,
+                    ]
+                );
+
+                unset($options["allowedTypes"]);
+                unset($options["messageType"]);
+            } elseif (strcasecmp($key, "maxResolution") === 0) {
+                // max resolution
+                $validator = new MaxResolution(
+                    [
+                        "resolution" => $value,
+                        "included"   => $options["includedMaxResolution"] ?? null,
+                        "message"    => $options["messageMaxResolution"] ?? null,
+                    ]
+                );
+
+                unset($options["maxResolution"]);
+                unset($options["includedMaxResolution"]);
+                unset($options["messageMaxResolution"]);
+            } elseif (strcasecmp($key, "minResolution") === 0) {
+                // min resolution
+                $validator = new MinResolution(
+                    [
+                        "resolution" => $value,
+                        "included"   => $options["includedMinResolution"] ?? null,
+                        "message"    => $options["messageMinResolution"] ?? null,
+                    ]
+                );
+
+                unset($options["minResolution"]);
+                unset($options["includedMinResolution"]);
+                unset($options["messageMinResolution"]);
+            } elseif (strcasecmp($key, "equalResolution") === 0) {
+                // equal resolution
+                $validator = new EqualResolution(
+                    [
+                        "resolution" => $value,
+                        "message"    => $options["messageEqualResolution"] ?? null,
+                    ]
+                );
+
+                unset($options["equalResolution"]);
+                unset($options["messageEqualResolution"]);
+            } elseif (strcasecmp($key, "aspectRatio") === 0) {
+                // aspect ratio
+                $validator = new AspectRatio(
+                    [
+                        "ratio"   => $value,
+                        "message" => $options["messageAspectRatio"] ?? null,
+                    ]
+                );
+
+                unset($options["aspectRatio"]);
+                unset($options["messageAspectRatio"]);
+            } else {
+                continue;
+            }
+
+            if (null !== $messageFileEmpty) {
+                $validator->setMessageFileEmpty((string)$messageFileEmpty);
+            }
+
+            if (null !== $messageIniSize) {
+                $validator->setMessageIniSize((string)$messageIniSize);
+            }
+
+            if (null !== $messageValid) {
+                $validator->setMessageValid((string)$messageValid);
+            }
+
+            $this->validators[] = $validator;
+        }
 
         parent::__construct($options);
-    }
-
-    /**
-     * @param array<string, mixed> $options
-     * @param string               $fileEmpty
-     * @param string               $iniSize
-     * @param string               $valid
-     *
-     * @return File
-     */
-    private function processFileAllowedType(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["allowedTypes"])) {
-            $validator = new MimeType(
-                [
-                    "types"          => $options["allowedTypes"],
-                    "message"        => $options["messageType"] ?? null,
-                    "allowWildcards" => (bool) ($options["allowWildcards"] ?? false),
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileResolutionAspectRatio(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["aspectRatio"])) {
-            $validator = new AspectRatio(
-                [
-                    "ratio"   => $options["aspectRatio"],
-                    "message" => $options["messageAspectRatio"] ?? null,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileResolutionEqual(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["equalResolution"])) {
-            $validator = new EqualResolution(
-                [
-                    "resolution" => $options["equalResolution"],
-                    "message"    => $options["messageEqualResolution"] ?? null,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileResolutionMax(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["maxResolution"])) {
-            $validator = new MaxResolution(
-                [
-                    "resolution" => $options["maxResolution"],
-                    "included"   => $options["includedMaxResolution"] ?? false,
-                    "message"    => $options["messageMaxResolution"] ?? null,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileResolutionMin(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["minResolution"])) {
-            $validator = new MinResolution(
-                [
-                    "resolution" => $options["minResolution"],
-                    "included"   => $options["includedMinResolution"] ?? false,
-                    "message"    => $options["messageMinResolution"] ?? null,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileSizeEquals(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["equalSize"])) {
-            $validator = new EqualFileSize(
-                [
-                    "size"    => $options["equalSize"],
-                    "message" => $options["messageEqualSize"] ?? null,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileSizeMax(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["maxSize"])) {
-            $validator = new MaxFileSize(
-                [
-                    "size"     => $options["maxSize"],
-                    "message"  => $options["messageSize"] ?? null,
-                    "included" => $options["includedSize"] ?? false,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param array  $options
-     * @param string $fileEmpty
-     * @param string $iniSize
-     * @param string $valid
-     *
-     * @return File
-     */
-    private function processFileSizeMin(
-        array $options,
-        string $fileEmpty,
-        string $iniSize,
-        string $valid
-    ): File {
-        if (isset($options["minSize"])) {
-            $validator = new MinFileSize(
-                [
-                    "size"     => $options["minSize"],
-                    "message"  => $options["messageMinSize"] ?? null,
-                    "included" => $options["includedMinSize"] ?? false,
-                ]
-            );
-
-            $this->processSettings(
-                $validator,
-                $fileEmpty,
-                $iniSize,
-                $valid
-            );
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ValidatorInterface $validator
-     * @param string             $messageFileEmpty
-     * @param string             $messageIniSize
-     * @param string             $messageValid
-     *
-     * @return void
-     */
-    private function processSettings(
-        ValidatorInterface $validator,
-        string $messageFileEmpty,
-        string $messageIniSize,
-        string $messageValid
-    ): void {
-        if (!empty($messageFileEmpty)) {
-            $validator->setMessageFileEmpty($messageFileEmpty);
-        }
-
-        if (!empty($messageIniSize)) {
-            $validator->setMessageIniSize($messageIniSize);
-        }
-
-        if (!empty($messageValid)) {
-            $validator->setMessageValid($messageValid);
-        }
-
-        $this->validators[] = $validator;
     }
 }

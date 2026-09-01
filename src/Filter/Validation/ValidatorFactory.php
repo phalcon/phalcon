@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Validation;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Filter\Validation\Validator\Alnum;
 use Phalcon\Filter\Validation\Validator\Alpha;
@@ -37,12 +38,15 @@ use Phalcon\Filter\Validation\Validator\StringLength;
 use Phalcon\Filter\Validation\Validator\Uniqueness;
 use Phalcon\Filter\Validation\Validator\Url;
 
+/**
+ * @phpstan-import-type filter_validator_services from FilterTypes
+ */
 class ValidatorFactory extends AbstractFactory
 {
     /**
      * Constructor.
      *
-     * @param array $services
+     * @phpstan-param filter_validator_services $services
      */
     public function __construct(array $services = [])
     {
@@ -59,6 +63,7 @@ class ValidatorFactory extends AbstractFactory
      */
     public function newInstance(string $name): ValidatorInterface
     {
+        /** @phpstan-var class-string<ValidatorInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition();

@@ -34,7 +34,7 @@ interface FilterInterface
      */
     public function sanitize(
         mixed $value,
-        array | string $sanitizers,
+        mixed $sanitizers,
         bool $noRecursive = false
     ): mixed;
 }

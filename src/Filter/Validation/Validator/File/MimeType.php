@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator\File;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\InvalidAllowedTypes;
 use Phalcon\Traits\Php\InfoTrait;
@@ -73,6 +74,8 @@ use const FILEINFO_MIME_TYPE;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 class MimeType extends AbstractFile
 {
@@ -87,18 +90,32 @@ class MimeType extends AbstractFile
      * Executes the validation
      *
      * @param Validation $validation
-     * @param string     $field
+     * @param mixed      $field
      *
      * @return bool
      */
-    public function validate(Validation $validation, string $field): bool
+    public function validate(Validation $validation, mixed $field): bool
     {
+        /**
+         * Validation iterates its validators by field name, so the field is
+         * a string here. The parameter is mixed to match the untyped Zephir
+         * signature.
+         *
+         * @var string $field
+         */
         // Check file upload
         if (false === $this->checkUpload($validation, $field)) {
             return false;
         }
 
+        /**
+         * `checkUpload()` rejects anything that is not a usable uploaded
+         * file, so the value is a $_FILES entry from here on.
+         *
+         * @var filter_uploaded_file $value
+         */
         $value = $validation->getValue($field);
+        /** @phpstan-var array<array-key, mixed>|null $types */
         $types = $this->getOption("types");
 
         if (isset($types[$field])) {
@@ -108,6 +125,9 @@ class MimeType extends AbstractFile
         if (!is_array($types)) {
             throw new InvalidAllowedTypes();
         }
+
+        /** @phpstan-var array<array-key, string> $allowedTypes */
+        $allowedTypes = $types;
 
         $mime = null;
         if ($this->phpFunctionExists("finfo_open")) {
@@ -125,7 +145,7 @@ class MimeType extends AbstractFile
 
         $matched = false;
         if ($allowWildcards) {
-            foreach ($types as $type) {
+            foreach ($allowedTypes as $type) {
                 if (
                     $mime === $type ||
                     preg_match("#^" . (string) $type . "$#", (string) $mime)
@@ -136,12 +156,12 @@ class MimeType extends AbstractFile
                 }
             }
         } else {
-            $matched = in_array($mime, $types);
+            $matched = in_array($mime, $allowedTypes);
         }
 
         if (!$matched) {
             $replacePairs = [
-                ":types" => implode(", ", $types),
+                ":types" => implode(", ", $allowedTypes),
             ];
 
             $validation->appendMessage(

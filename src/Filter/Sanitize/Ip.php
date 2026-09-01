@@ -34,6 +34,7 @@ class Ip implements Sanitizer
         if (strpos($input, "/") !== false) {
             [$ip, $mask] = explode("/", $input, 2);
 
+            /** @phpstan-var false|string $filtered */
             $filtered = filter_var($ip, FILTER_VALIDATE_IP, $filter);
             if ($filtered === false) {
                 return false;
@@ -52,6 +53,9 @@ class Ip implements Sanitizer
             return false;
         }
 
-        return filter_var($input, FILTER_VALIDATE_IP, $filter);
+        /** @phpstan-var false|string $result */
+        $result = filter_var($input, FILTER_VALIDATE_IP, $filter);
+
+        return $result;
     }
 }

@@ -30,7 +30,7 @@ class FloatVal implements Sanitizer
      *
      * @return float
      */
-    public function __invoke(mixed $input): float
+    public function __invoke(mixed $input)
     {
         return (float)filter_var(
             $input,
