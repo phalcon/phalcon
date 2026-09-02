@@ -101,32 +101,6 @@ class File extends AbstractValidatorComposite
     /**
      * Constructor
      *
-     * @param array $options = [
-     *                       'messageMinSize'         => '',
-     *                       'includedMinSize'        => false,
-     *                       'minSize'                => 100,
-     *                       'maxSize'                => 1000,
-     *                       'messageSize'            => '',
-     *                       'includedSize'           => false,
-     *                       'equalSize'              => '',
-     *                       'messageEqualSize'       => '',
-     *                       'allowedTypes'           => [],
-     *                       'messageType'            => '',
-     *                       'maxResolution'          => '1000x1000',
-     *                       'messageMaxResolution'   => '',
-     *                       'includedMaxResolution'  => false,
-     *                       'minResolution =         > '500x500',
-     *                       'includedMinResolution'  => false,
-     *                       'messageMinResolution'   => '',
-     *                       'equalResolution'        => '1000x1000',
-     *                       'messageEqualResolution' => '',
-     *                       'aspectRatio'            => '16x9',
-     *                       'messageAspectRatio'     => '',
-     *                       'allowEmpty'             => false,
-     *                       'messageFileEmpty'       => '',
-     *                       'messageIniSize'         => '',
-     *                       'messageValid'           => '',
-     *                       ]
      * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])

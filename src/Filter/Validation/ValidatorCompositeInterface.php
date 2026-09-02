@@ -32,11 +32,6 @@ interface ValidatorCompositeInterface
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      */
     public function validate(Validation $validation, mixed $field): bool;
 }

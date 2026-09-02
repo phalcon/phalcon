@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation;
 
-use Exception as BaseException;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Filter\Validation\Validator\Alnum;
@@ -55,11 +54,6 @@ class ValidatorFactory extends AbstractFactory
 
     /**
      * Creates a new instance
-     *
-     * @param string $name
-     *
-     * @return ValidatorInterface
-     * @throws BaseException
      */
     public function newInstance(string $name): ValidatorInterface
     {

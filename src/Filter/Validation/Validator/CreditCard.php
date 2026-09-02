@@ -76,11 +76,6 @@ class CreditCard extends AbstractValidator
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      */
     public function validate(Validation $validation, mixed $field): bool
     {
@@ -116,10 +111,6 @@ class CreditCard extends AbstractValidator
     /**
      * is a simple checksum formula used to validate a variety of identification
      * numbers
-     *
-     * @param string $number
-     *
-     * @return bool
      */
     private function verifyByLuhnAlgorithm(string $number): bool
     {

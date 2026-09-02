@@ -20,6 +20,7 @@ use Phalcon\Messages\Messages;
 /**
  * Interface for the Phalcon\Filter\Validation component
  *
+ * @phpstan-import-type filter_validation_data from FilterTypes
  * @phpstan-import-type filter_validation_labels from FilterTypes
  * @phpstan-import-type filter_validation_validators from FilterTypes
  * @phpstan-import-type filter_validation_whitelist from FilterTypes
@@ -30,10 +31,10 @@ interface ValidationInterface
     /**
      * Adds a validator to a field
      *
-     * @param mixed              $field
+     * @param array|string       $field
      * @param ValidatorInterface $validator
      *
-     * @return ValidationInterface
+     * @phpstan-param mixed $field
      */
     public function add(
         mixed $field,
@@ -42,10 +43,6 @@ interface ValidationInterface
 
     /**
      * Appends a message to the messages list
-     *
-     * @param MessageInterface $message
-     *
-     * @return ValidationInterface
      */
     public function appendMessage(
         MessageInterface $message
@@ -55,12 +52,12 @@ interface ValidationInterface
      * Assigns the data to an entity
      * The entity is used to obtain the validation values
      *
-     * @param mixed $entity
-     * @param mixed $data
+     * @param object        $entity
+     * @param array|object  $data
      *
+     * @phpstan-param mixed                       $entity
+     * @phpstan-param filter_validation_data      $data
      * @phpstan-param filter_validation_whitelist $whitelist
-     *
-     * @return ValidationInterface
      */
     public function bind(
         mixed $entity,
@@ -71,25 +68,19 @@ interface ValidationInterface
     /**
      * Returns the bound entity
      *
-     * @return mixed
+     * @return object
+     *
+     * @phpstan-return object|null
      */
     public function getEntity(): mixed;
 
     /**
      * Returns all the filters or a specific one
-     *
-     * @param string|null $field
-     *
-     * @return mixed
      */
     public function getFilters(string | null $field = null): mixed;
 
     /**
      * Get label for field
-     *
-     * @param string $field
-     *
-     * @return string
      */
     public function getLabel(string $field): string;
 
@@ -108,21 +99,17 @@ interface ValidationInterface
     public function getValidators(): array;
 
     /**
-     * Gets the value to validate in the array/object data source
-     *
-     * @param string $field
-     *
-     * @return mixed
+     * Gets the a value to validate in the array/object data source
      */
     public function getValue(string $field): mixed;
 
     /**
      * Alias of `add` method
      *
-     * @param mixed              $field
+     * @param array|string       $field
      * @param ValidatorInterface $validator
      *
-     * @return ValidationInterface
+     * @phpstan-param mixed $field
      */
     public function rule(
         mixed $field,
@@ -132,11 +119,7 @@ interface ValidationInterface
     /**
      * Adds the validators to a field
      *
-     * @param string $field
-     *
      * @phpstan-param filter_validators $validators
-     *
-     * @return ValidationInterface
      */
     public function rules(
         string $field,
@@ -146,10 +129,9 @@ interface ValidationInterface
     /**
      * Adds filters to the field
      *
-     * @param string       $field
-     * @param mixed        $filters
+     * @param array|string $filters
      *
-     * @return ValidationInterface
+     * @phpstan-param mixed $filters
      */
     public function setFilters(
         string $field,
@@ -166,9 +148,10 @@ interface ValidationInterface
     /**
      * Validate a set of data according to a set of rules
      *
-     * @param mixed $data
-     * @param mixed $entity
+     * @param array|object  $data
+     * @param object        $entity
      *
+     * @phpstan-param mixed $data
      * @phpstan-param filter_validation_whitelist $whitelist
      *
      * @return false|Messages
@@ -177,5 +160,5 @@ interface ValidationInterface
         mixed $data = null,
         mixed $entity = null,
         array $whitelist = []
-    ): false | Messages;
+    ): bool | Messages;
 }

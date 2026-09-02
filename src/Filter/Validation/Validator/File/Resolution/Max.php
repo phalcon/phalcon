@@ -67,7 +67,6 @@ use function is_array;
  * ```
  *
  * @phpstan-import-type filter_validator_options from FilterTypes
- *
  * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 class Max extends AbstractFile
@@ -89,11 +88,6 @@ class Max extends AbstractFile
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      */
     public function validate(Validation $validation, mixed $field): bool
     {

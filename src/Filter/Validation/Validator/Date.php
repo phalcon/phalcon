@@ -80,11 +80,6 @@ class Date extends AbstractValidator
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      */
     public function validate(Validation $validation, mixed $field): bool
     {
@@ -122,12 +117,7 @@ class Date extends AbstractValidator
     }
 
     /**
-     * @param mixed  $value
-     * @param mixed  $format
-     *
      * @phpstan-param string $format
-     *
-     * @return bool
      */
     private function checkDate(mixed $value, mixed $format): bool
     {

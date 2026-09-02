@@ -15,7 +15,6 @@ namespace Phalcon\Filter\Validation\Traits;
 
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\Exception;
 use Phalcon\Filter\Validation\Exceptions\NoValidatorsInComposite;
 
 use function get_class;
@@ -45,12 +44,6 @@ trait ValidatorCompositeTrait
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
-     * @throws Exception
      */
     public function validate(Validation $validation, mixed $field): bool
     {

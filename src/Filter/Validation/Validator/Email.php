@@ -90,12 +90,6 @@ class Email extends AbstractValidator
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
-     * @throws \Phalcon\Di\Exception
      */
     public function validate(Validation $validation, mixed $field): bool
     {

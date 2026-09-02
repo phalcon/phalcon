@@ -47,7 +47,6 @@ use function is_string;
 /**
  * Lazy loads, stores and exposes sanitizer objects
  *
- *
  * @method int          absint(mixed $input)
  * @method string       alnum(mixed $input)
  * @method string       alpha(mixed $input)
@@ -117,8 +116,6 @@ class Filter implements FilterInterface
 
     /**
      * Filter constructor.
-     *
-     * @param array<string, string> $mapper
      *
      * @phpstan-param filter_mapper $mapper
      */
@@ -230,9 +227,6 @@ class Filter implements FilterInterface
      * (e.g. `trim`). When `$noRecursive` is `true`, the whole array is
      * passed to the sanitizer as a single value.
      *
-     * @param mixed $value
-     * @param bool  $noRecursive
-     *
      * @phpstan-param filter_sanitizers|string $sanitizers
      *
      * @return array|false|mixed|null
@@ -296,9 +290,6 @@ class Filter implements FilterInterface
     /**
      * Set a new service to the mapper array
      *
-     * @param string $name
-     * @param mixed  $service
-     *
      * @phpstan-param class-string<Sanitizer>|Sanitizer $service
      */
     public function set(string $name, mixed $service): void
@@ -321,11 +312,7 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @param mixed $definition
-     *
      * @phpstan-param class-string<Sanitizer>|Sanitizer $definition
-     *
-     * @return mixed
      *
      * @phpstan-return Sanitizer
      */
@@ -339,9 +326,6 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @param mixed $value
-     * @param bool  $noRecursive
-     *
      * @phpstan-param filter_sanitizers $sanitizers
      *
      * @return array|false|mixed|null
@@ -399,8 +383,6 @@ class Filter implements FilterInterface
     /**
      * Processes the array values with the relevant sanitizers
      *
-     * @param string $sanitizerName
-     *
      * @phpstan-param filter_values           $values
      * @phpstan-param filter_sanitizer_params $sanitizerParams
      *
@@ -426,10 +408,6 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @param mixed  $value
-     * @param string $sanitizerName
-     * @param bool   $noRecursive
-     *
      * @phpstan-param filter_values             $value
      * @phpstan-param filter_sanitizer_params   $sanitizerParams
      *
@@ -460,9 +438,6 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @param mixed  $value
-     * @param string $sanitizerName
-     *
      * @phpstan-param filter_sanitizer_params $sanitizerParams
      *
      * @return array|false|mixed
@@ -486,9 +461,6 @@ class Filter implements FilterInterface
 
     /**
      * Internal sanitize wrapper for recursion
-     *
-     * @param mixed  $value
-     * @param string $sanitizerName
      *
      * @phpstan-param filter_sanitizer_params $sanitizerParams
      *

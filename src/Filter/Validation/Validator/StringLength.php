@@ -93,16 +93,6 @@ class StringLength extends AbstractValidatorComposite
     /**
      * Constructor
      *
-     * @param array $options = [
-     *                       'min'             => 100,
-     *                       'message'         => '',
-     *                       'messageMinimum'  => '',
-     *                       'included'        => true,
-     *                       'includedMinimum' => true,
-     *                       'max'             => 1000,
-     *                       'messageMaximum'  => '',
-     *                       'includedMaximum' => true,
-     *                       ]
      * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])

@@ -27,19 +27,12 @@ interface ValidatorInterface
      * Returns an option in the validator's options
      * Returns null if the option hasn't set
      *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
      * @return mixed
      */
     public function getOption(string $key, mixed $defaultValue = null): mixed;
 
     /**
      * Get the template message
-     *
-     * @param string $field
-     *
-     * @return string
      */
     public function getTemplate(string $field): string;
 
@@ -52,19 +45,11 @@ interface ValidatorInterface
 
     /**
      * Checks if an option is defined
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function hasOption(string $key): bool;
 
     /**
      * Set a new template message
-     *
-     * @param string $template
-     *
-     * @return ValidatorInterface
      */
     public function setTemplate(string $template): ValidatorInterface;
 
@@ -72,18 +57,11 @@ interface ValidatorInterface
      * Clear current template and set new from an array,
      *
      * @phpstan-param filter_validator_templates $templates
-     *
-     * @return ValidatorInterface
      */
     public function setTemplates(array $templates): ValidatorInterface;
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      */
     public function validate(Validation $validation, mixed $field): bool;
 }

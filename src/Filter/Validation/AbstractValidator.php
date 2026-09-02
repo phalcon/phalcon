@@ -44,8 +44,6 @@ abstract class AbstractValidator implements ValidatorInterface
     protected array $options = [];
     /**
      * Message template
-     *
-     * @var string|null
      */
     protected string | null $template = null;
 
@@ -54,8 +52,6 @@ abstract class AbstractValidator implements ValidatorInterface
      * instance (constructor `message`/`template` option or setTemplate()).
      * While false, `template` still holds the validator's class default and a
      * global default registered via Validation::setDefaultMessages() applies.
-     *
-     * @var bool
      */
     protected bool $templateChanged = false;
 
@@ -69,11 +65,8 @@ abstract class AbstractValidator implements ValidatorInterface
     /**
      * Phalcon\Filter\Validation\Validator constructor
      *
-     * @param mixed[] $options {
-     *                         $option string "message"
-     *                         $option string "template"
-     *                         $option bool   "allowEmpty"
-     *                         }
+     * @param array $options
+     *
      * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])
@@ -102,11 +95,6 @@ abstract class AbstractValidator implements ValidatorInterface
     /**
      * Returns an option in the validator's options
      * Returns null if the option hasn't set
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     public function getOption(string $key, mixed $defaultValue = null): mixed
     {
@@ -119,10 +107,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Get the template message
-     *
-     * @param string|null $field
-     *
-     * @return string
      */
     public function getTemplate(string | null $field = null): string
     {
@@ -164,10 +148,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Checks if an option is defined
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function hasOption(string $key): bool
     {
@@ -178,11 +158,6 @@ abstract class AbstractValidator implements ValidatorInterface
      * Checks whether the field can be considered empty and therefore
      * skipped, honoring the `allowEmpty` option (boolean flag, list of
      * empty values, or per-field map).
-     *
-     * @param Validation $validation
-     * @param string     $field
-     *
-     * @return bool
      */
     public function isAllowEmpty(Validation $validation, string $field): bool
     {
@@ -194,12 +169,10 @@ abstract class AbstractValidator implements ValidatorInterface
     /**
      * Create a default message by factory
      *
-     * @param Validation   $validation
-     * @param mixed        $field
+     * @param array|string $field
      *
+     * @phpstan-param mixed                         $field
      * @phpstan-param filter_validator_replacements $replacements
-     *
-     * @return Message
      */
     public function messageFactory(
         Validation $validation,
@@ -232,11 +205,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Sets an option in the validator
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return void
      */
     public function setOption(string $key, mixed $value): void
     {
@@ -245,10 +213,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Set a new template message
-     *
-     * @param string $template
-     *
-     * @return ValidatorInterface
      */
     public function setTemplate(string $template): ValidatorInterface
     {
@@ -262,8 +226,6 @@ abstract class AbstractValidator implements ValidatorInterface
      * Clear current templates and set new from an array,
      *
      * @phpstan-param filter_validator_templates $templates
-     *
-     * @return ValidatorInterface
      */
     public function setTemplates(array $templates): ValidatorInterface
     {
@@ -280,11 +242,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Executes the validation
-     *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      */
     abstract public function validate(
         Validation $validation,
@@ -293,11 +250,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Checks if field can be empty.
-     *
-     * @param mixed $field
-     * @param mixed $value
-     *
-     * @return bool
      */
     protected function allowEmpty(mixed $field, mixed $value): bool
     {
@@ -333,11 +285,6 @@ abstract class AbstractValidator implements ValidatorInterface
     /**
      * Checks if a value is an array and returns the element based on the
      * passed field name
-     *
-     * @param mixed  $value
-     * @param string $field
-     *
-     * @return mixed
      */
     protected function checkArray(mixed $value, string $field): mixed
     {
@@ -350,10 +297,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Prepares a validation code.
-     *
-     * @param string $field
-     *
-     * @return int
      */
     protected function prepareCode(string $field): int
     {
@@ -369,11 +312,6 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Prepares a label for the field.
-     *
-     * @param Validation $validation
-     * @param string     $field
-     *
-     * @return mixed
      */
     protected function prepareLabel(
         Validation $validation,

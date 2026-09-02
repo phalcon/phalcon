@@ -45,6 +45,7 @@ use function property_exists;
 /**
  * Allows to validate data using custom or built-in validators
  *
+ * @phpstan-import-type filter_sanitizers from FilterTypes
  * @phpstan-import-type filter_validation_combined_validators from FilterTypes
  * @phpstan-import-type filter_validation_data from FilterTypes
  * @phpstan-import-type filter_validation_default_messages from FilterTypes
@@ -62,6 +63,11 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Default messages for validators, keyed by validator class name
      *
+     * Declared without an array initializer on purpose: an initialized static
+     * array makes Zephir emit a zephir_init_static_properties() function that
+     * fails to compile in the single-file build. It is null until first set
+     * and treated as an empty array by the accessors below.
+     *
      * @phpstan-var filter_validation_default_messages
      */
     protected static array $defaultMessages = [];
@@ -74,7 +80,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * @phpstan-var filter_validation_data
      */
-    protected array | object | null $data = null;
+    protected mixed $data = null;
 
     /**
      * @var object|null
@@ -180,10 +186,10 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Adds a validator to a field
      *
-     * @param mixed              $field
+     * @param array|string       $field
      * @param ValidatorInterface $validator
      *
-     * @return ValidationInterface
+     * @phpstan-param mixed $field
      *
      * @phpstan-return static
      * @throws ValidationException
@@ -217,12 +223,6 @@ class Validation extends Injectable implements ValidationInterface
 
     /**
      * Appends a message to the messages list
-     *
-     * @param MessageInterface $message
-     *
-     * @return ValidationInterface
-     *
-     * @phpstan-return static
      */
     public function appendMessage(
         MessageInterface $message
@@ -244,15 +244,11 @@ class Validation extends Injectable implements ValidationInterface
      * $validation->validate();
      * ```
      *
-     * @param mixed $entity the entity object to assign data to
-     * @param mixed $data the data that needs to be validated
+     * @param object $entity
      *
+     * @phpstan-param mixed                       $entity
      * @phpstan-param filter_validation_data      $data
      * @phpstan-param filter_validation_whitelist $whitelist
-     *
-     * @return ValidationInterface
-     *
-     * @phpstan-return static
      */
     public function bind(
         mixed $entity,
@@ -320,7 +316,10 @@ class Validation extends Injectable implements ValidationInterface
             }
 
             if (isset($this->filters[$field])) {
-                $value = $filterService->sanitize($value, $this->filters[$field]);
+                /** @phpstan-var filter_sanitizers|string $fieldFilters */
+                $fieldFilters = $this->filters[$field];
+
+                $value = $filterService->sanitize($value, $fieldFilters);
             }
 
             /**
@@ -363,7 +362,9 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Returns the bound entity
      *
-     * @return mixed
+     * @return object
+     *
+     * @phpstan-return object|null
      */
     public function getEntity(): mixed
     {
@@ -372,10 +373,6 @@ class Validation extends Injectable implements ValidationInterface
 
     /**
      * Returns all the filters or a specific one
-     *
-     * @param string|null $field
-     *
-     * @return mixed
      */
     public function getFilters(string | null $field = null): mixed
     {
@@ -389,9 +386,9 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Get label for field
      *
-     * @param mixed        $field
+     * @param array|string $field
      *
-     * @return string
+     * @phpstan-param mixed $field
      */
     public function getLabel(mixed $field): string
     {
@@ -410,8 +407,6 @@ class Validation extends Injectable implements ValidationInterface
 
     /**
      * Returns the registered validators
-     *
-     * @return Messages
      */
     public function getMessages(): Messages
     {
@@ -488,6 +483,8 @@ class Validation extends Injectable implements ValidationInterface
              * Mirrors the `<FilterInterface>` cast in the Zephir source.
              *
              * @var FilterInterface $filterService
+             *
+             * @phpstan-var filter_sanitizers|string $fieldFilters
              */
             $value = $filterService->sanitize($value, $fieldFilters);
 
@@ -519,11 +516,6 @@ class Validation extends Injectable implements ValidationInterface
 
     /**
      * Gets the value to validate in the array/object data source
-     *
-     * @param mixed        $data
-     * @param string       $field
-     *
-     * @return mixed
      */
     public function getValueByData(
         mixed $data,
@@ -542,11 +534,6 @@ class Validation extends Injectable implements ValidationInterface
 
     /**
      * Gets the value to validate in the object entity source
-     *
-     * @param mixed  $entity
-     * @param string $field
-     *
-     * @return mixed
      */
     public function getValueByEntity(
         mixed $entity,
@@ -575,13 +562,10 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Alias of `add` method
      *
-     * @param mixed              $field
-     * @param ValidatorInterface $validator
+     * @param array|string       $field
      *
-     * @return ValidationInterface
+     * @phpstan-param mixed $field
      *
-     * @phpstan-return static
-     * @throws ValidationException
      * @todo remove this
      */
     public function rule(
@@ -594,14 +578,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Adds the validators to a field
      *
-     * @param mixed        $field
-     *
      * @phpstan-param filter_validators $validators
-     *
-     * @return ValidationInterface
-     *
-     * @phpstan-return static
-     * @throws ValidationException
      */
     public function rules(
         mixed $field,
@@ -635,12 +612,11 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Adds filters to the field
      *
-     * @param mixed        $field
-     * @param mixed        $filters
+     * @param array|string $field
+     * @param array|string $filters
      *
-     * @return ValidationInterface
-     *
-     * @phpstan-return static
+     * @phpstan-param mixed $field
+     * @phpstan-param mixed $filters
      */
     public function setFilters(
         mixed $field,
@@ -678,8 +654,6 @@ class Validation extends Injectable implements ValidationInterface
      * Sets the validator array
      *
      * @phpstan-param filter_validation_validators $validators
-     *
-     * @return $this
      */
     public function setValidators(array $validators): static
     {
@@ -707,13 +681,13 @@ class Validation extends Injectable implements ValidationInterface
      * $validation->validate($_POST, $entity, $fields);
      * ```
      *
-     * @param mixed $data the data that needs to be validated
-     * @param mixed $entity the entity object to assign data to
+     * @param array|object $data
      *
+     * @phpstan-param mixed $data
+     * @phpstan-param object $entity
      * @phpstan-param filter_validation_whitelist $whitelist
      *
      * @return false|Messages
-     * @throws ValidationException
      */
     public function validate(
         mixed $data = null,
@@ -843,11 +817,10 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Internal validations, if it returns true, then skip the current validator
      *
-     * @param mixed              $field
+     * @param array|string $field
      * @param ValidatorInterface $validator
      *
-     * @return bool
-     * @throws ValidationException
+     * @phpstan-param mixed $field
      */
     protected function preChecking(
         mixed $field,
