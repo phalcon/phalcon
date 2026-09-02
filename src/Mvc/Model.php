@@ -1581,6 +1581,23 @@ abstract class Model extends AbstractInjectionAware implements
         $query = self::getPreparedQuery($params, 1);
 
         /**
+         * A unique row is hydrated by the query itself, which leaves no point
+         * at which the relation map can be attached. The resultset is kept
+         * instead, pre-loaded, and reduced to its first row afterwards.
+         */
+        if (isset($params["eager"])) {
+            $resultset = $query->execute();
+
+            if (is_object($resultset)) {
+                self::loadEager($resultset, $params["eager"], $params);
+
+                return $resultset->getFirst();
+            }
+
+            return $resultset;
+        }
+
+        /**
          * Return only the first row
          */
         $query->setUniqueRow(true);

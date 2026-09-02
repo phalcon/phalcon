@@ -19,6 +19,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Acl\Exceptions\ForbiddenDelimiter`, thrown when an ACL role, component or access name contains `!`.
 - `Phalcon\Auth\Exceptions\InvalidCredentialKey`, thrown when a credential key passed to `Phalcon\Auth\Adapter\Model::retrieveByCredentials()` is not a plain identifier.
 - `Phalcon\Http\Request\Bag\AbstractBag::clear()`, removing all elements of a request bag.
+- `Phalcon\Mvc\Model::findFirst()` now recognizes the `eager` parameter, so relations can be eagerly loaded. [#17534](https://github.com/phalcon/cphalcon/issues/17534) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 - `allowedClasses` option for the Storage adapters (`true`, `false` or a list of class names), forwarded to the new `Phalcon\Storage\Serializer\Php::setAllowedClasses()`: restricts the classes `unserialize()` may instantiate for stored values, including the nested content of the `Stream` adapter. A class outside the list makes the read fail instead of building an object. Thanks to [Ilia Alshanetsky](https://ilia.ws)
 - `rememberSecure` option for the session guard (`Phalcon\Auth\Guard\Config\SessionGuardConfig`, `Session::fromOptions()`).
 
