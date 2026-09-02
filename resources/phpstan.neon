@@ -58,6 +58,15 @@ parameters:
             message: "#Call to function is_array\\(\\) with array<mixed> will always evaluate to true#"
             path: ../src/Config/ConfigFactory.php
             reportUnmatched: false
+        # `checkConfig()` accepts `mixed`, so an int or a plain object can still
+        # reach the guard at run time. Only the narrower docblock, which
+        # documents the two supported inputs, makes it look redundant. The same
+        # guard is live in the Zephir implementation, where the parameter is
+        # `var`.
+        -
+            message: "#Call to function is_array\\(\\) with array<string, mixed> will always evaluate to true#"
+            path: ../src/Factory/AbstractConfigFactory.php
+            reportUnmatched: false
         # `Attributes` is a Collection users populate freely, so a value stays
         # `mixed` after the array/resource guards that raise
         # AttributeNotRenderable. `AttributeEscaper::escape()` takes `mixed`

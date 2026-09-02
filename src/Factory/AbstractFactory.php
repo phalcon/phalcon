@@ -14,18 +14,27 @@ declare(strict_types=1);
 namespace Phalcon\Factory;
 
 use Exception as BaseException;
+use Phalcon\Contracts\Factory\FactoryTypes;
 
 use function array_merge;
 
+/**
+ * @phpstan-import-type factory_instances from FactoryTypes
+ * @phpstan-import-type factory_services from FactoryTypes
+ */
 abstract class AbstractFactory extends AbstractConfigFactory
 {
     /**
      * @var array<string, string>
+     *
+     * @phpstan-var factory_services
      */
     protected array $mapper = [];
 
     /**
      * @var array<string, mixed>
+     *
+     * @phpstan-var factory_instances
      */
     protected array $services = [];
 
@@ -52,6 +61,7 @@ abstract class AbstractFactory extends AbstractConfigFactory
      * Returns the adapters for the factory
      *
      * @return string[]
+     * @phpstan-return factory_services
      */
     abstract protected function getServices(): array;
 
@@ -59,6 +69,8 @@ abstract class AbstractFactory extends AbstractConfigFactory
      * Initialize services/add new services
      *
      * @param string[] $services
+     *
+     * @phpstan-param factory_services $services
      *
      * @return void
      */
