@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "adcbbc3adb675a71ec2045be63ff42ca",
+    "content-hash": "4ea0b2ed2a193e5014f504b0e6305eff",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1448,16 +1448,16 @@
         },
         {
             "name": "phalcon/quill",
-            "version": "v0.4.0",
+            "version": "v0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/quill.git",
-                "reference": "8cbb890512453ce1cecbe7116912da8a509a76aa"
+                "reference": "75a9ecb08726fdb3b33e0b28798bcaa4691221fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/quill/zipball/8cbb890512453ce1cecbe7116912da8a509a76aa",
-                "reference": "8cbb890512453ce1cecbe7116912da8a509a76aa",
+                "url": "https://api.github.com/repos/phalcon/quill/zipball/75a9ecb08726fdb3b33e0b28798bcaa4691221fb",
+                "reference": "75a9ecb08726fdb3b33e0b28798bcaa4691221fb",
                 "shasum": ""
             },
             "require": {
@@ -1500,7 +1500,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/quill/issues",
-                "source": "https://github.com/phalcon/quill/tree/v0.4.0"
+                "source": "https://github.com/phalcon/quill/tree/v0.5.0"
             },
             "funding": [
                 {
@@ -1512,7 +1512,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-31T15:53:25+00:00"
+            "time": "2026-09-02T01:58:49+00:00"
         },
         {
             "name": "phalcon/talon",
@@ -2021,11 +2021,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.11",
+            "version": "2.2.12",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0eb899d48d9b784eee3f1b58a6c9dc79734cf811",
-                "reference": "0eb899d48d9b784eee3f1b58a6c9dc79734cf811",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/174b0d88710f00a42598886504dd7a146f91ace5",
+                "reference": "174b0d88710f00a42598886504dd7a146f91ace5",
                 "shasum": ""
             },
             "require": {
@@ -2081,7 +2081,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-31T10:33:10+00:00"
+            "time": "2026-08-31T19:09:43+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
