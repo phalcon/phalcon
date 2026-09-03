@@ -858,7 +858,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @phpstan-return mvc_metadata_slot
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): array | string | bool | null
+    final public function readMetaDataIndex(ModelInterface $model, int $index): array | bool | string | null
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {

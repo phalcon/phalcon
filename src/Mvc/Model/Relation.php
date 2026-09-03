@@ -99,7 +99,7 @@ class Relation implements RelationInterface
     public function getForeignKey()
     {
         if (isset($this->options["foreignKey"]) && !empty($this->options["foreignKey"])) {
-            /** @var array<string, mixed>|string|bool */
+            /** @var array<string, mixed>|bool|string */
             return $this->options["foreignKey"];
         }
 
@@ -179,11 +179,11 @@ class Relation implements RelationInterface
             !empty($this->options["params"])
         ) {
             if (is_callable($this->options["params"])) {
-                /** @var mvc_model_parameters|false */
+                /** @var false|mvc_model_parameters */
                 return call_user_func($this->options["params"]);
             }
 
-            /** @var mvc_model_parameters|false */
+            /** @var false|mvc_model_parameters */
             return $this->options["params"];
         }
 

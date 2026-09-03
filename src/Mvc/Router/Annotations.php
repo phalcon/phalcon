@@ -482,7 +482,7 @@ class Annotations extends Router
             /**
              * The annotation names a function or a [class, method] pair.
              */
-            /** @var callable&(array<array-key, mixed>|string) $beforeMatch */
+            /** @var (array<array-key, mixed>|string)&callable $beforeMatch */
             $route->beforeMatch($beforeMatch);
         }
 

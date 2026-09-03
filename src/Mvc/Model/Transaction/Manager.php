@@ -105,7 +105,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      * @throws ManagerOrmServicesUnavailable
      */
     public function __construct(
-        protected DiInterface|null $container = null
+        protected DiInterface | null $container = null
     ) {
         if (null === $container) {
             $container = Di::getDefault();

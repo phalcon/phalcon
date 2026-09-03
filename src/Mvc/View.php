@@ -23,8 +23,8 @@ use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
 use Phalcon\Mvc\View\Exceptions\ViewNotFound;
-use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
 use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
+use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
 use Phalcon\Mvc\View\Traits\ViewParamsTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
@@ -1021,7 +1021,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         string $controllerName,
         string $actionName,
         array $params = []
-    ): static | bool {
+    ): bool | static {
         $result = $this->processRender($controllerName, $actionName, $params);
 
         if (!$result) {

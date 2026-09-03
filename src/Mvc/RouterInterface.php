@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
-use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\RouteInterface;

@@ -72,8 +72,8 @@ use Phalcon\Mvc\Model\QueryInterface;
 use Phalcon\Mvc\Model\Relation;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset;
-use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\ValidationFailed;
@@ -1028,7 +1028,7 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $columnMap,
         int $dirtyState = 0,
         bool | null $keepSnapshots = null
-    ): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\ResultInterface {
+    ): \Phalcon\Mvc\Model\ResultInterface | \Phalcon\Mvc\ModelInterface {
         /**
          * The resultsets pass the model instance they hydrate.
          */
@@ -5204,7 +5204,7 @@ abstract class Model extends AbstractInjectionAware implements
                 continue;
             }
 
-            /** @var false|Simple|ModelInterface $related */
+            /** @var false|ModelInterface|Simple $related */
             $related = $manager->getRelationRecords(
                 $relation,
                 $this

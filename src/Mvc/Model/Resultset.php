@@ -139,7 +139,7 @@ abstract class Resultset implements
      *
      * @var bool|ResultInterface
      *
-     * @phpstan-var \Phalcon\Contracts\Db\Result|bool|null
+     * @phpstan-var bool|\Phalcon\Contracts\Db\Result|null
      */
     protected mixed $result = null;
 
@@ -466,7 +466,7 @@ abstract class Resultset implements
      *
      * @return ModelInterface|Row|null
      */
-    public function getLast(): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\Row | null
+    public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | null
     {
         $count = $this->count();
 

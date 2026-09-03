@@ -16,9 +16,9 @@ namespace Phalcon\Mvc\Model;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Messages\MessageInterface;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Transaction\Failed as TxFailed;
 use Phalcon\Mvc\Model\Transaction\ManagerInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Transactions are protective blocks where SQL statements are only permanent if

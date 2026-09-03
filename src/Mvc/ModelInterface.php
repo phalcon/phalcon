@@ -20,7 +20,6 @@ use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\CriteriaInterface;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
-use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\Model\TransactionInterface;
@@ -104,7 +103,7 @@ interface ModelInterface
         mixed $columnMap,
         int $dirtyState = 0,
         bool $keepSnapshots = false
-    ): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\ResultInterface;
+    ): \Phalcon\Mvc\Model\ResultInterface | \Phalcon\Mvc\ModelInterface;
 
     /**
      * Returns a hydrated result based on the data and the column map

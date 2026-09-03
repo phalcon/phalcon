@@ -23,8 +23,6 @@ use Phalcon\Mvc\Application\Exception;
 use Phalcon\Mvc\Application\Exceptions\ContainerRequired;
 use Phalcon\Mvc\Application\Exceptions\InvalidModuleDefinition;
 use Phalcon\Mvc\Application\Exceptions\ModuleDefinitionPathNotFound;
-use Phalcon\Mvc\DispatcherInterface;
-use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;

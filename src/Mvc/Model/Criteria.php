@@ -18,11 +18,9 @@ use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Exceptions\InvalidModelName;
-use Phalcon\Mvc\Model\ManagerInterface;
-use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
+use Phalcon\Mvc\ModelInterface;
 
 use function abs;
 use function array_merge;

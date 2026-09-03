@@ -52,42 +52,6 @@ final class EagerRelationFallbackTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * A model named in WITH resolves through the by-model-pair lookup when
-     * the relation carries an alias.
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-09-03
-     */
-    public function testMvcModelQueryEagerRelationResolvesByModelName(): void
-    {
-        $manager = $this->container->get('modelsManager');
-
-        $query = $manager->createQuery(
-            'SELECT * FROM ' . InvoicesBelongsToCustomers::class
-            . ' WITH ' . Customers::class
-        );
-
-        $intermediate = $query->parse();
-
-        $this->assertIsArray($intermediate);
-        $this->assertArrayHasKey('joins', $intermediate);
-        $this->assertCount(1, $intermediate['joins']);
-
-        $expected = Customers::class;
-        $actual   = $intermediate['joins'][0]['source'][0];
-        $this->assertSame('co_customers', $actual);
-
-        $columns = $intermediate['columns'];
-        $eager   = array_filter(
-            $columns,
-            function ($column) {
-                return isset($column['eager']);
-            }
-        );
-        $this->assertNotEmpty($eager);
-    }
-
-    /**
      * Two or more relations between the same pair of models cannot be
      * resolved without an alias.
      *
@@ -126,5 +90,41 @@ final class EagerRelationFallbackTest extends AbstractDatabaseTestCase
         $this->expectExceptionMessage('Cannot find a relationship between');
 
         $query->parse();
+    }
+
+    /**
+     * A model named in WITH resolves through the by-model-pair lookup when
+     * the relation carries an alias.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-09-03
+     */
+    public function testMvcModelQueryEagerRelationResolvesByModelName(): void
+    {
+        $manager = $this->container->get('modelsManager');
+
+        $query = $manager->createQuery(
+            'SELECT * FROM ' . InvoicesBelongsToCustomers::class
+            . ' WITH ' . Customers::class
+        );
+
+        $intermediate = $query->parse();
+
+        $this->assertIsArray($intermediate);
+        $this->assertArrayHasKey('joins', $intermediate);
+        $this->assertCount(1, $intermediate['joins']);
+
+        $expected = Customers::class;
+        $actual   = $intermediate['joins'][0]['source'][0];
+        $this->assertSame('co_customers', $actual);
+
+        $columns = $intermediate['columns'];
+        $eager   = array_filter(
+            $columns,
+            function ($column) {
+                return isset($column['eager']);
+            }
+        );
+        $this->assertNotEmpty($eager);
     }
 }

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Contracts\Mvc\MvcTypes;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon\Mvc\Model\MetaDataInterface
@@ -261,7 +261,7 @@ interface MetaDataInterface
      *
      * @phpstan-return mvc_metadata_index
      */
-    public function readMetaDataIndex(ModelInterface $model, int $index): array | string | bool | null;
+    public function readMetaDataIndex(ModelInterface $model, int $index): array | bool | string | null;
 
     /**
      * Resets internal meta-data in order to regenerate it

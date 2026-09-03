@@ -16,10 +16,10 @@ namespace Phalcon\Mvc\Model;
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
-use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Mvc\ModelInterface;
 
 /**
  * Interface for Phalcon\Mvc\Model\Manager

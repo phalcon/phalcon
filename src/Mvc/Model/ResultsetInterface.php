@@ -74,7 +74,7 @@ interface ResultsetInterface
      *
      * @return ModelInterface|Row|null
      */
-    public function getLast(): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\Row | null;
+    public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | null;
 
     /**
      * Returns the error messages produced by a batch operation
