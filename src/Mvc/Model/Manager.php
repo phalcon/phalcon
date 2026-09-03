@@ -466,7 +466,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         // The fields and the referenced fields always have the same form. An
         // array of referenced fields means an array of fields.
         /** @var array<array-key, string> $fields */
-        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+        if (
+            is_array($referencedFields)
+            && $this->getFieldsCount($fields) != $this->getFieldsCount($referencedFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "BelongsTo",
                 $entityName,
@@ -564,7 +567,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         // The fields and the referenced fields always have the same form. An
         // array of referenced fields means an array of fields.
         /** @var array<array-key, string> $fields */
-        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+        if (
+            is_array($referencedFields)
+            && $this->getFieldsCount($fields) != $this->getFieldsCount($referencedFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "HasMany",
                 $entityName,
@@ -674,7 +680,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         // The fields and the referenced fields always have the same form. An
         // array of referenced fields means an array of fields.
         /** @var array<array-key, string> $fields */
-        if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
+        if (
+            is_array($intermediateFields)
+            && $this->getFieldsCount($fields) != $this->getFieldsCount($intermediateFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "HasManytoMany",
                 $entityName,
@@ -688,7 +697,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          */
         // The intermediate fields have the same form as the fields.
         /** @var array<array-key, string> $intermediateFields */
-        if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
+        if (
+            is_array($intermediateReferencedFields)
+            && $this->getFieldsCount($intermediateReferencedFields)
+            != $this->getFieldsCount($referencedFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "HasManytoMany",
                 $entityName,
@@ -801,7 +814,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         // The fields and the referenced fields always have the same form. An
         // array of referenced fields means an array of fields.
         /** @var array<array-key, string> $fields */
-        if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
+        if (
+            is_array($referencedFields)
+            && $this->getFieldsCount($fields) != $this->getFieldsCount($referencedFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "HasOne",
                 $entityName,
@@ -911,7 +927,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         // The fields and the referenced fields always have the same form. An
         // array of referenced fields means an array of fields.
         /** @var array<array-key, string> $fields */
-        if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
+        if (
+            is_array($intermediateFields)
+            && $this->getFieldsCount($fields) != $this->getFieldsCount($intermediateFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "HasOneThrough",
                 $entityName,
@@ -925,7 +944,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          */
         // The intermediate fields have the same form as the fields.
         /** @var array<array-key, string> $intermediateFields */
-        if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
+        if (
+            is_array($intermediateReferencedFields)
+            && $this->getFieldsCount($intermediateReferencedFields)
+            != $this->getFieldsCount($referencedFields)
+        ) {
             throw new ReferencedFieldsMismatch(
                 "HasOneThrough",
                 $entityName,
@@ -2581,6 +2604,23 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $collectionEntries = $this->$collection;
 
         return isset($collectionEntries[$keyRelation]);
+    }
+
+    /**
+     * Counts the fields of a relation leg. A leg with one field is a string,
+     * so it counts as one field.
+     *
+     * @param mixed $fields
+     *
+     * @return int
+     */
+    private function getFieldsCount(mixed $fields): int
+    {
+        if (is_array($fields)) {
+            return count($fields);
+        }
+
+        return 1;
     }
 
     /**
