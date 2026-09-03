@@ -390,7 +390,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * instead. The `object|false` return type lands in v7.
      *
      * @phpstan-param datamapper_values                $values
-     * @phpstan-param class-string                     $className
+     * @phpstan-param class-string|'stdClass'          $className
      * @phpstan-param datamapper_constructor_arguments $arguments
      */
     public function fetchObject(
@@ -401,12 +401,12 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     ): object {
         $sth = $this->perform($statement, $values);
 
-        $object = $sth->fetchObject($className, $arguments);
-        if (false === $object) {
+        $result = $sth->fetchObject($className, $arguments);
+        if (false === $result) {
             return new stdClass();
         }
 
-        return $object;
+        return $result;
     }
 
     /**
@@ -420,7 +420,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * `fetchObject`. The default object returned is `\stdClass`
      *
      * @phpstan-param datamapper_values                $values
-     * @phpstan-param class-string                     $className
+     * @phpstan-param class-string|'stdClass'          $className
      * @phpstan-param datamapper_constructor_arguments $arguments
      *
      * @phpstan-return datamapper_objects

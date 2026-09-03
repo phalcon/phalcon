@@ -122,7 +122,7 @@ interface ConnectionInterface extends PdoInterface
      * `object|false` return type lands in v7.
      *
      * @phpstan-param datamapper_values                $values
-     * @phpstan-param class-string                     $className
+     * @phpstan-param class-string|'stdClass'          $className
      * @phpstan-param datamapper_constructor_arguments $arguments
      */
     public function fetchObject(
@@ -143,7 +143,7 @@ interface ConnectionInterface extends PdoInterface
      * `fetchObject`. The default object returned is `\stdClass`
      *
      * @phpstan-param datamapper_values                $values
-     * @phpstan-param class-string                     $className
+     * @phpstan-param class-string|'stdClass'          $className
      * @phpstan-param datamapper_constructor_arguments $arguments
      *
      * @phpstan-return datamapper_objects
