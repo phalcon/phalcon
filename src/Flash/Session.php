@@ -113,7 +113,7 @@ class Session extends AbstractFlash
         $messages = $this->getSessionMessages(false);
 
         if (!$type) {
-            return (true !== empty($messages));
+            return true !== empty($messages);
         }
 
         return isset($messages[$type]);

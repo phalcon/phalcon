@@ -618,29 +618,30 @@ class Url extends AbstractInjectionAware implements UrlInterface
 
             if ($bracketCount === 0 && $parenthesesCount === 0) {
                 if ($lookingPlaceholder) {
-                    if ($intermediate > 0) {
-                        if ($ch < 'a' || $ch > 'z' || $i === ($len - 1)) {
-                            $replace = $this->replaceMarker(
-                                false,
-                                $paths,
-                                $replacements,
-                                $position,
-                                $pattern,
-                                $markerPos,
-                                $i
-                            );
+                    if (
+                        $intermediate > 0 &&
+                        ($ch < 'a' || $ch > 'z' || $i === ($len - 1))
+                    ) {
+                        $replace = $this->replaceMarker(
+                            false,
+                            $paths,
+                            $replacements,
+                            $position,
+                            $pattern,
+                            $markerPos,
+                            $i
+                        );
 
-                            if ($replace !== null) {
-                                $routeStr .= $replace;
-                            }
-                            $lookingPlaceholder = false;
-
-                            if ($ch < 'a' || $ch > 'z') {
-                                $routeStr .= $ch;
-                            }
-
-                            continue;
+                        if ($replace !== null) {
+                            $routeStr .= $replace;
                         }
+                        $lookingPlaceholder = false;
+
+                        if ($ch < 'a' || $ch > 'z') {
+                            $routeStr .= $ch;
+                        }
+
+                        continue;
                     }
                 } else {
                     if ($ch === ':') {

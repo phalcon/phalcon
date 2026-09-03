@@ -200,10 +200,11 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
         /**
          * Check if there is a method 'beforeBind'
          */
-        if (true === method_exists($this, "beforeBind")) {
-            if (false === $this->{"beforeBind"}($data, $entity)) {
-                return $this;
-            }
+        if (
+            true === method_exists($this, "beforeBind") &&
+            false === $this->{"beforeBind"}($data, $entity)
+        ) {
+            return $this;
         }
 
         if (empty($whitelist)) {

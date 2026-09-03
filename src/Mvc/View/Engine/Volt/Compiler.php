@@ -3094,7 +3094,7 @@ class Compiler implements InjectionAwareInterface
                  * There is a value, get it and check it
                  */
                 if (isset($left["value"])) {
-                    return ($left["value"] === "tag");
+                    return $left["value"] === "tag";
                 } else {
                     /**
                      * There is a "name" so that is nested, recursion

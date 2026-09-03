@@ -189,10 +189,8 @@ class Redis extends AbstractAdapter
             }
 
             $scanKeys = $result[1] ?? null;
-            if (null !== $scanKeys) {
-                if (is_array($scanKeys)) {
-                    $keys = array_merge($keys, $scanKeys);
-                }
+            if (null !== $scanKeys && is_array($scanKeys)) {
+                $keys = array_merge($keys, $scanKeys);
             }
 
             if ($cursor === "0" || $cursor === 0) {

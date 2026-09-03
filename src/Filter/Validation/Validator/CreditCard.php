@@ -128,6 +128,6 @@ class CreditCard extends AbstractValidator
 
         $result = array_sum(str_split($hash));
 
-        return ($result % 10 == 0);
+        return $result % 10 == 0;
     }
 }

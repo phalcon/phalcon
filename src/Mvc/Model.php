@@ -433,14 +433,11 @@ abstract class Model extends AbstractInjectionAware implements
              */
             if (
                 isset($this->related[$lowerProperty]) &&
-                !$relation->isReusable()
+                !$relation->isReusable() &&
+                is_object($this->related[$lowerProperty]) &&
+                $this->related[$lowerProperty] instanceof ModelInterface
             ) {
-                if (
-                    is_object($this->related[$lowerProperty]) &&
-                    $this->related[$lowerProperty] instanceof ModelInterface
-                ) {
-                    return $this->related[$lowerProperty];
-                }
+                return $this->related[$lowerProperty];
             }
 
             /**
@@ -2430,10 +2427,11 @@ abstract class Model extends AbstractInjectionAware implements
             if (array_key_exists($attributeField, $dataMapped)) {
                 $value = $dataMapped[$attributeField];
                 // If white-list exists check if the attribute is on that list
-                if (is_array($whiteList)) {
-                    if (!in_array($attributeField, $whiteList)) {
-                        continue;
-                    }
+                if (
+                    is_array($whiteList) &&
+                    !in_array($attributeField, $whiteList)
+                ) {
+                    continue;
                 }
 
                 // Try to find a possible getter
@@ -4786,14 +4784,12 @@ abstract class Model extends AbstractInjectionAware implements
                 $this
             );
 
-            if ($related) {
-                /**
-                 * Delete related if there is any
-                 * Stop the operation if needed
-                 */
-                if ($related->delete() === false) {
-                    return false;
-                }
+            /**
+             * Delete related if there is any
+             * Stop the operation if needed
+             */
+            if ($related && $related->delete() === false) {
+                return false;
             }
         }
 
@@ -4986,71 +4982,72 @@ abstract class Model extends AbstractInjectionAware implements
                 $attributeField = $field;
             }
 
-            if (!array_key_exists($attributeField, $automaticAttributes)) {
+            /**
+             * Check every attribute in the model except identity field
+             */
+            if (
+                !array_key_exists($attributeField, $automaticAttributes) &&
+                $field != $identityField
+            ) {
                 /**
-                 * Check every attribute in the model except identity field
+                 * This isset checks that the property be defined in the
+                 * model
                  */
-                if ($field != $identityField) {
-                    /**
-                     * This isset checks that the property be defined in the
-                     * model
-                     */
-                    if (isset($rawValues[$attributeField])) {
-                        $rawValue = $rawValues[$attributeField];
+                if (isset($rawValues[$attributeField])) {
+                    $rawValue = $rawValues[$attributeField];
 
-                        if (!isset($bindDataTypes[$field])) {
-                            throw new BindTypeNotDefined($field, get_class($this));
-                        }
-
-                        $bindType                  = $bindDataTypes[$field];
-                        $fields[]                  = $field;
-                        $values[]                  = $rawValue;
-                        $bindTypes[]               = $bindType;
-                        $snapshot[$attributeField] = $rawValue;
-                    } elseif (property_exists($this, $attributeField)) {
-                        $value = $this->$attributeField;
-                        if ($value === null && array_key_exists($field, $defaultValues)) {
-                            $snapshot[$attributeField]           = $defaultValues[$field];
-                            $unsetDefaultValues[$attributeField] = $defaultValues[$field];
-
-                            if (false === $connection->supportsDefaultValue()) {
-                                continue;
-                            }
-
-                            $value = $connection->getDefaultValue();
-                        } else {
-                            $snapshot[$attributeField] = $value;
-                        }
-
-                        /**
-                         * Every column must have a bind data type defined
-                         */
-                        if (!isset($bindDataTypes[$field])) {
-                            throw new BindTypeNotDefined($field, get_class($this));
-                        }
-
-                        $bindType    = $bindDataTypes[$field];
-                        $fields[]    = $field;
-                        $values[]    = $value;
-                        $bindTypes[] = $bindType;
-                    } else {
-                        if (array_key_exists($field, $defaultValues)) {
-                            $snapshot[$attributeField]           = $defaultValues[$field];
-                            $unsetDefaultValues[$attributeField] = $defaultValues[$field];
-
-                            if (false === $connection->supportsDefaultValue()) {
-                                continue;
-                            }
-
-                            $values[] = $connection->getDefaultValue();
-                        } else {
-                            $values[]                  = $value;
-                            $snapshot[$attributeField] = $value;
-                        }
-
-                        $fields[]    = $field;
-                        $bindTypes[] = $bindSkip;
+                    if (!isset($bindDataTypes[$field])) {
+                        throw new BindTypeNotDefined($field, get_class($this));
                     }
+
+                    $bindType                  = $bindDataTypes[$field];
+                    $fields[]                  = $field;
+                    $values[]                  = $rawValue;
+                    $bindTypes[]               = $bindType;
+                    $snapshot[$attributeField] = $rawValue;
+                } elseif (property_exists($this, $attributeField)) {
+                    $value = $this->$attributeField;
+                    if ($value === null && array_key_exists($field, $defaultValues)) {
+                        $snapshot[$attributeField]           = $defaultValues[$field];
+                        $unsetDefaultValues[$attributeField] = $defaultValues[$field];
+
+                        if (false === $connection->supportsDefaultValue()) {
+                            continue;
+                        }
+
+                        $value = $connection->getDefaultValue();
+                    } else {
+                        $snapshot[$attributeField] = $value;
+                    }
+
+                    /**
+                     * Every column must have a bind data type defined
+                     */
+                    if (!isset($bindDataTypes[$field])) {
+                        throw new BindTypeNotDefined($field, get_class($this));
+                    }
+
+                    $bindType    = $bindDataTypes[$field];
+                    $fields[]    = $field;
+                    $values[]    = $value;
+                    $bindTypes[] = $bindType;
+                } else {
+                    if (array_key_exists($field, $defaultValues)) {
+                        $snapshot[$attributeField]           = $defaultValues[$field];
+                        $unsetDefaultValues[$attributeField] = $defaultValues[$field];
+
+                        if (false === $connection->supportsDefaultValue()) {
+                            continue;
+                        }
+
+                        $values[] = $connection->getDefaultValue();
+                    } else {
+                        $values[]                  = $value;
+                        $snapshot[$attributeField] = $value;
+                    }
+
+                    $fields[]    = $field;
+                    $bindTypes[] = $bindSkip;
                 }
             }
         }
@@ -5301,10 +5298,11 @@ abstract class Model extends AbstractInjectionAware implements
             foreach ($nonPrimary as $field) {
                 $changed = false;
                 if (is_array($columnMap)) {
-                    if (!isset($columnMap[$field])) {
-                        if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new ColumnNotInTableMap($field, get_class($this));
-                        }
+                    if (
+                        !isset($columnMap[$field]) &&
+                        !Settings::get("orm.ignore_unknown_columns")
+                    ) {
+                        throw new ColumnNotInTableMap($field, get_class($this));
                     }
 
                     $attributeField = $columnMap[$field];
@@ -5426,10 +5424,11 @@ abstract class Model extends AbstractInjectionAware implements
                  * Check if the model has a column map
                  */
                 if (is_array($columnMap)) {
-                    if (!isset($columnMap[$field])) {
-                        if (!Settings::get("orm.ignore_unknown_columns")) {
-                            throw new ColumnNotInTableMap($field, get_class($this));
-                        }
+                    if (
+                        !isset($columnMap[$field]) &&
+                        !Settings::get("orm.ignore_unknown_columns")
+                    ) {
+                        throw new ColumnNotInTableMap($field, get_class($this));
                     }
 
                     $attributeField = $columnMap[$field];
@@ -6505,14 +6504,15 @@ abstract class Model extends AbstractInjectionAware implements
                                 );
                             }
 
-                            if (!isset($keptKeys[$keepKey])) {
-                                if (!$existingRecord->delete()) {
-                                    $this->appendMessagesFrom($existingRecord);
+                            if (
+                                !isset($keptKeys[$keepKey]) &&
+                                !$existingRecord->delete()
+                            ) {
+                                $this->appendMessagesFrom($existingRecord);
 
-                                    $connection->rollback($nesting);
+                                $connection->rollback($nesting);
 
-                                    return false;
-                                }
+                                return false;
                             }
                         }
                     }
@@ -6683,14 +6683,15 @@ abstract class Model extends AbstractInjectionAware implements
 
                 foreach ($notNull as $field) {
                     if (is_array($columnMap)) {
-                        if (!isset($columnMap[$field])) {
-                            if (!Settings::get("orm.ignore_unknown_columns")) {
-                                throw new Exception(
-                                    "Column '"
-                                    . $field . "' in '"
-                                    . get_class($this) . "' isn't part of the column map"
-                                );
-                            }
+                        if (
+                            !isset($columnMap[$field]) &&
+                            !Settings::get("orm.ignore_unknown_columns")
+                        ) {
+                            throw new Exception(
+                                "Column '"
+                                . $field . "' in '"
+                                . get_class($this) . "' isn't part of the column map"
+                            );
                         }
 
                         $attributeField = $columnMap[$field];
