@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Router\Exceptions\InvalidRoutePaths;
 
 use function array_flip;
@@ -29,6 +30,12 @@ use function substr;
 
 /**
  * This class represents every route added to the router
+ *
+ * @phpstan-import-type mvc_router_converters from MvcTypes
+ * @phpstan-import-type mvc_router_http_methods from MvcTypes
+ * @phpstan-import-type mvc_router_named_params from MvcTypes
+ * @phpstan-import-type mvc_router_paths from MvcTypes
+ * @phpstan-import-type mvc_router_reversed_paths from MvcTypes
  */
 class Route implements RouteInterface
 {
@@ -38,6 +45,8 @@ class Route implements RouteInterface
     protected static int $uniqueId = 0;
     /**
      * @mixed $callable|null
+     *
+     * @phpstan-var callable|null
      */
     protected mixed $beforeMatch = null;
 
@@ -57,6 +66,7 @@ class Route implements RouteInterface
 
     /**
      * @mixed array
+     * @phpstan-var mvc_router_converters
      */
     protected array $converters = [];
 
@@ -72,11 +82,14 @@ class Route implements RouteInterface
 
     /**
      * @mixed callable|null
+     *
+     * @phpstan-var callable|null
      */
     protected mixed $match = null;
 
     /**
      * @mixed array|string|null
+     * @phpstan-var mvc_router_http_methods|string|null
      */
     protected array | string | null $methods = [];
 
@@ -87,6 +100,7 @@ class Route implements RouteInterface
 
     /**
      * @mixed array
+     * @phpstan-var mvc_router_paths
      */
     protected array $paths = [];
 
@@ -104,15 +118,16 @@ class Route implements RouteInterface
      * Phalcon\Mvc\Router\Route constructor
      *
      * @param string            $pattern
-     * @param array|string|null $paths
-     * @param array|string|null $httpMethods
+     * @param mixed $paths
+     * @param mixed $httpMethods
      *
      * @throws Exception
+     *
      */
     public function __construct(
         string $pattern,
-        array | string | null $paths = null,
-        array | string | null $httpMethods = null
+        mixed $paths = null,
+        mixed $httpMethods = null
     ) {
         // Configure the route (extract parameters, paths, etc)
         $this->reConfigure($pattern, $paths);
@@ -131,12 +146,14 @@ class Route implements RouteInterface
     /**
      * Returns routePaths
      *
-     * @param array|string|null $paths
+     * @param mixed $paths
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_router_paths
      */
-    public static function getRoutePaths(array | string | null $paths = null): array
+    public static function getRoutePaths(mixed $paths = null): array
     {
         if ($paths === null) {
             $paths = [];
@@ -210,6 +227,11 @@ class Route implements RouteInterface
             throw new InvalidRoutePaths();
         }
 
+        /**
+         * The guard above proves the value is an array of route paths.
+         */
+        /** @var mvc_router_paths $routePaths */
+
         return $routePaths;
     }
 
@@ -247,13 +269,16 @@ class Route implements RouteInterface
      * );
      *```
      *
-     * @param callable $callback
+     * @param mixed $callback
      *
      * @return RouteInterface
      */
-    public function beforeMatch(callable $callback): RouteInterface
+    public function beforeMatch(mixed $callback): RouteInterface
     {
-        $this->beforeMatch = $callback;
+        /** @var callable|null $beforeMatch */
+        $beforeMatch = $callback;
+
+        $this->beforeMatch = $beforeMatch;
 
         return $this;
     }
@@ -301,6 +326,11 @@ class Route implements RouteInterface
      */
     public function convert(string $name, mixed $converter): RouteInterface
     {
+        /**
+         * The converter is invoked when the route matches, so a value that
+         * is not callable fails there, as it does in the Zephir source.
+         */
+        /** @var callable $converter */
         $this->converters[$name] = $converter;
 
         return $this;
@@ -312,6 +342,8 @@ class Route implements RouteInterface
      * @param string $pattern
      *
      * @return array|bool
+     *
+     * @phpstan-return mvc_router_named_params|false
      */
     public function extractNamedParams(string $pattern): array | bool
     {
@@ -470,7 +502,7 @@ class Route implements RouteInterface
      *
      * @return callable|null
      */
-    public function getBeforeMatch(): callable | null
+    public function getBeforeMatch()
     {
         return $this->beforeMatch;
     }
@@ -526,13 +558,22 @@ class Route implements RouteInterface
      */
     public function getCompiledPattern(): string
     {
-        return $this->compiledPattern;
+        /**
+         * The constructor calls reConfigure(), which always sets the
+         * compiled pattern.
+         */
+        /** @var string $compiledPattern */
+        $compiledPattern = $this->compiledPattern;
+
+        return $compiledPattern;
     }
 
     /**
      * Returns the router converter
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_converters
      */
     public function getConverters(): array
     {
@@ -561,6 +602,8 @@ class Route implements RouteInterface
      * Returns the HTTP methods that constraint matching the route
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_router_http_methods|string|null
      */
     public function getHttpMethods(): array | string | null
     {
@@ -572,7 +615,7 @@ class Route implements RouteInterface
      *
      * @return callable|null
      */
-    public function getMatch(): callable | null
+    public function getMatch()
     {
         return $this->match;
     }
@@ -591,6 +634,8 @@ class Route implements RouteInterface
      * Returns the paths
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_paths
      */
     public function getPaths(): array
     {
@@ -611,6 +656,8 @@ class Route implements RouteInterface
      * Returns the paths using positions as keys and names as values
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_reversed_paths
      */
     public function getReversedPaths(): array
     {
@@ -643,9 +690,12 @@ class Route implements RouteInterface
      * );
      *```
      */
-    public function match(callable $callback): RouteInterface
+    public function match(mixed $callback): RouteInterface
     {
-        $this->match = $callback;
+        /** @var callable|null $match */
+        $match = $callback;
+
+        $this->match = $match;
 
         return $this;
     }
@@ -654,14 +704,15 @@ class Route implements RouteInterface
      * Reconfigure the route adding a new pattern and a set of paths
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      *
      * @return void
      * @throws Exception
+     *
      */
     public function reConfigure(
         string $pattern,
-        array | string | null $paths = null
+        mixed $paths = null
     ): void {
         $routePaths = self::getRoutePaths($paths);
 
@@ -673,6 +724,11 @@ class Route implements RouteInterface
                 /**
                  * The route has named parameters, so we need to extract them
                  */
+                /**
+                 * The pattern holds a brace here, so it is not empty and
+                 * the extraction always returns the pair.
+                 */
+                /** @var mvc_router_named_params $extracted */
                 $extracted   = $this->extractNamedParams($pattern);
                 $pcrePattern = $extracted[0];
                 $routePaths  = array_merge($routePaths, $extracted[1]);
@@ -751,11 +807,12 @@ class Route implements RouteInterface
      * );
      *```
      *
-     * @param array|string $httpMethods
+     * @param mixed $httpMethods
      *
      * @return RouteInterface
+     *
      */
-    public function setHttpMethods(array | string $httpMethods): RouteInterface
+    public function setHttpMethods(mixed $httpMethods): RouteInterface
     {
         return $this->via($httpMethods);
     }
@@ -813,13 +870,17 @@ class Route implements RouteInterface
      * );
      *```
      *
-     * @param array|string|null $httpMethods
+     * @param mixed $httpMethods
      *
      * @return RouteInterface
+     *
      */
-    public function via(array | string | null $httpMethods): RouteInterface
+    public function via(mixed $httpMethods): RouteInterface
     {
-        $this->methods = $httpMethods;
+        /** @var mvc_router_http_methods|string|null $methods */
+        $methods = $httpMethods;
+
+        $this->methods = $methods;
 
         return $this;
     }

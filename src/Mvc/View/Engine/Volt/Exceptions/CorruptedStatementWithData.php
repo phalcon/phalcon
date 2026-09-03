@@ -13,10 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine\Volt\Exceptions;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\View\Engine\Volt\Exception;
 
+/**
+ * @phpstan-import-type mvc_volt_node from MvcTypes
+ */
 class CorruptedStatementWithData extends Exception
 {
+    /**
+     * @phpstan-param mvc_volt_node $statement
+     */
     public function __construct(array $statement)
     {
         parent::__construct("Corrupt statement", $statement);

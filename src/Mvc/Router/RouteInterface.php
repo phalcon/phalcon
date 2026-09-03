@@ -13,8 +13,25 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Router;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+
 /**
  * Interface for Phalcon\Mvc\Router\Route
+ *
+ * @phpstan-import-type mvc_router_http_methods from MvcTypes
+ * @phpstan-import-type mvc_router_paths from MvcTypes
+ * @phpstan-import-type mvc_router_converters from MvcTypes
+ * @phpstan-import-type mvc_router_reversed_paths from MvcTypes
+ *
+ * The route class carries these four members, and the router calls them on
+ * every route it holds. They join the interface in the next major; until
+ * then the tags below record the contract that all implementations meet.
+ *
+ * @method RouteInterface beforeMatch(callable $callback)
+ * @method callable|null getBeforeMatch()
+ * @method string|null getCompiledHostName()
+ * @method mvc_router_converters getConverters()
+ * @method callable|null getMatch()
  */
 interface RouteInterface
 {
@@ -61,6 +78,8 @@ interface RouteInterface
      * Returns the HTTP methods that constraint matching the route
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_router_http_methods|string|null
      */
     public function getHttpMethods(): array | string | null;
 
@@ -75,6 +94,8 @@ interface RouteInterface
      * Returns the paths
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_paths
      */
     public function getPaths(): array;
 
@@ -89,6 +110,8 @@ interface RouteInterface
      * Returns the paths using positions as keys and names as values
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_reversed_paths
      */
     public function getReversedPaths(): array;
 
@@ -103,13 +126,14 @@ interface RouteInterface
      * Reconfigure the route adding a new pattern and a set of paths
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
+     *
      *
      * @return void
      */
     public function reConfigure(
         string $pattern,
-        array | string | null $paths = null
+        mixed $paths = null
     ): void;
 
     /**
@@ -124,11 +148,12 @@ interface RouteInterface
     /**
      * Sets a set of HTTP methods that constraint the matching of the route
      *
-     * @param array|string $httpMethods
+     * @param mixed $httpMethods
+     *
      *
      * @return RouteInterface
      */
-    public function setHttpMethods(array | string $httpMethods): RouteInterface;
+    public function setHttpMethods(mixed $httpMethods): RouteInterface;
 
     /**
      * Sets the route's name
@@ -151,9 +176,10 @@ interface RouteInterface
     /**
      * Set one or more HTTP methods that constraint the matching of the route
      *
-     * @param array|string|null $httpMethods
+     * @param mixed $httpMethods
+     *
      *
      * @return RouteInterface
      */
-    public function via(array | string | null $httpMethods): RouteInterface;
+    public function via(mixed $httpMethods): RouteInterface;
 }

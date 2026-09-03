@@ -13,10 +13,22 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\ModelInterface;
 
 /**
  * Interface for Phalcon\Mvc\Model\Query
+ *
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_cache_options from MvcTypes
+ * @phpstan-import-type mvc_query_ir from MvcTypes
+ *
+ * The query class carries this member and the framework calls it on the
+ * interface. It joins the interface in the next major; until then the tag
+ * below records what all implementations provide.
+ *
+ * @method QueryInterface setTransaction(TransactionInterface $transaction)
  */
 interface QueryInterface
 {
@@ -26,6 +38,8 @@ interface QueryInterface
      * @param array $cacheOptions
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_model_cache_options $cacheOptions
      */
     public function cache(array $cacheOptions): QueryInterface;
 
@@ -36,16 +50,21 @@ interface QueryInterface
      * @param array $bindTypes
      *
      * @return mixed
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function execute(
         array $bindParams = [],
         array $bindTypes = []
-    ): mixed;
+    );
 
     /**
      * Returns default bind params
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_bind_params
      */
     public function getBindParams(): array;
 
@@ -53,6 +72,8 @@ interface QueryInterface
      * Returns default bind types
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_bind_types
      */
     public function getBindTypes(): array;
 
@@ -60,6 +81,8 @@ interface QueryInterface
      * Returns the current cache options
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_cache_options
      */
     public function getCacheOptions(): array;
 
@@ -70,6 +93,9 @@ interface QueryInterface
      * @param array $bindTypes
      *
      * @return ModelInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function getSingleResult(
         array $bindParams = [],
@@ -81,6 +107,8 @@ interface QueryInterface
      * in SELECT statements)
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getSql(): array;
 
@@ -98,6 +126,8 @@ interface QueryInterface
      * by Phalcon\Mvc\Model\Query
      *
      * @return array
+     *
+     * @phpstan-return mvc_query_ir
      */
     public function parse(): array;
 
@@ -108,6 +138,8 @@ interface QueryInterface
      * @param bool  $merge
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function setBindParams(
         array $bindParams,
@@ -121,6 +153,8 @@ interface QueryInterface
      * @param bool  $merge
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function setBindTypes(
         array $bindTypes,

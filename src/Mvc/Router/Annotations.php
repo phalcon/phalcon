@@ -15,7 +15,9 @@ namespace Phalcon\Mvc\Router;
 
 use Phalcon\Annotations\Adapter\Memory;
 use Phalcon\Annotations\Parser\Annotation;
+use Phalcon\Annotations\Parser\Collection;
 use Phalcon\Annotations\Parser\Exception;
+use Phalcon\Annotations\Parser\Reflection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router;
@@ -61,6 +63,8 @@ class Annotations extends Router
 
     /**
      * @mixed callable|string|null
+     *
+     * @phpstan-var callable|string|null
      */
     protected mixed $actionPreformatCallback = null;
 
@@ -76,6 +80,8 @@ class Annotations extends Router
 
     /**
      * @mixed array
+     *
+     * @phpstan-var list<array{0: string|null, 1: string, 2?: string}>
      */
     protected array $handlers = [];
 
@@ -94,6 +100,8 @@ class Annotations extends Router
      * @param string|null $prefix
      *
      * @return self
+     *
+     * @phpstan-return static
      */
     public function addModuleResource(
         string $module,
@@ -113,6 +121,8 @@ class Annotations extends Router
      * @param string|null $prefix
      *
      * @return $this
+     *
+     * @phpstan-return static
      */
     public function addResource(
         string $handler,
@@ -126,7 +136,7 @@ class Annotations extends Router
     /**
      * @return callable|string|null
      */
-    public function getActionPreformatCallback(): callable | string | null
+    public function getActionPreformatCallback()
     {
         return $this->actionPreformatCallback;
     }
@@ -135,6 +145,8 @@ class Annotations extends Router
      * Return the registered resources
      *
      * @return array
+     *
+     * @phpstan-return list<array{0: string|null, 1: string, 2?: string}>
      */
     public function getResources(): array
     {
@@ -159,10 +171,11 @@ class Annotations extends Router
             );
         }
 
-        /** @var Memory $annotationsService */
         if ($this->container instanceof DiInterface) {
+            /** @var Memory $annotationsService */
             $annotationsService = $this->container->getShared("annotations");
         } else {
+            /** @var Memory $annotationsService */
             $annotationsService = $this->container->get("annotations");
         }
 
@@ -234,6 +247,7 @@ class Annotations extends Router
             /**
              * Check if the scope has a module associated
              */
+            /** @var string|null $moduleName */
             $moduleName = $scope[2] ?? null;
             $moduleName = $moduleName !== null ? $moduleName : "";
             $suffixed   = $controllerName . $this->controllerSuffix;
@@ -248,6 +262,7 @@ class Annotations extends Router
             /**
              * Get the annotations from the class
              */
+            /** @var Reflection $handlerAnnotations */
             $handlerAnnotations = $annotationsService->get($suffixed);
 
             if (!is_object($handlerAnnotations)) {
@@ -260,6 +275,7 @@ class Annotations extends Router
             $classAnnotations = $handlerAnnotations->getClassAnnotations();
 
             if (is_object($classAnnotations)) {
+                /** @var iterable<Annotation> $annotations */
                 $annotations = $classAnnotations->getAnnotations();
 
                 foreach ($annotations as $annotation) {
@@ -270,6 +286,7 @@ class Annotations extends Router
             /**
              * Process method annotations
              */
+            /** @var array<string, Collection<int, Annotation>> $methodAnnotations */
             $methodAnnotations = $handlerAnnotations->getMethodsAnnotations();
 
             $lowerControllerName = $this->toUncamelize($controllerName);
@@ -279,7 +296,10 @@ class Annotations extends Router
                     continue;
                 }
 
-                foreach ($collection->getAnnotations() as $annotation) {
+                /** @var iterable<Annotation> $methodAnnotationList */
+                $methodAnnotationList = $collection->getAnnotations();
+
+                foreach ($methodAnnotationList as $annotation) {
                     $this->processActionAnnotation(
                         $moduleName,
                         $namespaceName,
@@ -353,14 +373,17 @@ class Annotations extends Router
         $proxyActionName = str_replace($this->actionSuffix, "", $action);
 
         if (null !== $this->actionPreformatCallback) {
-            $proxyActionName = call_user_func(
-                $this->actionPreformatCallback,
+            /** @var callable $preformatCallback */
+            $preformatCallback = $this->actionPreformatCallback;
+            $proxyActionName   = call_user_func(
+                $preformatCallback,
                 $proxyActionName
             );
         }
 
         $arguments = $annotation->getArguments();
 
+        /** @var string $proxyActionName */
         $actionName = strtolower($proxyActionName);
 
         /**
@@ -371,6 +394,8 @@ class Annotations extends Router
         if (!is_array($paths)) {
             $paths = [];
         }
+
+        /** @var array<string, int|string> $paths */
 
         /**
          * Update the module if any
@@ -396,6 +421,7 @@ class Annotations extends Router
         /**
          * Create the route using the prefix
          */
+        /** @var string|null $value */
         if ($value !== null) {
             if ($value != "/") {
                 $uri = $this->routePrefix . $value;
@@ -423,6 +449,7 @@ class Annotations extends Router
         }
 
         if (is_array($methods) || is_string($methods)) {
+            /** @var array<array-key, string>|string $methods */
             $route->via($methods);
         }
 
@@ -452,6 +479,10 @@ class Annotations extends Router
         $beforeMatch = $arguments["beforeMatch"] ?? null;
 
         if (is_array($beforeMatch) || is_string($beforeMatch)) {
+            /**
+             * The annotation names a function or a [class, method] pair.
+             */
+            /** @var callable&(array<array-key, mixed>|string) $beforeMatch */
             $route->beforeMatch($beforeMatch);
         }
 
@@ -469,15 +500,17 @@ class Annotations extends Router
      *
      * @return void
      */
-    public function processControllerAnnotation(Annotation $annotation): void
+    public function processControllerAnnotation(Annotation $annotation)
     {
         /**
          * @RoutePrefix add a prefix for all the routes defined in the model
          */
         if ($annotation->getName() === 'RoutePrefix') {
-            $this->routePrefix = $annotation->hasArgument(0) ?
+            /** @var string $prefixArgument */
+            $prefixArgument    = $annotation->hasArgument(0) ?
                 $annotation->getArgument(0) :
                 $annotation->getArgument('prefix') ?? '';
+            $this->routePrefix = $prefixArgument;
         }
     }
 
@@ -508,17 +541,19 @@ class Annotations extends Router
      * $annotationRouter->setActionPreformatCallback();
      * ```
      *
-     * @param callable|string|null $callback
+     * @param mixed $callback
      *
      * @return Annotations
      * @throws Exception
+     *
+     * @phpstan-return static
      */
-    public function setActionPreformatCallback(callable | string | null $callback = null): static
+    public function setActionPreformatCallback(mixed $callback = null): static
     {
         if (is_callable($callback)) {
             $this->actionPreformatCallback = $callback;
         } elseif ($callback === null) {
-            $this->actionPreformatCallback = function ($action) {
+            $this->actionPreformatCallback = function (string $action): string {
                 return $this->toUncamelize($action, "-");
             };
         } else {
@@ -536,6 +571,8 @@ class Annotations extends Router
      * @param string $actionSuffix
      *
      * @return Annotations
+     *
+     * @phpstan-return static
      */
     public function setActionSuffix(string $actionSuffix): static
     {
@@ -550,6 +587,8 @@ class Annotations extends Router
      * @param string $controllerSuffix
      *
      * @return Annotations
+     *
+     * @phpstan-return static
      */
     public function setControllerSuffix(string $controllerSuffix): static
     {

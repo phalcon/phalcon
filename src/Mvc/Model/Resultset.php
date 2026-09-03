@@ -76,6 +76,8 @@ use function method_exists;
  * @template TKey
  * @template TValue
  * @implements Iterator<TKey, TValue>
+ * @implements ArrayAccess<TKey, TValue>
+ * @implements SeekableIterator<TKey, TValue>
  */
 abstract class Resultset implements
     ResultsetInterface,
@@ -112,6 +114,8 @@ abstract class Resultset implements
 
     /**
      * @var array
+     *
+     * @phpstan-var array<array-key, MessageInterface>
      */
     protected array $errorMessages = [];
 
@@ -134,6 +138,8 @@ abstract class Resultset implements
      * Phalcon\Db\ResultInterface or false for empty resultset
      *
      * @var bool|ResultInterface
+     *
+     * @phpstan-var \Phalcon\Contracts\Db\Result|bool|null
      */
     protected mixed $result = null;
 
@@ -144,6 +150,8 @@ abstract class Resultset implements
 
     /**
      * @var array|null
+     *
+     * @phpstan-var array<array-key, mixed>|null
      */
     protected array | null $rows = null;
 
@@ -154,6 +162,8 @@ abstract class Resultset implements
      * @param mixed|null            $cache
      *
      * @throws Exception
+     *
+     * @phpstan-param \Phalcon\Contracts\Db\Result|false|null $result
      */
     public function __construct(
         mixed $result,
@@ -178,6 +188,11 @@ abstract class Resultset implements
          * Update the related cache if any
          */
         if ($cache !== null) {
+            /**
+             * A cache service is an object.
+             *
+             * @var object $cache
+             */
             if (
                 !is_a($cache, 'Phalcon\\Cache\\CacheInterface') &&
                 !is_a($cache, 'Psr\\SimpleCache\\CacheInterface')
@@ -262,6 +277,7 @@ abstract class Resultset implements
         $this->rewind();
 
         while ($this->valid()) {
+            /** @var ModelInterface|Row $record */
             $record = $this->current();
 
             if ($transaction === false) {
@@ -272,6 +288,7 @@ abstract class Resultset implements
                     throw new InvalidReturnedRecord();
                 }
 
+                /** @var ModelInterface $record */
                 $connection  = $record->getWriteConnection();
                 $transaction = true;
 
@@ -293,6 +310,7 @@ abstract class Resultset implements
             /**
              * Try to delete the record
              */
+            /** @var ModelInterface $record */
             if (!$record->delete()) {
                 /**
                  * Get the messages from the record that produce the error
@@ -302,6 +320,7 @@ abstract class Resultset implements
                 /**
                  * Rollback the transaction
                  */
+                /** @var \Phalcon\Db\Adapter\AdapterInterface $connection */
                 $connection->rollback();
 
                 $result      = false;
@@ -317,6 +336,7 @@ abstract class Resultset implements
          * Commit the transaction
          */
         if ($transaction === true) {
+            /** @var \Phalcon\Db\Adapter\AdapterInterface $connection */
             $connection->commit();
         }
 
@@ -338,11 +358,13 @@ abstract class Resultset implements
      * );
      *```
      *
-     * @param callable $filter
+     * @param mixed $filter
      *
      * @return array|ModelInterface[]
+     *
+     * @phpstan-return list<array<array-key, mixed>|object>
      */
-    public function filter(callable $filter): array
+    public function filter(mixed $filter): array
     {
         $records = [];
 
@@ -351,6 +373,11 @@ abstract class Resultset implements
         while ($this->valid()) {
             $record = $this->current();
 
+            /**
+             * The caller passes a callable that takes one record.
+             *
+             * @var callable(mixed): mixed $filter
+             */
             $processedRecord = call_user_func_array(
                 $filter,
                 [
@@ -408,7 +435,7 @@ abstract class Resultset implements
      *
      * @return ModelInterface|Row|null
      */
-    public function getFirst(): mixed
+    public function getFirst()
     {
         $this->seek(0);
 
@@ -420,6 +447,7 @@ abstract class Resultset implements
             return null;
         }
 
+        /** @var ModelInterface|Row|null */
         return $this->current();
     }
 
@@ -438,7 +466,7 @@ abstract class Resultset implements
      *
      * @return ModelInterface|Row|null
      */
-    public function getLast(): ModelInterface | Row | null
+    public function getLast(): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\Row | null
     {
         $count = $this->count();
 
@@ -448,6 +476,7 @@ abstract class Resultset implements
 
         $this->seek($count - 1);
 
+        /** @var ModelInterface|Row|null */
         return $this->current();
     }
 
@@ -455,6 +484,8 @@ abstract class Resultset implements
      * Returns the error messages produced by a batch operation
      *
      * @return array|MessageInterface[]
+     *
+     * @phpstan-return array<array-key, MessageInterface>
      */
     public function getMessages(): array
     {
@@ -464,7 +495,7 @@ abstract class Resultset implements
     /**
      * @return mixed
      */
-    public function getResult(): mixed
+    public function getResult()
     {
         return $this->result;
     }
@@ -500,6 +531,8 @@ abstract class Resultset implements
      *```
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -526,6 +559,8 @@ abstract class Resultset implements
      * Gets pointer number of active row in the resultset
      *
      * @return TKey|null
+     *
+     * @phpstan-return int|null
      */
     public function key(): int | null
     {
@@ -606,6 +641,8 @@ abstract class Resultset implements
      * @param mixed $index
      *
      * @return bool
+     *
+     * @phpstan-param int $index
      */
     public function offsetExists(mixed $index): bool
     {
@@ -619,6 +656,8 @@ abstract class Resultset implements
      *
      * @return mixed
      * @throws Exception
+     *
+     * @phpstan-param int $index
      */
     public function offsetGet(mixed $index): mixed
     {
@@ -740,6 +779,8 @@ abstract class Resultset implements
      * @param mixed $position
      *
      * @return void
+     *
+     * @phpstan-param int $position
      */
     final public function seek(mixed $position): void
     {
@@ -767,6 +808,7 @@ abstract class Resultset implements
             /**
              * Fetch from PDO one-by-one.
              */
+            /** @var \Phalcon\Contracts\Db\Result $result */
             $result = $this->result;
 
             if ($this->row === null && $this->pointer === 0) {
@@ -841,6 +883,8 @@ abstract class Resultset implements
      *
      * @return bool
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $data
      */
     public function update(
         mixed $data,
@@ -852,6 +896,7 @@ abstract class Resultset implements
         $this->rewind();
 
         while ($this->valid()) {
+            /** @var ModelInterface|Row $record */
             $record = $this->current();
 
             if ($transaction === false) {
@@ -862,6 +907,7 @@ abstract class Resultset implements
                     throw new InvalidReturnedRecord();
                 }
 
+                /** @var ModelInterface $record */
                 $connection  = $record->getWriteConnection();
                 $transaction = true;
 
@@ -880,6 +926,7 @@ abstract class Resultset implements
                 continue;
             }
 
+            /** @var ModelInterface $record */
             $record->assign($data);
 
             /**
@@ -894,6 +941,7 @@ abstract class Resultset implements
                 /**
                  * Rollback the transaction
                  */
+                /** @var \Phalcon\Db\Adapter\AdapterInterface $connection */
                 $connection->rollback();
 
                 $transaction = false;
@@ -908,6 +956,7 @@ abstract class Resultset implements
          * Commit the transaction
          */
         if ($transaction === true) {
+            /** @var \Phalcon\Db\Adapter\AdapterInterface $connection */
             $connection->commit();
         }
 

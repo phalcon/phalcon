@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Resultset;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model;
@@ -37,11 +38,19 @@ use function unserialize;
 /**
  * Simple resultsets only contains a complete objects
  * This class builds every complete object as it is required
+ *
+ * @extends Resultset<int, mixed>
+ *
+ * @phpstan-import-type mvc_eager_map from MvcTypes
+ * @phpstan-import-type mvc_hydration_column_map from MvcTypes
+ * @phpstan-import-type mvc_resultset_simple_state from MvcTypes
  */
 class Simple extends Resultset
 {
     /**
      * @var array|null
+     *
+     * @phpstan-var mvc_eager_map|null
      */
     protected array | null $eagerMap = null;
 
@@ -55,6 +64,9 @@ class Simple extends Resultset
      * @param bool                  $keepSnapshots
      *
      * @throws Exception
+     *
+     * @phpstan-param mvc_hydration_column_map|string|null      $columnMap
+     * @phpstan-param \Phalcon\Contracts\Db\Result|false|null $result
      */
     public function __construct(
         protected mixed $columnMap,
@@ -69,6 +81,8 @@ class Simple extends Resultset
     /**
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_resultset_simple_state
      */
     public function __serialize(): array
     {
@@ -86,6 +100,8 @@ class Simple extends Resultset
      * @param array $data
      *
      * @return void
+     *
+     * @phpstan-param mvc_resultset_simple_state $data
      */
     public function __unserialize(array $data): void
     {
@@ -105,9 +121,12 @@ class Simple extends Resultset
      * Returns current row in the resultset
      *
      * @return ModelInterface|null
+     *
+     * @phpstan-return ModelInterface|Row|null
      */
     final public function current(): ModelInterface | Row | null
     {
+        /** @var ModelInterface|Row|null $activeRow */
         $activeRow = $this->activeRow;
 
         if ($activeRow !== null) {
@@ -171,6 +190,8 @@ class Simple extends Resultset
             }
 
             if ($this->eagerMap !== null) {
+                // cloneResultMap() hydrates an instance of the model class.
+                /** @var Model $activeRow */
                 Loader::apply($activeRow, $this->eagerMap);
             }
         } else {
@@ -188,6 +209,7 @@ class Simple extends Resultset
 
         $this->activeRow = $activeRow;
 
+        /** @var ModelInterface|Row|null */
         return $activeRow;
     }
 
@@ -216,8 +238,10 @@ class Simple extends Resultset
             } else {
                 $serializer = $container->get("serializer");
             }
+            /** @var \Phalcon\Storage\Serializer\SerializerInterface $serializer */
             $serializer->setData($data);
 
+            /** @var string */
             return $serializer->serialize();
         }
 
@@ -238,6 +262,8 @@ class Simple extends Resultset
      * @param array $eagerMap
      *
      * @return void
+     *
+     * @phpstan-param mvc_eager_map $eagerMap
      */
     public function setEagerMap(array $eagerMap): void
     {
@@ -252,6 +278,8 @@ class Simple extends Resultset
      * @param array $indexes zero-based row positions, in the desired order
      *
      * @return Simple
+     *
+     * @phpstan-param array<array-key, int> $indexes
      */
     public function sliceRows(array $indexes): Simple
     {
@@ -286,6 +314,8 @@ class Simple extends Resultset
      * number of rows it could consume more memory than currently it does.
      * Export the resultset to an array couldn't be faster with a large number
      * of records
+     *
+     * @phpstan-return array<array-key, array<array-key, mixed>>
      */
     public function toArray(bool $renameColumns = true): array
     {
@@ -304,11 +334,14 @@ class Simple extends Resultset
          */
         if ($renameColumns && !($this->model instanceof Row)) {
             if (!is_array($this->columnMap)) {
+                /** @var array<array-key, array<array-key, mixed>> */
                 return $records;
             }
 
             $renamedRecords = [];
             if (is_array($records)) {
+                // The rows of a resultset are attribute-keyed arrays.
+                /** @var array<array-key, array<array-key, mixed>> $records */
                 foreach ($records as $record) {
                     $renamed = [];
                     foreach ($record as $key => $value) {
@@ -344,12 +377,15 @@ class Simple extends Resultset
             return $renamedRecords;
         }
 
+        /** @var array<array-key, array<array-key, mixed>> */
         return $records;
     }
 
     /**
      * Unserializing a resultset will allow to only works on the rows present in
      * the saved state
+     *
+     * @phpstan-param string $data
      */
     public function unserialize(mixed $data): void
     {
@@ -365,6 +401,7 @@ class Simple extends Resultset
                 $serializer = $container->get("serializer");
             }
 
+            /** @var \Phalcon\Storage\Serializer\SerializerInterface $serializer */
             $serializer->unserialize($data);
             $resultset = $serializer->getData();
         } else {
@@ -374,6 +411,8 @@ class Simple extends Resultset
         if (!is_array($resultset)) {
             throw new InvalidSerializationData();
         }
+
+        /** @var mvc_resultset_simple_state $resultset */
 
         $this->model       = $resultset["model"];
         $this->rows        = $resultset["rows"];

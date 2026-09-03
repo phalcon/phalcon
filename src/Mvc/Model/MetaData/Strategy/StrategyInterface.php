@@ -13,9 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\ModelInterface;
 
+/**
+ * Interface for Phalcon\Mvc\Model\MetaData strategies
+ *
+ * @phpstan-import-type mvc_metadata_index from MvcTypes
+ */
 interface StrategyInterface
 {
     /**
@@ -27,6 +33,7 @@ interface StrategyInterface
      * @return array
      * @todo Not implemented
      *
+     * @phpstan-return mvc_metadata_index
      */
     public function getColumnMaps(
         ModelInterface $model,
@@ -41,6 +48,8 @@ interface StrategyInterface
      * @param DiInterface $container
      *
      * @return array
+     *
+     * @phpstan-return mvc_metadata_index
      */
     public function getMetaData(
         ModelInterface $model,

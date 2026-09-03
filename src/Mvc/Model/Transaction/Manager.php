@@ -92,18 +92,20 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * @var array
+     *
+     * @phpstan-var list<TransactionInterface>
      */
     protected array $transactions = [];
 
     /**
      * Phalcon\Mvc\Model\Transaction\Manager constructor
      *
-     * @param object|null $container
+     * @param DiInterface|null $container
      *
      * @throws ManagerOrmServicesUnavailable
      */
     public function __construct(
-        protected object | null $container = null
+        protected DiInterface|null $container = null
     ) {
         if (null === $container) {
             $container = Di::getDefault();
@@ -137,7 +139,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      *
      * @return void
      */
-    public function commit(): void
+    public function commit()
     {
         foreach ($this->transactions as $transaction) {
             $connection = $transaction->getConnection();
@@ -191,9 +193,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface
      *
      * @return DiInterface|null
      */
-    public function getDI(): DiInterface | null
+    public function getDI(): \Phalcon\Di\DiInterface | null
     {
-        return $this->container;
+        /** @var DiInterface|null $container */
+        $container = $this->container;
+
+        return $container;
     }
 
     /**
@@ -222,8 +227,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface
             }
         }
 
+        /** @var DiInterface $container */
+        $container   = $this->container;
         $transaction = new Transaction(
-            $this->container,
+            $container,
             $autoBegin,
             $this->service
         );

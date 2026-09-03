@@ -16,6 +16,7 @@ namespace Phalcon\Mvc\Model;
 use Closure;
 use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Mvc\Controller\BindModelInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Binder\BindableInterface;
 use Phalcon\Mvc\Model\Exceptions\HandlerMustImplementBindable;
 use Phalcon\Mvc\Model\Exceptions\InvalidGetModelNameReturn;
@@ -41,6 +42,8 @@ class Binder implements BinderInterface
      * Array for storing active bound models
      *
      * @var array
+     *
+     * @phpstan-var array<array-key, ModelInterface>
      */
     protected array $boundModels = [];
 
@@ -48,6 +51,8 @@ class Binder implements BinderInterface
      * Internal cache for caching parameters for model binding during request
      *
      * @var array
+     *
+     * @phpstan-var array<string, array<array-key, string>>
      */
     protected array $internalCache = [];
 
@@ -55,6 +60,8 @@ class Binder implements BinderInterface
      * Array for original values
      *
      * @var array
+     *
+     * @phpstan-var array<array-key, mixed>
      */
     protected array $originalValues = [];
 
@@ -79,6 +86,9 @@ class Binder implements BinderInterface
      * @return array
      * @throws Exception
      * @throws ReflectionException
+     *
+     * @phpstan-param array<array-key, mixed> $params
+     * @phpstan-return array<array-key, mixed>
      */
     public function bindToHandler(
         object $handler,
@@ -97,7 +107,8 @@ class Binder implements BinderInterface
 
         if (is_array($paramsCache)) {
             foreach ($paramsCache as $paramKey => $className) {
-                $paramValue                      = $params[$paramKey];
+                $paramValue = $params[$paramKey];
+                /** @var ModelInterface $boundModel */
                 $boundModel                      = $this->findBoundModel($paramValue, $className);
                 $this->originalValues[$paramKey] = $paramValue;
                 $params[$paramKey]               = $boundModel;
@@ -107,6 +118,7 @@ class Binder implements BinderInterface
             return $params;
         }
 
+        /** @var string $methodName */
         return $this->getParamsFromReflection(
             $handler,
             $params,
@@ -119,6 +131,8 @@ class Binder implements BinderInterface
      * Return the active bound models
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, ModelInterface>
      */
     public function getBoundModels(): array
     {
@@ -132,13 +146,18 @@ class Binder implements BinderInterface
      */
     public function getCache(): AdapterInterface
     {
-        return $this->cache;
+        /** @var AdapterInterface $cache */
+        $cache = $this->cache;
+
+        return $cache;
     }
 
     /**
      * Return the array for original values
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function getOriginalValues(): array
     {
@@ -178,6 +197,8 @@ class Binder implements BinderInterface
      * @param string $cacheKey
      *
      * @return array|null
+     *
+     * @phpstan-return array<array-key, string>|null
      */
     protected function getParamsFromCache(string $cacheKey): array | null
     {
@@ -189,6 +210,7 @@ class Binder implements BinderInterface
             return null;
         }
 
+        /** @var array<array-key, string> $internalParams */
         $internalParams                 = $this->cache->get($cacheKey);
         $this->internalCache[$cacheKey] = $internalParams;
 
@@ -206,6 +228,9 @@ class Binder implements BinderInterface
      * @return array
      * @throws Exception
      * @throws ReflectionException
+     *
+     * @phpstan-param array<array-key, mixed> $params
+     * @phpstan-return array<array-key, mixed>
      */
     protected function getParamsFromReflection(
         object $handler,
@@ -219,6 +244,11 @@ class Binder implements BinderInterface
         if (null !== $methodName) {
             $reflection = new ReflectionMethod($handler, $methodName);
         } else {
+            /**
+             * bindToHandler() rejects a handler that is not a closure when
+             * no method name is given.
+             */
+            /** @var Closure $handler */
             $reflection = new ReflectionFunction($handler);
         }
 
@@ -269,6 +299,7 @@ class Binder implements BinderInterface
             }
 
             if (null !== $boundModel) {
+                /** @var ModelInterface $boundModel */
                 $this->originalValues[$paramKey] = $paramValue;
                 $params[$paramKey]               = $boundModel;
                 $this->boundModels[$paramKey]    = $boundModel;

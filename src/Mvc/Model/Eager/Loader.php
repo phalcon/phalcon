@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Eager;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+use Phalcon\Mvc\EntityInterface;
 use Phalcon\Mvc\Model\Exceptions\EagerRowLimitExceeded;
 use Phalcon\Mvc\Model\Exceptions\MissingEagerKeyColumn;
 use Phalcon\Mvc\Model\Exceptions\UnknownEagerRelation;
@@ -41,6 +43,14 @@ use function strtolower;
  * Loads model relations in bulk - a bounded number of queries per relation
  * node rather than one per record - and applies the result to records as they
  * are hydrated.
+ *
+ * @phpstan-import-type mvc_eager_map from MvcTypes
+ * @phpstan-import-type mvc_eager_map_node from MvcTypes
+ * @phpstan-import-type mvc_eager_node from MvcTypes
+ * @phpstan-import-type mvc_eager_parents from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_query_columns from MvcTypes
+ * @phpstan-import-type mvc_relation_fields from MvcTypes
  */
 class Loader
 {
@@ -71,14 +81,18 @@ class Loader
      * uniform; only the write differs. A Row is what a column-restricted
      * select produces, and it has no relation cache.
      *
-     * @param object $record   ModelInterface or Row
+     * @param mixed $record   ModelInterface or Row
      * @param array  $eagerMap
      *
      * @return void
+     *
+     * @phpstan-param mvc_eager_map                                $eagerMap
      */
-    public static function apply(object $record, array $eagerMap): void
+    public static function apply(mixed $record, array $eagerMap): void
     {
         foreach ($eagerMap as $alias => $node) {
+            // Model and Row both implement EntityInterface.
+            /** @var EntityInterface $record */
             $values = [];
 
             foreach ($node["fields"] as $field) {
@@ -97,6 +111,8 @@ class Loader
             }
 
             if ($record instanceof ModelInterface) {
+                // setRelated() is declared by the model class.
+                /** @var \Phalcon\Mvc\Model $record */
                 $record->setRelated($alias, $related);
             } else {
                 $record->writeAttribute($alias, $related);
@@ -115,9 +131,13 @@ class Loader
      * @param array $values
      *
      * @return string
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public static function buildKey(array $values): string
     {
+        // The key fields of a record hold scalar values.
+        /** @var array<array-key, scalar|null> $values */
         if (count($values) === 1) {
             return (string)$values[0];
         }
@@ -144,6 +164,8 @@ class Loader
      * @param array  $tree
      *
      * @return void
+     *
+     * @phpstan-param array<string, mixed> $tree
      */
     public function loadResultset(
         Simple $resultset,
@@ -170,6 +192,10 @@ class Loader
      * @param array  $tree
      *
      * @return array
+     *
+     * @phpstan-param mvc_eager_parents    $parents
+     * @phpstan-param array<string, mixed> $tree
+     * @phpstan-return mvc_eager_map
      */
     protected function buildMap(
         array $parents,
@@ -179,6 +205,7 @@ class Loader
         $map = [];
 
         foreach ($tree as $alias => $node) {
+            /** @var mvc_eager_node $node */
             $relation = $this->manager->getRelationByAlias($modelName, $alias);
 
             if (!is_object($relation)) {
@@ -205,6 +232,10 @@ class Loader
      * @param array             $node
      *
      * @return array
+     *
+     * @phpstan-param mvc_eager_parents $parents
+     * @phpstan-param mvc_eager_node    $node
+     * @phpstan-return mvc_eager_map_node
      */
     protected function buildNode(
         RelationInterface $relation,
@@ -237,6 +268,7 @@ class Loader
         $children->rewind();
 
         while ($children->valid()) {
+            /** @var \Phalcon\Mvc\Model|\Phalcon\Mvc\Model\Row $record */
             $record = $children->current();
 
             $childModels[] = $record;
@@ -279,10 +311,12 @@ class Loader
                  * the slices hydrate their own instances - so the map has to
                  * travel with the slices.
                  */
+                /** @var Simple $slice */
                 foreach ($records as $slice) {
                     $slice->setEagerMap($childMap);
                 }
 
+                /** @var Simple $emptyResult */
                 $emptyResult->setEagerMap($childMap);
             } else {
                 foreach ($childModels as $record) {
@@ -313,6 +347,10 @@ class Loader
      * @param array             $node
      *
      * @return array
+     *
+     * @phpstan-param mvc_eager_parents $parents
+     * @phpstan-param mvc_eager_node    $node
+     * @phpstan-return mvc_eager_map_node
      */
     protected function buildThroughNode(
         RelationInterface $relation,
@@ -350,6 +388,7 @@ class Loader
              */
             $intermediate = $this->manager->load($intermediateModel);
 
+            /** @var Simple $pairs */
             $pairs = $intermediate::find(
                 [
                     "[" . $intermediateField . "] IN ({phEagerKeys:array})",
@@ -362,6 +401,8 @@ class Loader
             $pairs->rewind();
 
             while ($pairs->valid()) {
+                // A column-restricted select returns Row instances.
+                /** @var \Phalcon\Mvc\Model\Row $pair */
                 $pair = $pairs->current();
 
                 $parentKey = self::buildKey(
@@ -398,6 +439,7 @@ class Loader
         $referenced->rewind();
 
         while ($referenced->valid()) {
+            /** @var \Phalcon\Mvc\Model|\Phalcon\Mvc\Model\Row $record */
             $record = $referenced->current();
 
             $childModels[] = $record;
@@ -441,10 +483,12 @@ class Loader
             );
 
             if ($isMany) {
+                /** @var Simple $slice */
                 foreach ($records as $slice) {
                     $slice->setEagerMap($childMap);
                 }
 
+                /** @var Simple $emptyResult */
                 $emptyResult->setEagerMap($childMap);
             } else {
                 foreach ($childModels as $record) {
@@ -468,6 +512,10 @@ class Loader
      * @param string $alias
      *
      * @return array list of value-tuples, deduped
+     *
+     * @phpstan-param mvc_eager_parents         $parents
+     * @phpstan-param array<array-key, string>  $fields
+     * @phpstan-return list<array<array-key, mixed>>
      */
     protected function collectKeys(
         array $parents,
@@ -513,6 +561,9 @@ class Loader
      * @param array             $options
      *
      * @return Simple
+     *
+     * @phpstan-param array<array-key, array<array-key, mixed>> $keys
+     * @phpstan-param mvc_model_parameters                      $options
      */
     protected function fetchReferenced(
         RelationInterface $relation,
@@ -599,6 +650,7 @@ class Loader
          * caller did not ask for - it would surface in the returned Row.
          */
         if (isset($findParams["columns"])) {
+            /** @var mvc_query_columns $columns */
             $columns = $findParams["columns"];
 
             $columnList = is_array($columns)
@@ -614,6 +666,7 @@ class Loader
             }
         }
 
+        /** @var Simple $resultset */
         $resultset = $modelInstance::find($findParams);
 
         $resultset->materialize();
@@ -637,6 +690,9 @@ class Loader
      * @param mixed $fields
      *
      * @return array
+     *
+     * @phpstan-param mvc_relation_fields $fields
+     * @phpstan-return array<array-key, string>
      */
     protected function normalizeFields(mixed $fields): array
     {
@@ -650,13 +706,18 @@ class Loader
     /**
      * Lookup key for an already-hydrated record.
      *
-     * @param object $record
+     * @param mixed $record
      * @param array  $fields
      *
      * @return string
+     *
+     * @phpstan-param array<array-key, string> $fields
      */
-    protected function recordKey(object $record, array $fields): string
+    protected function recordKey(mixed $record, array $fields): string
     {
+        // The caller passes a hydrated record. Model and Row both implement
+        // EntityInterface.
+        /** @var EntityInterface $record */
         $values = [];
 
         foreach ($fields as $field) {

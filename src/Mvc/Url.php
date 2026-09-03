@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Url\Exception;
@@ -49,6 +50,9 @@ use function substr;
  *     ]
  * );
  *```
+ *
+ * @phpstan-import-type mvc_router_paths from MvcTypes
+ * @phpstan-import-type mvc_router_reversed_paths from MvcTypes
  */
 class Url extends AbstractInjectionAware implements UrlInterface
 {
@@ -105,7 +109,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * );
      *```
      *
-     * @param array|string|null $uri = [
+     * @param mixed $uri = [
      *                               'for' => '',
      *                               ]
      * @param mixed|null        $arguments
@@ -114,9 +118,10 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *
      * @return string
      * @throws Exception
+     *
      */
     public function get(
-        array | string | null $uri = null,
+        mixed $uri = null,
         mixed $arguments = null,
         ?bool $local = null,
         mixed $baseUri = null,
@@ -151,6 +156,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
                 throw new MissingRouteName();
             }
 
+            /** @var string $routeName */
             $routeName = $uri["for"];
 
             /**
@@ -166,16 +172,26 @@ class Url extends AbstractInjectionAware implements UrlInterface
                 }
 
                 if ($this->container instanceof DiInterface) {
-                    $this->router = $this->container->getShared("router");
+                    /** @var RouterInterface $sharedRouter */
+                    $sharedRouter = $this->container->getShared("router");
+                    $this->router = $sharedRouter;
                 } else {
-                    $this->router = $this->container->get("router");
+                    /** @var RouterInterface $plainRouter */
+                    $plainRouter  = $this->container->get("router");
+                    $this->router = $plainRouter;
                 }
             }
 
             /**
              * Every route is uniquely identified by a name
              */
-            $route = $this->router->getRouteByName($routeName);
+            /**
+             * The block above assigns the router service when the property
+             * is still empty.
+             */
+            /** @var RouterInterface $router */
+            $router = $this->router;
+            $route  = $router->getRouteByName($routeName);
 
             if (!is_object($route)) {
                 throw new RouteNotFound($routeName);
@@ -184,6 +200,11 @@ class Url extends AbstractInjectionAware implements UrlInterface
             /**
              * Replace the patterns by its variables
              */
+            /**
+             * The pattern is not empty and the replacements are an array,
+             * so the call always gives back the built string.
+             */
+            /** @var string $uri */
             $uri = $this->replacePaths(
                 $route->getPattern(),
                 $route->getReversedPaths(),
@@ -204,6 +225,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
             }
         }
 
+        /**
+         * The array branch above builds a string. Any other value is
+         * already a string or null.
+         */
+        /** @var string|null $uri */
+
         if (true === $local) {
             $strUri = (string)$uri;
             $uri    = preg_replace(
@@ -212,6 +239,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
                 $baseUri . $strUri
             );
         }
+
+        /**
+         * The local branch builds the string, and the route branch above
+         * already replaced the paths.
+         */
+        /** @var string $uri */
 
         if ($arguments) {
             $queryPos = strpos($uri, "?");
@@ -229,6 +262,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
                 $queryPos  = false;
             }
 
+            /** @var array<array-key, mixed>|object $arguments */
             $queryString = http_build_query($arguments);
 
             if (strlen($queryString)) {
@@ -262,7 +296,9 @@ class Url extends AbstractInjectionAware implements UrlInterface
     {
         if (null === $this->baseUri) {
             if (isset($_SERVER["PHP_SELF"])) {
-                $uri = $this->getUri($_SERVER["PHP_SELF"]);
+                /** @var string $phpSelf */
+                $phpSelf = $_SERVER["PHP_SELF"];
+                $uri     = $this->getUri($phpSelf);
             } else {
                 $uri = null;
             }
@@ -294,14 +330,15 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * );
      *```
      *
-     * @param array|string|null $uri = [
+     * @param mixed $uri = [
      *                               'for' => ''
      *                               ]
      *
      * @return string
      * @throws Exception
+     *
      */
-    public function getStatic(array | string | null $uri = null): string
+    public function getStatic(mixed $uri = null): string
     {
         return $this->get(
             $uri,
@@ -448,6 +485,9 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @param int    $cursorPos    index of the closing delimiter (} or ) or first non-alpha)
      *
      * @return string|null  the replacement value, or null if none found
+     *
+     * @phpstan-param mvc_router_reversed_paths $paths
+     * @phpstan-param array<array-key, mixed> $replacements
      */
     private function replaceMarker(
         bool $named,
@@ -494,13 +534,19 @@ class Url extends AbstractInjectionAware implements UrlInterface
                     $key = $variable ?? $item;
                     if (array_key_exists($key, $replacements)) {
                         $position++;
-                        return (string)$replacements[$key];
+                        /** @var scalar $namedReplacement */
+                        $namedReplacement = $replacements[$key];
+
+                        return (string)$namedReplacement;
                     }
                 } else {
                     $pathName = $paths[$position];
                     if (is_string($pathName) && array_key_exists($pathName, $replacements)) {
                         $position++;
-                        return (string)$replacements[$pathName];
+                        /** @var scalar $pathReplacement */
+                        $pathReplacement = $replacements[$pathName];
+
+                        return (string)$pathReplacement;
                     }
                 }
             }
@@ -525,6 +571,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @param mixed  $replacements user-supplied key=>value replacements (array portion used)
      *
      * @return false|string|null
+     *
+     * @phpstan-param mvc_router_reversed_paths $paths
      */
     private function replacePaths(
         string $pattern,

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\MetaData\Exceptions\CorruptedMetaData;
@@ -81,6 +82,17 @@ use function trigger_error;
  * |------|-----------------------------|---------------------|
  * | 0    | `MODELS_COLUMN_MAP`         | column => attribute |
  * | 1    | `MODELS_REVERSE_COLUMN_MAP` | attribute => column |
+ *
+ * @phpstan-import-type mvc_metadata_column_map from MvcTypes
+ * @phpstan-import-type mvc_metadata_column_map_store from MvcTypes
+ * @phpstan-import-type mvc_metadata_column_maps from MvcTypes
+ * @phpstan-import-type mvc_metadata_default_values from MvcTypes
+ * @phpstan-import-type mvc_metadata_index from MvcTypes
+ * @phpstan-import-type mvc_metadata_model from MvcTypes
+ * @phpstan-import-type mvc_metadata_slot from MvcTypes
+ * @phpstan-import-type mvc_metadata_store from MvcTypes
+ * @phpstan-import-type mvc_metadata_types from MvcTypes
+ * @phpstan-import-type mvc_model_attributes from MvcTypes
  */
 abstract class MetaData extends Injectable implements MetaDataInterface
 {
@@ -109,6 +121,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * @var array
+     *
+     * @phpstan-var mvc_metadata_column_map_store
      */
     protected array $columnMap = [];
 
@@ -119,6 +133,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * @var array
+     *
+     * @phpstan-var mvc_metadata_store
      */
     protected array $metaData = [];
 
@@ -129,6 +145,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * inside initializeMetaData() after the real schema is loaded.
      *
      * @var array
+     *
+     * @phpstan-var mvc_metadata_store
      */
     protected array $pendingMetaDataWrites = [];
 
@@ -162,11 +180,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_ATTRIBUTES);
         if (is_array($data)) {
+            /** @var mvc_model_attributes $data */
             return $data;
         }
 
@@ -186,11 +207,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getAutomaticCreateAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_AUTOMATIC_DEFAULT_INSERT);
         if (is_array($data)) {
+            /** @var array<string, mixed> $data */
             return $data;
         }
 
@@ -212,11 +236,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getAutomaticUpdateAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_AUTOMATIC_DEFAULT_UPDATE);
         if (is_array($data)) {
+            /** @var array<string, mixed> $data */
             return $data;
         }
 
@@ -238,11 +265,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_types
      */
     public function getBindTypes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES_BIND);
         if (is_array($data)) {
+            /** @var mvc_metadata_types $data */
             return $data;
         }
 
@@ -264,6 +294,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array|null
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_column_map|null
      */
     public function getColumnMap(ModelInterface $model): array | null
     {
@@ -312,11 +344,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_types
      */
     public function getDataTypes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES);
         if (is_array($data)) {
+            /** @var mvc_metadata_types $data */
             return $data;
         }
 
@@ -338,11 +373,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_types
      */
     public function getDataTypesNumeric(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_DATA_TYPES_NUMERIC);
         if (is_array($data)) {
+            /** @var mvc_metadata_types $data */
             return $data;
         }
 
@@ -364,11 +402,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_default_values
      */
     public function getDefaultValues(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_DEFAULT_VALUES);
         if (is_array($data)) {
+            /** @var mvc_metadata_default_values $data */
             return $data;
         }
 
@@ -406,11 +447,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getEmptyStringAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_EMPTY_STRING_VALUES);
         if (is_array($data)) {
+            /** @var array<string, mixed> $data */
             return $data;
         }
 
@@ -435,6 +479,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getIdentityField(ModelInterface $model): bool | string | null
     {
+        // The identity slot holds the attribute name, or false.
+        /** @var bool|string|null */
         return $this->readMetaDataIndex($model, self::MODELS_IDENTITY_COLUMN);
     }
 
@@ -467,6 +513,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return string|null
      * @throws Exception
+     *
+     * @phpstan-param array<string, scalar|null> $row
      */
     public function getModelUUID(ModelInterface $model, array $row): string | null
     {
@@ -477,6 +525,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
         $uuid = get_class($model);
 
+        /** @var mvc_model_attributes $pks */
         foreach ($pks as $pk) {
             $uuid = $uuid . ':' . $row[$pk];
         }
@@ -499,11 +548,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getNonPrimaryKeyAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_NON_PRIMARY_KEY);
         if (is_array($data)) {
+            /** @var mvc_model_attributes $data */
             return $data;
         }
 
@@ -525,11 +577,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getNotNullAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_NOT_NULL);
         if (is_array($data)) {
+            /** @var mvc_model_attributes $data */
             return $data;
         }
 
@@ -551,11 +606,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getPrimaryKeyAttributes(ModelInterface $model): array
     {
         $data = $this->readMetaDataIndex($model, self::MODELS_PRIMARY_KEY);
         if (is_array($data)) {
+            /** @var mvc_model_attributes $data */
             return $data;
         }
 
@@ -577,6 +635,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array|null
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_column_map|null
      */
     public function getReverseColumnMap(ModelInterface $model): array | null
     {
@@ -662,13 +722,25 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Reads metadata from the adapter
      *
-     * @param string|null $key
+     * @param mixed $key
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_index|null
      */
-    public function read(string | null $key): array | null
+    public function read(mixed $key): array | null
     {
-        return $this->adapter->get($key);
+        /**
+         * A subclass without a cache adapter overrides this method. The
+         * interface declares the key as a string.
+         *
+         * @var CacheAdapterInterface $adapter
+         * @var string                $key
+         */
+        $adapter = $this->adapter;
+
+        /** @var mvc_metadata_index|null */
+        return $adapter->get($key);
     }
 
     /**
@@ -686,6 +758,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array|null
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_column_maps|null
      */
     final public function readColumnMap(ModelInterface $model): array | null
     {
@@ -718,6 +792,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array|null
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_column_map|null
      */
     final public function readColumnMapIndex(ModelInterface $model, int $index): array | null
     {
@@ -748,6 +824,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return array|null
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_model|null
      */
     final public function readMetaData(ModelInterface $model): array | null
     {
@@ -778,8 +856,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @throws Exception
      * @todo check the return type; 8 seems to be only string
      *
+     * @phpstan-return mvc_metadata_slot
      */
-    final public function readMetaDataIndex(ModelInterface $model, int $index): array | bool | string | null
+    final public function readMetaDataIndex(ModelInterface $model, int $index): array | string | bool | null
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {
@@ -822,6 +901,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $attributes
      */
     public function setAutomaticCreateAttributes(ModelInterface $model, array $attributes): void
     {
@@ -845,6 +926,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $attributes
      */
     public function setAutomaticUpdateAttributes(ModelInterface $model, array $attributes): void
     {
@@ -870,6 +953,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $attributes
      */
     public function setEmptyStringAttributes(ModelInterface $model, array $attributes): void
     {
@@ -900,12 +985,19 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param mvc_metadata_index $data
      */
     public function write(string $key, array $data): void
     {
+        // The setting holds a boolean flag.
+        /** @var bool $option */
         $option = Settings::get("orm.exception_on_failed_metadata_save");
+        // A subclass without a cache adapter overrides this method.
+        /** @var CacheAdapterInterface $adapter */
+        $adapter = $this->adapter;
         try {
-            $result = $this->adapter->set($key, $data);
+            $result = $adapter->set($key, $data);
             if (false === $result) {
                 $this->throwWriteException($option);
             }
@@ -943,6 +1035,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     ): void {
         $key = mb_strtolower(get_class($model));
 
+        /** @var mvc_metadata_slot $data */
         if (isset($this->metaData[$key])) {
             $this->metaData[$key][$index] = $data;
         } else {
@@ -963,8 +1056,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return void
      * @throws Exception
+     *
      */
-    final protected function initialize(ModelInterface $model, string $key, $table, $schema): void
+    final protected function initialize(ModelInterface $model, mixed $key, mixed $table, mixed $schema)
     {
         $this->initializeMetaData($model, $key);
         $this->initializeColumnMap($model, $key);
@@ -978,12 +1072,19 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *
      * @return bool
      * @throws Exception
+     *
      */
-    final protected function initializeColumnMap(ModelInterface $model, $key): bool
+    final protected function initializeColumnMap(ModelInterface $model, mixed $key): bool
     {
         if ($key === null) {
             return false;
         }
+
+        /**
+         * The callers pass the lower case class name as the key.
+         *
+         * @var string $key
+         */
 
         /**
          * Check for a column map, store in columnMap in order and reversed order
@@ -1003,6 +1104,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         $prefixKey = 'map-' . $key;
         $data      = $this->read($prefixKey);
 
+        /** @var mvc_metadata_column_maps|null $data */
         if ($data !== null) {
             $this->columnMap[$key] = $data;
 
@@ -1019,6 +1121,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
          * Get the meta-data
          * Update the column map locally
          */
+        /** @var mvc_metadata_column_maps $modelColumnMap */
         $modelColumnMap        = $strategy->getColumnMaps($model, $container);
         $this->columnMap[$key] = $modelColumnMap;
 
@@ -1034,14 +1137,20 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * Initialize the metadata for certain table
      *
      * @param ModelInterface $model
-     * @param string|null    $key
+     * @param mixed    $key
      *
      * @return bool
      * @throws Exception
      */
-    final protected function initializeMetaData(ModelInterface $model, string | null $key): bool
+    final protected function initializeMetaData(ModelInterface $model, mixed $key): bool
     {
         if ($key !== null) {
+            /**
+             * The callers pass the lower case class name as the key.
+             *
+             * @var string $key
+             */
+
             if (false === isset($this->metaData[$key])) {
                 /**
                  * The meta-data is read from the adapter always if not available in metaData property
@@ -1049,6 +1158,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                 $prefixKey = "meta-" . $key;
                 $data      = $this->read($prefixKey);
 
+                /** @var mvc_metadata_model|null $data */
                 if ($data !== null) {
                     $this->metaData[$key] = $data;
                 } else {
@@ -1078,6 +1188,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                     /**
                      * Store the meta-data locally
                      */
+                    /** @var mvc_metadata_model $modelMetadata */
                     $this->metaData[$key] = $modelMetadata;
 
                     /**
@@ -1103,12 +1214,12 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Throws an exception when the metadata cannot be written
      *
-     * @param bool $option
+     * @param mixed $option
      *
      * @return void
      * @throws Exception
      */
-    private function throwWriteException(bool $option): void
+    private function throwWriteException(mixed $option): void
     {
         $message = "Failed to store metaData to the cache adapter";
 

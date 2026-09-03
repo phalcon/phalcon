@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use JsonSerializable;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
@@ -63,14 +64,16 @@ use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerHydration;
 use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerResultset;
 use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
 use Phalcon\Mvc\Model\Hydration\CloneResultMapHydrate;
+use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
+use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\QueryInterface;
 use Phalcon\Mvc\Model\Relation;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\Resultset;
-use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\Model\TransactionInterface;
 use Phalcon\Mvc\Model\ValidationFailed;
@@ -160,7 +163,31 @@ use function unserialize;
  * and a behavior/listener `missingMethod()` hook. An unresolved method throws
  * `Phalcon\Mvc\Model\Exceptions\MethodNotFound`.
  *
- * @template T of static
+ * @phpstan-import-type mvc_model_attributes from MvcTypes
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_cache_options from MvcTypes
+ * @phpstan-import-type mvc_model_data from MvcTypes
+ * @phpstan-import-type mvc_model_foreign_key from MvcTypes
+ * @phpstan-import-type mvc_model_messages from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_model_related from MvcTypes
+ * @phpstan-import-type mvc_model_serialized from MvcTypes
+ * @phpstan-import-type mvc_model_snapshot from MvcTypes
+ * @phpstan-import-type mvc_model_sync_related from MvcTypes
+ * @phpstan-import-type mvc_metadata_column_map from MvcTypes
+ * @phpstan-import-type mvc_hydration_column_map from MvcTypes
+ * @phpstan-import-type mvc_relation_fields from MvcTypes
+ * @phpstan-import-type mvc_relation_options from MvcTypes
+ *
+ * A child may name itself as the type parameter, as in
+ * `@extends Model<Invoices>`, so that the finders report that class. The
+ * parameter has a default, so plain `Model` stays valid without it, and the
+ * static finders use `static`, which already resolves to the child.
+ *
+ * @template T of ModelInterface = ModelInterface
+ *
+ * @implements ModelInterface<T>
  */
 abstract class Model extends AbstractInjectionAware implements
     EntityInterface,
@@ -186,10 +213,12 @@ abstract class Model extends AbstractInjectionAware implements
      * hydration - see getPrivateProperties()
      *
      * @var array
+     * @phpstan-var array<class-string, array<string, \ReflectionProperty>>
      */
     private static array $privatePropertiesCache = [];
     /**
      * @var array
+     * @phpstan-var mvc_model_related
      */
     protected array $dirtyRelated = [];
     /**
@@ -198,6 +227,7 @@ abstract class Model extends AbstractInjectionAware implements
     protected int $dirtyState = 1;
     /**
      * @var array
+     * @phpstan-var mvc_model_messages
      */
     protected array $errorMessages = [];
 
@@ -212,6 +242,7 @@ abstract class Model extends AbstractInjectionAware implements
     protected MetaDataInterface | null $modelsMetaData = null;
     /**
      * @var array
+     * @phpstan-var mvc_model_snapshot
      */
     protected array $oldSnapshot = [];
     /**
@@ -220,10 +251,12 @@ abstract class Model extends AbstractInjectionAware implements
     protected int $operationMade = 0;
     /**
      * @var array
+     * @phpstan-var array<string, mixed>
      */
     protected array $rawValues = [];
     /**
      * @var array
+     * @phpstan-var mvc_model_related
      */
     protected array $related = [];
     /**
@@ -233,6 +266,7 @@ abstract class Model extends AbstractInjectionAware implements
 
     /**
      * @var array
+     * @phpstan-var mvc_model_snapshot
      */
     protected array $snapshot = [];
 
@@ -241,6 +275,7 @@ abstract class Model extends AbstractInjectionAware implements
      * alias (or "*" wildcard) => bool. Cleared after each save().
      *
      * @var array
+     * @phpstan-var mvc_model_sync_related
      */
     protected array $syncRelated = [];
 
@@ -256,25 +291,28 @@ abstract class Model extends AbstractInjectionAware implements
 
     /**
      * @var array
+     * @phpstan-var mvc_model_bind_params
      */
     protected array $uniqueParams = [];
 
     /**
      * @var array
+     * @phpstan-var mvc_model_bind_types
      */
     protected array $uniqueTypes = [];
 
     /**
      * Phalcon\Mvc\Model constructor
      *
-     * @param array|null                     $data
+     * @param mixed                     $data
      * @param DiInterface|null $container
      * @param ManagerInterface|null          $modelsManager
      *
      * @throws Exception
+     *
      */
     final public function __construct(
-        array | null $data = null,
+        mixed $data = null,
         DiInterface | null $container = null,
         ManagerInterface | null $modelsManager = null
     ) {
@@ -304,6 +342,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Update the models-manager
          */
+        /** @var ManagerInterface $modelsManager */
         $this->modelsManager = $modelsManager;
 
         /**
@@ -320,6 +359,8 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         if (null !== $data) {
+            // The constructor takes the initial attribute values as an array.
+            /** @var mvc_model_data $data */
             $this->assign($data);
         }
     }
@@ -332,9 +373,18 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return bool|int|mixed|ModelInterface|ModelInterface[]|Simple|null
      * @throws Exception
+     *
+     * @phpstan-param list<mixed> $arguments
      */
     public function __call(string $method, array $arguments)
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         $records = self::invokeFinder($method, $arguments);
 
         if ($records !== false) {
@@ -356,7 +406,7 @@ abstract class Model extends AbstractInjectionAware implements
          * Try to find a replacement for the missing method in a
          * behavior/listener
          */
-        $status = $this->modelsManager->missingMethod($this, $method, $arguments);
+        $status = $modelsManagerLocal->missingMethod($this, $method, $arguments);
 
         if ($status !== null) {
             return $status;
@@ -376,6 +426,9 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return bool|ModelInterface|ModelInterface[]|null
      * @throws Exception
+     *
+     * @phpstan-param list<mixed> $arguments
+     * @phpstan-return int|ResultsetInterface|Row|static|null
      */
     public static function __callStatic(string $method, array $arguments)
     {
@@ -505,6 +558,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_model_serialized
      */
     public function __serialize(): array
     {
@@ -689,6 +744,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $data
      */
     public function __unserialize(array $data): void
     {
@@ -722,6 +779,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Update the models manager
          */
+        /** @var ManagerInterface $manager */
         $this->modelsManager = $manager;
 
         /**
@@ -742,6 +800,7 @@ abstract class Model extends AbstractInjectionAware implements
          */
         $properties = [];
         if (isset($data["attributes"])) {
+            /** @var array<string, mixed> $properties */
             $properties = $data["attributes"];
             /**
              * Update the objects properties
@@ -755,14 +814,18 @@ abstract class Model extends AbstractInjectionAware implements
          * Fetch serialized dirtyState
          */
         if (isset($data["dirtyState"])) {
-            $this->dirtyState = $data["dirtyState"];
+            /** @var int $dirtyState */
+            $dirtyState       = $data["dirtyState"];
+            $this->dirtyState = $dirtyState;
         }
 
         /**
          * Fetch serialized snapshot when option is active
          */
         if ($manager->isKeepingSnapshots($this)) {
-            $this->snapshot = $data["snapshot"] ?? $properties;
+            /** @var array<string, mixed> $snapshot */
+            $snapshot       = $data["snapshot"] ?? $properties;
+            $this->snapshot = $snapshot;
         }
     }
 
@@ -778,6 +841,8 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $options
      *
      * @return void
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public static function setup(array $options): void
     {
@@ -808,7 +873,10 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         if (isset($options["prefetchRecords"])) {
-            Settings::set("orm.resultset_prefetch_records", (int)$options["prefetchRecords"]);
+            /** @var float|int|string $prefetchRecords */
+            $prefetchRecords = $options["prefetchRecords"];
+
+            Settings::set("orm.resultset_prefetch_records", (int)$prefetchRecords);
         }
     }
 
@@ -844,10 +912,13 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $parameters
      *
      * @return float|ResultsetInterface
+     *
+     * @phpstan-param mvc_model_parameters $parameters
      */
     public static function average(
         array $parameters = []
     ): float | ResultsetInterface {
+        /** @var float|ResultsetInterface|string|null $result */
         $result = self::groupResult("AVG", "average", $parameters);
 
         if (is_string($result)) {
@@ -881,6 +952,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return ModelInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public static function cloneResult(
         ModelInterface $base,
@@ -946,6 +1019,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return ModelInterface|ResultInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public static function cloneResultMap(
         mixed $base,
@@ -953,7 +1028,11 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $columnMap,
         int $dirtyState = 0,
         bool | null $keepSnapshots = null
-    ): ModelInterface | ResultInterface {
+    ): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\ResultInterface {
+        /**
+         * The resultsets pass the model instance they hydrate.
+         */
+        /** @var ModelInterface $base */
         $instance = clone $base;
 
         /**
@@ -1031,6 +1110,10 @@ abstract class Model extends AbstractInjectionAware implements
                 continue;
             }
 
+            // A column map value is an attribute name, or an array that
+            // holds the attribute name and the column type.
+            /** @var array<string, array{0: string, 1: int}|string> $columnMap */
+
             // Every field must be part of the column map
             if (!isset($columnMap[$key])) {
                 if (is_array($columnMap) && !empty($columnMap)) {
@@ -1097,6 +1180,10 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             if ($value != "" && $value !== null) {
+                /**
+                 * The row values come from the database, so they are scalar.
+                 */
+                /** @var scalar $value */
                 $castValue = match ($attribute[1]) {
                     Column::TYPE_INTEGER,
                     Column::TYPE_MEDIUMINTEGER,
@@ -1174,7 +1261,14 @@ abstract class Model extends AbstractInjectionAware implements
          */
         if ($keepSnapshots) {
             $instance->setSnapshotData($data, $columnMap);
-            $instance->setOldSnapshotData($instance->getSnapshotData());
+
+            /**
+             * Snapshots are a Model feature, so the instance is a Model here.
+             */
+            /** @var Model $instanceLocal */
+            $instanceLocal = $instance;
+
+            $instanceLocal->setOldSnapshotData($instanceLocal->getSnapshotData());
         }
 
         /**
@@ -1197,6 +1291,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return array|mixed|object
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public static function cloneResultMapHydrate(
         array $data,
@@ -1233,6 +1329,8 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array|string|null $parameters
      *
      * @return int|ResultsetInterface
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
     public static function count(
         mixed $parameters = null
@@ -1244,6 +1342,7 @@ abstract class Model extends AbstractInjectionAware implements
             unset($parameters["order"]);
         }
 
+        /** @var int|ResultsetInterface|string $result */
         $result = self::groupResult("COUNT", "rowcount", $parameters);
 
         if (is_string($result)) {
@@ -1431,7 +1530,9 @@ abstract class Model extends AbstractInjectionAware implements
      * @option ?bool  "hydration"
      * }
      *
-     * @return \Phalcon\Mvc\Model\Resultset<int, T>
+     * @return \Phalcon\Mvc\Model\Resultset<int, static>
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
     public static function find(
         mixed $parameters = null
@@ -1457,8 +1558,15 @@ abstract class Model extends AbstractInjectionAware implements
          * Define an hydration mode
          */
         if (is_object($resultset)) {
+            /**
+             * A find always produces a resultset.
+             */
+            /** @var Resultset<int, static> $resultset */
             if (isset($params["hydration"])) {
-                $resultset->setHydrateMode($params["hydration"]);
+                /** @var int $hydration */
+                $hydration = $params["hydration"];
+
+                $resultset->setHydrateMode($hydration);
             }
 
             /**
@@ -1471,6 +1579,7 @@ abstract class Model extends AbstractInjectionAware implements
             }
         }
 
+        /** @var Resultset<int, static> $resultset */
         return $resultset;
     }
 
@@ -1559,8 +1668,10 @@ abstract class Model extends AbstractInjectionAware implements
      * @option ?bool  "hydration"
      * }
      *
-     * @return Row|T|null
+     * @return Row|static|null
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_parameters|scalar|null $parameters
      */
     public static function findFirst(
         mixed $parameters = null
@@ -1583,12 +1694,20 @@ abstract class Model extends AbstractInjectionAware implements
          * instead, pre-loaded, and reduced to its first row afterwards.
          */
         if (isset($params["eager"])) {
+            /**
+             * An eager find produces a simple resultset, which loadEager()
+             * requires.
+             */
+            /** @var Simple|null $resultset */
             $resultset = $query->execute();
 
             if (is_object($resultset)) {
                 self::loadEager($resultset, $params["eager"], $params);
 
-                return $resultset->getFirst();
+                /** @var Row|static|null $firstRow */
+                $firstRow = $resultset->getFirst();
+
+                return $firstRow;
             }
 
             return $resultset;
@@ -1602,7 +1721,10 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Execute the query passing the bind-params and casting-types
          */
-        return $query->execute();
+        /** @var Row|static|null $result */
+        $result = $query->execute();
+
+        return $result;
     }
 
     /**
@@ -1633,8 +1755,10 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed|null $parameters
      *
      * @return mixed
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
-    public static function maximum(mixed $parameters = null): mixed
+    public static function maximum(mixed $parameters = null)
     {
         return self::groupResult("MAX", "maximum", $parameters);
     }
@@ -1667,8 +1791,10 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed|null $parameters
      *
      * @return mixed
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
-    public static function minimum(mixed $parameters = null): mixed
+    public static function minimum(mixed $parameters = null)
     {
         return self::groupResult("MIN", "minimum", $parameters);
     }
@@ -1693,6 +1819,7 @@ abstract class Model extends AbstractInjectionAware implements
          * Gets Criteria instance from DI container
          */
         if ($container instanceof DiInterface) {
+            /** @var CriteriaInterface $criteria */
             $criteria = $container->get(
                 "Phalcon\\Mvc\\Model\\Criteria"
             );
@@ -1736,9 +1863,12 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed|null $parameters
      *
      * @return float|ResultsetInterface
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
     public static function sum(mixed $parameters = null): float | ResultsetInterface
     {
+        /** @var float|ResultsetInterface|string|null $result */
         $result = self::groupResult("SUM", "sumatory", $parameters);
 
         if (is_string($result)) {
@@ -1757,20 +1887,27 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param string            $functionName
      * @param string            $alias
-     * @param array|string|null $parameters
+     * @param mixed $parameters
      *
      * @return mixed
+     *
      */
     protected static function groupResult(
         string $functionName,
         string $alias,
-        array | string | null $parameters = null
-    ): mixed {
+        mixed $parameters = null
+    ) {
         $bindParams = [];
         $bindTypes  = [];
 
+        /**
+         * The ORM requires the default container and the manager it holds.
+         */
+        /** @var DiInterface $container */
         $container = Di::getDefault();
-        $manager   = $container->get("modelsManager");
+
+        /** @var ManagerInterface $manager */
+        $manager = $container->get("modelsManager");
 
         if (!is_array($parameters)) {
             $params = [];
@@ -1782,16 +1919,22 @@ abstract class Model extends AbstractInjectionAware implements
             $params = $parameters;
         }
 
+        /**
+         * The group, column and distinct parameters name PHQL columns.
+         */
+        /** @var string $groupColumn */
         $groupColumn = $params["column"] ?? "*";
 
         /**
          * Builds the columns to query according to the received parameters
          */
         if (isset($params["distinct"])) {
+            /** @var string $distinctColumn */
             $distinctColumn = $params["distinct"];
             $columns        = $functionName . "(DISTINCT " . $distinctColumn . ") AS " . $alias;
         } else {
             if (isset($params["group"])) {
+                /** @var string $groupColumns */
                 $groupColumns = $params["group"];
                 $columns      = $groupColumns . ", " . $functionName . "(" . $groupColumn . ") AS " . $alias;
             } else {
@@ -1812,6 +1955,7 @@ abstract class Model extends AbstractInjectionAware implements
         if (isset($params[self::TRANSACTION_INDEX])) {
             $transaction = $params[self::TRANSACTION_INDEX];
             if ($transaction instanceof TransactionInterface) {
+                /** @var Query $query */
                 $query->setTransaction($transaction);
             }
         }
@@ -1820,9 +1964,11 @@ abstract class Model extends AbstractInjectionAware implements
          * Check for bind parameters
          */
         if (isset($params["bind"])) {
+            /** @var mvc_model_bind_params $bindParams */
             $bindParams = $params["bind"];
 
             if (isset($params["bindTypes"])) {
+                /** @var mvc_model_bind_types $bindTypes */
                 $bindTypes = $params["bindTypes"];
             }
         }
@@ -1831,13 +1977,16 @@ abstract class Model extends AbstractInjectionAware implements
          * Pass the cache options to the query
          */
         if (isset($params["cache"])) {
+            /** @var mvc_model_cache_options $cache */
             $cache = $params["cache"];
+
             $query->cache($cache);
         }
 
         /**
          * Execute the query
          */
+        /** @var ResultsetInterface $resultset */
         $resultset = $query->execute($bindParams, $bindTypes);
 
         /**
@@ -1850,6 +1999,10 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Return only the value in the first result
          */
+        /**
+         * The aggregate is selected as a column, so the row is a Row object.
+         */
+        /** @var Row $firstRow */
         $firstRow = $resultset->getFirst();
 
         return $firstRow->$alias;
@@ -1863,6 +2016,9 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return bool|ModelInterface|ModelInterface[]|void
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $arguments
+     * @phpstan-return false|int|ResultsetInterface|Row|static|null
      */
     final protected static function invokeFinder(
         string $method,
@@ -2019,15 +2175,23 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Attempts to find key case-insensitively
      *
-     * @param array  $columnMap
-     * @param string $key
+     * @param mixed  $columnMap
+     * @param mixed $key
      *
      * @return string
+     *
      */
     private static function caseInsensitiveColumnMap(
-        array $columnMap,
-        string $key
+        mixed $columnMap,
+        mixed $key
     ): string {
+        // The column map is an array. Its keys are the column names.
+        // The key is a column name.
+        /**
+         * @var array<array-key, mixed> $columnMap
+         * @var string                  $key
+         * @var list<string>            $keys
+         */
         $keys = array_keys($columnMap);
         foreach ($keys as $cmKey) {
             if (strtolower($cmKey) == strtolower($key)) {
@@ -2041,6 +2205,7 @@ abstract class Model extends AbstractInjectionAware implements
     private static function castSpatial(mixed $value): mixed
     {
         try {
+            /** @var scalar $value */
             return (new WkbParser())->parse((string) $value);
         } catch (InvalidWkb) {
             return $value;
@@ -2050,20 +2215,31 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * shared prepare query logic for find and findFirst method
      *
-     * @param array|string|null $params
+     * @param mixed $params
      * @param mixed|null        $limit
      *
      * @return QueryInterface
+     *
+     * @phpstan-param int|null $limit
      */
     private static function getPreparedQuery(
-        array | string | null $params,
+        mixed $params,
         mixed $limit = null
     ): QueryInterface {
+        /**
+         * The ORM requires the default container and the manager it holds.
+         */
+        /** @var DiInterface $container */
         $container = Di::getDefault();
-        $manager   = $container->get("modelsManager");
+
+        /** @var ManagerInterface $manager */
+        $manager = $container->get("modelsManager");
 
         /**
-         * Builds a query with the passed parameters
+         * Builds a query with the passed parameters. The callers normalize the
+         * parameters into an array before they get here.
+         *
+         * @var mvc_model_parameters $params
          */
         $builder = $manager->createBuilder($params);
 
@@ -2087,6 +2263,7 @@ abstract class Model extends AbstractInjectionAware implements
             if (isset($params["bindTypes"])) {
                 $bindTypes = $params["bindTypes"];
                 if (is_array($bindTypes)) {
+                    /** @var mvc_model_bind_types $bindTypes */
                     $query->setBindTypes($bindTypes, true);
                 }
             }
@@ -2095,6 +2272,7 @@ abstract class Model extends AbstractInjectionAware implements
         if (isset($params[self::TRANSACTION_INDEX])) {
             $transaction = $params[self::TRANSACTION_INDEX];
             if ($transaction instanceof TransactionInterface) {
+                /** @var Query $query */
                 $query->setTransaction($transaction);
             }
         }
@@ -2103,7 +2281,9 @@ abstract class Model extends AbstractInjectionAware implements
          * Pass the cache options to the query
          */
         if (isset($params["cache"])) {
+            /** @var mvc_model_cache_options $cache */
             $cache = $params["cache"];
+
             $query->cache($cache);
         }
 
@@ -2125,6 +2305,8 @@ abstract class Model extends AbstractInjectionAware implements
      * @return array<string, \ReflectionProperty>
      *
      * @see https://github.com/phalcon/cphalcon/issues/16454
+     *
+     * @phpstan-param class-string $className
      */
     private static function getPrivateProperties(string $className): array
     {
@@ -2167,6 +2349,9 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $params
      *
      * @return void
+     *
+     * @phpstan-param object $resultset
+     * @phpstan-param mvc_model_parameters $params
      */
     private static function loadEager(
         mixed $resultset,
@@ -2188,9 +2373,16 @@ abstract class Model extends AbstractInjectionAware implements
             throw new UnsupportedEagerHydration();
         }
 
+        /**
+         * The ORM requires the default container and the manager it holds.
+         */
+        /** @var DiInterface $container */
         $container = Di::getDefault();
-        $manager   = $container->getShared("modelsManager");
-        $loader    = new Loader($manager);
+
+        /** @var ManagerInterface $manager */
+        $manager = $container->getShared("modelsManager");
+
+        $loader = new Loader($manager);
 
         $loader->loadResultset(
             $resultset,
@@ -2241,7 +2433,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function addBehavior(BehaviorInterface $behavior): void
     {
-        $this->modelsManager->addBehavior($this, $behavior);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->addBehavior($this, $behavior);
     }
 
     /**
@@ -2280,14 +2479,19 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Append messages to this model from another Model.
      *
-     * @param ModelInterface $model
+     * @param mixed $model
      *
      * @return void
      */
-    public function appendMessagesFrom(ModelInterface $model): void
+    public function appendMessagesFrom(mixed $model): void
     {
+        /**
+         * Only a model carries messages, and every caller passes one.
+         */
+        /** @var ModelInterface $model */
         $messages = $model->getMessages();
         if (!empty($messages)) {
+            /** @var iterable<MessageInterface> $messages */
             foreach ($messages as $message) {
                 if (is_object($message)) {
                     $message->setMetaData(
@@ -2355,6 +2559,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return ModelInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public function assign(
         array $data,
@@ -2368,6 +2574,7 @@ abstract class Model extends AbstractInjectionAware implements
 
         // apply column map for data, if exist
         if (is_array($dataColumnMap)) {
+            /** @var mvc_metadata_column_map $dataColumnMap */
             $dataMapped = [];
 
             foreach ($data as $key => $value) {
@@ -2390,6 +2597,7 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         foreach ($metaData->getAttributes($this) as $attribute) {
+            /** @var string $attribute */
             // Try to find case-insensitive key variant
             if (
                 !isset($columnMap[$attribute]) &&
@@ -2410,6 +2618,7 @@ abstract class Model extends AbstractInjectionAware implements
 
                     continue;
                 } else {
+                    /** @var string $attributeField */
                     $attributeField = $columnMap[$attribute];
                 }
             } else {
@@ -2533,6 +2742,13 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function delete(): bool
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         $metaData        = $this->getModelsMetaData();
         $writeConnection = $this->getWriteConnection();
 
@@ -2675,11 +2891,11 @@ abstract class Model extends AbstractInjectionAware implements
              * Mark the write connection service as written-to for the sticky
              * connection mechanism.
              */
-            $this->modelsManager->registerWrite($this);
+            $modelsManagerLocal->registerWrite($this);
 
             $this->related      = [];
             $this->dirtyRelated = [];
-            $this->modelsManager->clearReusableObjects();
+            $modelsManagerLocal->clearReusableObjects();
         }
 
         /**
@@ -2695,12 +2911,21 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param CollectionInterface $visited
      *
+     * @phpstan-param CollectionInterface<mixed> $visited
+     *
      * @return bool
      * @throws Exception
      * @throws ValidationFailed
      */
     public function doSave(CollectionInterface $visited): bool
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         $objId = (string)spl_object_id($this);
 
         if (true === $visited->has($objId)) {
@@ -2771,6 +2996,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Query the identity field
          */
+        /** @var bool|string $identityField */
         $identityField = $metaData->getIdentityField($this);
 
         /**
@@ -2881,7 +3107,7 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             $this->related = [];
-            $this->modelsManager->clearReusableObjects();
+            $modelsManagerLocal->clearReusableObjects();
             $this->fireEvent("afterSave");
         }
 
@@ -2901,9 +3127,12 @@ abstract class Model extends AbstractInjectionAware implements
      *```
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function dump(): array
     {
+        /** @var array<string, mixed> */
         return get_object_vars($this);
     }
 
@@ -2918,6 +3147,13 @@ abstract class Model extends AbstractInjectionAware implements
     public function fireEvent(string $eventName): bool | null
     {
         /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /**
          * Check if there is a method with the same name of the event
          */
         if (method_exists($this, $eventName)) {
@@ -2929,6 +3165,10 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
         ) {
+            /**
+             * The event factory builds the event object.
+             */
+            /** @var object $eventObject */
             $logger = $this->getEventLogger($container);
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
@@ -2964,7 +3204,8 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Send a notification to the events manager
          */
-        return $this->modelsManager->notifyEvent(
+        /** @var bool|null */
+        return $modelsManagerLocal->notifyEvent(
             $eventName,
             $this
         );
@@ -2982,6 +3223,13 @@ abstract class Model extends AbstractInjectionAware implements
     public function fireEventCancel(string $eventName): bool | null
     {
         /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /**
          * Check if there is a method with the same name of the event
          */
         if (method_exists($this, $eventName) && $this->$eventName() === false) {
@@ -2993,6 +3241,10 @@ abstract class Model extends AbstractInjectionAware implements
             ($em = $this->getEventsManager()) &&
             $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
         ) {
+            /**
+             * The event factory builds the event object.
+             */
+            /** @var object $eventObject */
             $logger = $this->getEventLogger($container);
 
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
@@ -3041,7 +3293,8 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Send a notification to the events manager
          */
-        return $this->modelsManager->notifyEvent(
+        /** @var bool|null */
+        return $modelsManagerLocal->notifyEvent(
             $eventName,
             $this
         );
@@ -3062,6 +3315,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return list<string>
      */
     public function getChangedFields(): array
     {
@@ -3149,7 +3404,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function getEventsManager(): EventsManagerInterface | null
     {
-        return $this->modelsManager->getCustomEventsManager($this);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var Manager $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        return $modelsManagerLocal->getCustomEventsManager($this);
     }
 
     /**
@@ -3175,11 +3437,13 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      * ```
      *
-     * @param array|string|null $filter
+     * @param mixed $filter
      *
      * @return array|MessageInterface[]
+     *
+     * @phpstan-return mvc_model_messages
      */
-    public function getMessages(array | string | null $filter = null): array
+    public function getMessages(mixed $filter = null): array
     {
         if ((is_string($filter) || is_array($filter)) && !empty($filter)) {
             $filtered = [];
@@ -3207,6 +3471,11 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function getModelsManager(): ManagerInterface
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface */
         return $this->modelsManager;
     }
 
@@ -3222,7 +3491,10 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Obtain the models-metadata service from the DI
              */
-            $metaData = $this->container->get("modelsMetadata");
+            /** @var DiInterface $containerLocal */
+            $containerLocal = $this->container;
+
+            $metaData = $containerLocal->get("modelsMetadata");
 
             if (!is_object($metaData)) {
                 throw new InvalidModelsMetadataService(get_class($this));
@@ -3231,6 +3503,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Update the models-metadata property
              */
+            /** @var MetaDataInterface $metaData */
             $this->modelsMetaData = $metaData;
         }
 
@@ -3241,6 +3514,8 @@ abstract class Model extends AbstractInjectionAware implements
      * Returns the internal old snapshot data
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_snapshot
      */
     public function getOldSnapshotData(): array
     {
@@ -3265,11 +3540,18 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function getReadConnection(): AdapterInterface
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         if ($this->transaction !== null) {
             return $this->transaction->getConnection();
         }
 
-        return $this->modelsManager->getReadConnection($this);
+        return $modelsManagerLocal->getReadConnection($this);
     }
 
     /**
@@ -3280,7 +3562,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function getReadConnectionService(): string
     {
-        return $this->modelsManager->getReadConnectionService($this);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        return $modelsManagerLocal->getReadConnectionService($this);
     }
 
     /**
@@ -3292,14 +3581,21 @@ abstract class Model extends AbstractInjectionAware implements
      * @return mixed
      * @throws Exception
      */
-    public function getRelated(string $alias, mixed $arguments = null): mixed
+    public function getRelated(string $alias, mixed $arguments = null)
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         /**
          * Query the relation by alias
          */
         $className  = get_class($this);
         $lowerAlias = strtolower($alias);
-        $relation   = $this->modelsManager->getRelationByAlias(
+        $relation   = $modelsManagerLocal->getRelationByAlias(
             $className,
             $lowerAlias
         );
@@ -3351,7 +3647,7 @@ abstract class Model extends AbstractInjectionAware implements
              * the models manager needs to calculate the unique key from
              * the passed arguments and then check its internal cache
              */
-            $result = $this->modelsManager->getRelationRecords($relation, $this, $arguments);
+            $result = $modelsManagerLocal->getRelationRecords($relation, $this, $arguments);
 
             /**
              * We store relationship objects in the related cache if there were no arguments.
@@ -3362,7 +3658,8 @@ abstract class Model extends AbstractInjectionAware implements
              * Individually queried related records are handled by Manager.
              * The Manager also checks and stores reusable records.
              */
-            $result = $this->modelsManager->getRelationRecords($relation, $this, $arguments);
+            /** @var mvc_model_parameters|string $arguments */
+            $result = $modelsManagerLocal->getRelationRecords($relation, $this, $arguments);
         }
 
         return $result;
@@ -3375,13 +3672,22 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function getSchema(): string | null
     {
-        return $this->modelsManager->getModelSchema($this);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        return $modelsManagerLocal->getModelSchema($this);
     }
 
     /**
      * Returns the internal snapshot data
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_snapshot
      */
     public function getSnapshotData(): array
     {
@@ -3395,7 +3701,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function getSource(): string
     {
-        return $this->modelsManager->getModelSource($this);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        return $modelsManagerLocal->getModelSource($this);
     }
 
     /**
@@ -3424,6 +3737,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return list<string>
      */
     public function getUpdatedFields(): array
     {
@@ -3468,11 +3783,18 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function getWriteConnection(): AdapterInterface
     {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         if ($this->transaction !== null) {
             return $this->transaction->getConnection();
         }
 
-        return $this->modelsManager->getWriteConnection($this);
+        return $modelsManagerLocal->getWriteConnection($this);
     }
 
     /**
@@ -3483,7 +3805,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function getWriteConnectionService(): string
     {
-        return $this->modelsManager->getWriteConnectionService($this);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        return $modelsManagerLocal->getWriteConnectionService($this);
     }
 
     /**
@@ -3511,6 +3840,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return bool
      * @throws Exception
+     *
+     * @phpstan-param list<string>|string|null $fieldName
      */
     public function hasChanged(
         mixed $fieldName = null,
@@ -3572,6 +3903,7 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         if (is_array($fieldName)) {
+            /** @var list<string> $fieldName */
             $intersect = array_intersect($fieldName, $updatedFields);
             if ($allFields) {
                 return $intersect == $fieldName;
@@ -3623,6 +3955,8 @@ abstract class Model extends AbstractInjectionAware implements
      *```
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -3640,7 +3974,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return mixed
      */
-    public function readAttribute(string $attribute): mixed
+    public function readAttribute(string $attribute)
     {
         if (!isset($this->$attribute)) {
             return null;
@@ -3663,7 +3997,13 @@ abstract class Model extends AbstractInjectionAware implements
 
         $metaData       = $this->getModelsMetaData();
         $readConnection = $this->getReadConnection();
-        $manager        = $this->modelsManager;
+
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $manager */
+        $manager = $this->modelsManager;
 
         $schema = $this->getSchema();
         $source = $this->getSource();
@@ -3726,6 +4066,7 @@ abstract class Model extends AbstractInjectionAware implements
          * Assign the resulting array to the this object
          */
         if (is_array($row)) {
+            /** @var array<string, mixed> $row */
             $columnMap = $metaData->getColumnMap($this);
 
             $this->assign($row, null, $columnMap);
@@ -3817,7 +4158,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function setConnectionService(string $connectionService): void
     {
-        $this->modelsManager->setConnectionService(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->setConnectionService(
             $this,
             $connectionService
         );
@@ -3846,7 +4194,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function setEventsManager(EventsManagerInterface $eventsManager)
     {
-        $this->modelsManager->setCustomEventsManager($this, $eventsManager);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var Manager $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->setCustomEventsManager($this, $eventsManager);
     }
 
     /**
@@ -3859,6 +4214,9 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $data
+     * @phpstan-param mvc_hydration_column_map|null $columnMap
      */
     public function setOldSnapshotData(array $data, mixed $columnMap = null)
     {
@@ -3906,6 +4264,7 @@ abstract class Model extends AbstractInjectionAware implements
             $snapshot = $data;
         }
 
+        /** @var mvc_model_snapshot $snapshot */
         $this->oldSnapshot = $snapshot;
     }
 
@@ -3918,7 +4277,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function setReadConnectionService(string $connectionService): void
     {
-        $this->modelsManager->setReadConnectionService(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->setReadConnectionService(
             $this,
             $connectionService
         );
@@ -3960,6 +4326,9 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $data
+     * @phpstan-param mvc_hydration_column_map|null $columnMap
      */
     public function setSnapshotData(array $data, mixed $columnMap = null): void
     {
@@ -4014,6 +4383,7 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
 
+        /** @var mvc_model_snapshot $snapshot */
         $this->snapshot = $snapshot;
     }
 
@@ -4043,11 +4413,17 @@ abstract class Model extends AbstractInjectionAware implements
      * @param bool              $enabled
      *
      * @return ModelInterface
+     *
+     * @phpstan-param array<array-key, mixed> $elements
      */
     public function setSync(
         mixed $elements = null,
         bool $enabled = true
     ): ModelInterface {
+        /**
+         * An element is a relation alias, or the "*" wildcard.
+         */
+        /** @var array<array-key, string>|string|null $elements */
         if ($elements === null || $elements === "*") {
             $this->syncRelated["*"] = $enabled;
 
@@ -4126,7 +4502,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final public function setWriteConnectionService(string $connectionService): void
     {
-        $this->modelsManager->setWriteConnectionService(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->setWriteConnectionService(
             $this,
             $connectionService
         );
@@ -4154,14 +4537,16 @@ abstract class Model extends AbstractInjectionAware implements
      *```
      *
      * @param mixed $columns
-     * @param bool  $useGetter
+     * @param mixed  $useGetter
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function toArray(
         mixed $columns = null,
-        bool $useGetter = true
+        mixed $useGetter = true
     ): array {
         $data      = [];
         $metaData  = $this->getModelsMetaData();
@@ -4275,6 +4660,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Update the models manager
              */
+            /** @var ManagerInterface $manager */
             $this->modelsManager = $manager;
 
             /**
@@ -4294,6 +4680,7 @@ abstract class Model extends AbstractInjectionAware implements
              * Fetch serialized props
              */
             if (isset($attributes["attributes"])) {
+                /** @var array<string, mixed> $properties */
                 $properties = $attributes["attributes"];
                 /**
                  * Update the objects properties
@@ -4312,7 +4699,9 @@ abstract class Model extends AbstractInjectionAware implements
              * Fetch serialized dirtyState
              */
             if (isset($attributes["dirtyState"])) {
-                $this->dirtyState = $attributes["dirtyState"];
+                /** @var int $dirtyState */
+                $dirtyState       = $attributes["dirtyState"];
+                $this->dirtyState = $dirtyState;
             }
 
             /**
@@ -4320,7 +4709,9 @@ abstract class Model extends AbstractInjectionAware implements
              */
             if ($manager->isKeepingSnapshots($this)) {
                 if (isset($attributes["snapshot"])) {
-                    $this->snapshot = $attributes["snapshot"];
+                    /** @var array<string, mixed> $snapshot */
+                    $snapshot       = $attributes["snapshot"];
+                    $this->snapshot = $snapshot;
                 } else {
                     $this->snapshot = $properties;
                 }
@@ -4461,6 +4852,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_attributes $attributes
      */
     protected function allowEmptyStringValues(array $attributes): void
     {
@@ -4524,6 +4917,8 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *
      * @return Relation
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     protected function belongsTo(
         mixed $fields,
@@ -4531,7 +4926,15 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $referencedFields,
         array $options = []
     ): Relation {
-        return $this->modelsManager->addBelongsTo(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /** @var Relation */
+        return $modelsManagerLocal->addBelongsTo(
             $this,
             $fields,
             $referenceModel,
@@ -4545,7 +4948,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      */
-    protected function cancelOperation(): void
+    protected function cancelOperation()
     {
         if ($this->operationMade == self::OP_DELETE) {
             $this->fireEvent("notDeleted");
@@ -4566,6 +4969,11 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Get the models manager
          */
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $manager */
         $manager = $this->modelsManager;
 
         /**
@@ -4587,6 +4995,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * By default action is restrict
              */
+            /** @var mvc_model_foreign_key $foreignKey */
             $action = Relation::ACTION_RESTRICT;
 
             /**
@@ -4636,6 +5045,10 @@ abstract class Model extends AbstractInjectionAware implements
 
                 $validateWithNulls = $numberNull == count($fields);
             } else {
+                /**
+                 * A single field pairs with a single referenced field.
+                 */
+                /** @var string $referencedFields */
                 $value = $this->$fields ?? null;
 
                 $conditions[] = "[" . $referencedFields . "] = ?0";
@@ -4696,6 +5109,10 @@ abstract class Model extends AbstractInjectionAware implements
 
                 /**
                  * Create a message
+                 *
+                 * Message takes the field name as a string.
+                 *
+                 * @var string $fields
                  */
                 $this->appendMessage(
                     new Message(
@@ -4743,6 +5160,11 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Get the models manager
          */
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $manager */
         $manager = $this->modelsManager;
 
         /**
@@ -4769,7 +5191,10 @@ abstract class Model extends AbstractInjectionAware implements
              * Try to find a different action in the foreign key's options
              */
             if (is_array($foreignKey) && isset($foreignKey["action"])) {
-                $action = (int)$foreignKey["action"];
+                /** @var int|string $foreignKeyAction */
+                $foreignKeyAction = $foreignKey["action"];
+
+                $action = (int)$foreignKeyAction;
             }
 
             /**
@@ -4779,6 +5204,7 @@ abstract class Model extends AbstractInjectionAware implements
                 continue;
             }
 
+            /** @var false|Simple|ModelInterface $related */
             $related = $manager->getRelationRecords(
                 $relation,
                 $this
@@ -4807,6 +5233,11 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Get the models manager
          */
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $manager */
         $manager = $this->modelsManager;
 
         /**
@@ -4834,7 +5265,10 @@ abstract class Model extends AbstractInjectionAware implements
              * Try to find a different action in the foreign key's options
              */
             if (is_array($foreignKey) && isset($foreignKey["action"])) {
-                $action = (int)$foreignKey["action"];
+                /** @var int|string $foreignKeyAction */
+                $foreignKeyAction = $foreignKey["action"];
+
+                $action = (int)$foreignKeyAction;
             }
 
             /**
@@ -4851,10 +5285,15 @@ abstract class Model extends AbstractInjectionAware implements
                 /**
                  * Create a new message
                  */
+                /** @var string $message */
                 $message = $foreignKey["message"] ?? "Record is referenced by model " . $relationClass;
 
                 /**
                  * Create a message
+                 *
+                 * Message takes the field name as a string.
+                 *
+                 * @var string $fields
                  */
                 $this->appendMessage(
                     new Message(
@@ -4895,6 +5334,8 @@ abstract class Model extends AbstractInjectionAware implements
      * related records along with freshly added one
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_related
      */
     protected function collectRelatedToSave(): array
     {
@@ -4933,20 +5374,22 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param MetaDataInterface $metaData
      * @param AdapterInterface  $connection
-     * @param array|string      $table
-     * @param bool|string       $identityField
+     * @param mixed      $table
+     * @param mixed       $identityField
      *
      * @return bool
      * @throws Exception
+     *
      */
     protected function doLowInsert(
         MetaDataInterface $metaData,
         AdapterInterface $connection,
-        array | string $table,
-        bool | string $identityField
+        mixed $table,
+        mixed $identityField
     ): bool {
         $attributeField      = null;
         $bindSkip            = Column::BIND_SKIP;
+        /** @var ManagerInterface $manager */
         $manager             = $this->modelsManager;
         $fields              = [];
         $values              = [];
@@ -5056,6 +5499,11 @@ abstract class Model extends AbstractInjectionAware implements
          * If there is an identity field we add it using "null" or "default"
          */
         if ($identityField !== false) {
+            /**
+             * A model with an identity column names it, so the value is the
+             * column name here.
+             */
+            /** @var string $identityField */
             $defaultValue = $connection->getDefaultIdValue();
 
             /**
@@ -5141,11 +5589,16 @@ abstract class Model extends AbstractInjectionAware implements
          * The insert will escape the table name
          */
         if (is_array($table)) {
-            $table = $table[0] . "." . $table[1];
+            // A two element array holds the schema and the table name.
+            /** @var array{0: string, 1: string} $tableParts */
+            $tableParts = $table;
+            $table      = $tableParts[0] . "." . $tableParts[1];
         }
 
         /**
          * The low level insert is performed
+         *
+         * @var string $table
          */
         $success = $connection->insert($table, $values, $fields, $bindTypes);
 
@@ -5157,6 +5610,7 @@ abstract class Model extends AbstractInjectionAware implements
 
             if ($connection->supportSequences()) {
                 if (method_exists($this, "getSequenceName")) {
+                    /** @var string $sequenceName */
                     $sequenceName = $this->getSequenceName();
                 } else {
                     $source = $this->getSource();
@@ -5177,6 +5631,7 @@ abstract class Model extends AbstractInjectionAware implements
              * currval() requires nextval() to have been called in the session.
              * Reuse the value already present on the model in that case.
              */
+            /** @var scalar|null $value */
             $value = $this->$attributeField ?? null;
 
             if ($value !== null && $value !== "") {
@@ -5248,6 +5703,7 @@ abstract class Model extends AbstractInjectionAware implements
                 $manager->isKeepingSnapshots($this) &&
                 Settings::get("orm.update_snapshot_on_save")
             ) {
+                /** @var mvc_model_snapshot $snapshot */
                 $this->snapshot = $snapshot;
             }
         }
@@ -5260,15 +5716,16 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param MetaDataInterface $metaData
      * @param AdapterInterface  $connection
-     * @param array|string      $table
+     * @param mixed      $table
      *
      * @return bool
      * @throws Exception
+     *
      */
     protected function doLowUpdate(
         MetaDataInterface $metaData,
         AdapterInterface $connection,
-        array | string $table
+        mixed $table
     ): bool {
         $bindSkip    = Column::BIND_SKIP;
         $fields      = [];
@@ -5276,7 +5733,13 @@ abstract class Model extends AbstractInjectionAware implements
         $bindTypes   = [];
         $newSnapshot = [];
         $rawValues   = $this->rawValues;
-        $manager     = $this->modelsManager;
+
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $manager */
+        $manager = $this->modelsManager;
 
         /**
          * Check if the model must use dynamic update
@@ -5376,6 +5839,13 @@ abstract class Model extends AbstractInjectionAware implements
                                         $updateValue = $value->getValue();
                                     }
 
+                                    /**
+                                     * The compared values come from the
+                                     * database columns, so they are scalar.
+                                     *
+                                     * @var scalar|null $snapshotValue
+                                     * @var scalar|null $updateValue
+                                     */
                                     $changed = match ($dataType) {
                                         Column::TYPE_BOOLEAN    => (bool)$snapshotValue !== (bool)$updateValue,
                                         Column::TYPE_DECIMAL,
@@ -5547,12 +6017,17 @@ abstract class Model extends AbstractInjectionAware implements
          * The insert will escape the table name
          */
         if (is_array($table)) {
-            $table = $table[0] . "." . $table[1];
+            // A two element array holds the schema and the table name.
+            /** @var array{0: string, 1: string} $tableParts */
+            $tableParts = $table;
+            $table      = $tableParts[0] . "." . $tableParts[1];
         }
 
         /**
          * We build the conditions as an array
          * Perform the low level update
+         *
+         * @var string $table
          */
         $success = $connection->update(
             $table,
@@ -5630,22 +6105,36 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return false|int|mixed|ModelInterface|Simple
      * @throws Exception
+     *
+     * @phpstan-param list<mixed> $arguments
      */
     protected function getRelatedRecords(
         string $modelName,
         string $method,
         array $arguments
     ) {
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
         $relation    = false;
         $queryMethod = null;
-        $extraArgs   = $arguments[0] ?? null;
+
+        /**
+         * The first argument holds the find parameters of the relation.
+         */
+        /** @var mvc_model_parameters|string|null $extraArgs */
+        $extraArgs = $arguments[0] ?? null;
 
         /**
          * Calling find/findFirst if the method starts with "get"
          */
         if (str_starts_with($method, "get")) {
             $alias    = substr($method, 3);
-            $relation = $this->modelsManager->getRelationByAlias(
+            $relation = $modelsManagerLocal->getRelationByAlias(
                 $modelName,
                 $alias
             );
@@ -5666,7 +6155,7 @@ abstract class Model extends AbstractInjectionAware implements
          */
         if (str_starts_with($method, "count")) {
             $queryMethod = "count";
-            $relation    = $this->modelsManager->getRelationByAlias(
+            $relation    = $modelsManagerLocal->getRelationByAlias(
                 $modelName,
                 substr($method, 5)
             );
@@ -5678,7 +6167,7 @@ abstract class Model extends AbstractInjectionAware implements
                 return false;
             }
 
-            return $this->modelsManager->getRelationRecords(
+            return $modelsManagerLocal->getRelationRecords(
                 $relation,
                 $this,
                 $extraArgs,
@@ -5791,6 +6280,7 @@ abstract class Model extends AbstractInjectionAware implements
              * The unique key is composed of 3 parts uniqueKey, uniqueParams,
              * uniqueTypes
              */
+            /** @var mvc_model_bind_types $uniqueTypes */
             $this->uniqueKey    = $joinWhere;
             $this->uniqueParams = $uniqueParams;
             $this->uniqueTypes  = $uniqueTypes;
@@ -5838,6 +6328,7 @@ abstract class Model extends AbstractInjectionAware implements
             $uniqueTypes
         );
 
+        /** @var array<string, mixed> $num */
         if ($num["rowcount"]) {
             $this->dirtyState = self::DIRTY_STATE_PERSISTENT;
 
@@ -5897,6 +6388,9 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *
      * @return Relation
+     *
+     * @phpstan-param mvc_relation_options $options
+     * @phpstan-param mvc_relation_fields $referencedFields
      */
     protected function hasMany(
         mixed $fields,
@@ -5904,7 +6398,15 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $referencedFields,
         array $options = []
     ): Relation {
-        return $this->modelsManager->addHasMany(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /** @var Relation */
+        return $modelsManagerLocal->addHasMany(
             $this,
             $fields,
             $referenceModel,
@@ -5969,6 +6471,10 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *
      * @return Relation
+     *
+     * @phpstan-param mvc_relation_options $options
+     * @phpstan-param mvc_relation_fields $intermediateFields
+     * @phpstan-param mvc_relation_fields $intermediateReferencedFields
      */
     protected function hasManyToMany(
         mixed $fields,
@@ -5979,7 +6485,15 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $referencedFields,
         array $options = []
     ): Relation {
-        return $this->modelsManager->addHasManyToMany(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /** @var Relation */
+        return $modelsManagerLocal->addHasManyToMany(
             $this,
             $fields,
             $intermediateModel,
@@ -6039,6 +6553,8 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *
      * @return Relation
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     protected function hasOne(
         mixed $fields,
@@ -6046,7 +6562,15 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $referencedFields,
         array $options = []
     ): Relation {
-        return $this->modelsManager->addHasOne(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /** @var Relation */
+        return $modelsManagerLocal->addHasOne(
             $this,
             $fields,
             $referenceModel,
@@ -6111,6 +6635,10 @@ abstract class Model extends AbstractInjectionAware implements
      * }
      *
      * @return Relation
+     *
+     * @phpstan-param mvc_relation_options $options
+     * @phpstan-param mvc_relation_fields $intermediateFields
+     * @phpstan-param mvc_relation_fields $intermediateReferencedFields
      */
     protected function hasOneThrough(
         mixed $fields,
@@ -6121,7 +6649,15 @@ abstract class Model extends AbstractInjectionAware implements
         mixed $referencedFields,
         array $options = []
     ): Relation {
-        return $this->modelsManager->addHasOneThrough(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        /** @var Relation */
+        return $modelsManagerLocal->addHasOneThrough(
             $this,
             $fields,
             $intermediateModel,
@@ -6154,7 +6690,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     protected function keepSnapshots(bool $keepSnapshot): void
     {
-        $this->modelsManager->keepSnapshots(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->keepSnapshots(
             $this,
             $keepSnapshot
         );
@@ -6230,21 +6773,26 @@ abstract class Model extends AbstractInjectionAware implements
      * Save the related records assigned in the has-one/has-many relations
      *
      * @param AdapterInterface    $connection
-     * @param array               $related
+     * @param mixed               $related
      * @param CollectionInterface $visited
+     *
+     * @phpstan-param CollectionInterface<mixed> $visited
      *
      * @return bool
      * @throws Exception
+     *
      */
     protected function postSaveRelatedRecords(
         AdapterInterface $connection,
-        array $related,
+        mixed $related,
         CollectionInterface $visited
     ): bool {
         $nesting   = false;
         $className = get_class($this);
         $manager   = $this->getModelsManager();
 
+        // The related records are keyed by the relation alias.
+        /** @var mvc_model_related $related */
         foreach ($related as $name => $record) {
             /**
              * Try to get a relation with the same name
@@ -6281,6 +6829,10 @@ abstract class Model extends AbstractInjectionAware implements
                     $relatedRecords = $record;
                 }
 
+                /**
+                 * The related records are model instances.
+                 */
+                /** @var array<array-key, Model> $relatedRecords */
                 $isThrough = $relation->isThrough();
 
                 /**
@@ -6322,6 +6874,11 @@ abstract class Model extends AbstractInjectionAware implements
 
                         $i = $columnCount + 1;
                     } else {
+                        /**
+                         * A single field pairs with a single intermediate
+                         * field.
+                         */
+                        /** @var string $intermediateFields */
                         $conditions[]         = "[" . $intermediateFields . "] = :APR0:";
                         $placeholders["APR0"] = $this->readAttribute($columns);
                         $i                    = 1;
@@ -6365,6 +6922,7 @@ abstract class Model extends AbstractInjectionAware implements
                                     $loopPlaceholders["APR" . $t] = $recordAfter->readAttribute($columnA);
                                 }
                             } else {
+                                /** @var string $intermediateReferencedFields */
                                 $loopConditions[] = "[" . $intermediateReferencedFields . "] = :APR" . $i . ":";
                                 $loopPlaceholders["APR" . $i] = $recordAfter->readAttribute($referencedFields);
                             }
@@ -6409,6 +6967,7 @@ abstract class Model extends AbstractInjectionAware implements
                                     );
                                 }
                             } else {
+                                /** @var string $intermediateFields */
                                 $intermediateModel->writeAttribute(
                                     $intermediateFields,
                                     $this->readAttribute($columns)
@@ -6428,6 +6987,7 @@ abstract class Model extends AbstractInjectionAware implements
                                     );
                                 }
                             } else {
+                                /** @var string $intermediateReferencedFields */
                                 $intermediateModel->writeAttribute(
                                     $intermediateReferencedFields,
                                     $recordAfter->readAttribute($referencedFields)
@@ -6438,6 +6998,10 @@ abstract class Model extends AbstractInjectionAware implements
                         /**
                          * Save the record and get messages
                          */
+                        /**
+                         * The intermediate record is a model instance.
+                         */
+                        /** @var Model $intermediateModel */
                         if (!$intermediateModel->doSave($visited)) {
                             /**
                              * Get the validation messages generated by the referenced model
@@ -6461,10 +7025,16 @@ abstract class Model extends AbstractInjectionAware implements
                                 $keepKey = "";
 
                                 foreach ($referencedFields as $columnA) {
-                                    $keepKey .= $recordAfter->readAttribute($columnA) . "|";
+                                    /** @var scalar|null $keyValue */
+                                    $keyValue = $recordAfter->readAttribute($columnA);
+
+                                    $keepKey .= $keyValue . "|";
                                 }
                             } else {
-                                $keepKey = (string) $recordAfter->readAttribute($referencedFields);
+                                /** @var scalar|null $keyValue */
+                                $keyValue = $recordAfter->readAttribute($referencedFields);
+
+                                $keepKey = (string) $keyValue;
                             }
 
                             $keptKeys[$keepKey] = true;
@@ -6496,12 +7066,18 @@ abstract class Model extends AbstractInjectionAware implements
                                 $keepKey = "";
 
                                 foreach ($intermediateReferencedFields as $columnB) {
-                                    $keepKey .= $existingRecord->readAttribute($columnB) . "|";
+                                    /** @var scalar|null $keyValue */
+                                    $keyValue = $existingRecord->readAttribute($columnB);
+
+                                    $keepKey .= $keyValue . "|";
                                 }
                             } else {
-                                $keepKey = (string) $existingRecord->readAttribute(
+                                /** @var scalar|null $keyValue */
+                                $keyValue = $existingRecord->readAttribute(
                                     $intermediateReferencedFields
                                 );
+
+                                $keepKey = (string) $keyValue;
                             }
 
                             if (
@@ -6554,6 +7130,7 @@ abstract class Model extends AbstractInjectionAware implements
                             /**
                              * Assign the value to the
                              */
+                            /** @var string $referencedFields */
                             $recordAfter->writeAttribute(
                                 $referencedFields,
                                 $this->readAttribute($columns)
@@ -6678,6 +7255,7 @@ abstract class Model extends AbstractInjectionAware implements
                 /**
                  * Get string attributes that allow empty strings as defaults
                  */
+                /** @var array<string, mixed> $emptyStringValues */
                 $emptyStringValues = $metaData->getEmptyStringAttributes($this);
                 $error             = false;
 
@@ -6861,15 +7439,18 @@ abstract class Model extends AbstractInjectionAware implements
      * Saves related records that must be stored prior to save the master record
      *
      * @param AdapterInterface    $connection
-     * @param array               $related
+     * @param mixed               $related
      * @param CollectionInterface $visited
+     *
+     * @phpstan-param CollectionInterface<mixed> $visited
      *
      * @return bool
      * @throws Exception
+     *
      */
     protected function preSaveRelatedRecords(
         AdapterInterface $connection,
-        array $related,
+        mixed $related,
         CollectionInterface $visited
     ): bool {
         $nesting = false;
@@ -6882,6 +7463,8 @@ abstract class Model extends AbstractInjectionAware implements
         $className = get_class($this);
         $manager   = $this->getModelsManager();
 
+        // The related records are keyed by the relation alias.
+        /** @var mvc_model_related $related */
         foreach ($related as $name => $record) {
             /**
              * Try to get a relation with the same name
@@ -6912,6 +7495,7 @@ abstract class Model extends AbstractInjectionAware implements
                      * take any action. Recursion through circular relations is
                      * prevented by the visited collection inside doSave().
                      */
+                    /** @var Model $record */
                     if (!$record->doSave($visited)) {
                         /**
                          * Get the validation messages generated by the
@@ -6944,6 +7528,10 @@ abstract class Model extends AbstractInjectionAware implements
                             $this->$columnA = $record->readAttribute($columnB);
                         }
                     } else {
+                        /**
+                         * A single field pairs with a single referenced field.
+                         */
+                        /** @var string $referencedFields */
                         $this->$columns = $record->readAttribute($referencedFields);
                     }
                 }
@@ -6962,7 +7550,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final protected function setSchema(string $schema): ModelInterface
     {
-        $this->modelsManager->setModelSchema(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->setModelSchema(
             $this,
             $schema
         );
@@ -6979,7 +7574,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     final protected function setSource(string $source): ModelInterface
     {
-        $this->modelsManager->setModelSource($this, $source);
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->setModelSource($this, $source);
 
         return $this;
     }
@@ -7005,6 +7607,8 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array $attributes
      *
      * @return void
+     *
+     * @phpstan-param mvc_model_attributes $attributes
      */
     protected function skipAttributes(array $attributes): void
     {
@@ -7034,6 +7638,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_attributes $attributes
      */
     protected function skipAttributesOnCreate(array $attributes): void
     {
@@ -7071,6 +7677,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_attributes $attributes
      */
     protected function skipAttributesOnUpdate(array $attributes): void
     {
@@ -7107,7 +7715,14 @@ abstract class Model extends AbstractInjectionAware implements
      */
     protected function useDynamicUpdate(bool $dynamicUpdate): void
     {
-        $this->modelsManager->useDynamicUpdate(
+        /**
+         * The constructor is final and throws when no manager can be
+         * resolved, so the property always holds one here.
+         */
+        /** @var ManagerInterface $modelsManagerLocal */
+        $modelsManagerLocal = $this->modelsManager;
+
+        $modelsManagerLocal->useDynamicUpdate(
             $this,
             $dynamicUpdate
         );

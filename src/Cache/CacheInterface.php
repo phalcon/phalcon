@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Cache;
 
+use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Contracts\Cache\Cache as CacheContract;
 
 /**
@@ -21,6 +22,12 @@ use Phalcon\Contracts\Cache\Cache as CacheContract;
  * @psalm-suppress DeprecatedInterface
  * @deprecated Will be removed in a future major release.
  *             Use {@see \Phalcon\Contracts\Cache\Cache} instead.
+ *
+ * The cache class carries this member and the framework calls it on the
+ * interface. It joins the contract in the next major; until then the tag
+ * below records what all implementations provide.
+ *
+ * @method AdapterInterface getAdapter()
  */
 interface CacheInterface extends CacheContract
 {

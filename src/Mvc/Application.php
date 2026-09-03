@@ -23,6 +23,8 @@ use Phalcon\Mvc\Application\Exception;
 use Phalcon\Mvc\Application\Exceptions\ContainerRequired;
 use Phalcon\Mvc\Application\Exceptions\InvalidModuleDefinition;
 use Phalcon\Mvc\Application\Exceptions\ModuleDefinitionPathNotFound;
+use Phalcon\Mvc\DispatcherInterface;
+use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
@@ -117,8 +119,10 @@ class Application extends AbstractApplication
         }
 
         if ($this->container instanceof DiInterface) {
+            /** @var RouterInterface $router */
             $router = $this->container->getShared("router");
         } else {
+            /** @var RouterInterface $router */
             $router = $this->container->get("router");
         }
 
@@ -144,6 +148,7 @@ class Application extends AbstractApplication
                 /**
                  * Directly call the match callback
                  */
+                /** @var callable $match */
                 $possibleResponse = call_user_func_array(
                     $match,
                     $router->getParams()
@@ -154,8 +159,10 @@ class Application extends AbstractApplication
                  */
                 if (is_string($possibleResponse)) {
                     if ($this->container instanceof DiInterface) {
+                        /** @var ResponseInterface $response */
                         $response = $this->container->getShared("response");
                     } else {
+                        /** @var ResponseInterface $response */
                         $response = $this->container->get("response");
                     }
 
@@ -235,6 +242,7 @@ class Application extends AbstractApplication
                     }
                 }
 
+                /** @var ModuleDefinitionInterface $moduleObject */
                 $moduleObject = $this->container->get($className);
 
                 /**
@@ -278,8 +286,10 @@ class Application extends AbstractApplication
         $view = null;
         if (true === $this->implicitView) {
             if ($this->container instanceof DiInterface) {
+                /** @var ViewInterface $view */
                 $view = $this->container->getShared("view");
             } else {
+                /** @var ViewInterface $view */
                 $view = $this->container->get("view");
             }
         }
@@ -289,8 +299,10 @@ class Application extends AbstractApplication
          * Assign the values passed from the router
          */
         if ($this->container instanceof DiInterface) {
+            /** @var DispatcherInterface $dispatcher */
             $dispatcher = $this->container->getShared("dispatcher");
         } else {
+            /** @var DispatcherInterface $dispatcher */
             $dispatcher = $this->container->get("dispatcher");
         }
 
@@ -329,8 +341,10 @@ class Application extends AbstractApplication
          */
         if (false === $possibleResponse) {
             if ($this->container instanceof DiInterface) {
+                /** @var ResponseInterface $response */
                 $response = $this->container->getShared("response");
             } else {
+                /** @var ResponseInterface $response */
                 $response = $this->container->get("response");
             }
         } else {
@@ -339,8 +353,10 @@ class Application extends AbstractApplication
              */
             if (is_string($possibleResponse)) {
                 if ($this->container instanceof DiInterface) {
+                    /** @var ResponseInterface $response */
                     $response = $this->container->getShared("response");
                 } else {
+                    /** @var ResponseInterface $response */
                     $response = $this->container->get("response");
                 }
 
@@ -401,8 +417,10 @@ class Application extends AbstractApplication
                     $response = $possibleResponse;
                 } else {
                     if ($this->container instanceof DiInterface) {
+                        /** @var ResponseInterface $response */
                         $response = $this->container->getShared("response");
                     } else {
+                        /** @var ResponseInterface $response */
                         $response = $this->container->get("response");
                     }
 
@@ -462,6 +480,8 @@ class Application extends AbstractApplication
      * @param bool $sendHeaders
      *
      * @return Application
+     *
+     * @phpstan-return static
      */
     public function sendHeadersOnHandleRequest(bool $sendHeaders): static
     {
@@ -477,6 +497,8 @@ class Application extends AbstractApplication
      * @param bool $implicitView
      *
      * @return Application
+     *
+     * @phpstan-return static
      */
     public function useImplicitView(bool $implicitView): static
     {

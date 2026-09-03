@@ -22,6 +22,8 @@ abstract class Behavior implements BehaviorInterface
 {
     /**
      * Phalcon\Mvc\Model\Behavior
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public function __construct(
         protected array $options = []
@@ -36,6 +38,8 @@ abstract class Behavior implements BehaviorInterface
      * @param array          $arguments
      *
      * @return null
+     *
+     * @phpstan-param array<array-key, mixed> $arguments
      */
     public function missingMethod(
         ModelInterface $model,
@@ -52,6 +56,8 @@ abstract class Behavior implements BehaviorInterface
      * @param ModelInterface $model
      *
      * @return null
+     *
+     * @phpstan-return mixed
      */
     public function notify(string $type, ModelInterface $model)
     {
@@ -64,6 +70,8 @@ abstract class Behavior implements BehaviorInterface
      * @param string|null $eventName
      *
      * @return mixed
+     *
+     * @phpstan-return array<string, mixed>|mixed
      */
     protected function getOptions(string | null $eventName = null)
     {

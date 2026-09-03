@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Resultset;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
@@ -38,6 +39,11 @@ use function unserialize;
  *
  * @template TKey of int
  * @template TValue of mixed
+ * @extends Resultset<TKey, TValue>
+ *
+ * @phpstan-import-type mvc_resultset_complex_state from MvcTypes
+ * @phpstan-import-type mvc_resultset_object_column from MvcTypes
+ * @phpstan-import-type mvc_resultset_scalar_column from MvcTypes
  */
 class Complex extends Resultset
 {
@@ -52,15 +58,16 @@ class Complex extends Resultset
     /**
      * Phalcon\Mvc\Model\Resultset\Complex constructor
      *
-     * @param array|null           $columnTypes
+     * @param mixed           $columnTypes
      * @param ResultInterface|null $result
      * @param mixed|null           $cache
      * @param string               $resultsetRowClass
      *
      * @throws Exception
+     *
      */
     public function __construct(
-        protected array | null $columnTypes,
+        protected mixed $columnTypes,
         ResultInterface | null $result = null,
         mixed $cache = null,
         protected string $resultsetRowClass = ""
@@ -70,6 +77,8 @@ class Complex extends Resultset
 
     /**
      * @return array
+     *
+     * @phpstan-return mvc_resultset_complex_state
      */
     public function __serialize(): array
     {
@@ -78,7 +87,13 @@ class Complex extends Resultset
          */
         $records = $this->toArray();
 
-        $cache       = $this->cache;
+        $cache = $this->cache;
+
+        /**
+         * The constructor takes the column types as an array or as null.
+         *
+         * @var array<array-key, mixed>|null $columnTypes
+         */
         $columnTypes = $this->columnTypes;
         $hydrateMode = $this->hydrateMode;
 
@@ -94,6 +109,8 @@ class Complex extends Resultset
      * @param array $data
      *
      * @return void
+     *
+     * @phpstan-param mvc_resultset_complex_state $data
      */
     public function __unserialize(array $data): void
     {
@@ -171,7 +188,10 @@ class Complex extends Resultset
         /**
          * Create every record according to the column types
          */
-        foreach ($this->columnTypes as $alias => $column) {
+        /** @var array<string, mixed> $columnTypes */
+        $columnTypes = $this->columnTypes;
+
+        foreach ($columnTypes as $alias => $column) {
             if (!is_array($column)) {
                 throw new CorruptColumnType();
             }
@@ -179,6 +199,8 @@ class Complex extends Resultset
             $type = $column["type"];
 
             if ($type == "object") {
+                /** @var mvc_resultset_object_column $column */
+
                 /**
                  * Object columns are assigned column by column
                  */
@@ -265,6 +287,8 @@ class Complex extends Resultset
                  */
                 $attribute = $column["balias"];
             } else {
+                /** @var mvc_resultset_scalar_column $column */
+
                 /**
                  * Scalar columns are simply assigned to the result object
                  */
@@ -289,6 +313,7 @@ class Complex extends Resultset
                  * Assign the instance according to the hydration type
                  */
                 if ($hydrateMode == Resultset::HYDRATE_ARRAYS) {
+                    /** @var array<string, mixed> $activeRow */
                     $activeRow[$attribute] = $value;
                 } else {
                     $activeRow->$attribute = $value;
@@ -331,8 +356,10 @@ class Complex extends Resultset
             } else {
                 $serializer = $container->get("serializer");
             }
+            /** @var \Phalcon\Storage\Serializer\SerializerInterface $serializer */
             $serializer->setData($data);
 
+            /** @var string */
             return $serializer->serialize();
         }
 
@@ -344,6 +371,8 @@ class Complex extends Resultset
      * number of rows it could consume more memory than currently it does.
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function toArray(): array
     {
@@ -369,6 +398,8 @@ class Complex extends Resultset
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param string $data
      */
     public function unserialize(mixed $data): void
     {
@@ -389,6 +420,7 @@ class Complex extends Resultset
                 $serializer = $container->get("serializer");
             }
 
+            /** @var \Phalcon\Storage\Serializer\SerializerInterface $serializer */
             $serializer->unserialize($data);
             $resultset = $serializer->getData();
         } else {
@@ -398,6 +430,8 @@ class Complex extends Resultset
         if (!is_array($resultset)) {
             throw new InvalidSerializationData();
         }
+
+        /** @var mvc_resultset_complex_state $resultset */
 
         $this->rows        = $resultset["rows"];
         $this->count       = count($resultset["rows"]);

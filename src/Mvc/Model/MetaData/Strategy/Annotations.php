@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
+use Phalcon\Annotations\Parser\Annotation;
 use Phalcon\Annotations\Parser\Collection;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\Exception;
@@ -23,6 +25,9 @@ use Phalcon\Mvc\Model\MetaData\Exceptions\NoAnnotationsForClass;
 use Phalcon\Mvc\Model\MetaData\Exceptions\NoPropertyAnnotationsForClass;
 use Phalcon\Mvc\ModelInterface;
 
+/**
+ * @phpstan-import-type mvc_metadata_index from MvcTypes
+ */
 class Annotations implements StrategyInterface
 {
     /**
@@ -34,6 +39,8 @@ class Annotations implements StrategyInterface
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_index
      */
     public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
@@ -59,6 +66,8 @@ class Annotations implements StrategyInterface
             /**
              * Check if annotation has the "column" named parameter
              */
+            // The "column" parameter of the annotation names the column.
+            /** @var string $columnName */
             $columnName = $columnAnnotations->getNamedParameter("column");
             if (empty($columnName)) {
                 $columnName = $property;
@@ -91,6 +100,8 @@ class Annotations implements StrategyInterface
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
      * @throws Exception
+     *
+     * @phpstan-return mvc_metadata_index
      */
     public function getMetaData(ModelInterface $model, DiInterface $container): array
     {
@@ -129,6 +140,8 @@ class Annotations implements StrategyInterface
             /**
              * Check if annotation has the "column" named parameter
              */
+            // The "column" parameter of the annotation names the column.
+            /** @var string $columnName */
             $columnName = $columnAnnotations->getNamedParameter("column");
 
             if (empty($columnName)) {
@@ -288,6 +301,8 @@ class Annotations implements StrategyInterface
      *
      * @return Collection[]
      * @throws Exception
+     *
+     * @phpstan-return array<string, Collection<int, Annotation>>
      */
     private function getProperties(ModelInterface $model, DiInterface $container): array
     {
@@ -308,6 +323,8 @@ class Annotations implements StrategyInterface
         /**
          * Get the properties defined in
          */
+        // The annotations of every property are keyed by the property name.
+        /** @var array<string, Collection<int, Annotation>> $propertiesAnnotations */
         $propertiesAnnotations = $reflection->getPropertiesAnnotations();
 
         if (empty($propertiesAnnotations)) {

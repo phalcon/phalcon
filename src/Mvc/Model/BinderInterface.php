@@ -31,6 +31,9 @@ interface BinderInterface
      * @param string|null $methodName
      *
      * @return array
+     *
+     * @phpstan-param array<array-key, mixed> $params
+     * @phpstan-return array<array-key, mixed>
      */
     public function bindToHandler(
         object $handler,
@@ -43,6 +46,8 @@ interface BinderInterface
      * Gets active bound models
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function getBoundModels(): array;
 

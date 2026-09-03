@@ -221,3 +221,53 @@ parameters:
             message: "#Call to function is_array\\(\\) with array<.*> will always evaluate to true#"
             path: ../src/DataMapper/Query/AbstractConditions.php
             reportUnmatched: false
+        # The Mvc namespace mirrors Zephir sources where the same parameters
+        # and properties are `var`. Every guard below is live there and is
+        # what rejects a wrong type at run time; the PHP mirror declares the
+        # narrow native type, so PHPStan reads the guard as dead. Removing
+        # them would make the two projects diverge. The paths are listed one
+        # by one so a new dead guard elsewhere still gets reported.
+        -
+            message: "#(will always evaluate to (true|false)|Result of (&&|\\|\\|) is always (true|false)|(Left|Right) side of (&&|\\|\\|) is always (true|false)|Negated boolean expression is always (true|false)|Unreachable statement - code above always terminates|in isset\\(\\) always exists and is not nullable|Dead catch - .* is never thrown)#"
+            paths:
+                - ../src/Mvc/Application.php
+                - ../src/Mvc/Micro.php
+                - ../src/Mvc/Model.php
+                - ../src/Mvc/Model/Binder.php
+                - ../src/Mvc/Model/Criteria.php
+                - ../src/Mvc/Model/Manager.php
+                - ../src/Mvc/Model/MetaData.php
+                - ../src/Mvc/Model/MetaData/Strategy/Annotations.php
+                - ../src/Mvc/Model/Query.php
+                - ../src/Mvc/Model/Query/Builder.php
+                - ../src/Mvc/Model/Resultset.php
+                - ../src/Mvc/Model/Resultset/Complex.php
+                - ../src/Mvc/Model/Resultset/Simple.php
+                - ../src/Mvc/Model/Transaction.php
+                - ../src/Mvc/Model/Transaction/Manager.php
+                - ../src/Mvc/Router.php
+                - ../src/Mvc/Router/Annotations.php
+                - ../src/Mvc/Router/Route.php
+                - ../src/Mvc/Router/RouterFactory.php
+                - ../src/Mvc/Url.php
+                - ../src/Mvc/View.php
+                - ../src/Mvc/View/Simple.php
+                - ../src/Mvc/View/Engine/Volt/Compiler.php
+            reportUnmatched: false
+        # The container is `var` in the Zephir sources, so the `instanceof
+        # DiInterface` pair below is a live branch there. In the PHP mirror
+        # the property is typed, which makes the second branch unreachable.
+        -
+            message: "#Cannot call method get\\(\\) on null#"
+            paths:
+                - ../src/Mvc/Model/Query.php
+                - ../src/Mvc/Model/Query/Builder.php
+            reportUnmatched: false
+        # `__set()` returns the assigned value, as the Zephir source does.
+        # PHP discards it and PHPStan hardcodes the magic method as `void`,
+        # so the returns cannot be described in a docblock. Adding a native
+        # `: void` would change the signature away from cphalcon.
+        -
+            message: "#Method Phalcon\\\\Mvc\\\\Model::__set\\(\\) with return type void returns .* but should not return anything#"
+            path: ../src/Mvc/Model.php
+            reportUnmatched: false

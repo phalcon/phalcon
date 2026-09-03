@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\CriteriaInterface;
+use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Mvc\Model\ResultsetInterface;
@@ -26,7 +28,29 @@ use Phalcon\Mvc\Model\TransactionInterface;
 /**
  * Interface for Phalcon\Mvc\Model
  *
- * @template T
+ * The type parameter names the concrete model a resultset carries. It has a
+ * default, so plain `ModelInterface` stays valid everywhere, while a caller
+ * that wants the narrow type writes `ModelInterface<Invoices>`.
+ *
+ * @template T of ModelInterface = ModelInterface
+ *
+ * @phpstan-import-type mvc_model_data from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_model_snapshot from MvcTypes
+ *
+ * The model class carries these members and the framework calls them on the
+ * interface. They join the interface in the next major; until then the tags
+ * below record the contract that all implementations meet.
+ *
+ * @method DiInterface|null getDI()
+ * @method ManagerInterface getModelsManager()
+ * @method mvc_model_snapshot getOldSnapshotData()
+ * @method mvc_model_snapshot getSnapshotData()
+ * @method bool hasChanged(mixed $fieldName = null, bool $allFields = false)
+ * @method bool hasSnapshotData()
+ * @method mixed readAttribute(string $attribute)
+ * @method mixed setOldSnapshotData(array<string, mixed> $data, mixed $columnMap = null)
+ * @method void writeAttribute(string $attribute, mixed $value)
  */
 interface ModelInterface
 {
@@ -37,6 +61,8 @@ interface ModelInterface
      * @param array $parameters
      *
      * @return float|ResultsetInterface
+     *
+     * @phpstan-param mvc_model_parameters $parameters
      */
     public static function average(
         array $parameters = []
@@ -50,6 +76,8 @@ interface ModelInterface
      * @param int            $dirtyState
      *
      * @return ModelInterface
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public static function cloneResult(
         ModelInterface $base,
@@ -67,6 +95,8 @@ interface ModelInterface
      * @param bool               $keepSnapshots
      *
      * @return ModelInterface
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public static function cloneResultMap(
         mixed $base,
@@ -74,7 +104,7 @@ interface ModelInterface
         mixed $columnMap,
         int $dirtyState = 0,
         bool $keepSnapshots = false
-    ): ModelInterface | ResultInterface;
+    ): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\ResultInterface;
 
     /**
      * Returns a hydrated result based on the data and the column map
@@ -84,6 +114,8 @@ interface ModelInterface
      * @param int   $hydrationMode
      *
      * @return mixed
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public static function cloneResultMapHydrate(
         array $data,
@@ -101,6 +133,8 @@ interface ModelInterface
      * @param array|string|null $parameters
      *
      * @return int|ResultsetInterface
+     *
+     * @phpstan-param mvc_model_parameters $parameters
      */
     public static function count(mixed $parameters = null): int | ResultsetInterface;
 
@@ -144,7 +178,7 @@ interface ModelInterface
      *
      * @return mixed
      */
-    public static function maximum(mixed $parameters = null): mixed;
+    public static function maximum(mixed $parameters = null);
 
     /**
      * Allows to get the minimum value of a column that match the specified
@@ -154,7 +188,7 @@ interface ModelInterface
      *
      * @return mixed
      */
-    public static function minimum(mixed $parameters = null): mixed;
+    public static function minimum(mixed $parameters = null);
 
     /**
      * Create a criteria for a specific model
@@ -192,6 +226,8 @@ interface ModelInterface
      * @param mixed|null $dataColumnMap
      *
      * @return ModelInterface
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public function assign(
         array $data,
@@ -370,6 +406,8 @@ interface ModelInterface
      * @param mixed|null $columnMap
      *
      * @return void
+     *
+     * @phpstan-param mvc_model_data $data
      */
     public function setSnapshotData(array $data, mixed $columnMap = null): void;
 
@@ -381,6 +419,8 @@ interface ModelInterface
      * @param bool              $enabled
      *
      * @return ModelInterface
+     *
+     * @phpstan-param mvc_model_data $elements
      */
     public function setSync(
         mixed $elements = null,

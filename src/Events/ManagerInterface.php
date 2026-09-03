@@ -21,6 +21,12 @@ use Phalcon\Contracts\Events\Manager as ManagerContract;
  * @psalm-suppress DeprecatedInterface
  * @deprecated Will be removed in a future major release.
  *             Use {@see \Phalcon\Contracts\Events\Manager} instead.
+ *
+ * The manager class carries this member and the framework calls it on the
+ * interface. It joins the contract in the next major; until then the tag
+ * below records what all implementations provide.
+ *
+ * @method mixed dispatch(object $event, array<array-key, string>|string|null $name = null, object|null $source = null)
  */
 interface ManagerInterface extends ManagerContract
 {

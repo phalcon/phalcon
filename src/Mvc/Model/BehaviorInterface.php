@@ -28,6 +28,8 @@ interface BehaviorInterface
      * @param array          $arguments
      *
      * @return mixed
+     *
+     * @phpstan-param array<array-key, mixed> $arguments
      */
     public function missingMethod(
         ModelInterface $model,

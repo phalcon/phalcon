@@ -22,6 +22,8 @@ interface MiddlewareInterface
 {
     /**
      * Calls the middleware
+     *
+     * @return mixed
      */
     public function call(Micro $application);
 }

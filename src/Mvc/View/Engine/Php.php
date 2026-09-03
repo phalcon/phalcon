@@ -51,7 +51,11 @@ class Php extends AbstractEngine
         $include->call($this, $path, $params);
 
         if (true === $mustClean) {
-            $this->view->setContent(ob_get_contents());
+            // The view starts the buffer before it calls the engine.
+            /** @var string $contents */
+            $contents = ob_get_contents();
+
+            $this->view->setContent($contents);
         }
     }
 }

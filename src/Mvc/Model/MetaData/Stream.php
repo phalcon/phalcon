@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataDirectoryNotWritable;
@@ -36,6 +37,8 @@ use function var_export;
  *     ]
  * );
  *```
+ *
+ * @phpstan-import-type mvc_metadata_index from MvcTypes
  */
 class Stream extends MetaData
 {
@@ -54,40 +57,61 @@ class Stream extends MetaData
     public function __construct(array $options = [])
     {
         if (true === array_key_exists("metaDataDir", $options)) {
-            $this->metaDataDir = $options["metaDataDir"];
+            /** @var string $metaDataDir */
+            $metaDataDir = $options["metaDataDir"];
+
+            $this->metaDataDir = $metaDataDir;
         }
     }
 
     /**
      * Reads meta-data from files
      *
-     * @param string|null $key
+     * @param mixed $key
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_index|null
      */
-    public function read(string | null $key): array | null
+    public function read(mixed $key): array | null
     {
         if (null === $key) {
             return null;
         }
+
+        /**
+         * The interface declares the key as a string.
+         *
+         * @var string $key
+         */
         $path = $this->getFilePath($key);
         if (false === file_exists($path)) {
             return null;
         }
+        /** @var mvc_metadata_index */
         return require $path;
     }
 
     /**
      * Writes the meta-data to files
      *
-     * @param string|null $key
+     * @param mixed $key
      * @param array       $data
      *
      * @return void
      * @throws Exception
+     *
+     * @phpstan-param mvc_metadata_index $data
      */
-    public function write(string | null $key, array $data): void
+    public function write(mixed $key, array $data): void
     {
+        /**
+         * The setting holds a boolean flag. The interface declares the key as
+         * a string.
+         *
+         * @var bool   $option
+         * @var string $key
+         */
         $option = Settings::get('orm.exception_on_failed_metadata_save');
         try {
             $path = $this->getFilePath($key);
@@ -120,8 +144,9 @@ class Stream extends MetaData
 
     /**
      * Throws an exception when the metadata cannot be written
+     *
      */
-    private function throwWriteException($option): void
+    private function throwWriteException(mixed $option): void
     {
         if ($option) {
             throw new MetaDataDirectoryNotWritable();

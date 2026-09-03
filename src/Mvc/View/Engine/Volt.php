@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
+use Countable;
+use Iterator;
+use Phalcon\Di\DiInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroNotFound;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
@@ -44,11 +48,13 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
     /**
      * @var array
+     * @phpstan-var array<string, callable>
      */
     protected array $macros = [];
 
     /**
      * @var array
+     * @phpstan-var array<string, mixed>
      */
     protected array $options = [];
 
@@ -57,11 +63,12 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      *
      * @param string $name
      * @param array  $arguments
+     * @phpstan-param array<array-key, mixed> $arguments
      *
      * @return mixed
      * @throws MacroNotFound
      */
-    public function callMacro(string $name, array $arguments = []): mixed
+    public function callMacro(string $name, array $arguments = [])
     {
         if (!isset($this->macros[$name])) {
             throw new MacroNotFound($name);
@@ -86,7 +93,11 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             throw new MbstringRequired();
         }
 
-        return mb_convert_encoding($text, $to, $from);
+        // PHP 8 throws on an unknown encoding, so the result is a string.
+        /** @var string $converted */
+        $converted = mb_convert_encoding($text, $to, $from);
+
+        return $converted;
     }
 
     /**
@@ -121,6 +132,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * Return Volt's options
      *
      * @return array
+     * @phpstan-return array<string, mixed>
      */
     public function getOptions(): array
     {
@@ -131,11 +143,11 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * Checks if the needle is included in the haystack
      *
      * @param mixed        $needle
-     * @param array|string $haystack
+     * @param mixed $haystack
      *
      * @return bool
      */
-    public function isIncluded(mixed $needle, array | string $haystack): bool
+    public function isIncluded(mixed $needle, mixed $haystack): bool
     {
         if (null === $needle) {
             $needle = "";
@@ -145,6 +157,11 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             return in_array($needle, $haystack);
         }
 
+        // A string haystack needs a string needle.
+        /**
+         * @var string $haystack
+         * @var string $needle
+         */
         return mb_strpos($haystack, $needle) !== false;
     }
 
@@ -152,6 +169,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * Length filter. If an array/object is passed a count is performed otherwise a strlen/mb_strlen
      *
      * @param mixed $item
+     * @phpstan-param array<array-key, mixed>|Countable|string|null $item
      *
      * @return int
      */
@@ -170,6 +188,11 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
     /**
      * Parses the preload element passed and sets the necessary link headers
+     *
+     * @phpstan-param array{
+     *     0?: string,
+     *     1?: array<string, array<string>|bool|float|int|string|null>
+     * }|string $parameters
      *
      * @todo find a better way to handle this
      */
@@ -191,7 +214,13 @@ class Volt extends AbstractEngine implements EventsAwareInterface
         /**
          * Check if we have the response object in the container
          */
-        if ($this->container->has("response")) {
+        /**
+         * The engine is built by the view, which always sets the container.
+         */
+        /** @var DiInterface $container */
+        $container = $this->container;
+
+        if ($container->has("response")) {
             if (isset($params[1])) {
                 $attributes = $params[1];
             } else {
@@ -201,7 +230,8 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             /**
              * href comes wrapped with ''. Remove them
              */
-            $response = $this->container->get("response");
+            /** @var ResponseInterface $response */
+            $response = $container->get("response");
             $link     = new Link(
                 "preload",
                 str_replace("'", "", $href),
@@ -267,7 +297,11 @@ class Volt extends AbstractEngine implements EventsAwareInterface
         $include->call($this, $compiledTemplatePath, $params);
 
         if ($mustClean) {
-            $this->view->setContent(ob_get_contents());
+            // The view starts the buffer before it calls the engine.
+            /** @var string $contents */
+            $contents = ob_get_contents();
+
+            $this->view->setContent($contents);
         }
     }
 
@@ -275,10 +309,11 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * Set Volt's options
      *
      * @param array $options
+     * @phpstan-param array<string, mixed> $options
      *
      * @return void
      */
-    public function setOptions(array $options): void
+    public function setOptions(array $options)
     {
         $this->options = $options;
     }
@@ -287,12 +322,15 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * Extracts a slice from a string/array/traversable object value
      *
      * @param mixed      $value
+     * @phpstan-param array<array-key, mixed>|string|(Countable&Iterator<array-key, mixed>) $value
      * @param int        $start
      * @param mixed|null $end
+     * @phpstan-param int|null $end
      *
      * @return array|string
+     * @phpstan-return array<array-key, mixed>|string
      */
-    public function slice(mixed $value, int $start = 0, mixed $end = null): array | string
+    public function slice(mixed $value, int $start = 0, mixed $end = null)
     {
         /**
          * Objects must implement a Traversable interface
@@ -345,8 +383,10 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      * Sorts an array
      *
      * @param array $value
+     * @phpstan-param array<array-key, mixed> $value
      *
      * @return array
+     * @phpstan-return array<array-key, mixed>
      */
     public function sort(array $value): array
     {

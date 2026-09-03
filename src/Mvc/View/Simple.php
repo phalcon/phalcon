@@ -76,6 +76,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 
     /**
      * @var EngineInterface[]|false
+     *
+     * @phpstan-var array<string, EngineInterface>|false
      */
     protected array | false $engines = false; // TODO: Change to default null or empty array
 
@@ -88,6 +90,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * Phalcon\Mvc\View\Simple constructor
      *
      * @param array $options
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public function __construct(
         protected array $options = []
@@ -101,13 +105,13 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * echo $this->view->products;
      *```
      *
-     * @param string $propertyName
+     * @param string $key
      *
      * @return mixed
      */
-    public function __get(string $propertyName): mixed
+    public function __get(string $key)
     {
-        return $this->viewParams[$propertyName] ?? null;
+        return $this->viewParams[$key] ?? null;
     }
 
     /**
@@ -233,6 +237,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * @param array $engines
      *
      * @return void
+     *
+     * @phpstan-param array<string, mixed> $engines
      */
     public function registerEngines(array $engines): void
     {
@@ -248,6 +254,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * @return string
      * @throws EventsException
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function render(string $path, array $params = []): string
     {
@@ -279,6 +287,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * @param mixed  $value
      *
      * @return Simple
+     *
+     * @phpstan-return static
      */
     public function setParamToView(string $key, mixed $value): static
     {
@@ -300,6 +310,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * @param bool  $merge
      *
      * @return $this
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function setVars(array $params, bool $merge = true): static
     {
@@ -428,6 +440,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *
      * @return array|EngineInterface[]
      * @throws Exception
+     *
+     * @phpstan-return array<string, EngineInterface>
      */
     protected function loadTemplateEngines(): array
     {
@@ -493,9 +507,13 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                 }
             }
 
+            /** @var array<string, EngineInterface> $engines */
             $this->engines = $engines;
         }
 
-        return $this->engines;
+        /** @var array<string, EngineInterface> $loadedEngines */
+        $loadedEngines = $this->engines;
+
+        return $loadedEngines;
     }
 }

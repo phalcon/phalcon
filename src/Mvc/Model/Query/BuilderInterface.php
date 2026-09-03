@@ -13,10 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Query;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Model\QueryInterface;
 
 /**
  * Interface for Phalcon\Mvc\Model\Query\Builder
+ *
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_query_columns from MvcTypes
+ * @phpstan-import-type mvc_query_order from MvcTypes
  */
 interface BuilderInterface
 {
@@ -44,6 +50,9 @@ interface BuilderInterface
      * @param array  $bindTypes
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function andWhere(
         string $conditions,
@@ -112,11 +121,12 @@ interface BuilderInterface
      * );
      *```
      *
-     * @param array|string $columns
+     * @param mixed $columns
      *
      * @return BuilderInterface
+     *
      */
-    public function columns(array | string $columns): BuilderInterface;
+    public function columns(mixed $columns): BuilderInterface;
 
     /**
      * Sets SELECT DISTINCT / SELECT ALL flag
@@ -148,16 +158,19 @@ interface BuilderInterface
     /**
      * Sets the models who makes part of the query
      *
-     * @param array|string $models
+     * @param mixed $models
      *
      * @return BuilderInterface
+     *
      */
-    public function from(array | string $models): BuilderInterface;
+    public function from(mixed $models): BuilderInterface;
 
     /**
      * Returns default bind params
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_bind_params
      */
     public function getBindParams(): array;
 
@@ -165,6 +178,8 @@ interface BuilderInterface
      * Returns default bind types
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_bind_types
      */
     public function getBindTypes(): array;
 
@@ -172,8 +187,10 @@ interface BuilderInterface
      * Return the columns to be queried
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_query_columns
      */
-    public function getColumns(): array | string | null;
+    public function getColumns();
 
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag
@@ -186,13 +203,17 @@ interface BuilderInterface
      * Return the models who makes part of the query
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_query_columns
      */
-    public function getFrom(): array | string | null;
+    public function getFrom();
 
     /**
      * Returns the GROUP BY clause
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, string>
      */
     public function getGroupBy(): array;
 
@@ -207,6 +228,8 @@ interface BuilderInterface
      * Return join parts of the query
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function getJoins(): array;
 
@@ -214,6 +237,8 @@ interface BuilderInterface
      * Returns the current LIMIT clause
      *
      * @return array|string
+     *
+     * @phpstan-return array{number: int|string, offset?: int|string}|int|string
      */
     public function getLimit();
 
@@ -221,6 +246,8 @@ interface BuilderInterface
      * Returns the models involved in the query
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_query_columns|null
      */
     public function getModels(): array | string | null;
 
@@ -235,8 +262,10 @@ interface BuilderInterface
      * Return the set ORDER BY clause
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_query_order
      */
-    public function getOrderBy(): array | string | null;
+    public function getOrderBy();
 
     /**
      * Returns a PHQL statement built based on the builder parameters
@@ -256,8 +285,10 @@ interface BuilderInterface
      * Return the conditions for the query
      *
      * @return array|string|null
+     *
+     * @phpstan-return array<array-key, mixed>|string|null
      */
-    public function getWhere(): array | string | null;
+    public function getWhere();
 
     /**
      * Sets a GROUP BY clause
@@ -276,6 +307,9 @@ interface BuilderInterface
      * @param array  $bindTypes
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function having(
         string $conditions,
@@ -306,6 +340,8 @@ interface BuilderInterface
      * @param string $operator
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public function inWhere(
         string $expr,
@@ -378,6 +414,8 @@ interface BuilderInterface
      * @param string $operator
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public function notInWhere(
         string $expr,
@@ -397,9 +435,10 @@ interface BuilderInterface
     /**
      * Sets an ORDER BY condition clause
      *
-     * @param array|string $orderBy
+     * @param mixed $orderBy
+     *
      */
-    public function orderBy(array | string $orderBy): BuilderInterface;
+    public function orderBy(mixed $orderBy): BuilderInterface;
 
     /**
      * Appends a condition to the current conditions using an OR operator
@@ -409,6 +448,9 @@ interface BuilderInterface
      * @param array  $bindTypes
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function orWhere(
         string $conditions,
@@ -438,6 +480,8 @@ interface BuilderInterface
      * @param bool  $merge
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function setBindParams(
         array $bindParams,
@@ -451,6 +495,8 @@ interface BuilderInterface
      * @param bool  $merge
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function setBindTypes(
         array $bindTypes,
@@ -465,6 +511,9 @@ interface BuilderInterface
      * @param array  $bindTypes
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function where(
         string $conditions,

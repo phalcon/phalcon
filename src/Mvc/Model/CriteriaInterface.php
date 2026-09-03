@@ -13,8 +13,16 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+
 /**
  * Interface for Phalcon\Mvc\Model\Criteria
+ *
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_cache_options from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_query_columns from MvcTypes
  */
 interface CriteriaInterface
 {
@@ -22,15 +30,16 @@ interface CriteriaInterface
      * Appends a condition to the current conditions using an AND operator
      *
      * @param string     $conditions
-     * @param array|null $bindParams
-     * @param array|null $bindTypes
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
      *
      * @return CriteriaInterface
+     *
      */
     public function andWhere(
         string $conditions,
-        array | null $bindParams = null,
-        array | null $bindTypes = null
+        mixed $bindParams = null,
+        mixed $bindTypes = null
     ): CriteriaInterface;
 
     /**
@@ -59,6 +68,8 @@ interface CriteriaInterface
      * @param array $bindParams
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function bind(array $bindParams): CriteriaInterface;
 
@@ -69,6 +80,8 @@ interface CriteriaInterface
      * @param array $bindTypes
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function bindTypes(array $bindTypes): CriteriaInterface;
 
@@ -79,6 +92,8 @@ interface CriteriaInterface
      * @param array $cache
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param mvc_model_cache_options $cache
      */
     public function cache(array $cache): CriteriaInterface;
 
@@ -120,6 +135,8 @@ interface CriteriaInterface
      * Returns the columns to be queried
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_query_columns|null
      */
     public function getColumns(): array | string | null;
 
@@ -152,6 +169,8 @@ interface CriteriaInterface
      * - NULL if limit has not been set
      *
      * @return array|int|null
+     *
+     * @phpstan-return array{number: int|string, offset?: int|string}|int|null
      */
     public function getLimit(): array | int | null;
 
@@ -173,6 +192,8 @@ interface CriteriaInterface
      * Returns all the parameters defined in the criteria
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_parameters
      */
     public function getParams(): array;
 
@@ -244,6 +265,8 @@ interface CriteriaInterface
      * @param array  $values
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public function inWhere(string $expr, array $values): CriteriaInterface;
 
@@ -310,6 +333,8 @@ interface CriteriaInterface
      * @param array  $values
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public function notInWhere(string $expr, array $values): CriteriaInterface;
 
@@ -326,15 +351,16 @@ interface CriteriaInterface
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string     $conditions
-     * @param array|null $bindParams
-     * @param array|null $bindTypes
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
      *
      * @return CriteriaInterface
+     *
      */
     public function orWhere(
         string $conditions,
-        array | null $bindParams = null,
-        array | null $bindTypes = null
+        mixed $bindParams = null,
+        mixed $bindTypes = null
     ): CriteriaInterface;
 
     /**
@@ -382,14 +408,15 @@ interface CriteriaInterface
      * Sets the conditions parameter in the criteria
      *
      * @param string     $conditions
-     * @param array|null $bindParams
-     * @param array|null $bindTypes
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
      *
      * @return CriteriaInterface
+     *
      */
     public function where(
         string $conditions,
-        array | null $bindParams = null,
-        array | null $bindTypes = null
+        mixed $bindParams = null,
+        mixed $bindTypes = null
     ): CriteriaInterface;
 }

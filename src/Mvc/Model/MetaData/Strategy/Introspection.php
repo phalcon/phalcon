@@ -48,6 +48,8 @@ class Introspection implements StrategyInterface
             $reversedColumnMap = [];
             $orderedColumnMap  = $userColumnMap;
 
+            // A column map pairs the column name with the attribute name.
+            /** @var array<string, string> $userColumnMap */
             foreach ($userColumnMap as $name => $userName) {
                 $reversedColumnMap[$userName] = $name;
             }

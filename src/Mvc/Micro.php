@@ -62,6 +62,8 @@ use function is_string;
  *
  * $app->handle("/say/welcome/Phalcon");
  *```
+ *
+ * @implements ArrayAccess<string, mixed>
  */
 class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 {
@@ -69,21 +71,26 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 
     /**
      * @var callable|null
+     *
+     * @phpstan-var array<array-key, mixed>|callable|null
      */
     protected mixed $activeHandler = null;
 
     /**
      * @var array
+     * @phpstan-var list<mixed>
      */
     protected array $afterBindingHandlers = [];
 
     /**
      * @var array
+     * @phpstan-var list<mixed>
      */
     protected array $afterHandlers = [];
 
     /**
      * @var array
+     * @phpstan-var list<mixed>
      */
     protected array $beforeHandlers = [];
 
@@ -94,11 +101,13 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 
     /**
      * @var array
+     * @phpstan-var list<mixed>
      */
     protected array $finishHandlers = [];
 
     /**
      * @var array
+     * @phpstan-var array<string, array<array-key, mixed>|callable>
      */
     protected array $handlers = [];
 
@@ -147,11 +156,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends an 'after' middleware to be called after execute the route
      *
-     * @param callable|MiddlewareInterface $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function after(callable | MiddlewareInterface $handler): static
+    public function after(mixed $handler): static
     {
         $this->afterHandlers[] = $handler;
 
@@ -161,11 +170,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends a afterBinding middleware to be called after model binding
      *
-     * @param callable|MiddlewareInterface $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function afterBinding(callable | MiddlewareInterface $handler): static
+    public function afterBinding(mixed $handler): static
     {
         $this->afterBindingHandlers[] = $handler;
 
@@ -175,11 +184,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends a before middleware to be called before execute the route
      *
-     * @param callable|MiddlewareInterface $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function before(callable | MiddlewareInterface $handler): static
+    public function before(mixed $handler): static
     {
         $this->beforeHandlers[] = $handler;
 
@@ -190,11 +199,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is DELETE
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function delete(string $routePattern, array | callable $handler): RouteInterface
+    public function delete(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addDelete', $routePattern, $handler);
     }
@@ -203,13 +213,16 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Sets a handler that will be called when an exception is thrown handling
      * the route
      *
-     * @param callable $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function error(callable $handler): static
+    public function error(mixed $handler): static
     {
-        $this->errorHandler = $handler;
+        /** @var callable|null $errorHandler */
+        $errorHandler = $handler;
+
+        $this->errorHandler = $errorHandler;
 
         return $this;
     }
@@ -217,11 +230,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Appends a 'finish' middleware to be called when the request is finished
      *
-     * @param callable|MiddlewareInterface $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function finish(callable | MiddlewareInterface $handler): static
+    public function finish(mixed $handler): static
     {
         $this->finishHandlers[] = $handler;
 
@@ -232,11 +245,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is GET
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function get(string $routePattern, array | callable $handler): RouteInterface
+    public function get(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addGet', $routePattern, $handler);
     }
@@ -245,8 +259,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Return the handler that will be called for the matched route
      *
      * @return callable|null
+     *
+     * @phpstan-return array<array-key, mixed>|callable|null
      */
-    public function getActiveHandler(): mixed
+    public function getActiveHandler()
     {
         return $this->activeHandler;
     }
@@ -255,6 +271,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Returns bound models from binder instance
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function getBoundModels(): array
     {
@@ -269,6 +287,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Returns the internal handlers attached to the application
      *
      * @return array
+     *
+     * @phpstan-return array<string, array<array-key, mixed>|callable>
      */
     public function getHandlers(): array
     {
@@ -290,7 +310,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @return mixed
      */
-    public function getReturnedValue(): mixed
+    public function getReturnedValue()
     {
         return $this->returnedValue;
     }
@@ -303,20 +323,25 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     public function getRouter(): RouterInterface
     {
         if (null === $this->router) {
-            $this->router = $this->getSharedService("router");
+            /** @var RouterInterface $sharedRouter */
+            $sharedRouter = $this->getSharedService("router");
+            $this->router = $sharedRouter;
 
             /**
              * Clear the set routes if any
              */
-            $this->router->clear();
+            $sharedRouter->clear();
 
             /**
              * Automatically remove extra slashes
              */
-            $this->router->removeExtraSlashes(true);
+            $sharedRouter->removeExtraSlashes(true);
         }
 
-        return $this->router;
+        /** @var RouterInterface $router */
+        $router = $this->router;
+
+        return $router;
     }
 
     /**
@@ -328,7 +353,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         $this->checkDiContainer();
 
-        return $this->container->get($serviceName);
+        /** @var object $service */
+        $service = $this->container->get($serviceName);
+
+        return $service;
     }
 
     /**
@@ -357,7 +385,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * @throws Throwable
      * @throws EventsException
      */
-    public function handle(string $uri): mixed
+    public function handle(string $uri)
     {
         $realHandler = null;
 
@@ -379,10 +407,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             /**
              * Handling routing information
              */
-            /** @var Router $router */
             if ($this->container instanceof DiInterface) {
+                /** @var RouterInterface $router */
                 $router = $this->container->getShared("router");
             } else {
+                /** @var RouterInterface $router */
                 $router = $this->container->get("router");
             }
 
@@ -487,6 +516,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $realHandler instanceof Controller &&
                         null !== $this->modelBinder
                     ) {
+                        /** @var string $methodName */
                         $methodName   = $handler[1];
                         $bindCacheKey = "_PHMB_" . get_class($realHandler) . "_" . $methodName;
 
@@ -504,6 +534,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                  * will just call method
                  */
                 if ($realHandler instanceof LazyLoader) {
+                    /**
+                     * A lazy handler is always stored as the
+                     * [definition, method] pair.
+                     */
+                    /** @var array{0: mixed, 1: string} $handler */
                     $methodName = $handler[1];
 
                     $lazyReturned = $realHandler->callMethod(
@@ -512,6 +547,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $this->modelBinder
                     );
                 } else {
+                    /** @var callable $handler */
                     $lazyReturned = call_user_func_array($handler, $params);
                 }
 
@@ -702,8 +738,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
              */
             if (is_string($returnedValue)) {
                 if ($this->container instanceof DiInterface) {
+                    /** @var ResponseInterface $response */
                     $response = $this->container->getShared("response");
                 } else {
+                    /** @var ResponseInterface $response */
                     $response = $this->container->get("response");
                 }
 
@@ -745,11 +783,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is HEAD
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function head(string $routePattern, array | callable $handler): RouteInterface
+    public function head(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addHead', $routePattern, $handler);
     }
@@ -758,11 +797,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler without any HTTP method constraint
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function map(string $routePattern, array | callable $handler): RouteInterface
+    public function map(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('add', $routePattern, $handler);
     }
@@ -796,6 +836,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
          * Check if handler is lazy
          */
         if (true === $collection->isLazy()) {
+            /** @var string $mainHandler */
             $lazyHandler = new LazyLoader($mainHandler);
         } else {
             $lazyHandler = $mainHandler;
@@ -853,13 +894,16 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Sets a handler that will be called when the router does not match any of
      * the defined routes
      *
-     * @param callable $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function notFound(callable $handler): static
+    public function notFound(mixed $handler): static
     {
-        $this->notFoundHandler = $handler;
+        /** @var callable|null $notFoundHandler */
+        $notFoundHandler = $handler;
+
+        $this->notFoundHandler = $notFoundHandler;
 
         return $this;
     }
@@ -874,6 +918,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function offsetExists(mixed $offset): bool
     {
+        /** @var string $offset */
+
         return $this->hasService($offset);
     }
 
@@ -893,6 +939,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function offsetGet(mixed $offset): mixed
     {
+        /** @var string $offset */
+
         return $this->getService($offset);
     }
 
@@ -911,6 +959,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
+        /** @var string $offset */
+
         $this->setService($offset, $value);
     }
 
@@ -926,6 +976,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         $this->checkDiContainer();
 
+        /** @var string $offset */
+
         $this->container->remove($offset);
     }
 
@@ -933,11 +985,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function options(string $routePattern, array | callable $handler): RouteInterface
+    public function options(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addOptions', $routePattern, $handler);
     }
@@ -946,11 +999,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is PATCH
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function patch(string $routePattern, array | callable $handler): RouteInterface
+    public function patch(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addPatch', $routePattern, $handler);
     }
@@ -959,11 +1013,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is POST
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function post(string $routePattern, array | callable $handler): RouteInterface
+    public function post(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addPost', $routePattern, $handler);
     }
@@ -972,11 +1027,12 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Maps a route to a handler that only matches if the HTTP method is PUT
      *
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
-    public function put(string $routePattern, array | callable $handler): RouteInterface
+    public function put(string $routePattern, mixed $handler): RouteInterface
     {
         return $this->addRoute('addPut', $routePattern, $handler);
     }
@@ -984,13 +1040,18 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Sets externally the handler that must be called by the matched route
      *
-     * @param callable $activeHandler
+     * @param mixed $activeHandler
      *
      * @return Micro
+     *
+     * @phpstan-return static
      */
-    public function setActiveHandler(callable $activeHandler): static
+    public function setActiveHandler(mixed $activeHandler): static
     {
-        $this->activeHandler = $activeHandler;
+        /** @var array<array-key, mixed>|callable|null $handler */
+        $handler = $activeHandler;
+
+        $this->activeHandler = $handler;
 
         return $this;
     }
@@ -1008,13 +1069,13 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * ```
      *
      * @param BinderInterface              $modelBinder
-     * @param AdapterInterface|string|null $cache
+     * @param mixed $cache
      *
      * @return $this
      */
     public function setModelBinder(
         BinderInterface $modelBinder,
-        AdapterInterface | string | null $cache = null
+        mixed $cache = null
     ): static {
         if (is_string($cache)) {
             $cache = $this->getService($cache);
@@ -1033,13 +1094,16 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      * Appends a custom 'response' handler to be called instead of the default
      * response handler
      *
-     * @param callable $handler
+     * @param mixed $handler
      *
      * @return $this
      */
-    public function setResponseHandler(callable $handler): static
+    public function setResponseHandler(mixed $handler): static
     {
-        $this->responseHandler = $handler;
+        /** @var callable|null $responseHandler */
+        $responseHandler = $handler;
+
+        $this->responseHandler = $responseHandler;
 
         return $this;
     }
@@ -1077,14 +1141,15 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
      *
      * @param string         $method
      * @param string         $routePattern
-     * @param array|callable $handler
+     * @param mixed $handler
      *
      * @return RouteInterface
+     *
      */
     private function addRoute(
         string $method,
         string $routePattern,
-        array | callable $handler
+        mixed $handler
     ): RouteInterface {
         /**
          * We create a router even if there is no one in the DI
@@ -1094,12 +1159,16 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
         /**
          * Routes are added to the router
          */
+        /** @var RouteInterface $route */
         $route = $router->$method($routePattern);
 
         /**
          * Using the id produced by the router we store the handler
          */
-        $this->handlers[$route->getRouteId()] = $handler;
+        /** @var array<array-key, mixed>|callable $routeHandler */
+        $routeHandler = $handler;
+
+        $this->handlers[$route->getRouteId()] = $routeHandler;
 
         /**
          * The route is returned, the developer can add more things on it
@@ -1109,6 +1178,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 
     /**
      * @return void
+     *
+     * @phpstan-assert !null $this->container
      */
     private function checkDiContainer(): void
     {

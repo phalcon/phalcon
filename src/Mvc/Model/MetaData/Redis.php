@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\Model\MetaData;
 
 use Exception;
 use Phalcon\Cache\AdapterFactory;
+use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Mvc\Model\MetaData;
 
 /**
@@ -37,6 +38,8 @@ use Phalcon\Mvc\Model\MetaData;
  *     ]
  * );
  *```
+ *
+ * @phpstan-import-type storage_adapter_options from StorageTypes
  */
 class Redis extends MetaData
 {
@@ -52,6 +55,7 @@ class Redis extends MetaData
     {
         $options["prefix"]   = $options["prefix"] ?? "ph-mm-reds-";
         $options["lifetime"] = $options["lifetime"] ?? 172800;
+        /** @phpstan-var storage_adapter_options $options */
         $this->adapter       = $factory->newInstance("redis", $options);
     }
 
@@ -60,7 +64,10 @@ class Redis extends MetaData
      */
     public function reset(): void
     {
-        $this->adapter->clear();
+        // The constructor always sets the adapter.
+        /** @var \Phalcon\Cache\Adapter\AdapterInterface $adapter */
+        $adapter = $this->adapter;
+        $adapter->clear();
         parent::reset();
     }
 }

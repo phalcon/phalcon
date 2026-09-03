@@ -18,15 +18,23 @@ class CaseInsensitiveColumnMap
     /**
      * Attempts to find key case-insensitively
      *
-     * @param array  $columnMap
-     * @param string $key
+     * @param mixed  $columnMap
+     * @param mixed $key
      *
      * @return string
+     *
      */
     public static function caseInsensitiveColumnMap(
-        array $columnMap,
-        string $key
+        mixed $columnMap,
+        mixed $key
     ): string {
+        // The column map is an array. Its keys are the column names.
+        // The key is a column name.
+        /**
+         * @var array<array-key, mixed> $columnMap
+         * @var string                  $key
+         * @var list<string>            $keys
+         */
         $keys = array_keys($columnMap);
         foreach ($keys as $cmKey) {
             if (strtolower($cmKey) == strtolower($key)) {

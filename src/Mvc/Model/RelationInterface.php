@@ -13,8 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+
 /**
  * Interface for Phalcon\Mvc\Model\Relation
+ *
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_relation_fields from MvcTypes
+ * @phpstan-import-type mvc_relation_options from MvcTypes
  */
 interface RelationInterface
 {
@@ -22,22 +28,28 @@ interface RelationInterface
      * Returns the fields
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getFields(): array | string;
+    public function getFields();
 
     /**
      * Returns the foreign key configuration
      *
      * @return array|bool|string
+     *
+     * @phpstan-return array<string, mixed>|string|bool
      */
-    public function getForeignKey(): array | bool | string;
+    public function getForeignKey();
 
     /**
      * Gets the intermediate fields for has-*-through relations
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getIntermediateFields(): array | string;
+    public function getIntermediateFields();
 
     /**
      * Gets the intermediate model for has-*-through relations
@@ -50,8 +62,10 @@ interface RelationInterface
      * Gets the intermediate referenced fields for has-*-through relations
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getIntermediateReferencedFields(): array | string;
+    public function getIntermediateReferencedFields();
 
     /**
      * Returns an option by the specified name
@@ -61,12 +75,14 @@ interface RelationInterface
      *
      * @return mixed
      */
-    public function getOption(string $name): mixed;
+    public function getOption(string $name);
 
     /**
      * Returns the options
      *
      * @return array
+     *
+     * @phpstan-return mvc_relation_options
      */
     public function getOptions(): array;
 
@@ -74,15 +90,19 @@ interface RelationInterface
      * Returns parameters that must be always used when the related records are obtained
      *
      * @return array|false
+     *
+     * @phpstan-return mvc_model_parameters|false
      */
-    public function getParams(): array | false;
+    public function getParams();
 
     /**
      * Returns the referenced fields
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getReferencedFields(): array | string;
+    public function getReferencedFields();
 
     /**
      * Returns the referenced model
@@ -123,15 +143,16 @@ interface RelationInterface
     /**
      * Sets the intermediate model data for has-*-through relations
      *
-     * @param array|string $intermediateFields
+     * @param mixed $intermediateFields
      * @param string       $intermediateModel
-     * @param array|string $intermediateReferencedFields
+     * @param mixed $intermediateReferencedFields
      *
      * @return mixed
+     *
      */
     public function setIntermediateRelation(
-        array | string $intermediateFields,
+        mixed $intermediateFields,
         string $intermediateModel,
-        array | string $intermediateReferencedFields
+        mixed $intermediateReferencedFields
     );
 }

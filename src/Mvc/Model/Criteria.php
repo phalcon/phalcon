@@ -13,11 +13,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Column;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Exceptions\InvalidModelName;
+use Phalcon\Mvc\Model\ManagerInterface;
+use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 
 use function abs;
@@ -43,16 +47,25 @@ use function is_string;
  *     ->orderBy("inv_title")
  *     ->execute();
  * ```
+ *
+ * @phpstan-import-type mvc_criteria_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_cache_options from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_query_columns from MvcTypes
  */
 class Criteria implements CriteriaInterface, InjectionAwareInterface
 {
     /**
      * @var array
+     * @phpstan-var mvc_model_bind_params
      */
     protected array $bindParams;
 
     /**
      * @var array
+     * @phpstan-var mvc_model_bind_types
      */
     protected array $bindTypes;
 
@@ -68,6 +81,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * @var array
+     * @phpstan-var mvc_criteria_params
      */
     protected array $params = [];
 
@@ -80,6 +94,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param string                 $operator
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param array<string, mixed> $data
      */
     public static function fromInput(
         DiInterface $container,
@@ -92,10 +108,13 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
         if (!empty($data)) {
             if ($container instanceof DiInterface) {
+                /** @var MetaDataInterface $metaData */
                 $metaData = $container->getShared("modelsMetadata");
             } else {
+                /** @var MetaDataInterface $metaData */
                 $metaData = $container->get("modelsMetadata");
             }
+            /** @var ModelInterface $model */
             $model     = new $modelName(null, $container);
             $dataTypes = $metaData->getDataTypes($model);
             $columnMap = $metaData->getReverseColumnMap($model);
@@ -106,6 +125,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             foreach ($data as $field => $value) {
                 $attribute = $field;
                 if (is_array($columnMap) && !empty($columnMap)) {
+                    /** @var string $attribute */
                     $attribute = $columnMap[$field];
                 }
 
@@ -120,6 +140,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
                          * For varchar types we use LIKE operator
                          */
                         $conditions[] = "[" . $field . "] LIKE :" . $field . ":";
+                        /** @var scalar $value */
                         $bind[$field] = "%" . $value . "%";
 
                         continue;
@@ -157,15 +178,16 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Appends a condition to the current conditions using an AND operator
      *
      * @param string     $conditions
-     * @param array|null $bindParams
-     * @param array|null $bindTypes
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
      *
      * @return CriteriaInterface
+     *
      */
     public function andWhere(
         string $conditions,
-        array | null $bindParams = null,
-        array | null $bindTypes = null
+        mixed $bindParams = null,
+        mixed $bindTypes = null
     ): CriteriaInterface {
         if (isset($this->params["conditions"])) {
             $conditions = "(" . $this->params["conditions"] . ") AND (" . $conditions . ")";
@@ -225,6 +247,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param bool  $merge
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function bind(
         array $bindParams,
@@ -250,6 +274,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param array $bindTypes
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function bindTypes(array $bindTypes): CriteriaInterface
     {
@@ -265,6 +291,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param array $cache
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param mvc_model_cache_options $cache
      */
     public function cache(array $cache): CriteriaInterface
     {
@@ -318,10 +346,13 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * );
      *```
      *
-     * @param array|string $columns
+     * @param mixed $columns
+     *
      */
-    public function columns(array | string $columns): CriteriaInterface
+    public function columns(mixed $columns): CriteriaInterface
     {
+        // The columns are a single column name or a list of column names.
+        /** @var mvc_query_columns $columns */
         $this->params["columns"] = $columns;
 
         return $this;
@@ -354,14 +385,17 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $container = $this->getDI();
 
         if (!is_object($container)) {
+            /** @var DiInterface $container */
             $container = Di::getDefault();
 
             $this->setDI($container);
         }
 
         if ($container instanceof DiInterface) {
+            /** @var ManagerInterface $manager */
             $manager = $container->getShared("modelsManager");
         } else {
+            /** @var ManagerInterface $manager */
             $manager = $container->get("modelsManager");
         }
 
@@ -370,7 +404,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
          */
         $builder = $manager->createBuilder($this->params);
 
-        $builder->from($this->model);
+        /** @var string $modelName */
+        $modelName = $this->model;
+        $builder->from($modelName);
 
         return $builder;
     }
@@ -410,6 +446,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param array $paths relation paths
      *
      * @return Criteria
+     *
+     * @phpstan-param array<array-key, mixed> $paths
      */
     public function eager(array $paths): Criteria
     {
@@ -432,7 +470,10 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
             throw new InvalidModelName();
         }
 
-        return $model::find($this->getParams());
+        /** @var ResultsetInterface $resultset */
+        $resultset = $model::find($this->getParams());
+
+        return $resultset;
     }
 
     /**
@@ -453,6 +494,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Returns the columns to be queried
      *
      * @return array|string|null
+     *
+     * @phpstan-return mvc_query_columns|null
      */
     public function getColumns(): array | string | null
     {
@@ -476,7 +519,14 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function getDI(): DiInterface
     {
-        return $this->params["di"];
+        /**
+         * The constructor and createBuilder() both store the container
+         * before any read.
+         */
+        /** @var DiInterface $container */
+        $container = $this->params["di"] ?? null;
+
+        return $container;
     }
 
     /**
@@ -505,6 +555,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * - NULL if limit has not been set
      *
      * @return array|int|null
+     *
+     * @phpstan-return array{number: int|string, offset?: int|string}|int|null
      */
     public function getLimit(): array | int | null
     {
@@ -518,7 +570,14 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function getModelName(): string
     {
-        return $this->model;
+        /**
+         * The criteria is always built for a model, so the name is set
+         * before any read.
+         */
+        /** @var string $modelName */
+        $modelName = $this->model;
+
+        return $modelName;
     }
 
     /**
@@ -535,6 +594,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Returns all the parameters defined in the criteria
      *
      * @return array
+     *
+     * @phpstan-return mvc_criteria_params
      */
     public function getParams(): array
     {
@@ -626,6 +687,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param array  $values
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public function inWhere(string $expr, array $values): CriteriaInterface
     {
@@ -830,6 +893,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * @param array  $values
      *
      * @return CriteriaInterface
+     *
+     * @phpstan-param array<array-key, mixed> $values
      */
     public function notInWhere(string $expr, array $values): CriteriaInterface
     {
@@ -881,15 +946,16 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Appends a condition to the current conditions using an OR operator
      *
      * @param string     $conditions
-     * @param array|null $bindParams
-     * @param array|null $bindTypes
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
      *
      * @return CriteriaInterface
+     *
      */
     public function orWhere(
         string $conditions,
-        array | null $bindParams = null,
-        array | null $bindTypes = null
+        mixed $bindParams = null,
+        mixed $bindTypes = null
     ): CriteriaInterface {
         if (isset($this->params["conditions"])) {
             $conditions = "(" . $this->params["conditions"] . ") OR (" . $conditions . ")";
@@ -966,15 +1032,16 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Sets the conditions parameter in the criteria
      *
      * @param string     $conditions
-     * @param array|null $bindParams
-     * @param array|null $bindTypes
+     * @param mixed $bindParams
+     * @param mixed $bindTypes
      *
      * @return CriteriaInterface
+     *
      */
     public function where(
         string $conditions,
-        array | null $bindParams = null,
-        array | null $bindTypes = null
+        mixed $bindParams = null,
+        mixed $bindTypes = null
     ): CriteriaInterface {
         $this->params["conditions"] = $conditions;
 
@@ -996,6 +1063,8 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
          * Update or merge existing bind types parameters
          */
         if (is_array($bindTypes)) {
+            // The bind types are column type constants.
+            /** @var mvc_model_bind_types $bindTypes */
             if (isset($this->params["bindTypes"])) {
                 $this->params["bindTypes"] = array_merge(
                     $this->params["bindTypes"],

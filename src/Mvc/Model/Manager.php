@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Contracts\Mvc\Model\Relation\CacheKeyProvider;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
@@ -75,6 +76,13 @@ use function strtolower;
  *
  * $invoice = new Invoices($di);
  * ```
+ *
+ * @phpstan-import-type mvc_manager_relations from MvcTypes
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_relation_fields from MvcTypes
+ * @phpstan-import-type mvc_relation_options from MvcTypes
  */
 class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
 {
@@ -84,6 +92,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, RelationInterface>
      */
     protected array $aliases = [];
 
@@ -91,6 +101,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Models' behaviors
      *
      * @var array
+     *
+     * @phpstan-var array<string, array<int, BehaviorInterface>>
      */
     protected array $behaviors = [];
 
@@ -98,6 +110,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Belongs to relations
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $belongsTo = [];
 
@@ -105,6 +119,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * All the relationships by model
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $belongsToSingle = [];
 
@@ -115,6 +131,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, EventsManagerInterface>
      */
     protected array $customEventsManager = [];
 
@@ -124,6 +142,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * connection after a write.
      *
      * @var array
+     *
+     * @phpstan-var array<string, bool>
      */
     protected array $dirtyWriteServices = [];
 
@@ -131,6 +151,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Does the model use dynamic update, instead of updating all rows?
      *
      * @var array
+     *
+     * @phpstan-var array<string, bool>
      */
     protected array $dynamicUpdate = [];
 
@@ -138,6 +160,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has many relations
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasMany = [];
 
@@ -145,6 +169,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has many relations by model
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasManySingle = [];
 
@@ -152,6 +178,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has many-Through relations
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasManyToMany = [];
 
@@ -159,6 +187,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has many-Through relations by model
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasManyToManySingle = [];
 
@@ -166,6 +196,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has one relations
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasOne = [];
 
@@ -173,6 +205,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has one relations by model
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasOneSingle = [];
 
@@ -180,6 +214,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has one through relations
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasOneThrough = [];
 
@@ -187,6 +223,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Has one through relations by model
      *
      * @var array
+     *
+     * @phpstan-var mvc_manager_relations
      */
     protected array $hasOneThroughSingle = [];
 
@@ -194,11 +232,15 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Mark initialized models
      *
      * @var array
+     *
+     * @phpstan-var array<string, bool>
      */
     protected array $initialized = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, bool>
      */
     protected array $keepSnapshots = [];
 
@@ -218,6 +260,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, array<string, bool>>
      */
     protected array $modelVisibility = [];
 
@@ -228,20 +272,28 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $readConnectionServices = [];
     /**
      * Stores a list of reusable instances
      *
      * @var array
+     *
+     * @phpstan-var array<string, mixed>
      */
     protected array $reusable = [];
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $schemas = [];
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $sources = [];
     /**
@@ -253,6 +305,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     protected bool $sticky = false;
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $writeConnectionServices = [];
 
@@ -279,6 +333,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param mixed $findParamsTwo
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_parameters
      */
     final public static function mergeFindParameters(
         mixed $findParamsOne,
@@ -301,10 +357,15 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (is_array($findParamsOne)) {
             foreach ($findParamsOne as $key => $value) {
                 if ($key === 0 || $key === "conditions") {
+                    // The conditions of a find are a string.
+                    /** @var string $value */
                     if (!isset($findParams[0])) {
                         $findParams[0] = $value;
                     } else {
-                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
+                        /** @var string $existing */
+                        $existing = $findParams[0];
+
+                        $findParams[0] = "(" . $existing . ") AND (" . $value . ")";
                     }
                 } else {
                     $findParams[$key] = $value;
@@ -315,18 +376,26 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         if (is_array($findParamsTwo)) {
             foreach ($findParamsTwo as $key => $value) {
                 if ($key === 0 || $key === "conditions") {
+                    // The conditions of a find are a string.
+                    /** @var string $value */
                     if (!isset($findParams[0])) {
                         $findParams[0] = $value;
                     } else {
-                        $findParams[0] = "(" . $findParams[0] . ") AND (" . $value . ")";
+                        /** @var string $existing */
+                        $existing = $findParams[0];
+
+                        $findParams[0] = "(" . $existing . ") AND (" . $value . ")";
                     }
                 } elseif ($key === "bind" || $key === "bindTypes") {
                     if (is_array($value)) {
                         if (!isset($findParams[$key])) {
                             $findParams[$key] = $value;
                         } else {
+                            /** @var array<array-key, mixed> $merged */
+                            $merged = $findParams[$key];
+
                             $findParams[$key] = array_merge(
-                                $findParams[$key],
+                                $merged,
                                 $value
                             );
                         }
@@ -372,6 +441,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_fields  $fields
+     * @phpstan-param mvc_relation_fields  $referencedFields
+     * @phpstan-param mvc_relation_options $options
      */
     public function addBelongsTo(
         ModelInterface $model,
@@ -390,6 +463,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
+        // The fields and the referenced fields always have the same form. An
+        // array of referenced fields means an array of fields.
+        /** @var array<array-key, string> $fields */
         if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
             throw new ReferencedFieldsMismatch(
                 "BelongsTo",
@@ -464,6 +540,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_fields  $fields
+     * @phpstan-param mvc_relation_fields  $referencedFields
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasMany(
         ModelInterface $model,
@@ -481,6 +561,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
+        // The fields and the referenced fields always have the same form. An
+        // array of referenced fields means an array of fields.
+        /** @var array<array-key, string> $fields */
         if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
             throw new ReferencedFieldsMismatch(
                 "HasMany",
@@ -558,6 +641,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_fields  $fields
+     * @phpstan-param mvc_relation_fields  $intermediateFields
+     * @phpstan-param mvc_relation_fields  $intermediateReferencedFields
+     * @phpstan-param mvc_relation_fields  $referencedFields
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasManyToMany(
         ModelInterface $model,
@@ -582,6 +671,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the model to the
          * intermediate model
          */
+        // The fields and the referenced fields always have the same form. An
+        // array of referenced fields means an array of fields.
+        /** @var array<array-key, string> $fields */
         if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
             throw new ReferencedFieldsMismatch(
                 "HasManytoMany",
@@ -594,6 +686,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the intermediate
          * model to the referenced model
          */
+        // The intermediate fields have the same form as the fields.
+        /** @var array<array-key, string> $intermediateFields */
         if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
             throw new ReferencedFieldsMismatch(
                 "HasManytoMany",
@@ -683,6 +777,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_fields  $fields
+     * @phpstan-param mvc_relation_fields  $referencedFields
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasOne(
         ModelInterface $model,
@@ -700,6 +798,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Check if the number of fields are the same
          */
+        // The fields and the referenced fields always have the same form. An
+        // array of referenced fields means an array of fields.
+        /** @var array<array-key, string> $fields */
         if (is_array($referencedFields) && count($fields) != count($referencedFields)) {
             throw new ReferencedFieldsMismatch(
                 "HasOne",
@@ -777,6 +878,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_fields  $fields
+     * @phpstan-param mvc_relation_fields  $intermediateFields
+     * @phpstan-param mvc_relation_fields  $intermediateReferencedFields
+     * @phpstan-param mvc_relation_fields  $referencedFields
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasOneThrough(
         ModelInterface $model,
@@ -801,6 +908,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the model to the
          * intermediate model
          */
+        // The fields and the referenced fields always have the same form. An
+        // array of referenced fields means an array of fields.
+        /** @var array<array-key, string> $fields */
         if (is_array($intermediateFields) && count($fields) != count($intermediateFields)) {
             throw new ReferencedFieldsMismatch(
                 "HasOneThrough",
@@ -813,6 +923,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Check if the number of fields are the same from the intermediate
          * model to the referenced model
          */
+        // The intermediate fields have the same form as the fields.
+        /** @var array<array-key, string> $intermediateFields */
         if (is_array($intermediateReferencedFields) && count($fields) != count($intermediateFields)) {
             throw new ReferencedFieldsMismatch(
                 "HasOneThrough",
@@ -903,12 +1015,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
      *
-     * @param array|string|null $params
+     * @param mixed $params
      *
      * @return BuilderInterface
      * @throws Exception
+     *
      */
-    public function createBuilder(array | string | null $params = null): BuilderInterface
+    public function createBuilder(mixed $params = null): BuilderInterface
     {
         $this->checkContainer(
             ManagerOrmServicesUnavailable::class,
@@ -918,13 +1031,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Gets Builder instance from DI container
          */
-        $this->builder = $this->container->get(
+        /** @var BuilderInterface $builder */
+        $builder = $this->container->get(
             "Phalcon\\Mvc\\Model\\Query\\Builder",
             [
                 $params,
                 $this->container,
             ]
         );
+
+        $this->builder = $builder;
 
         return $this->builder;
     }
@@ -947,6 +1063,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Create a query
          */
+        /** @var QueryInterface $query */
         $query = $this->container->get(
             "Phalcon\\Mvc\\Model\\Query",
             [$phql, $this->container]
@@ -981,30 +1098,36 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * ```
      *
      * @param string     $phql
-     * @param array|null $placeholders
-     * @param array|null $types
+     * @param mixed $placeholders
+     * @param mixed $types
      *
      * @return ResultsetInterface|StatusInterface
      * @throws Exception
+     *
      */
     public function executeQuery(
         string $phql,
-        array | null $placeholders = null,
-        array | null $types = null
-    ): mixed {
+        mixed $placeholders = null,
+        mixed $types = null
+    ) {
         $query = $this->createQuery($phql);
 
         if (null !== $placeholders) {
+            // The placeholders are the values for the bound parameters.
+            /** @var mvc_model_bind_params $placeholders */
             $query->setBindParams($placeholders);
         }
 
         if (null !== $types) {
+            // The types are column type constants.
+            /** @var mvc_model_bind_types $types */
             $query->setBindTypes($types);
         }
 
         /**
          * Execute the query
          */
+        /** @var ResultsetInterface|StatusInterface */
         return $query->execute();
     }
 
@@ -1037,6 +1160,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return bool|ResultsetInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
     public function getBelongsToRecords(
         string $modelName,
@@ -1060,6 +1185,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * "relations" is an array with all the belongsTo relationships to that model
          * Perform the query
          */
+        /** @var bool|ResultsetInterface */
         return $this->getRelationRecords(
             $relations[0],
             $record,
@@ -1086,6 +1212,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array          $connectionServices
      *
      * @return string
+     *
+     * @phpstan-param array<string, string> $connectionServices
      */
     public function getConnectionService(
         ModelInterface $model,
@@ -1131,6 +1259,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return bool|ResultsetInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
     public function getHasManyRecords(
         string $modelName,
@@ -1154,6 +1284,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * "relations" is an array with all the hasMany relationships to that model
          * Perform the query
          */
+        /** @var bool|ResultsetInterface */
         return $this->getRelationRecords(
             $relations[0],
             $record,
@@ -1212,6 +1343,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return bool|ModelInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_model_parameters|string|null $parameters
      */
     public function getHasOneRecords(
         string $modelName,
@@ -1235,6 +1368,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * "relations" is an array with all the belongsTo relationships to that model
          * Perform the query
          */
+        /** @var bool|ModelInterface */
         return $this->getRelationRecords(
             $relations[0],
             $record,
@@ -1272,6 +1406,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function getLastQuery(): QueryInterface
     {
+        // A query has been created before this is called.
+        /** @var QueryInterface */
         return $this->lastQuery;
     }
 
@@ -1385,21 +1521,24 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @param RelationInterface $relation
      * @param ModelInterface    $record
-     * @param array|string|null $parameters
+     * @param mixed $parameters
      * @param string|null       $method
      *
      * @return false|int|ModelInterface|Simple
      * @throws Exception
+     *
      */
     public function getRelationRecords(
         RelationInterface $relation,
         ModelInterface $record,
-        array | string | null $parameters = null,
+        mixed $parameters = null,
         string | null $method = null
     ) {
         /**
          * Re-use bound parameters
          */
+        // readAttribute() and getDI() are declared by the model class.
+        /** @var Model $record */
         $placeholders = [];
 
         /**
@@ -1436,6 +1575,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
                     $placeholders["APR" . $i] = $record->readAttribute($fields[$i]);
                 }
             } else {
+                /**
+                 * A relation on a single field names it with a string.
+                 *
+                 * @var string $fields
+                 * @var string $intermediateFields
+                 */
                 $conditions[]         = "[" . $intermediateModel
                     . "].[" . $intermediateFields . "] = :APR0:";
                 $placeholders["APR0"] = $record->readAttribute($fields);
@@ -1458,6 +1603,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
                         . "].[" . $referencedFields[$i] . "]";
                 }
             } else {
+                /**
+                 * A relation on a single field names it with a string.
+                 *
+                 * @var string $intermediateReferenceFields
+                 * @var string $referencedFields
+                 */
                 $joinConditions[] = "[" . $intermediateModel
                     . "].[" . $intermediateReferenceFields
                     . "] = [" . $referencedModel
@@ -1487,11 +1638,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             if ($method == "count") {
                 $builder->columns("COUNT(*) AS rowcount");
 
+                /** @var ResultsetInterface $rows */
                 $rows = $builder->getQuery()->execute();
 
+                /** @var Row $firstRow */
                 $firstRow = $rows->getFirst();
 
-                return (int)$firstRow->readAttribute("rowcount");
+                /** @var int|string $rowCount */
+                $rowCount = $firstRow->readAttribute("rowcount");
+
+                return (int)$rowCount;
             }
 
             /**
@@ -1502,6 +1658,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $reusable = $relation->isReusable();
 
             if ($reusable) {
+                // The referenced model name is the prefix of the key.
+                // readAttribute() names a single attribute with a string.
+                /**
+                 * @var string $fields
+                 * @var string $uniqueKey
+                 */
                 $uniqueKey = $this->getUniqueKey(
                     $record,
                     $referencedModel,
@@ -1511,6 +1673,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
                 $records = $this->getReusableRecords($referencedModel, $uniqueKey);
 
                 if (is_array($records) || is_object($records)) {
+                    /** @var ModelInterface|Simple */
                     return $records;
                 }
             }
@@ -1525,6 +1688,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
                 $this->setReusableRecords($referencedModel, $uniqueKey, $records);
             }
 
+            /** @var false|int|ModelInterface|Simple */
             return $records;
         }
 
@@ -1541,10 +1705,15 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $referencedFields = $relation->getReferencedFields();
 
         if (!is_array($fields)) {
+            // A relation on a single field names it with a string.
+            /** @var string $referencedFields */
             $conditions[]         = "[" . $referencedModel . "].[" . $referencedFields . "] = :APR0:";
             $placeholders["APR0"] = $record->readAttribute($fields);
         } else {
-            foreach ($relation->getFields() as $refPosition => $field) {
+            /** @var array<array-key, string> $relationFields */
+            $relationFields = $relation->getFields();
+
+            foreach ($relationFields as $refPosition => $field) {
                 $conditions[] = "["
                     . $referencedModel
                     . "].["
@@ -1595,10 +1764,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $reusable = $relation->isReusable();
 
         if ($reusable) {
+            // The referenced model name is the prefix of the key.
+            /** @var string $uniqueKey */
             $uniqueKey = $this->getUniqueKey($record, $referencedModel, [$findParams, $retrieveMethod]);
             $records   = $this->getReusableRecords($referencedModel, $uniqueKey);
 
             if (is_array($records) || is_object($records)) {
+                /** @var ModelInterface|Simple */
                 return $records;
             }
         }
@@ -1609,11 +1781,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Load the referenced model
          * Call the function in the model
          */
+        /** @var callable $retrieveCallable */
+        $retrieveCallable = [
+            $this->load($referencedModel),
+            $retrieveMethod,
+        ];
+
         $records = call_user_func_array(
-            [
-                $this->load($referencedModel),
-                $retrieveMethod,
-            ],
+            $retrieveCallable,
             $arguments
         );
 
@@ -1624,6 +1799,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $this->setReusableRecords($referencedModel, $uniqueKey, $records);
         }
 
+        /** @var false|int|ModelInterface|Simple */
         return $records;
     }
 
@@ -2009,6 +2185,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         /**
          * Load it using an autoloader
          */
+        /** @var ModelInterface */
         return new $modelName(null, $this->container, $this);
     }
 
@@ -2022,12 +2199,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param mixed          $data
      *
      * @return mixed
+     *
+     * @phpstan-param array<array-key, mixed> $data
      */
     public function missingMethod(
         ModelInterface $model,
         string $eventName,
         mixed $data
-    ): mixed {
+    ) {
         /**
          * Dispatch events to the global events manager
          */
@@ -2341,6 +2520,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return AdapterInterface
      * @throws Exception
+     *
+     * @phpstan-param array<string, string> $connectionServices
      */
     protected function getConnection(
         ModelInterface $model,
@@ -2366,6 +2547,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             throw new InvalidConnectionService();
         }
 
+        /** @var AdapterInterface */
         return $connection;
     }
 
@@ -2395,7 +2577,10 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $this->load($modelName);
         }
 
-        return isset($this->$collection[$keyRelation]);
+        /** @var array<string, mixed> $collectionEntries */
+        $collectionEntries = $this->$collection;
+
+        return isset($collectionEntries[$keyRelation]);
     }
 
     /**
@@ -2434,6 +2619,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @param array $value
      *
      * @return string
+     *
+     * @phpstan-param array<array-key, mixed> $value
      */
     private function getUniqueKeyArray(array $value): string
     {
@@ -2462,6 +2649,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     private function getUniqueKeyVal(mixed $value): string
     {
+        // A key value is a scalar read from a record.
+        /** @var scalar|null $value */
         return is_string($value) ? $value : strval($value);
     }
 }

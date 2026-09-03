@@ -13,14 +13,28 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
-use Phalcon\Mvc\ModelInterface;
 
 /**
  * Interface for Phalcon\Mvc\Model\Manager
+ *
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_relation_options from MvcTypes
+ *
+ * The manager class carries these members and the framework calls them on
+ * the interface. They join the interface in the next major; until then the
+ * tags below record what all implementations provide.
+ *
+ * @method EventsManagerInterface|null getCustomEventsManager(ModelInterface $model)
+ * @method void setCustomEventsManager(ModelInterface $model, EventsManagerInterface $eventsManager)
  */
 interface ManagerInterface
 {
@@ -47,6 +61,8 @@ interface ManagerInterface
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     public function addBelongsTo(
         ModelInterface $model,
@@ -66,6 +82,8 @@ interface ManagerInterface
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasMany(
         ModelInterface $model,
@@ -88,6 +106,8 @@ interface ManagerInterface
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasManyToMany(
         ModelInterface $model,
@@ -110,6 +130,8 @@ interface ManagerInterface
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasOne(
         ModelInterface $model,
@@ -132,6 +154,8 @@ interface ManagerInterface
      * @param array          $options
      *
      * @return RelationInterface
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     public function addHasOneThrough(
         ModelInterface $model,
@@ -154,12 +178,13 @@ interface ManagerInterface
     /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
      *
-     * @param array|string|null $params
+     * @param mixed $params
      *
      * @return BuilderInterface
+     *
      */
     public function createBuilder(
-        array | string | null $params = null
+        mixed $params = null
     ): BuilderInterface;
 
     /**
@@ -175,17 +200,18 @@ interface ManagerInterface
      * Creates a Phalcon\Mvc\Model\Query and execute it
      *
      * @param string     $phql
-     * @param array|null $placeholders
-     * @param array|null $types
+     * @param mixed $placeholders
+     * @param mixed $types
      *
      * @return mixed
      * @return ResultsetInterface|StatusInterface
+     *
      */
     public function executeQuery(
         string $phql,
-        array | null $placeholders = null,
-        array | null $types = null
-    ): mixed;
+        mixed $placeholders = null,
+        mixed $types = null
+    );
 
     /**
      * Gets belongsTo relations defined on a model
@@ -202,14 +228,15 @@ interface ManagerInterface
      * @param string            $modelName
      * @param string            $modelRelation
      * @param ModelInterface    $record
-     * @param array|string|null $parameters
+     * @param mixed $parameters
      * @param string|null       $method
+     *
      */
     public function getBelongsToRecords(
         string $modelName,
         string $modelRelation,
         ModelInterface $record,
-        array | string | null $parameters = null,
+        mixed $parameters = null,
         string | null $method = null
     ): bool | ResultsetInterface;
 
@@ -235,14 +262,15 @@ interface ManagerInterface
      * @param string            $modelName
      * @param string            $modelRelation
      * @param ModelInterface    $record
-     * @param array|string|null $parameters
+     * @param mixed $parameters
      * @param string|null       $method
+     *
      */
     public function getHasManyRecords(
         string $modelName,
         string $modelRelation,
         ModelInterface $record,
-        array | string | null $parameters = null,
+        mixed $parameters = null,
         string | null $method = null
     ): bool | ResultsetInterface;
 
@@ -279,14 +307,15 @@ interface ManagerInterface
      * @param string            $modelName
      * @param string            $modelRelation
      * @param ModelInterface    $record
-     * @param array|string|null $parameters
+     * @param mixed $parameters
      * @param string|null       $method
+     *
      */
     public function getHasOneRecords(
         string $modelName,
         string $modelRelation,
         ModelInterface $record,
-        array | string | null $parameters = null,
+        mixed $parameters = null,
         string | null $method = null
     ): bool | ModelInterface;
 
@@ -367,15 +396,16 @@ interface ManagerInterface
      *
      * @param RelationInterface $relation
      * @param ModelInterface    $record
-     * @param array|string|null $parameters
+     * @param mixed $parameters
      * @param string|null       $method
      *
      * @return false|int|ModelInterface|Simple
+     *
      */
     public function getRelationRecords(
         RelationInterface $relation,
         ModelInterface $record,
-        array | string | null $parameters = null,
+        mixed $parameters = null,
         string | null $method = null
     );
 

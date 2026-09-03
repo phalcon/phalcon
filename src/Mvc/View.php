@@ -18,29 +18,15 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
 use Phalcon\Mvc\View\Exceptions\ViewNotFound;
-use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
 use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
+use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
 use Phalcon\Mvc\View\Traits\ViewParamsTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
-
-use function array_keys;
-use function array_merge;
-use function call_user_func;
-use function call_user_func_array;
-use function explode;
-use function file_exists;
-use function is_array;
-use function is_object;
-use function is_string;
-use function ob_end_clean;
-use function ob_get_clean;
-use function ob_get_contents;
-use function ob_start;
-use function strlen;
 
 use const PHP_OS;
 
@@ -105,6 +91,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @var array
+     * @phpstan-var list<string>
      */
     protected array $activeRenderPaths = [];
 
@@ -130,11 +117,13 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @var array
+     * @phpstan-var array<int, bool|int>
      */
     protected array $disabledLevels = [];
 
     /**
      * @var array|false
+     * @phpstan-var array<string, EngineInterface>|false
      */
     protected array | false $engines = false; // TODO: Make always array
 
@@ -155,6 +144,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @var array
+     * @phpstan-var array<string, mixed>
      */
     protected array $params = [];
 
@@ -165,6 +155,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @var array|null
+     * @phpstan-var array{0: string, 1?: string|null}|null
      */
     protected array | null $pickView = null;
 
@@ -175,21 +166,26 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
     /**
      * @var array
+     * @phpstan-var list<string>
      */
     protected array $templatesAfter = [];
 
     /**
      * @var array
+     * @phpstan-var list<string>
      */
     protected array $templatesBefore = [];
 
     /**
      * @var array|string
+     * @phpstan-var list<string>|string
      */
     protected array | string $viewsDirs = [];
 
     /**
      * Phalcon\Mvc\View constructor
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public function __construct(
         protected array $options = []
@@ -203,13 +199,13 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * echo $this->view->products;
      *```
      *
-     * @param string $propertyName
+     * @param string $key
      *
      * @return mixed
      */
-    public function __get(string $propertyName): mixed
+    public function __get(string $key)
     {
-        return $this->getVar($propertyName);
+        return $this->getVar($key);
     }
 
     /**
@@ -219,13 +215,13 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * echo isset($this->view->products);
      *```
      *
-     * @param string $name
+     * @param string $key
      *
      * @return bool
      */
-    public function __isset(string $name): bool
+    public function __isset(string $key): bool
     {
-        return isset($this->viewParams[$name]);
+        return isset($this->viewParams[$key]);
     }
 
     /**
@@ -294,12 +290,16 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param mixed $level
      *
      * @return ViewInterface
+     *
+     * @phpstan-return static
      */
     public function disableLevel(mixed $level): static
     {
         if (is_array($level)) {
+            /** @var array<int, bool|int> $level */
             $this->disabledLevels = $level;
         } else {
+            /** @var int $level */
             $this->disabledLevels[$level] = true;
         }
 
@@ -357,6 +357,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * Returns the path (or paths) of the views that are currently rendered
      *
      * @return array|string
+     *
+     * @phpstan-return list<string>|string
      */
     public function getActiveRenderPath(): array | string
     {
@@ -466,7 +468,13 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 
         $this->partial($partialPath, $params);
 
-        return ob_get_clean();
+        /**
+         * The buffer is open, so the call always gives back a string.
+         */
+        /** @var string $partialContent */
+        $partialContent = ob_get_clean();
+
+        return $partialContent;
     }
 
     /**
@@ -498,6 +506,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param mixed|null $configCallback
      *
      * @return string
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function getRender(
         string $controllerName,
@@ -524,6 +534,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * Perform extra configurations over the cloned object
          */
         if (is_object($configCallback)) {
+            /** @var callable&object $configCallback */
             call_user_func_array($configCallback, [$view]);
         }
 
@@ -560,6 +571,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * Gets views directory
      *
      * @return array|string
+     *
+     * @phpstan-return list<string>|string
      */
     public function getViewsDir(): array | string
     {
@@ -643,8 +656,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             /**
              * Merge the new params as parameters
              */
-            $viewParams       = $this->viewParams;
-            $this->viewParams = array_merge($viewParams, $params);
+            $viewParams = $this->viewParams;
+            /** @var array<string, mixed> $mergedParams */
+            $mergedParams     = array_merge($viewParams, $params);
+            $this->viewParams = $mergedParams;
         }
 
         /**
@@ -712,8 +727,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     public function pick(mixed $renderView): static
     {
         if (is_array($renderView)) {
+            /** @var array{0: string, 1?: string|null} $pickView */
             $pickView = $renderView;
         } else {
+            /** @var string $renderView */
             $layout = null;
 
             if (str_contains($renderView, "/")) {
@@ -744,6 +761,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @return bool
      * @throws EventsException
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function processRender(
         string $controllerName,
@@ -758,7 +777,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * produced in the controller
          */
         if ($this->disabled !== false) {
-            $this->content = ob_get_contents();
+            /** @var string $bufferedContent */
+            $bufferedContent = ob_get_contents();
+            $this->content   = $bufferedContent;
 
             return false;
         }
@@ -829,8 +850,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * Get the current content in the buffer maybe some output from the
          * controller?
          */
-        $this->content = ob_get_contents();
-        $silence       = true;
+        /** @var string $controllerContent */
+        $controllerContent = ob_get_contents();
+        $this->content     = $controllerContent;
+        $silence           = true;
 
         /**
          * Disabled levels allow to avoid an specific level of rendering
@@ -964,6 +987,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param array $engines
      *
      * @return $this
+     *
+     * @phpstan-param array<string, mixed> $engines
      */
     public function registerEngines(array $engines): static
     {
@@ -987,12 +1012,16 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @return $this|bool|View
      * @throws EventsException
      * @throws Exception
+     *
+     * @phpstan-return bool|static
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function render(
         string $controllerName,
         string $actionName,
         array $params = []
-    ): bool | static {
+    ): static | bool {
         $result = $this->processRender($controllerName, $actionName, $params);
 
         if (!$result) {
@@ -1106,6 +1135,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param mixed  $value
      *
      * @return $this
+     *
+     * @phpstan-return static
      */
     public function setParamToView(string $key, mixed $value): static
     {
@@ -1152,16 +1183,23 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Sets a "template after" controller layout
      *
-     * @param array|string $templateAfter
+     * @param mixed $templateAfter
      *
      * @return $this
+     *
      */
-    public function setTemplateAfter(array | string $templateAfter): static
+    public function setTemplateAfter(mixed $templateAfter): static
     {
         if (!is_array($templateAfter)) {
-            $this->templatesAfter = [$templateAfter];
+            /** @var string $template */
+            $template = $templateAfter;
+
+            $this->templatesAfter = [$template];
         } else {
-            $this->templatesAfter = $templateAfter;
+            /** @var list<string> $templates */
+            $templates = $templateAfter;
+
+            $this->templatesAfter = $templates;
         }
 
         return $this;
@@ -1170,16 +1208,23 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     /**
      * Sets a template before the controller layout
      *
-     * @param array|string $templateBefore
+     * @param mixed $templateBefore
      *
      * @return $this
+     *
      */
-    public function setTemplateBefore(array | string $templateBefore): static
+    public function setTemplateBefore(mixed $templateBefore): static
     {
         if (!is_array($templateBefore)) {
-            $this->templatesBefore = [$templateBefore];
+            /** @var string $template */
+            $template = $templateBefore;
+
+            $this->templatesBefore = [$template];
         } else {
-            $this->templatesBefore = $templateBefore;
+            /** @var list<string> $templates */
+            $templates = $templateBefore;
+
+            $this->templatesBefore = $templates;
         }
 
         return $this;
@@ -1200,6 +1245,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param bool  $merge
      *
      * @return $this
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function setVars(array $params, bool $merge = true): static
     {
@@ -1216,19 +1263,26 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * Sets the views directory. Depending of your platform,
      * always add a trailing slash or backslash
      *
-     * @param array|string $viewsDir
+     * @param mixed $viewsDir
      *
      * @return $this
      * @throws Exception
+     *
      */
-    public function setViewsDir(array | string $viewsDir): static
+    public function setViewsDir(mixed $viewsDir): static
     {
         if (is_string($viewsDir)) {
             $this->viewsDirs = $this->toDirSeparator($viewsDir);
         } else {
             $newViewsDir = [];
 
-            foreach ($viewsDir as $position => $directory) {
+            /**
+             * The value is not a string. It is a list of directories.
+             */
+            /** @var array<array-key, mixed> $directories */
+            $directories = $viewsDir;
+
+            foreach ($directories as $position => $directory) {
                 if (!is_string($directory)) {
                     throw new ViewsDirItemMustBeString();
                 }
@@ -1236,6 +1290,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                 $newViewsDir[$position] = $this->toDirSeparator($directory);
             }
 
+            /** @var list<string> $newViewsDir */
             $this->viewsDirs = $newViewsDir;
         }
 
@@ -1266,6 +1321,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @return string
      * @throws EventsException
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $params
      */
     public function toString(
         string $controllerName,
@@ -1301,6 +1358,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @return void
      * @throws Exception
      * @throws EventsException
+     *
+     * @phpstan-param array<string, EngineInterface> $engines
      */
     protected function engineRender(
         array $engines,
@@ -1366,6 +1425,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * Gets views directories
      *
      * @return array
+     *
+     * @phpstan-return list<string>
      */
     protected function getViewsDirs(): array
     {
@@ -1383,7 +1444,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return bool
      */
-    final protected function isAbsolutePath(string $path): bool
+    final protected function isAbsolutePath(string $path)
     {
         if (PHP_OS === "WINNT") {
             return strlen($path) >= 3 && substr($path, 1, 2) === ":\\";
@@ -1398,6 +1459,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, EngineInterface>
      */
     protected function loadTemplateEngines(): array
     {
@@ -1453,9 +1516,13 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                 }
             }
 
+            /** @var array<string, EngineInterface> $engines */
             $this->engines = $engines;
         }
 
-        return $this->engines;
+        /** @var array<string, EngineInterface> $loadedEngines */
+        $loadedEngines = $this->engines;
+
+        return $loadedEngines;
     }
 }

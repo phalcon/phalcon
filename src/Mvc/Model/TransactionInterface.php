@@ -47,6 +47,8 @@ interface TransactionInterface
      * Returns validations messages from last save try
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function getMessages(): array;
 

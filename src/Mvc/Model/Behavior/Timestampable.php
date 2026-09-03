@@ -52,6 +52,8 @@ class Timestampable extends Behavior
             return;
         }
 
+        /** @var array<string, mixed> $options */
+
         /**
          * The field name is required in this behavior
          */
@@ -59,6 +61,7 @@ class Timestampable extends Behavior
             throw new MissingRequiredOption("field");
         }
 
+        /** @var array<array-key, string>|string $field */
         $field     = $options['field'];
         $timestamp = $this->getTimestamp($options);
 
@@ -79,6 +82,9 @@ class Timestampable extends Behavior
      * @param array $options
      *
      * @return string
+     *
+     * @phpstan-param array<string, mixed> $options
+     * @phpstan-return int|string
      */
     private function getTimestamp(array $options)
     {
@@ -86,7 +92,10 @@ class Timestampable extends Behavior
             /**
              * Format is a format for date()
              */
-            return date($options['format']);
+            /** @var string $dateFormat */
+            $dateFormat = $options['format'];
+
+            return date($dateFormat);
         }
 
         if (isset($options["generator"])) {
@@ -98,7 +107,10 @@ class Timestampable extends Behavior
                 is_object($generator) &&
                 $generator instanceof Closure
             ) {
-                return call_user_func($generator);
+                /** @var int|string $generated */
+                $generated = call_user_func($generator);
+
+                return $generated;
             }
         }
 

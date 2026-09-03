@@ -24,6 +24,8 @@ use stdClass;
 /**
  * This component allows Phalcon\Mvc\Model to return rows without an associated entity.
  * This objects implements the ArrayAccess interface to allow access the object as object->x or array[x].
+ *
+ * @phpstan-implements ArrayAccess<array-key, mixed>
  */
 class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAccess, JsonSerializable
 {
@@ -31,6 +33,8 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * Serializes the object for json_encode
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function jsonSerialize(): array
     {
@@ -40,26 +44,30 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
     /**
      * Checks whether offset exists in the row
      *
-     * @param mixed $offset
+     * @param mixed $index
      *
      * @return bool
+     *
+     * @phpstan-param array-key $index
      */
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists(mixed $index): bool
     {
-        return property_exists($this, (string) $offset);
+        return property_exists($this, (string) $index);
     }
 
     /**
      * Gets a record in a specific position of the row
      *
-     * @param mixed $offset
+     * @param mixed $index
      *
      * @return mixed
      * @throws Exception
+     *
+     * @phpstan-param array-key $index
      */
-    public function offsetGet(mixed $offset): mixed
+    public function offsetGet(mixed $index): mixed
     {
-        $key = (string) $offset;
+        $key = (string) $index;
 
         if (!property_exists($this, $key)) {
             throw new IndexNotInRow();
@@ -108,7 +116,7 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      *
      * @return mixed
      */
-    public function readAttribute(string $attribute): mixed
+    public function readAttribute(string $attribute)
     {
         return $this->$attribute ?? null;
     }
@@ -129,6 +137,8 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * Returns the instance as an array representation
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function toArray(): array
     {

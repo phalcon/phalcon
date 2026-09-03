@@ -42,17 +42,18 @@ class LazyLoader
      * Calling __call method
      *
      * @param string               $method
-     * @param array                $arguments
+     * @param mixed                $arguments
      * @param BinderInterface|null $modelBinder
      *
      * @return mixed
      * @throws Exception
+     *
      */
     public function callMethod(
         string $method,
-        array $arguments,
+        mixed $arguments,
         BinderInterface | null $modelBinder = null
-    ): mixed {
+    ) {
         $definition = $this->definition;
 
         if (null === $this->handler) {
@@ -63,11 +64,17 @@ class LazyLoader
             $this->handler = new $definition();
         }
 
+        /**
+         * The arguments are the call parameters of the method.
+         */
+        /** @var array<array-key, mixed> $params */
+        $params = $arguments;
+
         if (null !== $modelBinder) {
             $bindCacheKey = "_PHMB_" . $definition . "_" . $method;
-            $arguments    = $modelBinder->bindToHandler(
+            $params       = $modelBinder->bindToHandler(
                 $this->handler,
-                $arguments,
+                $params,
                 $bindCacheKey,
                 $method
             );
@@ -76,9 +83,12 @@ class LazyLoader
         /**
          * Call the handler
          */
+        /** @var callable $callable */
+        $callable = [$this->handler, $method];
+
         return call_user_func_array(
-            [$this->handler, $method],
-            array_values($arguments)
+            $callable,
+            array_values($params)
         );
     }
 

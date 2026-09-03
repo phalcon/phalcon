@@ -44,25 +44,25 @@ interface ResultsetInterface
      * );
      *```
      *
-     * @param callable $filter
+     * @param mixed $filter
      *
      * @return ModelInterface[]
      */
-    public function filter(callable $filter): array;
+    public function filter(mixed $filter): array;
 
     /**
      * Returns the associated cache for the resultset
      *
      * @return mixed
      */
-    public function getCache(): mixed;
+    public function getCache();
 
     /**
      * Get first row in the resultset
      *
      * @return mixed
      */
-    public function getFirst(): mixed;
+    public function getFirst();
 
     /**
      * Returns the current hydration mode
@@ -74,7 +74,7 @@ interface ResultsetInterface
      *
      * @return ModelInterface|Row|null
      */
-    public function getLast(): ModelInterface | Row | null;
+    public function getLast(): \Phalcon\Mvc\ModelInterface | \Phalcon\Mvc\Model\Row | null;
 
     /**
      * Returns the error messages produced by a batch operation
@@ -120,6 +120,8 @@ interface ResultsetInterface
      * number of rows it could consume more memory than currently it does.
      *
      * @return array
+     *
+     * @phpstan-return array<array-key, mixed>
      */
     public function toArray(): array;
 

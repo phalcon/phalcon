@@ -27,7 +27,7 @@ interface EntityInterface
      *
      * @return mixed
      */
-    public function readAttribute(string $attribute): mixed;
+    public function readAttribute(string $attribute);
 
     /**
      * Writes an attribute value by its name
@@ -37,5 +37,5 @@ interface EntityInterface
      *
      * @return void
      */
-    public function writeAttribute(string $attribute, mixed $value): void;
+    public function writeAttribute(string $attribute, mixed $value);
 }

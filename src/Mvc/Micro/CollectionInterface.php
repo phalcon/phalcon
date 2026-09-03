@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Micro;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+
 /**
  * Interface for Phalcon\Mvc\Micro\Collection
+ *
+ * @phpstan-import-type mvc_micro_handlers from MvcTypes
  */
 interface CollectionInterface
 {
@@ -22,14 +26,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is DELETE
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function delete(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -37,14 +41,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is GET
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function get(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -53,12 +57,14 @@ interface CollectionInterface
      *
      * @return mixed
      */
-    public function getHandler(): mixed;
+    public function getHandler();
 
     /**
      * Returns the registered handlers
      *
      * @return array
+     *
+     * @phpstan-return mvc_micro_handlers
      */
     public function getHandlers(): array;
 
@@ -73,14 +79,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is HEAD
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function head(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -95,14 +101,14 @@ interface CollectionInterface
      * Maps a route to a handler
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function map(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -110,14 +116,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function options(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -125,14 +131,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is PATCH
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function patch(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -140,14 +146,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is POST
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function post(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 
@@ -155,14 +161,14 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is PUT
      *
      * @param string      $routePattern
-     * @param callable    $handler
+     * @param mixed    $handler
      * @param string|null $name
      *
      * @return CollectionInterface
      */
     public function put(
         string $routePattern,
-        callable $handler,
+        mixed $handler,
         string | null $name = null
     ): CollectionInterface;
 

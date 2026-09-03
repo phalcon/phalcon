@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\ModelInterface;
 
 /**
@@ -28,6 +29,8 @@ class ValidationFailed extends Exception
      *
      * @param ModelInterface $model
      * @param array          $validationMessages
+     *
+     * @phpstan-param list<MessageInterface> $validationMessages
      */
     public function __construct(
         protected ModelInterface $model,
@@ -53,6 +56,8 @@ class ValidationFailed extends Exception
      * Returns the complete group of messages produced in the validation
      *
      * @return array
+     *
+     * @phpstan-return list<MessageInterface>
      */
     public function getMessages(): array
     {

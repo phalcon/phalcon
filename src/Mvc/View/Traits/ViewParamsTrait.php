@@ -29,11 +29,15 @@ trait ViewParamsTrait
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, mixed>
      */
     protected array $registeredEngines = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, mixed>
      */
     protected array $viewParams = [];
 
@@ -51,6 +55,8 @@ trait ViewParamsTrait
      * Returns parameters to views
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getParamsToView(): array
     {
@@ -59,6 +65,8 @@ trait ViewParamsTrait
 
     /**
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getRegisteredEngines(): array
     {
@@ -72,7 +80,7 @@ trait ViewParamsTrait
      *
      * @return mixed
      */
-    public function getVar(string $key): mixed
+    public function getVar(string $key)
     {
         return $this->viewParams[$key] ?? null;
     }

@@ -16,6 +16,7 @@ namespace Phalcon\Mvc\Model;
 use PDOException;
 use Phalcon\Cache\CacheInterface;
 use Phalcon\Cache\Exception\InvalidArgumentException;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\RawValue;
@@ -142,6 +143,12 @@ use function str_replace;
  * $queryWithOutTransaction = new Query($phql, $di);
  * $resultWithOutEntries = $queryWithTransaction->execute();
  *```
+ *
+ * @phpstan-import-type mvc_model_bind_params from MvcTypes
+ * @phpstan-import-type mvc_model_bind_types from MvcTypes
+ * @phpstan-import-type mvc_model_cache_options from MvcTypes
+ * @phpstan-import-type mvc_query_ir from MvcTypes
+ * @phpstan-import-type mvc_query_ast from MvcTypes
  */
 class Query implements QueryInterface, InjectionAwareInterface
 {
@@ -154,22 +161,30 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * @var array|null
+     *
+     * @phpstan-var array<array-key, mvc_query_ir>|null
      */
     protected static array | null $internalPhqlCache = null;
 
     /**
      * @var array
      * TODO: Add default value, instead of null, also remove type check
+     *
+     * @phpstan-var mvc_query_ast
      */
     protected array $ast;
 
     /**
      * @var array
+     *
+     * @phpstan-var mvc_model_bind_params
      */
     protected array $bindParams = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var mvc_model_bind_types
      */
     protected array $bindTypes = [];
 
@@ -180,6 +195,8 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * @var array|null
+     *
+     * @phpstan-var mvc_model_cache_options|null
      */
     protected array | null $cacheOptions = null;
 
@@ -190,6 +207,8 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * @var array|null
+     *
+     * @phpstan-var mvc_query_ir|null
      */
     protected array | null $intermediate = null;
 
@@ -205,11 +224,15 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $models = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, ModelInterface>
      */
     protected array $modelsInstances = [];
 
@@ -235,26 +258,36 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $sqlAliases = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $sqlAliasesModels = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, ModelInterface>
      */
     protected array $sqlAliasesModelsInstances = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<int, array<string, bool>>
      */
     protected array $sqlColumnAliases = [];
 
     /**
      * @var array
+     *
+     * @phpstan-var array<string, string>
      */
     protected array $sqlModelsAliases = [];
 
@@ -286,6 +319,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array                        $options
      *
      * @throws Exception
+     *
+     * @phpstan-param array<string, mixed> $options
      */
     public function __construct(
         protected string | null $phql = null,
@@ -299,9 +334,11 @@ class Query implements QueryInterface, InjectionAwareInterface
         if (isset($options["enable_implicit_joins"])) {
             $this->enableImplicitJoins = ($options["enable_implicit_joins"] == true);
         } else {
-            $this->enableImplicitJoins = Settings::get(
+            /** @var bool $implicitJoins */
+            $implicitJoins             = Settings::get(
                 "orm.enable_implicit_joins"
             );
+            $this->enableImplicitJoins = $implicitJoins;
         }
 
         $this->bindParams = [];
@@ -325,6 +362,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $cacheOptions
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_model_cache_options $cacheOptions
      */
     public function cache(array $cacheOptions): QueryInterface
     {
@@ -342,8 +381,11 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return mixed
      * @throws Exception
      * @throws InvalidArgumentException
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
-    public function execute(array $bindParams = [], array $bindTypes = []): mixed
+    public function execute(array $bindParams = [], array $bindTypes = [])
     {
         $key          = null;
         $cache        = null;
@@ -359,13 +401,16 @@ class Query implements QueryInterface, InjectionAwareInterface
                 throw new MissingCacheKey();
             }
 
+            /** @var string $key */
             $key          = $cacheOptions["key"];
+            /** @var string $cacheService */
             $cacheService = $cacheOptions["service"] ?? "modelsCache";
 
-            /** @var CacheInterface $cache */
             if ($this->container instanceof DiInterface) {
+                /** @var object $cache */
                 $cache = $this->container->getShared($cacheService);
             } else {
+                /** @var object $cache */
                 $cache = $this->container->get($cacheService);
             }
 
@@ -379,10 +424,16 @@ class Query implements QueryInterface, InjectionAwareInterface
              */
             $adapter       = $cache->getAdapter();
             $cacheLifetime = $adapter->getLifetime();
+            /** @var int|null $lifetime */
             $lifetime      = $cacheOptions["lifetime"] ?? $cacheLifetime;
 
             $result = false;
             if ($cache->has($key)) {
+                /**
+                 * Only a resultset of a SELECT reaches the cache.
+                 *
+                 * @var ResultsetInterface $result
+                 */
                 $result = $cache->get($key);
             }
 
@@ -473,6 +524,10 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         /**
          * Check if only the first row must be returned
+         *
+         * The unique-row flag applies to a SELECT, which returns a resultset.
+         *
+         * @var ResultsetInterface $result
          */
         if ($uniqueRow) {
             $preparedResult = $result->getFirst();
@@ -487,6 +542,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Returns default bind params
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_bind_params
      */
     public function getBindParams(): array
     {
@@ -497,6 +554,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Returns default bind types
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_bind_types
      */
     public function getBindTypes(): array
     {
@@ -508,7 +567,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return CacheInterface|null
      */
-    public function getCache(): CacheInterface | null
+    public function getCache(): \Phalcon\Cache\CacheInterface | null
     {
         return $this->cache;
     }
@@ -517,6 +576,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Returns the current cache options
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_cache_options
      */
     public function getCacheOptions(): array
     {
@@ -527,10 +588,18 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Returns the intermediate representation of the PHQL statement
      *
      * @return array
+     *
+     * @phpstan-return mvc_query_ir
      */
     public function getIntermediate(): array
     {
-        return $this->intermediate;
+        /**
+         * parse() fills the intermediate representation before any read.
+         */
+        /** @var mvc_query_ir $intermediate */
+        $intermediate = $this->intermediate;
+
+        return $intermediate;
     }
 
     /**
@@ -554,6 +623,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return ModelInterface
      * @throws Exception
      * @throws InvalidArgumentException
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function getSingleResult(
         array $bindParams = [],
@@ -563,10 +635,19 @@ class Query implements QueryInterface, InjectionAwareInterface
          * The query is already programmed to return just one row
          */
         if ($this->uniqueRow) {
-            return $this->execute($bindParams, $bindTypes);
+            /** @var ModelInterface $singleResult */
+            $singleResult = $this->execute($bindParams, $bindTypes);
+
+            return $singleResult;
         }
 
-        return $this->execute($bindParams, $bindTypes)->getFirst();
+        /** @var ResultsetInterface $resultset */
+        $resultset = $this->execute($bindParams, $bindTypes);
+
+        /** @var ModelInterface $firstResult */
+        $firstResult = $resultset->getFirst();
+
+        return $firstResult;
     }
 
     /**
@@ -583,6 +664,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getSql(): array
     {
@@ -593,12 +676,19 @@ class Query implements QueryInterface, InjectionAwareInterface
         $intermediate = $this->parse();
 
         if ($this->type == Opcode::SELECT->value) {
-            return $this->executeSelect(
+            /**
+             * A simulated SELECT returns the SQL and its bind data.
+             *
+             * @var array<string, mixed> $simulated
+             */
+            $simulated = $this->executeSelect(
                 $intermediate,
                 $this->bindParams,
                 $this->bindTypes,
                 true
             );
+
+            return $simulated;
         }
 
         throw new MultipleSqlStatementsNotSupported();
@@ -619,7 +709,13 @@ class Query implements QueryInterface, InjectionAwareInterface
      */
     public function getType(): int
     {
-        return $this->type;
+        /**
+         * parse() sets the statement type before any read.
+         */
+        /** @var int $type */
+        $type = $this->type;
+
+        return $type;
     }
 
     /**
@@ -640,6 +736,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array|array[]
      * @throws Exception
+     *
+     * @phpstan-return mvc_query_ir
      */
     public function parse(): array
     {
@@ -652,6 +750,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * This function parses the PHQL statement
          */
+        /** @var string $phql */
         $phql = $this->phql;
         $ast  = $this->parser
             ->setEnableLiterals((bool) Settings::get('orm.enable_literals'))
@@ -660,6 +759,12 @@ class Query implements QueryInterface, InjectionAwareInterface
         $irPhql   = null;
         $uniqueId = null;
 
+        /**
+         * The parser tags every statement with its own identifier and with
+         * the opcode of the statement.
+         *
+         * @var mvc_query_ast $ast
+         */
         if (is_array($ast)) {
             /**
              * Check if the prepared PHQL is already cached
@@ -670,6 +775,12 @@ class Query implements QueryInterface, InjectionAwareInterface
                 if (isset(self::$internalPhqlCache[$uniqueId])) {
                     $irPhql = self::$internalPhqlCache[$uniqueId];
                     if (is_array($irPhql)) {
+                        /**
+                         * A statement reaches the cache only after it was
+                         * parsed, so it carries its opcode.
+                         *
+                         * @var array{type: int, ...} $ast
+                         */
                         // Assign the type to the query
                         $this->type = $ast["type"];
 
@@ -727,6 +838,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param bool  $merge
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function setBindParams(
         array $bindParams,
@@ -749,6 +862,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param bool  $merge
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function setBindTypes(
         array $bindTypes,
@@ -793,7 +908,9 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new InvalidInjectedMetadata();
         }
 
+        /** @var ManagerInterface $manager */
         $this->manager  = $manager;
+        /** @var MetaDataInterface $metaData */
         $this->metaData = $metaData;
 
         $this->container = $container;
@@ -805,6 +922,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $intermediate
      *
      * @return QueryInterface
+     *
+     * @phpstan-param mvc_query_ir $intermediate
      */
     public function setIntermediate(array $intermediate): QueryInterface
     {
@@ -904,12 +1023,21 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return StatusInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ir $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     final protected function executeDelete(
         array $intermediate,
         array $bindParams,
         array $bindTypes
     ): StatusInterface {
+        /**
+         * prepareDelete() stores the model names of the statement.
+         *
+         * @var array{models: array<array-key, string>, ...} $intermediate
+         */
         $models = $intermediate["models"];
 
         if (isset($models[1])) {
@@ -919,16 +1047,28 @@ class Query implements QueryInterface, InjectionAwareInterface
         $modelName = $models[0];
 
         /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
+        $manager = $this->manager;
+
+        /**
          * Load the model from the modelsManager or from the modelsInstances property
          */
         if (!isset($this->modelsInstances[$modelName])) {
-            $model = $this->manager->load($modelName);
+            $model = $manager->load($modelName);
         } else {
             $model = $this->modelsInstances[$modelName];
         }
 
         /**
          * Get the records to be deleted
+         *
+         * They come from a SELECT, so they arrive in a resultset.
+         *
+         * @var Resultset<array-key, ModelInterface> $records
          */
         $records = $this->getRelatedRecords(
             $model,
@@ -959,6 +1099,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         while ($records->valid()) {
             try {
+                /** @var ModelInterface $record */
                 $record = $records->current();
 
                 /**
@@ -1002,16 +1143,43 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return StatusInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ir $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     final protected function executeInsert(
         array $intermediate,
         array $bindParams,
         array $bindTypes
     ): StatusInterface {
+        /**
+         * prepareInsert() stores the model name, the fields and the values.
+         *
+         * @var array{
+         *     model: string,
+         *     fields?: array<array-key, string>,
+         *     values: array<array-key, array{
+         *         type: int,
+         *         value: array<array-key, mixed>,
+         *     }>,
+         *     ...
+         * } $intermediate
+         */
         $modelName = $intermediate["model"];
 
+        /**
+         * setDI() assigns the models manager and the metadata service. A
+         * query runs only with a container set.
+         *
+         * @var ManagerInterface $manager
+         */
+        $manager = $this->manager;
+        /** @var MetaDataInterface $metaData */
+        $metaData = $this->metaData;
+
         if (!isset($this->modelsInstances[$modelName])) {
-            $model = $this->manager->load($modelName);
+            $model = $manager->load($modelName);
         } else {
             $model = $this->modelsInstances[$modelName];
         }
@@ -1023,7 +1191,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $bindTypes
         );
 
-        $attributes      = $this->metaData->getAttributes($model);
+        $attributes      = $metaData->getAttributes($model);
         $automaticFields = false;
 
         /**
@@ -1036,7 +1204,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $fields          = $attributes;
 
             if (Settings::get("orm.column_renaming")) {
-                $columnMap = $this->metaData->getColumnMap($model);
+                $columnMap = $metaData->getColumnMap($model);
             }
         } else {
             $fields = $intermediate["fields"];
@@ -1118,7 +1286,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Get model from the Models Manager
          */
-        $insertModel = $this->manager->load($modelName);
+        $insertModel = $manager->load($modelName);
 
         $insertModel->assign($insertValues);
 
@@ -1140,6 +1308,11 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array|ResultsetInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ir $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
+     * @phpstan-return array<array-key, mixed>|ResultsetInterface
      */
     final protected function executeSelect(
         array $intermediate,
@@ -1154,12 +1327,31 @@ class Query implements QueryInterface, InjectionAwareInterface
         $isSimpleStd     = false;
         $connection      = null;
         $connectionTypes = [];
+        /**
+         * prepareSelect() stores at least one model and one column.
+         *
+         * @var array{
+         *     models: non-empty-array<array-key, string>,
+         *     columns: array<array-key, array<string, mixed>>,
+         *     ...
+         * } $intermediate
+         */
         $models          = $intermediate["models"];
+
+        /**
+         * setDI() assigns the models manager and the metadata service. A
+         * query runs only with a container set.
+         *
+         * @var ManagerInterface $manager
+         */
+        $manager = $this->manager;
+        /** @var MetaDataInterface $metaData */
+        $metaData = $this->metaData;
 
         foreach ($models as $modelName) {
             // Load model if it is not loaded
             if (!isset($this->modelsInstances[$modelName])) {
-                $model                             = $this->manager->load($modelName);
+                $model                             = $manager->load($modelName);
                 $this->modelsInstances[$modelName] = $model;
             } else {
                 $model = $this->modelsInstances[$modelName];
@@ -1245,27 +1437,34 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             // Complete objects are treated in a different way
             if ($column["type"] === "object") {
+                /** @var string $modelName */
                 $modelName = $column["model"];
 
                 /**
                  * Base instance
                  */
                 if (!isset($this->modelsInstances[$modelName])) {
-                    $instance                          = $this->manager->load($modelName);
+                    $instance                          = $manager->load($modelName);
                     $this->modelsInstances[$modelName] = $instance;
                 } else {
                     $instance = $this->modelsInstances[$modelName];
                 }
 
-                $attributes = $this->metaData->getAttributes($instance);
+                $attributes = $metaData->getAttributes($instance);
 
+                /**
+                 * An object column names its source table, so the member
+                 * holds a string.
+                 *
+                 * @var string $sqlColumn
+                 */
                 if ($isComplex) {
                     /**
                      * If the resultset is complex we open every model into
                      * their columns
                      */
                     if (Settings::get("orm.column_renaming")) {
-                        $columnMap = $this->metaData->getColumnMap($instance);
+                        $columnMap = $metaData->getColumnMap($instance);
                     } else {
                         $columnMap = null;
                     }
@@ -1288,7 +1487,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     $columns1[$aliasCopy]["columnMap"]  = $columnMap;
 
                     // Check if the model keeps snapshots
-                    $isKeepingSnapshots = (bool)$this->manager->isKeepingSnapshots($instance);
+                    $isKeepingSnapshots = (bool)$manager->isKeepingSnapshots($instance);
                     if ($isKeepingSnapshots) {
                         $columns1[$aliasCopy]["keepSnapshots"] = $isKeepingSnapshots;
                     }
@@ -1319,6 +1518,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              */
             if (!$isComplex && $isSimpleStd) {
                 if (isset($column["sqlAlias"])) {
+                    /** @var string $sqlAlias */
                     $sqlAlias                   = $column["sqlAlias"];
                     $simpleColumnMap[$sqlAlias] = $aliasCopy;
                 } else {
@@ -1404,11 +1604,14 @@ class Query implements QueryInterface, InjectionAwareInterface
         );
 
         foreach ($rawWildcards as $wildcard) {
-            $rawValue    = (string) $processed[$wildcard];
+            /** @var RawValue $rawWildcardValue */
+            $rawWildcardValue = $processed[$wildcard];
+            $rawValue    = (string) $rawWildcardValue;
             $placeholder = substr((string) $wildcard, 0, 1) === ":"
                 ? substr((string) $wildcard, 1)
                 : (string) $wildcard;
 
+            /** @var string $sqlSelect */
             $sqlSelect = preg_replace_callback(
                 "/:" . preg_quote($placeholder, "/") . "\\b/",
                 function ($matches) use ($rawValue) {
@@ -1464,6 +1667,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  */
                 if ($this->resultsetRowClass !== "") {
                     $rowClass     = $this->resultsetRowClass;
+                    /** @var Row $resultObject */
                     $resultObject = new $rowClass();
                 } else {
                     $resultObject = new Row();
@@ -1483,15 +1687,15 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Get the column map
                  */
                 if (!Settings::get("orm.cast_on_hydrate")) {
-                    $simpleColumnMap = $this->metaData->getColumnMap($resultObject);
+                    $simpleColumnMap = $metaData->getColumnMap($resultObject);
                 } else {
-                    $columnMap      = $this->metaData->getColumnMap($resultObject);
-                    $typesColumnMap = $this->metaData->getDataTypes($resultObject);
+                    $columnMap      = $metaData->getColumnMap($resultObject);
+                    $typesColumnMap = $metaData->getDataTypes($resultObject);
 
                     if ($columnMap === null) {
                         $simpleColumnMap = [];
 
-                        foreach ($this->metaData->getAttributes($resultObject) as $attribute) {
+                        foreach ($metaData->getAttributes($resultObject) as $attribute) {
                             $simpleColumnMap[$attribute] = [
                                 $attribute,
                                 $typesColumnMap[$attribute],
@@ -1512,13 +1716,14 @@ class Query implements QueryInterface, InjectionAwareInterface
                 /**
                  * Check if the model keeps snapshots
                  */
-                $isKeepingSnapshots = (bool)$this->manager->isKeepingSnapshots($resultObject);
+                $isKeepingSnapshots = (bool)$manager->isKeepingSnapshots($resultObject);
             }
 
             if (
                 $resultObject instanceof ModelInterface &&
                 method_exists($resultObject, "getResultsetClass")
             ) {
+                /** @var string|null $resultsetClassName */
                 $resultsetClassName = $resultObject->getResultsetClass();
 
                 if ($resultsetClassName) {
@@ -1567,12 +1772,31 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $bindTypes
      *
      * @return StatusInterface
+     *
+     * @phpstan-param mvc_query_ir $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     final protected function executeUpdate(
         array $intermediate,
         array $bindParams,
         array $bindTypes
     ): StatusInterface {
+        /**
+         * prepareUpdate() stores the model names, the assigned columns and
+         * their values. Every column comes from getQualified(), so it has a
+         * name.
+         *
+         * @var array{
+         *     models: array<array-key, string>,
+         *     fields: array<array-key, array{name: string, balias?: string, ...}>,
+         *     values: array<array-key, array{
+         *         type: int,
+         *         value: array<array-key, mixed>,
+         *     }>,
+         *     ...
+         * } $intermediate
+         */
         $models = $intermediate["models"];
 
         if (isset($models[1])) {
@@ -1582,10 +1806,18 @@ class Query implements QueryInterface, InjectionAwareInterface
         $modelName = $models[0];
 
         /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
+        $manager = $this->manager;
+
+        /**
          * Load the model from the modelsManager or from the modelsInstances
          * property
          */
-        $model = $this->modelsInstances[$modelName] ?? $this->manager->load($modelName);
+        $model = $this->modelsInstances[$modelName] ?? $manager->load($modelName);
 
         $connection = $this->getWriteConnection(
             $model,
@@ -1680,15 +1912,23 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                         foreach ($paramKeys as $paramKey) {
                             if (isset($bindParams[$paramKey])) {
+                                /**
+                                 * A named placeholder inside an expression
+                                 * binds a scalar value.
+                                 *
+                                 * @var float|int|string $paramValue
+                                 */
                                 $paramValue = $bindParams[$paramKey];
 
                                 if (is_int($paramValue) || is_float($paramValue)) {
+                                    /** @var string $sqlExpr */
                                     $sqlExpr = preg_replace(
                                         "/:" . preg_quote($paramKey, "/") . "\b/",
                                         (string) $paramValue,
                                         $sqlExpr
                                     );
                                 } else {
+                                    /** @var string $sqlExpr */
                                     $sqlExpr = preg_replace(
                                         "/:" . preg_quote($paramKey, "/") . "\b/",
                                         $connection->escapeString((string) $paramValue),
@@ -1712,6 +1952,12 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         /**
          * We need to query the records related to the update
+         */
+        /**
+         * The related records come from a SELECT, so they arrive in a
+         * resultset.
+         *
+         * @var Resultset<array-key, ModelInterface> $records
          */
         $records = $this->getRelatedRecords(
             $model,
@@ -1742,6 +1988,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         while ($records->valid()) {
             try {
+                /** @var ModelInterface $record */
                 $record = $records->current();
 
                 $record->assign($updateValues);
@@ -1781,6 +2028,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array|string[]
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $argument
+     * @phpstan-return array<array-key, mixed>
      */
     final protected function getCallArgument(array $argument): array
     {
@@ -1800,11 +2050,31 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $expr
+     * @phpstan-return array<string, mixed>
      */
     final protected function getCaseExpression(array $expr): array
     {
+        /**
+         * A CASE node keeps the tested expression on the left and the list of
+         * WHEN clauses on the right. Only an ELSE clause has no right member.
+         *
+         * @var array{
+         *     left: array<array-key, mixed>,
+         *     right: array<array-key, mixed>,
+         *     ...
+         * } $expr
+         */
         $whenClauses = [];
 
+        /**
+         * @var array{
+         *     left: array<array-key, mixed>,
+         *     right?: array<array-key, mixed>,
+         *     ...
+         * } $whenExpr
+         */
         foreach ($expr["right"] as $whenExpr) {
             if (isset($whenExpr["right"])) {
                 $whenClauses[] = [
@@ -1835,6 +2105,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array<array-key, list<array<string>>|string>
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $expr
+     * @phpstan-return array<array-key, mixed>
      */
     final protected function getExpression(array $expr, bool $quoting = true): array
     {
@@ -1842,6 +2115,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $right = null;
 
         if (isset($expr["type"])) {
+            /** @var int|string $exprType */
             $exprType       = $expr["type"];
             $tempNotQuoting = true;
 
@@ -1850,6 +2124,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Resolving the left part of the expression if any
                  */
                 if (isset($expr["left"])) {
+                    /** @var array<array-key, mixed> $exprLeft */
                     $exprLeft = $expr["left"];
                     $left     = $this->getExpression($exprLeft, $tempNotQuoting);
                 }
@@ -1858,6 +2133,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * Resolving the right part of the expression if any
                  */
                 if (isset($expr["right"])) {
+                    /** @var array<array-key, mixed> $exprRight */
                     $exprRight = $expr["right"];
                     $right     = $this->getExpression($exprRight, $tempNotQuoting);
                 }
@@ -2042,9 +2318,11 @@ class Query implements QueryInterface, InjectionAwareInterface
                 case Opcode::INTEGER->value:
                 case Opcode::DOUBLE->value:
                 case Opcode::HINTEGER->value:
+                    /** @var string $value */
+                    $value      = $expr["value"];
                     $exprReturn = [
                         "type"  => "literal",
-                        "value" => $expr["value"],
+                        "value" => $value,
                     ];
 
                     break;
@@ -2066,6 +2344,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     break;
 
                 case Opcode::STRING->value:
+                    /** @var string $value */
                     $value = $expr["value"];
 
                     if ($quoting) {
@@ -2090,22 +2369,27 @@ class Query implements QueryInterface, InjectionAwareInterface
                     break;
 
                 case Opcode::NPLACEHOLDER->value:
+                    /** @var string $value */
+                    $value      = $expr["value"];
                     $exprReturn = [
                         "type"  => "placeholder",
-                        "value" => str_replace("?", ":", $expr["value"]),
+                        "value" => str_replace("?", ":", $value),
                     ];
 
                     break;
 
                 case Opcode::SPLACEHOLDER->value:
+                    /** @var string $value */
+                    $value      = $expr["value"];
                     $exprReturn = [
                         "type"  => "placeholder",
-                        "value" => ":" . $expr["value"],
+                        "value" => ":" . $value,
                     ];
 
                     break;
 
                 case Opcode::BPLACEHOLDER->value:
+                    /** @var string $value */
                     $value = $expr["value"];
                     if (str_contains($value, ":")) {
                         $valueParts = explode(":", $value);
@@ -2378,13 +2662,19 @@ class Query implements QueryInterface, InjectionAwareInterface
                      * or CONVERT type. It must be a plain identifier, so a
                      * crafted type cannot add SQL to the compiled statement.
                      */
-                    if (!preg_match('/^\\\\?[a-zA-Z_][a-zA-Z0-9_\\\\:]*$/', $expr["name"])) {
-                        throw new UnsafeIdentifier($expr["name"], $this->phql);
+                    /** @var string $exprName */
+                    $exprName = $expr["name"];
+
+                    if (!preg_match('/^\\\\?[a-zA-Z_][a-zA-Z0-9_\\\\:]*$/', $exprName)) {
+                        /** @var string $exprPhql */
+                        $exprPhql = $this->phql;
+
+                        throw new UnsafeIdentifier($exprName, $exprPhql);
                     }
 
                     $exprReturn = [
                         "type"  => "literal",
-                        "value" => $expr["name"],
+                        "value" => $exprName,
                     ];
 
                     break;
@@ -2400,9 +2690,11 @@ class Query implements QueryInterface, InjectionAwareInterface
                     break;
 
                 case Opcode::SELECT->value:
+                    /** @var mvc_query_ast $subSelect */
+                    $subSelect  = $expr;
                     $exprReturn = [
                         "type"  => "select",
-                        "value" => $this->prepareSelect($expr, true),
+                        "value" => $this->prepareSelect($subSelect, true),
                     ];
 
                     break;
@@ -2517,6 +2809,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         if (isset($expr[0])) {
             $listItems = [];
 
+            /** @var array<array-key, mixed> $exprListItem */
             foreach ($expr as $exprListItem) {
                 $listItems[] = $this->getExpression($exprListItem);
             }
@@ -2537,9 +2830,23 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $expr
+     * @phpstan-return array<string, mixed>
      */
     final protected function getFunctionCall(array $expr): array
     {
+        /**
+         * A function call node keeps the function name and, when the call has
+         * any, its argument list.
+         *
+         * @var array{
+         *     name: string,
+         *     arguments?: array<array-key, mixed>,
+         *     distinct?: mixed,
+         *     ...
+         * } $expr
+         */
         $name = $expr["name"];
 
         /**
@@ -2547,7 +2854,10 @@ class Query implements QueryInterface, InjectionAwareInterface
          * cannot add SQL to the compiled statement.
          */
         if (!preg_match('/^\\\\?[a-zA-Z_][a-zA-Z0-9_\\\\:]*$/', $name)) {
-            throw new UnsafeIdentifier($name, $this->phql);
+            /** @var string $namePhql */
+            $namePhql = $this->phql;
+
+            throw new UnsafeIdentifier($name, $namePhql);
         }
 
         if (isset($expr["arguments"])) {
@@ -2558,6 +2868,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 // There are more than one argument
                 $functionArgs = [];
 
+                /** @var array<array-key, mixed> $argument */
                 foreach ($arguments as $argument) {
                     $functionArgs[] = $this->getCallArgument($argument);
                 }
@@ -2597,6 +2908,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return list<array<list<array<string>>|string>>
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $group
+     * @phpstan-return list<array<array-key, mixed>>
      */
     final protected function getGroupClause(array $group): array
     {
@@ -2606,6 +2920,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              */
             $groupParts = [];
 
+            /** @var array<array-key, mixed> $groupItem */
             foreach ($group as $groupItem) {
                 $groupParts[] = $this->getExpression($groupItem);
             }
@@ -2631,10 +2946,17 @@ class Query implements QueryInterface, InjectionAwareInterface
      *     model: ModelInterface
      * }
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $join
      */
     final protected function getJoin(ManagerInterface $manager, array $join): array
     {
         if (isset($join["qualified"])) {
+            /**
+             * A qualified name node carries the model name.
+             *
+             * @var array{type: int|string, name: string, ...} $qualified
+             */
             $qualified = $join["qualified"];
             if ($qualified["type"] == Opcode::QUALIFIED->value) {
                 $modelName = $qualified["name"];
@@ -2663,6 +2985,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ir $select
+     * @phpstan-return array<array-key, mixed>
      */
     final protected function getJoins(array $select): array
     {
@@ -2681,8 +3006,15 @@ class Query implements QueryInterface, InjectionAwareInterface
         $joinPreCondition = [];
         $joinPrepared     = [];
 
+        /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
         $manager = $this->manager;
 
+        /** @var array<array-key, mixed> $tables */
         $tables = $select["tables"];
 
         if (!isset($tables[0])) {
@@ -2691,6 +3023,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $selectTables = $tables;
         }
 
+        /** @var array<array-key, mixed> $joins */
         $joins = $select["joins"];
 
         if (!isset($joins[0])) {
@@ -2699,6 +3032,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $selectJoins = $joins;
         }
 
+        /** @var array<array-key, mixed> $joinItem */
         foreach ($selectJoins as $joinItem) {
             /**
              * Check join alias
@@ -2719,6 +3053,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * Process join alias
              */
             if (isset($joinItem["alias"])) {
+                /** @var array{name: string, ...} $aliasExpr */
                 $aliasExpr = $joinItem["alias"];
                 $alias     = $aliasExpr["name"];
 
@@ -2850,6 +3185,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * Check for predefined conditions
              */
             if (isset($joinItem["conditions"])) {
+                /** @var array<array-key, mixed> $joinExpr */
                 $joinExpr                         = $joinItem["conditions"];
                 $joinPreCondition[$joinAliasName] = $this->getExpression($joinExpr);
             }
@@ -2878,6 +3214,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         $fromModels = [];
 
+        /** @var array{qualifiedName: array{name: string, ...}, ...} $tableItem */
         foreach ($selectTables as $tableItem) {
             $fromModels[$tableItem["qualifiedName"]["name"]] = true;
         }
@@ -3015,6 +3352,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return string
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $join
      */
     final protected function getJoinType(array $join): string
     {
@@ -3022,6 +3361,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedSelectAst();
         }
 
+        /** @var int|string $type */
         $type = $join["type"];
         switch ($type) {
             case Opcode::INNERJOIN->value:
@@ -3050,9 +3390,21 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $limitClause
+     * @phpstan-return array<string, mixed>
      */
     final protected function getLimitClause(array $limitClause): array
     {
+        /**
+         * Both members of a LIMIT clause are expression nodes.
+         *
+         * @var array{
+         *     number?: array<array-key, mixed>,
+         *     offset?: array<array-key, mixed>,
+         *     ...
+         * } $limitClause
+         */
         $limit = [];
 
         if (isset($limitClause["number"])) {
@@ -3077,6 +3429,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed>|string $joinSource
+     * @phpstan-return array<array-key, mixed>
      */
     final protected function getMultiJoin(
         string $joinType,
@@ -3102,6 +3457,12 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         $intermediateModelName = $relation->getIntermediateModel();
 
+        /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
         $manager = $this->manager;
 
         /**
@@ -3148,6 +3509,14 @@ class Query implements QueryInterface, InjectionAwareInterface
         $referencedModelName = $relation->getReferencedModel();
 
         if (is_array($fields)) {
+            /**
+             * A relation that names several fields also names several
+             * intermediate fields.
+             *
+             * @var array<array-key, string> $intermediateFieldList
+             */
+            $intermediateFieldList = $intermediateFields;
+
             foreach ($fields as $field => $position) {
                 if (!isset($referencedFields[$position])) {
                     throw new JoinFieldCountMismatch($modelAlias, $joinAlias, (string) $this->phql);
@@ -3156,7 +3525,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 /**
                  * Get the referenced field in the same position
                  */
-                $intermediateField = $intermediateFields[$position];
+                $intermediateField = $intermediateFieldList[$position];
 
                 /**
                  * Create a binary operation for the join conditions
@@ -3253,13 +3622,20 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns a processed order clause for a SELECT statement
      *
-     * @param array|string $order
+     * @param mixed $order
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<array-key, mixed>
      */
-    final protected function getOrderClause(array | string $order): array
+    final protected function getOrderClause(mixed $order): array
     {
+        /**
+         * The parser returns one order item or a list of order items.
+         *
+         * @var array<array-key, mixed> $order
+         */
         if (!isset($order[0])) {
             $orderColumns = [$order];
         } else {
@@ -3268,6 +3644,12 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $orderParts = [];
 
+        /**
+         * Each entry names the column and, when the statement sets one, the
+         * sort direction.
+         *
+         * @var array{column: array<array-key, mixed>, sort?: int|string, ...} $orderItem
+         */
         foreach ($orderColumns as $orderItem) {
             $orderPartExpr = $this->getExpression($orderItem["column"]);
 
@@ -3298,9 +3680,13 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return string[]
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $expr
+     * @phpstan-return array<string, mixed>
      */
     final protected function getQualified(array $expr): array
     {
+        /** @var string $columnName */
         $columnName   = $expr["name"];
         $nestingLevel = $this->nestingLevel;
 
@@ -3323,12 +3709,19 @@ class Query implements QueryInterface, InjectionAwareInterface
             ];
         }
 
+        /**
+         * setDI() assigns the metadata service. A query runs only with a
+         * container set.
+         *
+         * @var MetaDataInterface $metaData
+         */
         $metaData = $this->metaData;
 
         /**
          * Check if the qualified name has a domain
          */
         if (isset($expr["domain"])) {
+            /** @var string $columnDomain */
             $columnDomain = $expr["domain"];
             $sqlAliases   = $this->sqlAliases;
 
@@ -3466,6 +3859,10 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return AdapterInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ir|null $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     protected function getReadConnection(
         ModelInterface $model,
@@ -3482,6 +3879,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         if (method_exists($model, "selectReadConnection")) {
             // use selectReadConnection() if implemented in extended Model class
+            /** @var AdapterInterface|null $connection */
             $connection = $model->selectReadConnection(
                 $intermediate,
                 $bindParams,
@@ -3509,6 +3907,10 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return ResultsetInterface
      * @throws Exception
      * @throws InvalidArgumentException
+     *
+     * @phpstan-param mvc_query_ir $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     final protected function getRelatedRecords(
         ModelInterface $model,
@@ -3559,11 +3961,22 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         $query = new self();
 
-        $query->setDI($this->container);
+        /**
+         * setDI() assigns the container. A query runs only with a container
+         * set.
+         *
+         * @var DiInterface $container
+         */
+        $container = $this->container;
+
+        $query->setDI($container);
         $query->setType(Opcode::SELECT->value);
         $query->setIntermediate($selectIr);
 
-        return $query->execute($bindParams, $bindTypes);
+        /** @var ResultsetInterface $records */
+        $records = $query->execute($bindParams, $bindTypes);
+
+        return $records;
     }
 
     /**
@@ -3574,6 +3987,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $column
+     * @phpstan-return array<array-key, mixed>
      */
     final protected function getSelectColumn(array $column): array
     {
@@ -3581,6 +3997,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedSelectAst();
         }
 
+        /** @var int|string $columnType */
         $columnType = $column["type"];
         $sqlColumns = [];
 
@@ -3630,6 +4047,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             /**
              * We only allow the alias.*
              */
+            /** @var string $columnDomain */
             $columnDomain = $column["column"];
 
             if (!isset($sqlAliases[$columnDomain])) {
@@ -3693,6 +4111,7 @@ class Query implements QueryInterface, InjectionAwareInterface
              * The sql_column is a scalar type returning a simple string
              */
             $sqlColumn     = ["type" => "scalar"];
+            /** @var array<array-key, mixed> $columnData */
             $columnData    = $column["column"];
             $sqlExprColumn = $this->getExpression($columnData);
 
@@ -3723,17 +4142,19 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Resolves joins involving has-one/belongs-to/has-many relations
      *
      * @param string            $joinType
-     * @param string            $joinSource
+     * @param mixed            $joinSource
      * @param string            $modelAlias
      * @param string            $joinAlias
      * @param RelationInterface $relation
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return array<string, mixed>
      */
     final protected function getSingleJoin(
         string $joinType,
-        string $joinSource,
+        mixed $joinSource,
         string $modelAlias,
         string $joinAlias,
         RelationInterface $relation
@@ -3836,15 +4257,19 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array|string
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed> $qualifiedName
+     * @phpstan-return array<array-key, mixed>|string
      */
     final protected function getTable(
         ManagerInterface $manager,
         array $qualifiedName
-    ): array | string {
+    ) {
         if (!isset($qualifiedName["name"])) {
             throw new CorruptedSelectAst();
         }
 
+        /** @var string $modelName */
         $modelName = $qualifiedName["name"];
         $model     = $manager->load($modelName);
         $source    = $model->getSource();
@@ -3868,6 +4293,10 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return AdapterInterface
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ir|null $intermediate
+     * @phpstan-param mvc_model_bind_params $bindParams
+     * @phpstan-param mvc_model_bind_types $bindTypes
      */
     protected function getWriteConnection(
         ModelInterface $model,
@@ -3883,6 +4312,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         }
 
         if (method_exists($model, "selectWriteConnection")) {
+            /** @var AdapterInterface|null $connection */
             $connection = $model->selectWriteConnection(
                 $intermediate,
                 $bindParams,
@@ -3905,6 +4335,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_query_ir
      */
     final protected function prepareDelete(): array
     {
@@ -3914,12 +4346,14 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedDeleteAst();
         }
 
+        /** @var array<array-key, mixed> $delete */
         $delete = $ast["delete"];
 
         if (!isset($delete["tables"])) {
             throw new CorruptedDeleteAst();
         }
 
+        /** @var array<array-key, mixed> $tables */
         $tables = $delete["tables"];
 
         /**
@@ -3940,8 +4374,15 @@ class Query implements QueryInterface, InjectionAwareInterface
             $deleteTables = $tables;
         }
 
+        /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
         $manager = $this->manager;
 
+        /** @var array{qualifiedName: array{name: string, ...}, alias?: string, ...} $table */
         foreach ($deleteTables as $table) {
             $qualifiedName = $table["qualifiedName"];
             $modelName     = $qualifiedName["name"];
@@ -4006,6 +4447,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_query_ir
      */
     final protected function prepareInsert(): array
     {
@@ -4018,6 +4461,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedInsertAst();
         }
 
+        /** @var array{name?: string, ...} $qualifiedName */
         $qualifiedName = $ast["qualifiedName"];
 
         // Check if the related model exists
@@ -4025,6 +4469,12 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedInsertAst();
         }
 
+        /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
         $manager   = $this->manager;
         $modelName = $qualifiedName["name"];
 
@@ -4039,6 +4489,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $notQuoting = false;
         $exprValues = [];
 
+        /** @var array{type: int|string, ...} $exprValue */
         foreach ($ast["values"] as $exprValue) {
             // Resolve every expression in the "values" clause
             $exprValues[] = [
@@ -4052,12 +4503,20 @@ class Query implements QueryInterface, InjectionAwareInterface
             "table" => $source,
         ];
 
+        /**
+         * setDI() assigns the metadata service. A query runs only with a
+         * container set.
+         *
+         * @var MetaDataInterface $metaData
+         */
         $metaData = $this->metaData;
 
         if (isset($ast["fields"])) {
+            /** @var array<array-key, mixed> $fields */
             $fields    = $ast["fields"];
             $sqlFields = [];
 
+            /** @var array{name: string, ...} $field */
             foreach ($fields as $field) {
                 $name = $field["name"];
 
@@ -4086,6 +4545,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-param mvc_query_ast|null $ast
+     * @phpstan-return mvc_query_ir
      */
     final protected function prepareSelect(
         mixed $ast = null,
@@ -4095,6 +4557,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $ast = $this->ast;
         }
 
+        /** @var array<string, mixed> $select */
         $select = $ast["select"] ?? $ast;
 
         if (
@@ -4104,7 +4567,9 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedSelectAst();
         }
 
+        /** @var array<array-key, mixed> $tables */
         $tables  = $select["tables"];
+        /** @var array<array-key, mixed> $columns */
         $columns = $select["columns"];
 
         $this->nestingLevel++;
@@ -4180,6 +4645,14 @@ class Query implements QueryInterface, InjectionAwareInterface
         $number         = 0;
         $automaticJoins = [];
 
+        /**
+         * @var array{
+         *     qualifiedName: array{name: string, ...},
+         *     alias?: string,
+         *     with?: array<array-key, mixed>,
+         *     ...
+         * } $selectedModel
+         */
         foreach ($selectedModels as $selectedModel) {
             $qualifiedName = $selectedModel["qualifiedName"];
             $modelName     = $qualifiedName["name"];
@@ -4243,6 +4716,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 }
 
                 // Simulate the definition of inner joins
+                /** @var array{name: string, ...} $withItem */
                 foreach ($withs as $withItem) {
                     $joinAlias     = "AA" . $number;
                     $relationModel = $withItem["name"];
@@ -4257,14 +4731,31 @@ class Query implements QueryInterface, InjectionAwareInterface
                         $relationModel = $relation->getReferencedModel();
                         $eagerType     = $relation->getType();
                     } else {
-                        $relation = $manager->getRelationsBetween(
+                        /**
+                         * Check for relations between models. The call gives
+                         * back an array of relations, or false when the models
+                         * have none.
+                         */
+                        $relations = $manager->getRelationsBetween(
                             $modelName,
                             $relationModel
                         );
 
-                        if (!is_object($relation)) {
+                        if (!is_array($relations)) {
                             throw new RelationshipNotFound($modelName, $relationModel, (string) $this->phql);
                         }
+
+                        /**
+                         * More than one relation must throw an exception
+                         */
+                        if (count($relations) != 1) {
+                            throw new AmbiguousJoinRelation($modelName, $relationModel, (string) $this->phql);
+                        }
+
+                        /**
+                         * Get the first relationship
+                         */
+                        $relation = $relations[0];
 
                         $bestAlias     = $relation->getOption("alias");
                         $relationModel = $relation->getReferencedModel();
@@ -4346,6 +4837,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             }
         }
 
+        /** @var array<array-key, mixed> $joins */
         $joins = $select["joins"] ?? [];
 
         // Join existing JOINS with automatic Joins
@@ -4373,7 +4865,9 @@ class Query implements QueryInterface, InjectionAwareInterface
         $position         = 0;
         $sqlColumnAliases = [];
 
+        /** @var array{alias?: string, ...} $column */
         foreach ($selectColumns as $column) {
+            /** @var array<string, mixed> $sqlColumn */
             foreach ($this->getSelectColumn($column) as $sqlColumn) {
                 /**
                  * If "alias" is set, the user defined an alias for the column
@@ -4392,6 +4886,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                      * "balias" is the best alias chosen for the column
                      */
                     if (isset($sqlColumn["balias"])) {
+                        /** @var string $alias */
                         $alias              = $sqlColumn["balias"];
                         $sqlColumns[$alias] = $sqlColumn;
                     } else {
@@ -4474,6 +4969,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      *
      * @return array
      * @throws Exception
+     *
+     * @phpstan-return mvc_query_ir
      */
     final protected function prepareUpdate(): array
     {
@@ -4483,6 +4980,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedUpdateAst();
         }
 
+        /** @var array<string, mixed> $update */
         $update = $ast["update"];
         if (
             !isset($update["tables"]) ||
@@ -4491,7 +4989,9 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new CorruptedUpdateAst();
         }
 
+        /** @var array<array-key, mixed> $tables */
         $tables = $update["tables"];
+        /** @var array<array-key, mixed> $values */
         $values = $update["values"];
 
         /**
@@ -4513,8 +5013,15 @@ class Query implements QueryInterface, InjectionAwareInterface
             $updateTables = $tables;
         }
 
+        /**
+         * setDI() assigns the models manager. A query runs only with a
+         * container set.
+         *
+         * @var ManagerInterface $manager
+         */
         $manager = $this->manager;
 
+        /** @var array{qualifiedName: array{name: string, ...}, alias?: string, ...} $table */
         foreach ($updateTables as $table) {
             $qualifiedName = $table["qualifiedName"];
             $modelName     = $qualifiedName["name"];
@@ -4594,6 +5101,13 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $notQuoting = false;
 
+        /**
+         * @var array{
+         *     column: array<array-key, mixed>,
+         *     expr: array{type: int|string, ...},
+         *     ...
+         * } $updateValue
+         */
         foreach ($updateValues as $updateValue) {
             $sqlFields[] = $this->getExpression($updateValue["column"], $notQuoting);
             $exprColumn  = $updateValue["expr"];
@@ -4635,6 +5149,9 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @param array $irPhql
      *
      * @return array
+     *
+     * @phpstan-param mvc_query_ir $irPhql
+     * @phpstan-return mvc_query_ir
      */
     final protected function refreshSchemasInIntermediate(array $irPhql): array
     {
@@ -4648,7 +5165,9 @@ class Query implements QueryInterface, InjectionAwareInterface
             return $irPhql;
         }
 
+        /** @var array<array-key, string> $models */
         $models = $irPhql["models"];
+        /** @var array<array-key, mixed> $tables */
         $tables = $irPhql["tables"];
 
         foreach ($models as $index => $modelName) {

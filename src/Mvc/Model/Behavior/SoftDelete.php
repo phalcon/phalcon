@@ -26,6 +26,8 @@ class SoftDelete extends Behavior
 {
     /**
      * Listens for notifications from the models manager
+     *
+     * @phpstan-return mixed
      */
     public function notify(string $type, ModelInterface $model)
     {
@@ -33,6 +35,7 @@ class SoftDelete extends Behavior
             return;
         }
 
+        /** @var array<string, mixed> $options */
         $options = $this->getOptions();
 
         /**
@@ -49,6 +52,7 @@ class SoftDelete extends Behavior
             throw new MissingRequiredOption("field");
         }
 
+        /** @var string $field */
         $field = $options['field'];
         $value = $options['value'];
 

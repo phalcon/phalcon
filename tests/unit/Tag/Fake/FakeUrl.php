@@ -31,8 +31,8 @@ final class FakeUrl implements UrlInterface
     private string $baseUri  = '';
 
     public function get(
-        array | string | null $uri = null,
-        array | object | null $arguments = null,
+        mixed $uri = null,
+        mixed $arguments = null,
         bool | null $local = null,
         mixed $baseUri = null,
         bool $replaceArgs = false

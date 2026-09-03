@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Hydration;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Model\Exceptions\ColumnNotInMap;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Support\Settings;
 
+/**
+ * @phpstan-import-type mvc_hydration_column_map from MvcTypes
+ */
 class CloneResultMapHydrate
 {
     /**
@@ -29,6 +33,8 @@ class CloneResultMapHydrate
      *
      * @return array|mixed|object
      * @throws ColumnNotInMap
+     *
+     * @phpstan-param array<array-key, mixed> $data
      */
     public static function cloneResultMapHydrate(
         array $data,
@@ -55,6 +61,10 @@ class CloneResultMapHydrate
             }
 
             if (is_array($columnMap)) {
+                // A column map value is an attribute name, or an array that
+                // holds the attribute name in the first position.
+                /** @var mvc_hydration_column_map $columnMap */
+
                 // Try to find case-insensitive key variant
                 if (
                     !isset($columnMap[$key]) &&

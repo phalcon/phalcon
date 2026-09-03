@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Eager;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Model\Exceptions\InvalidEagerPath;
 use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerOption;
 
@@ -33,6 +34,10 @@ use function trim;
  * "customer.country"] and ["customer.country"] produce the same two-node tree.
  * The number of queries an eager load costs follows the number of nodes in
  * this tree, not the number of elements supplied.
+ *
+ * @phpstan-import-type mvc_eager_node from MvcTypes
+ * @phpstan-import-type mvc_eager_tree from MvcTypes
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
  */
 class PathTree
 {
@@ -48,6 +53,9 @@ class PathTree
      * @param array $spec the `eager` find parameter
      *
      * @return array
+     *
+     * @phpstan-param array<array-key, mixed> $spec
+     * @phpstan-return mvc_eager_tree
      */
     public static function parse(array $spec): array
     {
@@ -64,7 +72,7 @@ class PathTree
 
             if (!is_string($path)) {
                 throw new InvalidEagerPath(
-                    is_object($path) ? get_class($path) : (string)$path
+                    is_object($path) ? get_class($path) : gettype($path)
                 );
             }
 
@@ -95,6 +103,8 @@ class PathTree
      * @param array $options
      *
      * @return void
+     *
+     * @phpstan-param mvc_model_parameters $options
      */
     private static function assertOptions(array $options): void
     {
@@ -115,6 +125,11 @@ class PathTree
      * @param array  $options  attach to the last segment only
      *
      * @return array
+     *
+     * @phpstan-param mvc_eager_tree            $tree
+     * @phpstan-param array<array-key, string>  $segments
+     * @phpstan-param mvc_model_parameters      $options
+     * @phpstan-return mvc_eager_tree
      */
     private static function insert(
         array $tree,
@@ -137,8 +152,11 @@ class PathTree
         if ($index + 1 >= count($segments)) {
             $node["options"] = array_merge($node["options"], $options);
         } else {
+            /** @var mvc_eager_tree $children */
+            $children = $node["children"];
+
             $node["children"] = self::insert(
-                $node["children"],
+                $children,
                 $path,
                 $segments,
                 $index + 1,

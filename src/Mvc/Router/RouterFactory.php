@@ -49,6 +49,8 @@ class RouterFactory
      *
      * @return RouterInterface
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed>|ConfigInterface $config
      */
     public function load(mixed $config): RouterInterface
     {

@@ -13,11 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+
 use function call_user_func;
 use function is_callable;
 
 /**
  * This class represents a relationship between two models
+ *
+ * @phpstan-import-type mvc_model_parameters from MvcTypes
+ * @phpstan-import-type mvc_relation_fields from MvcTypes
+ * @phpstan-import-type mvc_relation_options from MvcTypes
  */
 class Relation implements RelationInterface
 {
@@ -32,6 +38,8 @@ class Relation implements RelationInterface
 
     /**
      * @var array|string
+     *
+     * @phpstan-var mvc_relation_fields
      */
     protected array | string $intermediateFields;
 
@@ -42,6 +50,8 @@ class Relation implements RelationInterface
 
     /**
      * @var array|string
+     *
+     * @phpstan-var mvc_relation_fields
      */
     protected array | string $intermediateReferencedFields;
 
@@ -50,15 +60,17 @@ class Relation implements RelationInterface
      *
      * @param int          $type
      * @param string       $referencedModel
-     * @param array|string $fields
-     * @param array|string $referencedFields
+     * @param mixed $fields
+     * @param mixed $referencedFields
      * @param array        $options
+     *
+     * @phpstan-param mvc_relation_options $options
      */
     public function __construct(
         protected int $type,
         protected string $referencedModel,
-        protected array | string $fields,
-        protected array | string $referencedFields,
+        protected mixed $fields,
+        protected mixed $referencedFields,
         protected array $options = []
     ) {
     }
@@ -67,9 +79,13 @@ class Relation implements RelationInterface
      * Returns the fields
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getFields(): array | string
+    public function getFields()
     {
+        // The constructor receives the fields as a string or an array of strings.
+        /** @var mvc_relation_fields */
         return $this->fields;
     }
 
@@ -77,10 +93,13 @@ class Relation implements RelationInterface
      * Returns the foreign key configuration
      *
      * @return array|bool|string
+     *
+     * @phpstan-return array<string, mixed>|string|bool
      */
-    public function getForeignKey(): array | bool | string
+    public function getForeignKey()
     {
         if (isset($this->options["foreignKey"]) && !empty($this->options["foreignKey"])) {
+            /** @var array<string, mixed>|string|bool */
             return $this->options["foreignKey"];
         }
 
@@ -91,8 +110,10 @@ class Relation implements RelationInterface
      * Gets the intermediate fields for has-*-through relations
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getIntermediateFields(): array | string
+    public function getIntermediateFields()
     {
         return $this->intermediateFields;
     }
@@ -102,6 +123,8 @@ class Relation implements RelationInterface
      */
     public function getIntermediateModel(): string
     {
+        // setIntermediateRelation() sets the model of a has-*-through relation.
+        /** @var string */
         return $this->intermediateModel;
     }
 
@@ -109,8 +132,10 @@ class Relation implements RelationInterface
      * Gets the intermediate referenced fields for has-*-through relations
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getIntermediateReferencedFields(): array | string
+    public function getIntermediateReferencedFields()
     {
         return $this->intermediateReferencedFields;
     }
@@ -123,7 +148,7 @@ class Relation implements RelationInterface
      *
      * @return mixed
      */
-    public function getOption(string $name): mixed
+    public function getOption(string $name)
     {
         return $this->options[$name] ?? null;
     }
@@ -132,6 +157,8 @@ class Relation implements RelationInterface
      * Returns the options
      *
      * @return array
+     *
+     * @phpstan-return mvc_relation_options
      */
     public function getOptions(): array
     {
@@ -142,17 +169,21 @@ class Relation implements RelationInterface
      * Returns parameters that must be always used when the related records are obtained
      *
      * @return array|false
+     *
+     * @phpstan-return mvc_model_parameters|false
      */
-    public function getParams(): array | false
+    public function getParams()
     {
         if (
             isset($this->options["params"]) &&
             !empty($this->options["params"])
         ) {
             if (is_callable($this->options["params"])) {
+                /** @var mvc_model_parameters|false */
                 return call_user_func($this->options["params"]);
             }
 
+            /** @var mvc_model_parameters|false */
             return $this->options["params"];
         }
 
@@ -163,9 +194,13 @@ class Relation implements RelationInterface
      * Returns the referenced fields
      *
      * @return array|string
+     *
+     * @phpstan-return mvc_relation_fields
      */
-    public function getReferencedFields(): array | string
+    public function getReferencedFields()
     {
+        // The constructor receives the referenced fields as a string or an array of strings.
+        /** @var mvc_relation_fields */
         return $this->referencedFields;
     }
 
@@ -206,6 +241,8 @@ class Relation implements RelationInterface
      */
     public function isReusable(): bool
     {
+        // The "reusable" option holds a boolean flag.
+        /** @var bool */
         return $this->options["reusable"] ?? false;
     }
 
@@ -222,17 +259,23 @@ class Relation implements RelationInterface
     /**
      * Sets the intermediate model data for has-*-through relations
      *
-     * @param array|string $intermediateFields
+     * @param mixed $intermediateFields
      * @param string       $intermediateModel
-     * @param array|string $intermediateReferencedFields
+     * @param mixed $intermediateReferencedFields
      *
      * @return void
+     *
      */
     public function setIntermediateRelation(
-        array | string $intermediateFields,
+        mixed $intermediateFields,
         string $intermediateModel,
-        array | string $intermediateReferencedFields
-    ): void {
+        mixed $intermediateReferencedFields
+    ) {
+        // The manager passes the intermediate fields as a string or an array of strings.
+        /**
+         * @var mvc_relation_fields $intermediateFields
+         * @var mvc_relation_fields $intermediateReferencedFields
+         */
         $this->intermediateFields           = $intermediateFields;
         $this->intermediateModel            = $intermediateModel;
         $this->intermediateReferencedFields = $intermediateReferencedFields;

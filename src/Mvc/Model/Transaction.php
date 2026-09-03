@@ -15,9 +15,10 @@ namespace Phalcon\Mvc\Model;
 
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
+use Phalcon\Messages\MessageInterface;
+use Phalcon\Mvc\ModelInterface;
 use Phalcon\Mvc\Model\Transaction\Failed as TxFailed;
 use Phalcon\Mvc\Model\Transaction\ManagerInterface;
-use Phalcon\Mvc\ModelInterface;
 
 /**
  * Transactions are protective blocks where SQL statements are only permanent if
@@ -85,6 +86,8 @@ class Transaction implements TransactionInterface
 
     /**
      * @var array
+     *
+     * @phpstan-var list<MessageInterface>
      */
     protected array $messages = [];
     /**
@@ -112,6 +115,7 @@ class Transaction implements TransactionInterface
         bool $autoBegin = false,
         string $service = "db"
     ) {
+        /** @var AdapterInterface $connection */
         $connection = $container->get($service);
 
         $this->connection = $connection;
@@ -166,6 +170,8 @@ class Transaction implements TransactionInterface
      * Returns validations messages from last save try
      *
      * @return array
+     *
+     * @phpstan-return list<MessageInterface>
      */
     public function getMessages(): array
     {

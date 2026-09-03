@@ -20,26 +20,36 @@ interface ViewInterface extends ViewBaseInterface
 {
     /**
      * Resets any template before layouts
+     *
+     * @return static
      */
     public function cleanTemplateAfter();
 
     /**
      * Resets any template before layouts
+     *
+     * @return static
      */
     public function cleanTemplateBefore();
 
     /**
      * Disables the auto-rendering process
+     *
+     * @return static
      */
     public function disable();
 
     /**
      * Enables the auto-rendering process
+     *
+     * @return static
      */
     public function enable();
 
     /**
      * Finishes the render process by stopping the output buffering
+     *
+     * @return static
      */
     public function finish();
 
@@ -50,6 +60,8 @@ interface ViewInterface extends ViewBaseInterface
 
     /**
      * Returns the path of the view that is currently rendered
+     *
+     * @phpstan-return list<string>|string
      */
     public function getActiveRenderPath(): array | string;
 
@@ -90,16 +102,24 @@ interface ViewInterface extends ViewBaseInterface
 
     /**
      * Choose a view different to render than last-controller/last-action
+     *
+     * @return static
      */
     public function pick(string $renderView);
 
     /**
      * Register templating engines
+     *
+     * @phpstan-param array<string, mixed> $engines
+     *
+     * @return static
      */
     public function registerEngines(array $engines);
 
     /**
      * Executes render process from dispatching data
+     *
+     * @phpstan-param array<array-key, mixed> $params
      */
     public function render(
         string $controllerName,
@@ -109,18 +129,24 @@ interface ViewInterface extends ViewBaseInterface
 
     /**
      * Resets the view component to its factory default values
+     *
+     * @return static
      */
     public function reset();
 
     /**
      * Sets base path. Depending of your platform, always add a trailing slash
      * or backslash
+     *
+     * @return static
      */
     public function setBasePath(string $basePath);
 
     /**
      * Change the layout to be used instead of using the name of the latest
      * controller name
+     *
+     * @return static
      */
     public function setLayout(string $layout);
 
@@ -128,12 +154,16 @@ interface ViewInterface extends ViewBaseInterface
      * Sets the layouts sub-directory. Must be a directory under the views
      * directory. Depending of your platform, always add a trailing slash or
      * backslash
+     *
+     * @return static
      */
     public function setLayoutsDir(string $layoutsDir);
 
     /**
      * Sets default view name. Must be a file without extension in the views
      * directory
+     *
+     * @return static
      */
     public function setMainView(string $viewPath);
 
@@ -141,6 +171,8 @@ interface ViewInterface extends ViewBaseInterface
      * Sets a partials sub-directory. Must be a directory under the views
      * directory. Depending of your platform, always add a trailing slash or
      * backslash
+     *
+     * @return static
      */
     public function setPartialsDir(string $partialsDir);
 
@@ -152,19 +184,27 @@ interface ViewInterface extends ViewBaseInterface
     /**
      * Appends template after controller layout
      *
-     * @param array|string $templateAfter
+     * @param mixed $templateAfter
+     *
+     *
+     * @return static
      */
-    public function setTemplateAfter(array | string $templateAfter);
+    public function setTemplateAfter(mixed $templateAfter);
 
     /**
      * Appends template before controller layout
      *
-     * @param array|string $templateBefore
+     * @param mixed $templateBefore
+     *
+     *
+     * @return static
      */
-    public function setTemplateBefore(array | string $templateBefore);
+    public function setTemplateBefore(mixed $templateBefore);
 
     /**
      * Starts rendering process enabling the output buffering
+     *
+     * @return static
      */
     public function start();
 }

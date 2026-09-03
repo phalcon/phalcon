@@ -14,11 +14,24 @@ declare(strict_types=1);
 namespace Phalcon\Mvc;
 
 use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\RouteInterface;
 
 /**
  * Interface for Phalcon\Mvc\Router
+ *
+ * @phpstan-import-type mvc_router_defaults from MvcTypes
+ * @phpstan-import-type mvc_router_http_methods from MvcTypes
+ * @phpstan-import-type mvc_router_matches from MvcTypes
+ * @phpstan-import-type mvc_router_params from MvcTypes
+ * @phpstan-import-type mvc_router_paths from MvcTypes
+ *
+ * The router class carries this member and the framework calls it on the
+ * interface. It joins the interface in the next major; until then the tag
+ * below records the contract that all implementations meet.
+ *
+ * @method RouterInterface removeExtraSlashes(bool $remove)
  */
 interface RouterInterface
 {
@@ -26,16 +39,17 @@ interface RouterInterface
      * Adds a route to the router on any HTTP method
      *
      * @param string            $pattern
-     * @param array|string|null $paths
-     * @param array|string|null $httpMethods
+     * @param mixed $paths
+     * @param mixed $httpMethods
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function add(
         string $pattern,
-        array | string | null $paths = null,
-        array | string | null $httpMethods = null,
+        mixed $paths = null,
+        mixed $httpMethods = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -43,14 +57,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is CONNECT
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addConnect(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -58,14 +73,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is DELETE
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addDelete(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -73,14 +89,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is GET
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addGet(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -88,14 +105,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is HEAD
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addHead(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -103,14 +121,15 @@ interface RouterInterface
      * Add a route to the router that only match if the HTTP method is OPTIONS
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addOptions(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -118,14 +137,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is PATCH
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addPatch(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -133,14 +153,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is POST
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addPost(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -149,14 +170,15 @@ interface RouterInterface
      * (Squid and Varnish support)
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addPurge(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -164,14 +186,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is PUT
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addPut(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -179,14 +202,15 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is TRACE
      *
      * @param string            $pattern
-     * @param array|string|null $paths
+     * @param mixed $paths
      * @param int               $position
+     *
      *
      * @return RouteInterface
      */
     public function addTrace(
         string $pattern,
-        array | string | null $paths = null,
+        mixed $paths = null,
         int $position = Router::POSITION_LAST
     ): RouteInterface;
 
@@ -235,6 +259,8 @@ interface RouterInterface
      * Return the sub expressions in the regular expression matched
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_matches
      */
     public function getMatches(): array;
 
@@ -256,17 +282,19 @@ interface RouterInterface
      * Returns processed extra params
      *
      * @return array
+     *
+     * @phpstan-return mvc_router_params
      */
     public function getParams(): array;
 
     /**
      * Returns a route object by its id
      *
-     * @param int|string $routeId
+     * @param mixed $routeId
      *
      * @return bool|RouteInterface
      */
-    public function getRouteById(int | string $routeId): bool | RouteInterface;
+    public function getRouteById(mixed $routeId): bool | RouteInterface;
 
     /**
      * Returns a route object by its name
@@ -296,11 +324,12 @@ interface RouterInterface
     /**
      * Loads routes from an array or Phalcon\Config\Config instance.
      *
-     * @param array|ConfigInterface $config
+     * @param mixed $config
+     *
      *
      * @return RouterInterface
      */
-    public function loadFromConfig(array | ConfigInterface $config): RouterInterface;
+    public function loadFromConfig(mixed $config): RouterInterface;
 
     /**
      * Mounts a group of routes in the router
@@ -342,6 +371,8 @@ interface RouterInterface
      * Sets an array of default paths
      *
      * @param array $defaults
+     *
+     * @phpstan-param mvc_router_defaults $defaults
      *
      * @return RouterInterface
      */

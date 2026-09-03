@@ -13,13 +13,20 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model;
 
-use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
+use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 
 /**
  * Phalcon\Mvc\Model\MetaDataInterface
  *
  * Interface for Phalcon\Mvc\Model\MetaData
+ *
+ * @phpstan-import-type mvc_model_attributes from MvcTypes
+ * @phpstan-import-type mvc_metadata_column_map from MvcTypes
+ * @phpstan-import-type mvc_metadata_default_values from MvcTypes
+ * @phpstan-import-type mvc_metadata_index from MvcTypes
+ * @phpstan-import-type mvc_metadata_types from MvcTypes
  */
 interface MetaDataInterface
 {
@@ -29,6 +36,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getAttributes(ModelInterface $model): array;
 
@@ -38,6 +47,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getAutomaticCreateAttributes(ModelInterface $model): array;
 
@@ -47,6 +58,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getAutomaticUpdateAttributes(ModelInterface $model): array;
 
@@ -56,6 +69,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getBindTypes(ModelInterface $model): array;
 
@@ -65,6 +80,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_column_map|null
      */
     public function getColumnMap(ModelInterface $model): array | null;
 
@@ -74,6 +91,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return mvc_metadata_types
      */
     public function getDataTypes(ModelInterface $model): array;
 
@@ -83,6 +102,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getDataTypesNumeric(ModelInterface $model): array;
 
@@ -92,6 +113,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return mvc_metadata_default_values
      */
     public function getDefaultValues(ModelInterface $model): array;
 
@@ -101,6 +124,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return array<string, mixed>
      */
     public function getEmptyStringAttributes(ModelInterface $model): array;
 
@@ -119,6 +144,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getNonPrimaryKeyAttributes(ModelInterface $model): array;
 
@@ -128,6 +155,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getNotNullAttributes(ModelInterface $model): array;
 
@@ -137,6 +166,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array
+     *
+     * @phpstan-return mvc_model_attributes
      */
     public function getPrimaryKeyAttributes(ModelInterface $model): array;
 
@@ -146,6 +177,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_column_map|null
      */
     public function getReverseColumnMap(ModelInterface $model): array | null;
 
@@ -179,6 +212,8 @@ interface MetaDataInterface
      * @param string $key
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_index
      */
     public function read(string $key): array | null;
 
@@ -188,6 +223,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_index|null
      */
     public function readColumnMap(ModelInterface $model): array | null;
 
@@ -198,6 +235,8 @@ interface MetaDataInterface
      * @param int            $index
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_index|null
      */
     public function readColumnMapIndex(ModelInterface $model, int $index): array | null;
 
@@ -207,6 +246,8 @@ interface MetaDataInterface
      * @param ModelInterface $model
      *
      * @return array|null
+     *
+     * @phpstan-return mvc_metadata_index
      */
     public function readMetaData(ModelInterface $model): array | null;
 
@@ -217,8 +258,10 @@ interface MetaDataInterface
      * @param int            $index
      *
      * @return array|bool|string|null
+     *
+     * @phpstan-return mvc_metadata_index
      */
-    public function readMetaDataIndex(ModelInterface $model, int $index): array | bool | string | null;
+    public function readMetaDataIndex(ModelInterface $model, int $index): array | string | bool | null;
 
     /**
      * Resets internal meta-data in order to regenerate it
@@ -234,6 +277,8 @@ interface MetaDataInterface
      * @param array          $attributes
      *
      * @return mixed
+     *
+     * @phpstan-param array<string, mixed> $attributes
      */
     public function setAutomaticCreateAttributes(
         ModelInterface $model,
@@ -247,6 +292,8 @@ interface MetaDataInterface
      * @param array          $attributes
      *
      * @return mixed
+     *
+     * @phpstan-param array<string, mixed> $attributes
      */
     public function setAutomaticUpdateAttributes(
         ModelInterface $model,
@@ -260,6 +307,8 @@ interface MetaDataInterface
      * @param array          $attributes
      *
      * @return void
+     *
+     * @phpstan-param array<string, mixed> $attributes
      */
     public function setEmptyStringAttributes(
         ModelInterface $model,
@@ -282,6 +331,8 @@ interface MetaDataInterface
      * @param array  $data
      *
      * @return void
+     *
+     * @phpstan-param mvc_metadata_index $data
      */
     public function write(string $key, array $data): void;
 

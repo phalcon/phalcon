@@ -140,7 +140,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *
      * @return ControllerInterface|null
      */
-    public function getActiveController(): ControllerInterface | null
+    public function getActiveController(): \Phalcon\Mvc\ControllerInterface | null
     {
         /** @var ControllerInterface|null $activeHandler */
         $activeHandler = $this->activeHandler;
@@ -174,7 +174,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *
      * @return ControllerInterface|null
      */
-    public function getLastController(): ControllerInterface | null
+    public function getLastController(): \Phalcon\Mvc\ControllerInterface | null
     {
         /** @var ControllerInterface|null $lastHandler */
         $lastHandler = $this->lastHandler;
@@ -262,7 +262,7 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      * @throws EventsException
      * @throws Exception
      */
-    protected function throwDispatchException(string $message, int $exceptionCode = 0): bool
+    protected function throwDispatchException(string $message, int $exceptionCode = 0)
     {
         $this->checkContainer(
             ResponseServiceUnavailable::class,
