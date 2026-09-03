@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo\Profiler;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Exception\Exception;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\LoggerInterface;
@@ -27,10 +28,16 @@ use function hrtime;
 
 /**
  * Sends query profiles to a logger.
+ *
+ * @phpstan-import-type datamapper_profiler_context from DataMapperTypes
+ * @phpstan-import-type datamapper_values from DataMapperTypes
  */
 class Profiler implements ProfilerInterface
 {
     protected bool $active = false;
+    /**
+     * @phpstan-var datamapper_profiler_context
+     */
     protected array $context = [];
     protected string $logFormat = "";
     protected LoggerInterface $logger;
@@ -54,6 +61,8 @@ class Profiler implements ProfilerInterface
 
     /**
      * Finishes and logs a profile entry.
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function finish(?string $statement = null, array $values = []): void
     {
@@ -61,8 +70,11 @@ class Profiler implements ProfilerInterface
             $ex     = new Exception();
             $finish = hrtime(true);
 
+            /** @phpstan-var float|int $start */
+            $start = $this->context["start"];
+
             $this->context["backtrace"] = $ex->getTraceAsString();
-            $this->context["duration"]  = $finish - $this->context["start"];
+            $this->context["duration"]  = $finish - $start;
             $this->context["finish"]    = $finish;
             $this->context["statement"] = $statement;
             $this->context["values"]    = empty($values)

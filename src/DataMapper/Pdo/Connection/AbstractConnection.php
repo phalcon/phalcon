@@ -22,12 +22,14 @@ use BadMethodCallException;
 use PDO;
 use PDOException;
 use PDOStatement;
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\Contracts\Events\EventsAware;
 use Phalcon\DataMapper\Pdo\Events;
 use Phalcon\DataMapper\Pdo\Exception\OperationCancelled;
 use Phalcon\DataMapper\Pdo\Exception\UnknownDriverMethod;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use stdClass;
 use Throwable;
 
 use function array_merge;
@@ -50,6 +52,24 @@ use function str_contains;
  * an events manager is set. ConnectionInterface does not declare the events
  * manager methods; the EventsAware contract is applied here so that existing
  * implementations of the interface keep working.
+ *
+ * @phpstan-import-type datamapper_assoc_rows from DataMapperTypes
+ * @phpstan-import-type datamapper_call_arguments from DataMapperTypes
+ * @phpstan-import-type datamapper_column from DataMapperTypes
+ * @phpstan-import-type datamapper_constructor_arguments from DataMapperTypes
+ * @phpstan-import-type datamapper_drivers from DataMapperTypes
+ * @phpstan-import-type datamapper_error_info from DataMapperTypes
+ * @phpstan-import-type datamapper_fetch_arguments from DataMapperTypes
+ * @phpstan-import-type datamapper_fetch_result from DataMapperTypes
+ * @phpstan-import-type datamapper_grouped_rows from DataMapperTypes
+ * @phpstan-import-type datamapper_objects from DataMapperTypes
+ * @phpstan-import-type datamapper_pairs from DataMapperTypes
+ * @phpstan-import-type datamapper_pdo_options from DataMapperTypes
+ * @phpstan-import-type datamapper_quote_names from DataMapperTypes
+ * @phpstan-import-type datamapper_quote_value from DataMapperTypes
+ * @phpstan-import-type datamapper_row from DataMapperTypes
+ * @phpstan-import-type datamapper_rows from DataMapperTypes
+ * @phpstan-import-type datamapper_values from DataMapperTypes
  */
 abstract class AbstractConnection implements ConnectionInterface, EventsAware
 {
@@ -61,7 +81,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      */
     protected bool $autoReconnect = false;
     /**
-     * @var \PDO
+     * @var PDO|null
      */
     protected $pdo;
     protected ProfilerInterface $profiler;
@@ -77,6 +97,9 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * Proxies to PDO methods created for specific drivers; in particular,
      * `sqlite` and `pgsql`.
      *
+     * @phpstan-param datamapper_call_arguments $arguments
+     *
+     * @return mixed
      * @throws BadMethodCallException
      */
     public function __call(string $name, array $arguments)
@@ -102,10 +125,15 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Return an array of available PDO drivers (empty array if none available)
+     *
+     * @phpstan-return datamapper_drivers
      */
     public static function getAvailableDrivers(): array
     {
-        return PDO::getAvailableDrivers();
+        /** @phpstan-var datamapper_drivers $drivers */
+        $drivers = PDO::getAvailableDrivers();
+
+        return $drivers;
     }
 
     /**
@@ -154,6 +182,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Connects to the database.
+     *
+     * @phpstan-assert !null $this->pdo
      */
     abstract public function connect(): void;
 
@@ -187,12 +217,17 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Gets the most recent error info.
+     *
+     * @phpstan-return datamapper_error_info
      */
     public function errorInfo(): array
     {
         $this->connect();
 
-        return $this->pdo->errorInfo();
+        /** @phpstan-var datamapper_error_info $errorInfo */
+        $errorInfo = $this->pdo->errorInfo();
+
+        return $errorInfo;
     }
 
     /**
@@ -228,11 +263,13 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
             false
         );
 
-        return $affectedRows;
+        return (int)$affectedRows;
     }
 
     /**
      * Performs a statement and returns the number of affected rows.
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function fetchAffected(string $statement, array $values = []): int
     {
@@ -244,15 +281,22 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     /**
      * Fetches a sequential array of rows from the database; the rows are
      * returned as associative arrays.
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_rows
      */
     public function fetchAll(string $statement, array $values = []): array
     {
-        return $this->fetchData(
+        /** @phpstan-var datamapper_rows $rows */
+        $rows = $this->fetchData(
             "fetchAll",
             [PDO::FETCH_ASSOC],
             $statement,
             $values
         );
+
+        return $rows;
     }
 
     /**
@@ -263,16 +307,24 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * If multiple rows have the same first column value, the last row with
      * that value will overwrite earlier rows. This method is more resource
      * intensive and should be avoided if possible.
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_assoc_rows
      */
     public function fetchAssoc(string $statement, array $values = []): array
     {
         $data = [];
         $sth  = $this->perform($statement, $values);
 
+        /** @phpstan-var datamapper_row|false $row */
         $row = $sth->fetch(PDO::FETCH_ASSOC);
         while ($row) {
-            $data[current($row)] = $row;
+            /** @phpstan-var array-key $key */
+            $key        = current($row);
+            $data[$key] = $row;
 
+            /** @phpstan-var datamapper_row|false $row */
             $row = $sth->fetch(PDO::FETCH_ASSOC);
         }
 
@@ -281,24 +333,35 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Fetches a column of rows as a sequential array (default first one).
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_column
      */
     public function fetchColumn(
         string $statement,
         array $values = [],
         int $column = 0
     ): array {
-        return $this->fetchData(
+        /** @phpstan-var datamapper_column $rows */
+        $rows = $this->fetchData(
             "fetchAll",
             [PDO::FETCH_COLUMN, $column],
             $statement,
             $values
         );
+
+        return $rows;
     }
 
     /**
      * Fetches multiple from the database as an associative array. The first
      * column will be the index key. The default flags are
      * PDO::FETCH_ASSOC | PDO::FETCH_GROUP
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_grouped_rows
      */
     public function fetchGroup(
         string $statement,
@@ -321,6 +384,14 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * initializations for defaults that you potentially have in your object's
      * constructor, will override the values that have been injected by
      * `fetchObject`. The default object returned is `\stdClass`
+     *
+     * PDOStatement::fetchObject() returns false when there is no row. The
+     * interface declares `object`, so an empty `stdClass` is returned
+     * instead. The `object|false` return type lands in v7.
+     *
+     * @phpstan-param datamapper_values                $values
+     * @phpstan-param class-string                     $className
+     * @phpstan-param datamapper_constructor_arguments $arguments
      */
     public function fetchObject(
         string $statement,
@@ -330,7 +401,12 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     ): object {
         $sth = $this->perform($statement, $values);
 
-        return $sth->fetchObject($className, $arguments);
+        $object = $sth->fetchObject($className, $arguments);
+        if (false === $object) {
+            return new stdClass();
+        }
+
+        return $object;
     }
 
     /**
@@ -342,6 +418,12 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * initializations for defaults that you potentially have in your object's
      * constructor, will override the values that have been injected by
      * `fetchObject`. The default object returned is `\stdClass`
+     *
+     * @phpstan-param datamapper_values                $values
+     * @phpstan-param class-string                     $className
+     * @phpstan-param datamapper_constructor_arguments $arguments
+     *
+     * @phpstan-return datamapper_objects
      */
     public function fetchObjects(
         string $statement,
@@ -351,25 +433,39 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     ): array {
         $sth = $this->perform($statement, $values);
 
-        return $sth->fetchAll(PDO::FETCH_CLASS, $className, $arguments);
+        /** @phpstan-var datamapper_objects $objects */
+        $objects = $sth->fetchAll(PDO::FETCH_CLASS, $className, $arguments);
+
+        return $objects;
     }
 
     /**
      * Fetches one row from the database as an associative array.
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_row
      */
     public function fetchOne(string $statement, array $values = []): array
     {
-        return $this->fetchData(
+        /** @phpstan-var datamapper_row $row */
+        $row = $this->fetchData(
             "fetch",
             [PDO::FETCH_ASSOC],
             $statement,
             $values
         );
+
+        return $row;
     }
 
     /**
      * Fetches an associative array of rows as key-value pairs (first column is
      * the key, second column is the value).
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_pairs
      */
     public function fetchPairs(string $statement, array $values = []): array
     {
@@ -383,6 +479,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Fetches the very first value (i.e., first column of the first row).
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function fetchValue(string $statement, array $values = []): mixed
     {
@@ -428,7 +526,10 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     {
         $this->connect();
 
-        return $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+        /** @phpstan-var string $driverName */
+        $driverName = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+
+        return $driverName;
     }
 
     /**
@@ -441,6 +542,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Gets the quote parameters based on the driver
+     *
+     * @phpstan-return datamapper_quote_names
      */
     public function getQuoteNames(string $driver = ""): array
     {
@@ -528,6 +631,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * PDOStatement; array values will be passed through `quote()` and their
      * respective placeholders will be replaced in the query string. If the
      * profiler is enabled, the operation will be recorded.
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function perform(
         string $statement,
@@ -591,6 +696,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Prepares an SQL statement for execution.
+     *
+     * @phpstan-param datamapper_pdo_options $options
      */
     public function prepare(
         string $statement,
@@ -638,6 +745,12 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
         $this->profiler->start(__FUNCTION__);
 
         try {
+            /**
+             * PDO::query() returns false only in silent error mode. The
+             * connection runs in exception mode, so a failure throws.
+             *
+             * @phpstan-var PDOStatement $sth
+             */
             $sth = call_user_func_array([$this->pdo, "query"], $arguments);
         } catch (PDOException $ex) {
             if (!$this->canReconnect($ex)) {
@@ -646,6 +759,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
             $this->reconnect();
 
+            /** @phpstan-var PDOStatement $sth */
             $sth = call_user_func_array([$this->pdo, "query"], $arguments);
         }
 
@@ -667,6 +781,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * Quotes a value for use in an SQL statement. This differs from
      * `PDO::quote()` in that it will convert an array into a string of
      * comma-separated quoted values. The default type is `PDO::PARAM_STR`
+     *
+     * @phpstan-param datamapper_quote_value $value
      */
     public function quote(mixed $value, int $type = PDO::PARAM_STR): string
     {
@@ -756,6 +872,12 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Helper method to get data from PDO based on the method passed
+     *
+     * @phpstan-param 'fetch'|'fetchAll'         $method
+     * @phpstan-param datamapper_fetch_arguments $arguments
+     * @phpstan-param datamapper_values          $values
+     *
+     * @phpstan-return datamapper_fetch_result
      */
     protected function fetchData(
         string $method,
@@ -809,6 +931,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     protected function isConnectionError(Throwable $exception): bool
     {
         if ($exception instanceof PDOException) {
+            /** @phpstan-var datamapper_error_info|null $errorInfo */
             $errorInfo = $exception->errorInfo;
             if (isset($errorInfo[1])) {
                 $driverCode = (int)$errorInfo[1];
@@ -843,8 +966,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      */
     protected function performBind(
         PDOStatement $statement,
-        $name,
-        $arguments
+        mixed $name,
+        mixed $arguments
     ): void {
         $key = $name;
         if (is_int($key)) {
@@ -900,9 +1023,17 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Prepares, binds, and executes a statement, returning the PDOStatement.
+     *
+     * @phpstan-param datamapper_values $values
      */
     private function performStatement(string $statement, array $values): PDOStatement
     {
+        /**
+         * prepare() returns false only in silent error mode. The connection
+         * runs in exception mode, so a failure throws.
+         *
+         * @phpstan-var PDOStatement $sth
+         */
         $sth = $this->prepare($statement);
         foreach ($values as $name => $value) {
             $this->performBind($sth, $name, $value);
@@ -916,6 +1047,8 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     /**
      * Drops the dead handle and rebuilds it. disconnect() first is required
      * because connect() is idempotent.
+     *
+     * @phpstan-assert !null $this->pdo
      */
     private function reconnect(): void
     {

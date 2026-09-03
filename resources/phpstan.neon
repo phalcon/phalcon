@@ -172,3 +172,52 @@ parameters:
             message: "#Comparison operation \">\" between int<2, max> and 1 is always true#"
             path: ../src/Filter/Validation/Validator/Uniqueness.php
             reportUnmatched: false
+        # Every method of `AbstractConnection` calls `connect()` first, which
+        # guarantees a handle. PHPStan drops that narrowing again after the
+        # event and profiler calls that follow, so the handle looks nullable
+        # at the PDO call.
+        -
+            message: "#(Cannot call method \\w+\\(\\) on PDO\\|null|Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\): mixed, array\\{PDO\\|null, 'query'\\} given)#"
+            path: ../src/DataMapper/Pdo/Connection/AbstractConnection.php
+            reportUnmatched: false
+        # `__call()` forwards to the driver-specific PDO method that the caller
+        # names, so the callable is only known at run time. The
+        # `method_exists()` guard above it rejects unknown names.
+        -
+            message: "#Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\): mixed, array\\{PDO, string\\} given#"
+            path: ../src/DataMapper/Pdo/Connection/AbstractConnection.php
+            reportUnmatched: false
+        # `quote()` selects the scalar or the array branch on the `element`
+        # copy, as the Zephir source does, so PHPStan does not carry that
+        # narrowing back to `value` when the array branch iterates it.
+        -
+            message: "#Argument of an invalid type .* supplied for foreach, only iterables are supported#"
+            path: ../src/DataMapper/Pdo/Connection/AbstractConnection.php
+            reportUnmatched: false
+        # The constructor fills every key of these shapes before any read, and
+        # the Zephir source declares the same empty default.
+        -
+            message: "#Property Phalcon\\\\DataMapper\\\\(Pdo\\\\Connection|Query\\\\AbstractQuery)::\\$(arguments|store) .* does not accept default value of type array\\{\\}#"
+            paths:
+                - ../src/DataMapper/Pdo/Connection.php
+                - ../src/DataMapper/Query/AbstractQuery.php
+            reportUnmatched: false
+        # An int-keyed entry names a column or holds a complete condition, so
+        # its value is a string by contract, while a string-keyed entry pairs
+        # the key with any bound value. One array carries both, so the value
+        # stays `mixed`. Zephir coerces it where the PHP signature is strict.
+        -
+            message: "#Parameter \\#1 \\$(column|condition) of method Phalcon\\\\DataMapper\\\\Query\\\\(AbstractConditions|Insert|Update)::(column|where)\\(\\) expects string, mixed given#"
+            paths:
+                - ../src/DataMapper/Query/AbstractConditions.php
+                - ../src/DataMapper/Query/Insert.php
+                - ../src/DataMapper/Query/Update.php
+            reportUnmatched: false
+        # `processValue()` takes `mixed`, so a value that is not a string or an
+        # array can still reach the guard at run time. Only the narrower
+        # docblock makes it look redundant. The same guard is live in the
+        # Zephir implementation, where the parameter is `var`.
+        -
+            message: "#Call to function is_array\\(\\) with array<.*> will always evaluate to true#"
+            path: ../src/DataMapper/Query/AbstractConditions.php
+            reportUnmatched: false

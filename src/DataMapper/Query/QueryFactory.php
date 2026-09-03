@@ -71,6 +71,7 @@ class QueryFactory
      */
     public function newSelect(Connection $connection): Select
     {
+        /** @phpstan-var class-string<Select> $selectClass */
         $selectClass = $this->selectClass;
 
         return new $selectClass($connection, $this->newBind());

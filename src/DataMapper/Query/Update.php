@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection;
 
 use function array_merge;
@@ -25,6 +26,12 @@ use function is_int;
 
 /**
  * Update Query
+ *
+ * @phpstan-import-type datamapper_clauses from DataMapperTypes
+ * @phpstan-import-type datamapper_column_values from DataMapperTypes
+ * @phpstan-import-type datamapper_write_store from DataMapperTypes
+ *
+ * @property datamapper_write_store $store
  */
 class Update extends AbstractConditions
 {
@@ -42,7 +49,7 @@ class Update extends AbstractConditions
     /**
      * Sets a column for the `UPDATE` query
      */
-    public function column(string $column, $value = null, int $type = -1): Update
+    public function column(string $column, mixed $value = null, int $type = -1): Update
     {
         $this->store["COLUMNS"][$column] = ":" . $column;
 
@@ -55,6 +62,8 @@ class Update extends AbstractConditions
 
     /**
      * Mass sets columns and values for the `UPDATE`
+     *
+     * @phpstan-param datamapper_column_values $columns
      */
     public function columns(array $columns): Update
     {
@@ -113,6 +122,8 @@ class Update extends AbstractConditions
 
     /**
      * Adds the `RETURNING` clause
+     *
+     * @phpstan-param datamapper_clauses $columns
      */
     public function returning(array $columns): Update
     {
@@ -126,8 +137,10 @@ class Update extends AbstractConditions
 
     /**
      * Sets a column = value condition
+     *
+     * @phpstan-param string|null $value
      */
-    public function set(string $column, $value = null): Update
+    public function set(string $column, mixed $value = null): Update
     {
         if (null === $value) {
             $value = "NULL";

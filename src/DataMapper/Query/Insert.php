@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection;
 
 use function array_merge;
@@ -27,6 +28,12 @@ use function ltrim;
 
 /**
  * Insert Query
+ *
+ * @phpstan-import-type datamapper_clauses from DataMapperTypes
+ * @phpstan-import-type datamapper_column_values from DataMapperTypes
+ * @phpstan-import-type datamapper_write_store from DataMapperTypes
+ *
+ * @property datamapper_write_store $store
  */
 class Insert extends AbstractQuery
 {
@@ -57,6 +64,8 @@ class Insert extends AbstractQuery
 
     /**
      * Mass sets columns and values for the `INSERT`
+     *
+     * @phpstan-param datamapper_column_values $columns
      */
     public function columns(array $columns): Insert
     {
@@ -111,6 +120,8 @@ class Insert extends AbstractQuery
 
     /**
      * Adds the `RETURNING` clause
+     *
+     * @phpstan-param datamapper_clauses $columns
      */
     public function returning(array $columns): Insert
     {
@@ -124,8 +135,10 @@ class Insert extends AbstractQuery
 
     /**
      * Sets a column = value condition
+     *
+     * @phpstan-param string|null $value
      */
-    public function set(string $column, $value = null): Insert
+    public function set(string $column, mixed $value = null): Insert
     {
         if (null === $value) {
             $value = "NULL";

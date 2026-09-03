@@ -18,10 +18,13 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 
 /**
  * Locates PDO connections for default, read, and write databases.
+ *
+ * @phpstan-import-type datamapper_connection_factory from DataMapperTypes
  */
 interface ConnectionLocatorInterface
 {
@@ -53,6 +56,8 @@ interface ConnectionLocatorInterface
 
     /**
      * Sets a read connection registry entry by name.
+     *
+     * @phpstan-param datamapper_connection_factory $callableObject
      */
     public function setRead(
         string $name,
@@ -61,6 +66,8 @@ interface ConnectionLocatorInterface
 
     /**
      * Sets a write connection registry entry by name.
+     *
+     * @phpstan-param datamapper_connection_factory $callableObject
      */
     public function setWrite(
         string $name,

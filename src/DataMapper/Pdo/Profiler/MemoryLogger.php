@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo\Profiler;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Enum;
@@ -28,9 +29,14 @@ use function strtr;
 
 /**
  * A memory-based logger.
+ *
+ * @phpstan-import-type datamapper_log_messages from DataMapperTypes
  */
 class MemoryLogger implements LoggerInterface
 {
+    /**
+     * @phpstan-var datamapper_log_messages
+     */
     protected array $messages = [];
 
     public function alert(string | Stringable $message, array $context = []): void
@@ -84,6 +90,8 @@ class MemoryLogger implements LoggerInterface
 
     /**
      * Returns the logged messages.
+     *
+     * @phpstan-return datamapper_log_messages
      */
     public function getMessages(): array
     {

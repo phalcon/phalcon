@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Pdo;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\Contracts\Events\EventsAware;
 use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
@@ -31,6 +32,10 @@ use function call_user_func;
  *
  * The locator gives its events manager to each connection that it returns,
  * so connections that are built on demand also fire the DataMapper events.
+ *
+ * @phpstan-import-type datamapper_connection_factories from DataMapperTypes
+ * @phpstan-import-type datamapper_connection_factory from DataMapperTypes
+ * @phpstan-import-type datamapper_connection_instances from DataMapperTypes
  */
 class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 {
@@ -43,21 +48,30 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 
     /**
      * A registry of Connection "read" factories/instances.
+     *
+     * @phpstan-var datamapper_connection_factories
      */
     protected array $read = [];
 
     /**
      * A registry of Connection "write" factories/instances.
+     *
+     * @phpstan-var datamapper_connection_factories
      */
     protected array $write = [];
 
     /**
      * A collection of resolved instances
+     *
+     * @phpstan-var datamapper_connection_instances
      */
     private array $instances = [];
 
     /**
      * Constructor.
+     *
+     * @phpstan-param datamapper_connection_factories $read
+     * @phpstan-param datamapper_connection_factories $write
      */
     public function __construct(
         ConnectionInterface $master,
@@ -115,6 +129,8 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 
     /**
      * Sets a read connection factory by name.
+     *
+     * @phpstan-param datamapper_connection_factory $callableObject
      */
     public function setRead(
         string $name,
@@ -127,6 +143,8 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 
     /**
      * Sets a write connection factory by name.
+     *
+     * @phpstan-param datamapper_connection_factory $callableObject
      */
     public function setWrite(
         string $name,
@@ -139,6 +157,8 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 
     /**
      * Returns a connection by name.
+     *
+     * @phpstan-param 'read'|'write' $type
      */
     protected function getConnection(
         string $type,

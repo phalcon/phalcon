@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Query;
 
 use PDO;
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 
 use function implode;
 use function is_array;
@@ -27,10 +28,17 @@ use function is_int;
 
 /**
  * Class Bind
+ *
+ * @phpstan-import-type datamapper_bind_store from DataMapperTypes
+ * @phpstan-import-type datamapper_bind_values from DataMapperTypes
+ * @phpstan-import-type datamapper_values from DataMapperTypes
  */
 class Bind
 {
     protected int $inlineCount = 0;
+    /**
+     * @phpstan-var datamapper_bind_store
+     */
     protected array $store = [];
 
     public function bindInline(mixed $value, int $type = -1): string
@@ -79,6 +87,8 @@ class Bind
 
     /**
      * Sets values from an array
+     *
+     * @phpstan-param datamapper_bind_values $values
      */
     public function setValues(array $values, int $type = -1): void
     {
@@ -89,6 +99,8 @@ class Bind
 
     /**
      * Returns the internal collection
+     *
+     * @phpstan-return datamapper_bind_store
      */
     public function toArray(): array
     {
@@ -117,6 +129,8 @@ class Bind
 
     /**
      * Processes an array - if passed as an `inline` parameter
+     *
+     * @phpstan-param datamapper_values $data
      */
     protected function inlineArray(array $data, int $type): string
     {

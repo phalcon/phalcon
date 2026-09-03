@@ -20,11 +20,22 @@ namespace Phalcon\DataMapper\Pdo\Connection;
 
 use PDO;
 use PDOStatement;
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
+ *
+ * @phpstan-import-type datamapper_assoc_rows from DataMapperTypes
+ * @phpstan-import-type datamapper_column from DataMapperTypes
+ * @phpstan-import-type datamapper_constructor_arguments from DataMapperTypes
+ * @phpstan-import-type datamapper_grouped_rows from DataMapperTypes
+ * @phpstan-import-type datamapper_objects from DataMapperTypes
+ * @phpstan-import-type datamapper_pairs from DataMapperTypes
+ * @phpstan-import-type datamapper_row from DataMapperTypes
+ * @phpstan-import-type datamapper_rows from DataMapperTypes
+ * @phpstan-import-type datamapper_values from DataMapperTypes
  */
 interface ConnectionInterface extends PdoInterface
 {
@@ -40,12 +51,18 @@ interface ConnectionInterface extends PdoInterface
 
     /**
      * Performs a statement and returns the number of affected rows.
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function fetchAffected(string $statement, array $values = []): int;
 
     /**
      * Fetches a sequential array of rows from the database; the rows are
      * returned as associative arrays.
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_rows
      */
     public function fetchAll(string $statement, array $values = []): array;
 
@@ -57,11 +74,19 @@ interface ConnectionInterface extends PdoInterface
      * If multiple rows have the same first column value, the last row with
      * that value will overwrite earlier rows. This method is more resource
      * intensive and should be avoided if possible.
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_assoc_rows
      */
     public function fetchAssoc(string $statement, array $values = []): array;
 
     /**
      * Fetches a column of rows as a sequential array (default first one).
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_column
      */
     public function fetchColumn(
         string $statement,
@@ -73,6 +98,10 @@ interface ConnectionInterface extends PdoInterface
      * Fetches multiple from the database as an associative array. The first
      * column will be the index key. The default flags are
      * PDO::FETCH_ASSOC | PDO::FETCH_GROUP
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_grouped_rows
      */
     public function fetchGroup(
         string $statement,
@@ -88,6 +117,13 @@ interface ConnectionInterface extends PdoInterface
      * initializations for defaults that you potentially have in your object's
      * constructor, will override the values that have been injected by
      * `fetchObject`. The default object returned is `\stdClass`
+     *
+     * An empty `stdClass` is returned when there is no row. The
+     * `object|false` return type lands in v7.
+     *
+     * @phpstan-param datamapper_values                $values
+     * @phpstan-param class-string                     $className
+     * @phpstan-param datamapper_constructor_arguments $arguments
      */
     public function fetchObject(
         string $statement,
@@ -105,6 +141,12 @@ interface ConnectionInterface extends PdoInterface
      * initializations for defaults that you potentially have in your object's
      * constructor, will override the values that have been injected by
      * `fetchObject`. The default object returned is `\stdClass`
+     *
+     * @phpstan-param datamapper_values                $values
+     * @phpstan-param class-string                     $className
+     * @phpstan-param datamapper_constructor_arguments $arguments
+     *
+     * @phpstan-return datamapper_objects
      */
     public function fetchObjects(
         string $statement,
@@ -115,17 +157,27 @@ interface ConnectionInterface extends PdoInterface
 
     /**
      * Fetches one row from the database as an associative array.
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_row
      */
     public function fetchOne(string $statement, array $values = []): array;
 
     /**
      * Fetches an associative array of rows as key-value pairs (first column is
      * the key, second column is the value).
+     *
+     * @phpstan-param datamapper_values $values
+     *
+     * @phpstan-return datamapper_pairs
      */
     public function fetchPairs(string $statement, array $values = []): array;
 
     /**
      * Fetches the very first value (i.e., first column of the first row).
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function fetchValue(string $statement, array $values = []): mixed;
 
@@ -149,11 +201,15 @@ interface ConnectionInterface extends PdoInterface
      * PDOStatement; array values will be passed through `quote()` and their
      * respective placeholders will be replaced in the query string. If the
      * profiler is enabled, the operation will be recorded.
+     *
+     * @phpstan-param datamapper_values $values
      */
     public function perform(string $statement, array $values = []): PDOStatement;
 
     /**
      * Sets the Profiler instance.
+     *
+     * @return static
      */
     public function setProfiler(ProfilerInterface $profiler);
 }

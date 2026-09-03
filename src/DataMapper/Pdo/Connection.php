@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Pdo;
 
 use PDO;
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection\AbstractConnection;
 use Phalcon\DataMapper\Pdo\Exception\DriverNotSupported;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
@@ -29,9 +30,16 @@ use function explode;
 /**
  * Provides array quoting, profiling, a new `perform()` method, new `fetch*()`
  * methods
+ *
+ * @phpstan-import-type datamapper_connection_arguments from DataMapperTypes
+ * @phpstan-import-type datamapper_pdo_options from DataMapperTypes
+ * @phpstan-import-type datamapper_queries from DataMapperTypes
  */
 class Connection extends AbstractConnection
 {
+    /**
+     * @phpstan-var datamapper_connection_arguments
+     */
     protected array $arguments = [];
 
     /**
@@ -39,6 +47,9 @@ class Connection extends AbstractConnection
      *
      * This overrides the parent so that it can take connection attributes as a
      * constructor parameter, and set them after connection.
+     *
+     * @phpstan-param datamapper_pdo_options $options
+     * @phpstan-param datamapper_queries     $queries
      */
     public function __construct(
         string $dsn,
@@ -84,6 +95,8 @@ class Connection extends AbstractConnection
 
     /**
      * The purpose of this method is to hide sensitive data from stack traces.
+     *
+     * @phpstan-return array{arguments: datamapper_connection_arguments}
      */
     public function __debugInfo(): array
     {

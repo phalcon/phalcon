@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Exception\UnknownQueryMethod;
 
 use function array_key_last;
@@ -33,6 +34,13 @@ use function trim;
 
 /**
  * Select Query
+ *
+ * @phpstan-import-type datamapper_call_arguments from DataMapperTypes
+ * @phpstan-import-type datamapper_clauses from DataMapperTypes
+ * @phpstan-import-type datamapper_columns from DataMapperTypes
+ * @phpstan-import-type datamapper_select_store from DataMapperTypes
+ *
+ * @property datamapper_select_store $store
  */
 class Select extends AbstractConditions
 {
@@ -68,6 +76,10 @@ class Select extends AbstractConditions
 
     /**
      * Proxied methods to the connection
+     *
+     * @phpstan-param datamapper_call_arguments $params
+     *
+     * @return mixed
      */
     public function __call(string $method, array $params)
     {
@@ -75,7 +87,7 @@ class Select extends AbstractConditions
             "fetchAffected" => true,
             "fetchAll"      => true,
             "fetchAssoc"    => true,
-            "fetchCol"      => true,
+            "fetchColumn"   => true,
             "fetchGroup"    => true,
             "fetchObject"   => true,
             "fetchObjects"  => true,
@@ -108,7 +120,7 @@ class Select extends AbstractConditions
      */
     public function andHaving(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): Select {
         $this->having($condition, $value, $type);
@@ -121,7 +133,7 @@ class Select extends AbstractConditions
      */
     public function appendHaving(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): Select {
         $this->appendCondition("HAVING", $condition, $value, $type);
@@ -134,14 +146,16 @@ class Select extends AbstractConditions
      */
     public function appendJoin(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): Select {
         if (!empty($value)) {
             $condition .= $this->bind->bindInline($value, $type);
         }
 
+        /** @phpstan-var int $end */
         $end = array_key_last($this->store["FROM"]);
+        /** @phpstan-var int $key */
         $key = array_key_last($this->store["FROM"][$end]);
 
         $this->store["FROM"][$end][$key] = $this->store["FROM"][$end][$key] . $condition;
@@ -166,6 +180,8 @@ class Select extends AbstractConditions
     /**
      * The columns to select from. If a key is set in the array element, the
      * key will be used as the alias
+     *
+     * @phpstan-param datamapper_columns $columns
      */
     public function columns(array $columns): Select
     {
@@ -228,8 +244,10 @@ class Select extends AbstractConditions
 
     /**
      * Sets the `GROUP BY`
+     *
+     * @phpstan-param datamapper_clauses|string $groupBy
      */
-    public function groupBy($groupBy): Select
+    public function groupBy(mixed $groupBy): Select
     {
         $this->processValue("GROUP", $groupBy);
 
@@ -251,7 +269,7 @@ class Select extends AbstractConditions
      */
     public function having(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): Select {
         $this->addCondition("HAVING", "AND ", $condition, $value, $type);
@@ -266,7 +284,7 @@ class Select extends AbstractConditions
         string $join,
         string $table,
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): Select {
         $join = strtoupper(trim($join));
@@ -288,6 +306,7 @@ class Select extends AbstractConditions
             $condition .= $this->bind->bindInline($value, $type);
         }
 
+        /** @phpstan-var int $key */
         $key = array_key_last($this->store["FROM"]);
 
         $this->store["FROM"][$key][] = $join . " " . $table . " " . $condition;
@@ -300,7 +319,7 @@ class Select extends AbstractConditions
      */
     public function orHaving(
         string $condition,
-        $value = null,
+        mixed $value = null,
         int $type = -1
     ): Select {
         $this->addCondition("HAVING", "OR ", $condition, $value, $type);

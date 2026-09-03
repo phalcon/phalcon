@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
+
 use function array_key_last;
 use function array_merge;
 use function is_array;
@@ -28,6 +30,9 @@ use function ucfirst;
 
 /**
  * Class AbstractConditions
+ *
+ * @phpstan-import-type datamapper_clauses from DataMapperTypes
+ * @phpstan-import-type datamapper_column_values from DataMapperTypes
  */
 abstract class AbstractConditions extends AbstractQuery
 {
@@ -79,8 +84,10 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Sets the `ORDER BY`
+     *
+     * @phpstan-param datamapper_clauses|string $orderBy
      */
-    public function orderBy($orderBy): AbstractConditions
+    public function orderBy(mixed $orderBy): AbstractConditions
     {
         $this->processValue("ORDER", $orderBy);
 
@@ -113,6 +120,9 @@ abstract class AbstractConditions extends AbstractQuery
         return $this;
     }
 
+    /**
+     * @phpstan-param datamapper_column_values $columnsValues
+     */
     public function whereEquals(array $columnsValues): AbstractConditions
     {
         foreach ($columnsValues as $key => $value) {
@@ -132,6 +142,8 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Appends a conditional
+     *
+     * @phpstan-param 'HAVING'|'WHERE' $store
      */
     protected function addCondition(
         string $store,
@@ -153,6 +165,8 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Concatenates a conditional
+     *
+     * @phpstan-param 'HAVING'|'WHERE' $store
      */
     protected function appendCondition(
         string $store,
@@ -175,6 +189,8 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds a `BY` list
+     *
+     * @phpstan-param 'GROUP'|'ORDER' $type
      */
     protected function buildBy(string $type): string
     {
@@ -188,6 +204,8 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Builds the conditional string
+     *
+     * @phpstan-param 'HAVING'|'WHERE' $type
      */
     protected function buildCondition(string $type): string
     {
@@ -272,6 +290,9 @@ abstract class AbstractConditions extends AbstractQuery
 
     /**
      * Processes a value (array or string) and merges it with the store
+     *
+     * @phpstan-param 'GROUP'|'ORDER'           $store
+     * @phpstan-param datamapper_clauses|string $data
      */
     protected function processValue(string $store, mixed $data): void
     {

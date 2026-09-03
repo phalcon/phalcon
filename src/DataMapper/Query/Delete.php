@@ -18,12 +18,18 @@ declare(strict_types=1);
 
 namespace Phalcon\DataMapper\Query;
 
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection;
 
 use function array_merge;
 
 /**
  * Delete Query
+ *
+ * @phpstan-import-type datamapper_clauses from DataMapperTypes
+ * @phpstan-import-type datamapper_write_store from DataMapperTypes
+ *
+ * @property datamapper_write_store $store
  */
 class Delete extends AbstractConditions
 {
@@ -70,6 +76,8 @@ class Delete extends AbstractConditions
 
     /**
      * Adds the `RETURNING` clause
+     *
+     * @phpstan-param datamapper_clauses $columns
      */
     public function returning(array $columns): Delete
     {

@@ -20,14 +20,22 @@ namespace Phalcon\DataMapper\Pdo\Connection;
 
 use PDO;
 use PDOStatement;
+use Phalcon\Contracts\DataMapper\DataMapperTypes;
 
 /**
  * An interface to the native PDO object.
+ *
+ * @phpstan-import-type datamapper_drivers from DataMapperTypes
+ * @phpstan-import-type datamapper_error_info from DataMapperTypes
+ * @phpstan-import-type datamapper_pdo_options from DataMapperTypes
+ * @phpstan-import-type datamapper_quote_value from DataMapperTypes
  */
 interface PdoInterface
 {
     /**
      * Return an array of available PDO drivers (empty array if none available)
+     *
+     * @phpstan-return datamapper_drivers
      */
     public static function getAvailableDrivers(): array;
 
@@ -50,6 +58,8 @@ interface PdoInterface
 
     /**
      * Gets the most recent error info.
+     *
+     * @phpstan-return datamapper_error_info
      */
     public function errorInfo(): array;
 
@@ -79,6 +89,8 @@ interface PdoInterface
 
     /**
      * Prepares an SQL statement for execution.
+     *
+     * @phpstan-param datamapper_pdo_options $options
      */
     public function prepare(string $statement, array $options = []): false | PDOStatement;
 
@@ -92,6 +104,8 @@ interface PdoInterface
      * Quotes a value for use in an SQL statement. This differs from
      * `PDO::quote()` in that it will convert an array into a string of
      * comma-separated quoted values. The default type is `PDO::PARAM_STR`
+     *
+     * @phpstan-param datamapper_quote_value $value
      */
     public function quote(mixed $value, int $type = PDO::PARAM_STR): string;
 
