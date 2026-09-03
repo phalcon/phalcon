@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Factory;
 
-use Exception as BaseException;
 use Phalcon\Contracts\Factory\FactoryTypes;
 
 use function array_merge;
@@ -25,28 +24,19 @@ use function array_merge;
 abstract class AbstractFactory extends AbstractConfigFactory
 {
     /**
-     * @var array<string, string>
-     *
      * @phpstan-var factory_services
      */
     protected array $mapper = [];
 
     /**
-     * @var array<string, mixed>
-     *
      * @phpstan-var factory_instances
      */
     protected array $services = [];
 
     /**
      * Checks if a service exists and throws an exception
-     *
-     * @param string $name
-     *
-     * @return string
-     * @throws BaseException
      */
-    protected function getService(string $name): string
+    protected function getService(string $name): mixed
     {
         if (!isset($this->mapper[$name])) {
             throw $this->getException(
@@ -60,7 +50,6 @@ abstract class AbstractFactory extends AbstractConfigFactory
     /**
      * Returns the adapters for the factory
      *
-     * @return string[]
      * @phpstan-return factory_services
      */
     abstract protected function getServices(): array;
@@ -68,11 +57,7 @@ abstract class AbstractFactory extends AbstractConfigFactory
     /**
      * Initialize services/add new services
      *
-     * @param string[] $services
-     *
      * @phpstan-param factory_services $services
-     *
-     * @return void
      */
     protected function init(array $services = []): void
     {

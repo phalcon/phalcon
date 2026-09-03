@@ -25,7 +25,6 @@ use Phalcon\Cache\Exception\Exception;
 use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Storage\SerializerFactory;
-use Throwable;
 
 /**
  * Factory to create Cache adapters
@@ -87,7 +86,7 @@ class AdapterFactory extends AbstractFactory
     }
 
     /**
-     * @return class-string<Throwable>
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {
@@ -97,7 +96,7 @@ class AdapterFactory extends AbstractFactory
     /**
      * Returns the available adapters
      *
-     * @return string[]
+     * @return array<string, string>
      */
     protected function getServices(): array
     {

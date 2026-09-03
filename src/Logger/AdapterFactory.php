@@ -20,7 +20,6 @@ use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Adapter\Stream;
 use Phalcon\Logger\Adapter\Syslog;
-use Throwable;
 
 /**
  * Factory used to create adapters used for Logging
@@ -61,7 +60,7 @@ class AdapterFactory extends AbstractFactory
     }
 
     /**
-     * @return class-string<Throwable>
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {
@@ -71,7 +70,7 @@ class AdapterFactory extends AbstractFactory
     /**
      * Returns the available adapters
      *
-     * @return string[]
+     * @return array<string, string>
      */
     protected function getServices(): array
     {

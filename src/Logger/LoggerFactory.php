@@ -18,7 +18,6 @@ use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Factory\AbstractConfigFactory;
-use Throwable;
 
 /**
  * Factory creating logger objects
@@ -107,7 +106,7 @@ class LoggerFactory extends AbstractConfigFactory
     }
 
     /**
-     * @return class-string<Throwable>
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {

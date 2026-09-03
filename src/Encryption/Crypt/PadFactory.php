@@ -88,7 +88,7 @@ class PadFactory extends AbstractFactory
     }
 
     /**
-     * @return string
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {
@@ -96,7 +96,7 @@ class PadFactory extends AbstractFactory
     }
 
     /**
-     * @return string[]
+     * @return array<string, string>
      */
     protected function getServices(): array
     {

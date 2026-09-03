@@ -31,7 +31,6 @@ abstract class AbstractConfigFactory
      *
      * @phpstan-param factory_config|ConfigInterface $config
      *
-     * @return array<string, mixed>
      * @phpstan-return factory_config
      * @throws BaseException
      */
@@ -77,10 +76,6 @@ abstract class AbstractConfigFactory
 
     /**
      * Returns the exception object for the child class
-     *
-     * @param string $message
-     *
-     * @return BaseException
      */
     protected function getException(string $message): BaseException
     {

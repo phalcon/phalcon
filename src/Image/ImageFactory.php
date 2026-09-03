@@ -20,7 +20,6 @@ use Phalcon\Factory\AbstractFactory;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
-use Throwable;
 
 /**
  * Factory to create adapters for image manipulation
@@ -91,7 +90,7 @@ class ImageFactory extends AbstractFactory
     }
 
     /**
-     * @return class-string<Throwable>
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {

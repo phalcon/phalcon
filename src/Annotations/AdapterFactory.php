@@ -91,7 +91,7 @@ class AdapterFactory extends AbstractFactory
     }
 
     /**
-     * @return string
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {

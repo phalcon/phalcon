@@ -74,7 +74,6 @@ use Phalcon\Support\Helper\Str\Ucwords;
 use Phalcon\Support\Helper\Str\Uncamelize;
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Support\Helper\Str\Upper;
-use Throwable;
 
 use function call_user_func_array;
 
@@ -190,7 +189,7 @@ class HelperFactory extends AbstractFactory
     }
 
     /**
-     * @return class-string<Throwable>
+     * @return class-string<\Exception>
      */
     protected function getExceptionClass(): string
     {
