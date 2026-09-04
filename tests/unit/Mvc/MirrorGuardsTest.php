@@ -70,6 +70,20 @@ final class MirrorGuardsTest extends AbstractUnitTestCase
     }
 
     /**
+     * An array haystack still resolves.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-09-04
+     */
+    public function testMvcViewEngineVoltIsIncludedArray(): void
+    {
+        $volt = new Volt($this->createMock(\Phalcon\Mvc\ViewBaseInterface::class));
+
+        $this->assertTrue($volt->isIncluded('a', ['a', 'b']));
+        $this->assertFalse($volt->isIncluded('c', ['a', 'b']));
+    }
+
+    /**
      * A haystack that is neither an array nor a string is rejected instead of
      * reaching `mb_strpos()`.
      *
@@ -98,19 +112,5 @@ final class MirrorGuardsTest extends AbstractUnitTestCase
 
         $this->assertTrue($volt->isIncluded('ee', 'needle'));
         $this->assertFalse($volt->isIncluded('zz', 'needle'));
-    }
-
-    /**
-     * An array haystack still resolves.
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-09-04
-     */
-    public function testMvcViewEngineVoltIsIncludedArray(): void
-    {
-        $volt = new Volt($this->createMock(\Phalcon\Mvc\ViewBaseInterface::class));
-
-        $this->assertTrue($volt->isIncluded('a', ['a', 'b']));
-        $this->assertFalse($volt->isIncluded('c', ['a', 'b']));
     }
 }

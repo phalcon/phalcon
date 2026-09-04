@@ -2612,10 +2612,14 @@ class Compiler implements InjectionAwareInterface
              * compilation
              */
             /**
-             * The statement list above collects the blocks of the template.
+             * A template that defines no blocks of its own gives back an
+             * empty array.
              */
-            /** @var array<array-key, mixed> $blocks */
             $blocks = $this->blocks;
+
+            if (!is_array($blocks)) {
+                $blocks = [];
+            }
 
             return $blocks;
         }

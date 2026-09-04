@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Traits;
 
+use function is_string;
 use function str_replace;
 use function strpos;
-use function is_string;
 use function strtolower;
 use function substr;
 

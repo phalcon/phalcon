@@ -15,7 +15,6 @@ namespace Phalcon\Mvc\View\Engine;
 
 use Countable;
 use Iterator;
-use Phalcon\Di\DiInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Html\Link\Link;
@@ -225,12 +224,12 @@ class Volt extends AbstractEngine implements EventsAwareInterface
          * Check if we have the response object in the container
          */
         /**
-         * The engine is built by the view, which always sets the container.
+         * Check if we have the response object in the container. Without a
+         * container the href is given back as it is.
          */
-        /** @var DiInterface $container */
         $container = $this->container;
 
-        if ($container->has("response")) {
+        if (null !== $container && $container->has("response")) {
             if (isset($params[1])) {
                 $attributes = $params[1];
             } else {

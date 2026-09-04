@@ -53,6 +53,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::$prefix` and `$extendedBlocks` typed more narrowly than the cphalcon properties, so a closure prefix generator could not be stored and an extends-mode sub-compilation raised `TypeError`.
 - `Phalcon\Support\Traits\FilePathTrait::prepareVirtualPath()` raising `TypeError` when `realpath()` returned `false` for a missing Volt template, before `TemplateFileNotFound` could be thrown.
 - `Phalcon\Mvc\Model\MetaData::getColumnMap()` and `getReverseColumnMap()` raising `TypeError` from the reader on a corrupt column-map slot, so their `CorruptedMetaData` guard could never fire, as it does in cphalcon.
+- `Phalcon\Mvc\View\Engine\Volt::preload()` raising an error when the engine has no container; the href is given back unchanged. `Phalcon\Mvc\View\Engine\Volt\Compiler::compileSource()` returning `null` in extends mode when the template contributes no blocks. [#17565](https://github.com/phalcon/cphalcon/issues/17565) [[doc]](https://docs.phalcon.io/6.0/volt/)
 - `Phalcon\Storage\Adapter\Stream` and `Phalcon\Queue\Adapter\Stream\StreamContext` reporting a `mkdir(): File exists` warning when a different process makes the directory first. [#17561](https://github.com/phalcon/cphalcon/issues/17561) [[doc]](https://docs.phalcon.io/6.0/storage/)
 - Request attributes of the previous route surviving on a reused request in `Phalcon\ADR\Application::handle()`.
 - Scheme allow-list bypass in the Filter `url` sanitizer through HTML-entity obfuscated schemes (`java&#115;cript:`) and URLs that `parse_url()` cannot parse; the sanitizer now fails closed. Thanks to [Ilia Alshanetsky](https://ilia.ws)
@@ -65,6 +66,8 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `only()` / `except()` action filters leaking between `Phalcon\Auth\Manager::access()` activations when the access gate was registered as a shared service in the legacy `Di`.
 
 ### Removed
+
+- `Phalcon\Mvc\Model\Query::ormSingleQuotes()`, private and unused since escaping moved into the dialect. It has no cphalcon counterpart.
 
 
 ## [6.0.0 beta 10](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta10) (2026-08-25)

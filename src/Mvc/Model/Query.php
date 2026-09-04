@@ -5210,22 +5210,4 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         return $irPhql;
     }
-
-    /**
-     * @param mixed $str
-     *
-     * @return mixed
-     */
-    private function ormSingleQuotes(mixed $str): mixed
-    {
-        // Check if input is a string
-        if (!is_string($str)) {
-            return $str;
-        }
-
-        // Replace unescaped single quotes with double single quotes
-        $escaped = preg_replace("/(?<!\\\\)'/", "''", $str);
-
-        return $escaped;
-    }
 }
