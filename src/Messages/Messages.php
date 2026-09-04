@@ -149,7 +149,7 @@ class Messages implements MessagesContract, JsonSerializable
     }
 
     /**
-     * Returns serialised message objects as array for json_encode. Calls
+     * Returns serialized message objects as array for json_encode. Calls
      * jsonSerialize on each object if present
      *
      *```php

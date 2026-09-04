@@ -64,7 +64,7 @@ abstract class AbstractUuid implements UuidInterface
     }
 
     /**
-     * Returns the UUID string for JSON serialisation.
+     * Returns the UUID string for JSON serialization.
      */
     public function jsonSerialize(): string
     {

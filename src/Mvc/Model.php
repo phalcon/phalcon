@@ -358,8 +358,7 @@ abstract class Model extends AbstractInjectionAware implements
             $this->onConstruct($data);
         }
 
-        if (null !== $data) {
-            // The constructor takes the initial attribute values as an array.
+        if (is_array($data)) {
             /** @var mvc_model_data $data */
             $this->assign($data);
         }

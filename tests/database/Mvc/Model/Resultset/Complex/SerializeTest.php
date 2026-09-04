@@ -48,7 +48,7 @@ final class SerializeTest extends AbstractDatabaseTestCase
         $restored->unserialize($original->serialize());
 
         // A complex resultset hydrates rows of models whose internal snapshot
-        // state is not part of the serialised payload, so compare the restored
+        // state is not part of the serialized payload, so compare the restored
         // row count rather than a deep object graph.
         $this->assertCount(4, $restored);
         $this->assertSame($original->count(), $restored->count());

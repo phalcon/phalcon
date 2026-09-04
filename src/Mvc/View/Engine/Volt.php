@@ -22,8 +22,10 @@ use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\Serializer\Header;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidHaystack;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroNotFound;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
+use Phalcon\Traits\Php\InfoTrait;
 
 use function array_slice;
 use function asort;
@@ -35,12 +37,15 @@ use function is_object;
 use function ob_clean;
 use function ob_get_contents;
 use function str_replace;
+use function strpos;
 
 /**
  * Designer friendly and fast template engine for PHP written in Zephir/C
  */
 class Volt extends AbstractEngine implements EventsAwareInterface
 {
+    use InfoTrait;
+
     /**
      * @var Compiler|null
      */
@@ -157,12 +162,17 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             return in_array($needle, $haystack);
         }
 
-        // A string haystack needs a string needle.
-        /**
-         * @var string $haystack
-         * @var string $needle
-         */
-        return mb_strpos($haystack, $needle) !== false;
+        if (is_string($haystack)) {
+            // A string haystack needs a string needle.
+            /** @var string $needle */
+            if ($this->phpFunctionExists("mb_strpos")) {
+                return mb_strpos($haystack, $needle) !== false;
+            }
+
+            return strpos($haystack, $needle) !== false;
+        }
+
+        throw new InvalidHaystack();
     }
 
     /**

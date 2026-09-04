@@ -6,7 +6,7 @@ namespace Phalcon\Tests\Unit\Events\Manager;
 
 use Phalcon\Events\Manager;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use Phalcon\Tests\Unit\Events\Fake\CancellableEventObject;
+use Phalcon\Tests\Unit\Events\Fake\CancelableEventObject;
 use Phalcon\Tests\Unit\Events\Fake\EmptyEventObject;
 
 final class Psr14LayerTest extends AbstractUnitTestCase
@@ -16,15 +16,15 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $manager = new Manager();
         $callOrder = [];
 
-        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
+        $manager->attach('cancelable', function (CancelableEventObject $event) use (&$callOrder) {
             $callOrder[] = 'first';
         });
 
-        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
+        $manager->attach('cancelable', function (CancelableEventObject $event) use (&$callOrder) {
             $callOrder[] = 'second';
         });
 
-        $manager->dispatch(new CancellableEventObject(), 'cancellable');
+        $manager->dispatch(new CancelableEventObject(), 'cancelable');
 
         $this->assertSame(['first', 'second'], $callOrder, 'Both listeners should have been called');
     }
@@ -34,16 +34,16 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $manager = new Manager();
         $callOrder = [];
 
-        $manager->attach(CancellableEventObject::class, function (CancellableEventObject $event) use (&$callOrder) {
+        $manager->attach(CancelableEventObject::class, function (CancelableEventObject $event) use (&$callOrder) {
             $callOrder[] = 'first';
             $event->cancel();
         });
 
-        $manager->attach(CancellableEventObject::class, function (CancellableEventObject $event) use (&$callOrder) {
+        $manager->attach(CancelableEventObject::class, function (CancelableEventObject $event) use (&$callOrder) {
             $callOrder[] = 'second';
         });
 
-        $manager->dispatch(new CancellableEventObject());
+        $manager->dispatch(new CancelableEventObject());
 
         $this->assertSame(['first'], $callOrder, 'Second listener should not have been called after cancel()');
     }
@@ -53,16 +53,16 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $manager = new Manager();
         $callOrder = [];
 
-        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
+        $manager->attach('cancelable', function (CancelableEventObject $event) use (&$callOrder) {
             $callOrder[] = 'first';
             $event->cancel();
         });
 
-        $manager->attach('cancellable', function (CancellableEventObject $event) use (&$callOrder) {
+        $manager->attach('cancelable', function (CancelableEventObject $event) use (&$callOrder) {
             $callOrder[] = 'second';
         });
 
-        $manager->dispatch(new CancellableEventObject(), 'cancellable');
+        $manager->dispatch(new CancelableEventObject(), 'cancelable');
 
         $this->assertSame(['first'], $callOrder, 'Second listener should not have been called after cancel()');
     }
@@ -150,7 +150,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 
     public function testIsPropagationStoppedReflectsCancelState(): void
     {
-        $event = new CancellableEventObject();
+        $event = new CancelableEventObject();
 
         $this->assertFalse($event->isPropagationStopped(), 'New event should not be stopped');
 
@@ -159,22 +159,22 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $this->assertTrue($event->isPropagationStopped(), 'Cancelled event should be stopped');
     }
 
-    public function testNonCancellableEventIsNotAffectedByStoppableCheck(): void
+    public function testNonCancelableEventIsNotAffectedByStoppableCheck(): void
     {
         $manager = new Manager();
         $callOrder = [];
 
-        $manager->attach('noncancellable', function (EmptyEventObject $event) use (&$callOrder) {
+        $manager->attach('noncancelable', function (EmptyEventObject $event) use (&$callOrder) {
             $callOrder[] = 'first';
         });
 
-        $manager->attach('noncancellable', function (EmptyEventObject $event) use (&$callOrder) {
+        $manager->attach('noncancelable', function (EmptyEventObject $event) use (&$callOrder) {
             $callOrder[] = 'second';
         });
 
-        $manager->dispatch(new EmptyEventObject(), 'noncancellable');
+        $manager->dispatch(new EmptyEventObject(), 'noncancelable');
 
-        $this->assertSame(['first', 'second'], $callOrder, 'Both listeners should run for non-cancellable events');
+        $this->assertSame(['first', 'second'], $callOrder, 'Both listeners should run for non-cancelable events');
     }
 
 

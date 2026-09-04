@@ -197,7 +197,7 @@ use Phalcon\Mvc\Router\RouteInterface;
  * @phpstan-type mvc_metadata_slot array<array-key, mixed>|bool|string|null
  * @phpstan-type mvc_metadata_model array<array-key, mvc_metadata_slot>
  * @phpstan-type mvc_metadata_store array<string, mvc_metadata_model>
- * @phpstan-type mvc_metadata_column_maps array<array-key, mvc_metadata_column_map|null>
+ * @phpstan-type mvc_metadata_column_maps array<array-key, mvc_metadata_column_map|mvc_metadata_slot>
  * @phpstan-type mvc_metadata_column_map_store array<string, mvc_metadata_column_maps>
  * @phpstan-type mvc_manager_relations array<string, list<\Phalcon\Mvc\Model\RelationInterface>>
  * @phpstan-type mvc_hydration_column_map array<array-key, array<array-key, int|string>|int|string>

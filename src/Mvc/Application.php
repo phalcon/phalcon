@@ -271,7 +271,7 @@ class Application extends AbstractApplication
             /**
              * The "afterStartModule" event is a notification fired once the
              * module has started. Its return value is intentionally ignored:
-             * the module is already booted, so handling cannot be cancelled
+             * the module is already booted, so handling cannot be canceled
              * here. (Phalcon\Cli\Console still honors a `false` return for
              * backward compatibility; the two are unified in the next major.)
              */

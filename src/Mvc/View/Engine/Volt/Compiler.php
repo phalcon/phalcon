@@ -132,11 +132,11 @@ class Compiler implements InjectionAwareInterface
     protected bool $extended = false;
     /**
      * @var array|bool
-     * @phpstan-var array<array-key, mixed>|bool
+     * @phpstan-var array<array-key, mixed>|bool|string
      *
      * TODO: Make it always array
      */
-    protected array | bool $extendedBlocks;
+    protected array | bool | string $extendedBlocks;
     /**
      * @var array
      * @phpstan-var list<object>
@@ -188,9 +188,14 @@ class Compiler implements InjectionAwareInterface
     protected Parser $parser;
 
     /**
+     * A subclass may store a closure that builds the prefix, as the Zephir
+     * source allows.
+     *
      * @var string
+     *
+     * @phpstan-var Closure|string
      */
-    protected string $prefix = "";
+    protected mixed $prefix = "";
 
     /**
      * Phalcon\Mvc\View\Engine\Volt\Compiler
@@ -406,14 +411,8 @@ class Compiler implements InjectionAwareInterface
                  * Create the virtual path replacing the directory separator by
                  * the compiled separator
                  */
-                /**
-                 * The template file exists, so realpath gives back a string.
-                 */
-                /** @var non-empty-string $realTemplatePath */
-                $realTemplatePath = realpath($templatePath);
-
                 $templateSepPath = $this->prepareVirtualPath(
-                    $realTemplatePath,
+                    realpath($templatePath),
                     $compiledSeparator
                 );
             } else {
@@ -3073,7 +3072,7 @@ class Compiler implements InjectionAwareInterface
                         );
                     }
 
-                    /** @var array<array-key, mixed>|bool $extendedBlocks */
+                    /** @var array<array-key, mixed>|bool|string $extendedBlocks */
                     $extendedBlocks = $tempCompilation;
 
                     $this->extended       = true;

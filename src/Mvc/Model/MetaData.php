@@ -302,6 +302,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         $data = $this->readColumnMapIndex($model, self::MODELS_COLUMN_MAP);
 
         if (is_array($data) || null === $data) {
+            /** @var mvc_metadata_column_map|null $data */
             return $data;
         }
 
@@ -642,6 +643,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     {
         $data = $this->readColumnMapIndex($model, self::MODELS_REVERSE_COLUMN_MAP);
         if (is_array($data) || null === $data) {
+            /** @var mvc_metadata_column_map|null $data */
             return $data;
         }
 
@@ -793,10 +795,16 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @return array|null
      * @throws Exception
      *
-     * @phpstan-return mvc_metadata_column_map|null
+     * The store is read back as it was written, so a corrupt slot reaches
+     * the callers, which raise CorruptedMetaData. This matches the Zephir
+     * source, where the declared return type is not enforced.
+     *
+     * @phpstan-return mvc_metadata_slot
      */
-    final public function readColumnMapIndex(ModelInterface $model, int $index): array | null
-    {
+    final public function readColumnMapIndex(
+        ModelInterface $model,
+        int $index
+    ): array | bool | string | null {
         if (true !== Settings::get('orm.column_renaming')) {
             return null;
         }

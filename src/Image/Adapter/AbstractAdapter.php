@@ -370,7 +370,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Add a text to an image with a specified opacity
      *
-     * The offsets accept `false` to centre the text on that axis, so they are
+     * The offsets accept `false` to center the text on that axis, so they are
      * wider than the `int` the interface documents.
      *
      * @phpstan-param bool|int $offsetX
@@ -456,7 +456,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Renders the supplied colour onto the image as the background. Channels
+     * Renders the supplied color onto the image as the background. Channels
      * are 0-255; the opacity is the validated 0-100 value.
      *
      * @phpstan-param image_channel $red
@@ -549,7 +549,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Renders text onto the image. The opacity is clamped to 0-100 and the
-     * colour is supplied as separate 0-255 channels.
+     * color is supplied as separate 0-255 channels.
      *
      * @phpstan-param bool|int $offsetX
      * @phpstan-param bool|int $offsetY

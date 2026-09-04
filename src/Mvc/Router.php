@@ -27,6 +27,7 @@ use Phalcon\Mvc\Router\Exceptions\BeforeMatchNotCallable;
 use Phalcon\Mvc\Router\Exceptions\ConfigKeyMustBeArray;
 use Phalcon\Mvc\Router\Exceptions\EmptyGroupOfRoutes;
 use Phalcon\Mvc\Router\Exceptions\GroupRoutesMustBeArray;
+use Phalcon\Mvc\Router\Exceptions\InvalidConfigSource;
 use Phalcon\Mvc\Router\Exceptions\InvalidRoutePosition;
 use Phalcon\Mvc\Router\Exceptions\MissingGroupRouteKey;
 use Phalcon\Mvc\Router\Exceptions\MissingRouteConfigKey;
@@ -1802,13 +1803,18 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function loadFromConfig(mixed $config): static
     {
-        if ($config instanceof ConfigInterface) {
+        if (is_object($config)) {
+            if (!($config instanceof ConfigInterface)) {
+                throw new InvalidConfigSource();
+            }
+
             $config = $config->toArray();
         }
 
-        /**
-         * Objects convert to an array above. Other sources are already arrays.
-         */
+        if (!is_array($config)) {
+            throw new InvalidConfigSource();
+        }
+
         /** @var array<string, mixed> $configData */
         $configData = $config;
 

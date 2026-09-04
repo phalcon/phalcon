@@ -521,7 +521,7 @@ abstract class Resultset implements
     }
 
     /**
-     * Returns serialised model objects as array for json_encode.
+     * Returns serialized model objects as array for json_encode.
      * Calls jsonSerialize on each object if present
      *
      *```php

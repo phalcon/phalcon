@@ -26,6 +26,7 @@ use Phalcon\Mvc\ModelInterface;
  * @phpstan-import-type mvc_metadata_column_map from MvcTypes
  * @phpstan-import-type mvc_metadata_default_values from MvcTypes
  * @phpstan-import-type mvc_metadata_index from MvcTypes
+ * @phpstan-import-type mvc_metadata_slot from MvcTypes
  * @phpstan-import-type mvc_metadata_types from MvcTypes
  */
 interface MetaDataInterface
@@ -236,9 +237,12 @@ interface MetaDataInterface
      *
      * @return array|null
      *
-     * @phpstan-return mvc_metadata_index|null
+     * @phpstan-return mvc_metadata_slot
      */
-    public function readColumnMapIndex(ModelInterface $model, int $index): array | null;
+    public function readColumnMapIndex(
+        ModelInterface $model,
+        int $index
+    ): array | bool | string | null;
 
     /**
      * Reads meta-data for certain model

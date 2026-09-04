@@ -48,7 +48,7 @@ use function unserialize;
 class Complex extends Resultset
 {
     /**
-     * Unserialised result-set hydrated all rows already. unserialise() sets
+     * Unserialized result-set hydrated all rows already. unserialize() sets
      * disableHydration to true
      *
      * @var bool

@@ -6,7 +6,7 @@ namespace Phalcon\Tests\Unit\Events\Fake;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 
-class CancellableEventObject implements StoppableEventInterface
+class CancelableEventObject implements StoppableEventInterface
 {
     private bool $cancelled = false;
 
