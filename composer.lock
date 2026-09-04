@@ -131,16 +131,16 @@
         },
         {
             "name": "phalcon/traits",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/traits.git",
-                "reference": "4e4412a78475af2d08f7e82e48e577e2a40b6896"
+                "reference": "a686028ef39ccbb6bd90fd56dc7c7389e768693e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/traits/zipball/4e4412a78475af2d08f7e82e48e577e2a40b6896",
-                "reference": "4e4412a78475af2d08f7e82e48e577e2a40b6896",
+                "url": "https://api.github.com/repos/phalcon/traits/zipball/a686028ef39ccbb6bd90fd56dc7c7389e768693e",
+                "reference": "a686028ef39ccbb6bd90fd56dc7c7389e768693e",
                 "shasum": ""
             },
             "require": {
@@ -150,10 +150,9 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.75",
-                "infection/infection": "^0.29.9",
                 "pds/composer-script-names": "^1.0",
                 "pds/skeleton": "^1.0",
-                "phalcon/talon": "^0.7",
+                "phalcon/talon": "^1.0.0",
                 "phpstan/phpstan": "^2.2",
                 "phpunit/phpunit": "^10.5",
                 "squizlabs/php_codesniffer": "^4.0"
@@ -209,7 +208,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-07-10T19:24:02+00:00"
+            "time": "2026-09-04T16:43:18+00:00"
         },
         {
             "name": "psr/event-dispatcher",
@@ -1598,12 +1597,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "1c0bb97defb0e3612cfd0afa9dcf471a33bdf69d"
+                "reference": "ccd55a67e5a3a79b12657c43e1c03630a23b528b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/1c0bb97defb0e3612cfd0afa9dcf471a33bdf69d",
-                "reference": "1c0bb97defb0e3612cfd0afa9dcf471a33bdf69d",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/ccd55a67e5a3a79b12657c43e1c03630a23b528b",
+                "reference": "ccd55a67e5a3a79b12657c43e1c03630a23b528b",
                 "shasum": ""
             },
             "require": {
@@ -1675,7 +1674,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-27T17:56:49+00:00"
+            "time": "2026-09-02T10:14:26+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -2021,11 +2020,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.12",
+            "version": "2.2.13",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/174b0d88710f00a42598886504dd7a146f91ace5",
-                "reference": "174b0d88710f00a42598886504dd7a146f91ace5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
+                "reference": "9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
                 "shasum": ""
             },
             "require": {
@@ -2081,7 +2080,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-31T19:09:43+00:00"
+            "time": "2026-09-03T20:38:19+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

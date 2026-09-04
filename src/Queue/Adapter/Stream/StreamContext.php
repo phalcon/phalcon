@@ -37,14 +37,14 @@ use function array_filter;
 use function array_shift;
 use function base64_decode;
 use function base64_encode;
+use function error_clear_last;
+use function error_reporting;
 use function explode;
 use function file_exists;
 use function flock;
 use function fopen;
 use function ftruncate;
 use function implode;
-use function is_dir;
-use function mkdir;
 use function preg_replace;
 use function rewind;
 use function rtrim;
@@ -179,8 +179,15 @@ class StreamContext extends AbstractContext
 
     private function ensureDir(): void
     {
-        if (!is_dir($this->storageDir)) {
-            mkdir($this->storageDir, 0777, true);
+        /**
+         * A different process can make the directory after the test. Do not
+         * report the "File exists" warning that this condition causes.
+         */
+        if (!$this->phpIsDir($this->storageDir)) {
+            $errorLevel = error_reporting(0);
+            $this->phpMkdir($this->storageDir, 0777, true);
+            error_clear_last();
+            error_reporting($errorLevel);
         }
     }
 

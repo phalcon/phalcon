@@ -26,11 +26,11 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
+use function error_clear_last;
+use function error_reporting;
 use function fclose;
 use function flock;
-use function is_dir;
 use function is_int;
-use function mkdir;
 use function restore_error_handler;
 use function serialize;
 use function set_error_handler;
@@ -419,8 +419,15 @@ class Stream extends AbstractAdapter
         $payload   = serialize($payload);
         $directory = $this->getDir($key);
 
-        if (true !== is_dir($directory)) {
-            mkdir($directory, 0755, true);
+        /**
+         * A different process can make the directory after the test. Do not
+         * report the "File exists" warning that this condition causes.
+         */
+        if (true !== $this->phpIsDir($directory)) {
+            $errorLevel = error_reporting(0);
+            $this->phpMkdir($directory, 0755, true);
+            error_clear_last();
+            error_reporting($errorLevel);
         }
 
         return false !== $this->phpFilePutContents(
