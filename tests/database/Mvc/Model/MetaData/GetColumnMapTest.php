@@ -130,7 +130,6 @@ final class GetColumnMapTest extends AbstractDatabaseTestCase
 
         $reflection = new ReflectionClass(MetaData::class);
         $columnMap  = $reflection->getProperty('columnMap');
-        $columnMap->setAccessible(true);
         $columnMap->setValue(
             $meta,
             [$key => [MetaData::MODELS_COLUMN_MAP => 'not-an-array']]
