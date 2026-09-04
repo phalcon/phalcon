@@ -2600,6 +2600,7 @@ abstract class Model extends AbstractInjectionAware implements
             /** @var string $attribute */
             // Try to find case-insensitive key variant
             if (
+                is_array($columnMap) &&
                 !isset($columnMap[$attribute]) &&
                 Settings::get("orm.case_insensitive_column_map")
             ) {
@@ -4347,7 +4348,11 @@ abstract class Model extends AbstractInjectionAware implements
                 }
 
                 // Try to find case-insensitive key variant
-                if (!isset($columnMap[$key]) && Settings::get("orm.case_insensitive_column_map")) {
+                if (
+                    is_array($columnMap) &&
+                    !isset($columnMap[$key]) &&
+                    Settings::get("orm.case_insensitive_column_map")
+                ) {
                     $key = self::caseInsensitiveColumnMap($columnMap, $key);
                 }
 
@@ -5110,14 +5115,18 @@ abstract class Model extends AbstractInjectionAware implements
                 /**
                  * Create a message
                  *
-                 * Message takes the field name as a string.
-                 *
-                 * @var string $fields
+                 * A composite foreign key names every field it covers.
                  */
+                if (is_array($fields)) {
+                    $messageField = implode(", ", $fields);
+                } else {
+                    $messageField = $fields;
+                }
+
                 $this->appendMessage(
                     new Message(
                         $message,
-                        $fields,
+                        $messageField,
                         "ConstraintViolation",
                         0,
                         [
@@ -5291,14 +5300,18 @@ abstract class Model extends AbstractInjectionAware implements
                 /**
                  * Create a message
                  *
-                 * Message takes the field name as a string.
-                 *
-                 * @var string $fields
+                 * A composite foreign key names every field it covers.
                  */
+                if (is_array($fields)) {
+                    $messageField = implode(", ", $fields);
+                } else {
+                    $messageField = $fields;
+                }
+
                 $this->appendMessage(
                     new Message(
                         $message,
-                        $fields,
+                        $messageField,
                         "ConstraintViolation",
                         0,
                         [
