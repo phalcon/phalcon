@@ -1681,16 +1681,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
             $reusable = $relation->isReusable();
 
             if ($reusable) {
-                // The referenced model name is the prefix of the key.
-                // readAttribute() names a single attribute with a string.
                 /**
-                 * @var string $fields
+                 * The placeholders hold the value of every field the relation
+                 * covers, so a compound relation gets a key of its own.
+                 *
                  * @var string $uniqueKey
                  */
                 $uniqueKey = $this->getUniqueKey(
                     $record,
                     $referencedModel,
-                    [$intermediateModel, $parameters, $record->readAttribute($fields)]
+                    [$intermediateModel, $parameters, $placeholders]
                 );
 
                 $records = $this->getReusableRecords($referencedModel, $uniqueKey);
