@@ -20,16 +20,22 @@ use function implode;
 class Polygon extends AbstractGeometry
 {
     /**
-     * @var Point[][]
+     * @var list<list<Point>>
      */
     protected array $rings;
 
+    /**
+     * @param list<list<Point>> $rings
+     */
     public function __construct(array $rings, int $srid = 0)
     {
         $this->rings = $rings;
         $this->srid  = $srid;
     }
 
+    /**
+     * @return list<list<Point>>
+     */
     public function getRings(): array
     {
         return $this->rings;

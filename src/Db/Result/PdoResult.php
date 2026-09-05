@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Result;
 
+use PDO;
 use PDOStatement;
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\ResultInterface;
@@ -34,6 +36,11 @@ use function is_object;
  *     print_r($invoice);
  * }
  * ```
+ *
+ * @phpstan-import-type db_bind_params from DbTypes
+ * @phpstan-import-type db_bind_types from DbTypes
+ * @phpstan-import-type db_constructor_arguments from DbTypes
+ * @phpstan-import-type db_rows from DbTypes
  */
 class PdoResult implements ResultInterface
 {
@@ -54,6 +61,9 @@ class PdoResult implements ResultInterface
 
     /**
      * Phalcon\Db\Result\Pdo constructor
+     *
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
      */
     public function __construct(
         protected AdapterInterface $connection,
@@ -82,6 +92,7 @@ class PdoResult implements ResultInterface
      */
     public function dataSeek(int $number): void
     {
+        /** @var PDO $pdo */
         $pdo = $this->connection->getInternalHandler();
 
         /**
@@ -102,6 +113,7 @@ class PdoResult implements ResultInterface
             $statement = $pdo->query($this->sqlStatement);
         }
 
+        /** @var PDOStatement $statement */
         $this->pdoStatement = $statement;
 
         $counter = -1;
@@ -170,6 +182,10 @@ class PdoResult implements ResultInterface
      *```
      *
      * @param callable|int|string|null $fetchArgument
+     *
+     * @phpstan-param db_constructor_arguments|null $constructorArgs
+     *
+     * @phpstan-return db_rows
      */
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,
@@ -177,14 +193,26 @@ class PdoResult implements ResultInterface
         array | null $constructorArgs = null
     ): array {
         if ($mode === Enum::FETCH_CLASS) {
-            return $this->pdoStatement->fetchAll($mode, $fetchArgument, $constructorArgs);
+            /** @var class-string $className */
+            $className = $fetchArgument;
+            /** @var db_rows $rows */
+            $rows = $this->pdoStatement->fetchAll($mode, $className, $constructorArgs);
+
+            return $rows;
         }
 
         if ($mode === Enum::FETCH_COLUMN || $mode === Enum::FETCH_FUNC) {
-            return $this->pdoStatement->fetchAll($mode, $fetchArgument);
+            /** @var callable(): mixed|int|string $fetchArgument */
+            /** @var db_rows $rows */
+            $rows = $this->pdoStatement->fetchAll($mode, $fetchArgument);
+
+            return $rows;
         }
 
-        return $this->pdoStatement->fetchAll($mode);
+        /** @var db_rows $rows */
+        $rows = $this->pdoStatement->fetchAll($mode);
+
+        return $rows;
     }
 
     /**
@@ -264,6 +292,8 @@ class PdoResult implements ResultInterface
             $this->bindTypes
         );
 
+        /** @var ResultInterface $result */
+        /** @var array{numrows: int|string} $row */
         $row = $result->fetch();
 
         /**
@@ -305,11 +335,19 @@ class PdoResult implements ResultInterface
         mixed $ctorargs = null
     ): bool {
         if (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO === $fetchMode) {
-            if (!$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject, $ctorargs)) {
+            /** @var object|string $target */
+            $target = $colNoOrClassNameOrObject;
+            /** @var db_constructor_arguments|null $constructorArgs */
+            $constructorArgs = $ctorargs;
+
+            if (!$this->pdoStatement->setFetchMode($fetchMode, $target, $constructorArgs)) {
                 return false;
             }
         } elseif (Enum::FETCH_COLUMN === $fetchMode) {
-            if (!$this->pdoStatement->setFetchMode($fetchMode, $colNoOrClassNameOrObject)) {
+            /** @var string $column */
+            $column = $colNoOrClassNameOrObject;
+
+            if (!$this->pdoStatement->setFetchMode($fetchMode, $column)) {
                 return false;
             }
         } else {

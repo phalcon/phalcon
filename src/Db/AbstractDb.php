@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Support\Settings;
 
 /**
@@ -57,11 +58,15 @@ use Phalcon\Support\Settings;
  *     echo $e->getMessage(), PHP_EOL;
  * }
  * ```
+ *
+ * @phpstan-import-type db_setup_options from DbTypes
  */
 abstract class AbstractDb
 {
     /**
      * Enables/disables options in the Database component
+     *
+     * @phpstan-param db_setup_options $options
      */
     public static function setup(array $options): void
     {

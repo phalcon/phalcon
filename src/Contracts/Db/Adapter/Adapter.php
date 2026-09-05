@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Db\Adapter;
 
+use PDOStatement;
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\DialectInterface;
 use Phalcon\Db\IndexInterface;
@@ -23,6 +25,23 @@ use Phalcon\Db\ResultInterface;
 /**
  * Canonical contract for Phalcon\Db adapters.
  *
+ * @phpstan-import-type db_bind_params from DbTypes
+ * @phpstan-import-type db_bind_types from DbTypes
+ * @phpstan-import-type db_column_list from DbTypes
+ * @phpstan-import-type db_column_names from DbTypes
+ * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_dict from DbTypes
+ * @phpstan-import-type db_identifier from DbTypes
+ * @phpstan-import-type db_limit_number from DbTypes
+ * @phpstan-import-type db_row from DbTypes
+ * @phpstan-import-type db_rows from DbTypes
+ * @phpstan-import-type db_table_definition from DbTypes
+ * @phpstan-import-type db_table_identifier from DbTypes
+ * @phpstan-import-type db_table_names from DbTypes
+ * @phpstan-import-type db_table_options from DbTypes
+ * @phpstan-import-type db_view_definition from DbTypes
+ * @phpstan-import-type db_where_condition from DbTypes
+ *
  * @todo v7 - these will become required interface members. They are
  *            omitted from the v5 line to avoid breaking third-party
  *            implementors:
@@ -30,9 +49,18 @@ use Phalcon\Db\ResultInterface;
  *              - createMaterializedView()  : bool
  *              - dropCheck()               : bool
  *              - dropMaterializedView()    : bool
+ *              - executePrepared()         : PDOStatement
  *              - onConflictUpdate()        : string
+ *              - prepare()                 : PDOStatement
  *              - refreshMaterializedView() : bool
  *              - returning()               : string
+ *
+ * The PDO adapters carry the two statement members above and the framework
+ * calls them on the interface. They join the interface in the next major;
+ * until then the tags below record what they provide.
+ *
+ * @method PDOStatement executePrepared(PDOStatement $statement, db_bind_params $placeholders, db_bind_types $dataTypes)
+ * @method PDOStatement prepare(string $sqlStatement)
  */
 interface Adapter
 {
@@ -97,6 +125,8 @@ interface Adapter
     /**
      * This method is automatically called in \Phalcon\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection
+     *
+     * @phpstan-param db_descriptor $descriptor
      */
     public function connect(array $descriptor = []): void;
 
@@ -107,6 +137,8 @@ interface Adapter
 
     /**
      * Creates a table
+     *
+     * @phpstan-param db_table_definition $definition
      */
     public function createTable(
         string $tableName,
@@ -116,6 +148,8 @@ interface Adapter
 
     /**
      * Creates a view
+     *
+     * @phpstan-param db_view_definition $definition
      */
     public function createView(
         string $viewName,
@@ -125,6 +159,10 @@ interface Adapter
 
     /**
      * Deletes data from a table using custom RDBMS SQL syntax
+     *
+     * @phpstan-param db_table_identifier $tableName
+     * @phpstan-param db_bind_params $placeholders
+     * @phpstan-param db_bind_types  $dataTypes
      */
     public function delete(
         array | string $tableName,
@@ -224,7 +262,7 @@ interface Adapter
     /**
      * Escapes a column/table/schema name
      *
-     * @param array|string $identifier
+     * @phpstan-param db_identifier $identifier
      */
     public function escapeIdentifier(array | float | int | string $identifier): string;
 
@@ -237,6 +275,9 @@ interface Adapter
      * Sends SQL statements to the database server returning the success state.
      * Use this method only when the SQL statement sent to the server does not
      * return any rows
+     *
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
      */
     public function execute(
         string $sqlStatement,
@@ -246,6 +287,11 @@ interface Adapter
 
     /**
      * Dumps the complete result of a query into an array
+     *
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
+     *
+     * @phpstan-return db_rows
      */
     public function fetchAll(
         string $sqlQuery,
@@ -270,6 +316,8 @@ interface Adapter
      * print_r($invoice);
      *```
      *
+     * @phpstan-param db_bind_params $placeholders
+     *
      * @return bool|string
      */
     public function fetchColumn(
@@ -280,6 +328,11 @@ interface Adapter
 
     /**
      * Returns the first row in a SQL query result
+     *
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
+     *
+     * @phpstan-return db_row|bool
      */
     public function fetchOne(
         string $sqlQuery,
@@ -300,6 +353,8 @@ interface Adapter
 
     /**
      * Gets a list of columns
+     *
+     * @phpstan-param db_column_list $columnList
      */
     public function getColumnList(array $columnList): string;
 
@@ -338,6 +393,8 @@ interface Adapter
 
     /**
      * Return descriptor used to connect to the active database
+     *
+     * @phpstan-return db_descriptor
      */
     public function getDescriptor(): array;
 
@@ -368,6 +425,8 @@ interface Adapter
 
     /**
      * Active SQL statement in the object
+     *
+     * @phpstan-return db_bind_types
      */
     public function getSQLBindTypes(): array;
 
@@ -378,6 +437,8 @@ interface Adapter
 
     /**
      * Active SQL statement in the object
+     *
+     * @phpstan-return db_bind_params
      */
     public function getSQLVariables(): array;
 
@@ -389,7 +450,9 @@ interface Adapter
     /**
      * Inserts data into a table using custom RDBMS SQL syntax
      *
-     * @param array $fields
+     * @phpstan-param db_bind_params    $values
+     * @phpstan-param db_column_names|null $fields
+     * @phpstan-param db_bind_types     $dataTypes
      */
     public function insert(
         string $tableName,
@@ -414,6 +477,9 @@ interface Adapter
      * // Next SQL sentence is sent to the database system
      * INSERT INTO `co_invoices` (`inv_title`, `inv_total`) VALUES ("Test Invoice", 100);
      * ```
+     *
+     * @phpstan-param db_dict       $data
+     * @phpstan-param db_bind_types $dataTypes
      */
     public function insertAsDict(
         string $tableName,
@@ -442,20 +508,22 @@ interface Adapter
 
     /**
      * Appends a LIMIT clause to sqlQuery argument
+     *
+     * @phpstan-param db_limit_number $number
      */
     public function limit(string $sqlQuery, array | int $number): string;
 
     /**
      * List all tables on a database
      *
-     * @param string $schemaName
+     * @phpstan-return db_table_names
      */
     public function listTables(string | null $schemaName = null): array;
 
     /**
      * List all views on a database
      *
-     * @param string $schemaName
+     * @phpstan-return db_table_names
      */
     public function listViews(string | null $schemaName = null): array;
 
@@ -473,6 +541,9 @@ interface Adapter
      * Sends SQL statements to the database server returning the success state.
      * Use this method only when the SQL statement sent to the server returns
      * rows
+     *
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
      */
     public function query(
         string $sqlStatement,
@@ -497,8 +568,6 @@ interface Adapter
 
     /**
      * Set if nested transactions should use savepoints
-     *
-     * @return AdapterInterface
      */
     public function setNestedTransactionsWithSavepoints(
         bool $flag
@@ -535,7 +604,7 @@ interface Adapter
     /**
      * Gets creation options from a table
      *
-     * @param string $schemaName
+     * @phpstan-return db_table_options
      */
     public function tableOptions(
         string $tableName,
@@ -544,6 +613,11 @@ interface Adapter
 
     /**
      * Updates data on a table using custom RDBMS SQL syntax
+     *
+     * @phpstan-param db_column_names    $fields
+     * @phpstan-param db_bind_params     $values
+     * @phpstan-param db_where_condition $whereCondition
+     * @phpstan-param db_bind_types      $dataTypes
      */
     public function update(
         string $tableName,
@@ -570,6 +644,10 @@ interface Adapter
      * // Next SQL sentence is sent to the database system
      * UPDATE `co_invoices` SET `inv_title` = "New Test Invoice" WHERE inv_id = 101
      * ```
+     *
+     * @phpstan-param db_dict           $data
+     * @phpstan-param db_where_condition $whereCondition
+     * @phpstan-param db_bind_types     $dataTypes
      */
     public function updateAsDict(
         string $tableName,

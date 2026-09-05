@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\CheckInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
@@ -32,6 +33,8 @@ use function substr;
 
 /**
  * Generates database specific SQL for the MySQL RDBMS
+ *
+ * @phpstan-import-type db_column_list from DbTypes
  */
 class Mysql extends Dialect
 {
@@ -134,9 +137,12 @@ class Mysql extends Dialect
         string $schemaName,
         IndexInterface $index
     ): string {
+        /** @var db_column_list $columns */
+        $columns = $index->getColumns();
+
         return $this->alter($tableName, $schemaName)
             . ' ADD PRIMARY KEY '
-            . $this->wrap($this->getColumnList($index->getColumns()));
+            . $this->wrap($this->getColumnList($columns));
     }
 
     /**
@@ -693,7 +699,7 @@ class Mysql extends Dialect
                             . ")";
                     } else {
                         $columnSql .= "('"
-                            . $this->escapeStringLiteral($typeValues)
+                            . $this->escapeStringLiteral((string) $typeValues)
                             . "')";
                     }
                 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter\Pdo;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo as PdoAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
@@ -48,6 +49,11 @@ use function trigger_error;
  *
  * $connection = new Postgresql($config);
  * ```
+ *
+ * @phpstan-import-type db_describe_row from DbTypes
+ * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_reference_build from DbTypes
+ * @phpstan-import-type db_table_definition from DbTypes
  */
 class Postgresql extends PdoAdapter
 {
@@ -57,6 +63,9 @@ class Postgresql extends PdoAdapter
 
     /**
      * Constructor for Phalcon\Db\Adapter\Pdo\Postgresql
+     */
+    /**
+     * @phpstan-param db_descriptor $descriptor
      */
     public function __construct(array $descriptor)
     {
@@ -73,11 +82,14 @@ class Postgresql extends PdoAdapter
      * This method is automatically called in Phalcon\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection.
      *
+     * @phpstan-param db_descriptor $descriptor
+     *
      * @throws Exception
      */
     public function connect(array $descriptor = []): void
     {
         $descriptor = !empty($descriptor) ? $descriptor : $this->descriptor;
+        /** @var string|null $schemaName */
         $schemaName = $descriptor["schema"] ?? null;
         unset($descriptor['schema']);
         if (
@@ -99,6 +111,8 @@ class Postgresql extends PdoAdapter
 
     /**
      * Creates a table
+     *
+     * @phpstan-param db_table_definition $definition
      *
      * @throws Exception
      */
@@ -178,6 +192,8 @@ class Postgresql extends PdoAdapter
         foreach ($fields as $field) {
             /**
              * By default, the bind types is 2
+             *
+             * @var db_describe_row $field
              */
             $definition = [
                 "bindType" => Column::BIND_PARAM_STR,
@@ -186,9 +202,13 @@ class Postgresql extends PdoAdapter
             /**
              * By checking every column type we convert it to a
              * Phalcon\Db\Column
+             *
+             * @var string $columnType
              */
             $columnType   = $field[1];
-            $charSize     = $field[2];
+            /** @var string $charSize */
+            $charSize = $field[2];
+            /** @var string $numericSize */
             $numericSize  = $field[3];
             $numericScale = $field[4];
 
@@ -584,13 +604,15 @@ class Postgresql extends PdoAdapter
                  * Check if the column has default values
                  */
                 if (null !== $field[9]) {
+                    /** @var string $rawDefault */
+                    $rawDefault            = $field[9];
                     $definition["default"] = preg_replace(
                         "/(?:^')|(?:'?::[[:alnum:][:space:]]+$)/",
                         "",
-                        $field[9]
+                        $rawDefault
                     );
 
-                    if (0 === strcasecmp($definition["default"], "null")) {
+                    if (0 === strcasecmp((string) $definition["default"], "null")) {
                         $definition["default"] = null;
                     }
                 }
@@ -606,6 +628,7 @@ class Postgresql extends PdoAdapter
             /**
              * Every route is stored as a Phalcon\Db\Column
              */
+            /** @var string $columnName */
             $columnName = $field[0];
             $columns[]  = new Column($columnName, $definition);
             $oldColumn  = $columnName;
@@ -632,6 +655,7 @@ class Postgresql extends PdoAdapter
         string $tableName,
         string | null $schemaName = null
     ): array {
+        /** @var array<string, db_reference_build> $references */
         $references = [];
         $records    = $this->fetchAll(
             $this->dialect->describeReferences($tableName, $schemaName),
@@ -639,6 +663,7 @@ class Postgresql extends PdoAdapter
         );
 
         foreach ($records as $reference) {
+            /** @var db_describe_row $reference */
             $constraintName    = $reference[2];
             $columns           = $references[$constraintName]["columns"] ?? [];
             $referenceDelete   = $references[$constraintName]["onDelete"] ?? $reference[7];
@@ -662,6 +687,7 @@ class Postgresql extends PdoAdapter
 
         $referenceObjects = [];
         foreach ($references as $name => $arrayReference) {
+            /** @var db_reference_build $arrayReference */
             $referenceObjects[$name] = new Reference(
                 $name,
                 [

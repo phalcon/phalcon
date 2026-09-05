@@ -16,6 +16,7 @@ namespace Phalcon\Db\Adapter\Pdo;
 use PDO;
 use PDOException;
 use PDOStatement;
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\AbstractAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\Exception;
@@ -56,6 +57,13 @@ use function preg_replace;
  *
  * $connection = new Mysql($config);
  *```
+ *
+ * @phpstan-import-type db_bind_params from DbTypes
+ * @phpstan-import-type db_bind_types from DbTypes
+ * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_dsn_defaults from DbTypes
+ * @phpstan-import-type db_error_info from DbTypes
+ * @phpstan-import-type db_pdo_options from DbTypes
  */
 abstract class AbstractPdo extends AbstractAdapter
 {
@@ -89,6 +97,8 @@ abstract class AbstractPdo extends AbstractAdapter
      *                          'dsn'          => null,
      *                          'charset'      => 'utf8mb4',
      *                          ]
+     *
+     * @phpstan-param db_descriptor $descriptor
      */
     public function __construct(array $descriptor)
     {
@@ -285,13 +295,17 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function connect(array $descriptor = []): void
     {
+        /** @var list<string> $dsnParts */
         $dsnParts   = [];
         $descriptor = !empty($descriptor) ? $descriptor : $this->descriptor;
 
         // Check for a username or use null as default
+        /** @var string|null $userName */
         $userName = $descriptor["username"] ?? null;
+        /** @var string|null $password */
         $password = $descriptor["password"] ?? null;
-        $options  = [];
+        /** @var db_pdo_options $options */
+        $options = [];
 
         /**
          * Check if the developer has defined custom options or create one from
@@ -315,7 +329,9 @@ abstract class AbstractPdo extends AbstractAdapter
         // Check if the user has defined a custom dsn string. It should be in
         // the form of key=value with semicolons delineating sections.
         if (isset($descriptor["dsn"])) {
-            $dsnParts[] = $descriptor["dsn"];
+            /** @var string $dsn */
+            $dsn        = $descriptor["dsn"];
+            $dsnParts[] = $dsn;
         }
 
         /**
@@ -335,6 +351,7 @@ abstract class AbstractPdo extends AbstractAdapter
          * descriptor. At this point the descriptor should be a valid DSN
          * key-value map due to all other values having been removed.
          */
+        /** @var db_dsn_defaults $dsnAttributesMap */
         $dsnAttributesMap = array_merge($this->getDsnDefaults(), $descriptor);
 
         foreach ($dsnAttributesMap as $key => $value) {
@@ -367,7 +384,10 @@ abstract class AbstractPdo extends AbstractAdapter
      * );
      *```
      *
-     * @return array<string, list|string|null>
+     * @phpstan-param db_bind_params $parameters
+     *
+     * @phpstan-return array{sql: string, params: list<mixed>}
+     *
      * @throws Exception
      */
     public function convertBoundParams(
@@ -384,6 +404,7 @@ abstract class AbstractPdo extends AbstractAdapter
             preg_match_all($bindPattern, $sql, $matches, $setOrder)
         ) {
             foreach ($matches as $placeMatch) {
+                /** @var array<int, string> $placeMatch */
                 if (isset($parameters[$placeMatch[1]])) {
                     $value = $parameters[$placeMatch[1]];
                 } else {
@@ -401,6 +422,7 @@ abstract class AbstractPdo extends AbstractAdapter
                 $placeHolders[] = $value;
             }
 
+            /** @var string $boundSql */
             $boundSql = preg_replace($bindPattern, "?", $sql);
         }
 
@@ -534,6 +556,9 @@ abstract class AbstractPdo extends AbstractAdapter
      *     ]
      * );
      *```
+     *
+     * @phpstan-param db_bind_params $placeholders
+     * @phpstan-param db_bind_types  $dataTypes
      */
     public function executePrepared(
         PDOStatement $statement,
@@ -622,10 +647,15 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Return the error info, if any
+     *
+     * @phpstan-return db_error_info
      */
     public function getErrorInfo(): array
     {
-        return $this->pdo->errorInfo();
+        /** @var db_error_info $errorInfo */
+        $errorInfo = $this->pdo->errorInfo();
+
+        return $errorInfo;
     }
 
     /**
@@ -887,6 +917,8 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Returns PDO adapter DSN defaults as a key-value map.
+     *
+     * @phpstan-return db_dsn_defaults
      */
     abstract protected function getDsnDefaults(): array;
 
@@ -904,6 +936,8 @@ abstract class AbstractPdo extends AbstractAdapter
      * Constructs the SQL statement (with parameters)
      *
      * @see https://stackoverflow.com/a/8403150
+     *
+     * @phpstan-param db_bind_params $parameters
      */
     protected function prepareRealSql(string $statement, array $parameters): void
     {
@@ -922,15 +956,18 @@ abstract class AbstractPdo extends AbstractAdapter
                 if (is_string($value)) {
                     $values[$key] = "'" . $value . "'";
                 } elseif (is_array($value)) {
+                    /** @var array<array-key, string> $value */
                     $values[$key] = "'" . implode("','", $value) . "'";
                 } elseif (null === $value) {
                     $values[$key] = "NULL";
                 }
             }
 
+            /** @var array<array-key, string> $values */
             $result = preg_replace($keys, $values, $statement, 1);
         }
 
+        /** @var string $result */
         $this->realSqlStatement = $result;
     }
 
@@ -955,6 +992,10 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Runs the actual write against PDO and returns the affected-rows count
      * (or the raw exec() return for unprepared statements).
+     */
+    /**
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
      */
     private function executeStatement(
         string $sqlStatement,
@@ -994,6 +1035,9 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Prepares and executes a read statement, returning the live PDOStatement.
+     *
+     * @phpstan-param db_bind_params $params
+     * @phpstan-param db_bind_types  $types
      *
      * @throws CannotPrepareStatement
      */

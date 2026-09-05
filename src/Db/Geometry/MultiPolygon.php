@@ -20,16 +20,22 @@ use function implode;
 class MultiPolygon extends AbstractGeometry
 {
     /**
-     * @var Polygon[]
+     * @var list<Polygon>
      */
     protected array $polygons;
 
+    /**
+     * @param list<Polygon> $polygons
+     */
     public function __construct(array $polygons, int $srid = 0)
     {
         $this->polygons = $polygons;
         $this->srid     = $srid;
     }
 
+    /**
+     * @return list<Polygon>
+     */
     public function getPolygons(): array
     {
         return $this->polygons;

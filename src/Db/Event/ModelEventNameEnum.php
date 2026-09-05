@@ -65,7 +65,9 @@ enum ModelEventNameEnum: string
     /**
      * Get the event class associated with this event type
      *
-     * @return string The fully qualified class name
+     * @param string $eventName
+     *
+     * @return class-string<AbstractModelEvent> The fully qualified class name
      */
     public static function getEventClass($eventName): string
     {

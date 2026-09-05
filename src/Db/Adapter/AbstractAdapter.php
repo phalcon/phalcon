@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\CheckInterface;
 use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\DialectInterface;
@@ -32,6 +33,7 @@ use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Stringable;
 
 use function array_keys;
 use function array_merge;
@@ -44,6 +46,22 @@ use function strpos;
 
 /**
  * Base class for Phalcon\Db\Adapter adapters
+ *
+ * @phpstan-import-type db_bind_params from DbTypes
+ * @phpstan-import-type db_bind_types from DbTypes
+ * @phpstan-import-type db_column_names from DbTypes
+ * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_identifier from DbTypes
+ * @phpstan-import-type db_indexes from DbTypes
+ * @phpstan-import-type db_limit_number from DbTypes
+ * @phpstan-import-type db_references from DbTypes
+ * @phpstan-import-type db_row from DbTypes
+ * @phpstan-import-type db_rows from DbTypes
+ * @phpstan-import-type db_setup_options from DbTypes
+ * @phpstan-import-type db_table_names from DbTypes
+ * @phpstan-import-type db_table_options from DbTypes
+ * @phpstan-import-type db_value_placeholder from DbTypes
+ * @phpstan-import-type db_view_definition from DbTypes
  */
 abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
@@ -61,6 +79,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Descriptor used to connect to a database
+     *
+     * @var db_descriptor
      */
     protected array $descriptor = [];
 
@@ -81,6 +101,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL Bind Types
+     *
+     * @var db_bind_types
      */
     protected array $sqlBindTypes = [];
 
@@ -91,6 +113,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL bound parameter variables
+     *
+     * @var db_bind_params
      */
     protected array $sqlVariables = [];
 
@@ -127,6 +151,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Note: the `options` key is forwarded to the static `setup()` method,
      * which writes process-global settings affecting every connection in the
      * process. See `setup()`.
+     *
+     * @phpstan-param db_descriptor $descriptor
      */
     public function __construct(array $descriptor)
     {
@@ -145,6 +171,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * Create the instance only if the dialect is a string
          */
         if (is_string($dialectClass)) {
+            /** @var class-string<DialectInterface> $dialectClass */
             $this->dialect = new $dialectClass();
         } elseif (is_object($dialectClass)) {
             if (!($dialectClass instanceof DialectInterface)) {
@@ -157,7 +184,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         $this->descriptor = $descriptor;
 
         if (isset($descriptor["options"]) && is_array($descriptor["options"])) {
-            self::setup($descriptor["options"]);
+            /** @var db_setup_options $options */
+            $options = $descriptor["options"];
+
+            self::setup($options);
         }
     }
 
@@ -171,6 +201,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * constructor calls `setup()` whenever a descriptor carries an `options`
      * key, constructing one adapter with `options` can change the SQL another,
      * already-configured connection generates.
+     *
+     * @phpstan-param db_setup_options $options
      */
     public static function setup(array $options): void
     {
@@ -260,6 +292,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Creates a materialized view (PostgreSQL only).
+     *
+     * @phpstan-param db_view_definition $definition
      */
     public function createMaterializedView(
         string $viewName,
@@ -399,6 +433,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         );
 
         foreach ($records as $index) {
+            /** @var db_column_names $index */
             $keyName           = $index[2];
             $columns           = $indexes[$keyName] ?? [];
             $columns[]         = $index[4];
@@ -450,6 +485,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         );
 
         foreach ($records as $reference) {
+            /** @var db_column_names $reference */
             $constraintName    = $reference[2];
             $referencedSchema  = $references[$constraintName]["referencedSchema"] ?? $reference[3];
             $referencedTable   = $references[$constraintName]["referencedTable"] ?? $reference[4];
@@ -470,7 +506,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         $referenceObjects = [];
         foreach ($references as $name => $arrayReference) {
             $referenceObjects[$name] = new Reference(
-                $name,
+                (string) $name,
                 [
                     "referencedSchema"  => $arrayReference["referencedSchema"],
                     "referencedTable"   => $arrayReference["referencedTable"],
@@ -629,7 +665,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param array|string $identifier
+     * @phpstan-param db_identifier $identifier
      */
     public function escapeIdentifier(array | float | int | string $identifier): string
     {
@@ -712,7 +748,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     ): mixed {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
-        return $row[$column] ?? false;
+        if (!is_array($row)) {
+            return false;
+        }
+
+        /** @var bool|string $value */
+        $value = $row[$column] ?? false;
+
+        return $value;
     }
 
     /**
@@ -745,7 +788,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         $result->setFetchMode($fetchMode);
 
-        return $result->fetch();
+        /** @var bool|db_row $row */
+        $row = $result->fetch();
+
+        return $row;
     }
 
     /**
@@ -920,6 +966,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @param array $fields
      *
+     * @phpstan-param db_bind_params      $values
+     * @phpstan-param db_column_names|null $fields
+     * @phpstan-param db_bind_types       $dataTypes
+     *
      * @throws Exception
      */
     public function insert(
@@ -952,7 +1002,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                 $insertValues[] = $placeholder["value"];
 
                 if ($placeholder["hasBindType"]) {
-                    $bindDataTypes[] = $placeholder["bindType"];
+                    /** @var int $bindType */
+                    $bindType        = $placeholder["bindType"];
+                    $bindDataTypes[] = $bindType;
                 }
             }
         }
@@ -1044,7 +1096,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * echo $connection->limit("SELECT * FROM co_invoices", 5);
      * ```
      *
-     * @param array|int $number
+     * @phpstan-param db_limit_number $number
      */
     public function limit(string $sqlQuery, mixed $number): string
     {
@@ -1073,6 +1125,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         );
 
         foreach ($tableNames as $tableName) {
+            /** @var db_table_names $tableName */
             $allTables[] = $tableName[0];
         }
 
@@ -1099,6 +1152,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         );
 
         foreach ($tableNames as $tableName) {
+            /** @var db_table_names $tableName */
             $allTables[] = $tableName[0];
         }
 
@@ -1127,6 +1181,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Appends an ON CONFLICT (...) DO UPDATE SET col = excluded.col upsert
      * clause to the supplied INSERT statement.
+     *
+     * @phpstan-param db_column_names $conflictColumns
+     * @phpstan-param db_column_names $updateColumns
      */
     public function onConflictUpdate(
         string $sqlQuery,
@@ -1175,6 +1232,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Appends a RETURNING clause to an INSERT/UPDATE/DELETE statement.
+     *
+     * @phpstan-param db_column_names $columns
      */
     public function returning(string $sqlQuery, array $columns): string
     {
@@ -1300,7 +1359,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             return [];
         }
 
-        return $options[0];
+        /** @var db_table_options $tableOptions */
+        $tableOptions = $options[0];
+
+        return $tableOptions;
     }
 
     /**
@@ -1370,7 +1432,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                 $updateValues[] = $placeholder["value"];
 
                 if ($placeholder["hasBindType"]) {
-                    $bindDataTypes[] = $placeholder["bindType"];
+                    /** @var int $bindType */
+                    $bindType        = $placeholder["bindType"];
+                    $bindDataTypes[] = $bindType;
                 }
             }
         }
@@ -1420,7 +1484,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
                  * be sent to the database system
                  */
                 if (isset($whereCondition["bindTypes"])) {
-                    $condition     = $whereCondition["bindTypes"];
+                    $condition = $whereCondition["bindTypes"];
+                    /** @var db_bind_types $condition */
                     $condition     = is_array($condition) ? $condition : [$condition];
                     $bindDataTypes = array_merge($bindDataTypes, $condition);
                 }
@@ -1504,8 +1569,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string | null $schemaName = null
     ): bool {
         $exists = $this->dialect->viewExists($viewName, $schemaName);
+        $row    = $this->fetchOne($exists, Enum::FETCH_NUM);
 
-        return $this->fetchOne($exists, Enum::FETCH_NUM)[0] > 0;
+        return is_array($row) && $row[0] > 0;
     }
 
     /**
@@ -1534,6 +1600,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *  - "value":       the value to bind (when "bind" is true)
      *  - "hasBindType": whether "bindType" must be collected
      *  - "bindType":    the bind type to collect (when applicable)
+     *
+     * @phpstan-param db_bind_types $dataTypes
+     *
+     * @phpstan-return db_value_placeholder
      */
     private function buildValuePlaceholder(
         mixed $value,
@@ -1551,7 +1621,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         }
 
         if (is_object($value)) {
-            $value = (string) $value;
+            /** @var Stringable $stringable */
+            $stringable = $value;
+            $value      = (string) $stringable;
         }
 
         if (null === $value) {

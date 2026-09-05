@@ -34,7 +34,7 @@ use Phalcon\Mvc\ModelInterface;
  * tags below record what all implementations provide.
  *
  * @method EvManagerInterface|null getCustomEventsManager(ModelInterface $model)
- * @method void setCustomEventsManager(ModelInterface $model, EvManagerInterface $eventsManager)
+ * @method void                    setCustomEventsManager(ModelInterface $model, EvManagerInterface $eventsManager)
  */
 interface ManagerInterface
 {

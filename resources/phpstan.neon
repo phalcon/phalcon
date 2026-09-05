@@ -187,6 +187,101 @@ parameters:
             message: "#Parameter \\#1 \\$callback of function call_user_func_array expects callable\\(\\): mixed, array\\{PDO, string\\} given#"
             path: ../src/DataMapper/Pdo/Connection/AbstractConnection.php
             reportUnmatched: false
+        # The adapter connects in its constructor, so the handle is present
+        # unless `close()` was called. PHPStan reads the property as nullable
+        # because `close()` is what clears it.
+        -
+            message: "#Cannot call method \\w+\\(\\) on PDO\\|null#"
+            paths:
+                - ../src/Db/Adapter/Pdo/AbstractPdo.php
+                - ../src/Db/Adapter/Pdo/Mysql.php
+                - ../src/Db/Adapter/Pdo/Postgresql.php
+                - ../src/Db/Adapter/Pdo/Sqlite.php
+            reportUnmatched: false
+        # `queryStatement()` returns a `PDOStatement` and the bundled PDO stub
+        # declares no `@throws`, so PHPStan reads the retry path around it as
+        # dead. The connection runs in exception mode, where PDO does throw a
+        # `PDOException`, and that is what the auto-reconnect retry catches.
+        -
+            message: "#(Dead catch - PDOException is never thrown in the try block|Call to function is_object\\(\\) with PDOStatement will always evaluate to true|Unreachable statement - code above always terminates)#"
+            path: ../src/Db/Adapter/Pdo/AbstractPdo.php
+            reportUnmatched: false
+        # A bound value is whatever the caller passed, and the bind type is
+        # what decides how it is cast. The Zephir source takes the same `var`
+        # and casts it the same way.
+        -
+            message: "#(Cannot cast mixed to string|Parameter \\#1 \\$value of function intval expects .*, mixed given)#"
+            paths:
+                - ../src/Db/Adapter/Pdo/AbstractPdo.php
+                - ../src/Db/Adapter/Pdo/Mysql.php
+                - ../src/Db/Adapter/Pdo/Postgresql.php
+                - ../src/Db/Adapter/Pdo/Sqlite.php
+            reportUnmatched: false
+        # The describe methods pair an `isset()` with a redundant null or
+        # offset check, and `preg_match()` proves the group the guard tests.
+        # Every guard is live in the Zephir source, where the row is `var`.
+        -
+            message: "#(Strict comparison using [!=]== between (string|mixed) and null will always evaluate to (true|false)|Offset ('?\\w+'?) on array\\{.*\\} in isset\\(\\) always exists and is not nullable)#"
+            paths:
+                - ../src/Db/Adapter/Pdo/Mysql.php
+                - ../src/Db/Adapter/Pdo/Postgresql.php
+                - ../src/Db/Adapter/Pdo/Sqlite.php
+            reportUnmatched: false
+        # `PDOStatement::setFetchMode()` is stubbed as one signature per
+        # fetch mode. `FETCH_CLASS` takes a class name and `FETCH_INTO` an
+        # object, and this branch serves both, so no single argument type
+        # satisfies the stub. `bindParams` is `var` in the Zephir source,
+        # where the `is_array()` guard below is live.
+        -
+            message: "#(Parameter \\#2 \\$args of method PDOStatement::setFetchMode\\(\\) expects string, object\\|string given|Call to function is_array\\(\\) with array<mixed> will always evaluate to true)#"
+            path: ../src/Db/Result/PdoResult.php
+            reportUnmatched: false
+        # The contract declares `dropTable()` with a required `string`
+        # schema, as the Zephir contract does, while every bundled dialect
+        # widens it to `string|null` and defaults it to null. Widening the
+        # contract breaks third-party implementors, so it lands in the next
+        # major.
+        -
+            message: "#Parameter \\#2 \\$schemaName of method Phalcon\\\\Contracts\\\\Db\\\\Dialect::dropTable\\(\\) expects string, string\\|null given#"
+            path: ../src/Db/Adapter/AbstractAdapter.php
+            reportUnmatched: false
+        # `stopProfile()` pairs with `startProfile()`, which is what fills
+        # `activeProfile`. Calling it on its own is a caller error, and the
+        # Zephir source has the same precondition. The `array_key_first()`
+        # guard below it is live there too, where the profile list is `var`.
+        -
+            message: "#(Cannot call method \\w+\\(\\) on Phalcon\\\\Db\\\\Profiler\\\\Item\\|null|Property Phalcon\\\\Db\\\\Profiler::\\$allProfiles .* does not accept array<Phalcon\\\\Db\\\\Profiler\\\\Item\\|null>|Strict comparison using !== between null and \\(int\\|string\\) will always evaluate to true)#"
+            path: ../src/Db/Profiler.php
+            reportUnmatched: false
+        # `RawValue` documents itself as taking any developer-authored value
+        # and rendering it verbatim, so the cast is what states the contract.
+        # The Zephir source takes the same `var` and casts it the same way.
+        -
+            message: "#Cannot cast mixed to string#"
+            path: ../src/Db/RawValue.php
+            reportUnmatched: false
+        # `escapeChar` is a typed property the concrete dialects set, but a
+        # dialect that never sets it leaves it uninitialized, and `??` is what
+        # falls back to the default. PHPStan reads the property as always set.
+        -
+            message: "#Property Phalcon\\\\Db\\\\Dialect\\\\\\w+::\\$escapeChar \\(string\\) on left side of \\?\\? is not nullable#"
+            path: ../src/Db/Dialect/Traits/TextTrait.php
+            reportUnmatched: false
+        # The definition array is `var` in the Zephir source, so the three
+        # type guards in the constructor are live there and are what raises
+        # `InvalidIndexColumns`, `InvalidIndexDirections` and
+        # `InvalidIndexWhere`. Only the documented shape makes them look dead.
+        -
+            message: "#(Call to function is_array\\(\\) with array<Phalcon\\\\Db\\\\RawValue\\|string> will always evaluate to true|Negated boolean expression is always false)#"
+            path: ../src/Db/Index.php
+            reportUnmatched: false
+        # The bundled stub declares `unpack()` as returning a plain `array`,
+        # so every unpacked value is `mixed`. The format character on each
+        # call decides the type, and the cast that follows is what states it.
+        -
+            message: "#Cannot cast mixed to (int|float)#"
+            path: ../src/Db/Geometry/WkbParser.php
+            reportUnmatched: false
         # `quote()` selects the scalar or the array branch on the `element`
         # copy, as the Zephir source does, so PHPStan does not carry that
         # narrowing back to `value` when the array branch iterates it.
@@ -270,7 +365,9 @@ parameters:
         # next major change, because it breaks every implementation.
         -
             message: "#Method Phalcon\\\\Contracts\\\\Db\\\\Result::fetchAll\\(\\) invoked with 1 parameter, 0 required#"
-            path: ../src/Mvc/Model/Resultset.php
+            paths:
+                - ../src/Db/Adapter/AbstractAdapter.php
+                - ../src/Mvc/Model/Resultset.php
             reportUnmatched: false
         # `__set()` returns the assigned value, as the Zephir source does.
         # PHP discards it and PHPStan hardcodes the magic method as `void`,

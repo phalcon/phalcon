@@ -21,6 +21,16 @@ use Phalcon\Db\ReferenceInterface;
 /**
  * Canonical contract for Phalcon\Db dialects.
  *
+ * @phpstan-import-type db_bind_counts from DbTypes
+ * @phpstan-import-type db_column_list from DbTypes
+ * @phpstan-import-type db_column_names from DbTypes
+ * @phpstan-import-type db_custom_functions from DbTypes
+ * @phpstan-import-type db_expression from DbTypes
+ * @phpstan-import-type db_limit_number from DbTypes
+ * @phpstan-import-type db_select_definition from DbTypes
+ * @phpstan-import-type db_table_definition from DbTypes
+ * @phpstan-import-type db_view_definition from DbTypes
+ *
  * @todo v7 - these will become required interface members. They are
  *            omitted from the v5 line to avoid breaking third-party
  *            implementors:
@@ -28,9 +38,27 @@ use Phalcon\Db\ReferenceInterface;
  *              - createMaterializedView()  : string
  *              - dropCheck()               : string
  *              - dropMaterializedView()    : string
+ *              - escape()                  : string
+ *              - escapeSchema()            : string
+ *              - listViews()               : string
  *              - onConflictUpdate()        : string
  *              - refreshMaterializedView() : string
  *              - returning()               : string
+ *
+ * The adapters call the members above on the interface. They join the
+ * interface in the next major; until then the tags below record what all
+ * implementations provide.
+ *
+ * @method string addCheck(string $tableName, string $schemaName, \Phalcon\Db\CheckInterface $check)
+ * @method string createMaterializedView(string $view, db_view_definition $definition, string|null $schema = null)
+ * @method string dropCheck(string $tableName, string $schemaName, string $checkName)
+ * @method string dropMaterializedView(string $viewName, string|null $schemaName = null, bool $ifExists = true)
+ * @method string escape(string $input, string $escapeChar = '')
+ * @method string escapeSchema(string $input, string $escapeChar = '')
+ * @method string listViews(string|null $schemaName = null)
+ * @method string onConflictUpdate(string $sqlQuery, db_column_names $conflictColumns, db_column_names $updateColumns)
+ * @method string refreshMaterializedView(string $viewName, string|null $schemaName = null, bool $concurrent = false)
+ * @method string returning(string $sqlQuery, db_column_names $columns)
  */
 interface Dialect
 {
@@ -92,6 +120,8 @@ interface Dialect
 
     /**
      * Generates SQL to create a table
+     *
+     * @phpstan-param db_table_definition $definition
      */
     public function createTable(
         string $tableName,
@@ -101,6 +131,8 @@ interface Dialect
 
     /**
      * Generates SQL to create a view
+     *
+     * @phpstan-param db_view_definition $definition
      */
     public function createView(
         string $viewName,
@@ -174,9 +206,9 @@ interface Dialect
     public function dropPrimaryKey(string $tableName, string $schemaName): string;
 
     /**
-     * Generates SQL to drop a table
-     *
-     * @param string|null $schemaName
+     * Generates SQL to drop a table. Every bundled dialect widens
+     * `schemaName` to `string|null` and defaults it to null; widening the
+     * contract itself is a next major change.
      */
     public function dropTable(
         string $tableName,
@@ -205,17 +237,24 @@ interface Dialect
 
     /**
      * Gets a list of columns
+     *
+     * @phpstan-param db_column_list $columnList
      */
     public function getColumnList(array $columnList): string;
 
     /**
      * Returns registered functions
+     *
+     * @phpstan-return db_custom_functions
      */
     public function getCustomFunctions(): array;
 
     /**
      * Transforms an intermediate representation for an expression into a
      * database system valid expression
+     *
+     * @phpstan-param db_expression   $expression
+     * @phpstan-param db_bind_counts  $bindCounts
      */
     public function getSqlExpression(
         array $expression,
@@ -225,6 +264,8 @@ interface Dialect
 
     /**
      * Generates the SQL for LIMIT clause
+     *
+     * @phpstan-param db_limit_number $number
      */
     public function limit(string $sqlQuery, array | int $number): string;
 
@@ -263,6 +304,8 @@ interface Dialect
 
     /**
      * Builds a SELECT statement
+     *
+     * @phpstan-param db_select_definition $definition
      */
     public function select(array $definition): string;
 

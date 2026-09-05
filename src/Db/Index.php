@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Exceptions\InvalidIndexColumns;
 use Phalcon\Db\Exceptions\InvalidIndexDirections;
 use Phalcon\Db\Exceptions\InvalidIndexWhere;
@@ -55,12 +56,18 @@ use Phalcon\Db\Exceptions\InvalidIndexWhere;
  *     ]
  * );
  *```
+ *
+ * @phpstan-import-type db_index_columns from DbTypes
+ * @phpstan-import-type db_index_definition from DbTypes
+ * @phpstan-import-type db_index_directions from DbTypes
  */
 class Index implements IndexInterface
 {
     /**
      * Index columns. Entries may be plain strings (column names) or
      * `Phalcon\Db\RawValue` instances (functional/expression index entries).
+     *
+     * @var db_index_columns
      */
     protected array $columns;
 
@@ -75,6 +82,8 @@ class Index implements IndexInterface
      * Per-column sort directions (`ASC` / `DESC`). Empty array means
      * "emit no per-column direction" - preserves the legacy plain
      * `(col1, col2)` rendering.
+     *
+     * @var db_index_directions
      */
     protected array $directions = [];
 
@@ -98,6 +107,8 @@ class Index implements IndexInterface
      * `columns` key in the second argument; when present, the third
      * positional `type` argument is ignored in favor of the definition.
      *
+     * @phpstan-param db_index_columns|db_index_definition $columnsOrDefinition
+     *
      * @throws Exception
      */
     public function __construct(
@@ -106,6 +117,7 @@ class Index implements IndexInterface
         protected string $type = ""
     ) {
         if (isset($columnsOrDefinition['columns'])) {
+            /** @var db_index_definition $columnsOrDefinition */
             if (!is_array($columnsOrDefinition['columns'])) {
                 throw new InvalidIndexColumns();
             }
@@ -138,12 +150,15 @@ class Index implements IndexInterface
                 $this->concurrent = (bool) $columnsOrDefinition['concurrently'];
             }
         } else {
+            /** @var db_index_columns $columnsOrDefinition */
             $this->columns = $columnsOrDefinition;
         }
     }
 
     /**
      * Index columns
+     *
+     * @phpstan-return db_index_columns
      */
     public function getColumns(): array
     {
@@ -154,6 +169,8 @@ class Index implements IndexInterface
      * Returns the per-column sort directions array (`ASC` / `DESC`).
      * Empty array means the index was declared without explicit per-column
      * directions.
+     *
+     * @phpstan-return db_index_directions
      */
     public function getDirections(): array
     {

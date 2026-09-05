@@ -20,16 +20,22 @@ use function implode;
 class MultiLineString extends AbstractGeometry
 {
     /**
-     * @var LineString[]
+     * @var list<LineString>
      */
     protected array $lineStrings;
 
+    /**
+     * @param list<LineString> $lineStrings
+     */
     public function __construct(array $lineStrings, int $srid = 0)
     {
         $this->lineStrings = $lineStrings;
         $this->srid        = $srid;
     }
 
+    /**
+     * @return list<LineString>
+     */
     public function getLineStrings(): array
     {
         return $this->lineStrings;

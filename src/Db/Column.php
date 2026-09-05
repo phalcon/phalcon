@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Exceptions\ColumnTypeRejectsAutoIncrement;
 use Phalcon\Db\Exceptions\ColumnTypeRejectsScale;
 use Phalcon\Db\Exceptions\ColumnTypeRequired;
@@ -43,6 +44,8 @@ use Phalcon\Db\Exceptions\InvalidGenerationExpression;
  * // Add column to existing table
  * $connection->addColumn("co_invoices", null, $column);
  *```
+ *
+ * @phpstan-import-type db_column_definition from DbTypes
  */
 class Column implements ColumnInterface
 {
@@ -417,11 +420,15 @@ class Column implements ColumnInterface
 
     /**
      * Column data type values
+     *
+     * @var array<array-key, string>|int|string
      */
     protected array | int | string $typeValues = [];
 
     /**
      * Phalcon\Db\Column constructor
+     *
+     * @phpstan-param db_column_definition $definition
      *
      * @throws Exception
      */
@@ -613,7 +620,7 @@ class Column implements ColumnInterface
     /**
      * Column data type values
      *
-     * @return array|string
+     * @return array<array-key, string>|int|string
      */
     public function getTypeValues(): array | int | string
     {
@@ -714,6 +721,9 @@ class Column implements ColumnInterface
         return $this->isUnsigned;
     }
 
+    /**
+     * @param int|string $type
+     */
     private function processColumnType(mixed $type): int | string
     {
         if (is_string($type)) {

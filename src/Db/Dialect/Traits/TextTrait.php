@@ -13,11 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect\Traits;
 
-use Phalcon\Db\Column;
+use Phalcon\Contracts\Db\DbTypes;
+use Phalcon\Db\ColumnInterface;
 use Phalcon\Db\Exception;
-use Phalcon\Db\Index;
+use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
-use Phalcon\Db\Reference;
+use Phalcon\Db\ReferenceInterface;
 
 use function explode;
 use function implode;
@@ -26,6 +27,12 @@ use function is_int;
 use function is_string;
 use function strtoupper;
 
+/**
+ * @phpstan-import-type db_column_list from DbTypes
+ * @phpstan-import-type db_columns from DbTypes
+ * @phpstan-import-type db_table_definition from DbTypes
+ * @phpstan-import-type db_table_options from DbTypes
+ */
 trait TextTrait
 {
     protected function alter(string $tableName, string | null $schemaName = null): string
@@ -44,15 +51,17 @@ trait TextTrait
             . $this->delimit($item);
     }
 
-    protected function checkColumnComment(Column $column): string
+    protected function checkColumnComment(ColumnInterface $column): string
     {
-        return empty($column->getComment())
+        $comment = $column->getComment();
+
+        return empty($comment)
             ? ''
-            : " COMMENT '" . $this->escapeStringLiteral($column->getComment()) . "'";
+            : " COMMENT '" . $this->escapeStringLiteral($comment) . "'";
     }
 
     protected function checkColumnFirstAfterPositions(
-        Column $column
+        ColumnInterface $column
     ): string {
         $sql = '';
         if (true === $column->isFirst()) {
@@ -68,7 +77,7 @@ trait TextTrait
         return $sql;
     }
 
-    protected function checkColumnHasDefault(Column $column): string
+    protected function checkColumnHasDefault(ColumnInterface $column): string
     {
         $sql = '';
 
@@ -96,6 +105,7 @@ trait TextTrait
             ) {
                 $sql = ' DEFAULT ' . $defaultValue;
             } else {
+                /** @var scalar|null $defaultValue */
                 $sql = " DEFAULT '"
                     . $this->escapeStringLiteral((string)$defaultValue)
                     . "'";
@@ -105,7 +115,7 @@ trait TextTrait
         return $sql;
     }
 
-    protected function checkColumnIsAutoIncrement(Column $column): string
+    protected function checkColumnIsAutoIncrement(ColumnInterface $column): string
     {
         if ($column->isGenerated()) {
             return '';
@@ -118,7 +128,7 @@ trait TextTrait
      * Emits the GENERATED ALWAYS AS (...) VIRTUAL|STORED clause. Wraps the
      * shared dialect helper for trait users.
      */
-    protected function checkColumnIsGenerated(Column $column): string
+    protected function checkColumnIsGenerated(ColumnInterface $column): string
     {
         return $this->getGeneratedClause($column);
     }
@@ -127,17 +137,17 @@ trait TextTrait
      * Emits the INVISIBLE keyword for MySQL 8.0.23+ invisible columns.
      * Other dialects override this trait helper to return an empty string.
      */
-    protected function checkColumnIsInvisible(Column $column): string
+    protected function checkColumnIsInvisible(ColumnInterface $column): string
     {
         return $column->isInvisible() ? ' INVISIBLE' : '';
     }
 
-    protected function checkColumnIsNull(Column $column): string
+    protected function checkColumnIsNull(ColumnInterface $column): string
     {
         return $column->isNotNull() ? ' NOT' : '';
     }
 
-    protected function checkColumnIsPrimary(Column $column): string
+    protected function checkColumnIsPrimary(ColumnInterface $column): string
     {
         return $column->isPrimary() ? ' PRIMARY KEY' : '';
     }
@@ -146,7 +156,7 @@ trait TextTrait
      * Checks if the size and/or scale are present and encloses those values
      * in parentheses if need be
      */
-    protected function checkColumnSizeAndScale(Column $column): string
+    protected function checkColumnSizeAndScale(ColumnInterface $column): string
     {
         $columnSql = '';
         if ($column->getSize()) {
@@ -165,12 +175,12 @@ trait TextTrait
     /**
      * Checks if a column is unsigned or not and returns the relevant SQL syntax
      */
-    protected function checkColumnUnsigned(Column $column): string
+    protected function checkColumnUnsigned(ColumnInterface $column): string
     {
         return $column->isUnsigned() ? ' UNSIGNED' : '';
     }
 
-    protected function checkReferenceConstraint(Reference $reference): string
+    protected function checkReferenceConstraint(ReferenceInterface $reference): string
     {
         $sql = '';
         if ($reference->getName()) {
@@ -180,7 +190,7 @@ trait TextTrait
         return $sql;
     }
 
-    protected function checkReferenceOnDelete(Reference $reference): string
+    protected function checkReferenceOnDelete(ReferenceInterface $reference): string
     {
         $onDelete = $reference->getOnDelete();
 
@@ -189,7 +199,7 @@ trait TextTrait
             : ' ON DELETE ' . $onDelete;
     }
 
-    protected function checkReferenceOnUpdate(Reference $reference): string
+    protected function checkReferenceOnUpdate(ReferenceInterface $reference): string
     {
         $onUpdate = $reference->getOnUpdate();
 
@@ -240,6 +250,10 @@ trait TextTrait
      * Returns the list of CONSTRAINT ... CHECK (...) lines for createTable.
      * Uses the dialect's escape character via the shared getCheckClause()
      * helper.
+     *
+     * @phpstan-param db_table_definition $definition
+     *
+     * @return list<string>
      */
     protected function getTableChecks(array $definition): array
     {
@@ -256,6 +270,13 @@ trait TextTrait
     }
 
     /**
+     * The caller rejects a definition without a column list, so the shape
+     * below is narrower than `db_table_definition`.
+     *
+     * @phpstan-param array{columns: db_columns} $definition
+     *
+     * @return list<string>
+     *
      * @throws Exception
      */
     protected function getTableColumns(array $definition): array
@@ -279,6 +300,11 @@ trait TextTrait
         return $result;
     }
 
+    /**
+     * @phpstan-param db_table_definition $definition
+     *
+     * @return list<string>
+     */
     protected function getTableIndexes(array $definition): array
     {
         $result = [];
@@ -287,7 +313,7 @@ trait TextTrait
          */
         if (isset($definition['indexes'])) {
             $indexes = $definition['indexes'];
-            /** @var Index $index */
+            /** @var IndexInterface $index */
             foreach ($indexes as $index) {
                 $indexName = $index->getName();
                 $indexType = $index->getType() ? $index->getType() . ' ' : '';
@@ -314,14 +340,21 @@ trait TextTrait
     }
 
     /**
-     * Generates SQL to add the table creation options
+     * Generates SQL to add the table creation options. The caller emits the
+     * clause only when the definition carries the options, so the shape
+     * below is narrower than `db_table_definition`.
+     *
+     * @phpstan-param array{options: db_table_options} $definition
      */
     protected function getTableOptions(array $definition): string
     {
         $tableNameOptions = [];
-        $options          = $definition['options'];
+        /** @var db_table_options $options */
+        $options = $definition['options'];
         /**
          * Check if there is an ENGINE option
+         *
+         * @var string $engine
          */
         $engine = $options['ENGINE'] ?? '';
         if (!empty($engine)) {
@@ -331,6 +364,7 @@ trait TextTrait
         /**
          * Check if there is an AUTO_INCREMENT option
          */
+        /** @var int|string $autoIncrement */
         $autoIncrement = $options['AUTO_INCREMENT'] ?? '';
         if (!empty($autoIncrement)) {
             $tableNameOptions[] = 'AUTO_INCREMENT=' . $autoIncrement;
@@ -339,6 +373,7 @@ trait TextTrait
         /**
          * Check if there is a TABLE_COLLATION option
          */
+        /** @var string $tableNameCollation */
         $tableNameCollation = $options['TABLE_COLLATION'] ?? '';
         if (!empty($tableNameCollation)) {
             $collationParts     = explode('_', $tableNameCollation);
@@ -349,6 +384,7 @@ trait TextTrait
         /**
          * Check if there is a TABLE_COMMENT option
          */
+        /** @var string $tableComment */
         $tableComment = $options['TABLE_COMMENT'] ?? '';
         if (!empty($tableComment)) {
             $tableNameOptions[] = "COMMENT='" . str_replace("'", "''", $tableComment) . "'";
@@ -358,6 +394,10 @@ trait TextTrait
     }
 
     /**
+     * @phpstan-param db_table_definition $definition
+     *
+     * @return list<string>
+     *
      * @throws Exception
      */
     protected function getTableReferences(array $definition): array

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Profiler\Item;
 use Phalcon\Db\Traits\ElapsedTimeTrait;
 
@@ -68,6 +69,10 @@ use function method_exists;
  * echo "Final Time: ", $profile->getFinalTime(), "\n";
  * echo "Total Elapsed Time: ", $profile->getTotalElapsedSeconds(), "\n";
  * ```
+ *
+ * @phpstan-import-type db_bind_params from DbTypes
+ * @phpstan-import-type db_bind_types from DbTypes
+ * @phpstan-import-type db_profiler_items from DbTypes
  */
 class Profiler
 {
@@ -81,7 +86,7 @@ class Profiler
     /**
      * All the Items in the active profile
      *
-     * @var Item[]
+     * @var db_profiler_items
      */
     protected array $allProfiles = [];
 
@@ -167,6 +172,9 @@ class Profiler
 
     /**
      * Starts the profile of a SQL sentence
+     *
+     * @phpstan-param db_bind_params $sqlVariables
+     * @phpstan-param db_bind_types  $sqlBindTypes
      *
      * @return $this
      */

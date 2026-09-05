@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Dialect;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\CheckInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
@@ -31,6 +32,9 @@ use function substr;
 
 /**
  * Generates database specific SQL for the PostgreSQL RDBMS
+ *
+ * @phpstan-import-type db_column_list from DbTypes
+ * @phpstan-import-type db_table_options from DbTypes
  */
 class Postgresql extends Dialect
 {
@@ -174,12 +178,15 @@ class Postgresql extends Dialect
         string $schemaName,
         IndexInterface $index
     ): string {
+        /** @var db_column_list $columns */
+        $columns = $index->getColumns();
+
         return "ALTER TABLE "
             . $this->prepareTable($tableName, $schemaName)
             . " ADD CONSTRAINT \""
             . $tableName
             . "_PRIMARY\" PRIMARY KEY ("
-            . $this->getColumnList($index->getColumns())
+            . $this->getColumnList($columns)
             . ")";
     }
 
@@ -217,7 +224,9 @@ class Postgresql extends Dialect
         }
 
         $tableName    = $this->prepareTable($tableName, $schemaName);
-        $options      = $definition["options"] ?? [];
+        /** @var db_table_options $options */
+        $options = $definition["options"] ?? [];
+        /** @var string $tableComment */
         $tableComment = $options["TABLE_COMMENT"] ?? "";
         $temporary    = $options["temporary"] ?? "";
         $temporary    = empty($temporary) ? "" : " TEMPORARY";
@@ -901,7 +910,7 @@ class Postgresql extends Dialect
                             . ")";
                     } else {
                         $columnSql .= "('"
-                            . $this->escapeStringLiteral($typeValues)
+                            . $this->escapeStringLiteral((string) $typeValues)
                             . "')";
                     }
                 }
@@ -1185,6 +1194,7 @@ class Postgresql extends Dialect
      */
     protected function castDefault(ColumnInterface $column): string
     {
+        /** @var RawValue|scalar|null $defaultValue */
         $defaultValue = $column->getDefault();
 
         /**
@@ -1221,13 +1231,16 @@ class Postgresql extends Dialect
             $preparedValue = (string)$defaultValue;
         } else {
             $preparedValue = "'"
-                . $this->escapeStringLiteral($defaultValue)
+                . $this->escapeStringLiteral((string) $defaultValue)
                 . "'";
         }
 
         return $preparedValue;
     }
 
+    /**
+     * @phpstan-param array{options: db_table_options} $definition
+     */
     protected function getTableOptions(array $definition): string
     {
         return "";

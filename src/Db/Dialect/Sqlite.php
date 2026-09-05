@@ -30,6 +30,7 @@ use Phalcon\Db\Exceptions\SqliteDropForeignKeyNotSupported;
 use Phalcon\Db\Exceptions\SqliteDropPrimaryKeyNotSupported;
 use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
+use Phalcon\Db\RawValue;
 use Phalcon\Db\ReferenceInterface;
 
 use function is_array;
@@ -78,9 +79,10 @@ class Sqlite extends Dialect
             . $this->getGeneratedClause($column);
 
         if (!$column->isGenerated() && true === $column->hasDefault()) {
+            /** @var RawValue|scalar|null $defaultValue */
             $defaultValue = $column->getDefault();
 
-            if ($defaultValue instanceof \Phalcon\Db\RawValue) {
+            if ($defaultValue instanceof RawValue) {
                 $sql .= ' DEFAULT ' . $defaultValue->getValue();
             } elseif (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
                 $sql .= " DEFAULT CURRENT_TIMESTAMP";
@@ -220,9 +222,10 @@ class Sqlite extends Dialect
                  * Add a Default clause
                  */
                 if (true === $column->hasDefault()) {
+                    /** @var RawValue|scalar|null $defaultValue */
                     $defaultValue = $column->getDefault();
 
-                    if ($defaultValue instanceof \Phalcon\Db\RawValue) {
+                    if ($defaultValue instanceof RawValue) {
                         $columnLine .= ' DEFAULT ' . $defaultValue->getValue();
                     } elseif (str_contains(strtoupper((string)$defaultValue), "CURRENT_TIMESTAMP")) {
                         $columnLine .= " DEFAULT CURRENT_TIMESTAMP";
@@ -656,7 +659,7 @@ class Sqlite extends Dialect
                             . ")";
                     } else {
                         $columnSql .= "('"
-                            . $this->escapeStringLiteral($typeValues)
+                            . $this->escapeStringLiteral((string) $typeValues)
                             . "')";
                     }
                 }

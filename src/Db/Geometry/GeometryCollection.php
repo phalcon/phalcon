@@ -20,16 +20,22 @@ use function implode;
 class GeometryCollection extends AbstractGeometry
 {
     /**
-     * @var GeometryInterface[]
+     * @var list<GeometryInterface>
      */
     protected array $geometries;
 
+    /**
+     * @param list<GeometryInterface> $geometries
+     */
     public function __construct(array $geometries, int $srid = 0)
     {
         $this->geometries = $geometries;
         $this->srid       = $srid;
     }
 
+    /**
+     * @return list<GeometryInterface>
+     */
     public function getGeometries(): array
     {
         return $this->geometries;

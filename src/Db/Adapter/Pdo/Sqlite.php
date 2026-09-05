@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Db\Adapter\Pdo;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo as PdoAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Dialect\Sqlite as SqliteDialect;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\MissingSqliteDatabase;
@@ -42,6 +44,10 @@ use function trigger_error;
  *     ]
  * );
  * ```
+ *
+ * @phpstan-import-type db_describe_row from DbTypes
+ * @phpstan-import-type db_index_columns from DbTypes
+ * @phpstan-import-type db_reference_build from DbTypes
  */
 class Sqlite extends PdoAdapter
 {
@@ -118,7 +124,10 @@ class Sqlite extends PdoAdapter
 
         foreach ($fields as $field) {
             /**
-             * By default, the bind types is 2 (string)
+             * By default, the bind types is 2 (string). SQLite hands back
+             * native types, so a row value is any scalar.
+             *
+             * @var array<array-key, scalar|null> $field
              */
             $definition = [
                 "bindType" => Column::BIND_PARAM_STR,
@@ -128,6 +137,7 @@ class Sqlite extends PdoAdapter
              * By checking every column type we convert it to a
              * Phalcon\Db\Column
              */
+            /** @var string $columnType */
             $columnType = $field[2];
 
             /**
@@ -341,14 +351,17 @@ class Sqlite extends PdoAdapter
                  * Check if the column is default values
                  * When field is empty default value is null
                  */
+                /** @var string $rawDefault */
+                $rawDefault = $field[4] ?? '';
+
                 if (
-                    !empty($field[4]) &&
-                    0 !== strcasecmp($field[4], "null")
+                    !empty($rawDefault) &&
+                    0 !== strcasecmp($rawDefault, "null")
                 ) {
                     $definition["default"] = preg_replace(
                         "/(?:^')|(?:'$)/",
                         "",
-                        $field[4]
+                        $rawDefault
                     );
                 }
             }
@@ -356,6 +369,7 @@ class Sqlite extends PdoAdapter
             /**
              * Every route is stored as a Phalcon\Db\Column
              */
+            /** @var string $columnName */
             $columnName = $field[1];
             $columns[]  = new Column($columnName, $definition);
             $oldColumn  = $columnName;
@@ -381,10 +395,15 @@ class Sqlite extends PdoAdapter
         string $tableName,
         string | null $schemaName = null
     ): array {
+        /** @var array<string, array{columns: db_index_columns, type: string}> $indexes */
         $indexes = [];
 
-        foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName)) as $index) {
-            $keyName = $index["name"];
+        /** @var SqliteDialect $dialect */
+        $dialect = $this->dialect;
+
+        foreach ($this->fetchAll($dialect->describeIndexes($tableName, $schemaName)) as $index) {
+            /** @var db_describe_row $index */
+            $keyName = (string) $index["name"];
 
             if (!isset($indexes[$keyName])) {
                 $indexes[$keyName] = [];
@@ -393,23 +412,24 @@ class Sqlite extends PdoAdapter
             $columns = $indexes[$keyName]["columns"] ?? [];
 
             $describeIndexes = $this->fetchAll(
-                $this->dialect->describeIndex($keyName),
+                $dialect->describeIndex($keyName),
                 Enum::FETCH_ASSOC
             );
 
             foreach ($describeIndexes as $describeIndex) {
-                $columns[] = $describeIndex["name"];
+                /** @var db_describe_row $describeIndex */
+                $columns[] = (string) $describeIndex["name"];
             }
 
             $indexes[$keyName]["columns"] = $columns;
 
             $indexSql = $this->fetchColumn(
-                $this->dialect->listIndexesSql($tableName, $schemaName, $keyName)
+                $dialect->listIndexesSql($tableName, $schemaName, $keyName)
             );
 
             $indexes[$keyName]["type"] = "";
             if ($index["unique"]) {
-                if (preg_match("# UNIQUE #i", $indexSql)) {
+                if (preg_match("# UNIQUE #i", (string) $indexSql)) {
                     $indexes[$keyName]["type"] = "UNIQUE";
                 } else {
                     $indexes[$keyName]["type"] = "PRIMARY";
@@ -419,6 +439,7 @@ class Sqlite extends PdoAdapter
 
         $indexObjects = [];
         foreach ($indexes as $name => $index) {
+            /** @var array{columns: db_index_columns, type: string} $index */
             $indexObjects[$name] = new Index(
                 $name,
                 $index["columns"],
@@ -441,6 +462,7 @@ class Sqlite extends PdoAdapter
         string $tableName,
         string | null $schemaName = null
     ): array {
+        /** @var array<string, db_reference_build> $references */
         $references = [];
         $records    = $this->fetchAll(
             $this->dialect->describeReferences($tableName, $schemaName),
@@ -448,6 +470,7 @@ class Sqlite extends PdoAdapter
         );
 
         foreach ($records as $number => $reference) {
+            /** @var db_describe_row $reference */
             $constraintName = "foreign_key_" . $number;
 
             $referencedSchema  = $references[$constraintName]["referencedSchema"] ?? null;
@@ -468,8 +491,9 @@ class Sqlite extends PdoAdapter
 
         $referenceObjects = [];
         foreach ($references as $name => $arrayReference) {
+            /** @var db_reference_build $arrayReference */
             $referenceObjects[$name] = new Reference(
-                $name,
+                (string) $name,
                 [
                     "referencedSchema"  => $arrayReference["referencedSchema"],
                     "referencedTable"   => $arrayReference["referencedTable"],

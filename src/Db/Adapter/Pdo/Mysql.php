@@ -15,9 +15,11 @@ namespace Phalcon\Db\Adapter\Pdo;
 
 use PDO;
 use PDOException;
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\Pdo\AbstractPdo as PdoAdapter;
 use Phalcon\Db\Column;
 use Phalcon\Db\ColumnInterface;
+use Phalcon\Db\Dialect\Mysql as MysqlDialect;
 use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\MissingForeignKeyChecks;
@@ -52,6 +54,14 @@ use function substr;
  *
  * $connection = new Mysql($config);
  *```
+ *
+ * @phpstan-import-type db_column_names from DbTypes
+ * @phpstan-import-type db_describe_row from DbTypes
+ * @phpstan-import-type db_error_info from DbTypes
+ * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_index_build from DbTypes
+ * @phpstan-import-type db_pdo_options from DbTypes
+ * @phpstan-import-type db_reference_build from DbTypes
  */
 class Mysql extends PdoAdapter
 {
@@ -69,7 +79,10 @@ class Mysql extends PdoAdapter
         string $schemaName,
         ReferenceInterface $reference
     ): bool {
-        $foreignKeyCheck = $this->prepare($this->dialect->getForeignKeyChecks());
+        /** @var MysqlDialect $dialect */
+        $dialect = $this->dialect;
+
+        $foreignKeyCheck = $this->prepare($dialect->getForeignKeyChecks());
 
         if (true !== $foreignKeyCheck->execute()) {
             throw new MissingForeignKeyChecks();
@@ -98,6 +111,8 @@ class Mysql extends PdoAdapter
      *                          'dsn' => null,
      *                          'charset' => 'utf8mb4'
      *                          ]
+     *
+     * @phpstan-param db_descriptor $descriptor
      */
     public function connect(array $descriptor = []): void
     {
@@ -107,13 +122,19 @@ class Mysql extends PdoAdapter
          * Returning numbers as numbers and not strings. If the user already
          * set this option in the descriptor["options"], we do not have to set
          * anything
+         *
+         * @var db_pdo_options $options
          */
-        if (!isset($descriptor["options"][PDO::ATTR_EMULATE_PREPARES])) {
-            $descriptor["options"][PDO::ATTR_EMULATE_PREPARES] = false;
+        $options = $descriptor["options"] ?? [];
+
+        if (!isset($options[PDO::ATTR_EMULATE_PREPARES])) {
+            $options[PDO::ATTR_EMULATE_PREPARES] = false;
         }
-        if (!isset($descriptor["options"][PDO::ATTR_STRINGIFY_FETCHES])) {
-            $descriptor["options"][PDO::ATTR_STRINGIFY_FETCHES] = false;
+        if (!isset($options[PDO::ATTR_STRINGIFY_FETCHES])) {
+            $options[PDO::ATTR_STRINGIFY_FETCHES] = false;
         }
+
+        $descriptor["options"] = $options;
 
         parent::connect($descriptor);
     }
@@ -166,6 +187,8 @@ class Mysql extends PdoAdapter
         foreach ($fields as $field) {
             /**
              * By default, the bind types is 2
+             *
+             * @var db_describe_row $field
              */
             $definition = [
                 "bindType" => Column::BIND_PARAM_STR,
@@ -180,6 +203,7 @@ class Mysql extends PdoAdapter
              * case already, so the str_starts_with checks below still match,
              * while preserving the case of ENUM values (e.g. 'A','I','X').
              */
+            /** @var string $columnType */
             $columnType = $field[1];
 
             /**
@@ -603,6 +627,7 @@ class Mysql extends PdoAdapter
             /**
              * Every route is stored as a Phalcon\Db\Column
              */
+            /** @var string $columnName */
             $columnName = $field[0];
             $columns[]  = new Column($columnName, $definition);
             $oldColumn  = $columnName;
@@ -627,9 +652,11 @@ class Mysql extends PdoAdapter
         string $tableName,
         string | null $schemaName = null
     ): array {
+        /** @var array<string, db_index_build> $indexes */
         $indexes = [];
 
         foreach ($this->fetchAll($this->dialect->describeIndexes($tableName, $schemaName)) as $index) {
+            /** @var db_column_names $index */
             $keyName   = $index["Key_name"];
             $indexType = $index["Index_type"];
 
@@ -674,6 +701,7 @@ class Mysql extends PdoAdapter
 
         $indexObjects = [];
         foreach ($indexes as $name => $index) {
+            /** @var db_index_build $index */
             $invisible = false;
             if (isset($index["invisible"])) {
                 $invisible = (bool) $index["invisible"];
@@ -724,13 +752,16 @@ class Mysql extends PdoAdapter
         string $tableName,
         string | null $schemaName = null
     ): array {
-        $references = [];
-        $records    = $this->fetchAll(
+        $records = $this->fetchAll(
             $this->dialect->describeReferences($tableName, $schemaName),
             Enum::FETCH_NUM
         );
 
+        /** @var array<string, db_reference_build> $references */
+        $references = [];
+
         foreach ($records as $reference) {
+            /** @var db_column_names $reference */
             $constraintName    = $reference[2];
             $columns           = $references[$constraintName]["columns"] ?? [];
             $referenceDelete   = $references[$constraintName]["onDelete"] ?? $reference[7];
@@ -754,6 +785,7 @@ class Mysql extends PdoAdapter
 
         $referenceObjects = [];
         foreach ($references as $name => $arrayReference) {
+            /** @var db_reference_build $arrayReference */
             $referenceObjects[$name] = new Reference(
                 $name,
                 [
@@ -790,6 +822,7 @@ class Mysql extends PdoAdapter
     protected function isConnectionError(Throwable $exception): bool
     {
         if ($exception instanceof PDOException) {
+            /** @var db_error_info|null $errorInfo */
             $errorInfo = $exception->errorInfo;
             if (isset($errorInfo[1])) {
                 $driverCode = (int)$errorInfo[1];

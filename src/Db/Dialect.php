@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Db;
 
+use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Exceptions\ConflictTargetColumnRequired;
 use Phalcon\Db\Exceptions\ConflictUpdateColumnRequired;
 use Phalcon\Db\Exceptions\InvalidGroupByExpression;
@@ -41,25 +42,46 @@ use function trim;
 /**
  * This is the base class to each database dialect. This implements
  * common methods to transform intermediate code into its RDBMS related syntax
+ *
+ * @phpstan-import-type db_bind_counts from DbTypes
+ * @phpstan-import-type db_column_list from DbTypes
+ * @phpstan-import-type db_column_names from DbTypes
+ * @phpstan-import-type db_custom_functions from DbTypes
+ * @phpstan-import-type db_expression from DbTypes
+ * @phpstan-import-type db_limit_expression from DbTypes
+ * @phpstan-import-type db_joins from DbTypes
+ * @phpstan-import-type db_limit_number from DbTypes
+ * @phpstan-import-type db_select_definition from DbTypes
+ * @phpstan-import-type db_table_name from DbTypes
+ * @phpstan-import-type db_view_definition from DbTypes
  */
 abstract class Dialect implements DialectInterface
 {
+    /**
+     * @var db_custom_functions
+     */
     protected array $customFunctions = [];
     protected string $escapeChar;
     /**
      * Dialect-specific operators that a concrete dialect must opt into via
      * $supportedOperators; using one elsewhere throws.
+     *
+     * @var list<string>
      */
     protected array $guardedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
     /**
      * Subset of $guardedOperators that this dialect emits. Overridden per
      * dialect.
+     *
+     * @var list<string>
      */
     protected array $supportedOperators = [];
 
     /**
      * Generates SQL to create a materialized view. Supported by PostgreSQL;
      * MySQL and SQLite inherit this throw.
+     *
+     * @phpstan-param db_view_definition $definition
      *
      * @throws Exception
      */
@@ -182,6 +204,9 @@ abstract class Dialect implements DialectInterface
      * );
      * ```
      *
+     * @phpstan-param db_column_list $columnList
+     * @phpstan-param db_bind_counts $bindCounts
+     *
      * @throws Exception
      */
     final public function getColumnList(
@@ -200,6 +225,8 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Returns registered functions
+     *
+     * @phpstan-return db_custom_functions
      */
     public function getCustomFunctions(): array
     {
@@ -208,6 +235,9 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Resolve Column expressions
+     *
+     * @phpstan-param db_expression  $column
+     * @phpstan-param db_bind_counts $bindCounts
      *
      * @throws Exception
      */
@@ -270,7 +300,9 @@ abstract class Dialect implements DialectInterface
          * Escape alias and concatenate to value SQL
          */
         if (isset($columnExpression["sqlAlias"]) || isset($columnExpression["alias"])) {
+            /** @var string|null $columnAlias */
             $columnAlias = $columnExpression["sqlAlias"] ?? null;
+            /** @var string $columnAlias */
             $columnAlias = (null === $columnAlias) ? $columnExpression["alias"] : $columnAlias;
 
             return $this->prepareColumnAlias($column, $columnAlias, $escapeChar);
@@ -283,6 +315,9 @@ abstract class Dialect implements DialectInterface
      * Transforms an intermediate representation for an expression into a
      * database system valid expression
      *
+     * @phpstan-param db_expression  $expression
+     * @phpstan-param db_bind_counts $bindCounts
+     *
      * @throws Exception
      */
     public function getSqlExpression(
@@ -294,6 +329,7 @@ abstract class Dialect implements DialectInterface
             throw new InvalidSqlExpression();
         }
 
+        /** @var string $type */
         $type = $expression["type"];
         switch ($type) {
             /**
@@ -326,20 +362,25 @@ abstract class Dialect implements DialectInterface
              * Resolve literal OR placeholder expressions
              */
             case "literal":
+                /** @var string $literal */
+                $literal = $expression["value"];
+
                 if (isset($expression["escape"]) && $expression["escape"]) {
-                    return "'"
-                        . $this->escapeStringLiteral($expression["value"])
-                        . "'";
+                    return "'" . $this->escapeStringLiteral($literal) . "'";
                 }
 
-                return $expression["value"];
+                return $literal;
 
             case "placeholder":
+                /** @var string $value */
+                $value = $expression["value"];
+
                 if (isset($expression["times"])) {
                     $placeholders = [];
-                    $rawValue     = $expression["rawValue"];
-                    $value        = $expression["value"];
-                    $times        = $expression["times"];
+                    /** @var string $rawValue */
+                    $rawValue = $expression["rawValue"];
+                    /** @var int $times */
+                    $times = $expression["times"];
 
                     if (isset($bindCounts[$rawValue])) {
                         $times = $bindCounts[$rawValue];
@@ -352,7 +393,7 @@ abstract class Dialect implements DialectInterface
                     return implode(", ", $placeholders);
                 }
 
-                return $expression["value"];
+                return $value;
 
             /**
              * Resolve binary operations expressions
@@ -378,12 +419,11 @@ abstract class Dialect implements DialectInterface
              * Resolve parentheses
              */
             case "parentheses":
+                /** @var db_expression $left */
+                $left = $expression["left"];
+
                 return "("
-                    . $this->getSqlExpression(
-                        $expression["left"],
-                        $escapeChar,
-                        $bindCounts
-                    )
+                    . $this->getSqlExpression($left, $escapeChar, $bindCounts)
                     . ")";
 
             /**
@@ -423,6 +463,7 @@ abstract class Dialect implements DialectInterface
              * issue #17004.
              */
             case "select":
+                /** @var db_select_definition $nestedDefinition */
                 $nestedDefinition = $expression["value"];
                 if (!empty($bindCounts)) {
                     $nestedDefinition["bindCounts"] = $bindCounts;
@@ -466,6 +507,8 @@ abstract class Dialect implements DialectInterface
     /**
      * Transform an intermediate representation of a schema/table into a
      * database system valid expression
+     *
+     * @phpstan-param db_table_name $tableName
      */
     final public function getSqlTable(
         array | string $tableName,
@@ -479,7 +522,7 @@ abstract class Dialect implements DialectInterface
              */
 
             return $this->prepareTable(
-                $tableName[0] ?? null,
+                $tableName[0],
                 $tableName[1] ?? null,
                 $tableName[2] ?? '',
                 $escapeChar
@@ -506,7 +549,7 @@ abstract class Dialect implements DialectInterface
      * );
      * ```
      *
-     * @param array|int $number
+     * @phpstan-param db_limit_number $number
      */
     public function limit(string $sqlQuery, mixed $number): string
     {
@@ -519,8 +562,11 @@ abstract class Dialect implements DialectInterface
         if (is_array($number)) {
             $sqlQuery .= " LIMIT " . $this->getLimitValue($number[0]);
 
-            if (isset($number[1]) && strlen((string) $number[1])) {
-                $sqlQuery .= " OFFSET " . $this->getLimitValue($number[1]);
+            /** @var scalar|null $offset */
+            $offset = $number[1] ?? null;
+
+            if (null !== $offset && strlen((string) $offset)) {
+                $sqlQuery .= " OFFSET " . $this->getLimitValue($offset);
             }
 
             return $sqlQuery;
@@ -534,6 +580,9 @@ abstract class Dialect implements DialectInterface
      * upsert clause to the supplied INSERT statement. Supported by
      * PostgreSQL 9.5+ and SQLite 3.24+. MySQL overrides this method to
      * throw.
+     *
+     * @phpstan-param db_column_names $conflictColumns
+     * @phpstan-param db_column_names $updateColumns
      *
      * @throws Exception
      */
@@ -556,6 +605,7 @@ abstract class Dialect implements DialectInterface
             $assignments[] = $escaped . ' = excluded.' . $escaped;
         }
 
+        /** @var db_column_list $conflictColumns */
         return $sqlQuery
             . ' ON CONFLICT (' . $this->getColumnList($conflictColumns) . ')'
             . ' DO UPDATE SET ' . implode(', ', $assignments);
@@ -600,6 +650,8 @@ abstract class Dialect implements DialectInterface
      * Returns a SQL statement extended with a `RETURNING` clause.
      * Supported by PostgreSQL and SQLite 3.35+; MySQL inherits the throw.
      *
+     * @phpstan-param db_column_names $columns
+     *
      * @throws Exception
      */
     public function returning(string $sqlQuery, array $columns): string
@@ -618,6 +670,8 @@ abstract class Dialect implements DialectInterface
     /**
      * Builds a SELECT statement
      *
+     * @phpstan-param db_select_definition $definition
+     *
      * @throws Exception
      */
     public function select(array $definition): string
@@ -630,8 +684,11 @@ abstract class Dialect implements DialectInterface
             throw new MissingDefinitionKey("columns");
         }
 
+        /** @var db_bind_counts $bindCounts */
         $bindCounts = $definition["bindCounts"] ?? [];
-        $columns    = $definition["columns"];
+        /** @var db_column_list $columns */
+        $columns = $definition["columns"];
+        /** @var array<array-key, db_table_name>|string $tableNames */
         $tableNames = $definition["tables"];
         $escapeChar = $this->escapeChar;
 
@@ -657,12 +714,11 @@ abstract class Dialect implements DialectInterface
             isset($definition["joins"]) &&
             !empty($definition["joins"])
         ) {
+            /** @var db_joins $joins */
+            $joins = $definition["joins"];
+
             $sql .= " "
-                . $this->getSqlExpressionJoins(
-                    $definition["joins"],
-                    $escapeChar,
-                    $bindCounts
-                );
+                . $this->getSqlExpressionJoins($joins, $escapeChar, $bindCounts);
         }
 
         /**
@@ -672,12 +728,11 @@ abstract class Dialect implements DialectInterface
             isset($definition["where"]) &&
             !empty($definition["where"])
         ) {
+            /** @var db_expression|string $where */
+            $where = $definition["where"];
+
             $sql .= " "
-                . $this->getSqlExpressionWhere(
-                    $definition["where"],
-                    $escapeChar,
-                    $bindCounts
-                );
+                . $this->getSqlExpressionWhere($where, $escapeChar, $bindCounts);
         }
 
         /**
@@ -687,11 +742,10 @@ abstract class Dialect implements DialectInterface
             isset($definition["group"]) &&
             !empty($definition["group"])
         ) {
-            $sql .= " "
-                . $this->getSqlExpressionGroupBy(
-                    $definition["group"],
-                    $escapeChar
-                );
+            /** @var array<array-key, db_expression>|string $group */
+            $group = $definition["group"];
+
+            $sql .= " " . $this->getSqlExpressionGroupBy($group, $escapeChar);
         }
 
         /**
@@ -701,12 +755,11 @@ abstract class Dialect implements DialectInterface
             isset($definition["having"]) &&
             !empty($definition["having"])
         ) {
+            /** @var db_expression $having */
+            $having = $definition["having"];
+
             $sql .= " "
-                . $this->getSqlExpressionHaving(
-                    $definition["having"],
-                    $escapeChar,
-                    $bindCounts
-                );
+                . $this->getSqlExpressionHaving($having, $escapeChar, $bindCounts);
         }
 
         /**
@@ -716,12 +769,11 @@ abstract class Dialect implements DialectInterface
             isset($definition["order"]) &&
             !empty($definition["order"])
         ) {
+            /** @var array<array-key, db_expression>|string $order */
+            $order = $definition["order"];
+
             $sql .= " "
-                . $this->getSqlExpressionOrderBy(
-                    $definition["order"],
-                    $escapeChar,
-                    $bindCounts
-                );
+                . $this->getSqlExpressionOrderBy($order, $escapeChar, $bindCounts);
         }
 
         /**
@@ -923,6 +975,7 @@ abstract class Dialect implements DialectInterface
         }
 
         if (!$hasExpression && empty($directions)) {
+            /** @var db_column_list $columns */
             return $this->getColumnList($columns);
         }
 
@@ -965,16 +1018,21 @@ abstract class Dialect implements DialectInterface
             return $value;
         }
 
+        /** @var scalar|null $value */
+
         return (string) (int) $value;
     }
 
     /**
      * Resolve *
+     *
+     * @phpstan-param db_expression $expression
      */
     final protected function getSqlExpressionAll(
         array $expression,
         string $escapeChar = ""
     ): string {
+        /** @var string $domain */
         $domain = $expression["domain"] ?? '';
 
         return $this->prepareQualified(
@@ -988,12 +1046,16 @@ abstract class Dialect implements DialectInterface
      * Resolve binary operations expressions
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionBinaryOperations(
         array $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
+        /** @var string $operator */
         $operator = $expression["op"];
 
         if (
@@ -1003,17 +1065,13 @@ abstract class Dialect implements DialectInterface
             throw new UnsupportedOperator($operator);
         }
 
-        $left = $this->getSqlExpression(
-            $expression["left"],
-            $escapeChar,
-            $bindCounts
-        );
+        /** @var db_expression $leftNode */
+        $leftNode = $expression["left"];
+        /** @var db_expression $rightNode */
+        $rightNode = $expression["right"];
 
-        $right = $this->getSqlExpression(
-            $expression["right"],
-            $escapeChar,
-            $bindCounts
-        );
+        $left  = $this->getSqlExpression($leftNode, $escapeChar, $bindCounts);
+        $right = $this->getSqlExpression($rightNode, $escapeChar, $bindCounts);
 
         return $left . " " . $operator . " " . $right;
     }
@@ -1022,23 +1080,37 @@ abstract class Dialect implements DialectInterface
      * Resolve CASE expressions
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionCase(
         array $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
-        $sql = "CASE " . $this->getSqlExpression($expression["expr"], $escapeChar, $bindCounts);
+        /** @var db_expression $caseExpr */
+        $caseExpr = $expression["expr"];
+        /** @var array<array-key, db_expression> $whenClauses */
+        $whenClauses = $expression["when-clauses"];
 
-        foreach ($expression["when-clauses"] as $whenClause) {
+        $sql = "CASE " . $this->getSqlExpression($caseExpr, $escapeChar, $bindCounts);
+
+        foreach ($whenClauses as $whenClause) {
+            /** @var db_expression $whenExpr */
+            $whenExpr = $whenClause["expr"];
+
             if ("when" === $whenClause["type"]) {
+                /** @var db_expression $whenThen */
+                $whenThen = $whenClause["then"];
+
                 $sql .= " WHEN "
-                    . $this->getSqlExpression($whenClause["expr"], $escapeChar, $bindCounts)
+                    . $this->getSqlExpression($whenExpr, $escapeChar, $bindCounts)
                     . " THEN "
-                    . $this->getSqlExpression($whenClause["then"], $escapeChar, $bindCounts);
+                    . $this->getSqlExpression($whenThen, $escapeChar, $bindCounts);
             } else {
                 $sql .= " ELSE "
-                    . $this->getSqlExpression($whenClause["expr"], $escapeChar, $bindCounts);
+                    . $this->getSqlExpression($whenExpr, $escapeChar, $bindCounts);
             }
         }
 
@@ -1049,23 +1121,22 @@ abstract class Dialect implements DialectInterface
      * Resolve CAST of values
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionCastValue(
         array $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
-        $left = $this->getSqlExpression(
-            $expression["left"],
-            $escapeChar,
-            $bindCounts
-        );
+        /** @var db_expression $leftNode */
+        $leftNode = $expression["left"];
+        /** @var db_expression $rightNode */
+        $rightNode = $expression["right"];
 
-        $right = $this->getSqlExpression(
-            $expression["right"],
-            $escapeChar,
-            $bindCounts
-        );
+        $left  = $this->getSqlExpression($leftNode, $escapeChar, $bindCounts);
+        $right = $this->getSqlExpression($rightNode, $escapeChar, $bindCounts);
 
         return "CAST(" . $left . " AS " . $right . ")";
     }
@@ -1074,64 +1145,71 @@ abstract class Dialect implements DialectInterface
      * Resolve CONVERT of values encodings
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionConvertValue(
         array $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
-        $left = $this->getSqlExpression(
-            $expression["left"],
-            $escapeChar,
-            $bindCounts
-        );
+        /** @var db_expression $leftNode */
+        $leftNode = $expression["left"];
+        /** @var db_expression $rightNode */
+        $rightNode = $expression["right"];
 
-        $right = $this->getSqlExpression(
-            $expression["right"],
-            $escapeChar,
-            $bindCounts
-        );
+        $left  = $this->getSqlExpression($leftNode, $escapeChar, $bindCounts);
+        $right = $this->getSqlExpression($rightNode, $escapeChar, $bindCounts);
 
         return "CONVERT(" . $left . " USING " . $right . ")";
     }
 
     /**
      * Resolve a FROM clause
+     *
+     * @phpstan-param array<array-key, db_table_name>|string $expression
      */
     final protected function getSqlExpressionFrom(
         array | string $expression,
         string $escapeChar = ""
     ): string {
-        $tableNames = $expression;
         if (is_array($expression)) {
-            $tableNames = [];
+            $tables = [];
 
             foreach ($expression as $tableName) {
-                $tableNames[] = $this->getSqlTable($tableName, $escapeChar);
+                $tables[] = $this->getSqlTable($tableName, $escapeChar);
             }
 
-            $tableNames = implode(", ", $tableNames);
+            return "FROM " . implode(", ", $tables);
         }
 
-        return "FROM " . $tableNames;
+        return "FROM " . $expression;
     }
 
     /**
      * Resolve function calls
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionFunctionCall(
         array $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
+        /** @var string $name */
         $name = $expression["name"];
 
         if (isset($this->customFunctions[$name])) {
             $customFunction = $this->customFunctions[$name];
 
-            return $customFunction($this, $expression, $escapeChar);
+            /** @var string $rendered */
+            $rendered = $customFunction($this, $expression, $escapeChar);
+
+            return $rendered;
         }
 
         if (
@@ -1162,14 +1240,15 @@ abstract class Dialect implements DialectInterface
      * Resolve a GROUP BY clause
      *
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed>|string $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionGroupBy(
         array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
-        $fields = $expression;
-
         if (is_array($expression)) {
             $fields = [];
             foreach ($expression as $field) {
@@ -1184,16 +1263,19 @@ abstract class Dialect implements DialectInterface
                 );
             }
 
-            $fields = implode(", ", $fields);
+            return "GROUP BY " . implode(", ", $fields);
         }
 
-        return "GROUP BY " . $fields;
+        return "GROUP BY " . $expression;
     }
 
     /**
      * Resolve a HAVING clause
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionHaving(
         array $expression,
@@ -1209,6 +1291,9 @@ abstract class Dialect implements DialectInterface
      * @todo Isn't expression just an array?
      *
      * @throws Exception
+     *
+     * @phpstan-param db_joins $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionJoins(
         array | string $expression,
@@ -1217,16 +1302,20 @@ abstract class Dialect implements DialectInterface
     ): string {
         $sql = "";
 
-        foreach ($expression as $join) {
+        /** @var db_joins $joins */
+        $joins = $expression;
+
+        foreach ($joins as $join) {
             /**
              * Check if the join has conditions
              */
-            $joinCondition = 1;
+            $joinCondition = "1";
             $joinType      = "";
             if (
                 isset($join["conditions"]) &&
                 !empty($join["conditions"])
             ) {
+                /** @var db_expression $joinConditionsArray */
                 $joinConditionsArray = $join["conditions"];
                 if (!isset($joinConditionsArray[0])) {
                     $joinCondition = $this->getSqlExpression(
@@ -1235,24 +1324,29 @@ abstract class Dialect implements DialectInterface
                         $bindCounts
                     );
                 } else {
-                    $joinCondition = [];
+                    $conditions = [];
                     foreach ($joinConditionsArray as $condition) {
-                        $joinCondition[] = $this->getSqlExpression(
+                        /** @var db_expression $condition */
+                        $conditions[] = $this->getSqlExpression(
                             $condition,
                             $escapeChar,
                             $bindCounts
                         );
                     }
 
-                    $joinCondition = implode(" AND ", $joinCondition);
+                    $joinCondition = implode(" AND ", $conditions);
                 }
             }
 
             if (isset($join["type"]) && $join["type"]) {
-                $joinType = $join["type"] . " ";
+                /** @var string $type */
+                $type     = $join["type"];
+                $joinType = $type . " ";
             }
 
-            $joinTable = $this->getSqlTable($join["source"], $escapeChar);
+            /** @var db_table_name $joinSource */
+            $joinSource = $join["source"];
+            $joinTable  = $this->getSqlTable($joinSource, $escapeChar);
 
             $sql .= " " . $joinType
                 . "JOIN " . $joinTable
@@ -1266,6 +1360,9 @@ abstract class Dialect implements DialectInterface
      * Resolve a LIMIT clause
      *
      * @throws Exception
+     *
+     * @phpstan-param db_limit_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionLimit(
         array | string $expression,
@@ -1275,10 +1372,14 @@ abstract class Dialect implements DialectInterface
         $sql    = "";
         $offset = null;
 
-        $value = $expression["value"];
+        /** @var db_limit_expression $limitExpression */
+        $limitExpression = $expression;
 
-        if (isset($expression["sql"])) {
-            $sql = $expression["sql"];
+        $value = $limitExpression["value"];
+
+        if (isset($limitExpression["sql"])) {
+            /** @var string $sql */
+            $sql = $limitExpression["sql"];
         }
 
         $limit = $value;
@@ -1311,6 +1412,9 @@ abstract class Dialect implements DialectInterface
      * Resolve Lists
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionList(
         array $expression,
@@ -1321,6 +1425,7 @@ abstract class Dialect implements DialectInterface
         $separator = ", ";
 
         if (isset($expression["separator"])) {
+            /** @var string $separator */
             $separator = $expression["separator"];
         }
 
@@ -1329,6 +1434,7 @@ abstract class Dialect implements DialectInterface
             (isset($expression["value"]) && is_array($expression["value"]))
         ) {
             $values = $expression[0] ?? null;
+            /** @var array<array-key, db_expression> $values */
             $values = (null === $values) ? $expression["value"] : $values;
 
             foreach ($values as $item) {
@@ -1352,6 +1458,9 @@ abstract class Dialect implements DialectInterface
      * Resolve object expressions
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionObject(
         array $expression,
@@ -1383,14 +1492,15 @@ abstract class Dialect implements DialectInterface
      * Resolve an ORDER BY clause
      *
      * @throws Exception
+     *
+     * @phpstan-param array<array-key, mixed>|string $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionOrderBy(
         array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
-        $fields = $expression;
-
         if (is_array($expression)) {
             $fields = [];
             foreach ($expression as $field) {
@@ -1398,8 +1508,10 @@ abstract class Dialect implements DialectInterface
                     throw new InvalidOrderByExpression();
                 }
 
-                $fieldSql = $this->getSqlExpression(
-                    $field[0],
+                /** @var db_expression $fieldExpression */
+                $fieldExpression = $field[0];
+                $fieldSql        = $this->getSqlExpression(
+                    $fieldExpression,
                     $escapeChar,
                     $bindCounts
                 );
@@ -1408,29 +1520,36 @@ abstract class Dialect implements DialectInterface
                  * In the numeric 1 position could be ASC/DESC clause
                  */
                 if (isset($field[1]) && "" !== $field[1]) {
-                    $fieldSql .= " " . $field[1];
+                    /** @var string $direction */
+                    $direction = $field[1];
+                    $fieldSql .= " " . $direction;
                 }
 
                 $fields[] = $fieldSql;
             }
 
-            $fields = implode(", ", $fields);
+            return "ORDER BY " . implode(", ", $fields);
         }
 
-        return "ORDER BY " . $fields;
+        return "ORDER BY " . $expression;
     }
 
     /**
      * Resolve qualified expressions
+     *
+     * @phpstan-param db_expression $expression
      */
     final protected function getSqlExpressionQualified(
         array $expression,
         string $escapeChar = ""
     ): string {
+        /** @var string $column */
         $column = $expression["name"];
 
         /**
          * A domain could be a table/schema
+         *
+         * @var string $domain
          */
         $domain = $expression["domain"] ?? "";
 
@@ -1441,6 +1560,9 @@ abstract class Dialect implements DialectInterface
      * Resolve Column expressions
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionScalar(
         array $expression,
@@ -1448,13 +1570,17 @@ abstract class Dialect implements DialectInterface
         array $bindCounts = []
     ): string {
         if (isset($expression["column"])) {
-            return $this->getSqlColumn($expression["column"]);
+            /** @var db_expression|string $column */
+            $column = $expression["column"];
+
+            return $this->getSqlColumn($column);
         }
 
         if (!isset($expression["value"])) {
             throw new InvalidSqlExpression();
         }
 
+        /** @var db_expression|string $value */
         $value = $expression["value"];
         if (is_array($value)) {
             return $this->getSqlExpression($value, $escapeChar, $bindCounts);
@@ -1467,6 +1593,9 @@ abstract class Dialect implements DialectInterface
      * Resolve unary operations expressions
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionUnaryOperations(
         array $expression,
@@ -1476,21 +1605,30 @@ abstract class Dialect implements DialectInterface
         /**
          * Some unary operators use the left operand...
          */
+        /** @var string $operator */
+        $operator = $expression["op"];
+
         if (isset($expression["left"])) {
+            /** @var db_expression $leftNode */
+            $leftNode = $expression["left"];
+
             return $this->getSqlExpression(
-                $expression["left"],
+                $leftNode,
                 $escapeChar,
                 $bindCounts
-            ) . " " . $expression["op"];
+            ) . " " . $operator;
         }
 
         /**
          * ...Others use the right operand
          */
         if (isset($expression["right"])) {
-            return $expression["op"] . " "
+            /** @var db_expression $rightNode */
+            $rightNode = $expression["right"];
+
+            return $operator . " "
                 . $this->getSqlExpression(
-                    $expression["right"],
+                    $rightNode,
                     $escapeChar,
                     $bindCounts
                 );
@@ -1503,22 +1641,24 @@ abstract class Dialect implements DialectInterface
      * Resolve a WHERE clause
      *
      * @throws Exception
+     *
+     * @phpstan-param db_expression|string $expression
+     * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionWhere(
         array | string $expression,
         string $escapeChar = "",
         array $bindCounts = []
     ): string {
-        $whereSql = $expression;
         if (is_array($expression)) {
-            $whereSql = $this->getSqlExpression(
+            return "WHERE " . $this->getSqlExpression(
                 $expression,
                 $escapeChar,
                 $bindCounts
             );
         }
 
-        return "WHERE " . $whereSql;
+        return "WHERE " . $expression;
     }
 
     /**

@@ -168,15 +168,22 @@ class WkbParser
                     $items[] = $this->readGeometry($srid, $depth + 1);
                 }
 
+                /**
+                 * The WKB type code decides what the members are, so each
+                 * branch below narrows the list the loop above collected.
+                 */
                 if ($baseType === 4) {
+                    /** @var list<Point> $items */
                     return new MultiPoint($items, $srid);
                 }
 
                 if ($baseType === 5) {
+                    /** @var list<LineString> $items */
                     return new MultiLineString($items, $srid);
                 }
 
                 if ($baseType === 6) {
+                    /** @var list<Polygon> $items */
                     return new MultiPolygon($items, $srid);
                 }
 
@@ -197,6 +204,9 @@ class WkbParser
         return new Point($x, $y, $srid);
     }
 
+    /**
+     * @return list<Point>
+     */
     protected function readPointList(bool $little, bool $hasZ, bool $hasM): array
     {
         $count  = $this->readUint32($little);
@@ -214,6 +224,9 @@ class WkbParser
         return $points;
     }
 
+    /**
+     * @return list<list<Point>>
+     */
     protected function readRingList(bool $little, bool $hasZ, bool $hasM): array
     {
         $count = $this->readUint32($little);
