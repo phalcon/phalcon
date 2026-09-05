@@ -15,7 +15,7 @@ namespace Phalcon\Mvc\Model;
 
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
-use Phalcon\Events\ManagerInterface as EventsManagerInterface;
+use Phalcon\Events\ManagerInterface as EvManagerInterface;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
@@ -33,8 +33,8 @@ use Phalcon\Mvc\ModelInterface;
  * the interface. They join the interface in the next major; until then the
  * tags below record what all implementations provide.
  *
- * @method EventsManagerInterface|null getCustomEventsManager(ModelInterface $model)
- * @method void                        setCustomEventsManager(ModelInterface $model, EventsManagerInterface $eventsManager)
+ * @method EvManagerInterface|null getCustomEventsManager(ModelInterface $model)
+ * @method void setCustomEventsManager(ModelInterface $model, EvManagerInterface $eventsManager)
  */
 interface ManagerInterface
 {
