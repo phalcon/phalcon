@@ -6937,12 +6937,16 @@ abstract class Model extends AbstractInjectionAware implements
                                 for ($j = 0; $j <= $referencedFieldsCount; $j++) {
                                     $columnA                      = $referencedFields[$j];
                                     $t                            = $j + $i;
-                                    $loopConditions[]             = "[" . $intermediateReferencedFields[$j] . "] = :APR" . $t . ":";
+                                    $loopConditions[]             = "["
+                                        . $intermediateReferencedFields[$j]
+                                        . "] = :APR" . $t . ":";
                                     $loopPlaceholders["APR" . $t] = $recordAfter->readAttribute($columnA);
                                 }
                             } else {
                                 /** @var string $intermediateReferencedFields */
-                                $loopConditions[]             = "[" . $intermediateReferencedFields . "] = :APR" . $i . ":";
+                                $loopConditions[]             = "["
+                                    . $intermediateReferencedFields
+                                    . "] = :APR" . $i . ":";
                                 $loopPlaceholders["APR" . $i] = $recordAfter->readAttribute($referencedFields);
                             }
                         }
