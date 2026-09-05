@@ -157,17 +157,11 @@ class Escaper implements EscaperInterface
         return $this->url($input);
     }
 
-    /**
-     * @return AttributeEscaper
-     */
     public function getAttributeEscaper(): AttributeEscaper
     {
         return $this->attributeEscaper;
     }
 
-    /**
-     * @return CssEscaper
-     */
     public function getCssEscaper(): CssEscaper
     {
         return $this->cssEscaper;
@@ -189,25 +183,16 @@ class Escaper implements EscaperInterface
         return $this->htmlEscaper->getFlags();
     }
 
-    /**
-     * @return HtmlEscaper
-     */
     public function getHtmlEscaper(): HtmlEscaper
     {
         return $this->htmlEscaper;
     }
 
-    /**
-     * @return JsEscaper
-     */
     public function getJsEscaper(): JsEscaper
     {
         return $this->jsEscaper;
     }
 
-    /**
-     * @return UrlEscaper
-     */
     public function getUrlEscaper(): UrlEscaper
     {
         return $this->urlEscaper;
@@ -215,10 +200,6 @@ class Escaper implements EscaperInterface
 
     /**
      * Escapes a HTML string. Delegates to `HtmlEscaper`.
-     *
-     * @param string|null $input
-     *
-     * @return string
      */
     public function html(string | null $input = null): string
     {
@@ -241,9 +222,6 @@ class Escaper implements EscaperInterface
         return $this->htmlEscaper->normalizeEncoding($input);
     }
 
-    /**
-     * @param AttributeEscaper $escaper
-     */
     public function setAttributeEscaper(AttributeEscaper $escaper): static
     {
         $this->attributeEscaper = $escaper;
@@ -251,9 +229,6 @@ class Escaper implements EscaperInterface
         return $this;
     }
 
-    /**
-     * @param CssEscaper $escaper
-     */
     public function setCssEscaper(CssEscaper $escaper): static
     {
         $this->cssEscaper = $escaper;
@@ -303,9 +278,6 @@ class Escaper implements EscaperInterface
         return $this;
     }
 
-    /**
-     * @param HtmlEscaper $escaper
-     */
     public function setHtmlEscaper(HtmlEscaper $escaper): static
     {
         $this->htmlEscaper = $escaper;
@@ -323,9 +295,6 @@ class Escaper implements EscaperInterface
         return $this->setFlags($flags);
     }
 
-    /**
-     * @param JsEscaper $escaper
-     */
     public function setJsEscaper(JsEscaper $escaper): static
     {
         $this->jsEscaper = $escaper;
@@ -333,9 +302,6 @@ class Escaper implements EscaperInterface
         return $this;
     }
 
-    /**
-     * @param UrlEscaper $escaper
-     */
     public function setUrlEscaper(UrlEscaper $escaper): static
     {
         $this->urlEscaper = $escaper;

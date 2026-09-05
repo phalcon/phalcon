@@ -45,8 +45,6 @@ class Collection implements IteratorAggregate
 
     /**
      * Constructor
-     *
-     * @param array $reflectionData
      */
     public function __construct(array $reflectionData = [])
     {
@@ -59,9 +57,6 @@ class Collection implements IteratorAggregate
     /**
      * Returns the first annotation that match a name
      *
-     * @param string $name
-     *
-     * @return Annotation
      * @throws Exception
      */
     public function get(string $name): Annotation
@@ -79,8 +74,6 @@ class Collection implements IteratorAggregate
 
     /**
      * Returns all the annotations that match a name
-     *
-     * @param string $name
      *
      * @return TValue[]
      */
@@ -108,10 +101,6 @@ class Collection implements IteratorAggregate
 
     /**
      * Check if an annotation exists in a collection
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {

@@ -56,17 +56,8 @@ use function substr;
  */
 class Url extends AbstractInjectionAware implements UrlInterface
 {
-    /**
-     * @var string|null
-     */
-    protected string | null $basePath = null;
-    /**
-     * @var string|null
-     */
-    protected string | null $baseUri = null;
-    /**
-     * @var string|null
-     */
+    protected string | null $basePath      = null;
+    protected string | null $baseUri       = null;
     protected string | null $staticBaseUri = null;
 
     public function __construct(
@@ -109,16 +100,11 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * );
      *```
      *
-     * @param mixed      $uri       = [
-     *                              'for' => '',
-     *                              ]
-     * @param mixed|null $arguments
-     * @param bool|null  $local
-     * @param mixed|null $baseUri
+     * @param mixed $uri = [
+     *                   'for' => '',
+     *                   ]
      *
-     * @return string
      * @throws Exception
-     *
      */
     public function get(
         mixed $uri = null,
@@ -279,8 +265,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
 
     /**
      * Returns the base path
-     *
-     * @return string|null
      */
     public function getBasePath(): string | null
     {
@@ -289,8 +273,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
 
     /**
      * Returns the prefix for all the generated urls. By default, /
-     *
-     * @return string
      */
     public function getBaseUri(): string
     {
@@ -334,9 +316,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *                   'for' => ''
      *                   ]
      *
-     * @return string
      * @throws Exception
-     *
      */
     public function getStatic(mixed $uri = null): string
     {
@@ -350,8 +330,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
 
     /**
      * Returns the prefix for all the generated static urls. By default, /
-     *
-     * @return string
      */
     public function getStaticBaseUri(): string
     {
@@ -364,10 +342,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
 
     /**
      * Generates a local path
-     *
-     * @param string|null $path
-     *
-     * @return string
      */
     public function path(string | null $path = null): string
     {
@@ -380,10 +354,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *```php
      * $url->setBasePath("/var/www/htdocs/");
      *```
-     *
-     * @param string $basePath
-     *
-     * @return UrlInterface
      */
     public function setBasePath(string $basePath): UrlInterface
     {
@@ -400,10 +370,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *
      * $url->setBaseUri("/invo/index.php/");
      *```
-     *
-     * @param string $baseUri
-     *
-     * @return UrlInterface
      */
     public function setBaseUri(string $baseUri): UrlInterface
     {
@@ -422,10 +388,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *```php
      * $url->setStaticBaseUri("/invo/");
      *```
-     *
-     * @param string $staticBaseUri
-     *
-     * @return UrlInterface
      */
     public function setStaticBaseUri(string $staticBaseUri): UrlInterface
     {
@@ -441,10 +403,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *
      * For example: "/var/www/app/index.php" returns "app"
      *              "/index.php"             returns ""
-     *
-     * @param string $path
-     *
-     * @return string
      */
     private function getUri(string $path): string
     {
@@ -569,8 +527,6 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @param string $pattern      the route pattern (e.g. "/blog/{year}/{month}/{title}")
      * @param array  $paths        reversed-paths map (position => name)
      * @param mixed  $replacements user-supplied key=>value replacements (array portion used)
-     *
-     * @return false|string|null
      *
      * @phpstan-param mvc_router_reversed_paths $paths
      */

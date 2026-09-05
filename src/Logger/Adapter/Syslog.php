@@ -52,7 +52,6 @@ class Syslog extends AbstractAdapter
     /**
      * Syslog constructor.
      *
-     * @param string $name
      * @phpstan-param logger_syslog_options $options
      */
     public function __construct(

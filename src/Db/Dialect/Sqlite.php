@@ -43,24 +43,13 @@ class Sqlite extends Dialect
 {
     use TextTrait;
 
-    /**
-     * @var string
-     */
     protected string $escapeChar = "\"";
 
-    /**
-     * @var array
-     */
     protected array $supportedOperators = ["||", "->", "->>"];
 
     /**
      * SQLite cannot ALTER an existing table to add a CHECK constraint.
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return string
      * @throws Exception
      */
     public function addCheck(
@@ -74,11 +63,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to add a column to a table
      *
-     * @param string          $tableName
-     * @param string          $schemaName
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     public function addColumn(
@@ -119,11 +103,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to add an index to a table
      *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return string
      * @throws Exception
      */
     public function addForeignKey(
@@ -137,11 +116,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to add an index to a table
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return string
      * @throws Exception
      */
     public function addIndex(
@@ -177,11 +151,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to add the primary key to a table
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return string
      * @throws Exception
      */
     public function addPrimaryKey(
@@ -195,11 +164,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to create a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param array  $definition
-     *
-     * @return string
      * @throws Exception
      */
     public function createTable(
@@ -348,11 +312,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to create a view
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return string
      * @throws Exception
      */
     public function createView(
@@ -378,11 +337,6 @@ class Sqlite extends Dialect
      *     $dialect->describeColumns("posts")
      * );
      * ```
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function describeColumns(
         string $tableName,
@@ -398,10 +352,6 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to query indexes detail on a table
-     *
-     * @param string $index
-     *
-     * @return string
      */
     public function describeIndex(string $index): string
     {
@@ -411,10 +361,7 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return string
      */
     public function describeIndexes(
         string $tableName,
@@ -426,10 +373,7 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return string
      */
     public function describeReferences(
         string $tableName,
@@ -441,11 +385,6 @@ class Sqlite extends Dialect
     /**
      * SQLite cannot DROP a CHECK constraint from an existing table.
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return string
      * @throws Exception
      */
     public function dropCheck(
@@ -459,11 +398,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to delete a column from a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $columnName
-     *
-     * @return string
      * @throws Exception
      */
     public function dropColumn(
@@ -480,11 +414,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to delete a foreign key from a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $referenceName
-     *
-     * @return string
      * @throws Exception
      */
     public function dropForeignKey(
@@ -497,12 +426,6 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to delete an index from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $indexName
-     *
-     * @return string
      */
     public function dropIndex(
         string $tableName,
@@ -519,10 +442,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to delete primary key from a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return string
      * @throws Exception
      */
     public function dropPrimaryKey(
@@ -534,12 +453,6 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to drop a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
      */
     public function dropTable(
         string $tableName,
@@ -558,11 +471,7 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to drop a view
      *
-     * @param string $viewName
      * @param string $schemaName
-     * @param bool   $ifExists
-     *
-     * @return string
      */
     public function dropView(
         string $viewName,
@@ -581,10 +490,6 @@ class Sqlite extends Dialect
     /**
      * Returns a SQL modified with a FOR UPDATE clause. For SQLite, it returns
      * the original query
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function forUpdate(string $sqlQuery, string $modifier = ''): string
     {
@@ -594,9 +499,6 @@ class Sqlite extends Dialect
     /**
      * Gets the column name in SQLite
      *
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     public function getColumnDefinition(ColumnInterface $column): string
@@ -772,11 +674,7 @@ class Sqlite extends Dialect
      * );
      * ```
      *
-     * @param string      $tableName
-     * @param string      $schemaName
-     * @param string|null $keyName
-     *
-     * @return string
+     * @param string $schemaName
      */
     public function listIndexesSql(
         string $tableName,
@@ -805,8 +703,6 @@ class Sqlite extends Dialect
      * ```
      *
      * @param string $schemaName
-     *
-     * @return string
      */
     public function listTables(string | null $schemaName = null): string
     {
@@ -819,8 +715,6 @@ class Sqlite extends Dialect
      * Generates the SQL to list all views of a schema or user
      *
      * @param string $schemaName
-     *
-     * @return string
      */
     public function listViews(string | null $schemaName = null): string
     {
@@ -833,12 +727,6 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to modify a column in a table
      *
-     * @param string               $tableName
-     * @param string               $schemaName
-     * @param ColumnInterface      $column
-     * @param ColumnInterface|null $currentColumn
-     *
-     * @return string
      * @throws Exception
      */
     public function modifyColumn(
@@ -854,10 +742,6 @@ class Sqlite extends Dialect
      * Appends a `RETURNING` clause to the supplied INSERT/UPDATE/DELETE
      * statement. SQLite 3.35+.
      *
-     * @param string $sqlQuery
-     * @param array  $columns
-     *
-     * @return string
      * @throws Exception
      */
     public function returning(string $sqlQuery, array $columns): string
@@ -876,10 +760,6 @@ class Sqlite extends Dialect
     /**
      * Returns a SQL modified a shared lock statement. For now this method
      * returns the original query
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
@@ -890,8 +770,6 @@ class Sqlite extends Dialect
      * SQLite cannot modify existing columns or add/drop foreign keys, primary
      * keys, or check constraints through `ALTER TABLE`; those operations throw
      * a dedicated `Sqlite*NotSupported` exception.
-     *
-     * @return bool
      */
     public function supportsAlterTable(): bool
     {
@@ -900,8 +778,6 @@ class Sqlite extends Dialect
 
     /**
      * SQLite (3.35+) supports the `RETURNING` clause.
-     *
-     * @return bool
      */
     public function supportsReturning(): bool
     {
@@ -929,10 +805,7 @@ class Sqlite extends Dialect
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return string
      */
     public function tableOptions(string $tableName, string | null $schemaName = null): string
     {
@@ -941,11 +814,6 @@ class Sqlite extends Dialect
 
     /**
      * Generates SQL to truncate a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function truncateTable(
         string $tableName,
@@ -962,10 +830,7 @@ class Sqlite extends Dialect
     /**
      * Generates SQL checking for the existence of a schema.view
      *
-     * @param string $viewName
      * @param string $schemaName
-     *
-     * @return string
      */
     public function viewExists(string $viewName, string | null $schemaName = null): string
     {

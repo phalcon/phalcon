@@ -628,8 +628,6 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 
     /**
      * Return the HTTP method parameter override flag
-     *
-     * @return bool
      */
     public function getHttpMethodParameterOverride(): bool
     {
@@ -1187,8 +1185,6 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      * When strict is true it checks if validated methods are real HTTP methods
      *
      * @todo check the $methods type - refactor this !!
-     *
-     * @param mixed $methods
      */
     public function isMethod(mixed $methods, bool $strict = false): bool
     {

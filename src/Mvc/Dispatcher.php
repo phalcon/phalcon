@@ -50,19 +50,10 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 {
     use EventsAwareTrait;
 
-    /**
-     * @var string
-     */
     protected string $defaultAction = "index";
 
-    /**
-     * @var string
-     */
     protected string $defaultHandler = "index";
 
-    /**
-     * @var string
-     */
     protected string $handlerSuffix = "Controller";
 
     /**
@@ -124,7 +115,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *
      * @phpstan-param dispatcher_forward $forward
      *
-     * @return void
      * @throws EventsException
      * @throws DispatcherException
      */
@@ -137,8 +127,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Returns the active controller in the dispatcher
-     *
-     * @return ControllerInterface|null
      */
     public function getActiveController(): \Phalcon\Mvc\ControllerInterface | null
     {
@@ -151,8 +139,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
     /**
      * Possible controller class name that will be located to dispatch the
      * request
-     *
-     * @return string
      */
     public function getControllerClass(): string
     {
@@ -161,8 +147,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Gets last dispatched controller name
-     *
-     * @return string
      */
     public function getControllerName(): string
     {
@@ -171,8 +155,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Returns the latest dispatched controller
-     *
-     * @return ControllerInterface|null
      */
     public function getLastController(): \Phalcon\Mvc\ControllerInterface | null
     {
@@ -187,8 +169,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      *
      * Note: This is an Mvc-specific alias for the base
      * getPreviousHandlerName().
-     *
-     * @return string
      */
     public function getPreviousControllerName(): string
     {
@@ -197,10 +177,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Sets the controller name to be dispatched
-     *
-     * @param string $controllerName
-     *
-     * @return DispatcherInterface
      */
     public function setControllerName(string $controllerName): DispatcherInterface
     {
@@ -211,10 +187,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Sets the default controller suffix
-     *
-     * @param string $controllerSuffix
-     *
-     * @return DispatcherInterface
      */
     public function setControllerSuffix(string $controllerSuffix): DispatcherInterface
     {
@@ -225,10 +197,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Sets the default controller name
-     *
-     * @param string $controllerName
-     *
-     * @return DispatcherInterface
      */
     public function setDefaultController(string $controllerName): DispatcherInterface
     {
@@ -239,8 +207,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Handles a user exception
-     *
-     * @param BaseException $exception
      *
      * @return false|void
      * @throws EventsException
@@ -254,9 +220,6 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
 
     /**
      * Throws an internal exception
-     *
-     * @param string $message
-     * @param int    $exceptionCode
      *
      * @return false
      * @throws EventsException

@@ -41,16 +41,12 @@ class Binder implements BinderInterface
     /**
      * Array for storing active bound models
      *
-     * @var array
-     *
      * @phpstan-var array<array-key, ModelInterface>
      */
     protected array $boundModels = [];
 
     /**
      * Internal cache for caching parameters for model binding during request
-     *
-     * @var array
      *
      * @phpstan-var array<string, array<array-key, string>>
      */
@@ -59,16 +55,12 @@ class Binder implements BinderInterface
     /**
      * Array for original values
      *
-     * @var array
-     *
      * @phpstan-var array<array-key, mixed>
      */
     protected array $originalValues = [];
 
     /**
      * Phalcon\Mvc\Model\Binder constructor
-     *
-     * @param AdapterInterface|null $cache
      */
     public function __construct(
         protected AdapterInterface | null $cache = null
@@ -78,12 +70,6 @@ class Binder implements BinderInterface
     /**
      * Bind models into params in proper handler
      *
-     * @param object      $handler
-     * @param array       $params
-     * @param string      $cacheKey
-     * @param string|null $methodName
-     *
-     * @return array
      * @throws Exception
      * @throws ReflectionException
      *
@@ -130,8 +116,6 @@ class Binder implements BinderInterface
     /**
      * Return the active bound models
      *
-     * @return array
-     *
      * @phpstan-return array<array-key, ModelInterface>
      */
     public function getBoundModels(): array
@@ -141,8 +125,6 @@ class Binder implements BinderInterface
 
     /**
      * Sets cache instance
-     *
-     * @return AdapterInterface
      */
     public function getCache(): AdapterInterface
     {
@@ -155,8 +137,6 @@ class Binder implements BinderInterface
     /**
      * Return the array for original values
      *
-     * @return array
-     *
      * @phpstan-return array<array-key, mixed>
      */
     public function getOriginalValues(): array
@@ -166,10 +146,6 @@ class Binder implements BinderInterface
 
     /**
      * Gets cache instance
-     *
-     * @param AdapterInterface $cache
-     *
-     * @return BinderInterface
      */
     public function setCache(AdapterInterface $cache): BinderInterface
     {
@@ -181,9 +157,6 @@ class Binder implements BinderInterface
     /**
      * Find the model by param value.
      *
-     * @param mixed  $paramValue
-     * @param string $className
-     *
      * @return mixed|null
      */
     protected function findBoundModel(mixed $paramValue, string $className)
@@ -193,10 +166,6 @@ class Binder implements BinderInterface
 
     /**
      * Get params classes from cache by key
-     *
-     * @param string $cacheKey
-     *
-     * @return array|null
      *
      * @phpstan-return array<array-key, string>|null
      */
@@ -220,12 +189,6 @@ class Binder implements BinderInterface
     /**
      * Get modified params for handler using reflection
      *
-     * @param object $handler
-     * @param array  $params
-     * @param string $cacheKey
-     * @param string $methodName
-     *
-     * @return array
      * @throws Exception
      * @throws ReflectionException
      *

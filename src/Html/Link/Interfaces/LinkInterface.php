@@ -44,8 +44,6 @@ interface LinkInterface
      * - A URI template as defined by RFC 6570.
      *
      * If a URI template is returned, isTemplated() MUST return True.
-     *
-     * @return string
      */
     public function getHref(): string;
 

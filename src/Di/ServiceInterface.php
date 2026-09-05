@@ -20,41 +20,26 @@ interface ServiceInterface
 {
     /**
      * Returns the service definition
-     *
-     * @return mixed
      */
     public function getDefinition(): mixed;
 
     /**
      * Returns a parameter in a specific position
-     *
-     * @param int $position
-     *
-     * @return mixed
      */
     public function getParameter(int $position): mixed;
 
     /**
      * Returns true if the service was resolved
-     *
-     * @return bool
      */
     public function isResolved(): bool;
 
     /**
      * Check whether the service is shared or not
-     *
-     * @return bool
      */
     public function isShared(): bool;
 
     /**
      * Resolves the service
-     *
-     * @param array|null       $parameters
-     * @param DiInterface|null $container
-     *
-     * @return mixed
      */
     public function resolve(
         array | null $parameters = null,
@@ -64,26 +49,17 @@ interface ServiceInterface
     /**
      * Set the service definition
      *
-     * @param mixed $definition
-     *
      * @return mixed
      */
     public function setDefinition(mixed $definition);
 
     /**
      * Changes a parameter in the definition without resolve the service
-     *
-     * @param int   $position
-     * @param array $parameter
-     *
-     * @return ServiceInterface
      */
     public function setParameter(int $position, array $parameter): ServiceInterface;
 
     /**
      * Sets if the service is shared or not
-     *
-     * @param bool $shared
      *
      * @return mixed
      */

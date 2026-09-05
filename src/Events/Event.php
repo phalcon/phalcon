@@ -35,18 +35,11 @@ class Event implements EventInterface, Stoppable
 {
     /**
      * Is event propagation stopped?
-     *
-     * @var bool
      */
     protected bool $stopped = false;
 
     /**
      * Event constructor.
-     *
-     * @param string      $type
-     * @param object|null $source
-     * @param mixed|null  $data
-     * @param bool        $cancelable
      */
     public function __construct(
         protected string $type,
@@ -56,25 +49,16 @@ class Event implements EventInterface, Stoppable
     ) {
     }
 
-    /**
-     * @return mixed
-     */
     public function getData(): mixed
     {
         return $this->data;
     }
 
-    /**
-     * @return object|null
-     */
     public function getSource(): object | null
     {
         return $this->source;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
@@ -88,8 +72,6 @@ class Event implements EventInterface, Stoppable
      *     $event->stop();
      * }
      * ```
-     *
-     * @return bool
      */
     public function isCancelable(): bool
     {
@@ -99,8 +81,6 @@ class Event implements EventInterface, Stoppable
     /**
      * Returns whether propagation must stop. PSR-14 alias backed by the same
      * `stopped` flag as `isStopped()`; calling `stop()` flips both.
-     *
-     * @return bool
      */
     public function isPropagationStopped(): bool
     {
@@ -109,8 +89,6 @@ class Event implements EventInterface, Stoppable
 
     /**
      * Check whether the event is currently stopped.
-     *
-     * @return bool
      */
     public function isStopped(): bool
     {
@@ -119,10 +97,6 @@ class Event implements EventInterface, Stoppable
 
     /**
      * Sets event data.
-     *
-     * @param mixed|null $data
-     *
-     * @return EventInterface
      */
     public function setData(mixed $data = null): EventInterface
     {
@@ -133,10 +107,6 @@ class Event implements EventInterface, Stoppable
 
     /**
      * Sets event type.
-     *
-     * @param string $type
-     *
-     * @return EventInterface
      */
     public function setType(string $type): EventInterface
     {
@@ -154,7 +124,6 @@ class Event implements EventInterface, Stoppable
      * }
      * ```
      *
-     * @return EventInterface
      * @throws EventNotCancelable
      */
     public function stop(): EventInterface

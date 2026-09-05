@@ -184,18 +184,12 @@ interface ViewInterface extends ViewBaseInterface
     /**
      * Appends template after controller layout
      *
-     * @param mixed $templateAfter
-     *
-     *
      * @return static
      */
     public function setTemplateAfter(mixed $templateAfter);
 
     /**
      * Appends template before controller layout
-     *
-     * @param mixed $templateBefore
-     *
      *
      * @return static
      */

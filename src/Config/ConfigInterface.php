@@ -27,35 +27,18 @@ use Phalcon\Support\Collection\CollectionInterface;
  */
 interface ConfigInterface extends CollectionInterface
 {
-    /**
-     * @return string
-     */
     public function getPathDelimiter(): string;
 
     /**
      * @phpstan-param config_data|ConfigInterface $toMerge
-     *
-     * @return ConfigInterface
      */
     public function merge(mixed $toMerge): ConfigInterface;
 
-    /**
-     * @param string      $path
-     * @param mixed|null  $defaultValue
-     * @param string|null $delimiter
-     *
-     * @return mixed
-     */
     public function path(
         string $path,
         mixed $defaultValue = null,
         string | null $delimiter = null
     ): mixed;
 
-    /**
-     * @param string|null $delimiter
-     *
-     * @return ConfigInterface
-     */
     public function setPathDelimiter(string | null $delimiter = null): ConfigInterface;
 }

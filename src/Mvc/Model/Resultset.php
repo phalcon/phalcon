@@ -98,40 +98,24 @@ abstract class Resultset implements
      */
     protected mixed $activeRow = null;
 
-    /**
-     * @var mixed
-     */
     protected mixed $cache = null;
 
     /**
      * Number of rows, or null while it has not been worked out yet. Resolved
      * lazily by count() - asking the driver up front costs SQLite an extra
      * statement on every single result-set.
-     *
-     * @var int|null
      */
     protected int | null $count = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var array<array-key, MessageInterface>
      */
     protected array $errorMessages = [];
 
-    /**
-     * @var int
-     */
     protected int $hydrateMode = 0;
 
-    /**
-     * @var bool
-     */
     protected bool $isFresh = true;
 
-    /**
-     * @var int
-     */
     protected int $pointer = 0;
 
     /**
@@ -149,8 +133,6 @@ abstract class Resultset implements
     protected mixed $row = null;
 
     /**
-     * @var array|null
-     *
      * @phpstan-var array<array-key, mixed>|null
      */
     protected array | null $rows = null;
@@ -159,7 +141,6 @@ abstract class Resultset implements
      * Phalcon\Mvc\Model\Resultset constructor
      *
      * @param false|ResultInterface $result
-     * @param mixed|null            $cache
      *
      * @throws Exception
      *
@@ -243,7 +224,7 @@ abstract class Resultset implements
     /**
      * Counts how many rows are in the resultset
      *
-     * @return int
+     * @phpstan-return int
      */
     final public function count(): int
     {
@@ -263,9 +244,6 @@ abstract class Resultset implements
     /**
      * Deletes every record in the resultset
      *
-     * @param Closure|null $conditionCallback
-     *
-     * @return bool
      * @throws Exception
      */
     public function delete(Closure | null $conditionCallback = null): bool
@@ -357,8 +335,6 @@ abstract class Resultset implements
      *     }
      * );
      *```
-     *
-     * @param mixed $filter
      *
      * @return array|ModelInterface[]
      *
@@ -453,8 +429,6 @@ abstract class Resultset implements
 
     /**
      * Returns the current hydration mode
-     *
-     * @return int
      */
     public function getHydrateMode(): int
     {
@@ -463,8 +437,6 @@ abstract class Resultset implements
 
     /**
      * Get last row in the resultset
-     *
-     * @return ModelInterface|Row|null
      */
     public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | null
     {
@@ -502,8 +474,6 @@ abstract class Resultset implements
 
     /**
      * Returns the internal type of data retrieval that the resultset is using
-     *
-     * @return int
      */
     public function getType(): int
     {
@@ -512,8 +482,6 @@ abstract class Resultset implements
 
     /**
      * Tell if the resultset if fresh or an old one cached
-     *
-     * @return bool
      */
     public function isFresh(): bool
     {
@@ -529,8 +497,6 @@ abstract class Resultset implements
      *
      * echo json_encode($invoices);
      *```
-     *
-     * @return array
      *
      * @phpstan-return array<array-key, mixed>
      */
@@ -583,8 +549,6 @@ abstract class Resultset implements
      * already been executed by Model\Query::executeSelect() and only the row
      * the constructor consumed is missing from the cursor, so no re-execution
      * takes place. Idempotent.
-     *
-     * @return void
      */
     public function materialize(): void
     {
@@ -630,8 +594,6 @@ abstract class Resultset implements
 
     /**
      * Moves cursor to next row in the resultset
-     *
-     * @return void
      */
     public function next(): void
     {
@@ -641,10 +603,6 @@ abstract class Resultset implements
 
     /**
      * Checks whether offset exists in the resultset
-     *
-     * @param mixed $index
-     *
-     * @return bool
      *
      * @phpstan-param int $index
      */
@@ -656,9 +614,6 @@ abstract class Resultset implements
     /**
      * Gets row in a specific position of the resultset
      *
-     * @param mixed $index
-     *
-     * @return mixed
      * @throws Exception
      *
      * @phpstan-param int $index
@@ -681,10 +636,6 @@ abstract class Resultset implements
      * Resultsets cannot be changed. It has only been implemented to meet the
      * definition of the ArrayAccess interface
      *
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @return void
      * @throws Exception
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -696,9 +647,6 @@ abstract class Resultset implements
      * Resultsets cannot be changed. It has only been implemented to meet the
      * definition of the ArrayAccess interface
      *
-     * @param mixed $offset
-     *
-     * @return void
      * @throws Exception
      */
     public function offsetUnset(mixed $offset): void
@@ -706,9 +654,6 @@ abstract class Resultset implements
         throw new CursorIsImmutable();
     }
 
-    /**
-     * @return bool
-     */
     public function refresh(): bool
     {
         /**
@@ -768,8 +713,6 @@ abstract class Resultset implements
 
     /**
      * Rewinds resultset to its beginning
-     *
-     * @return void
      */
     final public function rewind(): void
     {
@@ -779,10 +722,6 @@ abstract class Resultset implements
     /**
      * Changes the internal pointer to a specific position in the resultset.
      * Set the new position if required, and then set this->row
-     *
-     * @param mixed $position
-     *
-     * @return void
      *
      * @phpstan-param int $position
      */
@@ -853,10 +792,6 @@ abstract class Resultset implements
 
     /**
      * Sets the hydration mode in the resultset
-     *
-     * @param int $hydrateMode
-     *
-     * @return ResultsetInterface
      */
     public function setHydrateMode(int $hydrateMode): ResultsetInterface
     {
@@ -867,10 +802,6 @@ abstract class Resultset implements
 
     /**
      * Set if the resultset is fresh or an old one cached
-     *
-     * @param bool $isFresh
-     *
-     * @return ResultsetInterface
      */
     public function setIsFresh(bool $isFresh): ResultsetInterface
     {
@@ -882,10 +813,6 @@ abstract class Resultset implements
     /**
      * Updates every record in the resultset
      *
-     * @param mixed        $data
-     * @param Closure|null $conditionCallback
-     *
-     * @return bool
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed> $data
@@ -975,8 +902,6 @@ abstract class Resultset implements
      * Driven by the row the cursor is parked on rather than by the count, so
      * that a plain traversal never has to ask the driver how many rows there
      * are - on SQLite that answer costs a second statement.
-     *
-     * @return bool
      */
     public function valid(): bool
     {

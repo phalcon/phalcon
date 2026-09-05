@@ -65,8 +65,6 @@ abstract class AbstractValidator implements ValidatorInterface
     /**
      * Phalcon\Filter\Validation\Validator constructor
      *
-     * @param array $options
-     *
      * @phpstan-param filter_validator_options $options
      */
     public function __construct(array $options = [])

@@ -23,35 +23,21 @@ interface Renderer extends TemplateAware
 {
     /**
      * Returns the CSS sources block for the given base URI.
-     *
-     * @param string $uri
-     *
-     * @return string
      */
     public function getCssSources(string $uri): string;
 
     /**
      * Returns the JavaScript sources block for the given base URI.
-     *
-     * @param string $uri
-     *
-     * @return string
      */
     public function getJsSources(string $uri): string;
 
     /**
      * Returns the framework version block.
-     *
-     * @return string
      */
     public function getVersion(): string;
 
     /**
      * Renders the report.
-     *
-     * @param ExceptionReport $report
-     *
-     * @return string
      */
     public function render(ExceptionReport $report): string;
 }

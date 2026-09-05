@@ -24,22 +24,11 @@ use function substr;
  */
 class Pkcs7 implements PadInterface
 {
-    /**
-     * @param int $paddingSize
-     *
-     * @return string
-     */
     public function pad(int $paddingSize): string
     {
         return str_repeat(chr($paddingSize), $paddingSize);
     }
 
-    /**
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return int
-     */
     public function unpad(string $input, int $blockSize): int
     {
         $paddingSize = 0;

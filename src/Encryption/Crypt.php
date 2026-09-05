@@ -73,37 +73,21 @@ class Crypt implements CryptInterface
     public const PADDING_SPACE          = 6;
     public const PADDING_ZERO           = 5;
 
-    /**
-     * @var string
-     */
     protected string $authData = "";
 
-    /**
-     * @var string
-     */
     protected string $authTag = "";
 
-    /**
-     * @var int
-     */
     protected int $authTagLength = 16;
 
     /**
      * Available cipher methods.
-     *
-     * @var array
      */
     protected array $availableCiphers = [];
 
-    /**
-     * @var string
-     */
     protected string $cipher = self::DEFAULT_CIPHER;
 
     /**
      * The name of hashing algorithm.
-     *
-     * @var string
      */
     protected string $hashAlgorithm = self::DEFAULT_ALGORITHM;
 
@@ -112,46 +96,27 @@ class Crypt implements CryptInterface
      * algorithm name. The hash output length is deterministic for a
      * given algorithm, so this collapses the per-decrypt strlen+hash
      * call to a single hash lookup after warm-up.
-     *
-     * @var array
      */
     protected array $hashLengthCache = [];
 
     /**
      * The cipher iv length.
-     *
-     * @var int
      */
     protected int $ivLength = 16;
 
-    /**
-     * @var string
-     */
     protected string $key = "";
 
-    /**
-     * @var int
-     */
     protected int $padding = 0;
 
-    /**
-     * @var PadFactory
-     */
     protected PadFactory $padFactory;
 
     /**
      * Whether calculating message digest enabled or not.
-     *
-     * @var bool
      */
     protected bool $useSigning = true;
 
     /**
      * Crypt constructor.
-     *
-     * @param string          $cipher
-     * @param bool            $useSigning
-     * @param PadFactory|null $padFactory
      *
      * @throws Exception
      */
@@ -184,10 +149,6 @@ class Crypt implements CryptInterface
      * );
      * ```
      *
-     * @param string      $input
-     * @param string|null $key
-     *
-     * @return string
      * @throws Exception
      * @throws InvalidDecryptLength
      * @throws Mismatch
@@ -294,11 +255,8 @@ class Crypt implements CryptInterface
     /**
      * Decrypt a text that is coded as a base64 string.
      *
-     * @param string     $input
      * @param mixed|null $key
-     * @param bool       $safe
      *
-     * @return string
      * @throws Exception
      * @throws Mismatch
      */
@@ -325,10 +283,6 @@ class Crypt implements CryptInterface
      * );
      * ```
      *
-     * @param string      $input
-     * @param string|null $key
-     *
-     * @return string
      * @throws Exception
      */
     public function encrypt(string $input, ?string $key = null): string
@@ -381,11 +335,8 @@ class Crypt implements CryptInterface
     /**
      * Encrypts a text returning the result as a base64 string.
      *
-     * @param string     $input
      * @param mixed|null $key
-     * @param bool       $safe
      *
-     * @return string
      * @throws Exception
      */
     public function encryptBase64(
@@ -411,8 +362,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns the auth data
-     *
-     * @return string
      */
     public function getAuthData(): string
     {
@@ -421,8 +370,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns the auth tag
-     *
-     * @return string
      */
     public function getAuthTag(): string
     {
@@ -431,8 +378,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns the auth tag length
-     *
-     * @return int
      */
     public function getAuthTagLength(): int
     {
@@ -441,8 +386,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns a list of available ciphers.
-     *
-     * @return array
      */
     public function getAvailableCiphers(): array
     {
@@ -451,8 +394,6 @@ class Crypt implements CryptInterface
 
     /**
      * Return a list of registered hashing algorithms suitable for hash_hmac.
-     *
-     * @return array
      */
     public function getAvailableHashAlgorithms(): array
     {
@@ -465,8 +406,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns the current cipher
-     *
-     * @return string
      */
     public function getCipher(): string
     {
@@ -475,8 +414,6 @@ class Crypt implements CryptInterface
 
     /**
      * Get the name of hashing algorithm.
-     *
-     * @return string
      */
     public function getHashAlgorithm(): string
     {
@@ -485,8 +422,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns the encryption key
-     *
-     * @return string
      */
     public function getKey(): string
     {
@@ -496,10 +431,6 @@ class Crypt implements CryptInterface
     /**
      * Returns if the input length for decryption is valid or not
      * (number of bytes required by the cipher).
-     *
-     * @param string $input
-     *
-     * @return bool
      */
     public function isValidDecryptLength(string $input): bool
     {
@@ -512,11 +443,6 @@ class Crypt implements CryptInterface
         return $length <= strlen($input);
     }
 
-    /**
-     * @param string $data
-     *
-     * @return CryptInterface
-     */
     public function setAuthData(string $data): CryptInterface
     {
         $this->authData = $data;
@@ -524,11 +450,6 @@ class Crypt implements CryptInterface
         return $this;
     }
 
-    /**
-     * @param string $tag
-     *
-     * @return CryptInterface
-     */
     public function setAuthTag(string $tag): CryptInterface
     {
         $this->authTag = $tag;
@@ -537,9 +458,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * @param int $length
-     *
-     * @return CryptInterface
      * @throws InvalidAuthTagLength
      */
     public function setAuthTagLength(int $length): CryptInterface
@@ -556,9 +474,6 @@ class Crypt implements CryptInterface
     /**
      * Sets the cipher algorithm for data encryption and decryption.
      *
-     * @param string $cipher
-     *
-     * @return CryptInterface
      * @throws Exception
      */
     public function setCipher(string $cipher): CryptInterface
@@ -574,9 +489,6 @@ class Crypt implements CryptInterface
     /**
      * Set the name of hashing algorithm.
      *
-     * @param string $hashAlgorithm
-     *
-     * @return static
      * @throws Exception
      */
     public function setHashAlgorithm(string $hashAlgorithm): static
@@ -602,10 +514,6 @@ class Crypt implements CryptInterface
      *
      * Good key:
      * "T4\xb1\x8d\xa9\x98\x05\\\x8c\xbe\x1d\x07&[\x99\x18\xa4~Lc1\xbeW\xb3"
-     *
-     * @param string $key
-     *
-     * @return CryptInterface
      */
     public function setKey(string $key): CryptInterface
     {
@@ -616,10 +524,6 @@ class Crypt implements CryptInterface
 
     /**
      * Changes the padding scheme used.
-     *
-     * @param int $scheme
-     *
-     * @return CryptInterface
      */
     public function setPadding(int $scheme): CryptInterface
     {
@@ -630,10 +534,6 @@ class Crypt implements CryptInterface
 
     /**
      * Sets if the calculating message digest must used.
-     *
-     * @param bool $useSigning
-     *
-     * @return CryptInterface
      */
     public function useSigning(bool $useSigning): CryptInterface
     {
@@ -644,9 +544,6 @@ class Crypt implements CryptInterface
 
     /**
      * Checks if a cipher or a hash algorithm is available
-     *
-     * @param string $cipher
-     * @param string $type
      *
      * @throws Exception
      */
@@ -669,12 +566,6 @@ class Crypt implements CryptInterface
      * Pads texts before encryption. See
      * [cryptopad](https://www.di-mgt.com.au/cryptopad.html)
      *
-     * @param string $input
-     * @param string $mode
-     * @param int    $blockSize
-     * @param int    $paddingType
-     *
-     * @return string
      * @throws Exception
      */
     protected function cryptPadText(
@@ -711,12 +602,6 @@ class Crypt implements CryptInterface
      * If the function detects that the text was not padded, it will return it
      * unmodified.
      *
-     * @param string $input
-     * @param string $mode
-     * @param int    $blockSize
-     * @param int    $paddingType
-     *
-     * @return string
      * @throws Exception
      */
     protected function cryptUnpadText(
@@ -758,12 +643,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * @param string $mode
-     * @param string $cipherText
-     * @param string $decryptKey
-     * @param string $iv
-     *
-     * @return string
      * @throws Exception
      */
     protected function decryptGcmCcmAuth(
@@ -807,13 +686,6 @@ class Crypt implements CryptInterface
         return $decrypted;
     }
 
-    /**
-     * @param string $mode
-     * @param int    $blockSize
-     * @param string $decrypted
-     *
-     * @return string
-     */
     protected function decryptGetUnpadded(
         string $mode,
         int $blockSize,
@@ -834,12 +706,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * @param string $mode
-     * @param string $padded
-     * @param string $encryptKey
-     * @param string $iv
-     *
-     * @return string
      * @throws Exception
      */
     protected function encryptGcmCcm(
@@ -899,11 +765,6 @@ class Crypt implements CryptInterface
     }
 
     /**
-     * @param string $mode
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return string
      * @throws Exception
      */
     protected function encryptGetPadded(
@@ -924,7 +785,6 @@ class Crypt implements CryptInterface
     /**
      * Initialize available cipher algorithms.
      *
-     * @return static
      * @throws Exception
      */
     protected function initializeAvailableCiphers(): static
@@ -954,11 +814,6 @@ class Crypt implements CryptInterface
 
     /**
      * Checks if a mode (string) is in the values to compare (modes array)
-     *
-     * @param array  $modes
-     * @param string $mode
-     *
-     * @return bool
      */
     private function checkIsMode(array $modes, string $mode): bool
     {
@@ -968,9 +823,6 @@ class Crypt implements CryptInterface
     /**
      * Returns the block size
      *
-     * @param string $mode
-     *
-     * @return int
      * @throws Exception
      */
     private function getBlockSize(string $mode): int
@@ -987,9 +839,6 @@ class Crypt implements CryptInterface
     /**
      * Initialize available cipher algorithms.
      *
-     * @param string $cipher
-     *
-     * @return int
      * @throws Exception
      */
     private function getIvLength(string $cipher): int
@@ -1004,8 +853,6 @@ class Crypt implements CryptInterface
 
     /**
      * Returns the mode (last few characters of the cipher)
-     *
-     * @return string
      */
     private function getMode(): string
     {

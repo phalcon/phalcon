@@ -28,10 +28,7 @@ interface Logger
      * Example: Entire website down, database unavailable, etc. This should
      * trigger the SMS alerts and wake you up.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function alert(string $message, array $context = []): void;
 
@@ -40,30 +37,21 @@ interface Logger
      *
      * Example: Application component unavailable, unexpected exception.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function critical(string $message, array $context = []): void;
 
     /**
      * Detailed debug information.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function debug(string $message, array $context = []): void;
 
     /**
      * System is unusable.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function emergency(string $message, array $context = []): void;
 
@@ -71,10 +59,7 @@ interface Logger
      * Runtime errors that do not require immediate action but should typically
      * be logged and monitored.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function error(string $message, array $context = []): void;
 
@@ -82,8 +67,6 @@ interface Logger
      * Returns an adapter from the stack
      *
      * @param string $name The name of the adapter
-     *
-     * @return Adapter
      */
     public function getAdapter(string $name): Adapter;
 
@@ -96,15 +79,11 @@ interface Logger
 
     /**
      * Returns the log level
-     *
-     * @return int
      */
     public function getLogLevel(): int;
 
     /**
      * Returns the name of the logger
-     *
-     * @return string
      */
     public function getName(): string;
 
@@ -113,10 +92,7 @@ interface Logger
      *
      * Example: User logs in, SQL logs.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function info(string $message, array $context = []): void;
 
@@ -126,31 +102,21 @@ interface Logger
      * An unknown level (a typo or an unmapped value) is not rejected; it maps
      * to the CUSTOM level and is logged, rather than raising an exception.
      *
-     * @param mixed  $level
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function log(mixed $level, string $message, array $context = []): void;
 
     /**
      * Normal but significant events.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function notice(string $message, array $context = []): void;
 
     /**
      * Extra-verbose diagnostic output.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function trace(string $message, array $context = []): void;
 
@@ -160,10 +126,7 @@ interface Logger
      * Example: Use of deprecated APIs, poor use of an API, undesirable things
      * that are not necessarily wrong.
      *
-     * @param string $message
      * @phpstan-param logger_context $context
-     *
-     * @return void
      */
     public function warning(string $message, array $context = []): void;
 }

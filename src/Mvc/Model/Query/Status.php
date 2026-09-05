@@ -49,9 +49,6 @@ class Status implements StatusInterface
 {
     /**
      * Phalcon\Mvc\Model\Query\Status
-     *
-     * @param bool                $success
-     * @param ModelInterface|null $model
      */
     public function __construct(
         protected bool $success,
@@ -75,8 +72,6 @@ class Status implements StatusInterface
 
     /**
      * Returns the model that executed the action
-     *
-     * @return ModelInterface|null
      */
     public function getModel(): ?ModelInterface
     {
@@ -85,8 +80,6 @@ class Status implements StatusInterface
 
     /**
      * Allows to check if the executed operation was successful
-     *
-     * @return bool
      */
     public function success(): bool
     {

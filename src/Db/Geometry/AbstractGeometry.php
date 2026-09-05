@@ -15,9 +15,6 @@ namespace Phalcon\Db\Geometry;
 
 abstract class AbstractGeometry implements GeometryInterface
 {
-    /**
-     * @var int
-     */
     protected int $srid = 0;
 
     public function __toString(): string

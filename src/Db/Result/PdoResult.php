@@ -50,9 +50,6 @@ class PdoResult implements ResultInterface
      */
     protected $result;
 
-    /**
-     * @var int|null
-     */
     protected int | null $rowCount = null;
 
     /**
@@ -82,10 +79,6 @@ class PdoResult implements ResultInterface
      * // Fetch third row
      * $row = $result->fetch();
      *```
-     *
-     * @param int $number
-     *
-     * @return void
      */
     public function dataSeek(int $number): void
     {
@@ -124,8 +117,6 @@ class PdoResult implements ResultInterface
      * Allows to execute the statement again. Some database systems don't
      * support scrollable cursors. So, as cursors are forward only, we need to
      * execute the cursor again to fetch rows from the beginning
-     *
-     * @return bool
      */
     public function execute(): bool
     {
@@ -150,12 +141,6 @@ class PdoResult implements ResultInterface
      *     echo $invoice->inv_title;
      * }
      *```
-     *
-     * @param int|null $fetchStyle
-     * @param int      $cursorOrientation
-     * @param int      $cursorOffset
-     *
-     * @return mixed
      */
     public function fetch(
         int | null $fetchStyle = null,
@@ -184,11 +169,7 @@ class PdoResult implements ResultInterface
      * $invoices = $result->fetchAll();
      *```
      *
-     * @param int                      $mode
      * @param callable|int|string|null $fetchArgument
-     * @param array|null               $constructorArgs
-     *
-     * @return array
      */
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,
@@ -222,8 +203,6 @@ class PdoResult implements ResultInterface
      *     print_r($invoice);
      * }
      *```
-     *
-     * @return mixed
      */
     public function fetchArray(): mixed
     {
@@ -232,8 +211,6 @@ class PdoResult implements ResultInterface
 
     /**
      * Gets the internal PDO result object
-     *
-     * @return PDOStatement
      */
     public function getInternalResult(): PDOStatement
     {
@@ -321,12 +298,6 @@ class PdoResult implements ResultInterface
      *     \Phalcon\Enum::FETCH_OBJ
      * );
      *```
-     *
-     * @param int                $fetchMode
-     * @param object|string|null $colNoOrClassNameOrObject
-     * @param mixed|null         $ctorargs
-     *
-     * @return bool
      */
     public function setFetchMode(
         int $fetchMode,

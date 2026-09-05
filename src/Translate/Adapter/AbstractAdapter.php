@@ -83,8 +83,6 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      * Returns the translation related to the given key
      *
      * @param string $offset
-     *
-     * @return string
      */
     public function offsetGet(mixed $offset): string
     {

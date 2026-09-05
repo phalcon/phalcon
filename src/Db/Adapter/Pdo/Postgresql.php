@@ -51,20 +51,12 @@ use function trigger_error;
  */
 class Postgresql extends PdoAdapter
 {
-    /**
-     * @var string
-     */
     protected string $dialectType = "postgresql";
 
-    /**
-     * @var string
-     */
     protected string $type = "pgsql";
 
     /**
      * Constructor for Phalcon\Db\Adapter\Pdo\Postgresql
-     *
-     * @param array $descriptor
      */
     public function __construct(array $descriptor)
     {
@@ -81,9 +73,6 @@ class Postgresql extends PdoAdapter
      * This method is automatically called in Phalcon\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection.
      *
-     * @param array $descriptor
-     *
-     * @return void
      * @throws Exception
      */
     public function connect(array $descriptor = []): void
@@ -111,11 +100,6 @@ class Postgresql extends PdoAdapter
     /**
      * Creates a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param array  $definition
-     *
-     * @return bool
      * @throws Exception
      */
     public function createTable(
@@ -169,7 +153,6 @@ class Postgresql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ColumnInterface[]
@@ -640,7 +623,6 @@ class Postgresql extends PdoAdapter
      * );
      *```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
@@ -715,8 +697,6 @@ class Postgresql extends PdoAdapter
      *     ]
      * );
      *```
-     *
-     * @return RawValue
      */
     public function getDefaultIdValue(): RawValue
     {
@@ -726,12 +706,6 @@ class Postgresql extends PdoAdapter
     /**
      * Modifies a table column based on a $definition
      *
-     * @param string               $tableName
-     * @param string               $schemaName
-     * @param ColumnInterface      $column
-     * @param ColumnInterface|null $currentColumn
-     *
-     * @return bool
      * @throws Exception
      */
     public function modifyColumn(
@@ -773,8 +747,6 @@ class Postgresql extends PdoAdapter
     /**
      * Check whether the database system requires a sequence to produce
      * auto-numeric values
-     *
-     * @return bool
      */
     public function supportSequences(): bool
     {
@@ -784,8 +756,6 @@ class Postgresql extends PdoAdapter
     /**
      * Check whether the database system requires an explicit value for identity
      * columns
-     *
-     * @return bool
      */
     public function useExplicitIdValue(): bool
     {
@@ -794,8 +764,6 @@ class Postgresql extends PdoAdapter
 
     /**
      * Returns PDO adapter DSN defaults as a key-value map.
-     *
-     * @return array
      */
     protected function getDsnDefaults(): array
     {
@@ -806,10 +774,6 @@ class Postgresql extends PdoAdapter
      * Recognizes a PostgreSQL connection-loss failure by SQLSTATE
      * (connection exception class 08, or admin/crash shutdown 57P0x) with a
      * message fallback.
-     *
-     * @param Throwable $exception
-     *
-     * @return bool
      */
     protected function isConnectionError(Throwable $exception): bool
     {

@@ -46,19 +46,10 @@ class Service implements ServiceInterface
 {
     use DiInstanceTrait;
 
-    /**
-     * @var mixed
-     */
     protected mixed $definition;
 
-    /**
-     * @var bool
-     */
     protected bool $resolved = false;
 
-    /**
-     * @var bool
-     */
     protected bool $shared = false;
 
     /**
@@ -68,9 +59,6 @@ class Service implements ServiceInterface
 
     /**
      * Service constructor.
-     *
-     * @param mixed $definition
-     * @param bool  $shared
      */
     final public function __construct(mixed $definition, bool $shared = false)
     {
@@ -80,8 +68,6 @@ class Service implements ServiceInterface
 
     /**
      * Returns the service definition
-     *
-     * @return mixed
      */
     public function getDefinition(): mixed
     {
@@ -90,10 +76,6 @@ class Service implements ServiceInterface
 
     /**
      * Returns a parameter in a specific position
-     *
-     * @param int $position
-     *
-     * @return mixed
      */
     public function getParameter(int $position): mixed
     {
@@ -106,8 +88,6 @@ class Service implements ServiceInterface
 
     /**
      * Returns true if the service was resolved
-     *
-     * @return bool
      */
     public function isResolved(): bool
     {
@@ -116,8 +96,6 @@ class Service implements ServiceInterface
 
     /**
      * Check whether the service is shared or not
-     *
-     * @return bool
      */
     public function isShared(): bool
     {
@@ -126,9 +104,6 @@ class Service implements ServiceInterface
 
     /**
      * Resolves the service
-     *
-     * @param array|null       $parameters
-     * @param DiInterface|null $container
      *
      * @return mixed|null
      * @throws Exception
@@ -208,8 +183,6 @@ class Service implements ServiceInterface
 
     /**
      * Set the service definition
-     *
-     * @param mixed $definition
      */
     public function setDefinition(mixed $definition): void
     {
@@ -219,10 +192,6 @@ class Service implements ServiceInterface
     /**
      * Changes a parameter in the definition without resolve the service
      *
-     * @param int   $position
-     * @param array $parameter
-     *
-     * @return ServiceInterface
      * @throws Exception
      */
     public function setParameter(int $position, array $parameter): ServiceInterface
@@ -251,8 +220,6 @@ class Service implements ServiceInterface
 
     /**
      * Sets if the service is shared or not
-     *
-     * @param bool $shared
      */
     public function setShared(bool $shared): void
     {
@@ -261,8 +228,6 @@ class Service implements ServiceInterface
 
     /**
      * Sets/Resets the shared instance related to the service
-     *
-     * @param mixed $sharedInstance
      */
     public function setSharedInstance(mixed $sharedInstance): void
     {

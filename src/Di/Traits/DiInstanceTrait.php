@@ -23,12 +23,6 @@ use function call_user_func_array;
  */
 trait DiInstanceTrait
 {
-    /**
-     * @param mixed      $instance
-     * @param array|null $parameters
-     *
-     * @return mixed
-     */
     private function createClosureInstance(
         mixed $instance,
         array | null $parameters = null
@@ -40,12 +34,6 @@ trait DiInstanceTrait
         return call_user_func($instance);
     }
 
-    /**
-     * @param string     $name
-     * @param array|null $parameters
-     *
-     * @return mixed
-     */
     private function createInstance(
         string $name,
         array | null $parameters = null

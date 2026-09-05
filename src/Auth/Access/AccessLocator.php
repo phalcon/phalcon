@@ -29,7 +29,6 @@ use Phalcon\Support\AbstractLocator;
  * class builder).
  *
  * @extends AbstractLocator<Access>
- *
  */
 class AccessLocator extends AbstractLocator
 {

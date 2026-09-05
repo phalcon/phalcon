@@ -68,9 +68,6 @@ use function is_array;
  */
 class Between extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must be within the range of :min to :max";
 
     /**

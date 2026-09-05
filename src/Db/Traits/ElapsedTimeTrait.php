@@ -21,8 +21,6 @@ trait ElapsedTimeTrait
 {
     /**
      * Returns the total time in milliseconds spent by the profiles
-     *
-     * @return float
      */
     public function getTotalElapsedMilliseconds(): float
     {
@@ -31,15 +29,11 @@ trait ElapsedTimeTrait
     /**
      * Returns the total time in nanoseconds spent by the profiles. Implemented
      * by the using class.
-     *
-     * @return float
      */
     abstract public function getTotalElapsedNanoseconds(): float;
 
     /**
      * Returns the total time in seconds spent by the profiles
-     *
-     * @return float
      */
     public function getTotalElapsedSeconds(): float
     {

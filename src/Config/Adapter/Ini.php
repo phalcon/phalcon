@@ -80,9 +80,6 @@ class Ini extends Config
     /**
      * Ini constructor.
      *
-     * @param string $filePath
-     * @param int    $mode
-     *
      * @throws Exception
      */
     public function __construct(string $filePath, int $mode = INI_SCANNER_RAW)
@@ -128,8 +125,6 @@ class Ini extends Config
      * `on/yes/true`, `off/no/false`, `null` and numeric strings are decoded
      * here. The json, yaml and php adapters receive natively typed values
      * from their parsers and perform no casting.
-     *
-     * @param mixed $ini
      *
      * @return array|float|int|mixed|string|null
      */
@@ -196,8 +191,7 @@ class Ini extends Config
     /**
      * Build multidimensional array from string
      *
-     * @param string $path
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @phpstan-return config_data
      */

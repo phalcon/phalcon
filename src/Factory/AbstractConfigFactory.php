@@ -54,7 +54,6 @@ abstract class AbstractConfigFactory
      * Checks if the config has "adapter"
      *
      * @param array<string, mixed> $config
-     * @param string               $element
      *
      * @phpstan-param factory_config $config
      *
@@ -85,7 +84,6 @@ abstract class AbstractConfigFactory
     }
 
     /**
-     * @return string
      * @phpstan-return class-string<BaseException>
      */
     protected function getExceptionClass(): string

@@ -30,50 +30,36 @@ class Payload implements PayloadInterface
 {
     /**
      * Exception if any
-     *
-     * @var Throwable|null
      */
     protected ?Throwable $exception = null;
 
     /**
      * Extra information
-     *
-     * @var mixed
      */
     protected mixed $extras = null;
 
     /**
      * Input
-     *
-     * @var mixed
      */
     protected mixed $input = null;
 
     /**
      * Messages
-     *
-     * @var mixed
      */
     protected mixed $messages = null;
 
     /**
      * Output
-     *
-     * @var mixed
      */
     protected mixed $output = null;
 
     /**
      * Status
-     *
-     * @var mixed
      */
     protected mixed $status = null;
 
     /**
      * Gets the potential exception thrown in the domain layer
-     *
-     * @return Throwable|null
      */
     public function getException(): ?Throwable
     {
@@ -82,8 +68,6 @@ class Payload implements PayloadInterface
 
     /**
      * Extra information
-     *
-     * @return mixed
      */
     public function getExtras(): mixed
     {
@@ -92,8 +76,6 @@ class Payload implements PayloadInterface
 
     /**
      * Input
-     *
-     * @return mixed
      */
     public function getInput(): mixed
     {
@@ -102,8 +84,6 @@ class Payload implements PayloadInterface
 
     /**
      * Messages
-     *
-     * @return mixed
      */
     public function getMessages(): mixed
     {
@@ -112,8 +92,6 @@ class Payload implements PayloadInterface
 
     /**
      * Output
-     *
-     * @return mixed
      */
     public function getOutput(): mixed
     {
@@ -125,8 +103,6 @@ class Payload implements PayloadInterface
      *
      * Status values are drawn from the `Status` vocabulary.
      *
-     * @return mixed
-     *
      * @see Status
      */
     public function getStatus(): mixed
@@ -136,10 +112,6 @@ class Payload implements PayloadInterface
 
     /**
      * Sets an exception thrown in the domain
-     *
-     * @param Throwable $exception
-     *
-     * @return PayloadInterface
      */
     public function setException(Throwable $exception): PayloadInterface
     {
@@ -150,10 +122,6 @@ class Payload implements PayloadInterface
 
     /**
      * Sets arbitrary extra domain information.
-     *
-     * @param mixed $extras
-     *
-     * @return PayloadInterface
      */
     public function setExtras(mixed $extras): PayloadInterface
     {
@@ -164,10 +132,6 @@ class Payload implements PayloadInterface
 
     /**
      * Sets the domain input.
-     *
-     * @param mixed $input
-     *
-     * @return PayloadInterface
      */
     public function setInput(mixed $input): PayloadInterface
     {
@@ -178,10 +142,6 @@ class Payload implements PayloadInterface
 
     /**
      * Sets the domain messages.
-     *
-     * @param mixed $messages
-     *
-     * @return PayloadInterface
      */
     public function setMessages(mixed $messages): PayloadInterface
     {
@@ -192,10 +152,6 @@ class Payload implements PayloadInterface
 
     /**
      * Sets the domain output.
-     *
-     * @param mixed $output
-     *
-     * @return PayloadInterface
      */
     public function setOutput(mixed $output): PayloadInterface
     {
@@ -208,10 +164,6 @@ class Payload implements PayloadInterface
      * Sets the payload status.
      *
      * Status values are drawn from the `Status` vocabulary.
-     *
-     * @param mixed $status
-     *
-     * @return PayloadInterface
      *
      * @see Status
      */

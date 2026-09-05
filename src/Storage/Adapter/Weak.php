@@ -36,9 +36,6 @@ use function is_object;
  */
 class Weak extends AbstractAdapter
 {
-    /**
-     * @var string|null
-     */
     protected string | null $fetching = null;
 
     /**

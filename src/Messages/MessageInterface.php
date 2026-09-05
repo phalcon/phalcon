@@ -29,15 +29,11 @@ interface MessageInterface
 
     /**
      * Returns the message code related to this message
-     *
-     * @return int
      */
     public function getCode(): int;
 
     /**
      * Returns field name related to message
-     *
-     * @return string
      */
     public function getField(): string;
 

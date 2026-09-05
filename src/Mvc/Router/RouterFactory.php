@@ -47,7 +47,6 @@ class RouterFactory
      *
      * @param array|ConfigInterface $config
      *
-     * @return RouterInterface
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed>|ConfigInterface $config
@@ -79,10 +78,6 @@ class RouterFactory
 
     /**
      * Returns a bare Router instance.
-     *
-     * @param bool $defaultRoutes
-     *
-     * @return RouterInterface
      */
     public function newInstance(bool $defaultRoutes = true): RouterInterface
     {

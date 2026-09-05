@@ -55,9 +55,6 @@ use Phalcon\Filter\Validation\AbstractValidator;
  */
 class PresenceOf extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field is required";
 
     /**

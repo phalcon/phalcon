@@ -33,8 +33,6 @@ trait MessagesHelperTrait
 
     /**
      * Returns the number of messages in the list
-     *
-     * @return int
      */
     public function count(): int
     {

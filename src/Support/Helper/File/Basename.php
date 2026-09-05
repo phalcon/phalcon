@@ -29,11 +29,6 @@ class Basename
 {
     /**
      * @see https://bugs.php.net/bug.php?id=37738
-     *
-     * @param string      $uri
-     * @param string|null $suffix
-     *
-     * @return string
      */
     public function __invoke(
         string $uri,

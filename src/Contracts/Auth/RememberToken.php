@@ -23,22 +23,16 @@ interface RememberToken
 {
     /**
      * Deletes the token from storage.
-     *
-     * @return bool
      */
     public function delete(): bool;
 
     /**
      * Returns the token value stored for this remember entry.
-     *
-     * @return string
      */
     public function getToken(): string;
 
     /**
      * Returns the user agent associated with this token, if any.
-     *
-     * @return string|null
      */
     public function getUserAgent(): ?string;
 }

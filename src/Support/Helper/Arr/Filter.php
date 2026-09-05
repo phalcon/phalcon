@@ -21,9 +21,6 @@ class Filter extends AbstractArr
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param callable|null           $method
-     *
-     * @return mixed
      */
     public function __invoke(array $collection, callable | null $method = null): mixed
     {

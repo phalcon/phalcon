@@ -586,11 +586,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Resize the image to the given size
      *
-     * @param int|null $width
-     * @param int|null $height
-     * @param int      $master
-     *
-     * @return void
      * @throws Exception
      */
     private function checkResizeInput(
@@ -644,8 +639,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Parses a hex color ("#rgb", "rgb", "#rrggbb" or "rrggbb") into an array
      * of three integer channels [red, green, blue].
-     *
-     * @param string $color
      *
      * @phpstan-return image_color_channels
      * @throws InvalidColor

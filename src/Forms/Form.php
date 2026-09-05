@@ -56,9 +56,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 {
     use CamelizeTrait;
 
-    /**
-     * @var Attributes
-     */
     protected Attributes $attributes;
 
     /**
@@ -73,10 +70,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @phpstan-var forms_elements_indexed
      */
     protected array $elementsIndexed = [];
-    /**
-     * @var object|null
-     */
-    protected object | null $entity = null;
+    protected object | null $entity  = null;
     /**
      * @phpstan-var forms_data
      */
@@ -380,8 +374,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
     /**
      * Returns the current element in the iterator
-     *
-     * @return mixed
      */
     public function current(): mixed
     {
@@ -435,8 +427,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
     /**
      * Returns the entity related to the model
-     *
-     * @return object|null
      */
     public function getEntity(): object | null
     {
@@ -869,7 +859,6 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
     /**
      * Sets the form's action
-     *
      */
     public function setAction(string $action): static
     {

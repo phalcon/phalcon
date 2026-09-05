@@ -69,9 +69,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     use EventsAwareTrait;
     use ViewParamsTrait;
 
-    /**
-     * @var string
-     */
     protected string $activeRenderPath;
 
     /**
@@ -81,15 +78,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     protected array | false $engines = false; // TODO: Change to default null or empty array
 
-    /**
-     * @var string
-     */
     protected string $viewsDir;
 
     /**
      * Phalcon\Mvc\View\Simple constructor
-     *
-     * @param array $options
      *
      * @phpstan-param array<string, mixed> $options
      */
@@ -105,8 +97,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * echo $this->view->products;
      *```
      *
-     * @param string $key
-     *
      * @return mixed
      */
     public function __get(string $key)
@@ -120,11 +110,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      *```php
      * $this->view->products = $products;
      *```
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return void
      */
     public function __set(string $key, mixed $value): void
     {
@@ -133,8 +118,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 
     /**
      * Returns the path of the view that is currently rendered
-     *
-     * @return string
      */
     public function getActiveRenderPath(): string
     {
@@ -143,8 +126,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 
     /**
      * Gets views directory
-     *
-     * @return string
      */
     public function getViewsDir(): string
     {
@@ -169,10 +150,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * );
      * ```
      *
-     * @param string     $partialPath
-     * @param mixed|null $params
-     *
-     * @return void
      * @throws EventsException
      * @throws Exception
      */
@@ -234,10 +211,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * );
      *```
      *
-     * @param array $engines
-     *
-     * @return void
-     *
      * @phpstan-param array<string, mixed> $engines
      */
     public function registerEngines(array $engines): void
@@ -248,10 +221,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     /**
      * Renders a view
      *
-     * @param string $path
-     * @param array  $params
-     *
-     * @return string
      * @throws EventsException
      * @throws Exception
      *
@@ -283,9 +252,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * $this->view->setParamToView("products", $products);
      *```
      *
-     * @param string $key
-     * @param mixed  $value
-     *
      * @return Simple
      *
      * @phpstan-return static
@@ -306,9 +272,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      * );
      *```
      *
-     * @param array $params
-     * @param bool  $merge
-     *
      * @return $this
      *
      * @phpstan-param array<string, mixed> $params
@@ -326,10 +289,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 
     /**
      * Sets views directory
-     *
-     * @param string $viewsDir
-     *
-     * @return void
      */
     public function setViewsDir(string $viewsDir): void
     {
@@ -339,10 +298,6 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     /**
      * Tries to render the view with every engine registered in the component
      *
-     * @param string $path
-     * @param mixed  $params
-     *
-     * @return void
      * @throws Exception
      * @throws EventsException
      */

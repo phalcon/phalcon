@@ -67,9 +67,6 @@ class Gettext extends AbstractAdapter
      */
     protected array | string $directory;
 
-    /**
-     * @var false|string
-     */
     protected false | string $locale;
 
     /**

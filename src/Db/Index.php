@@ -61,8 +61,6 @@ class Index implements IndexInterface
     /**
      * Index columns. Entries may be plain strings (column names) or
      * `Phalcon\Db\RawValue` instances (functional/expression index entries).
-     *
-     * @var array
      */
     protected array $columns;
 
@@ -70,8 +68,6 @@ class Index implements IndexInterface
      * Whether to build the index without taking a strong lock that blocks
      * writes - emits `CONCURRENTLY` between `INDEX` and the index name on
      * PostgreSQL. MySQL and SQLite ignore the flag.
-     *
-     * @var bool
      */
     protected bool $concurrent = false;
 
@@ -79,23 +75,17 @@ class Index implements IndexInterface
      * Per-column sort directions (`ASC` / `DESC`). Empty array means
      * "emit no per-column direction" - preserves the legacy plain
      * `(col1, col2)` rendering.
-     *
-     * @var array
      */
     protected array $directions = [];
 
     /**
      * Whether the index is declared `INVISIBLE` (MySQL 8.0+).
-     *
-     * @var bool
      */
     protected bool $invisible = false;
 
     /**
      * Optional partial-index `WHERE` predicate. Supported by PostgreSQL and
      * SQLite. Empty string means no predicate.
-     *
-     * @var string
      */
     protected string $where = "";
 
@@ -107,10 +97,6 @@ class Index implements IndexInterface
      * "invisible" => true, ...])`. Detection is based on the presence of a
      * `columns` key in the second argument; when present, the third
      * positional `type` argument is ignored in favor of the definition.
-     *
-     * @param string $name
-     * @param array  $columnsOrDefinition
-     * @param string $type
      *
      * @throws Exception
      */
@@ -158,8 +144,6 @@ class Index implements IndexInterface
 
     /**
      * Index columns
-     *
-     * @return array
      */
     public function getColumns(): array
     {
@@ -170,8 +154,6 @@ class Index implements IndexInterface
      * Returns the per-column sort directions array (`ASC` / `DESC`).
      * Empty array means the index was declared without explicit per-column
      * directions.
-     *
-     * @return array
      */
     public function getDirections(): array
     {
@@ -180,8 +162,6 @@ class Index implements IndexInterface
 
     /**
      * Index name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -190,8 +170,6 @@ class Index implements IndexInterface
 
     /**
      * Index type
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -201,8 +179,6 @@ class Index implements IndexInterface
     /**
      * Returns the partial-index `WHERE` predicate, or an empty string when
      * the index has none.
-     *
-     * @return string
      */
     public function getWhere(): string
     {
@@ -211,8 +187,6 @@ class Index implements IndexInterface
 
     /**
      * Whether the index is built `CONCURRENTLY` (PostgreSQL only).
-     *
-     * @return bool
      */
     public function isConcurrent(): bool
     {
@@ -221,8 +195,6 @@ class Index implements IndexInterface
 
     /**
      * Whether the index is declared `INVISIBLE` (MySQL 8.0+).
-     *
-     * @return bool
      */
     public function isInvisible(): bool
     {

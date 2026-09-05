@@ -23,9 +23,6 @@ class FirstKey extends AbstractArr
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param callable|null           $method
-     *
-     * @return int|string|null
      */
     public function __invoke(array $collection, callable | null $method = null): int | string | null
     {

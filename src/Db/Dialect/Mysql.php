@@ -37,25 +37,13 @@ class Mysql extends Dialect
 {
     use TextTrait;
 
-    /**
-     * @var string
-     */
     protected string $escapeChar = "`";
 
-    /**
-     * @var array
-     */
     protected array $supportedOperators = ["->", "->>"];
 
     /**
      * Generates SQL to add a CHECK constraint to an existing table.
      * Enforced by MySQL 8.0.16+.
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return string
      */
     public function addCheck(
         string $tableName,
@@ -69,11 +57,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to add a column to a table
      *
-     * @param string          $tableName
-     * @param string          $schemaName
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     public function addColumn(
@@ -98,11 +81,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to add an index to a table
      *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return string
      * @throws Exception
      */
     public function addForeignKey(
@@ -125,11 +103,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to add an index to a table
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return string
      * @throws Exception
      */
     public function addIndex(
@@ -154,11 +127,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to add the primary key to a table
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return string
      * @throws Exception
      */
     public function addPrimaryKey(
@@ -174,11 +142,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to create a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param array  $definition
-     *
-     * @return string
      * @throws Exception
      */
     public function createTable(
@@ -223,11 +186,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to create a view
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return string
      * @throws Exception
      */
     public function createView(
@@ -253,11 +211,6 @@ class Mysql extends Dialect
      *     $dialect->describeColumns("posts")
      * );
      * ```
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function describeColumns(
         string $tableName,
@@ -289,11 +242,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to query indexes on a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function describeIndexes(
         string $tableName,
@@ -305,11 +253,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to query foreign keys on a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function describeReferences(
         string $tableName,
@@ -341,12 +284,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to delete a CHECK constraint from a table.
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return string
      */
     public function dropCheck(
         string $tableName,
@@ -360,12 +297,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to delete a column from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $columnName
-     *
-     * @return string
      */
     public function dropColumn(
         string $tableName,
@@ -382,12 +313,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to delete a foreign key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $referenceName
-     *
-     * @return string
      */
     public function dropForeignKey(
         string $tableName,
@@ -404,12 +329,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to delete an index from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $indexName
-     *
-     * @return string
      */
     public function dropIndex(
         string $tableName,
@@ -426,11 +345,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to delete primary key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return string
      */
     public function dropPrimaryKey(
         string $tableName,
@@ -442,12 +356,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to drop a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
      */
     public function dropTable(
         string $tableName,
@@ -461,12 +369,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to drop a view
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
      */
     public function dropView(
         string $viewName,
@@ -481,9 +383,6 @@ class Mysql extends Dialect
     /**
      * Gets the column name in MySQL
      *
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     public function getColumnDefinition(ColumnInterface $column): string
@@ -805,8 +704,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to check DB parameter FOREIGN_KEY_CHECKS.
-     *
-     * @return string
      */
     public function getForeignKeyChecks(): string
     {
@@ -821,10 +718,6 @@ class Mysql extends Dialect
      *     $dialect->listTables("blog")
      * );
      * ```
-     *
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function listTables(string | null $schemaName = null): string
     {
@@ -835,10 +728,6 @@ class Mysql extends Dialect
 
     /**
      * Generates the SQL to list all views of a schema or user
-     *
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function listViews(string | null $schemaName = null): string
     {
@@ -851,12 +740,6 @@ class Mysql extends Dialect
     /**
      * Generates SQL to modify a column in a table
      *
-     * @param string               $tableName
-     * @param string               $schemaName
-     * @param ColumnInterface      $column
-     * @param ColumnInterface|null $currentColumn
-     *
-     * @return string
      * @throws Exception
      */
     public function modifyColumn(
@@ -897,11 +780,6 @@ class Mysql extends Dialect
      * MySQL does not support the SQL-standard `ON CONFLICT DO UPDATE`
      * upsert syntax - it has its own `INSERT ... ON DUPLICATE KEY UPDATE`.
      *
-     * @param string $sqlQuery
-     * @param array  $conflictColumns
-     * @param array  $updateColumns
-     *
-     * @return string
      * @throws Exception
      */
     public function onConflictUpdate(
@@ -920,10 +798,6 @@ class Mysql extends Dialect
      *
      * echo $sql; // SELECT * FROM co_invoices LOCK IN SHARE MODE
      *```
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
@@ -933,8 +807,6 @@ class Mysql extends Dialect
     /**
      * MySQL does not support the SQL-standard `ON CONFLICT (...) DO UPDATE`
      * upsert clause; `onConflictUpdate()` throws.
-     *
-     * @return bool
      */
     public function supportsOnConflictUpdate(): bool
     {
@@ -949,11 +821,6 @@ class Mysql extends Dialect
      *
      * echo $dialect->tableExists("posts");
      * ```
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function tableExists(
         string $tableName,
@@ -972,11 +839,6 @@ class Mysql extends Dialect
 
     /**
      * Generates the SQL to describe the table creation options
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function tableOptions(
         string $tableName,
@@ -994,11 +856,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL to truncate a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return string
      */
     public function truncateTable(
         string $tableName,
@@ -1011,11 +868,6 @@ class Mysql extends Dialect
 
     /**
      * Generates SQL checking for the existence of a schema.view
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function viewExists(
         string $viewName,
@@ -1036,10 +888,6 @@ class Mysql extends Dialect
      * Escape a string literal for a single quoted SQL string. MySQL treats the
      * backslash as an escape character, so it must be doubled together with the
      * single quote.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     protected function escapeStringLiteral(string $value): string
     {

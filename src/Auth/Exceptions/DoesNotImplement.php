@@ -37,10 +37,7 @@ class DoesNotImplement extends Exception
      *
      * @template TExpected of object
      *
-     * @param mixed                   $value
      * @param class-string<TExpected> $interfaceName
-     * @param string                  $type
-     * @param string                  $name
      *
      * @phpstan-assert TExpected $value
      *

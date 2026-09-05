@@ -71,7 +71,6 @@ class AdapterFactory extends AbstractFactory
      *
      * @phpstan-param storage_adapter_options $options
      *
-     * @return AdapterInterface
      * @throws Exception
      */
     public function newInstance(string $name, array $options = []): AdapterInterface

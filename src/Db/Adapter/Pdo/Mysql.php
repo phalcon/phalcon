@@ -55,24 +55,13 @@ use function substr;
  */
 class Mysql extends PdoAdapter
 {
-    /**
-     * @var string
-     */
     protected string $dialectType = "mysql";
 
-    /**
-     * @var string
-     */
     protected string $type = "mysql";
 
     /**
      * Adds a foreign key to a table
      *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return bool
      * @throws Exception
      */
     public function addForeignKey(
@@ -110,11 +99,6 @@ class Mysql extends PdoAdapter
      *                          'charset' => 'utf8mb4'
      *                          ]
      */
-    /**
-     * @param array $descriptor
-     *
-     * @return void
-     */
     public function connect(array $descriptor = []): void
     {
         $descriptor = !empty($descriptor) ? $descriptor : $this->descriptor;
@@ -143,7 +127,6 @@ class Mysql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ColumnInterface[]
@@ -636,7 +619,6 @@ class Mysql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|IndexInterface[]
@@ -733,7 +715,6 @@ class Mysql extends PdoAdapter
      * );
      *```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
@@ -805,10 +786,6 @@ class Mysql extends PdoAdapter
     /**
      * Recognizes a MySQL "server has gone away" / "Lost connection" failure
      * by the driver error code (2006 / 2013) with a message fallback.
-     *
-     * @param Throwable $exception
-     *
-     * @return bool
      */
     protected function isConnectionError(Throwable $exception): bool
     {
@@ -835,10 +812,6 @@ class Mysql extends PdoAdapter
      * MariaDB quotes literal defaults to tell them apart from the expression
      * defaults it has supported since 10.2. Expression defaults arrive
      * unquoted, so an unmatched pair leaves the value untouched.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     private function unquoteDefault(string $value): string
     {

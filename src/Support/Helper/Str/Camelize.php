@@ -22,13 +22,6 @@ class Camelize
 {
     use CamelizeTrait;
 
-    /**
-     * @param string      $text
-     * @param string|null $delimiters
-     * @param bool        $lowerFirst
-     *
-     * @return string
-     */
     public function __invoke(
         string $text,
         string | null $delimiters = null,

@@ -31,11 +31,6 @@ interface BuilderInterface
 
     /**
      * Add a model to take part of the query
-     *
-     * @param string      $model
-     * @param string|null $alias
-     *
-     * @return BuilderInterface
      */
     public function addFrom(
         string $model,
@@ -44,12 +39,6 @@ interface BuilderInterface
 
     /**
      * Appends a condition to the current conditions using a AND operator
-     *
-     * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param mvc_model_bind_params $bindParams
      * @phpstan-param mvc_model_bind_types $bindTypes
@@ -62,13 +51,6 @@ interface BuilderInterface
 
     /**
      * Appends a BETWEEN condition to the current conditions
-     *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     * @param string $operator
-     *
-     * @return BuilderInterface
      */
     public function betweenWhere(
         string $expr,
@@ -120,11 +102,6 @@ interface BuilderInterface
      *     ]
      * );
      *```
-     *
-     * @param mixed $columns
-     *
-     * @return BuilderInterface
-     *
      */
     public function columns(mixed $columns): BuilderInterface;
 
@@ -135,10 +112,6 @@ interface BuilderInterface
      * $builder->distinct("status");
      * $builder->distinct(null);
      *```
-     *
-     * @param mixed $distinct
-     *
-     * @return BuilderInterface
      */
     public function distinct(mixed $distinct): BuilderInterface;
 
@@ -148,19 +121,11 @@ interface BuilderInterface
      *```php
      * $builder->forUpdate(true);
      *```
-     *
-     * @param bool $forUpdate
-     *
-     * @return BuilderInterface
      */
     public function forUpdate(bool $forUpdate): BuilderInterface;
 
     /**
      * Sets the models who makes part of the query
-     *
-     * @param mixed $models
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param mvc_query_columns $models
      */
@@ -169,16 +134,12 @@ interface BuilderInterface
     /**
      * Returns default bind params
      *
-     * @return array
-     *
      * @phpstan-return mvc_model_bind_params
      */
     public function getBindParams(): array;
 
     /**
      * Returns default bind types
-     *
-     * @return array
      *
      * @phpstan-return mvc_model_bind_types
      */
@@ -195,8 +156,6 @@ interface BuilderInterface
 
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag
-     *
-     * @return bool
      */
     public function getDistinct(): bool;
 
@@ -212,23 +171,17 @@ interface BuilderInterface
     /**
      * Returns the GROUP BY clause
      *
-     * @return array
-     *
      * @phpstan-return array<array-key, string>
      */
     public function getGroupBy(): array;
 
     /**
      * Returns the HAVING condition clause
-     *
-     * @return string|null
      */
     public function getHaving(): string | null;
 
     /**
      * Return join parts of the query
-     *
-     * @return array
      *
      * @phpstan-return array<array-key, mixed>
      */
@@ -246,16 +199,12 @@ interface BuilderInterface
     /**
      * Returns the models involved in the query
      *
-     * @return array|string|null
-     *
      * @phpstan-return mvc_query_columns|null
      */
     public function getModels(): array | string | null;
 
     /**
      * Returns the current OFFSET clause
-     *
-     * @return int
      */
     public function getOffset(): int;
 
@@ -270,15 +219,11 @@ interface BuilderInterface
 
     /**
      * Returns a PHQL statement built based on the builder parameters
-     *
-     * @return string
      */
     public function getPhql(): string;
 
     /**
      * Returns the query built
-     *
-     * @return QueryInterface
      */
     public function getQuery(): QueryInterface;
 
@@ -294,22 +239,12 @@ interface BuilderInterface
     /**
      * Sets a GROUP BY clause
      *
-     * @param mixed $group
-     *
-     * @return BuilderInterface
-     *
      * @phpstan-param array<array-key, string>|string|null $group
      */
     public function groupBy(mixed $group): BuilderInterface;
 
     /**
      * Sets a HAVING condition clause
-     *
-     * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param mvc_model_bind_params $bindParams
      * @phpstan-param mvc_model_bind_types $bindTypes
@@ -322,12 +257,6 @@ interface BuilderInterface
 
     /**
      * Adds an INNER join to the query
-     *
-     * @param string      $model
-     * @param string|null $conditions
-     * @param string|null $alias
-     *
-     * @return BuilderInterface
      */
     public function innerJoin(
         string $model,
@@ -337,12 +266,6 @@ interface BuilderInterface
 
     /**
      * Appends an IN condition to the current conditions
-     *
-     * @param string $expr
-     * @param array  $values
-     * @param string $operator
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param array<array-key, mixed> $values
      */
@@ -354,12 +277,6 @@ interface BuilderInterface
 
     /**
      * Adds an :type: join (by default type - INNER) to the query
-     *
-     * @param string      $model
-     * @param string|null $conditions
-     * @param string|null $alias
-     *
-     * @return BuilderInterface
      */
     public function join(
         string $model,
@@ -369,12 +286,6 @@ interface BuilderInterface
 
     /**
      * Adds a LEFT join to the query
-     *
-     * @param string      $model
-     * @param string|null $conditions
-     * @param string|null $alias
-     *
-     * @return BuilderInterface
      */
     public function leftJoin(
         string $model,
@@ -384,23 +295,11 @@ interface BuilderInterface
 
     /**
      * Sets a LIMIT clause
-     *
-     * @param int        $limit
-     * @param mixed|null $offset
-     *
-     * @return BuilderInterface
      */
     public function limit(int $limit, mixed $offset = null): BuilderInterface;
 
     /**
      * Appends a NOT BETWEEN condition to the current conditions
-     *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     * @param string $operator
-     *
-     * @return BuilderInterface
      */
     public function notBetweenWhere(
         string $expr,
@@ -412,12 +311,6 @@ interface BuilderInterface
     /**
      * Appends a NOT IN condition to the current conditions
      *
-     * @param string $expr
-     * @param array  $values
-     * @param string $operator
-     *
-     * @return BuilderInterface
-     *
      * @phpstan-param array<array-key, mixed> $values
      */
     public function notInWhere(
@@ -428,29 +321,16 @@ interface BuilderInterface
 
     /**
      * Sets an OFFSET clause
-     *
-     * @param int $offset
-     *
-     * @return BuilderInterface
      */
     public function offset(int $offset): BuilderInterface;
 
     /**
      * Sets an ORDER BY condition clause
-     *
-     * @param mixed $orderBy
-     *
      */
     public function orderBy(mixed $orderBy): BuilderInterface;
 
     /**
      * Appends a condition to the current conditions using an OR operator
-     *
-     * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param mvc_model_bind_params $bindParams
      * @phpstan-param mvc_model_bind_types $bindTypes
@@ -463,12 +343,6 @@ interface BuilderInterface
 
     /**
      * Adds a RIGHT join to the query
-     *
-     * @param string      $model
-     * @param string|null $conditions
-     * @param string|null $alias
-     *
-     * @return BuilderInterface
      */
     public function rightJoin(
         string $model,
@@ -478,11 +352,6 @@ interface BuilderInterface
 
     /**
      * Set default bind parameters
-     *
-     * @param array $bindParams
-     * @param bool  $merge
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param mvc_model_bind_params $bindParams
      */
@@ -494,11 +363,6 @@ interface BuilderInterface
     /**
      * Set default bind types
      *
-     * @param array $bindTypes
-     * @param bool  $merge
-     *
-     * @return BuilderInterface
-     *
      * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function setBindTypes(
@@ -508,12 +372,6 @@ interface BuilderInterface
 
     /**
      * Sets conditions for the query
-     *
-     * @param string $conditions
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return BuilderInterface
      *
      * @phpstan-param mvc_model_bind_params $bindParams
      * @phpstan-param mvc_model_bind_types $bindTypes

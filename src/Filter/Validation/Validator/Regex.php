@@ -64,9 +64,6 @@ use function preg_match;
  */
 class Regex extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field does not match the required format";
 
     /**

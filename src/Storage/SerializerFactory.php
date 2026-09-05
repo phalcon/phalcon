@@ -48,9 +48,6 @@ class SerializerFactory extends AbstractFactory
     }
 
     /**
-     * @param string $name
-     *
-     * @return SerializerInterface
      * @throws BaseException
      */
     public function newInstance(string $name): SerializerInterface

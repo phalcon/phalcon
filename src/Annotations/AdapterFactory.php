@@ -32,15 +32,11 @@ use Phalcon\Storage\SerializerFactory;
  */
 class AdapterFactory extends AbstractFactory
 {
-    /**
-     * @var SerializerFactory|null
-     */
     private SerializerFactory | null $serializerFactory;
 
     /**
      * AdapterFactory constructor.
      *
-     * @param SerializerFactory     $factory
      * @param array<string, string> $services
      */
     public function __construct(
@@ -55,7 +51,6 @@ class AdapterFactory extends AbstractFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string               $name
      * @param array<string, mixed> $options = [
      *                                      'servers' => [
      *                                      [
@@ -77,7 +72,6 @@ class AdapterFactory extends AbstractFactory
      *                                      'storageDir'        => ''
      *                                      ]
      *
-     * @return AdapterInterface
      * @throws BaseException
      */
     public function newInstance(string $name, array $options = []): AdapterInterface

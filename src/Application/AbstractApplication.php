@@ -60,8 +60,6 @@ abstract class AbstractApplication extends Injectable implements EventsAwareInte
     /**
      * Gets the module definition registered in the application via module name
      *
-     * @param string $name
-     *
      * @phpstan-return Closure|application_module_definition
      */
     public function getModule(string $name): mixed

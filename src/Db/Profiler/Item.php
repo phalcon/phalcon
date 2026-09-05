@@ -24,43 +24,31 @@ class Item
 
     /**
      * Timestamp when the profile ended
-     *
-     * @var float
      */
     protected float $finalTime;
 
     /**
      * Timestamp when the profile started
-     *
-     * @var float
      */
     protected float $initialTime;
 
     /**
      * SQL bind types related to the profile
-     *
-     * @var array
      */
     protected array $sqlBindTypes;
 
     /**
      * SQL statement related to the profile
-     *
-     * @var string
      */
     protected string $sqlStatement;
 
     /**
      * SQL variables related to the profile
-     *
-     * @var array
      */
     protected array $sqlVariables;
 
     /**
      * Return the timestamp when the profile ended
-     *
-     * @return float
      */
     public function getFinalTime(): float
     {
@@ -69,8 +57,6 @@ class Item
 
     /**
      * Return the timestamp when the profile started
-     *
-     * @return float
      */
     public function getInitialTime(): float
     {
@@ -79,8 +65,6 @@ class Item
 
     /**
      * Return the SQL bind types related to the profile
-     *
-     * @return array
      */
     public function getSqlBindTypes(): array
     {
@@ -89,8 +73,6 @@ class Item
 
     /**
      * Return the SQL statement related to the profile
-     *
-     * @return string
      */
     public function getSqlStatement(): string
     {
@@ -99,8 +81,6 @@ class Item
 
     /**
      * Return the SQL variables related to the profile
-     *
-     * @return array
      */
     public function getSqlVariables(): array
     {
@@ -109,8 +89,6 @@ class Item
 
     /**
      * Returns the total time in nanoseconds spent by the profile
-     *
-     * @return float
      */
     public function getTotalElapsedNanoseconds(): float
     {
@@ -119,8 +97,6 @@ class Item
 
     /**
      * Return the timestamp when the profile ended
-     *
-     * @param float $finalTime
      *
      * @return $this
      */
@@ -134,8 +110,6 @@ class Item
     /**
      * Return the timestamp when the profile started
      *
-     * @param float $initialTime
-     *
      * @return $this
      */
     public function setInitialTime(float $initialTime): static
@@ -147,8 +121,6 @@ class Item
 
     /**
      * Return the SQL bind types related to the profile
-     *
-     * @param array $sqlBindTypes
      *
      * @return $this
      */
@@ -162,8 +134,6 @@ class Item
     /**
      * Return the SQL statement related to the profile
      *
-     * @param string $sqlStatement
-     *
      * @return $this
      */
     public function setSqlStatement(string $sqlStatement): static
@@ -175,8 +145,6 @@ class Item
 
     /**
      * Return the SQL variables related to the profile
-     *
-     * @param array $sqlVariables
      *
      * @return $this
      */

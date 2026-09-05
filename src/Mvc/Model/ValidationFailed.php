@@ -27,9 +27,6 @@ class ValidationFailed extends Exception
     /**
      * Phalcon\Mvc\Model\ValidationFailed constructor
      *
-     * @param ModelInterface $model
-     * @param array          $validationMessages
-     *
      * @phpstan-param list<MessageInterface> $validationMessages
      */
     public function __construct(
@@ -55,8 +52,6 @@ class ValidationFailed extends Exception
     /**
      * Returns the complete group of messages produced in the validation
      *
-     * @return array
-     *
      * @phpstan-return list<MessageInterface>
      */
     public function getMessages(): array
@@ -66,8 +61,6 @@ class ValidationFailed extends Exception
 
     /**
      * Returns the model that generated the messages
-     *
-     * @return ModelInterface
      */
     public function getModel(): ModelInterface
     {

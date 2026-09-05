@@ -25,7 +25,6 @@ class Flatten
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param bool                    $deep
      *
      * @return array<array-key, mixed>
      */

@@ -467,8 +467,6 @@ class Collection implements
      * (`SORT_ASC` or `SORT_DESC`).
      *
      * @phpstan-return static<T>
-     *
-     * @param callable|null $callback
      */
     public function sort(callable | null $callback = null, int $order = SORT_ASC): static
     {
@@ -650,8 +648,6 @@ class Collection implements
      * `float`, `array`, `object`) map to their `is_*` checks; anything else
      * is treated as a class/interface name and tested with `instanceof`.
      *
-     * @param mixed $value
-     *
      * @throws InvalidValueType
      */
     protected function validateType(mixed $value): void
@@ -675,9 +671,6 @@ class Collection implements
         }
     }
 
-    /**
-     * @param mixed $value
-     */
     private function checkSerializable(mixed $value): mixed
     {
         if (

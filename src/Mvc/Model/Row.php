@@ -32,8 +32,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
     /**
      * Serializes the object for json_encode
      *
-     * @return array
-     *
      * @phpstan-return array<array-key, mixed>
      */
     public function jsonSerialize(): array
@@ -43,10 +41,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
 
     /**
      * Checks whether offset exists in the row
-     *
-     * @param mixed $index
-     *
-     * @return bool
      *
      * @phpstan-param array-key $index
      */
@@ -58,9 +52,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
     /**
      * Gets a record in a specific position of the row
      *
-     * @param mixed $index
-     *
-     * @return mixed
      * @throws Exception
      *
      * @phpstan-param array-key $index
@@ -80,10 +71,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * Rows cannot be changed. It has only been implemented to meet the
      * definition of the ArrayAccess interface
      *
-     * @param mixed $offset
-     * @param mixed $value
-     *
-     * @return void
      * @throws Exception
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -95,9 +82,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * Rows cannot be changed. It has only been implemented to meet the
      * definition of the ArrayAccess interface
      *
-     * @param mixed $offset
-     *
-     * @return void
      * @throws Exception
      */
     public function offsetUnset(mixed $offset): void
@@ -112,8 +96,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      * echo $invoice->readAttribute("inv_title");
      *```
      *
-     * @param string $attribute
-     *
      * @return mixed
      */
     public function readAttribute(string $attribute)
@@ -123,10 +105,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
 
     /**
      * Set the current object's state
-     *
-     * @param int $dirtyState
-     *
-     * @return bool|ModelInterface
      */
     public function setDirtyState(int $dirtyState): bool | ModelInterface
     {
@@ -135,8 +113,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
 
     /**
      * Returns the instance as an array representation
-     *
-     * @return array
      *
      * @phpstan-return array<array-key, mixed>
      */
@@ -151,11 +127,6 @@ class Row extends stdClass implements EntityInterface, ResultInterface, ArrayAcc
      *```php
      * $invoice->writeAttribute("inv_title", "Test Invoice");
      *```
-     *
-     * @param string $attribute
-     * @param mixed  $value
-     *
-     * @return void
      */
     public function writeAttribute(string $attribute, mixed $value): void
     {

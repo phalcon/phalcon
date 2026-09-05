@@ -77,10 +77,6 @@ class Imagick extends AbstractAdapter
      * than the named file. Prefer Imagick::create() for the canvas case; this
      * dual mode is slated for removal in the next major version.
      *
-     * @param string   $file
-     * @param int|null $width
-     * @param int|null $height
-     *
      * @throws Exception
      * @throws ImagickException
      */
@@ -928,7 +924,6 @@ class Imagick extends AbstractAdapter
     /**
      * Checks if Imagick is enabled
      *
-     * @return void
      * @throws Exception
      */
     private function check(): void
@@ -948,10 +943,6 @@ class Imagick extends AbstractAdapter
      * setImageFormat() marks the current frame only, and a wand built with
      * newImage() carries no format at all, which stops a multi frame write.
      *
-     * @param ImagickNative $image
-     * @param string        $extension
-     *
-     * @return void
      * @throws ImagickException
      */
     private function setFramesFormat(ImagickNative $image, string $extension): void

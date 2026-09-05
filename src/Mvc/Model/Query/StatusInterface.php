@@ -30,15 +30,11 @@ interface StatusInterface
 
     /**
      * Returns the model which executed the action
-     *
-     * @return ModelInterface|null
      */
     public function getModel(): ModelInterface | null;
 
     /**
      * Allows to check if the executed operation was successful
-     *
-     * @return bool
      */
     public function success(): bool;
 }

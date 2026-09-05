@@ -320,22 +320,16 @@ class Column implements ColumnInterface
 
     /**
      * Column Position
-     *
-     * @var string|null
      */
     protected ?string $after = null;
 
     /**
      * Bind Type
-     *
-     * @var int
      */
     protected int $bindType = 2;
 
     /**
      * Column's comment
-     *
-     * @var string|null
      */
     protected ?string $comment = null;
 
@@ -349,8 +343,6 @@ class Column implements ColumnInterface
     /**
      * Generation expression for `GENERATED ALWAYS AS (...)`. Null when the
      * column is not generated.
-     *
-     * @var string|null
      */
     protected ?string $generated = null;
 
@@ -358,36 +350,26 @@ class Column implements ColumnInterface
      * Whether a generated column is `STORED` (true) or `VIRTUAL` (false).
      * PostgreSQL only supports `STORED` and emits it regardless of this
      * flag.
-     *
-     * @var bool
      */
     protected bool $generationStored = false;
 
     /**
      * Whether the column is an array of its base type (PostgreSQL).
-     *
-     * @var bool
      */
     protected bool $isArray = false;
 
     /**
      * Column is autoIncrement?
-     *
-     * @var bool
      */
     protected bool $isAutoIncrement = false;
 
     /**
      * Position is first
-     *
-     * @var bool
      */
     protected bool $isFirst = false;
 
     /**
      * Whether the column is declared `INVISIBLE` (MySQL 8.0.23+).
-     *
-     * @var bool
      */
     protected bool $isInvisible = false;
 
@@ -395,72 +377,51 @@ class Column implements ColumnInterface
      * Column not nullable?
      *
      * Default SQL definition is NOT NULL.
-     *
-     * @var bool
      */
     protected bool $isNotNull = true;
 
     /**
      * The column have some numeric type?
-     *
-     * @var bool
      */
     protected bool $isNumeric = false;
 
     /**
      * Column is part of the primary key?
-     *
-     * @var bool
      */
     protected bool $isPrimary = false;
 
     /**
      * Integer column unsigned?
-     *
-     * @var bool
      */
     protected bool $isUnsigned = false;
 
     /**
      * Integer column number scale
-     *
-     * @var int
      */
     protected int $scale = 0;
 
     /**
      * Integer column size
-     *
-     * @var int|string
      */
     protected int | string $size = 0;
 
     /**
      * Column data type
-     *
-     * @var int|string
      */
     protected int | string $type;
 
     /**
      * Column data type reference
-     *
-     * @var int
      */
     protected int $typeReference = -1;
 
     /**
      * Column data type values
-     *
-     * @var array|int|string
      */
     protected array | int | string $typeValues = [];
 
     /**
      * Phalcon\Db\Column constructor
-     *
-     * @param string $name
-     * @param array  $definition
      *
      * @throws Exception
      */
@@ -570,8 +531,6 @@ class Column implements ColumnInterface
 
     /**
      * Check whether field absolute to position in table
-     *
-     * @return string|null
      */
     public function getAfterPosition(): ?string
     {
@@ -580,8 +539,6 @@ class Column implements ColumnInterface
 
     /**
      * Returns the type of bind handling
-     *
-     * @return int
      */
     public function getBindType(): int
     {
@@ -590,8 +547,6 @@ class Column implements ColumnInterface
 
     /**
      * Column's comment
-     *
-     * @return string|null
      */
     public function getComment(): ?string
     {
@@ -600,8 +555,6 @@ class Column implements ColumnInterface
 
     /**
      * Default column value
-     *
-     * @return mixed
      */
     public function getDefault(): mixed
     {
@@ -611,8 +564,6 @@ class Column implements ColumnInterface
     /**
      * Returns the generation expression for a generated/computed column.
      * Returns null when the column is not generated.
-     *
-     * @return string|null
      */
     public function getGenerationExpression(): ?string
     {
@@ -621,8 +572,6 @@ class Column implements ColumnInterface
 
     /**
      * Column's name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -631,8 +580,6 @@ class Column implements ColumnInterface
 
     /**
      * Integer column number scale
-     *
-     * @return int
      */
     public function getScale(): int
     {
@@ -641,8 +588,6 @@ class Column implements ColumnInterface
 
     /**
      * Integer column size
-     *
-     * @return int|string
      */
     public function getSize(): int | string
     {
@@ -651,8 +596,6 @@ class Column implements ColumnInterface
 
     /**
      * Column data type
-     *
-     * @return int|string
      */
     public function getType(): int | string
     {
@@ -661,8 +604,6 @@ class Column implements ColumnInterface
 
     /**
      * Column data type reference
-     *
-     * @return int
      */
     public function getTypeReference(): int
     {
@@ -681,8 +622,6 @@ class Column implements ColumnInterface
 
     /**
      * Check whether column has default value
-     *
-     * @return bool
      */
     public function hasDefault(): bool
     {
@@ -697,8 +636,6 @@ class Column implements ColumnInterface
      * Whether the column is an array of its base type. Recognized by the
      * PostgreSQL dialect (e.g. `INTEGER[]`, `TEXT[]`); MySQL and SQLite
      * ignore the flag.
-     *
-     * @return bool
      */
     public function isArray(): bool
     {
@@ -707,8 +644,6 @@ class Column implements ColumnInterface
 
     /**
      * Auto-Increment
-     *
-     * @return bool
      */
     public function isAutoIncrement(): bool
     {
@@ -717,8 +652,6 @@ class Column implements ColumnInterface
 
     /**
      * Check whether column has the first position in the table
-     *
-     * @return bool
      */
     public function isFirst(): bool
     {
@@ -727,8 +660,6 @@ class Column implements ColumnInterface
 
     /**
      * Whether the column is a generated/computed column.
-     *
-     * @return bool
      */
     public function isGenerated(): bool
     {
@@ -737,8 +668,6 @@ class Column implements ColumnInterface
 
     /**
      * Whether a generated column is `STORED`. `false` means `VIRTUAL`.
-     *
-     * @return bool
      */
     public function isGenerationStored(): bool
     {
@@ -747,8 +676,6 @@ class Column implements ColumnInterface
 
     /**
      * Whether the column is declared `INVISIBLE` (MySQL 8.0.23+).
-     *
-     * @return bool
      */
     public function isInvisible(): bool
     {
@@ -757,8 +684,6 @@ class Column implements ColumnInterface
 
     /**
      * Not null
-     *
-     * @return bool
      */
     public function isNotNull(): bool
     {
@@ -767,8 +692,6 @@ class Column implements ColumnInterface
 
     /**
      * Check whether column have a numeric type
-     *
-     * @return bool
      */
     public function isNumeric(): bool
     {
@@ -777,8 +700,6 @@ class Column implements ColumnInterface
 
     /**
      * Column is part of the primary key?
-     *
-     * @return bool
      */
     public function isPrimary(): bool
     {
@@ -787,8 +708,6 @@ class Column implements ColumnInterface
 
     /**
      * Returns true if number column is unsigned
-     *
-     * @return bool
      */
     public function isUnsigned(): bool
     {

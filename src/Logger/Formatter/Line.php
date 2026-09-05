@@ -23,11 +23,6 @@ class Line extends AbstractFormatter
 {
     /**
      * Line constructor.
-     *
-     * @param string $format
-     * @param string $dateFormat
-     * @param string $interpolatorLeft
-     * @param string $interpolatorRight
      */
     public function __construct(
         protected string $format = '[%date%][%level%] %message%',

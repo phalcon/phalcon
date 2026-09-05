@@ -48,8 +48,6 @@ use function unserialize;
 class Simple extends Resultset
 {
     /**
-     * @var array|null
-     *
      * @phpstan-var mvc_eager_map|null
      */
     protected array | null $eagerMap = null;
@@ -60,8 +58,6 @@ class Simple extends Resultset
      * @param array|string          $columnMap
      * @param ModelInterface|Row    $model
      * @param false|ResultInterface $result
-     * @param mixed|null            $cache
-     * @param bool                  $keepSnapshots
      *
      * @throws Exception
      *
@@ -79,7 +75,6 @@ class Simple extends Resultset
     }
 
     /**
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_resultset_simple_state
@@ -97,10 +92,6 @@ class Simple extends Resultset
     }
 
     /**
-     * @param array $data
-     *
-     * @return void
-     *
      * @phpstan-param mvc_resultset_simple_state $data
      */
     public function __unserialize(array $data): void
@@ -264,10 +255,6 @@ class Simple extends Resultset
      * move and current() re-hydrates from the raw row - so hydration is the
      * only durable point at which relations can be stamped.
      *
-     * @param array $eagerMap
-     *
-     * @return void
-     *
      * @phpstan-param mvc_eager_map $eagerMap
      */
     public function setEagerMap(array $eagerMap): void
@@ -281,8 +268,6 @@ class Simple extends Resultset
      * snapshot behavior of this resultset.
      *
      * @param array $indexes zero-based row positions, in the desired order
-     *
-     * @return Simple
      *
      * @phpstan-param array<array-key, int> $indexes
      */

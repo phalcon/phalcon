@@ -38,12 +38,6 @@ interface Adapter
 {
     /**
      * Adds a column to a table
-     *
-     * @param string          $tableName
-     * @param string          $schemaName
-     * @param ColumnInterface $column
-     *
-     * @return bool
      */
     public function addColumn(
         string $tableName,
@@ -53,12 +47,6 @@ interface Adapter
 
     /**
      * Adds a foreign key to a table
-     *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return bool
      */
     public function addForeignKey(
         string $tableName,
@@ -68,12 +56,6 @@ interface Adapter
 
     /**
      * Adds an index to a table
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return bool
      */
     public function addIndex(
         string $tableName,
@@ -83,12 +65,6 @@ interface Adapter
 
     /**
      * Adds a primary key to a table
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return bool
      */
     public function addPrimaryKey(
         string $tableName,
@@ -99,64 +75,38 @@ interface Adapter
     /**
      * Returns the number of affected rows by the last INSERT/UPDATE/DELETE
      * reported by the database system
-     *
-     * @return int
      */
     public function affectedRows(): int;
 
     /**
      * Starts a transaction in the connection
-     *
-     * @param bool $nesting
-     *
-     * @return bool
      */
     public function begin(bool $nesting = true): bool;
 
     /**
      * Closes active connection returning success. Phalcon automatically closes
      * and destroys active connections within Phalcon\Db\Pool
-     *
-     * @return void
      */
     public function close(): void;
 
     /**
      * Commits the active transaction in the connection
-     *
-     * @param bool $nesting
-     *
-     * @return bool
      */
     public function commit(bool $nesting = true): bool;
 
     /**
      * This method is automatically called in \Phalcon\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection
-     *
-     * @param array $descriptor
-     *
-     * @return void
      */
     public function connect(array $descriptor = []): void;
 
     /**
      * Creates a new savepoint
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function createSavepoint(string $name): bool;
 
     /**
      * Creates a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param array  $definition
-     *
-     * @return bool
      */
     public function createTable(
         string $tableName,
@@ -166,12 +116,6 @@ interface Adapter
 
     /**
      * Creates a view
-     *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return bool
      */
     public function createView(
         string $viewName,
@@ -181,13 +125,6 @@ interface Adapter
 
     /**
      * Deletes data from a table using custom RDBMS SQL syntax
-     *
-     * @param array|string $tableName
-     * @param string|null  $whereCondition
-     * @param array        $placeholders
-     * @param array        $dataTypes
-     *
-     * @return bool
      */
     public function delete(
         array | string $tableName,
@@ -199,7 +136,6 @@ interface Adapter
     /**
      * Returns an array of Phalcon\Db\Column objects describing a table
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return ColumnInterface[]
@@ -212,7 +148,6 @@ interface Adapter
     /**
      * Lists table indexes
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return IndexInterface[]
@@ -225,7 +160,6 @@ interface Adapter
     /**
      * Lists table references
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return ReferenceInterface[]
@@ -237,12 +171,6 @@ interface Adapter
 
     /**
      * Drops a column from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $columnName
-     *
-     * @return bool
      */
     public function dropColumn(
         string $tableName,
@@ -252,12 +180,6 @@ interface Adapter
 
     /**
      * Drops a foreign key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $referenceName
-     *
-     * @return bool
      */
     public function dropForeignKey(
         string $tableName,
@@ -267,12 +189,6 @@ interface Adapter
 
     /**
      * Drop an index from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $indexName
-     *
-     * @return bool
      */
     public function dropIndex(
         string $tableName,
@@ -282,22 +198,11 @@ interface Adapter
 
     /**
      * Drops primary key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return bool
      */
     public function dropPrimaryKey(string $tableName, string $schemaName): bool;
 
     /**
      * Drops a table from a schema/database
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return bool
      */
     public function dropTable(
         string $tableName,
@@ -308,11 +213,7 @@ interface Adapter
     /**
      * Drops a view
      *
-     * @param string $viewName
      * @param string $schemaName
-     * @param bool   $ifExists
-     *
-     * @return bool
      */
     public function dropView(
         string $viewName,
@@ -324,17 +225,11 @@ interface Adapter
      * Escapes a column/table/schema name
      *
      * @param array|string $identifier
-     *
-     * @return string
      */
     public function escapeIdentifier(array | float | int | string $identifier): string;
 
     /**
      * Escapes a value to avoid SQL injections
-     *
-     * @param string $input
-     *
-     * @return string
      */
     public function escapeString(string $input): string;
 
@@ -342,12 +237,6 @@ interface Adapter
      * Sends SQL statements to the database server returning the success state.
      * Use this method only when the SQL statement sent to the server does not
      * return any rows
-     *
-     * @param string $sqlStatement
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return bool
      */
     public function execute(
         string $sqlStatement,
@@ -357,13 +246,6 @@ interface Adapter
 
     /**
      * Dumps the complete result of a query into an array
-     *
-     * @param string $sqlQuery
-     * @param int    $fetchMode
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return array
      */
     public function fetchAll(
         string $sqlQuery,
@@ -388,10 +270,6 @@ interface Adapter
      * print_r($invoice);
      *```
      *
-     * @param string     $sqlQuery
-     * @param array      $placeholders
-     * @param int|string $column
-     *
      * @return bool|string
      */
     public function fetchColumn(
@@ -402,13 +280,6 @@ interface Adapter
 
     /**
      * Returns the first row in a SQL query result
-     *
-     * @param string $sqlQuery
-     * @param int    $fetchMode
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return array|bool
      */
     public function fetchOne(
         string $sqlQuery,
@@ -419,42 +290,26 @@ interface Adapter
 
     /**
      * Returns a SQL modified with a FOR UPDATE clause
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function forUpdate(string $sqlQuery, string $modifier = ''): string;
 
     /**
      * Returns the SQL column definition from a column
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
      */
     public function getColumnDefinition(ColumnInterface $column): string;
 
     /**
      * Gets a list of columns
-     *
-     * @param array $columnList
-     *
-     * @return string
      */
     public function getColumnList(array $columnList): string;
 
     /**
      * Gets the active connection unique identifier
-     *
-     * @return int
      */
     public function getConnectionId(): int;
 
     /**
      * Return the default identity value to insert in an identity column
-     *
-     * @return RawValue
      */
     public function getDefaultIdValue(): RawValue;
 
@@ -477,91 +332,64 @@ interface Adapter
      * );
      *```
      *
-     * @return RawValue|null
      * @todo Return NULL if this is not supported by the adapter
-     *
      */
     public function getDefaultValue(): RawValue | null;
 
     /**
      * Return descriptor used to connect to the active database
-     *
-     * @return array
      */
     public function getDescriptor(): array;
 
     /**
      * Returns internal dialect instance
-     *
-     * @return DialectInterface
      */
     public function getDialect(): DialectInterface;
 
     /**
      * Returns the name of the dialect used
-     *
-     * @return string
      */
     public function getDialectType(): string;
 
     /**
      * Return internal PDO handler
-     *
-     * @return mixed
      */
     public function getInternalHandler(): mixed;
 
     /**
      * Returns the savepoint name to use for nested transactions
-     *
-     * @return string
      */
     public function getNestedTransactionSavepointName(): string;
 
     /**
      * Active SQL statement in the object without replace bound parameters
-     *
-     * @return string
      */
     public function getRealSQLStatement(): string;
 
     /**
      * Active SQL statement in the object
-     *
-     * @return array
      */
     public function getSQLBindTypes(): array;
 
     /**
      * Active SQL statement in the object
-     *
-     * @return string
      */
     public function getSQLStatement(): string;
 
     /**
      * Active SQL statement in the object
-     *
-     * @return array
      */
     public function getSQLVariables(): array;
 
     /**
      * Returns type of database system the adapter is used for
-     *
-     * @return string
      */
     public function getType(): string;
 
     /**
      * Inserts data into a table using custom RDBMS SQL syntax
      *
-     * @param string $tableName
-     * @param array  $values
-     * @param array  $fields
-     * @param array  $dataTypes
-     *
-     * @return bool
+     * @param array $fields
      */
     public function insert(
         string $tableName,
@@ -586,12 +414,6 @@ interface Adapter
      * // Next SQL sentence is sent to the database system
      * INSERT INTO `co_invoices` (`inv_title`, `inv_total`) VALUES ("Test Invoice", 100);
      * ```
-     *
-     * @param string $tableName
-     * @param array  $data
-     * @param array  $dataTypes
-     *
-     * @return bool
      */
     public function insertAsDict(
         string $tableName,
@@ -601,15 +423,11 @@ interface Adapter
 
     /**
      * Returns if nested transactions should use savepoints
-     *
-     * @return bool
      */
     public function isNestedTransactionsWithSavepoints(): bool;
 
     /**
      * Checks whether connection is under database transaction
-     *
-     * @return bool
      */
     public function isUnderTransaction(): bool;
 
@@ -619,18 +437,11 @@ interface Adapter
      *
      * @param string|null $name Name of the sequence object from which the ID
      *                          should be returned.
-     *
-     * @return bool|string
      */
     public function lastInsertId(string | null $name = null): bool | string;
 
     /**
      * Appends a LIMIT clause to sqlQuery argument
-     *
-     * @param string    $sqlQuery
-     * @param array|int $number
-     *
-     * @return string
      */
     public function limit(string $sqlQuery, array | int $number): string;
 
@@ -638,8 +449,6 @@ interface Adapter
      * List all tables on a database
      *
      * @param string $schemaName
-     *
-     * @return array
      */
     public function listTables(string | null $schemaName = null): array;
 
@@ -647,20 +456,11 @@ interface Adapter
      * List all views on a database
      *
      * @param string $schemaName
-     *
-     * @return array
      */
     public function listViews(string | null $schemaName = null): array;
 
     /**
      * Modifies a table column based on a definition
-     *
-     * @param string               $tableName
-     * @param string               $schemaName
-     * @param ColumnInterface      $column
-     * @param ColumnInterface|null $currentColumn
-     *
-     * @return bool
      */
     public function modifyColumn(
         string $tableName,
@@ -673,12 +473,6 @@ interface Adapter
      * Sends SQL statements to the database server returning the success state.
      * Use this method only when the SQL statement sent to the server returns
      * rows
-     *
-     * @param string $sqlStatement
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return bool|ResultInterface
      */
     public function query(
         string $sqlStatement,
@@ -688,35 +482,21 @@ interface Adapter
 
     /**
      * Releases given savepoint
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function releaseSavepoint(string $name): bool;
 
     /**
      * Rollbacks the active transaction in the connection
-     *
-     * @param bool $nesting
-     *
-     * @return bool
      */
     public function rollback(bool $nesting = true): bool;
 
     /**
      * Rollbacks given savepoint
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function rollbackSavepoint(string $name): bool;
 
     /**
      * Set if nested transactions should use savepoints
-     *
-     * @param bool $flag
      *
      * @return AdapterInterface
      */
@@ -726,37 +506,26 @@ interface Adapter
 
     /**
      * Returns a SQL modified with a LOCK IN SHARE MODE clause
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string;
 
     /**
      * SQLite does not support the DEFAULT keyword
      *
-     * @return bool
      * @deprecated Will re removed in the next version
-     *
      */
     public function supportsDefaultValue(): bool;
 
     /**
      * Check whether the database system requires a sequence to produce
      * auto-numeric values
-     *
-     * @return bool
      */
     public function supportSequences(): bool;
 
     /**
      * Generates SQL checking for the existence of a schema.table
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return bool
      */
     public function tableExists(
         string $tableName,
@@ -766,10 +535,7 @@ interface Adapter
     /**
      * Gets creation options from a table
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return array
      */
     public function tableOptions(
         string $tableName,
@@ -778,14 +544,6 @@ interface Adapter
 
     /**
      * Updates data on a table using custom RDBMS SQL syntax
-     *
-     * @param string       $tableName
-     * @param array        $fields
-     * @param array        $values
-     * @param array|string $whereCondition
-     * @param array        $dataTypes
-     *
-     * @return bool
      */
     public function update(
         string $tableName,
@@ -812,13 +570,6 @@ interface Adapter
      * // Next SQL sentence is sent to the database system
      * UPDATE `co_invoices` SET `inv_title` = "New Test Invoice" WHERE inv_id = 101
      * ```
-     *
-     * @param string       $tableName
-     * @param array        $data
-     * @param array|string $whereCondition
-     * @param array        $dataTypes
-     *
-     * @return bool
      */
     public function updateAsDict(
         string $tableName,
@@ -830,18 +581,13 @@ interface Adapter
     /**
      * Check whether the database system requires an explicit value for identity
      * columns
-     *
-     * @return bool
      */
     public function useExplicitIdValue(): bool;
 
     /**
      * Generates SQL checking for the existence of a schema.view
      *
-     * @param string $viewName
      * @param string $schemaName
-     *
-     * @return bool
      */
     public function viewExists(
         string $viewName,

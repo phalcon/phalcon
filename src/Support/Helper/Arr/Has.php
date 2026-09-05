@@ -24,8 +24,6 @@ class Has
     /**
      * @param array<array-key, mixed> $collection
      * @param int|string              $index
-     *
-     * @return bool
      */
     public function __invoke(array $collection, $index): bool
     {

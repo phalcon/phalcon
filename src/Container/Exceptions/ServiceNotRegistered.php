@@ -38,8 +38,6 @@ class ServiceNotRegistered extends Exception
     /**
      * Service not registered
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

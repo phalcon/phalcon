@@ -23,15 +23,10 @@ use function array_values;
  */
 class LazyLoader
 {
-    /**
-     * @var object|null
-     */
     protected object | null $handler = null;
 
     /**
      * Phalcon\Mvc\Micro\LazyLoader constructor
-     *
-     * @param string $definition
      */
     public function __construct(
         protected string $definition
@@ -41,13 +36,8 @@ class LazyLoader
     /**
      * Calling __call method
      *
-     * @param string               $method
-     * @param mixed                $arguments
-     * @param BinderInterface|null $modelBinder
-     *
      * @return mixed
      * @throws Exception
-     *
      */
     public function callMethod(
         string $method,
@@ -92,17 +82,11 @@ class LazyLoader
         );
     }
 
-    /**
-     * @return string
-     */
     public function getDefinition(): string
     {
         return $this->definition;
     }
 
-    /**
-     * @return object|null
-     */
     public function getHandler(): object | null
     {
         return $this->handler;

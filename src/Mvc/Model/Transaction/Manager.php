@@ -70,37 +70,21 @@ use function is_object;
  */
 class Manager implements ManagerInterface, InjectionAwareInterface
 {
-    /**
-     * @var bool
-     */
     protected bool $initialized = false;
 
-    /**
-     * @var int
-     */
     protected int $number = 0;
 
-    /**
-     * @var bool
-     */
     protected bool $rollbackPendent = true;
 
-    /**
-     * @var string
-     */
     protected string $service = "db";
 
     /**
-     * @var array
-     *
      * @phpstan-var list<TransactionInterface>
      */
     protected array $transactions = [];
 
     /**
      * Phalcon\Mvc\Model\Transaction\Manager constructor
-     *
-     * @param DiInterface|null $container
      *
      * @throws ManagerOrmServicesUnavailable
      */
@@ -120,8 +104,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Remove all the transactions from the manager
-     *
-     * @return void
      */
     public function collectTransactions(): void
     {
@@ -155,10 +137,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Returns a new \Phalcon\Mvc\Model\Transaction or an already created once
      * This method registers a shutdown function to rollback active connections
-     *
-     * @param bool $autoBegin
-     *
-     * @return TransactionInterface
      */
     public function get(bool $autoBegin = true): TransactionInterface
     {
@@ -180,8 +158,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Returns the database service used to isolate the transaction
-     *
-     * @return string
      */
     public function getDbService(): string
     {
@@ -190,8 +166,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Returns the dependency injection container
-     *
-     * @return DiInterface|null
      */
     public function getDI(): \Phalcon\Di\DiInterface | null
     {
@@ -204,9 +178,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Create/Returns a new transaction or an existing one
      *
-     * @param bool $autoBegin
-     *
-     * @return TransactionInterface
      * @throws ManagerOrmServicesUnavailable
      */
     public function getOrCreateTransaction(bool $autoBegin = true): TransactionInterface
@@ -245,8 +216,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Check if the transaction manager is registering a shutdown function to
      * clean up pendent transactions
-     *
-     * @return bool
      */
     public function getRollbackPendent(): bool
     {
@@ -255,8 +224,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Checks whether the manager has an active transaction
-     *
-     * @return bool
      */
     public function has(): bool
     {
@@ -265,10 +232,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Notifies the manager about a committed transaction
-     *
-     * @param TransactionInterface $transaction
-     *
-     * @return void
      */
     public function notifyCommit(TransactionInterface $transaction): void
     {
@@ -277,10 +240,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Notifies the manager about a rollbacked transaction
-     *
-     * @param TransactionInterface $transaction
-     *
-     * @return void
      */
     public function notifyRollback(TransactionInterface $transaction): void
     {
@@ -290,10 +249,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Rollbacks active transactions within the manager
      * Collect will remove the transaction from the manager
-     *
-     * @param bool $collect
-     *
-     * @return void
      */
     public function rollback(bool $collect = true): void
     {
@@ -313,8 +268,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Rollbacks active transactions within the manager
-     *
-     * @return void
      */
     public function rollbackPendent(): void
     {
@@ -323,10 +276,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Sets the database service used to run the isolated transactions
-     *
-     * @param string $service
-     *
-     * @return ManagerInterface
      */
     public function setDbService(string $service): ManagerInterface
     {
@@ -337,10 +286,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Sets the dependency injection container
-     *
-     * @param DiInterface $container
-     *
-     * @return void
      */
     public function setDI(DiInterface $container): void
     {
@@ -350,10 +295,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
     /**
      * Set if the transaction manager must register a shutdown function to clean
      * up pendent transactions
-     *
-     * @param bool $rollbackPendent
-     *
-     * @return ManagerInterface
      */
     public function setRollbackPendent(bool $rollbackPendent): ManagerInterface
     {
@@ -364,10 +305,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 
     /**
      * Removes transactions from the TransactionManager
-     *
-     * @param TransactionInterface $transaction
-     *
-     * @return void
      */
     protected function collectTransaction(TransactionInterface $transaction): void
     {

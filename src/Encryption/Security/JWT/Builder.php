@@ -39,30 +39,16 @@ class Builder
 {
     use Base64Trait;
 
-    /**
-     * @var CollectionInterface
-     */
     private CollectionInterface $claims;
 
-    /**
-     * @var Encode
-     */
     private Encode $encode;
 
-    /**
-     * @var CollectionInterface
-     */
     private CollectionInterface $jose;
 
-    /**
-     * @var string
-     */
     private string $passphrase;
 
     /**
      * Builder constructor.
-     *
-     * @param SignerInterface $signer
      */
     public function __construct(
         private SignerInterface $signer
@@ -75,9 +61,6 @@ class Builder
     /**
      * Adds a custom claim
      *
-     * @param string $name
-     * @param mixed  $value
-     *
      * @return Builder
      */
     public function addClaim(string $name, mixed $value): static
@@ -89,9 +72,6 @@ class Builder
 
     /**
      * Adds a custom claim
-     *
-     * @param string $name
-     * @param mixed  $value
      *
      * @return Builder
      */
@@ -118,17 +98,11 @@ class Builder
         return $this->claims->toArray();
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentType(): string | null
     {
         return $this->jose->get(Enum::CONTENT_TYPE, null, 'string');
     }
 
-    /**
-     * @return int|null
-     */
     public function getExpirationTime(): int | null
     {
         return $this->claims->get(Enum::EXPIRATION_TIME, null, 'int');
@@ -142,56 +116,37 @@ class Builder
         return $this->jose->toArray();
     }
 
-    /**
-     * @return string|null
-     */
     public function getId(): string | null
     {
         return $this->claims->get(Enum::ID, null, 'string');
     }
 
-    /**
-     * @return int|null
-     */
     public function getIssuedAt(): int | null
     {
         return $this->claims->get(Enum::ISSUED_AT, null, 'int');
     }
 
-    /**
-     * @return string|null
-     */
     public function getIssuer(): string | null
     {
         return $this->claims->get(Enum::ISSUER, null, 'string');
     }
 
-    /**
-     * @return int|null
-     */
     public function getNotBefore(): int | null
     {
         return $this->claims->get(Enum::NOT_BEFORE, null, 'int');
     }
 
-    /**
-     * @return string
-     */
     public function getPassphrase(): string
     {
         return $this->passphrase;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSubject(): string | null
     {
         return $this->claims->get(Enum::SUBJECT, null, 'string');
     }
 
     /**
-     * @return Token
      * @throws ValidatorException
      */
     public function getToken(): Token
@@ -244,8 +199,6 @@ class Builder
      * interpretation of audience values is generally application specific.
      * Use of this claim is OPTIONAL.
      *
-     * @param array|string $audience
-     *
      * @return Builder
      */
     public function setAudience(array | string $audience): static
@@ -259,8 +212,6 @@ class Builder
 
     /**
      * Sets the content type header 'cty'
-     *
-     * @param string $contentType
      *
      * @return Builder
      */
@@ -279,8 +230,6 @@ class Builder
      * Implementers MAY provide for some small leeway, usually no more than
      * a few minutes, to account for clock skew.  Its value MUST be a number
      * containing a NumericDate value.  Use of this claim is OPTIONAL.
-     *
-     * @param int $timestamp
      *
      * @return Builder
      * @throws ValidatorException
@@ -304,8 +253,6 @@ class Builder
      * to prevent the JWT from being replayed.  The "jti" value is a case-
      * sensitive string.  Use of this claim is OPTIONAL.
      *
-     * @param string $jwtId
-     *
      * @return Builder
      */
     public function setId(string $jwtId): static
@@ -319,8 +266,6 @@ class Builder
      * value MUST be a number containing a NumericDate value.  Use of this
      * claim is OPTIONAL.
      *
-     * @param int $timestamp
-     *
      * @return Builder
      */
     public function setIssuedAt(int $timestamp): static
@@ -333,8 +278,6 @@ class Builder
      * JWT.  The processing of this claim is generally application specific.
      * The "iss" value is a case-sensitive string containing a StringOrURI
      * value.  Use of this claim is OPTIONAL.
-     *
-     * @param string $issuer
      *
      * @return Builder
      */
@@ -352,8 +295,6 @@ class Builder
      * account for clock skew.  Its value MUST be a number containing a
      * NumericDate value.  Use of this claim is OPTIONAL.
      *
-     * @param int $timestamp
-     *
      * @return Builder
      * @throws ValidatorException
      */
@@ -367,8 +308,6 @@ class Builder
     }
 
     /**
-     * @param string $passphrase
-     *
      * @return Builder
      * @throws ValidatorException
      */
@@ -397,8 +336,6 @@ class Builder
      * "sub" value is a case-sensitive string containing a StringOrURI
      * value.  Use of this claim is OPTIONAL.
      *
-     * @param string $subject
-     *
      * @return Builder
      */
     public function setSubject(string $subject): static
@@ -408,9 +345,6 @@ class Builder
 
     /**
      * Sets a registered claim
-     *
-     * @param string $name
-     * @param mixed  $value
      *
      * @return Builder
      */

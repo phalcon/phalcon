@@ -491,8 +491,6 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
 
     /**
      * Return the inner PDO (if any)
-     *
-     * @return \PDO
      */
     public function getAdapter(): PDO
     {
@@ -909,9 +907,6 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * Fires a cancelable "before" event. A listener cancels by stopping the
      * event and returning false; see Phalcon\DataMapper\Pdo\Events for the
      * required idiom. The operation does not run when it is canceled.
-     *
-     * @param string $eventName
-     * @param mixed  $data
      *
      * @throws OperationCancelled
      */

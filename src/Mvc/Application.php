@@ -79,27 +79,15 @@ class Application extends AbstractApplication
 {
     use FileTrait;
 
-    /**
-     * @var bool
-     */
     protected bool $implicitView = true;
 
-    /**
-     * @var bool
-     */
     protected bool $sendCookies = true;
 
-    /**
-     * @var bool
-     */
     protected bool $sendHeaders = true;
 
     /**
      * Handles a MVC request
      *
-     * @param string $uri
-     *
-     * @return bool|ResponseInterface
      * @throws ApplicationException
      * @throws Exception
      * @throws EventsException
@@ -461,8 +449,6 @@ class Application extends AbstractApplication
     /**
      * Enables or disables sending cookies by each request handling
      *
-     * @param bool $sendCookies
-     *
      * @return $this
      */
     public function sendCookiesOnHandleRequest(bool $sendCookies): static
@@ -474,8 +460,6 @@ class Application extends AbstractApplication
 
     /**
      * Enables or disables sending headers by each request handling
-     *
-     * @param bool $sendHeaders
      *
      * @return Application
      *
@@ -491,8 +475,6 @@ class Application extends AbstractApplication
     /**
      * By default, the view is implicitly buffering all the output
      * You can full disable the view component using this method
-     *
-     * @param bool $implicitView
      *
      * @return Application
      *

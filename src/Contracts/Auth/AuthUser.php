@@ -31,8 +31,6 @@ interface AuthUser
 
     /**
      * Returns the hashed password for the authenticatable user.
-     *
-     * @return string
      */
     public function getAuthPassword(): string;
 }

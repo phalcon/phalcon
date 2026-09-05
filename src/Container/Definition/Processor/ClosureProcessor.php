@@ -41,10 +41,6 @@ class ClosureProcessor implements Processor
 {
     /**
      * Wheteher the definition is a Closure
-     *
-     * @param mixed $definition
-     *
-     * @return bool
      */
     public function canProcess(mixed $definition): bool
     {
@@ -53,12 +49,6 @@ class ClosureProcessor implements Processor
 
     /**
      * Process the Closure
-     *
-     * @param string $name
-     * @param mixed  $definition
-     * @param object $container
-     *
-     * @return ServiceDefinition
      */
     public function process(
         string $name,

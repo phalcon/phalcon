@@ -250,10 +250,6 @@ class Dump implements TemplateAware
 
     /**
      * Returns the embedded default template for the given name.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function defaultTemplate(string $name): string
     {
@@ -522,11 +518,6 @@ class Dump implements TemplateAware
         return $output . $this->toInterpolate($message, $context);
     }
 
-    /**
-     * @param string $text
-     *
-     * @return string
-     */
     private function getOutputBold(string $text): string
     {
         return $this->toInterpolate(

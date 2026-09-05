@@ -32,8 +32,6 @@ class PayloadFactory
 {
     /**
      * Instantiate a new object
-     *
-     * @return PayloadInterface
      */
     public function newInstance(): PayloadInterface
     {

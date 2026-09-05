@@ -18,15 +18,10 @@ namespace Phalcon\Events;
  */
 abstract class AbstractEventsAware
 {
-    /**
-     * @var ManagerInterface|null
-     */
     protected ManagerInterface | null $eventsManager = null;
 
     /**
      * Returns the internal event manager
-     *
-     * @return ManagerInterface|null
      */
     public function getEventsManager(): ManagerInterface | null
     {
@@ -35,10 +30,6 @@ abstract class AbstractEventsAware
 
     /**
      * Sets the events manager
-     *
-     * @param ManagerInterface $eventsManager
-     *
-     * @return void
      */
     public function setEventsManager(ManagerInterface $eventsManager): void
     {
@@ -48,11 +39,8 @@ abstract class AbstractEventsAware
     /**
      * Helper method to fire an event
      *
-     * @param string     $eventName
-     * @param mixed|null $data
-     * @param bool       $cancellable
-     * @param bool       $stopOnFalse Make a listener's `false` final for
-     *                                this call (concrete Manager only)
+     * @param bool $stopOnFalse Make a listener's `false` final for
+     *                          this call (concrete Manager only)
      *
      * @return bool|mixed
      */

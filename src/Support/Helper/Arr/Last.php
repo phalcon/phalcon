@@ -23,7 +23,6 @@ class Last extends AbstractArr
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param callable|null           $method
      *
      * @return mixed
      */

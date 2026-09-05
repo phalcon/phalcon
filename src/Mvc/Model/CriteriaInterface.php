@@ -28,13 +28,6 @@ interface CriteriaInterface
 {
     /**
      * Appends a condition to the current conditions using an AND operator
-     *
-     * @param string $conditions
-     * @param mixed  $bindParams
-     * @param mixed  $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      */
     public function andWhere(
         string $conditions,
@@ -48,12 +41,6 @@ interface CriteriaInterface
      *```php
      * $criteria->betweenWhere("price", 100.25, 200.50);
      *```
-     *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     *
-     * @return CriteriaInterface
      */
     public function betweenWhere(
         string $expr,
@@ -65,10 +52,6 @@ interface CriteriaInterface
      * Sets the bound parameters in the criteria
      * This method replaces all previously set bound parameters
      *
-     * @param array $bindParams
-     *
-     * @return CriteriaInterface
-     *
      * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function bind(array $bindParams): CriteriaInterface;
@@ -76,10 +59,6 @@ interface CriteriaInterface
     /**
      * Sets the bind types in the criteria
      * This method replaces all previously set bound parameters
-     *
-     * @param array $bindTypes
-     *
-     * @return CriteriaInterface
      *
      * @phpstan-param mvc_model_bind_types $bindTypes
      */
@@ -89,52 +68,32 @@ interface CriteriaInterface
      * Sets the cache options in the criteria
      * This method replaces all previously set cache options
      *
-     * @param array $cache
-     *
-     * @return CriteriaInterface
-     *
      * @phpstan-param mvc_model_cache_options $cache
      */
     public function cache(array $cache): CriteriaInterface;
 
     /**
      * Adds the conditions parameter to the criteria
-     *
-     * @param string $conditions
-     *
-     * @return CriteriaInterface
      */
     public function conditions(string $conditions): CriteriaInterface;
 
     /**
      * Sets SELECT DISTINCT / SELECT ALL flag
-     *
-     * @param mixed $distinct
-     *
-     * @return CriteriaInterface
      */
     public function distinct(mixed $distinct): CriteriaInterface;
 
     /**
      * Executes a find using the parameters built with the criteria
-     *
-     * @return ResultsetInterface
      */
     public function execute(): ResultsetInterface;
 
     /**
      * Sets the "for_update" parameter to the criteria
-     *
-     * @param bool $forUpdate
-     *
-     * @return CriteriaInterface
      */
     public function forUpdate(bool $forUpdate = true): CriteriaInterface;
 
     /**
      * Returns the columns to be queried
-     *
-     * @return array|string|null
      *
      * @phpstan-return mvc_query_columns|null
      */
@@ -142,8 +101,6 @@ interface CriteriaInterface
 
     /**
      * Returns the conditions parameter in the criteria
-     *
-     * @return string|null
      */
     public function getConditions(): string | null;
 
@@ -168,30 +125,22 @@ interface CriteriaInterface
      * - An array with 'number' and 'offset' keys if an offset was set with the limit
      * - NULL if limit has not been set
      *
-     * @return array|int|null
-     *
      * @phpstan-return array{number: int|string, offset?: int|string}|int|null
      */
     public function getLimit(): array | int | null;
 
     /**
      * Returns an internal model name on which the criteria will be applied
-     *
-     * @return string
      */
     public function getModelName(): string;
 
     /**
      * Returns the order parameter in the criteria
-     *
-     * @return string|null
      */
     public function getOrderBy(): string | null;
 
     /**
      * Returns all the parameters defined in the criteria
-     *
-     * @return array
      *
      * @phpstan-return mvc_model_parameters
      */
@@ -199,26 +148,16 @@ interface CriteriaInterface
 
     /**
      * Returns the conditions parameter in the criteria
-     *
-     * @return string|null
      */
     public function getWhere(): string | null;
 
     /**
      * Adds the group-by clause to the criteria
-     *
-     * @param mixed $group
-     *
-     * @return CriteriaInterface
      */
     public function groupBy(mixed $group): CriteriaInterface;
 
     /**
      * Adds the having clause to the criteria
-     *
-     * @param mixed $having
-     *
-     * @return CriteriaInterface
      */
     public function having(mixed $having): CriteriaInterface;
 
@@ -241,12 +180,6 @@ interface CriteriaInterface
      *     "r"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
      */
     public function innerJoin(
         string $model,
@@ -260,11 +193,6 @@ interface CriteriaInterface
      *```php
      * $criteria->inWhere("id", [1, 2, 3]);
      *```
-     *
-     * @param string $expr
-     * @param array  $values
-     *
-     * @return CriteriaInterface
      *
      * @phpstan-param array<array-key, mixed> $values
      */
@@ -280,12 +208,6 @@ interface CriteriaInterface
      *     "r"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
      */
     public function leftJoin(
         string $model,
@@ -295,11 +217,6 @@ interface CriteriaInterface
 
     /**
      * Sets the limit parameter to the criteria
-     *
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return CriteriaInterface
      */
     public function limit(int $limit, int $offset = 0): CriteriaInterface;
 
@@ -309,12 +226,6 @@ interface CriteriaInterface
      *```php
      * $criteria->notBetweenWhere("price", 100.25, 200.50);
      *```
-     *
-     * @param string $expr
-     * @param mixed  $minimum
-     * @param mixed  $maximum
-     *
-     * @return CriteriaInterface
      */
     public function notBetweenWhere(
         string $expr,
@@ -329,33 +240,17 @@ interface CriteriaInterface
      * $criteria->notInWhere("id", [1, 2, 3]);
      *```
      *
-     * @param string $expr
-     * @param array  $values
-     *
-     * @return CriteriaInterface
-     *
      * @phpstan-param array<array-key, mixed> $values
      */
     public function notInWhere(string $expr, array $values): CriteriaInterface;
 
     /**
      * Adds the order-by parameter to the criteria
-     *
-     * @param string $orderColumns
-     *
-     * @return CriteriaInterface
      */
     public function orderBy(string $orderColumns): CriteriaInterface;
 
     /**
      * Appends a condition to the current conditions using an OR operator
-     *
-     * @param string $conditions
-     * @param mixed  $bindParams
-     * @param mixed  $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      */
     public function orWhere(
         string $conditions,
@@ -373,12 +268,6 @@ interface CriteriaInterface
      *     "r"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
      */
     public function rightJoin(
         string $model,
@@ -388,31 +277,16 @@ interface CriteriaInterface
 
     /**
      * Set a model on which the query will be executed
-     *
-     * @param string $modelName
-     *
-     * @return CriteriaInterface
      */
     public function setModelName(string $modelName): CriteriaInterface;
 
     /**
      * Sets the "shared_lock" parameter to the criteria
-     *
-     * @param bool $sharedLock
-     *
-     * @return CriteriaInterface
      */
     public function sharedLock(bool $sharedLock = true): CriteriaInterface;
 
     /**
      * Sets the conditions parameter in the criteria
-     *
-     * @param string $conditions
-     * @param mixed  $bindParams
-     * @param mixed  $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      */
     public function where(
         string $conditions,

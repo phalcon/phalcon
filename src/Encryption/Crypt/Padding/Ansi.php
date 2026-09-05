@@ -24,22 +24,11 @@ use function substr;
  */
 class Ansi implements PadInterface
 {
-    /**
-     * @param int $paddingSize
-     *
-     * @return string
-     */
     public function pad(int $paddingSize): string
     {
         return str_repeat(chr(0), $paddingSize - 1) . chr($paddingSize);
     }
 
-    /**
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return int
-     */
     public function unpad(string $input, int $blockSize): int
     {
         $paddingSize = 0;

@@ -68,9 +68,6 @@ use function is_bool;
  */
 class InclusionIn extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must be a part of list: :domain";
 
     /**

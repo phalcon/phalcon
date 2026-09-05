@@ -36,7 +36,6 @@ class Validator
     /**
      * Validator constructor.
      *
-     * @param Token               $token
      * @param int                 $timeShift Legacy clock-skew offset in seconds
      *                                       added to validated timestamps.
      *                                       Prefer injecting a ClockInterface
@@ -68,10 +67,6 @@ class Validator
 
     /**
      * Return the value of a claim
-     *
-     * @param string $claim
-     *
-     * @return mixed
      */
     public function get(string $claim): mixed
     {
@@ -80,8 +75,6 @@ class Validator
 
     /**
      * Return an array with validation errors (if any)
-     *
-     * @return array
      */
     public function getErrors(): array
     {
@@ -90,9 +83,6 @@ class Validator
 
     /**
      * Set the value of a claim, for comparison with the token values
-     *
-     * @param string $claim
-     * @param mixed  $value
      *
      * @return Validator
      */
@@ -105,8 +95,6 @@ class Validator
 
     /**
      * Set the token to be validated
-     *
-     * @param Token $token
      *
      * @return Validator
      */
@@ -147,9 +135,6 @@ class Validator
     /**
      * Validate a claim
      *
-     * @param string          $name
-     * @param bool|int|string $value
-     *
      * @return Validator
      */
     public function validateClaim(string $name, bool | int | string $value): static
@@ -165,8 +150,6 @@ class Validator
 
     /**
      * Validate the expiration time of the token
-     *
-     * @param int $timestamp
      *
      * @return Validator
      */
@@ -188,8 +171,6 @@ class Validator
      * Validate the id of the token
      *
      * A null id expresses no expectation and is skipped.
-     *
-     * @param string|null $jwtId
      *
      * @return Validator
      */
@@ -214,8 +195,6 @@ class Validator
      * A token issued at exactly $timestamp is valid. Only a token issued after
      * it, i.e. in the future, is rejected.
      *
-     * @param int $timestamp
-     *
      * @return Validator
      */
     public function validateIssuedAt(int $timestamp): static
@@ -235,8 +214,6 @@ class Validator
      * Validate the issuer of the token
      *
      * A null issuer expresses no expectation and is skipped.
-     *
-     * @param string|null $issuer
      *
      * @return Validator
      */
@@ -263,8 +240,6 @@ class Validator
      * A token is valid at exactly $timestamp. Only a timestamp before the
      * "nbf" claim is rejected.
      *
-     * @param int $timestamp
-     *
      * @return Validator
      */
     public function validateNotBefore(int $timestamp): static
@@ -282,9 +257,6 @@ class Validator
 
     /**
      * Validate the signature of the token
-     *
-     * @param SignerInterface $signer
-     * @param string          $passphrase
      *
      * @return Validator
      */
@@ -311,8 +283,6 @@ class Validator
      *
      * A null subject expresses no expectation and is skipped.
      *
-     * @param string|null $subject
-     *
      * @return Validator
      */
     public function validateSubject(string | null $subject = null): static
@@ -332,11 +302,6 @@ class Validator
         return $this;
     }
 
-    /**
-     * @param int $timestamp
-     *
-     * @return int
-     */
     private function getTimestamp(int $timestamp): int
     {
         return $timestamp + $this->timeShift;

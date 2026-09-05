@@ -79,8 +79,6 @@ class QueryBuilderCursor extends AbstractAdapter
 
     /**
      * The cursor value for the current page (null = first page)
-     *
-     * @var mixed
      */
     protected mixed $cursor = null;
 

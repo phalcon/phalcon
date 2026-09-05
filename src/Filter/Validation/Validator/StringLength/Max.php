@@ -80,9 +80,6 @@ class Max extends AbstractValidator
 {
     use InfoTrait;
 
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must not exceed :max characters long";
 
     /**

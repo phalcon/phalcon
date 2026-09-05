@@ -92,8 +92,6 @@ interface AdapterInterface
      * the `setForever()` method.
      *
      * @param DateInterval|int|null $ttl
-     *
-     * @return bool
      */
     public function set(string $key, mixed $value, mixed $ttl = null): bool;
 

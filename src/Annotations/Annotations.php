@@ -33,10 +33,6 @@ class Annotations
 
     /**
      * Parses or retrieves all the attributes found in a class
-     *
-     * @param mixed $className
-     *
-     * @return Reflection
      */
     public function get(mixed $className): Reflection
     {
@@ -71,11 +67,6 @@ class Annotations
 
     /**
      * Returns the attributes found in a specific constant
-     *
-     * @param string $className
-     * @param string $constantName
-     *
-     * @return Collection
      */
     public function getConstant(string $className, string $constantName): Collection
     {
@@ -86,10 +77,6 @@ class Annotations
 
     /**
      * Returns the attributes found in all the class' constants
-     *
-     * @param string $className
-     *
-     * @return array
      */
     public function getConstants(string $className): array
     {
@@ -98,11 +85,6 @@ class Annotations
 
     /**
      * Returns the attributes found in a specific method
-     *
-     * @param string $className
-     * @param string $methodName
-     *
-     * @return Collection
      */
     public function getMethod(string $className, string $methodName): Collection
     {
@@ -122,10 +104,6 @@ class Annotations
 
     /**
      * Returns the attributes found in all the class' methods
-     *
-     * @param string $className
-     *
-     * @return array
      */
     public function getMethods(string $className): array
     {
@@ -134,10 +112,6 @@ class Annotations
 
     /**
      * Returns the attributes found in all the class' properties
-     *
-     * @param string $className
-     *
-     * @return array
      */
     public function getProperties(string $className): array
     {
@@ -146,11 +120,6 @@ class Annotations
 
     /**
      * Returns the attributes found in a specific property
-     *
-     * @param string $className
-     * @param string $propertyName
-     *
-     * @return Collection
      */
     public function getProperty(string $className, string $propertyName): Collection
     {
@@ -161,8 +130,6 @@ class Annotations
 
     /**
      * Returns the annotation reader
-     *
-     * @return ReaderInterface
      */
     public function getReader(): ReaderInterface
     {
@@ -171,10 +138,6 @@ class Annotations
 
     /**
      * Reads parsed annotations from memory
-     *
-     * @param string $key
-     *
-     * @return bool|Reflection
      */
     public function read(string $key): bool | Reflection
     {
@@ -183,10 +146,6 @@ class Annotations
 
     /**
      * Sets the attributes parser
-     *
-     * @param ReaderInterface $reader
-     *
-     * @return void
      */
     public function setReader(ReaderInterface $reader): void
     {
@@ -195,11 +154,6 @@ class Annotations
 
     /**
      * Writes parsed annotations to memory
-     *
-     * @param string     $key
-     * @param Reflection $data
-     *
-     * @return bool
      */
     public function write(string $key, Reflection $data): bool
     {

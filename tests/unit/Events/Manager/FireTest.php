@@ -83,8 +83,6 @@ final class FireTest extends AbstractUnitTestCase
      * When the event type has no colon separator AND $data is an object,
      * fire() delegates to $this->dispatch($data, $eventType, $source).
      *
-     * @return void
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */
@@ -106,8 +104,6 @@ final class FireTest extends AbstractUnitTestCase
     /**
      * Tests Phalcon\Events\Manager :: fire() - no colon, data is not object,
      * throws Invalid event type (L209)
-     *
-     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
@@ -171,8 +167,6 @@ final class FireTest extends AbstractUnitTestCase
 
     /**
      * Tests Phalcon\Events\Manager :: fire() - with priorities
-     *
-     * @return void
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

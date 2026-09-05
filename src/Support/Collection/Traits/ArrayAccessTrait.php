@@ -17,12 +17,6 @@ trait ArrayAccessTrait
 {
     /**
      * Get the element from the collection
-     *
-     * @param string      $element
-     * @param mixed|null  $defaultValue
-     * @param string|null $cast
-     *
-     * @return mixed
      */
     abstract public function get(
         string $element,
@@ -32,10 +26,6 @@ trait ArrayAccessTrait
 
     /**
      * Get the element from the collection
-     *
-     * @param string $element
-     *
-     * @return bool
      */
     abstract public function has(string $element): bool;
 
@@ -81,14 +71,11 @@ trait ArrayAccessTrait
 
     /**
      * Delete the element from the collection
-     *
-     * @param string $element
      */
     abstract public function remove(string $element): void;
 
     /**
      * Set an element in the collection
-     *
      */
     abstract public function set(string $element, mixed $value): void;
 }

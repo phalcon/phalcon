@@ -98,8 +98,6 @@ interface RouteInterface
      * Reconfigure the route adding a new pattern and a set of paths
      *
      * @phpstan-param mixed $paths
-     *
-     * @return void
      */
     public function reConfigure(string $pattern, mixed $paths = null): void;
 

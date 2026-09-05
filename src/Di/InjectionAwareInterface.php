@@ -26,8 +26,6 @@ interface InjectionAwareInterface
 
     /**
      * Sets the dependency injector
-     *
-     * @param DiInterface $container
      */
     public function setDI(DiInterface $container): void;
 }

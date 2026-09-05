@@ -74,8 +74,6 @@ abstract class AbstractHelper
 
     /**
      * Replicates the indent x times as per indentLevel
-     *
-     * @return string
      */
     protected function indent(): string
     {

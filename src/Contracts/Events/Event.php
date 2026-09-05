@@ -20,54 +20,36 @@ interface Event
 {
     /**
      * Gets event data
-     *
-     * @return mixed
      */
     public function getData(): mixed;
 
     /**
      * Gets event type
-     *
-     * @return mixed
      */
     public function getType(): mixed;
 
     /**
      * Check whether the event is cancelable
-     *
-     * @return bool
      */
     public function isCancelable(): bool;
 
     /**
      * Check whether the event is currently stopped
-     *
-     * @return bool
      */
     public function isStopped(): bool;
 
     /**
      * Sets event data
-     *
-     * @param mixed $data
-     *
-     * @return Event
      */
     public function setData(mixed $data = null): Event;
 
     /**
      * Sets event type
-     *
-     * @param string $type
-     *
-     * @return Event
      */
     public function setType(string $type): Event;
 
     /**
      * Stops the event preventing propagation
-     *
-     * @return Event
      */
     public function stop(): Event;
 }

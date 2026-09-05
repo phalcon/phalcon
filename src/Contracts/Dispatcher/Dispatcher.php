@@ -37,29 +37,21 @@ interface Dispatcher
      * Forwards the execution flow to another controller/action
      *
      * @phpstan-param dispatcher_forward $forward
-     *
-     * @return void
      */
     public function forward(array $forward): void;
 
     /**
      * Gets last dispatched action name
-     *
-     * @return string
      */
     public function getActionName(): string;
 
     /**
      * Gets the default action suffix
-     *
-     * @return string
      */
     public function getActionSuffix(): string;
 
     /**
      * Gets the default handler suffix
-     *
-     * @return string
      */
     public function getHandlerSuffix(): string;
 
@@ -69,7 +61,6 @@ interface Dispatcher
      * @phpstan-param array-key $param
      * @phpstan-param mixed $filters
      *
-     * @return mixed
      * @deprecated Use getParameter() instead
      *
      * Note: This signature omits the `$defaultValue` argument the
@@ -83,8 +74,6 @@ interface Dispatcher
      *
      * @phpstan-param array-key $param
      * @phpstan-param mixed $filters
-     *
-     * @return mixed
      */
     public function getParameter(mixed $param, mixed $filters = null): mixed;
 
@@ -114,7 +103,6 @@ interface Dispatcher
      *
      * @phpstan-param array-key $param
      *
-     * @return bool
      * @deprecated Use hasParameter() instead
      */
     public function hasParam(mixed $param): bool;
@@ -122,53 +110,31 @@ interface Dispatcher
     /**
      * Checks if the dispatch loop is finished or has more pendent
      * controllers/tasks to dispatch
-     *
-     * @return bool
      */
     public function isFinished(): bool;
 
     /**
      * Sets the action name to be dispatched
-     *
-     * @param string $actionName
-     *
-     * @return void
      */
     public function setActionName(string $actionName): void;
 
     /**
      * Sets the default action suffix
-     *
-     * @param string $actionSuffix
-     *
-     * @return void
      */
     public function setActionSuffix(string $actionSuffix): void;
 
     /**
      * Sets the default action name
-     *
-     * @param string $actionName
-     *
-     * @return void
      */
     public function setDefaultAction(string $actionName): void;
 
     /**
      * Sets the default namespace
-     *
-     * @param string $defaultNamespace
-     *
-     * @return void
      */
     public function setDefaultNamespace(string $defaultNamespace): void;
 
     /**
      * Sets the default suffix for the handler
-     *
-     * @param string $handlerSuffix
-     *
-     * @return void
      */
     public function setHandlerSuffix(string $handlerSuffix): void;
 
@@ -176,17 +142,11 @@ interface Dispatcher
      * Sets the module name which the application belongs to
      *
      * @param string $moduleName
-     *
-     * @return void
      */
     public function setModuleName(string | null $moduleName = null): void;
 
     /**
      * Sets the namespace which the controller belongs to
-     *
-     * @param string $namespaceName
-     *
-     * @return void
      */
     public function setNamespaceName(string $namespaceName): void;
 
@@ -194,9 +154,7 @@ interface Dispatcher
      * Set a param by its name or numeric index
      *
      * @phpstan-param array-key $param
-     * @param mixed $value
      *
-     * @return void
      * @deprecated Use setParameter() instead
      */
     public function setParam(mixed $param, mixed $value): void;
@@ -206,7 +164,6 @@ interface Dispatcher
      *
      * @phpstan-param dispatcher_params $params
      *
-     * @return void
      * @deprecated Use setParameters() instead
      */
     public function setParams(array $params): void;

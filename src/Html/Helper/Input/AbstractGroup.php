@@ -47,9 +47,6 @@ use const PHP_EOL;
  */
 abstract class AbstractGroup extends AbstractHelper
 {
-    /**
-     * @var mixed
-     */
     protected mixed $checked = null;
     protected string $name   = '';
     /**
@@ -105,10 +102,6 @@ abstract class AbstractGroup extends AbstractHelper
 
     /**
      * Determines whether the given value is considered checked.
-     *
-     * @param string $value
-     *
-     * @return bool
      */
     abstract protected function isChecked(string $value): bool;
 

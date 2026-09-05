@@ -30,19 +30,10 @@ use function unpack;
  */
 class WkbParser
 {
-    /**
-     * @var string
-     */
     protected string $buffer = "";
 
-    /**
-     * @var int
-     */
     protected int $length = 0;
 
-    /**
-     * @var int
-     */
     protected int $position = 0;
 
     public function parse(string $raw): GeometryInterface

@@ -127,7 +127,6 @@ class Filter implements FilterInterface
     /**
      * Magic call to make the helper objects available as methods.
      *
-     * @param string               $name
      * @param array<string, mixed> $args
      *
      * @return mixed
@@ -182,10 +181,6 @@ class Filter implements FilterInterface
      * Get a service. If it is not in the mapper array, create a new object,
      * set it and then return it.
      *
-     * @param string $name
-     *
-     * @return mixed
-     *
      * @phpstan-return Sanitizer
      *
      * @throws Exception
@@ -206,10 +201,6 @@ class Filter implements FilterInterface
 
     /**
      * Checks if a service exists in the map array
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -489,9 +480,6 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @param mixed $sanitizerKey
-     * @param mixed $sanitizer
-     *
      * @phpstan-return filter_sanitizer_split
      */
     private function splitSanitizerParameters(mixed $sanitizerKey, mixed $sanitizer): array

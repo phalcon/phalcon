@@ -97,7 +97,6 @@ class RedisCluster extends Redis
     /**
      * Flushes/clears the cache
      *
-     * @return bool
      * @throws ClusterConnectionFailed|SupportException
      */
     public function clear(): bool

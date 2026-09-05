@@ -137,8 +137,6 @@ class Memory extends AbstractAdapter
     protected array $accessList = ["*!*" => true];
     /**
      * Returns the latest function used to acquire access
-     *
-     * @var mixed
      */
     protected mixed $activeFunction;
     /**
@@ -549,8 +547,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Returns the latest function used to acquire access
-     *
-     * @return mixed
      */
     public function getActiveFunction(): mixed
     {

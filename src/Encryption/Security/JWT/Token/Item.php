@@ -20,9 +20,6 @@ class Item extends AbstractItem
 {
     /**
      * Item constructor.
-     *
-     * @param array  $payload
-     * @param string $encoded
      */
     public function __construct(array $payload, string $encoded)
     {
@@ -31,9 +28,6 @@ class Item extends AbstractItem
     }
 
     /**
-     * @param string     $name
-     * @param mixed|null $defaultValue
-     *
      * @return mixed|null
      */
     public function get(string $name, mixed $defaultValue = null): mixed
@@ -53,11 +47,6 @@ class Item extends AbstractItem
         return $this->data['payload'];
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     public function has(string $name): bool
     {
         return isset($this->data['payload'][$name]);

@@ -43,10 +43,6 @@ class StringProcessor implements Processor
 {
     /**
      * Whether the definition is a class string
-     *
-     * @param mixed $definition
-     *
-     * @return bool
      */
     public function canProcess(mixed $definition): bool
     {
@@ -55,12 +51,6 @@ class StringProcessor implements Processor
 
     /**
      * Process the class string
-     *
-     * @param string $name
-     * @param mixed  $definition
-     * @param object $container
-     *
-     * @return ServiceDefinition
      */
     public function process(
         string $name,

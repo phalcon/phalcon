@@ -38,9 +38,6 @@ class CannotResolveParameter extends Exception
     /**
      * Cannot resolve a parameter
      *
-     * @param string $param
-     * @param string $className
-     *
      * @return static
      */
     public function __construct(string $param, string $className)

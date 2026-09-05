@@ -34,14 +34,8 @@ class Parser
 {
     use Base64Trait;
 
-    /**
-     * @var Decode
-     */
     private Decode $decode;
 
-    /**
-     * @param Decode|null $decode
-     */
     public function __construct(Decode | null $decode = null)
     {
         if (null === $decode) {
@@ -53,10 +47,6 @@ class Parser
 
     /**
      * Parse a token and return it
-     *
-     * @param string $token
-     *
-     * @return Token
      */
     public function parse(string $token): Token
     {
@@ -73,10 +63,6 @@ class Parser
 
     /**
      * Decode the claims
-     *
-     * @param string $claims
-     *
-     * @return Item
      */
     private function decodeClaims(string $claims): Item
     {
@@ -104,10 +90,6 @@ class Parser
 
     /**
      * Decodes the headers
-     *
-     * @param string $headers
-     *
-     * @return Item
      */
     private function decodeHeaders(string $headers): Item
     {
@@ -126,11 +108,6 @@ class Parser
 
     /**
      * Decodes the signature
-     *
-     * @param Item   $headers
-     * @param string $signature
-     *
-     * @return Signature
      */
     private function decodeSignature(Item $headers, string $signature): Signature
     {
@@ -147,8 +124,6 @@ class Parser
 
     /**
      * Splits the token to its three parts;
-     *
-     * @param string $token
      *
      * @return array{0: string, 1: string, 2: string}
      */

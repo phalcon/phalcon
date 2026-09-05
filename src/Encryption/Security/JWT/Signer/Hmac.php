@@ -29,8 +29,6 @@ class Hmac extends AbstractSigner
     /**
      * Hmac constructor.
      *
-     * @param string $algo
-     *
      * @throws UnsupportedAlgorithmException
      */
     public function __construct(string $algo = 'sha512')
@@ -50,8 +48,6 @@ class Hmac extends AbstractSigner
 
     /**
      * Return the value that is used for the "alg" header
-     *
-     * @return string
      */
     public function getAlgHeader(): string
     {
@@ -60,11 +56,6 @@ class Hmac extends AbstractSigner
 
     /**
      * Sign a payload using the passphrase
-     *
-     * @param string $payload
-     * @param string $passphrase
-     *
-     * @return string
      */
     public function sign(string $payload, string $passphrase): string
     {
@@ -73,12 +64,6 @@ class Hmac extends AbstractSigner
 
     /**
      * Verify a passed source with a payload and passphrase
-     *
-     * @param string $source
-     * @param string $payload
-     * @param string $passphrase
-     *
-     * @return bool
      */
     public function verify(
         string $source,
@@ -90,11 +75,6 @@ class Hmac extends AbstractSigner
 
     /**
      * Calculates a hash from the passed parameters
-     *
-     * @param string $payload
-     * @param string $passphrase
-     *
-     * @return string
      */
     private function getHash(string $payload, string $passphrase): string
     {

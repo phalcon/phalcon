@@ -22,11 +22,6 @@ interface AdapterInterface
 {
     /**
      * Add a background to an image
-     *
-     * @param string $color
-     * @param int    $opacity
-     *
-     * @return AdapterInterface
      */
     public function background(
         string $color,
@@ -35,22 +30,11 @@ interface AdapterInterface
 
     /**
      * Blur an image
-     *
-     * @param int $radius
-     *
-     * @return AdapterInterface
      */
     public function blur(int $radius): AdapterInterface;
 
     /**
      * Crop an image
-     *
-     * @param int      $width
-     * @param int      $height
-     * @param int|null $offsetX
-     * @param int|null $offsetY
-     *
-     * @return AdapterInterface
      */
     public function crop(
         int $width,
@@ -61,49 +45,25 @@ interface AdapterInterface
 
     /**
      * Flip an image
-     *
-     * @param int $direction
-     *
-     * @return AdapterInterface
      */
     public function flip(int $direction): AdapterInterface;
 
-    /**
-     * @return int
-     */
     public function getHeight(): int;
 
-    /**
-     * @return int
-     */
     public function getWidth(): int;
 
     /**
      * Add a mask to an image
-     *
-     * @param AdapterInterface $mask
-     *
-     * @return AdapterInterface
      */
     public function mask(AdapterInterface $mask): AdapterInterface;
 
     /**
      * Pixelate an image
-     *
-     * @param int $amount
-     *
-     * @return AdapterInterface
      */
     public function pixelate(int $amount): AdapterInterface;
 
     /**
      * Reflect an image
-     *
-     * @param int  $height
-     * @param int  $opacity
-     * @param bool $fadeIn
-     *
-     * @return AdapterInterface
      */
     public function reflection(
         int $height,
@@ -113,11 +73,6 @@ interface AdapterInterface
 
     /**
      * Render an image
-     *
-     * @param string|null $extension
-     * @param int         $quality
-     *
-     * @return string
      */
     public function render(
         string | null $extension = null,
@@ -126,12 +81,6 @@ interface AdapterInterface
 
     /**
      * Resize an image
-     *
-     * @param int|null $width
-     * @param int|null $height
-     * @param int      $master
-     *
-     * @return AdapterInterface
      */
     public function resize(
         int | null $width = null,
@@ -141,20 +90,11 @@ interface AdapterInterface
 
     /**
      * Rotate an image
-     *
-     * @param int $degrees
-     *
-     * @return AdapterInterface
      */
     public function rotate(int $degrees): AdapterInterface;
 
     /**
      * Save an image
-     *
-     * @param string|null $file
-     * @param int         $quality
-     *
-     * @return AdapterInterface
      */
     public function save(
         string | null $file = null,
@@ -163,25 +103,11 @@ interface AdapterInterface
 
     /**
      * Sharpen an image
-     *
-     * @param int $amount
-     *
-     * @return AdapterInterface
      */
     public function sharpen(int $amount): AdapterInterface;
 
     /**
      * Adds text on an image
-     *
-     * @param string      $text
-     * @param int         $offsetX
-     * @param int         $offsetY
-     * @param int         $opacity
-     * @param string      $color
-     * @param int         $size
-     * @param string|null $fontFile
-     *
-     * @return AdapterInterface
      */
     public function text(
         string $text,
@@ -195,13 +121,6 @@ interface AdapterInterface
 
     /**
      * Add a watermark on an image
-     *
-     * @param AdapterInterface $watermark
-     * @param int              $offsetX
-     * @param int              $offsetY
-     * @param int              $opacity
-     *
-     * @return AdapterInterface
      */
     public function watermark(
         AdapterInterface $watermark,

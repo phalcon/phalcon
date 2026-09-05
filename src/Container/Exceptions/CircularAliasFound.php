@@ -38,8 +38,6 @@ class CircularAliasFound extends Exception
     /**
      * Circular Alias found
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

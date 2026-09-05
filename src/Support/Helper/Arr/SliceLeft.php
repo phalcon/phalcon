@@ -22,7 +22,6 @@ class SliceLeft
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param int                     $elements
      *
      * @return array<array-key, mixed>
      */

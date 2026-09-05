@@ -210,10 +210,6 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
      * Gives the locator's events manager to a connection. Does nothing when
      * the locator has no manager, or when the connection does not accept
      * one. It is safe to call this more than once on the same connection.
-     *
-     * @param ConnectionInterface $connection
-     *
-     * @return ConnectionInterface
      */
     private function applyEventsManager(
         ConnectionInterface $connection

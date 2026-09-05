@@ -65,18 +65,11 @@ use Phalcon\Filter\Validation\Validator\File\AbstractFile;
  */
 class Equal extends AbstractFile
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "File :field does not have the exact :size file size";
 
     /**
      * Executes the validation
      *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      * @throws Validation\Exception
      */
     public function validate(Validation $validation, mixed $field): bool
@@ -128,10 +121,6 @@ class Equal extends AbstractFile
 
     /**
      * Executes the conditional
-     *
-     * @param float $source
-     * @param float $target
-     * @param bool  $included
      *
      * @return bool
      */

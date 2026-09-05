@@ -27,8 +27,6 @@ class FilterFactory
     /**
      * Returns a Locator object with all the helpers defined in anonymous
      * functions
-     *
-     * @return FilterInterface
      */
     public function newInstance(): FilterInterface
     {

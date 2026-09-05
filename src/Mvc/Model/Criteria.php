@@ -56,42 +56,26 @@ use function is_string;
 class Criteria implements CriteriaInterface, InjectionAwareInterface
 {
     /**
-     * @var array
      * @phpstan-var mvc_model_bind_params
      */
     protected array $bindParams;
 
     /**
-     * @var array
      * @phpstan-var mvc_model_bind_types
      */
     protected array $bindTypes;
 
-    /**
-     * @var int
-     */
     protected int $hiddenParamNumber = 0;
 
-    /**
-     * @var string|null
-     */
     protected string | null $model = null;
 
     /**
-     * @var array
      * @phpstan-var mvc_criteria_params
      */
     protected array $params = [];
 
     /**
      * Builds a Phalcon\Mvc\Model\Criteria based on an input array like $_POST
-     *
-     * @param DiInterface $container
-     * @param string      $modelName
-     * @param array       $data
-     * @param string      $operator
-     *
-     * @return CriteriaInterface
      *
      * @phpstan-param array<string, mixed> $data
      */
@@ -174,13 +158,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Appends a condition to the current conditions using an AND operator
-     *
-     * @param string $conditions
-     * @param mixed  $bindParams
-     * @param mixed  $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      */
     public function andWhere(
         string $conditions,
@@ -241,11 +218,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Sets the bound parameters in the criteria
      * This method replaces all previously set bound parameters
      *
-     * @param array $bindParams
-     * @param bool  $merge
-     *
-     * @return CriteriaInterface
-     *
      * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function bind(
@@ -269,10 +241,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Sets the bind types in the criteria
      * This method replaces all previously set bound parameters
      *
-     * @param array $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function bindTypes(array $bindTypes): CriteriaInterface
@@ -285,10 +253,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Sets the cache options in the criteria
      * This method replaces all previously set cache options
-     *
-     * @param array $cache
-     *
-     * @return CriteriaInterface
      *
      * @phpstan-param mvc_model_cache_options $cache
      */
@@ -343,9 +307,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      *     ]
      * );
      *```
-     *
-     * @param mixed $columns
-     *
      */
     public function columns(mixed $columns): CriteriaInterface
     {
@@ -411,10 +372,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Sets SELECT DISTINCT / SELECT ALL flag
-     *
-     * @param mixed $distinct
-     *
-     * @return CriteriaInterface
      */
     public function distinct(mixed $distinct): CriteriaInterface
     {
@@ -443,8 +400,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      *
      * @param array $paths relation paths
      *
-     * @return Criteria
-     *
      * @phpstan-param array<array-key, mixed> $paths
      */
     public function eager(array $paths): Criteria
@@ -457,7 +412,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Executes a find using the parameters built with the criteria
      *
-     * @return ResultsetInterface
      * @throws Exception
      */
     public function execute(): ResultsetInterface
@@ -476,10 +430,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Adds the "for_update" parameter to the criteria
-     *
-     * @param bool $forUpdate
-     *
-     * @return CriteriaInterface
      */
     public function forUpdate(bool $forUpdate = true): CriteriaInterface
     {
@@ -491,8 +441,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Returns the columns to be queried
      *
-     * @return array|string|null
-     *
      * @phpstan-return mvc_query_columns|null
      */
     public function getColumns(): array | string | null
@@ -502,8 +450,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Returns the conditions parameter in the criteria
-     *
-     * @return string|null
      */
     public function getConditions(): string | null
     {
@@ -512,8 +458,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Returns the DependencyInjector container
-     *
-     * @return DiInterface
      */
     public function getDI(): DiInterface
     {
@@ -552,8 +496,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * - An array with 'number' and 'offset' keys if an offset was set with the limit
      * - NULL if limit has not been set
      *
-     * @return array|int|null
-     *
      * @phpstan-return array{number: int|string, offset?: int|string}|int|null
      */
     public function getLimit(): array | int | null
@@ -563,8 +505,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Returns an internal model name on which the criteria will be applied
-     *
-     * @return string
      */
     public function getModelName(): string
     {
@@ -580,8 +520,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Returns the order clause in the criteria
-     *
-     * @return string|null
      */
     public function getOrderBy(): string | null
     {
@@ -590,8 +528,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Returns all the parameters defined in the criteria
-     *
-     * @return array
      *
      * @phpstan-return mvc_criteria_params
      */
@@ -602,8 +538,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Returns the conditions parameter in the criteria
-     *
-     * @return string|null
      */
     public function getWhere(): string | null
     {
@@ -612,10 +546,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Adds the group-by clause to the criteria
-     *
-     * @param mixed $group
-     *
-     * @return CriteriaInterface
      */
     public function groupBy(mixed $group): CriteriaInterface
     {
@@ -626,10 +556,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Adds the having clause to the criteria
-     *
-     * @param mixed $having
-     *
-     * @return CriteriaInterface
      */
     public function having(mixed $having): CriteriaInterface
     {
@@ -659,12 +585,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      *     "i"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
      */
     public function innerJoin(
         string $model,
@@ -680,11 +600,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * ```php
      * $criteria->inWhere("id", [1, 2, 3]);
      * ```
-     *
-     * @param string $expr
-     * @param array  $values
-     *
-     * @return CriteriaInterface
      *
      * @phpstan-param array<array-key, mixed> $values
      */
@@ -757,13 +672,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      *     "LEFT"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     * @param mixed|null $type
-     *
-     * @return CriteriaInterface
      */
     public function join(
         string $model,
@@ -786,12 +694,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      *     "i"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
      */
     public function leftJoin(
         string $model,
@@ -809,11 +711,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * $criteria->limit(100, 200);
      * $criteria->limit("100", "200");
      * ```
-     *
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return CriteriaInterface
      */
     public function limit(int $limit, int $offset = 0): CriteriaInterface
     {
@@ -887,11 +784,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * $criteria->notInWhere("id", [1, 2, 3]);
      *```
      *
-     * @param string $expr
-     * @param array  $values
-     *
-     * @return CriteriaInterface
-     *
      * @phpstan-param array<array-key, mixed> $values
      */
     public function notInWhere(string $expr, array $values): CriteriaInterface
@@ -928,10 +820,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Adds the order-by clause to the criteria
-     *
-     * @param string $orderColumns
-     *
-     * @return CriteriaInterface
      */
     public function orderBy(string $orderColumns): CriteriaInterface
     {
@@ -942,13 +830,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Appends a condition to the current conditions using an OR operator
-     *
-     * @param string $conditions
-     * @param mixed  $bindParams
-     * @param mixed  $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      */
     public function orWhere(
         string $conditions,
@@ -974,12 +855,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      *     "i"
      * );
      *```
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     *
-     * @return CriteriaInterface
      */
     public function rightJoin(string $model, mixed $conditions = null, mixed $alias = null): CriteriaInterface
     {
@@ -988,10 +863,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Sets the DependencyInjector container
-     *
-     * @param DiInterface $container
-     *
-     * @return void
      */
     public function setDI(DiInterface $container): void
     {
@@ -1000,10 +871,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Set a model on which the query will be executed
-     *
-     * @param string $modelName
-     *
-     * @return CriteriaInterface
      */
     public function setModelName(string $modelName): CriteriaInterface
     {
@@ -1014,10 +881,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Adds the "shared_lock" parameter to the criteria
-     *
-     * @param bool $sharedLock
-     *
-     * @return CriteriaInterface
      */
     public function sharedLock(bool $sharedLock = true): CriteriaInterface
     {
@@ -1028,13 +891,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
 
     /**
      * Sets the conditions parameter in the criteria
-     *
-     * @param string $conditions
-     * @param mixed  $bindParams
-     * @param mixed  $bindTypes
-     *
-     * @return CriteriaInterface
-     *
      */
     public function where(
         string $conditions,
@@ -1082,13 +938,6 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * delegate here so that the call site is not subject to Zephir's
      * name collision between the public `join()` method and PHP's
      * built-in `join()` function.
-     *
-     * @param string     $model
-     * @param mixed|null $conditions
-     * @param mixed|null $alias
-     * @param mixed|null $type
-     *
-     * @return CriteriaInterface
      */
     private function addJoinClause(
         string $model,

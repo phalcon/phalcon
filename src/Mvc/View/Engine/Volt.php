@@ -45,19 +45,14 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 {
     use InfoTrait;
 
-    /**
-     * @var Compiler|null
-     */
     protected Compiler | null $compiler = null;
 
     /**
-     * @var array
      * @phpstan-var array<string, callable>
      */
     protected array $macros = [];
 
     /**
-     * @var array
      * @phpstan-var array<string, mixed>
      */
     protected array $options = [];
@@ -65,8 +60,6 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Checks if a macro is defined and calls it
      *
-     * @param string $name
-     * @param array  $arguments
      * @phpstan-param array<array-key, mixed> $arguments
      *
      * @return mixed
@@ -84,11 +77,6 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Performs a string conversion
      *
-     * @param string $text
-     * @param string $from
-     * @param string $to
-     *
-     * @return string
      * @throws MbstringRequired
      */
     public function convertEncoding(string $text, string $from, string $to): string
@@ -106,8 +94,6 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
     /**
      * Returns the Volt's compiler
-     *
-     * @return Compiler
      */
     public function getCompiler(): Compiler
     {
@@ -135,7 +121,6 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Return Volt's options
      *
-     * @return array
      * @phpstan-return array<string, mixed>
      */
     public function getOptions(): array
@@ -145,11 +130,6 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
     /**
      * Checks if the needle is included in the haystack
-     *
-     * @param mixed $needle
-     * @param mixed $haystack
-     *
-     * @return bool
      */
     public function isIncluded(mixed $needle, mixed $haystack): bool
     {
@@ -177,10 +157,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Length filter. If an array/object is passed a count is performed otherwise a strlen/mb_strlen
      *
-     * @param mixed $item
      * @phpstan-param array<array-key, mixed>|Countable|string|null $item
-     *
-     * @return int
      */
     public function length(mixed $item): int
     {
@@ -257,9 +234,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Renders a view using the template engine
      *
-     * @param string $path
-     * @param mixed  $params
-     * @param bool   $mustClean
+     * @param bool $mustClean
      *
      * TODO: Make params array
      *
@@ -317,7 +292,6 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Set Volt's options
      *
-     * @param array $options
      * @phpstan-param array<string, mixed> $options
      *
      * @return void
@@ -330,10 +304,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Extracts a slice from a string/array/traversable object value
      *
-     * @param mixed $value
      * @phpstan-param array<array-key, mixed>|string|(Countable&Iterator<array-key, mixed>) $value
-     * @param int        $start
-     * @param mixed|null $end
      * @phpstan-param int|null $end
      *
      * @return array|string
@@ -391,10 +362,8 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Sorts an array
      *
-     * @param array $value
      * @phpstan-param array<array-key, mixed> $value
      *
-     * @return array
      * @phpstan-return array<array-key, mixed>
      */
     public function sort(array $value): array

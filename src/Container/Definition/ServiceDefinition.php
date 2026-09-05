@@ -325,7 +325,6 @@ class ServiceDefinition
      * Set an argument
      *
      * @param int|string $param
-     * @param mixed      $value
      *
      * @throws FrozenDefinition
      */
@@ -339,8 +338,6 @@ class ServiceDefinition
 
     /**
      * Set a class
-     *
-     * @param string $className
      *
      * @throws FrozenDefinition
      */

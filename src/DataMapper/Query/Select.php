@@ -64,14 +64,8 @@ class Select extends AbstractConditions
      */
     public const JOIN_RIGHT = "RIGHT";
 
-    /**
-     * @var string
-     */
     protected string $asAlias = "";
 
-    /**
-     * @var bool
-     */
     protected bool $forUpdate = false;
 
     /**
@@ -165,10 +159,6 @@ class Select extends AbstractConditions
 
     /**
      * The `AS` statement for the query - useful in sub-queries
-     *
-     * @param string $asAlias
-     *
-     * @return Select
      */
     public function asAlias(string $asAlias): Select
     {
@@ -222,10 +212,6 @@ class Select extends AbstractConditions
 
     /**
      * Adds table(s) in the query
-     *
-     * @param string $table
-     *
-     * @return Select
      */
     public function from(string $table): Select
     {
@@ -256,8 +242,6 @@ class Select extends AbstractConditions
 
     /**
      * Whether the query has columns or not
-     *
-     * @return bool
      */
     public function hasColumns(): bool
     {

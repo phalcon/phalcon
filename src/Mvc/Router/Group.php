@@ -125,18 +125,14 @@ class Group implements GroupInterface
      * $router->add("/about", "About::index");
      *```
      *
-     * @param string $pattern
-     * @param mixed  $paths       = [
-     *                            'module => '',
-     *                            'controller' => '',
-     *                            'action' => '',
-     *                            'namespace' => ''
-     *                            ]
-     * @param mixed  $httpMethods
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function add(
         string $pattern,
@@ -149,17 +145,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is CONNECT
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addConnect(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -169,17 +162,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is DELETE
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addDelete(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -189,17 +179,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is GET
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addGet(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -209,17 +196,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is HEAD
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addHead(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -229,17 +213,14 @@ class Group implements GroupInterface
     /**
      * Add a route to the router that only match if the HTTP method is OPTIONS
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addOptions(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -249,17 +230,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is PATCH
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPatch(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -269,17 +247,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is POST
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPost(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -289,17 +264,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is PURGE
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPurge(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -309,17 +281,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPut(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -329,17 +298,14 @@ class Group implements GroupInterface
     /**
      * Adds a route to the router that only match if the HTTP method is TRACE
      *
-     * @param string $pattern
-     * @param mixed  $paths   = [
-     *                        'module => '',
-     *                        'controller' => '',
-     *                        'action' => '',
-     *                        'namespace' => ''
-     *                        ]
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addTrace(string $pattern, mixed $paths = null): RouteInterface
     {
@@ -350,10 +316,6 @@ class Group implements GroupInterface
      * Sets a callback that is called if the route is matched.
      * The developer can implement any arbitrary conditions here
      * If the callback returns false the route is treated as not matched
-     *
-     * @param mixed $beforeMatch
-     *
-     * @return GroupInterface
      */
     public function beforeMatch(mixed $beforeMatch): GroupInterface
     {
@@ -367,8 +329,6 @@ class Group implements GroupInterface
 
     /**
      * Removes all the pre-defined routes
-     *
-     * @return void
      */
     public function clear(): void
     {
@@ -387,8 +347,6 @@ class Group implements GroupInterface
 
     /**
      * Returns the hostname restriction
-     *
-     * @return string|null
      */
     public function getHostname(): string | null
     {
@@ -397,8 +355,6 @@ class Group implements GroupInterface
 
     /**
      * Returns the common paths defined for this group
-     *
-     * @return array|string|null
      *
      * @phpstan-return mvc_router_paths|string|null
      */
@@ -409,8 +365,6 @@ class Group implements GroupInterface
 
     /**
      * Returns the common prefix for all the routes
-     *
-     * @return string|null
      */
     public function getPrefix(): string | null
     {
@@ -431,10 +385,6 @@ class Group implements GroupInterface
 
     /**
      * Set a hostname restriction for all the routes in the group
-     *
-     * @param string $hostname
-     *
-     * @return GroupInterface
      */
     public function setHostname(string $hostname): GroupInterface
     {
@@ -445,11 +395,6 @@ class Group implements GroupInterface
 
     /**
      * Set common paths for all the routes in the group
-     *
-     * @param mixed $paths
-     *
-     * @return GroupInterface
-     *
      */
     public function setPaths(mixed $paths): GroupInterface
     {
@@ -463,10 +408,6 @@ class Group implements GroupInterface
 
     /**
      * Set a common uri prefix for all the routes in this group
-     *
-     * @param string $prefix
-     *
-     * @return GroupInterface
      */
     public function setPrefix(string $prefix): GroupInterface
     {
@@ -478,18 +419,14 @@ class Group implements GroupInterface
     /**
      * Adds a route applying the common attributes
      *
-     * @param string $pattern
-     * @param mixed  $paths       [
-     *                            'module => '',
-     *                            'controller' => '',
-     *                            'action' => '',
-     *                            'namespace' => ''
-     *                            ]
-     * @param mixed  $httpMethods
+     * @param mixed $paths [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     protected function addRoute(
         string $pattern,

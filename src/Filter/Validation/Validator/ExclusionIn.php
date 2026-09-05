@@ -74,9 +74,6 @@ use function is_bool;
  */
 class ExclusionIn extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must not be a part of list: :domain";
 
     /**

@@ -24,11 +24,6 @@ class Close extends AbstractHelper
 {
     /**
      * Produce a `</...>` tag.
-     *
-     * @param string $tag
-     * @param bool   $raw
-     *
-     * @return string
      */
     public function __invoke(string $tag, bool $raw = false): string
     {

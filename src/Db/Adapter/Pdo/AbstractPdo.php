@@ -61,23 +61,17 @@ abstract class AbstractPdo extends AbstractAdapter
 {
     /**
      * Last affected rows
-     *
-     * @var int
      */
     protected int $affectedRows = 0;
 
     /**
      * Whether to transparently reconnect and retry once when a query fails
      * because the connection was lost. Opt-in; off by default.
-     *
-     * @var bool
      */
     protected bool $autoReconnect = false;
 
     /**
      * PDO Handler
-     *
-     * @var PDO|null
      */
     protected PDO | null $pdo = null;
 
@@ -123,9 +117,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Starts a transaction in the connection
      *
-     * @param bool $nesting
-     *
-     * @return bool
      * @throws EventsException
      * @throws Exception
      */
@@ -172,8 +163,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Closes the active connection returning success. Phalcon automatically
      * closes and destroys active connections when the request ends
-     *
-     * @return void
      */
     public function close(): void
     {
@@ -183,9 +172,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Commits the active transaction in the connection
      *
-     * @param bool $nesting
-     *
-     * @return bool
      * @throws EventsException
      * @throws Exception
      */
@@ -381,9 +367,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * );
      *```
      *
-     * @param string $sql
-     * @param array  $parameters
-     *
      * @return array<string, list|string|null>
      * @throws Exception
      */
@@ -429,8 +412,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Ensures the connection is alive, reconnecting in place if it is not.
-     *
-     * @return void
      */
     public function ensureConnection(): void
     {
@@ -446,10 +427,6 @@ abstract class AbstractPdo extends AbstractAdapter
      *```php
      * $escapedStr = $connection->escapeString("some dangerous value");
      *```
-     *
-     * @param string $input
-     *
-     * @return string
      */
     public function escapeString(string $input): string
     {
@@ -476,11 +453,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * );
      *```
      *
-     * @param string $sqlStatement
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return bool
      * @throws Exception
      * @throws EventsException
      */
@@ -642,8 +614,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Returns whether transparent auto-reconnect is enabled.
-     *
-     * @return bool
      */
     public function getAutoReconnect(): bool
     {
@@ -652,8 +622,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Return the error info, if any
-     *
-     * @return array
      */
     public function getErrorInfo(): array
     {
@@ -662,8 +630,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Return internal PDO handler
-     *
-     * @return PDO|null
      */
     public function getInternalHandler(): PDO | null
     {
@@ -672,8 +638,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Returns the current transaction nesting level
-     *
-     * @return int
      */
     public function getTransactionLevel(): int
     {
@@ -691,8 +655,6 @@ abstract class AbstractPdo extends AbstractAdapter
      *     $connection->isUnderTransaction()
      * );
      *```
-     *
-     * @return bool
      */
     public function isUnderTransaction(): bool
     {
@@ -720,10 +682,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * // Getting the generated id
      * $id = $connection->lastInsertId();
      *```
-     *
-     * @param string|null $name
-     *
-     * @return bool|string
      */
     public function lastInsertId(string | null $name = null): bool | string
     {
@@ -733,8 +691,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Checks whether the underlying connection is still alive by issuing a
      * trivial query. Returns false if there is no handle or the probe fails.
-     *
-     * @return bool
      */
     public function ping(): bool
     {
@@ -771,10 +727,6 @@ abstract class AbstractPdo extends AbstractAdapter
      *     ]
      * );
      *```
-     *
-     * @param string $sqlStatement
-     *
-     * @return PDOStatement
      */
     public function prepare(string $sqlStatement): PDOStatement
     {
@@ -800,11 +752,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * );
      *```
      *
-     * @param string $sqlStatement
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return bool|ResultInterface
      * @throws EventsException
      * @throws Exception
      */
@@ -866,9 +813,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Rollbacks the active transaction in the connection
      *
-     * @param bool $nesting
-     *
-     * @return bool
      * @throws EventsException
      * @throws Exception
      */
@@ -933,10 +877,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Enables or disables transparent auto-reconnect on a lost connection.
-     *
-     * @param bool $autoReconnect
-     *
-     * @return static
      */
     public function setAutoReconnect(bool $autoReconnect): static
     {
@@ -954,10 +894,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * Recognizes whether an exception represents a lost ("gone away")
      * connection. The base adapter cannot know driver specifics, so it
      * returns false; concrete adapters override this.
-     *
-     * @param Throwable $exception
-     *
-     * @return bool
      */
     protected function isConnectionError(Throwable $exception): bool
     {
@@ -1002,10 +938,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * Whether a failed query may be transparently retried after reconnecting.
      * Only when auto-reconnect is on, we are not in a transaction, and the
      * failure is a recognized connection loss.
-     *
-     * @param Throwable $exception
-     *
-     * @return bool
      */
     private function canReconnect(Throwable $exception): bool
     {
@@ -1023,12 +955,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Runs the actual write against PDO and returns the affected-rows count
      * (or the raw exec() return for unprepared statements).
-     *
-     * @param string $sqlStatement
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return false|int
      */
     private function executeStatement(
         string $sqlStatement,
@@ -1058,8 +984,6 @@ abstract class AbstractPdo extends AbstractAdapter
 
     /**
      * Notifies listeners that the connection was lost and re-establishes it.
-     *
-     * @return void
      */
     private function handleConnectionLost(): void
     {
@@ -1071,11 +995,6 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Prepares and executes a read statement, returning the live PDOStatement.
      *
-     * @param string $sqlStatement
-     * @param array  $params
-     * @param array  $types
-     *
-     * @return PDOStatement
      * @throws CannotPrepareStatement
      */
     private function queryStatement(

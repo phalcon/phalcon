@@ -29,7 +29,6 @@ use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 class Decorated extends AbstractConnection
 {
     /**
-     *
      * Constructor.
      *
      * This overrides the parent so that it can take an existing PDO instance

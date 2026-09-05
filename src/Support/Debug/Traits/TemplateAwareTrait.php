@@ -31,22 +31,11 @@ trait TemplateAwareTrait
      */
     protected array $templates = [];
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
     public function getTemplate(string $name): string
     {
         return $this->templates[$name] ?? $this->defaultTemplate($name);
     }
 
-    /**
-     * @param string $name
-     * @param string $template
-     *
-     * @return static
-     */
     public function setTemplate(string $name, string $template): static
     {
         $this->templates[$name] = $template;
@@ -56,10 +45,6 @@ trait TemplateAwareTrait
 
     /**
      * Returns the embedded default template for the given name.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     abstract protected function defaultTemplate(string $name): string;
 }

@@ -23,9 +23,6 @@ use Phalcon\Storage\Adapter\Stream as StorageStream;
 class Stream extends StorageStream implements AdapterInterface
 {
     /**
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
      * @return mixed|Reflection
      */
     public function get(string $key, mixed $defaultValue = null): mixed

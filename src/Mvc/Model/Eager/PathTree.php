@@ -52,8 +52,6 @@ class PathTree
     /**
      * @param array $spec the `eager` find parameter
      *
-     * @return array
-     *
      * @phpstan-param array<array-key, mixed> $spec
      * @phpstan-return mvc_eager_tree
      */
@@ -100,10 +98,6 @@ class PathTree
      * would return N children in total rather than N per parent, which is
      * silently wrong.
      *
-     * @param array $options
-     *
-     * @return void
-     *
      * @phpstan-param mvc_model_parameters $options
      */
     private static function assertOptions(array $options): void
@@ -123,8 +117,6 @@ class PathTree
      * @param array  $segments exploded path
      * @param int    $index    segment currently being inserted
      * @param array  $options  attach to the last segment only
-     *
-     * @return array
      *
      * @phpstan-param mvc_eager_tree            $tree
      * @phpstan-param array<array-key, string>  $segments

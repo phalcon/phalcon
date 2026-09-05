@@ -22,29 +22,20 @@ namespace Phalcon\Mvc\View\Traits;
  */
 trait ViewParamsTrait
 {
-    /**
-     * @var string
-     */
     protected string $content = "";
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, mixed>
      */
     protected array $registeredEngines = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, mixed>
      */
     protected array $viewParams = [];
 
     /**
      * Returns output from another view stage
-     *
-     * @return string
      */
     public function getContent(): string
     {
@@ -54,8 +45,6 @@ trait ViewParamsTrait
     /**
      * Returns parameters to views
      *
-     * @return array
-     *
      * @phpstan-return array<string, mixed>
      */
     public function getParamsToView(): array
@@ -64,8 +53,6 @@ trait ViewParamsTrait
     }
 
     /**
-     * @return array
-     *
      * @phpstan-return array<string, mixed>
      */
     public function getRegisteredEngines(): array
@@ -75,8 +62,6 @@ trait ViewParamsTrait
 
     /**
      * Returns a parameter previously set in the view
-     *
-     * @param string $key
      *
      * @return mixed
      */
@@ -91,10 +76,6 @@ trait ViewParamsTrait
      *```php
      * $this->view->setContent("<h1>hello</h1>");
      *```
-     *
-     * @param string $content
-     *
-     * @return static
      */
     public function setContent(string $content): static
     {
@@ -109,11 +90,6 @@ trait ViewParamsTrait
      *```php
      * $this->view->setVar("products", $products);
      *```
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return static
      */
     public function setVar(string $key, mixed $value): static
     {

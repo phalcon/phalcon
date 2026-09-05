@@ -62,9 +62,6 @@ use function is_array;
  */
 class Identical extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field does not have the expected value";
 
     /**

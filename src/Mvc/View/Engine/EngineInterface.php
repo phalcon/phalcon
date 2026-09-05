@@ -20,18 +20,11 @@ interface EngineInterface
 {
     /**
      * Returns cached output on another view stage
-     *
-     * @return string
      */
     public function getContent(): string;
 
     /**
      * Renders a partial inside another view
-     *
-     * @param string     $partialPath
-     * @param mixed|null $params
-     *
-     * @return void
      */
     public function partial(string $partialPath, mixed $params = null): void;
 
@@ -39,10 +32,6 @@ interface EngineInterface
      * Renders a view using the template engine
      *
      * TODO: Change params to array type
-     *
-     * @param string $path
-     * @param mixed  $params
-     * @param bool   $mustClean
      *
      * @return mixed
      */

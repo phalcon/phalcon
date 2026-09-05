@@ -138,9 +138,6 @@ class TagFactory
      * @phpstan-var html_factory_instances
      */
     protected array $instances = [];
-    /**
-     * @var Doctype
-     */
     private readonly Doctype $doctype;
 
     /**
@@ -179,8 +176,6 @@ class TagFactory
         return call_user_func_array([$helper, '__invoke'], $arguments);
     }
 
-    /**
-     */
     public function has(string $name): bool
     {
         return isset($this->factories[$name]);

@@ -24,12 +24,6 @@ interface CollectionInterface
 {
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function delete(
         string $routePattern,
@@ -39,12 +33,6 @@ interface CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is GET
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function get(
         string $routePattern,
@@ -62,27 +50,17 @@ interface CollectionInterface
     /**
      * Returns the registered handlers
      *
-     * @return array
-     *
      * @phpstan-return mvc_micro_handlers
      */
     public function getHandlers(): array;
 
     /**
      * Returns the collection prefix if any
-     *
-     * @return string
      */
     public function getPrefix(): string;
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is HEAD
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function head(
         string $routePattern,
@@ -92,19 +70,11 @@ interface CollectionInterface
 
     /**
      * Returns if the main handler must be lazy loaded
-     *
-     * @return bool
      */
     public function isLazy(): bool;
 
     /**
      * Maps a route to a handler
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function map(
         string $routePattern,
@@ -114,12 +84,6 @@ interface CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function options(
         string $routePattern,
@@ -129,12 +93,6 @@ interface CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is PATCH
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function patch(
         string $routePattern,
@@ -144,12 +102,6 @@ interface CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is POST
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function post(
         string $routePattern,
@@ -159,12 +111,6 @@ interface CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is PUT
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function put(
         string $routePattern,
@@ -174,29 +120,16 @@ interface CollectionInterface
 
     /**
      * Sets the main handler
-     *
-     * @param mixed $handler
-     * @param bool  $isLazy
-     *
-     * @return CollectionInterface
      */
     public function setHandler(mixed $handler, bool $isLazy = false): CollectionInterface;
 
     /**
      * Sets if the main handler must be lazy loaded
-     *
-     * @param bool $isLazy
-     *
-     * @return CollectionInterface
      */
     public function setLazy(bool $isLazy): CollectionInterface;
 
     /**
      * Sets a prefix for all routes added to the collection
-     *
-     * @param string $prefix
-     *
-     * @return CollectionInterface
      */
     public function setPrefix(string $prefix): CollectionInterface;
 }

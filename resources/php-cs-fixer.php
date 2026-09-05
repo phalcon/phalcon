@@ -53,7 +53,7 @@ return (new Config())
              * unrelated blocks stay independent. Every other operator keeps
              * the single space PSR-12 asks for.
              */
-            'binary_operator_spaces' => [
+            'binary_operator_spaces'                        => [
                 'default'   => 'single_space',
                 'operators' => [
                     '='   => 'align',
@@ -68,13 +68,25 @@ return (new Config())
                     '=>'  => 'align',
                 ],
             ],
-            'declare_strict_types'   => true,
-            'no_unused_imports'      => true,
-            'ordered_imports'        => [
+            'declare_strict_types'                          => true,
+            'no_empty_phpdoc'                               => true,
+            /**
+             * Removes `@param`, `@return` and `@var` tags that only repeat the
+             * native type. A tag is removed only when it has no description and
+             * its type is the same as the signature, so shapes such as
+             * `array<string, mixed>` stay. `allow_mixed` keeps `@param mixed`.
+             */
+            'no_superfluous_phpdoc_tags'                    => [
+                'allow_mixed'         => true,
+                'allow_unused_params' => false,
+                'remove_inheritdoc'   => false,
+            ],
+            'no_unused_imports'                             => true,
+            'ordered_imports'                               => [
                 'sort_algorithm' => 'alpha',
                 'imports_order'  => ['class', 'function', 'const'],
             ],
-            'ordered_class_elements' => [
+            'ordered_class_elements'                        => [
                 'sort_algorithm' => 'alpha',
                 'order'          => [
                     'use_trait',
@@ -106,11 +118,11 @@ return (new Config())
              * null last, and so does the model quill builds from both this and
              * the Zephir source, so last it stays.
              */
-            'ordered_types'          => [
+            'ordered_types'                                 => [
                 'sort_algorithm'  => 'alpha',
                 'null_adjustment' => 'always_last',
             ],
-            'phpdoc_align'           => [
+            'phpdoc_align'                                  => [
                 'align' => 'vertical',
                 'tags'  => [
                     'method',
@@ -122,11 +134,13 @@ return (new Config())
                     'var',
                 ],
             ],
-            'phpdoc_types_order'     => [
+            'phpdoc_trim'                                   => true,
+            'phpdoc_trim_consecutive_blank_line_separation' => true,
+            'phpdoc_types_order'                            => [
                 'sort_algorithm'  => 'alpha',
                 'null_adjustment' => 'always_last',
             ],
-            'types_spaces'           => [
+            'types_spaces'                                  => [
                 'space' => 'single',
             ],
         ]

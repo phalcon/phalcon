@@ -41,11 +41,8 @@ class AdapterFactory extends AbstractFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param string $fileName
      * @phpstan-param logger_adapter_options $options
      *
-     * @return AdapterInterface
      * @throws BaseException
      */
     public function newInstance(

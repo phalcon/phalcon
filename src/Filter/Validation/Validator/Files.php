@@ -52,11 +52,6 @@ class Files extends AbstractValidator
 {
     /**
      * Whole-field empty check: true when the field carries no uploaded files.
-     *
-     * @param Validation $validation
-     * @param string     $field
-     *
-     * @return bool
      */
     public function isAllowEmpty(Validation $validation, string $field): bool
     {
@@ -84,10 +79,6 @@ class Files extends AbstractValidator
     /**
      * Executes the validation, delegating each file to a `File` validator.
      *
-     * @param Validation $validation
-     * @param mixed      $field
-     *
-     * @return bool
      * @throws Validation\Exception
      */
     public function validate(Validation $validation, mixed $field): bool
@@ -130,8 +121,6 @@ class Files extends AbstractValidator
     /**
      * Normalizes a single file or a transposed multi-file `$_FILES` node into a
      * list of single-file structures.
-     *
-     * @param mixed $value
      *
      * @return list<mixed>
      */

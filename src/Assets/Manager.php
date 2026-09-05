@@ -63,7 +63,6 @@ class Manager extends AbstractInjectionAware
     /**
      * Manager constructor.
      *
-     * @param TagFactory     $tagFactory
      * @param assets_options $options
      */
     public function __construct(
@@ -74,8 +73,6 @@ class Manager extends AbstractInjectionAware
 
     /**
      * Adds a raw asset to the manager
-     *
-     * @param Asset $asset
      */
     public function addAsset(Asset $asset): static
     {
@@ -89,9 +86,6 @@ class Manager extends AbstractInjectionAware
 
     /**
      * Adds an asset by its type
-     *
-     * @param string $type
-     * @param Asset  $asset
      */
     public function addAssetByType(string $type, Asset $asset): static
     {
@@ -124,8 +118,6 @@ class Manager extends AbstractInjectionAware
 
     /**
      * Adds a raw inline code to the manager
-     *
-     * @param Inline $code
      */
     public function addInlineCode(Inline $code): static
     {
@@ -139,9 +131,6 @@ class Manager extends AbstractInjectionAware
 
     /**
      * Adds an inline code by its type
-     *
-     * @param string $type
-     * @param Inline $code
      */
     public function addInlineCodeByType(string $type, Inline $code): static
     {
@@ -570,10 +559,8 @@ class Manager extends AbstractInjectionAware
     /**
      * Traverses a collection and generate its HTML
      *
-     * @param Collection $collection
-     * @param string     $type
+     * @param string $type
      *
-     * @return string
      * @throws Exception
      */
     public function outputInline(Collection $collection, mixed $type): string
@@ -830,10 +817,6 @@ class Manager extends AbstractInjectionAware
     }
 
     /**
-     * @param Collection $collection
-     * @param string     $completeTargetPath
-     *
-     * @return bool
      * @throws Exception
      */
     private function getJoin(Collection $collection, string $completeTargetPath): bool
@@ -860,12 +843,7 @@ class Manager extends AbstractInjectionAware
     }
 
     /**
-     * @param Collection      $collection
-     * @param string          $completeTargetPath
      * @param assets_callback $callback
-     * @param string          $output
-     *
-     * @return string
      */
     private function getOutput(
         Collection $collection,
@@ -949,10 +927,6 @@ class Manager extends AbstractInjectionAware
     }
 
     /**
-     * @param mixed $parameters
-     * @param bool  $local
-     *
-     * @return string
      * @throws Exception
      */
     private function jsLink(mixed $parameters = [], bool $local = true): string

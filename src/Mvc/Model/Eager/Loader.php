@@ -63,9 +63,6 @@ class Loader
      */
     public const MAX_ROWS_PER_LEVEL = 100000;
 
-    /**
-     * @param ManagerInterface $manager
-     */
     public function __construct(
         protected ManagerInterface $manager
     ) {
@@ -81,10 +78,7 @@ class Loader
      * uniform; only the write differs. A Row is what a column-restricted
      * select produces, and it has no relation cache.
      *
-     * @param mixed $record   ModelInterface or Row
-     * @param array $eagerMap
-     *
-     * @return void
+     * @param mixed $record ModelInterface or Row
      *
      * @phpstan-param mvc_eager_map                                $eagerMap
      */
@@ -128,10 +122,6 @@ class Loader
      * values are length-prefixed so ["a|b", "c"] cannot collide with
      * ["a", "b|c"].
      *
-     * @param array $values
-     *
-     * @return string
-     *
      * @phpstan-param array<array-key, mixed> $values
      */
     public static function buildKey(array $values): string
@@ -159,12 +149,6 @@ class Loader
      * but no row has been consumed, so fetching every row costs nothing extra
      * and gives the key values without a second pass over the cursor.
      *
-     * @param Simple $resultset
-     * @param string $modelName
-     * @param array  $tree
-     *
-     * @return void
-     *
      * @phpstan-param array<string, mixed> $tree
      */
     public function loadResultset(
@@ -186,12 +170,8 @@ class Loader
     /**
      * Builds one level of the map.
      *
-     * @param array  $parents   attribute-keyed row arrays at the root, or
-     *                          ModelInterface / Row instances below it
-     * @param string $modelName
-     * @param array  $tree
-     *
-     * @return array
+     * @param array $parents attribute-keyed row arrays at the root, or
+     *                       ModelInterface / Row instances below it
      *
      * @phpstan-param mvc_eager_parents    $parents
      * @phpstan-param array<string, mixed> $tree
@@ -225,13 +205,6 @@ class Loader
 
     /**
      * Builds a single map node: one query, indexed by the referenced field.
-     *
-     * @param RelationInterface $relation
-     * @param string            $alias
-     * @param array             $parents
-     * @param array             $node
-     *
-     * @return array
      *
      * @phpstan-param mvc_eager_parents $parents
      * @phpstan-param mvc_eager_node    $node
@@ -340,13 +313,6 @@ class Loader
      * collected. The pairs then attribute referenced rows back to parents
      * without a synthetic column in the select list, and without the row
      * multiplication an inner join would cause.
-     *
-     * @param RelationInterface $relation
-     * @param string            $alias
-     * @param array             $parents
-     * @param array             $node
-     *
-     * @return array
      *
      * @phpstan-param mvc_eager_parents $parents
      * @phpstan-param mvc_eager_node    $node
@@ -507,9 +473,7 @@ class Loader
     /**
      * Distinct, non-null local key tuples across the parent set.
      *
-     * @param array  $parents attribute-keyed row arrays, ModelInterface or Row
-     * @param array  $fields
-     * @param string $alias
+     * @param array $parents attribute-keyed row arrays, ModelInterface or Row
      *
      * @return array list of value-tuples, deduped
      *
@@ -554,13 +518,6 @@ class Loader
     /**
      * One query per relation node. An empty key set issues none at all -
      * WHERE IN () is a syntax error and there is nothing to attribute.
-     *
-     * @param RelationInterface $relation
-     * @param string            $alias
-     * @param array             $keys
-     * @param array             $options
-     *
-     * @return Simple
      *
      * @phpstan-param array<array-key, array<array-key, mixed>> $keys
      * @phpstan-param mvc_model_parameters                      $options
@@ -687,10 +644,6 @@ class Loader
      * array for a composite key. Normalizing removes that fork everywhere
      * downstream.
      *
-     * @param mixed $fields
-     *
-     * @return array
-     *
      * @phpstan-param mvc_relation_fields $fields
      * @phpstan-return array<array-key, string>
      */
@@ -705,11 +658,6 @@ class Loader
 
     /**
      * Lookup key for an already-hydrated record.
-     *
-     * @param mixed $record
-     * @param array $fields
-     *
-     * @return string
      *
      * @phpstan-param array<array-key, string> $fields
      */

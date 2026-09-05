@@ -22,9 +22,6 @@ namespace Phalcon\Html\Helper;
  */
 class Ul extends Ol
 {
-    /**
-     * @return string
-     */
     protected function getTag(): string
     {
         return 'ul';

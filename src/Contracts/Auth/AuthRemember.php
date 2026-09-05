@@ -25,11 +25,6 @@ interface AuthRemember
 {
     /**
      * Persists a new remember token for the user.
-     *
-     * @param string      $token
-     * @param string|null $userAgent
-     *
-     * @return RememberToken
      */
     public function createRememberToken(
         string $token,
@@ -39,10 +34,6 @@ interface AuthRemember
     /**
      * Returns the remember token entry matching the given token value,
      * or null if not found.
-     *
-     * @param string $token
-     *
-     * @return RememberToken|null
      */
     public function getRememberToken(string $token): ?RememberToken;
 }

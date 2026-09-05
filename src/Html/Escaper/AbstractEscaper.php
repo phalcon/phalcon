@@ -46,8 +46,6 @@ abstract class AbstractEscaper
      * @param string $escapeChar  Escape prefix (e.g. '\' for CSS, '\x' for JS)
      * @param string $escapeExtra Character appended after hex (e.g. ' ' for CSS)
      * @param bool   $whitelist   Whether to allow a JS-specific whitelist through
-     *
-     * @return string
      */
     protected function escapeMulti(
         string $input,

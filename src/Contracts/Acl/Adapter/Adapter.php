@@ -35,10 +35,7 @@ interface Adapter
      * Access names can be a particular action, for instance `search`, `update`
      * `delete` etc. or a list of them.
      *
-     * @param ComponentInterface|string $componentObject
-     * @param acl_access_list           $accessList
-     *
-     * @return bool
+     * @param acl_access_list $accessList
      */
     public function addComponent(
         ComponentInterface | string $componentObject,
@@ -48,12 +45,7 @@ interface Adapter
     /**
      * Adds access to components
      *
-     * @param string $componentName
-     * @param mixed  $accessList
-     *
      * @phpstan-param acl_access_list $accessList
-     *
-     * @return bool
      */
     public function addComponentAccess(
         string $componentName,
@@ -63,10 +55,7 @@ interface Adapter
     /**
      * Add a role which inherits from an existing role
      *
-     * @param string              $roleName
      * @param acl_role_to_inherit $roleToInherit
-     *
-     * @return bool
      */
     public function addInherit(
         string $roleName,
@@ -77,12 +66,9 @@ interface Adapter
      * Adds a role to the ACL list. The second parameter lets to inherit access
      * from an existing role
      *
-     * @param mixed                    $roleObject
      * @param acl_role_to_inherit|null $accessInherits
      *
      * @phpstan-param RoleInterface|string $roleObject
-     *
-     * @return bool
      */
     public function addRole(
         mixed $roleObject,
@@ -92,12 +78,7 @@ interface Adapter
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
      *
-     * @param string          $roleName
-     * @param string          $componentName
      * @param acl_access_list $access
-     * @param callable|null   $function
-     *
-     * @return void
      */
     public function allow(
         string $roleName,
@@ -109,12 +90,7 @@ interface Adapter
     /**
      * Deny access to a role on a component. You can use `*` as wildcard
      *
-     * @param string          $roleName
-     * @param string          $componentName
      * @param acl_access_list $access
-     * @param callable|null   $function
-     *
-     * @return void
      */
     public function deny(
         string $roleName,
@@ -126,10 +102,7 @@ interface Adapter
     /**
      * Removes access from a component
      *
-     * @param string          $componentName
      * @param acl_access_list $accessList
-     *
-     * @return void
      */
     public function dropComponentAccess(
         string $componentName,
@@ -138,24 +111,18 @@ interface Adapter
 
     /**
      * Returns the access which the list is checking if a role can access it
-     *
-     * @return string|null
      */
     public function getActiveAccess(): string | null;
 
     /**
      * Returns the component which the list is checking if some role can access
      * it
-     *
-     * @return string|null
      */
     public function getActiveComponent(): string | null;
 
     /**
      * Returns the role which the list is checking if it's allowed to certain
      * component/access
-     *
-     * @return string|null
      */
     public function getActiveRole(): string | null;
 
@@ -175,8 +142,6 @@ interface Adapter
      * Returns the inherited roles for a passed role name. If no role name
      * has been specified it will return the whole array. If the role has not
      * been found it returns an empty array
-     *
-     * @param string $roleName
      *
      * @return array<int|string, array<int, string>|string>
      */
@@ -198,15 +163,10 @@ interface Adapter
     /**
      * Check whether a role is allowed to access an action from a component
      *
-     * @param mixed                    $roleName
-     * @param mixed                    $componentName
-     * @param string                   $access
      * @param array<int|string, mixed> $parameters
      *
      * @phpstan-param acl_role_name      $roleName
      * @phpstan-param acl_component_name $componentName
-     *
-     * @return bool
      */
     public function isAllowed(
         mixed $roleName,

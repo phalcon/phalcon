@@ -50,11 +50,6 @@ use Phalcon\Logger\Logger;
  */
 class AdrProvider implements Provider
 {
-    /**
-     * @param Collection $services
-     *
-     * @return void
-     */
     public function provide(Collection $services): void
     {
         // Native events manager

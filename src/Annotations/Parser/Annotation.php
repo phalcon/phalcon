@@ -26,22 +26,16 @@ class Annotation
 {
     /**
      * Attribute Arguments
-     *
-     * @var array
      */
     protected array $arguments = [];
 
     /**
      * Attribute Name
-     *
-     * @var string
      */
     protected string $name;
 
     /**
      * Constructor
-     *
-     * @param ReflectionAttribute $reflectionData
      */
     public function __construct(ReflectionAttribute $reflectionData)
     {
@@ -51,10 +45,6 @@ class Annotation
 
     /**
      * Returns an argument in a specific position
-     *
-     * @param int|string $position
-     *
-     * @return mixed
      */
     public function getArgument(int | string $position): mixed
     {
@@ -63,8 +53,6 @@ class Annotation
 
     /**
      * Returns the expression arguments
-     *
-     * @return array
      */
     public function getArguments(): array
     {
@@ -73,8 +61,6 @@ class Annotation
 
     /**
      * Returns the attribute's base name
-     *
-     * @return string
      */
     public function getCleanName(): string
     {
@@ -83,8 +69,6 @@ class Annotation
 
     /**
      * Returns the attribute's name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -93,10 +77,6 @@ class Annotation
 
     /**
      * Returns a named argument
-     *
-     * @param string $name
-     *
-     * @return mixed
      */
     public function getNamedArgument(string $name): mixed
     {
@@ -105,10 +85,6 @@ class Annotation
 
     /**
      * Returns a named parameter
-     *
-     * @param string $name
-     *
-     * @return mixed
      */
     public function getNamedParameter(string $name): mixed
     {
@@ -117,10 +93,6 @@ class Annotation
 
     /**
      * Returns an argument in a specific position
-     *
-     * @param int|string $position
-     *
-     * @return bool
      */
     public function hasArgument(int | string $position): bool
     {
@@ -129,8 +101,6 @@ class Annotation
 
     /**
      * Returns the number of arguments that the attribute has
-     *
-     * @return int
      */
     public function numberArguments(): int
     {

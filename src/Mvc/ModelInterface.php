@@ -57,10 +57,6 @@ interface ModelInterface
      * Allows to calculate the average value on a column matching the specified
      * conditions
      *
-     * @param array $parameters
-     *
-     * @return float|ResultsetInterface
-     *
      * @phpstan-param mvc_model_parameters $parameters
      */
     public static function average(
@@ -69,12 +65,6 @@ interface ModelInterface
 
     /**
      * Assigns values to a model from an array returning a new model
-     *
-     * @param ModelInterface $base
-     * @param array          $data
-     * @param int            $dirtyState
-     *
-     * @return ModelInterface
      *
      * @phpstan-param mvc_model_data $data
      */
@@ -88,10 +78,6 @@ interface ModelInterface
      * Assigns values to a model from an array returning a new model
      *
      * @param ModelInterface|Row $base
-     * @param array              $data
-     * @param mixed              $columnMap
-     * @param int                $dirtyState
-     * @param bool               $keepSnapshots
      *
      * @return ModelInterface
      *
@@ -107,10 +93,6 @@ interface ModelInterface
 
     /**
      * Returns a hydrated result based on the data and the column map
-     *
-     * @param array $data
-     * @param mixed $columnMap
-     * @param int   $hydrationMode
      *
      * @return mixed
      *
@@ -131,8 +113,6 @@ interface ModelInterface
      *
      * @param array|string|null $parameters
      *
-     * @return int|ResultsetInterface
-     *
      * @phpstan-param mvc_model_parameters $parameters
      */
     public static function count(mixed $parameters = null): int | ResultsetInterface;
@@ -148,8 +128,6 @@ interface ModelInterface
      * - `Phalcon\Mvc\Model\Criteria` as request-bound convenience;
      * - raw PHQL via `Phalcon\Mvc\Model\Query` for everything else.
      *
-     * @param mixed|null $parameters
-     *
      * @return \Phalcon\Mvc\Model\Resultset<int, T>|T[]
      */
     public static function find(mixed $parameters = null);
@@ -163,8 +141,6 @@ interface ModelInterface
      * @see https://github.com/phalcon/cphalcon/issues/15212
      * @see https://github.com/phalcon/cphalcon/issues/15883
      *
-     * @param mixed|null $parameters
-     *
      * @return ModelInterface|Row|T|null
      */
     public static function findFirst(mixed $parameters = null);
@@ -172,8 +148,6 @@ interface ModelInterface
     /**
      * Allows to get the maximum value of a column that match the specified
      * conditions
-     *
-     * @param mixed|null $parameters
      *
      * @return mixed
      */
@@ -183,18 +157,12 @@ interface ModelInterface
      * Allows to get the minimum value of a column that match the specified
      * conditions
      *
-     * @param mixed|null $parameters
-     *
      * @return mixed
      */
     public static function minimum(mixed $parameters = null);
 
     /**
      * Create a criteria for a specific model
-     *
-     * @param DiInterface|null $container
-     *
-     * @return CriteriaInterface
      */
     public static function query(
         DiInterface | null $container = null
@@ -202,29 +170,15 @@ interface ModelInterface
 
     /**
      * Allows to calculate a sum on a column that match the specified conditions
-     *
-     * @param mixed|null $parameters
-     *
-     * @return float|ResultsetInterface
      */
     public static function sum(mixed $parameters = null): float | ResultsetInterface;
     /**
      * Appends a customized message on the validation process
-     *
-     * @param MessageInterface $message
-     *
-     * @return ModelInterface
      */
     public function appendMessage(MessageInterface $message): ModelInterface;
 
     /**
      * Assigns values to a model from an array
-     *
-     * @param array      $data
-     * @param mixed|null $whiteList
-     * @param mixed|null $dataColumnMap
-     *
-     * @return ModelInterface
      *
      * @phpstan-param mvc_model_data $data
      */
@@ -238,25 +192,17 @@ interface ModelInterface
      * Inserts a model instance. If the instance already exists in the
      * persistence it will throw an exception. Returning true on success or
      * false otherwise.
-     *
-     * @return bool
      */
     public function create(): bool;
 
     /**
      * Deletes a model instance. Returning true on success or false otherwise.
-     *
-     * @return bool
      */
     public function delete(): bool;
 
     /**
      * Fires an event, implicitly calls behaviors and listeners in the events
      * manager are notified
-     *
-     * @param string $eventName
-     *
-     * @return bool|null
      */
     public function fireEvent(string $eventName): bool | null;
 
@@ -264,18 +210,12 @@ interface ModelInterface
      * Fires an event, implicitly calls behaviors and listeners in the events
      * manager are notified. This method stops if one of the callbacks/listeners
      * returns bool false
-     *
-     * @param string $eventName
-     *
-     * @return bool|null
      */
     public function fireEventCancel(string $eventName): bool | null;
 
     /**
      * Returns one of the DIRTY_STATE_* constants telling if the record exists
      * in the database or not
-     *
-     * @return int
      */
     public function getDirtyState(): int;
 
@@ -288,38 +228,27 @@ interface ModelInterface
 
     /**
      * Returns the models meta-data service related to the entity instance.
-     *
-     * @return MetaDataInterface
      */
     public function getModelsMetaData(): MetaDataInterface;
 
     /**
      * Returns the type of the latest operation performed by the ORM
      * Returns one of the OP_* class constants
-     *
-     * @return int
      */
     public function getOperationMade(): int;
 
     /**
      * Gets internal database connection
-     *
-     * @return AdapterInterface
      */
     public function getReadConnection(): AdapterInterface;
 
     /**
      * Returns DependencyInjection connection service used to read data
-     *
-     * @return string
      */
     public function getReadConnectionService(): string;
 
     /**
      * Returns related records based on defined relations
-     *
-     * @param string     $alias
-     * @param mixed|null $arguments
      *
      * @return mixed
      * @todo make arguments array type
@@ -328,83 +257,54 @@ interface ModelInterface
 
     /**
      * Returns schema name where table mapped is located
-     *
-     * @return string|null
      */
     public function getSchema(): string | null;
 
     /**
      * Returns table name mapped in the model
-     *
-     * @return string
      */
     public function getSource(): string;
 
     /**
      * Gets internal database connection
-     *
-     * @return AdapterInterface
      */
     public function getWriteConnection(): AdapterInterface;
 
     /**
      * Returns DependencyInjection connection service used to write data
-     *
-     * @return string
      */
     public function getWriteConnectionService(): string;
 
     /**
      * Refreshes the model attributes re-querying the record from the database
-     *
-     * @return ModelInterface
      */
     public function refresh(): ModelInterface;
 
     /**
      * Inserts or updates a model instance. Returning true on success or false
      * otherwise.
-     *
-     * @return bool
      */
     public function save(): bool;
 
     /**
      * Sets both read/write connection services
-     *
-     * @param string $connectionService
-     *
-     * @return void
      */
     public function setConnectionService(string $connectionService): void;
 
     /**
      * Sets the dirty state of the object using one of the DIRTY_STATE_*
      * constants
-     *
-     * @param int $dirtyState
-     *
-     * @return bool|ModelInterface
      */
     public function setDirtyState(int $dirtyState): bool | ModelInterface;
 
     /**
      * Sets the DependencyInjection connection service used to read data
-     *
-     * @param string $connectionService
-     *
-     * @return void
      */
     public function setReadConnectionService(string $connectionService): void;
 
     /**
      * Sets the record's snapshot data. This method is used internally to set
      * snapshot data when the model was set up to keep snapshot data
-     *
-     * @param array      $data
-     * @param mixed|null $columnMap
-     *
-     * @return void
      *
      * @phpstan-param mvc_model_data $data
      */
@@ -415,9 +315,6 @@ interface ModelInterface
      * on the next save() call.
      *
      * @param array|string|null $elements
-     * @param bool              $enabled
-     *
-     * @return ModelInterface
      *
      * @phpstan-param mvc_model_data $elements
      */
@@ -428,10 +325,6 @@ interface ModelInterface
 
     /**
      * Sets a transaction related to the Model instance
-     *
-     * @param TransactionInterface $transaction
-     *
-     * @return ModelInterface
      */
     public function setTransaction(
         TransactionInterface $transaction
@@ -439,19 +332,11 @@ interface ModelInterface
 
     /**
      * Sets the DependencyInjection connection service used to write data
-     *
-     * @param string $connectionService
-     *
-     * @return void
      */
     public function setWriteConnectionService(string $connectionService): void;
 
     /**
      * Skips the current operation forcing a success state
-     *
-     * @param bool $skip
-     *
-     * @return void
      */
     public function skipOperation(bool $skip): void;
 
@@ -459,15 +344,11 @@ interface ModelInterface
      * Updates a model instance. If the instance does not exist in the
      * persistence it will throw an exception. Returning true on success or
      * false otherwise.
-     *
-     * @return bool
      */
     public function update(): bool;
 
     /**
      * Check whether validation process has generated any messages
-     *
-     * @return bool
      */
     public function validationHasFailed(): bool;
 }

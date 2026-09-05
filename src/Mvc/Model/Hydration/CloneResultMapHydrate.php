@@ -26,11 +26,6 @@ class CloneResultMapHydrate
     /**
      * Returns an hydrated result based on the data and the column map
      *
-     * @param array  $data
-     * @param mixed  $columnMap
-     * @param int    $hydrationMode
-     * @param string $calledClass
-     *
      * @return array|mixed|object
      * @throws ColumnNotInMap
      *

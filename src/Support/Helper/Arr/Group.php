@@ -31,7 +31,6 @@ class Group
 
     /**
      * @param array<array-key, mixed> $collection
-     * @param callable|string         $method
      *
      * @return array<array-key, list<mixed>>
      */
@@ -48,10 +47,6 @@ class Group
     }
 
     /**
-     * @param callable|string $method
-     *
-     * @return bool
-     *
      * @phpstan-assert-if-true callable $method
      */
     private function isCallable(callable | string $method): bool
@@ -61,8 +56,6 @@ class Group
 
     /**
      * @param mixed $element
-     *
-     * @return bool
      *
      * @phpstan-assert-if-true object $element
      */
@@ -74,8 +67,6 @@ class Group
     /**
      * @param mixed $method
      * @param mixed $element
-     *
-     * @return bool
      *
      * @phpstan-assert-if-true array<array-key, mixed> $element
      * @phpstan-assert-if-true array-key               $method
@@ -89,8 +80,6 @@ class Group
 
     /**
      * @param array<array-key, list<mixed>> $filtered
-     * @param callable|string               $method
-     * @param mixed                         $element
      *
      * @return array<array-key, list<mixed>>
      */
@@ -107,8 +96,6 @@ class Group
 
     /**
      * @param array<array-key, list<mixed>> $filtered
-     * @param callable|string               $method
-     * @param mixed                         $element
      *
      * @return array<array-key, list<mixed>>
      */
@@ -128,8 +115,6 @@ class Group
 
     /**
      * @param array<array-key, list<mixed>> $filtered
-     * @param callable|string               $method
-     * @param mixed                         $element
      *
      * @return array<array-key, list<mixed>>
      */

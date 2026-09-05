@@ -21,14 +21,8 @@ interface UrlInterface
     /**
      * Generates a URL
      *
-     * @param mixed     $uri         URI
-     * @param mixed     $arguments   Optional arguments to be appended to the query string
-     * @param bool|null $local
-     * @param mixed     $baseUri
-     * @param bool      $replaceArgs
-     *
-     *
-     * @return string
+     * @param mixed $uri       URI
+     * @param mixed $arguments Optional arguments to be appended to the query string
      */
     public function get(
         mixed $uri = null,
@@ -40,42 +34,26 @@ interface UrlInterface
 
     /**
      * Returns a base path
-     *
-     * @return string|null
      */
     public function getBasePath(): string | null;
 
     /**
      * Returns the prefix for all the generated urls. By default, /
-     *
-     * @return string
      */
     public function getBaseUri(): string;
 
     /**
      * Generates a local path
-     *
-     * @param string|null $path
-     *
-     * @return string
      */
     public function path(string | null $path = null): string;
 
     /**
      * Sets a base paths for all the generated paths
-     *
-     * @param string $basePath
-     *
-     * @return UrlInterface
      */
     public function setBasePath(string $basePath): UrlInterface;
 
     /**
      * Sets a prefix to all the urls generated
-     *
-     * @param string $baseUri
-     *
-     * @return UrlInterface
      */
     public function setBaseUri(string $baseUri): UrlInterface;
 }

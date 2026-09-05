@@ -71,9 +71,6 @@ use function is_array;
  */
 class Max extends AbstractFile
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "File :field exceeds the maximum resolution of :resolution";
 
     /**

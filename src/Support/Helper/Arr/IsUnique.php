@@ -26,8 +26,6 @@ class IsUnique
 {
     /**
      * @param array<array-key, scalar|Stringable|null> $collection
-     *
-     * @return bool
      */
     public function __invoke(array $collection): bool
     {

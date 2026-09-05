@@ -86,8 +86,6 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
     /**
      * Magic method __get
      *
-     * @param string $propertyName
-     *
      * @return mixed
      */
     public function __get(string $propertyName)

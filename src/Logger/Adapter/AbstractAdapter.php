@@ -101,10 +101,6 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Adds a message to the queue
-     *
-     * @param Item $item
-     *
-     * @return AdapterInterface
      */
     public function add(Item $item): AdapterInterface
     {
@@ -126,7 +122,6 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Starts a transaction
      *
-     * @return AdapterInterface
      * @throws TransactionAlreadyActive
      */
     public function begin(): AdapterInterface
@@ -142,15 +137,12 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Closes the logger
-     *
-     * @return bool
      */
     abstract public function close(): bool;
 
     /**
      * Commits the internal transaction
      *
-     * @return AdapterInterface
      * @throws TransactionNotActive
      */
     public function commit(): AdapterInterface

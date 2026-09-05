@@ -44,26 +44,16 @@ use function trim;
  */
 abstract class Dialect implements DialectInterface
 {
-    /**
-     * @var array
-     */
     protected array $customFunctions = [];
-    /**
-     * @var string
-     */
     protected string $escapeChar;
     /**
      * Dialect-specific operators that a concrete dialect must opt into via
      * $supportedOperators; using one elsewhere throws.
-     *
-     * @var array
      */
     protected array $guardedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
     /**
      * Subset of $guardedOperators that this dialect emits. Overridden per
      * dialect.
-     *
-     * @var array
      */
     protected array $supportedOperators = [];
 
@@ -71,11 +61,6 @@ abstract class Dialect implements DialectInterface
      * Generates SQL to create a materialized view. Supported by PostgreSQL;
      * MySQL and SQLite inherit this throw.
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return string
      * @throws Exception
      */
     public function createMaterializedView(
@@ -88,10 +73,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Generate SQL to create a new savepoint
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function createSavepoint(string $name): string
     {
@@ -101,11 +82,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Generates SQL to drop a materialized view (PostgreSQL only).
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
      * @throws Exception
      */
     public function dropMaterializedView(
@@ -118,11 +94,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Escape identifiers
-     *
-     * @param string $input
-     * @param string $escapeChar
-     *
-     * @return string
      */
     final public function escape(
         string $input,
@@ -161,11 +132,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Escape Schema
-     *
-     * @param string $input
-     * @param string $escapeChar
-     *
-     * @return string
      */
     final public function escapeSchema(
         string $input,
@@ -194,11 +160,6 @@ abstract class Dialect implements DialectInterface
      * );
      * echo $sql; // SELECT * FROM co_invoices FOR UPDATE NOWAIT
      *```
-     *
-     * @param string $sqlQuery
-     * @param string $modifier
-     *
-     * @return string
      */
     public function forUpdate(string $sqlQuery, string $modifier = ''): string
     {
@@ -221,11 +182,6 @@ abstract class Dialect implements DialectInterface
      * );
      * ```
      *
-     * @param array  $columnList
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final public function getColumnList(
@@ -244,8 +200,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Returns registered functions
-     *
-     * @return array
      */
     public function getCustomFunctions(): array
     {
@@ -255,11 +209,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve Column expressions
      *
-     * @param array|string $column
-     * @param string       $escapeChar
-     * @param array        $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final public function getSqlColumn(
@@ -334,11 +283,6 @@ abstract class Dialect implements DialectInterface
      * Transforms an intermediate representation for an expression into a
      * database system valid expression
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     public function getSqlExpression(
@@ -522,11 +466,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Transform an intermediate representation of a schema/table into a
      * database system valid expression
-     *
-     * @param array|string $tableName
-     * @param string       $escapeChar
-     *
-     * @return string
      */
     final public function getSqlTable(
         array | string $tableName,
@@ -567,10 +506,7 @@ abstract class Dialect implements DialectInterface
      * );
      * ```
      *
-     * @param string    $sqlQuery
      * @param array|int $number
-     *
-     * @return string
      */
     public function limit(string $sqlQuery, mixed $number): string
     {
@@ -599,11 +535,6 @@ abstract class Dialect implements DialectInterface
      * PostgreSQL 9.5+ and SQLite 3.24+. MySQL overrides this method to
      * throw.
      *
-     * @param string $sqlQuery
-     * @param array  $conflictColumns
-     * @param array  $updateColumns
-     *
-     * @return string
      * @throws Exception
      */
     public function onConflictUpdate(
@@ -633,11 +564,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Generates SQL to refresh a materialized view (PostgreSQL only).
      *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $concurrent
-     *
-     * @return string
      * @throws Exception
      */
     public function refreshMaterializedView(
@@ -650,9 +576,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Registers custom SQL functions
-     *
-     * @param string   $name
-     * @param callable $customFunction
      *
      * @return $this
      */
@@ -667,10 +590,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Generate SQL to release a savepoint
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function releaseSavepoint(string $name): string
     {
@@ -681,10 +600,6 @@ abstract class Dialect implements DialectInterface
      * Returns a SQL statement extended with a `RETURNING` clause.
      * Supported by PostgreSQL and SQLite 3.35+; MySQL inherits the throw.
      *
-     * @param string $sqlQuery
-     * @param array  $columns
-     *
-     * @return string
      * @throws Exception
      */
     public function returning(string $sqlQuery, array $columns): string
@@ -694,10 +609,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Generate SQL to rollback a savepoint
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function rollbackSavepoint(string $name): string
     {
@@ -707,9 +618,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Builds a SELECT statement
      *
-     * @param array $definition
-     *
-     * @return string
      * @throws Exception
      */
     public function select(array $definition): string
@@ -852,8 +760,6 @@ abstract class Dialect implements DialectInterface
      * keys, and check constraints. SQLite returns false - those operations
      * throw a dedicated `Sqlite*NotSupported` exception there (basic
      * `ADD COLUMN` remains available).
-     *
-     * @return bool
      */
     public function supportsAlterTable(): bool
     {
@@ -863,8 +769,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Checks whether the platform supports materialized views. Only PostgreSQL
      * returns true; `createMaterializedView()` throws on the other dialects.
-     *
-     * @return bool
      */
     public function supportsMaterializedViews(): bool
     {
@@ -874,8 +778,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Checks whether the platform supports the `ON CONFLICT (...) DO UPDATE`
      * upsert clause. MySQL returns false; `onConflictUpdate()` throws there.
-     *
-     * @return bool
      */
     public function supportsOnConflictUpdate(): bool
     {
@@ -884,8 +786,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Checks whether the platform supports releasing savepoints.
-     *
-     * @return bool
      */
     public function supportsReleaseSavepoints(): bool
     {
@@ -895,8 +795,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Checks whether the platform supports the `RETURNING` clause. MySQL
      * returns false; `returning()` throws there.
-     *
-     * @return bool
      */
     public function supportsReturning(): bool
     {
@@ -905,8 +803,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Checks whether the platform supports savepoints
-     *
-     * @return bool
      */
     public function supportsSavepoints(): bool
     {
@@ -916,9 +812,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Checks the column type and if not string it returns the type reference
      *
-     * @param ColumnInterface $column
-     *
-     * @return int
      * @todo this always returns the type beceuse type is never string
      */
     protected function checkColumnType(ColumnInterface $column): int
@@ -933,9 +826,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Checks the column type and returns the updated SQL statement
      *
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @todo check this one also
      */
     protected function checkColumnTypeSql(ColumnInterface $column): string
@@ -951,10 +841,6 @@ abstract class Dialect implements DialectInterface
      * Escape a string literal for a single quoted SQL string. The standard
      * way doubles the single quotes. A dialect where the backslash is an
      * escape character must override this method.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     protected function escapeStringLiteral(string $value): string
     {
@@ -964,11 +850,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Builds a CHECK constraint clause from a `CheckInterface`, using the
      * provided escape character for the constraint name.
-     *
-     * @param CheckInterface $check
-     * @param string         $escapeChar
-     *
-     * @return string
      */
     protected function getCheckClause(
         CheckInterface $check,
@@ -986,10 +867,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Returns the size of the column enclosed in parentheses
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
      */
     protected function getColumnSize(ColumnInterface $column): string
     {
@@ -998,10 +875,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Returns the column size and scale enclosed in parentheses
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
      */
     protected function getColumnSizeAndScale(ColumnInterface $column): string
     {
@@ -1013,11 +886,6 @@ abstract class Dialect implements DialectInterface
      * generated/computed column. Returns an empty string when the column is
      * not generated. When `forceStored` is `true` the clause is always
      * emitted as `STORED` (PostgreSQL uses this).
-     *
-     * @param ColumnInterface $column
-     * @param bool            $forceStored
-     *
-     * @return string
      */
     protected function getGeneratedClause(
         ColumnInterface $column,
@@ -1038,11 +906,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Builds the per-index parenthesized column list, honoring per-column
      * sort directions and `RawValue` expression entries.
-     *
-     * @param IndexInterface $index
-     * @param bool           $wrapExpressions
-     *
-     * @return string
      */
     protected function getIndexColumnList(
         IndexInterface $index,
@@ -1092,10 +955,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Renders a LIMIT/OFFSET value: a bound placeholder passes through, any
      * other value is coerced to an integer to prevent SQL injection.
-     *
-     * @param mixed $value
-     *
-     * @return string
      */
     protected function getLimitValue(mixed $value): string
     {
@@ -1111,11 +970,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Resolve *
-     *
-     * @param array  $expression
-     * @param string $escapeChar
-     *
-     * @return string
      */
     final protected function getSqlExpressionAll(
         array $expression,
@@ -1133,11 +987,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve binary operations expressions
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionBinaryOperations(
@@ -1172,11 +1021,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve CASE expressions
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionCase(
@@ -1204,11 +1048,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve CAST of values
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionCastValue(
@@ -1234,11 +1073,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve CONVERT of values encodings
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionConvertValue(
@@ -1263,11 +1097,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Resolve a FROM clause
-     *
-     * @param array|string $expression
-     * @param string       $escapeChar
-     *
-     * @return string
      */
     final protected function getSqlExpressionFrom(
         array | string $expression,
@@ -1290,11 +1119,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve function calls
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionFunctionCall(
@@ -1337,11 +1161,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve a GROUP BY clause
      *
-     * @param array|string $expression
-     * @param string       $escapeChar
-     * @param array        $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionGroupBy(
@@ -1374,11 +1193,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve a HAVING clause
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionHaving(
@@ -1394,11 +1208,6 @@ abstract class Dialect implements DialectInterface
      *
      * @todo Isn't expression just an array?
      *
-     * @param array|string $expression
-     * @param string       $escapeChar
-     * @param array        $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionJoins(
@@ -1456,11 +1265,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve a LIMIT clause
      *
-     * @param array|string $expression
-     * @param string       $escapeChar
-     * @param array        $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionLimit(
@@ -1506,11 +1310,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve Lists
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionList(
@@ -1552,11 +1351,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve object expressions
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionObject(
@@ -1588,11 +1382,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve an ORDER BY clause
      *
-     * @param array|string $expression
-     * @param string       $escapeChar
-     * @param array        $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionOrderBy(
@@ -1633,11 +1422,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Resolve qualified expressions
-     *
-     * @param array  $expression
-     * @param string $escapeChar
-     *
-     * @return string
      */
     final protected function getSqlExpressionQualified(
         array $expression,
@@ -1656,11 +1440,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve Column expressions
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionScalar(
@@ -1687,11 +1466,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve unary operations expressions
      *
-     * @param array  $expression
-     * @param string $escapeChar
-     * @param array  $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionUnaryOperations(
@@ -1728,11 +1502,6 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve a WHERE clause
      *
-     * @param array|string $expression
-     * @param string       $escapeChar
-     * @param array        $bindCounts
-     *
-     * @return string
      * @throws Exception
      */
     final protected function getSqlExpressionWhere(
@@ -1754,12 +1523,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Prepares column for this RDBMS
-     *
-     * @param string $qualified
-     * @param string $alias
-     * @param string $escapeChar
-     *
-     * @return string
      */
     protected function prepareColumnAlias(
         string $qualified,
@@ -1775,12 +1538,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Prepares qualified for this RDBMS
-     *
-     * @param string $column
-     * @param string $domain
-     * @param string $escapeChar
-     *
-     * @return string
      */
     protected function prepareQualified(
         string $column,
@@ -1796,13 +1553,6 @@ abstract class Dialect implements DialectInterface
 
     /**
      * Prepares table for this RDBMS
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     * @param string      $alias
-     * @param string      $escapeChar
-     *
-     * @return string
      */
     protected function prepareTable(
         string $tableName,

@@ -279,8 +279,6 @@ class Loader
 
     /**
      * Get the path when a class was found
-     *
-     * @return string|null
      */
     public function getFoundPath(): string | null
     {
@@ -633,8 +631,6 @@ class Loader
      * if not. It converts the string to an array and then traverses the array
      * to normalize the directories with the proper directory separator at the
      * end
-     *
-     * @param mixed $directories
      *
      * @return autoload_strings
      */

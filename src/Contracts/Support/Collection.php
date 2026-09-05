@@ -26,29 +26,12 @@ use IteratorAggregate;
  */
 interface Collection extends ArrayAccess, IteratorAggregate
 {
-    /**
-     * @param string $element
-     *
-     * @return mixed
-     */
     public function __get(string $element): mixed;
 
-    /**
-     * @param string $element
-     *
-     * @return bool
-     */
     public function __isset(string $element): bool;
 
-    /**
-     * @param string $element
-     * @param mixed  $value
-     */
     public function __set(string $element, mixed $value): void;
 
-    /**
-     * @param string $element
-     */
     public function __unset(string $element): void;
 
     /**
@@ -60,8 +43,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Returns the values from a single property/method extracted from every
      * item in the collection, keyed by the original collection key.
      *
-     * @param string $propertyOrMethod
-     *
      * @return array<int|string, mixed>
      */
     public function column(string $propertyOrMethod): array;
@@ -70,10 +51,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Invokes the callback for every item in the collection.
      *
      * @phpstan-param callable(T, array-key): mixed $callback
-     *
-     * @param callable $callback
-     *
-     * @return static
      */
     public function each(callable $callback): static;
 
@@ -82,10 +59,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      *
      * @phpstan-param  callable(T, array-key): bool $callback
      * @phpstan-return static<T>
-     *
-     * @param callable $callback
-     *
-     * @return static
      */
     public function filter(callable $callback): static;
 
@@ -93,19 +66,11 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Returns the first value in the collection or null when empty.
      *
      * @phpstan-return T|null
-     *
-     * @return mixed
      */
     public function first(): mixed;
 
     /**
      * Returns an element from the collection.
-     *
-     * @param string      $element
-     * @param mixed       $defaultValue
-     * @param string|null $cast
-     *
-     * @return mixed
      */
     public function get(string $element, mixed $defaultValue = null, ?string $cast = null): mixed;
 
@@ -114,16 +79,12 @@ interface Collection extends ArrayAccess, IteratorAggregate
      *
      * @deprecated Use {@see self::keys()} instead. Will be removed in a future major release.
      *
-     * @param bool $insensitive
-     *
      * @return array<int|string, mixed>
      */
     public function getKeys(bool $insensitive = true): array;
 
     /**
      * Returns the configured runtime type guard, or null when not set.
-     *
-     * @return string|null
      */
     public function getType(): ?string;
 
@@ -138,10 +99,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
 
     /**
      * Checks whether an element exists in the collection.
-     *
-     * @param string $element
-     *
-     * @return bool
      */
     public function has(string $element): bool;
 
@@ -154,15 +111,11 @@ interface Collection extends ArrayAccess, IteratorAggregate
 
     /**
      * Returns true when the collection has no entries.
-     *
-     * @return bool
      */
     public function isEmpty(): bool;
 
     /**
      * Returns the keys (insensitive or not) of the collection.
-     *
-     * @param bool $insensitive
      *
      * @return array<int|string, mixed>
      */
@@ -172,8 +125,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Returns the last value in the collection or null when empty.
      *
      * @phpstan-return T|null
-     *
-     * @return mixed
      */
     public function last(): mixed;
 
@@ -181,10 +132,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Returns a new collection with the callback applied to every value.
      *
      * @phpstan-param callable(T, array-key): mixed $callback
-     *
-     * @param callable $callback
-     *
-     * @return static
      */
     public function map(callable $callback): static;
 
@@ -192,18 +139,11 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Reduces the collection to a single value using the callback.
      *
      * @phpstan-param callable(mixed, T, array-key): mixed $callback
-     *
-     * @param callable $callback
-     * @param mixed    $initial
-     *
-     * @return mixed
      */
     public function reduce(callable $callback, mixed $initial = null): mixed;
 
     /**
      * Removes the element from the collection.
-     *
-     * @param string $element
      */
     public function remove(string $element): void;
 
@@ -218,9 +158,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Stores an element in the collection.
      *
      * @phpstan-param T $value
-     *
-     * @param string $element
-     * @param mixed  $value
      */
     public function set(string $element, mixed $value): void;
 
@@ -228,11 +165,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * Returns a new collection sorted by value, preserving keys.
      *
      * @phpstan-return static<T>
-     *
-     * @param callable|null $callback
-     * @param int           $order
-     *
-     * @return static
      */
     public function sort(?callable $callback = null, int $order = SORT_ASC): static;
 
@@ -247,10 +179,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
 
     /**
      * Returns the collection serialized as a JSON string.
-     *
-     * @param int $options
-     *
-     * @return string
      */
     public function toJson(int $options = 4194383): string;
 
@@ -266,11 +194,6 @@ interface Collection extends ArrayAccess, IteratorAggregate
      * `propertyOrMethod` strictly equals `$value`.
      *
      * @phpstan-return static<T>
-     *
-     * @param string $propertyOrMethod
-     * @param mixed  $value
-     *
-     * @return static
      */
     public function where(string $propertyOrMethod, mixed $value): static;
 }

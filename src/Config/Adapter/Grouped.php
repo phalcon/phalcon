@@ -82,11 +82,10 @@ class Grouped extends Config
      *
      * @phpstan-param config_grouped_entries $arrayConfig
      *
-     * @param string             $defaultAdapter
-     * @param ConfigFactory|null $factory        Factory used to load file
-     *                                           based fragments; a default
-     *                                           one is created when not
-     *                                           provided
+     * @param ConfigFactory|null $factory Factory used to load file
+     *                                    based fragments; a default
+     *                                    one is created when not
+     *                                    provided
      */
     public function __construct(
         array $arrayConfig,

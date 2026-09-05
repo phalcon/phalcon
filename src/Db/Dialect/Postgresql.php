@@ -34,24 +34,12 @@ use function substr;
  */
 class Postgresql extends Dialect
 {
-    /**
-     * @var string
-     */
     protected string $escapeChar = "\"";
 
-    /**
-     * @var array
-     */
     protected array $supportedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
 
     /**
      * Generates SQL to add a CHECK constraint to an existing table.
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return string
      */
     public function addCheck(
         string $tableName,
@@ -66,11 +54,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to add a column to a table
      *
-     * @param string          $tableName
-     * @param string          $schemaName
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     public function addColumn(
@@ -104,11 +87,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to add an index to a table
      *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return string
      * @throws Exception
      */
     public function addForeignKey(
@@ -148,11 +126,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to add an index to a table
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return string
      * @throws Exception
      */
     public function addIndex(
@@ -194,11 +167,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to add the primary key to a table
      *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return string
      * @throws Exception
      */
     public function addPrimaryKey(
@@ -218,11 +186,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to create a materialized view.
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return string
      * @throws Exception
      */
     public function createMaterializedView(
@@ -242,11 +205,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to create a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param array  $definition
-     *
-     * @return string
      * @throws Exception
      */
     public function createTable(
@@ -420,11 +378,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to create a view
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return string
      * @throws Exception
      */
     public function createView(
@@ -450,11 +403,6 @@ class Postgresql extends Dialect
      *     $dialect->describeColumns("posts")
      * );
      * ```
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function describeColumns(
         string $tableName,
@@ -506,10 +454,7 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return string
      */
     public function describeIndexes(
         string $tableName,
@@ -532,11 +477,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to query foreign keys on a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function describeReferences(
         string $tableName,
@@ -571,12 +511,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to delete a CHECK constraint from a table.
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return string
      */
     public function dropCheck(
         string $tableName,
@@ -592,12 +526,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to delete a column from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $columnName
-     *
-     * @return string
      */
     public function dropColumn(
         string $tableName,
@@ -613,12 +541,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to delete a foreign key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $referenceName
-     *
-     * @return string
      */
     public function dropForeignKey(
         string $tableName,
@@ -634,12 +556,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to delete an index from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $indexName
-     *
-     * @return string
      */
     public function dropIndex(
         string $tableName,
@@ -651,12 +567,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to drop a materialized view.
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
      */
     public function dropMaterializedView(
         string $viewName,
@@ -674,11 +584,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to delete primary key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return string
      */
     public function dropPrimaryKey(
         string $tableName,
@@ -693,12 +598,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to drop a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return string
      */
     public function dropTable(
         string $tableName,
@@ -717,11 +616,7 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to drop a view
      *
-     * @param string $viewName
      * @param string $schemaName
-     * @param bool   $ifExists
-     *
-     * @return string
      */
     public function dropView(
         string $viewName,
@@ -740,9 +635,6 @@ class Postgresql extends Dialect
     /**
      * Gets the column name in PostgreSQL
      *
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     public function getColumnDefinition(ColumnInterface $column): string
@@ -1030,10 +922,6 @@ class Postgresql extends Dialect
      *     $dialect->listTables("blog")
      * );
      * ```
-     *
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function listTables(string | null $schemaName = null): string
     {
@@ -1049,10 +937,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates the SQL to list all views of a schema or user
-     *
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function listViews(string | null $schemaName = null): string
     {
@@ -1069,12 +953,6 @@ class Postgresql extends Dialect
     /**
      * Generates SQL to modify a column in a table
      *
-     * @param string               $tableName
-     * @param string               $schemaName
-     * @param ColumnInterface      $column
-     * @param ColumnInterface|null $currentColumn
-     *
-     * @return string
      * @throws Exception
      */
     public function modifyColumn(
@@ -1168,12 +1046,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to refresh a materialized view.
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $concurrent
-     *
-     * @return string
      */
     public function refreshMaterializedView(
         string $viewName,
@@ -1193,10 +1065,6 @@ class Postgresql extends Dialect
      * Appends a `RETURNING` clause to the supplied INSERT/UPDATE/DELETE
      * statement.
      *
-     * @param string $sqlQuery
-     * @param array  $columns
-     *
-     * @return string
      * @throws Exception
      */
     public function returning(string $sqlQuery, array $columns): string
@@ -1215,10 +1083,6 @@ class Postgresql extends Dialect
     /**
      * Returns a SQL modified a shared lock statement. For now this method
      * returns the original query
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
@@ -1231,8 +1095,6 @@ class Postgresql extends Dialect
 
     /**
      * PostgreSQL supports materialized views (`CREATE MATERIALIZED VIEW`).
-     *
-     * @return bool
      */
     public function supportsMaterializedViews(): bool
     {
@@ -1241,8 +1103,6 @@ class Postgresql extends Dialect
 
     /**
      * PostgreSQL supports the `RETURNING` clause.
-     *
-     * @return bool
      */
     public function supportsReturning(): bool
     {
@@ -1257,11 +1117,6 @@ class Postgresql extends Dialect
      *
      * echo $dialect->tableExists("posts");
      * ```
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function tableExists(
         string $tableName,
@@ -1280,11 +1135,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates the SQL to describe the table creation options
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function tableOptions(
         string $tableName,
@@ -1304,11 +1154,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL to truncate a table
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function truncateTable(
         string $tableName,
@@ -1319,11 +1164,6 @@ class Postgresql extends Dialect
 
     /**
      * Generates SQL checking for the existence of a schema.view
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     *
-     * @return string
      */
     public function viewExists(
         string $viewName,
@@ -1341,9 +1181,6 @@ class Postgresql extends Dialect
     }
 
     /**
-     * @param ColumnInterface $column
-     *
-     * @return string
      * @throws Exception
      */
     protected function castDefault(ColumnInterface $column): string
@@ -1391,11 +1228,6 @@ class Postgresql extends Dialect
         return $preparedValue;
     }
 
-    /**
-     * @param array $definition
-     *
-     * @return string
-     */
     protected function getTableOptions(array $definition): string
     {
         return "";

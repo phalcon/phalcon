@@ -47,7 +47,6 @@ use function file_exists;
  * $session->setAdapter($files);
  * ```
  *
- *
  * @phpstan-import-type session_files from SessionTypes
  * @phpstan-import-type session_stream_options from SessionTypes
  *
@@ -126,9 +125,6 @@ class Stream extends Noop
     /**
      * Garbage Collector
      *
-     * @param int $max_lifetime
-     *
-     * @return false|int
      * @throws AdapterRuntimeError
      */
     public function gc(int $max_lifetime): false | int
@@ -218,10 +214,6 @@ class Stream extends Noop
 
     /**
      * Gets the glob array or returns false on failure
-     *
-     * @param string $pattern
-     *
-     * @return array|false
      *
      * @phpstan-return session_files|false
      */

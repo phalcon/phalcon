@@ -44,9 +44,6 @@ class Stream extends MetaData
 {
     use FilePathTrait;
 
-    /**
-     * @var string
-     */
     protected string $metaDataDir = "./";
 
     /**
@@ -66,10 +63,6 @@ class Stream extends MetaData
 
     /**
      * Reads meta-data from files
-     *
-     * @param mixed $key
-     *
-     * @return array|null
      *
      * @phpstan-return mvc_metadata_index|null
      */
@@ -95,10 +88,6 @@ class Stream extends MetaData
     /**
      * Writes the meta-data to files
      *
-     * @param mixed $key
-     * @param array $data
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param mvc_metadata_index $data
@@ -144,7 +133,6 @@ class Stream extends MetaData
 
     /**
      * Throws an exception when the metadata cannot be written
-     *
      */
     private function throwWriteException(mixed $option): void
     {

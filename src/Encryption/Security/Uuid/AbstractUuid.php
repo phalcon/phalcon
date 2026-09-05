@@ -43,15 +43,11 @@ abstract class AbstractUuid implements UuidInterface
 
     /**
      * Cached SysNodeProvider instance - shared within the request via static.
-     *
-     * @var NodeProviderInterface|null
      */
     protected static NodeProviderInterface | null $nodeProvider = null;
 
     /**
      * The generated UUID string.
-     *
-     * @var string
      */
     protected string $uid = "";
 

@@ -28,9 +28,6 @@ use function is_object;
 trait DiExceptionsTrait
 {
     /**
-     * @param int   $position
-     * @param array $argument
-     *
      * @throws Exception
      */
     private function checkArgumentTypeExists(int $position, array $argument): void
@@ -46,8 +43,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param string $name
-     *
      * @throws Exception
      */
     private function checkClassExists(string $name): void
@@ -65,8 +60,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param array $definition
-     *
      * @throws Exception
      */
     private function checkClassNameExists(array $definition): void
@@ -82,9 +75,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param mixed $arguments
-     * @param int   $position
-     *
      * @throws Exception
      */
     private function checkMethodArgumentsIsArray(mixed $arguments, int $position): void
@@ -98,9 +88,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param mixed $method
-     * @param int   $position
-     *
      * @throws Exception
      */
     private function checkMethodCallPosition(mixed $method, int $position): void
@@ -117,9 +104,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param array $method
-     * @param int   $position
-     *
      * @throws Exception
      */
     private function checkMethodMethodExists(array $method, int $position): void
@@ -136,8 +120,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param mixed $instance
-     *
      * @throws Exception
      */
     private function checkPropertiesInjectionConstruct(mixed $instance): void
@@ -151,9 +133,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param mixed $property
-     * @param int   $position
-     *
      * @throws Exception
      */
     private function checkPropertyIsArray(mixed $property, int $position): void
@@ -170,9 +149,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param array $property
-     * @param int   $position
-     *
      * @throws Exception
      */
     private function checkPropertyNameExists(array $property, int $position): void
@@ -189,8 +165,7 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param array $property
-     * @param int   $position
+     * @param int $position
      *
      * @throws Exception
      */
@@ -208,10 +183,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param array  $argument
-     * @param string $name
-     * @param int    $position
-     *
      * @throws Exception
      */
     private function checkServiceParameters(
@@ -225,8 +196,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param mixed $instance
-     *
      * @throws Exception
      */
     private function checkSetterInjectionConstructor(mixed $instance): void
@@ -240,8 +209,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param mixed $parameters
-     *
      * @throws Exception
      */
     private function checkSetterInjectionParameters(mixed $parameters): void
@@ -254,8 +221,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param string $name
-     *
      * @throws Exception
      */
     private function throwCannotResolveService(string $name): void
@@ -266,8 +231,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param string $name
-     *
      * @throws Exception
      */
     private function throwServiceNotFound(string $name): void
@@ -279,8 +242,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param string $method
-     *
      * @throws Exception
      */
     private function throwUndefinedMethod(string $method): void
@@ -294,8 +255,6 @@ trait DiExceptionsTrait
     }
 
     /**
-     * @param int $position
-     *
      * @throws Exception
      */
     private function throwUnknownServiceInParameter(int $position): void

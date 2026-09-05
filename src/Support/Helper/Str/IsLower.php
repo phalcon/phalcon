@@ -18,12 +18,6 @@ namespace Phalcon\Support\Helper\Str;
  */
 class IsLower extends AbstractStr
 {
-    /**
-     * @param string $text
-     * @param string $encoding
-     *
-     * @return bool
-     */
     public function __invoke(
         string $text,
         string $encoding = 'UTF-8'

@@ -35,20 +35,12 @@ interface MetaDataInterface
     /**
      * Returns table attributes names (fields)
      *
-     * @param ModelInterface $model
-     *
-     * @return array
-     *
      * @phpstan-return mvc_model_attributes
      */
     public function getAttributes(ModelInterface $model): array;
 
     /**
      * Returns attributes that must be ignored from the INSERT SQL generation
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
      *
      * @phpstan-return array<string, mixed>
      */
@@ -57,20 +49,12 @@ interface MetaDataInterface
     /**
      * Returns attributes that must be ignored from the UPDATE SQL generation
      *
-     * @param ModelInterface $model
-     *
-     * @return array
-     *
      * @phpstan-return array<string, mixed>
      */
     public function getAutomaticUpdateAttributes(ModelInterface $model): array;
 
     /**
      * Returns attributes and their bind data types
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
      *
      * @phpstan-return array<string, mixed>
      */
@@ -79,20 +63,12 @@ interface MetaDataInterface
     /**
      * Returns the column map if any
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
-     *
      * @phpstan-return mvc_metadata_column_map|null
      */
     public function getColumnMap(ModelInterface $model): array | null;
 
     /**
      * Returns attributes and their data types
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
      *
      * @phpstan-return mvc_metadata_types
      */
@@ -101,20 +77,12 @@ interface MetaDataInterface
     /**
      * Returns attributes which types are numerical
      *
-     * @param ModelInterface $model
-     *
-     * @return array
-     *
      * @phpstan-return array<string, mixed>
      */
     public function getDataTypesNumeric(ModelInterface $model): array;
 
     /**
      * Returns attributes (which have default values) and their default values
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
      *
      * @phpstan-return mvc_metadata_default_values
      */
@@ -123,29 +91,17 @@ interface MetaDataInterface
     /**
      * Returns attributes allow empty strings
      *
-     * @param ModelInterface $model
-     *
-     * @return array
-     *
      * @phpstan-return array<string, mixed>
      */
     public function getEmptyStringAttributes(ModelInterface $model): array;
 
     /**
      * Returns the name of identity field (if one is present)
-     *
-     * @param ModelInterface $model
-     *
-     * @return bool|string|null
      */
     public function getIdentityField(ModelInterface $model): bool | string | null;
 
     /**
      * Returns an array of fields which are not part of the primary key
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
      *
      * @phpstan-return mvc_model_attributes
      */
@@ -154,20 +110,12 @@ interface MetaDataInterface
     /**
      * Returns an array of not null attributes
      *
-     * @param ModelInterface $model
-     *
-     * @return array
-     *
      * @phpstan-return mvc_model_attributes
      */
     public function getNotNullAttributes(ModelInterface $model): array;
 
     /**
      * Returns an array of fields which are part of the primary key
-     *
-     * @param ModelInterface $model
-     *
-     * @return array
      *
      * @phpstan-return mvc_model_attributes
      */
@@ -176,44 +124,27 @@ interface MetaDataInterface
     /**
      * Returns the reverse column map if any
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
-     *
      * @phpstan-return mvc_metadata_column_map|null
      */
     public function getReverseColumnMap(ModelInterface $model): array | null;
 
     /**
      * Return the strategy to obtain the meta-data
-     *
-     * @return StrategyInterface
      */
     public function getStrategy(): StrategyInterface;
 
     /**
      * Check if a model has certain attribute
-     *
-     * @param ModelInterface $model
-     * @param string         $attribute
-     *
-     * @return bool
      */
     public function hasAttribute(ModelInterface $model, string $attribute): bool;
 
     /**
      * Checks if the internal meta-data container is empty
-     *
-     * @return bool
      */
     public function isEmpty(): bool;
 
     /**
      * Reads meta-data from the adapter
-     *
-     * @param string $key
-     *
-     * @return array|null
      *
      * @phpstan-return mvc_metadata_index|null
      */
@@ -222,19 +153,12 @@ interface MetaDataInterface
     /**
      * Reads the ordered/reversed column map for certain model
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
-     *
      * @phpstan-return mvc_metadata_index|null
      */
     public function readColumnMap(ModelInterface $model): array | null;
 
     /**
      * Reads column-map information for certain model using a MODEL_* constant
-     *
-     * @param ModelInterface $model
-     * @param int            $index
      *
      * @return array|null
      *
@@ -248,21 +172,12 @@ interface MetaDataInterface
     /**
      * Reads meta-data for certain model
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
-     *
      * @phpstan-return mvc_metadata_model|null
      */
     public function readMetaData(ModelInterface $model): array | null;
 
     /**
      * Reads meta-data for certain model using a MODEL_* constant
-     *
-     * @param ModelInterface $model
-     * @param int            $index
-     *
-     * @return array|bool|string|null
      *
      * @phpstan-return mvc_metadata_slot
      */
@@ -278,9 +193,6 @@ interface MetaDataInterface
     /**
      * Set the attributes that must be ignored from the INSERT SQL generation
      *
-     * @param ModelInterface $model
-     * @param array          $attributes
-     *
      * @return mixed
      *
      * @phpstan-param array<string, mixed> $attributes
@@ -292,9 +204,6 @@ interface MetaDataInterface
 
     /**
      * Set the attributes that must be ignored from the UPDATE SQL generation
-     *
-     * @param ModelInterface $model
-     * @param array          $attributes
      *
      * @return mixed
      *
@@ -308,11 +217,6 @@ interface MetaDataInterface
     /**
      * Set the attributes that allow empty string values
      *
-     * @param ModelInterface $model
-     * @param array          $attributes
-     *
-     * @return void
-     *
      * @phpstan-param array<string, mixed> $attributes
      */
     public function setEmptyStringAttributes(
@@ -323,8 +227,6 @@ interface MetaDataInterface
     /**
      * Set the meta-data extraction strategy
      *
-     * @param StrategyInterface $strategy
-     *
      * @return mixed
      */
     public function setStrategy(StrategyInterface $strategy);
@@ -332,21 +234,12 @@ interface MetaDataInterface
     /**
      * Writes meta-data to the adapter
      *
-     * @param string $key
-     * @param array  $data
-     *
-     * @return void
-     *
      * @phpstan-param mvc_metadata_index $data
      */
     public function write(string $key, array $data): void;
 
     /**
      * Writes meta-data for certain model using a MODEL_* constant
-     *
-     * @param ModelInterface $model
-     * @param int            $index
-     * @param mixed          $data
      *
      * @return mixed
      */

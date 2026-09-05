@@ -81,10 +81,6 @@ class Settings
      *      (only available when the Phalcon C extension is loaded)
      *   3. Hardcoded default - mirrors the C extension's compiled-in defaults
      *   4. null - for unknown keys
-     *
-     * @param string $key
-     *
-     * @return bool|int|null
      */
     public static function get(string $key): bool | int | null
     {
@@ -107,8 +103,6 @@ class Settings
     /**
      * Clears all PHP-level overrides, restoring get() to return ini_get()
      * fallback values (as configured in php.ini or .htaccess).
-     *
-     * @return void
      */
     public static function reset(): void
     {
@@ -122,11 +116,6 @@ class Settings
      * no other project sharing this PHP process is affected.
      *
      * Unknown keys are silently ignored.
-     *
-     * @param string   $key
-     * @param bool|int $value
-     *
-     * @return void
      */
     public static function set(string $key, bool | int $value): void
     {

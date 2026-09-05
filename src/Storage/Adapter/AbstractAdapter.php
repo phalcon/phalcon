@@ -38,9 +38,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     use EventsAwareTrait;
     use GetTrait;
 
-    /**
-     * @var mixed
-     */
     protected mixed $adapter = null;
 
     /**
@@ -299,9 +296,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         return $result;
     }
 
-    /**
-     * @param string $serializer
-     */
     public function setDefaultSerializer(string $serializer): void
     {
         $this->defaultSerializer = mb_strtolower($serializer);
@@ -334,11 +328,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         return $result;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
     protected function doGet(string $key, mixed $defaultValue = null): mixed
     {
         if (true !== $this->doHas($key)) {
@@ -350,11 +339,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         return $this->getUnserializedData($content, $defaultValue);
     }
 
-    /**
-     * @param string $key
-     *
-     * @return mixed
-     */
     protected function doGetData(string $key): mixed
     {
         /**
@@ -370,10 +354,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Checks if an element exists in the cache
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     abstract protected function doHas(string $key): bool;
 
@@ -389,11 +369,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
      *
-     * @param string                $key
-     * @param mixed                 $value
      * @param DateInterval|int|null $ttl
-     *
-     * @return bool
      */
     abstract protected function doSet(string $key, mixed $value, mixed $ttl = null): bool;
 

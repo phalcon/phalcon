@@ -31,8 +31,6 @@ interface Subscriber
 {
     /**
      * Returns a map of event name => listener config.
-     *
-     * @return array
      */
     public static function getSubscribedEvents(): array;
 }

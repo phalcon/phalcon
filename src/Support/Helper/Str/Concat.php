@@ -26,11 +26,6 @@ use function trim;
 class Concat extends AbstractStr
 {
     /**
-     * @param string $delimiter
-     * @param string ...$many
-     *
-     * @return string
-     *
      * @throws InsufficientArguments
      */
     public function __invoke(string $delimiter, string ...$many): string

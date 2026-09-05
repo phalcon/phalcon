@@ -50,10 +50,6 @@ trait InjectionAwareTrait
     }
 
     /**
-     * @param string $exceptionClass
-     *
-     * @return void
-     *
      * @phpstan-assert !null $this->container
      */
     protected function checkContainer(

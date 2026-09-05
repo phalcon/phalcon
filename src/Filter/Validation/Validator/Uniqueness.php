@@ -112,9 +112,6 @@ use function range;
  */
 class Uniqueness extends AbstractCombinedFieldsValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must be unique";
 
     /**
@@ -138,11 +135,6 @@ class Uniqueness extends AbstractCombinedFieldsValidator
      *
      * The `attribute` option can be defined as an array when validating a
      * combination of fields; in that case resolve it to the mapped value.
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
-     * @return mixed
      */
     public function getOption(string $key, mixed $defaultValue = null): mixed
     {

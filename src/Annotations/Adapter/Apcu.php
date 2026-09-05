@@ -22,9 +22,6 @@ use Phalcon\Storage\Adapter\Apcu as StorageApcu;
 class Apcu extends StorageApcu implements AdapterInterface
 {
     /**
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
      * @return mixed|Reflection
      */
     public function get(string $key, mixed $defaultValue = null): mixed

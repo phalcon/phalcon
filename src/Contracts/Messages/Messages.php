@@ -35,8 +35,6 @@ interface Messages extends ArrayAccess, Countable, Iterator
 {
     /**
      * Appends a message to the collection
-     *
-     * @param MessageInterface $message
      */
     public function appendMessage(MessageInterface $message): void;
 
@@ -51,8 +49,6 @@ interface Messages extends ArrayAccess, Countable, Iterator
 
     /**
      * Filters the message collection by field name
-     *
-     * @param string $fieldName
      *
      * @return messages_list
      */

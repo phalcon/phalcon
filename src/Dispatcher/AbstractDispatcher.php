@@ -109,13 +109,10 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * @phpstan-var dispatcher_hook_cache
      */
-    protected array $handlerHookCache      = [];
-    protected string $handlerName          = "";
-    protected string $handlerSuffix        = "";
-    protected bool $isControllerInitialize = false;
-    /**
-     * @var mixed
-     */
+    protected array $handlerHookCache       = [];
+    protected string $handlerName           = "";
+    protected string $handlerSuffix         = "";
+    protected bool $isControllerInitialize  = false;
     protected mixed $lastHandler            = null;
     protected ?BinderInterface $modelBinder = null;
     protected bool $modelBinding            = false;
@@ -124,18 +121,9 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * @phpstan-var dispatcher_params
      */
-    protected array $params = [];
-    /**
-     * @var string
-     */
-    protected string $previousActionName = "";
-    /**
-     * @var string
-     */
-    protected string $previousHandlerName = "";
-    /**
-     * @var string
-     */
+    protected array $params                 = [];
+    protected string $previousActionName    = "";
+    protected string $previousHandlerName   = "";
     protected string $previousNamespaceName = "";
     /**
      * @todo fix the type in v7
@@ -143,12 +131,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     protected mixed $returnedValue = null;
 
     /**
-     * @param mixed  $handler
-     * @param string $actionMethod
-     *
      * @phpstan-param dispatcher_params $params
-     *
-     * @return mixed
      */
     public function callActionMethod(
         mixed $handler,
@@ -1251,8 +1234,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * the `dispatch:beforeException` event so listeners may forward or swallow
      * the exception).
      *
-     * @param \Exception $exception
-     *
      * @return mixed Return `false` to signal that the exception was handled
      *               (swallowed) and the current loop iteration should stop.
      *               Any other return value (including null) lets the caller
@@ -1287,9 +1268,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *
      * Subclasses build the namespace-specific exception and route it through
      * handleException() before throwing it when it was not handled.
-     *
-     * @param string $message
-     * @param int    $exceptionCode
      *
      * @return mixed Returns `false` when handleException() swallowed the
      *               exception; otherwise the method throws and does not return.

@@ -28,25 +28,11 @@ use function strtoupper;
 
 trait TextTrait
 {
-    /**
-     * @param string      $tableName
-     * @param string|null $schemaName
-     *
-     * @return string
-     */
     protected function alter(string $tableName, string | null $schemaName = null): string
     {
         return 'ALTER TABLE ' . $this->prepareTable($tableName, $schemaName);
     }
 
-    /**
-     * @param string $item
-     * @param string $object
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return string
-     */
     protected function alterTableDrop(
         string $object,
         string $item,
@@ -58,11 +44,6 @@ trait TextTrait
             . $this->delimit($item);
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     protected function checkColumnComment(Column $column): string
     {
         return empty($column->getComment())
@@ -70,11 +51,6 @@ trait TextTrait
             : " COMMENT '" . $this->escapeStringLiteral($column->getComment()) . "'";
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     protected function checkColumnFirstAfterPositions(
         Column $column
     ): string {
@@ -92,11 +68,6 @@ trait TextTrait
         return $sql;
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     protected function checkColumnHasDefault(Column $column): string
     {
         $sql = '';
@@ -134,11 +105,6 @@ trait TextTrait
         return $sql;
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     protected function checkColumnIsAutoIncrement(Column $column): string
     {
         if ($column->isGenerated()) {
@@ -151,10 +117,6 @@ trait TextTrait
     /**
      * Emits the GENERATED ALWAYS AS (...) VIRTUAL|STORED clause. Wraps the
      * shared dialect helper for trait users.
-     *
-     * @param Column $column
-     *
-     * @return string
      */
     protected function checkColumnIsGenerated(Column $column): string
     {
@@ -164,31 +126,17 @@ trait TextTrait
     /**
      * Emits the INVISIBLE keyword for MySQL 8.0.23+ invisible columns.
      * Other dialects override this trait helper to return an empty string.
-     *
-     * @param Column $column
-     *
-     * @return string
      */
     protected function checkColumnIsInvisible(Column $column): string
     {
         return $column->isInvisible() ? ' INVISIBLE' : '';
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     protected function checkColumnIsNull(Column $column): string
     {
         return $column->isNotNull() ? ' NOT' : '';
     }
 
-    /**
-     * @param Column $column
-     *
-     * @return string
-     */
     protected function checkColumnIsPrimary(Column $column): string
     {
         return $column->isPrimary() ? ' PRIMARY KEY' : '';
@@ -197,10 +145,6 @@ trait TextTrait
     /**
      * Checks if the size and/or scale are present and encloses those values
      * in parentheses if need be
-     *
-     * @param Column $column
-     *
-     * @return string
      */
     protected function checkColumnSizeAndScale(Column $column): string
     {
@@ -220,21 +164,12 @@ trait TextTrait
 
     /**
      * Checks if a column is unsigned or not and returns the relevant SQL syntax
-     *
-     * @param Column $column
-     *
-     * @return string
      */
     protected function checkColumnUnsigned(Column $column): string
     {
         return $column->isUnsigned() ? ' UNSIGNED' : '';
     }
 
-    /**
-     * @param Reference $reference
-     *
-     * @return string
-     */
     protected function checkReferenceConstraint(Reference $reference): string
     {
         $sql = '';
@@ -245,11 +180,6 @@ trait TextTrait
         return $sql;
     }
 
-    /**
-     * @param Reference $reference
-     *
-     * @return string
-     */
     protected function checkReferenceOnDelete(Reference $reference): string
     {
         $onDelete = $reference->getOnDelete();
@@ -259,11 +189,6 @@ trait TextTrait
             : ' ON DELETE ' . $onDelete;
     }
 
-    /**
-     * @param Reference $reference
-     *
-     * @return string
-     */
     protected function checkReferenceOnUpdate(Reference $reference): string
     {
         $onUpdate = $reference->getOnUpdate();
@@ -273,44 +198,21 @@ trait TextTrait
             : ' ON UPDATE ' . $onUpdate;
     }
 
-    /**
-     * @param string $identifier
-     * @param string $delimiter
-     *
-     * @return string
-     */
     protected function delimit(string $identifier, string $delimiter = '`'): string
     {
         return $delimiter . $identifier . $delimiter;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return string
-     */
     protected function drop(string $type): string
     {
         return 'DROP ' . $type . ' ';
     }
 
-    /**
-     * @param bool $exists
-     *
-     * @return string
-     */
     protected function exists(bool $exists): string
     {
         return $exists ? 'IF EXISTS ' : '';
     }
 
-    /**
-     * @param string      $table
-     * @param string      $viewName
-     * @param string|null $schemaName
-     *
-     * @return string
-     */
     protected function getExistsSql(
         string $table,
         string $viewName,
@@ -322,11 +224,6 @@ trait TextTrait
             . 'AND `TABLE_SCHEMA` = ' . $this->getMysqlSchemaString($schemaName);
     }
 
-    /**
-     * @param string|null $schemaName
-     *
-     * @return string
-     */
     protected function getMysqlSchemaString(string | null $schemaName): string
     {
         return empty($schemaName)
@@ -334,9 +231,6 @@ trait TextTrait
             "'" . $this->escapeStringLiteral($schemaName) . "'";
     }
 
-    /**
-     * @return string
-     */
     protected function getNullString(): string
     {
         return ' NULL';
@@ -346,10 +240,6 @@ trait TextTrait
      * Returns the list of CONSTRAINT ... CHECK (...) lines for createTable.
      * Uses the dialect's escape character via the shared getCheckClause()
      * helper.
-     *
-     * @param array $definition
-     *
-     * @return array
      */
     protected function getTableChecks(array $definition): array
     {
@@ -366,9 +256,6 @@ trait TextTrait
     }
 
     /**
-     * @param array $definition
-     *
-     * @return array
      * @throws Exception
      */
     protected function getTableColumns(array $definition): array
@@ -428,10 +315,6 @@ trait TextTrait
 
     /**
      * Generates SQL to add the table creation options
-     *
-     * @param array $definition
-     *
-     * @return string
      */
     protected function getTableOptions(array $definition): string
     {
@@ -475,9 +358,6 @@ trait TextTrait
     }
 
     /**
-     * @param array $definition
-     *
-     * @return array
      * @throws Exception
      */
     protected function getTableReferences(array $definition): array
@@ -502,11 +382,6 @@ trait TextTrait
         return $result;
     }
 
-    /**
-     * @param string $identifier
-     *
-     * @return string
-     */
     protected function wrap(string $identifier): string
     {
         return '(' . $identifier . ')';

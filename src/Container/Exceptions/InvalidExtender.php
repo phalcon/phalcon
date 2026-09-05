@@ -38,9 +38,6 @@ class InvalidExtender extends Exception
     /**
      * Invalid extender (not callable)
      *
-     * @param string $service
-     * @param string $key
-     *
      * @return static
      */
     public function __construct(string $service, string $key)

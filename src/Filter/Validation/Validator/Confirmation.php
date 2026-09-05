@@ -69,9 +69,6 @@ class Confirmation extends AbstractValidator
 {
     use InfoTrait;
 
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must be the same as :with";
 
     /**
@@ -145,11 +142,6 @@ class Confirmation extends AbstractValidator
 
     /**
      * Compare strings
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return bool
      */
     final protected function compare(string $a, string $b): bool
     {

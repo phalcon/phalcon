@@ -23,10 +23,6 @@ interface BehaviorInterface
     /**
      * Calls a method when it's missing in the model
      *
-     * @param ModelInterface $model
-     * @param string         $method
-     * @param array          $arguments
-     *
      * @return mixed
      *
      * @phpstan-param array<array-key, mixed> $arguments
@@ -39,9 +35,6 @@ interface BehaviorInterface
 
     /**
      * This method receives the notifications from the EventsManager
-     *
-     * @param string         $type
-     * @param ModelInterface $model
      *
      * @return mixed
      */

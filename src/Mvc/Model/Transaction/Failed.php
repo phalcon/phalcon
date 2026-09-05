@@ -25,9 +25,6 @@ class Failed extends Exception
 {
     /**
      * Constructor
-     *
-     * @param string              $message
-     * @param ModelInterface|null $record
      */
     public function __construct(
         string $message,
@@ -38,8 +35,6 @@ class Failed extends Exception
 
     /**
      * Returns validation record messages which stop the transaction
-     *
-     * @return ModelInterface|null
      */
     public function getRecord(): ModelInterface | null
     {

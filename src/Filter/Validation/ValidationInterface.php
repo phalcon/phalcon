@@ -31,8 +31,7 @@ interface ValidationInterface
     /**
      * Adds a validator to a field
      *
-     * @param array|string       $field
-     * @param ValidatorInterface $validator
+     * @param array|string $field
      *
      * @phpstan-param mixed $field
      */
@@ -86,8 +85,6 @@ interface ValidationInterface
 
     /**
      * Returns the registered validators
-     *
-     * @return Messages
      */
     public function getMessages(): Messages;
 
@@ -106,8 +103,7 @@ interface ValidationInterface
     /**
      * Alias of `add` method
      *
-     * @param array|string       $field
-     * @param ValidatorInterface $validator
+     * @param array|string $field
      *
      * @phpstan-param mixed $field
      */

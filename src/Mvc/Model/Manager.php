@@ -90,16 +90,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     use UncamelizeTrait;
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, RelationInterface>
      */
     protected array $aliases = [];
 
     /**
      * Models' behaviors
-     *
-     * @var array
      *
      * @phpstan-var array<string, array<int, BehaviorInterface>>
      */
@@ -108,8 +104,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Belongs to relations
      *
-     * @var array
-     *
      * @phpstan-var mvc_manager_relations
      */
     protected array $belongsTo = [];
@@ -117,20 +111,13 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * All the relationships by model
      *
-     * @var array
-     *
      * @phpstan-var mvc_manager_relations
      */
     protected array $belongsToSingle = [];
 
-    /**
-     * @var BuilderInterface|null
-     */
     protected BuilderInterface | null $builder = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, EventsManagerInterface>
      */
     protected array $customEventsManager = [];
@@ -140,16 +127,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * request cycle. Used by the sticky mechanism to route reads to the write
      * connection after a write.
      *
-     * @var array
-     *
      * @phpstan-var array<string, bool>
      */
     protected array $dirtyWriteServices = [];
 
     /**
      * Does the model use dynamic update, instead of updating all rows?
-     *
-     * @var array
      *
      * @phpstan-var array<string, bool>
      */
@@ -158,16 +141,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Has many relations
      *
-     * @var array
-     *
      * @phpstan-var mvc_manager_relations
      */
     protected array $hasMany = [];
 
     /**
      * Has many relations by model
-     *
-     * @var array
      *
      * @phpstan-var mvc_manager_relations
      */
@@ -176,16 +155,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Has many-Through relations
      *
-     * @var array
-     *
      * @phpstan-var mvc_manager_relations
      */
     protected array $hasManyToMany = [];
 
     /**
      * Has many-Through relations by model
-     *
-     * @var array
      *
      * @phpstan-var mvc_manager_relations
      */
@@ -194,16 +169,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Has one relations
      *
-     * @var array
-     *
      * @phpstan-var mvc_manager_relations
      */
     protected array $hasOne = [];
 
     /**
      * Has one relations by model
-     *
-     * @var array
      *
      * @phpstan-var mvc_manager_relations
      */
@@ -212,16 +183,12 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Has one through relations
      *
-     * @var array
-     *
      * @phpstan-var mvc_manager_relations
      */
     protected array $hasOneThrough = [];
 
     /**
      * Has one through relations by model
-     *
-     * @var array
      *
      * @phpstan-var mvc_manager_relations
      */
@@ -230,81 +197,56 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Mark initialized models
      *
-     * @var array
-     *
      * @phpstan-var array<string, bool>
      */
     protected array $initialized = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, bool>
      */
     protected array $keepSnapshots = [];
 
     /**
      * Last model initialized
-     *
-     * @var ModelInterface|null
      */
     protected ModelInterface | null $lastInitialized = null;
 
     /**
      * Last query created/executed
-     *
-     * @var QueryInterface|null
      */
     protected QueryInterface | null $lastQuery = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, array<string, bool>>
      */
     protected array $modelVisibility = [];
 
-    /**
-     * @var string
-     */
     protected string $prefix = "";
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $readConnectionServices = [];
     /**
      * Stores a list of reusable instances
      *
-     * @var array
-     *
      * @phpstan-var array<string, mixed>
      */
     protected array $reusable = [];
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $schemas = [];
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $sources = [];
     /**
      * Whether reads should stick to the write connection after a write has
      * occurred during the current request cycle.
-     *
-     * @var bool
      */
     protected bool $sticky = false;
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $writeConnectionServices = [];
@@ -327,11 +269,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * Static because it reads nothing but its arguments, and public so bulk
      * loaders can reuse the merge instead of duplicating these semantics.
-     *
-     * @param mixed $findParamsOne
-     * @param mixed $findParamsTwo
-     *
-     * @return array
      *
      * @phpstan-return mvc_model_parameters
      */
@@ -410,9 +347,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Binds a behavior to a model
-     *
-     * @param ModelInterface    $model
-     * @param BehaviorInterface $behavior
      */
     public function addBehavior(
         ModelInterface $model,
@@ -432,14 +366,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Setup a relation reverse many to one between two models
-     *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -533,14 +459,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Setup a relation 1-n between two models
      *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
-     *
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasMany(
@@ -631,17 +549,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Setups a relation n-m between two models
-     *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $intermediateModel
-     * @param mixed          $intermediateFields
-     * @param mixed          $intermediateReferencedFields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -774,14 +681,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Setup a 1-1 relation between two models
      *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
-     *
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasOne(
@@ -872,17 +771,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Setups a relation 1-1 between two models using an intermediate model
-     *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $intermediateModel
-     * @param mixed          $intermediateFields
-     * @param mixed          $intermediateReferencedFields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -1023,11 +911,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
      *
-     * @param mixed $params
-     *
-     * @return BuilderInterface
      * @throws Exception
-     *
      */
     public function createBuilder(mixed $params = null): BuilderInterface
     {
@@ -1056,9 +940,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Creates a Phalcon\Mvc\Model\Query without execute it
      *
-     * @param string $phql
-     *
-     * @return QueryInterface
      * @throws Exception
      */
     public function createQuery(string $phql): QueryInterface
@@ -1105,13 +986,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * $manager->executeQuery('DELETE FROM Invoices WHERE inv_id = :id:', ['id' => 1]);
      * ```
      *
-     * @param string $phql
-     * @param mixed  $placeholders
-     * @param mixed  $types
-     *
      * @return ResultsetInterface|StatusInterface
      * @throws Exception
-     *
      */
     public function executeQuery(
         string $phql,
@@ -1148,8 +1024,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
      * @return array|RelationInterface[]
      */
     public function getBelongsTo(ModelInterface $model): array
@@ -1160,13 +1034,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Gets belongsTo related records from a model
      *
-     * @param string         $modelName
-     * @param string         $modelRelation
-     * @param ModelInterface $record
-     * @param mixed|null     $parameters
-     * @param string|null    $method
-     *
-     * @return bool|ResultsetInterface
      * @throws Exception
      *
      * @phpstan-param mvc_model_parameters|string|null $parameters
@@ -1204,8 +1071,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the newly created Phalcon\Mvc\Model\Query\Builder or null
-     *
-     * @return BuilderInterface|null
      */
     public function getBuilder(): BuilderInterface | null
     {
@@ -1215,11 +1080,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Returns the connection service name used to read or write data related to
      * a model depending on the connection services
-     *
-     * @param ModelInterface $model
-     * @param array          $connectionServices
-     *
-     * @return string
      *
      * @phpstan-param array<string, string> $connectionServices
      */
@@ -1233,10 +1093,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Returns a custom events manager related to a model or null if there is
      * no related events manager
-     *
-     * @param ModelInterface $model
-     *
-     * @return EventsManagerInterface|null
      */
     public function getCustomEventsManager(
         ModelInterface $model
@@ -1246,8 +1102,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Gets hasMany relations defined on a model
-     *
-     * @param ModelInterface $model
      *
      * @return array|RelationInterface[]
      */
@@ -1259,13 +1113,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Gets hasMany related records from a model
      *
-     * @param string         $modelName
-     * @param string         $modelRelation
-     * @param ModelInterface $record
-     * @param mixed|null     $parameters
-     * @param string|null    $method
-     *
-     * @return bool|ResultsetInterface
      * @throws Exception
      *
      * @phpstan-param mvc_model_parameters|string|null $parameters
@@ -1304,8 +1151,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Gets hasManyToMany relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return array|RelationInterface[]
      */
     public function getHasManyToMany(ModelInterface $model): array
@@ -1316,8 +1161,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Gets hasOne relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return array|RelationInterface[]
      */
     public function getHasOne(ModelInterface $model): array
@@ -1327,8 +1170,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Gets hasOne relations defined on a model
-     *
-     * @param ModelInterface $model
      *
      * @return array|RelationInterface[]
      */
@@ -1343,13 +1184,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Gets belongsTo related records from a model
      *
-     * @param string         $modelName
-     * @param string         $modelRelation
-     * @param ModelInterface $record
-     * @param mixed|null     $parameters
-     * @param string|null    $method
-     *
-     * @return bool|ModelInterface
      * @throws Exception
      *
      * @phpstan-param mvc_model_parameters|string|null $parameters
@@ -1388,8 +1222,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Gets hasOneThrough relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return array|RelationInterface[]
      */
     public function getHasOneThrough(ModelInterface $model): array
@@ -1399,8 +1231,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Get last initialized model
-     *
-     * @return ModelInterface|null
      */
     public function getLastInitialized(): ModelInterface | null
     {
@@ -1409,8 +1239,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the last query created or executed in the models manager
-     *
-     * @return QueryInterface
      */
     public function getLastQuery(): QueryInterface
     {
@@ -1421,8 +1249,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the prefix for all model sources.
-     *
-     * @return string
      */
     public function getModelPrefix(): string
     {
@@ -1431,10 +1257,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the mapped schema for a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string|null
      */
     public function getModelSchema(ModelInterface $model): string | null
     {
@@ -1443,10 +1265,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the mapped source for a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string
      */
     public function getModelSource(ModelInterface $model): string
     {
@@ -1468,10 +1286,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the connection to read data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return AdapterInterface
      */
     public function getReadConnection(ModelInterface $model): AdapterInterface
     {
@@ -1496,10 +1310,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the connection service name used to read data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string
      */
     public function getReadConnectionService(ModelInterface $model): string
     {
@@ -1511,11 +1321,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns a relation by its alias
-     *
-     * @param string $modelName
-     * @param string $alias
-     *
-     * @return bool|RelationInterface
      */
     public function getRelationByAlias(
         string $modelName,
@@ -1527,14 +1332,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Helper method to query records based on a relation definition
      *
-     * @param RelationInterface $relation
-     * @param ModelInterface    $record
-     * @param mixed             $parameters
-     * @param string|null       $method
-     *
      * @return false|int|ModelInterface|Simple
      * @throws Exception
-     *
      */
     public function getRelationRecords(
         RelationInterface $relation,
@@ -1814,8 +1613,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Query all the relationships defined on a model
      *
-     * @param string $modelName
-     *
      * @return RelationInterface[]
      */
     public function getRelations(string $modelName): array
@@ -1874,9 +1671,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Query the first relationship defined between two models
      *
-     * @param string $first
-     * @param string $second
-     *
      * @return bool|RelationInterface[]
      */
     public function getRelationsBetween(string $first, string $second): array | bool
@@ -1924,9 +1718,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Returns a reusable object from the internal list
      *
-     * @param string $modelName
-     * @param string $key
-     *
      * @return mixed
      */
     public function getReusableRecords(string $modelName, string $key)
@@ -1936,10 +1727,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the connection to write data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return AdapterInterface
      */
     public function getWriteConnection(ModelInterface $model): AdapterInterface
     {
@@ -1948,10 +1735,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Returns the connection service name used to write data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string
      */
     public function getWriteConnectionService(ModelInterface $model): string
     {
@@ -1963,11 +1746,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks whether a model has a belongsTo relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasBelongsTo(string $modelName, string $modelRelation): bool
     {
@@ -1976,11 +1754,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks whether a model has a hasMany relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasMany(string $modelName, string $modelRelation): bool
     {
@@ -1989,11 +1762,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks whether a model has a hasManyToMany relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasManyToMany(string $modelName, string $modelRelation): bool
     {
@@ -2002,11 +1770,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks whether a model has a hasOne relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasOne(string $modelName, string $modelRelation): bool
     {
@@ -2015,11 +1778,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks whether a model has a hasOneThrough relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasOneThrough(string $modelName, string $modelRelation): bool
     {
@@ -2029,9 +1787,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Initializes a model in the model manager
      *
-     * @param ModelInterface $model
-     *
-     * @return bool
      * @throws EventsException
      */
     public function initialize(ModelInterface $model): bool
@@ -2081,10 +1836,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Check whether a model is already initialized
-     *
-     * @param string $className
-     *
-     * @return bool
      */
     public function isInitialized(string $className): bool
     {
@@ -2093,10 +1844,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks if a model is keeping snapshots for the queried records
-     *
-     * @param ModelInterface $model
-     *
-     * @return bool
      */
     public function isKeepingSnapshots(ModelInterface $model): bool
     {
@@ -2109,10 +1856,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Checks if a model is using dynamic update instead of all-field update
-     *
-     * @param ModelInterface $model
-     *
-     * @return bool
      */
     public function isUsingDynamicUpdate(ModelInterface $model): bool
     {
@@ -2133,10 +1876,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * );
      * ```
      *
-     * @param ModelInterface $model
-     * @param string         $property
-     *
-     * @return bool
      * @throws ReflectionException
      */
     final public function isVisibleModelProperty(
@@ -2162,11 +1901,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets if a model must keep snapshots
-     *
-     * @param ModelInterface $model
-     * @param bool           $keepSnapshots
-     *
-     * @return void
      */
     public function keepSnapshots(ModelInterface $model, bool $keepSnapshots): void
     {
@@ -2176,9 +1910,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Loads a model throwing an exception if it does not exist
      *
-     * @param string $modelName
-     *
-     * @return ModelInterface
      * @throws Exception
      */
     public function load(string $modelName): ModelInterface
@@ -2201,10 +1932,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Dispatch an event to the listeners and behaviors
      * This method expects that the endpoint listeners/behaviors returns true
      * meaning that a least one was implemented
-     *
-     * @param ModelInterface $model
-     * @param string         $eventName
-     * @param mixed          $data
      *
      * @return mixed
      *
@@ -2250,9 +1977,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Receives events generated in the models and dispatches them to an
      * events-manager if available. Notify the behaviors that are listening in
      * the model
-     *
-     * @param string         $eventName
-     * @param ModelInterface $model
      *
      * @return bool|mixed|null
      * @throws EventsException
@@ -2312,10 +2036,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Marks the model's write connection service as written-to for the
      * current request cycle. Used by the sticky mechanism to route
      * subsequent reads to the write connection.
-     *
-     * @param ModelInterface $model
-     *
-     * @return void
      */
     public function registerWrite(ModelInterface $model): void
     {
@@ -2330,9 +2050,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Removes a behavior from a model
-     *
-     * @param ModelInterface $model
-     * @param string         $behaviorClass
      */
     public function removeBehavior(
         ModelInterface $model,
@@ -2356,8 +2073,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Clears the per-request sticky write tracking. Call this between
      * requests in long-running runtimes (e.g. Swoole, RoadRunner) where the
      * manager instance is reused across requests.
-     *
-     * @return void
      */
     public function resetConnectionState(): void
     {
@@ -2366,11 +2081,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets both write and read connection service for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $connectionService
-     *
-     * @return void
      */
     public function setConnectionService(ModelInterface $model, string $connectionService): void
     {
@@ -2380,11 +2090,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets a custom events manager for a specific model
-     *
-     * @param ModelInterface         $model
-     * @param EventsManagerInterface $eventsManager
-     *
-     * @return void
      */
     public function setCustomEventsManager(
         ModelInterface $model,
@@ -2416,8 +2121,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * ```
      *
      * $param string $prefix
-     *
-     * @return void
      */
     public function setModelPrefix(string $prefix): void
     {
@@ -2426,11 +2129,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets the mapped schema for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $schema
-     *
-     * @return void
      */
     public function setModelSchema(ModelInterface $model, string $schema): void
     {
@@ -2439,11 +2137,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets the mapped source for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $source
-     *
-     * @return void
      */
     public function setModelSource(ModelInterface $model, string $source): void
     {
@@ -2452,11 +2145,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets read connection service for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $connectionService
-     *
-     * @return void
      */
     public function setReadConnectionService(ModelInterface $model, string $connectionService): void
     {
@@ -2465,12 +2153,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Stores a reusable record in the internal list
-     *
-     * @param string $modelName
-     * @param string $key
-     * @param mixed  $records
-     *
-     * @return void
      */
     public function setReusableRecords(string $modelName, string $key, mixed $records): void
     {
@@ -2481,10 +2163,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Enables or disables sticky connections. When enabled, once a model has
      * written to its write connection during the current request cycle, any
      * further reads for that write service use the write connection.
-     *
-     * @param bool $sticky
-     *
-     * @return void
      */
     public function setSticky(bool $sticky): void
     {
@@ -2493,11 +2171,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets write connection service for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $connectionService
-     *
-     * @return void
      */
     public function setWriteConnectionService(ModelInterface $model, string $connectionService): void
     {
@@ -2506,11 +2179,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Sets if a model must use dynamic update instead of the all-field update
-     *
-     * @param ModelInterface $model
-     * @param bool           $dynamicUpdate
-     *
-     * @return void
      */
     public function useDynamicUpdate(ModelInterface $model, bool $dynamicUpdate): void
     {
@@ -2523,10 +2191,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * Returns the connection to read or write data related to a model
      * depending on the connection services.
      *
-     * @param ModelInterface $model
-     * @param array          $connectionServices
-     *
-     * @return AdapterInterface
      * @throws Exception
      *
      * @phpstan-param array<string, string> $connectionServices
@@ -2559,13 +2223,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         return $connection;
     }
 
-    /**
-     * @param string $collection
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
-     */
     private function checkHasRelationship(
         string $collection,
         string $modelName,
@@ -2594,10 +2251,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     /**
      * Counts the fields of a relation leg. A leg with one field is a string,
      * so it counts as one field.
-     *
-     * @param mixed $fields
-     *
-     * @return int
      */
     private function getFieldsCount(mixed $fields): int
     {
@@ -2610,11 +2263,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
     /**
      * Creates a unique key to be used as index in a hash
-     *
-     * @param mixed $prefix
-     * @param mixed $value
-     *
-     * @return string|null
      */
     private function getUniqueKey(
         CacheKeyProvider | ModelInterface $model,
@@ -2641,10 +2289,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
-     * @param array $value
-     *
-     * @return string
-     *
      * @phpstan-param array<array-key, mixed> $value
      */
     private function getUniqueKeyArray(array $value): string

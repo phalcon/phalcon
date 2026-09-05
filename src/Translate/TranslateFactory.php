@@ -44,7 +44,6 @@ class TranslateFactory extends AbstractFactory
      *
      * @phpstan-param ConfigInterface|translate_factory_config $config
      *
-     * @return AdapterInterface
      * @throws Exception
      */
     public function load(mixed $config): AdapterInterface
@@ -66,8 +65,6 @@ class TranslateFactory extends AbstractFactory
      * Create a new instance of the adapter
      *
      * @phpstan-param array<string, mixed> $options
-     *
-     * @return AdapterInterface
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {

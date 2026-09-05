@@ -49,21 +49,20 @@ class Redis extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param AdapterFactory $factory
-     * @param array          $options = [
-     *                                'prefix'         => 'sess-reds-',
-     *                                'stripPrefix'    => false,
-     *                                'host'           => '127.0.0.1',
-     *                                'port'           => 6379,
-     *                                'index'          => 0,
-     *                                'persistent'     => false,
-     *                                'auth'           => '',
-     *                                'socket'         => '',
-     *                                'lockingEnabled' => false,
-     *                                'lockExpiry'     => 30,
-     *                                'lockRetries'    => 100,
-     *                                'lockWaitTime'   => 50000,
-     *                                ]
+     * @param array $options = [
+     *                       'prefix'         => 'sess-reds-',
+     *                       'stripPrefix'    => false,
+     *                       'host'           => '127.0.0.1',
+     *                       'port'           => 6379,
+     *                       'index'          => 0,
+     *                       'persistent'     => false,
+     *                       'auth'           => '',
+     *                       'socket'         => '',
+     *                       'lockingEnabled' => false,
+     *                       'lockExpiry'     => 30,
+     *                       'lockRetries'    => 100,
+     *                       'lockWaitTime'   => 50000,
+     *                       ]
      *
      * @phpstan-param session_redis_options $options
      *

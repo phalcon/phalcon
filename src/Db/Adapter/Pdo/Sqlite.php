@@ -45,20 +45,12 @@ use function trigger_error;
  */
 class Sqlite extends PdoAdapter
 {
-    /**
-     * @var string
-     */
     protected string $dialectType = "sqlite";
 
-    /**
-     * @var string
-     */
     protected string $type = "sqlite";
 
     /**
      * Constructor for Phalcon\Db\Adapter\Pdo\Sqlite
-     *
-     * @param array $descriptor
      */
     public function __construct(array $descriptor)
     {
@@ -75,9 +67,6 @@ class Sqlite extends PdoAdapter
      * This method is automatically called in Phalcon\Db\Adapter\Pdo
      * constructor. Call it when you need to restore a database connection.
      *
-     * @param array $descriptor
-     *
-     * @return void
      * @throws Exception
      */
     public function connect(array $descriptor = []): void
@@ -106,7 +95,6 @@ class Sqlite extends PdoAdapter
      * );
      * ```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ColumnInterface[]
@@ -385,7 +373,6 @@ class Sqlite extends PdoAdapter
      * );
      * ```
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|IndexInterface[]
@@ -445,7 +432,6 @@ class Sqlite extends PdoAdapter
     /**
      * Lists table references
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
@@ -514,8 +500,6 @@ class Sqlite extends PdoAdapter
      *     ]
      * );
      *```
-     *
-     * @return RawValue
      */
     public function getDefaultValue(): RawValue
     {
@@ -525,9 +509,7 @@ class Sqlite extends PdoAdapter
     /**
      * SQLite does not support the DEFAULT keyword
      *
-     * @return bool
      * @deprecated Will re removed in the next version
-     *
      */
     public function supportsDefaultValue(): bool
     {
@@ -537,8 +519,6 @@ class Sqlite extends PdoAdapter
     /**
      * Check whether the database system requires an explicit value for identity
      * columns
-     *
-     * @return bool
      */
     public function useExplicitIdValue(): bool
     {
@@ -547,8 +527,6 @@ class Sqlite extends PdoAdapter
 
     /**
      * Returns PDO adapter DSN defaults as a key-value map.
-     *
-     * @return array
      */
     protected function getDsnDefaults(): array
     {

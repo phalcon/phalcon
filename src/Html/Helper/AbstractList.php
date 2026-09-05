@@ -79,7 +79,6 @@ abstract class AbstractList extends AbstractHelper
     }
 
     /**
-     *
      * Returns the tag name.
      */
     abstract protected function getTag(): string;

@@ -24,10 +24,6 @@ interface Flash
 {
     /**
      * Shows a HTML error message
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function error(string $message): string | null;
 
@@ -40,38 +36,21 @@ interface Flash
      * semantics differ per implementation: `Direct::message()` renders and
      * emits the message immediately, while `Session::message()` stores the raw
      * message for output on a later request.
-     *
-     * @param string $type
-     * @param string $message
-     *
-     * @return string|null
      */
     public function message(string $type, string $message): string | null;
 
     /**
      * Shows a HTML notice/information message
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function notice(string $message): string | null;
 
     /**
      * Shows a HTML success message
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function success(string $message): string | null;
 
     /**
      * Shows a HTML warning message
-     *
-     * @param string $message
-     *
-     * @return string|null
      */
     public function warning(string $message): string | null;
 }

@@ -91,8 +91,6 @@ class FormsLocator
      * Without an entity the result is lazily created and cached.
      * With an entity a fresh form is always produced.
      *
-     * @param object|null $entity
-     *
      * @throws Exception
      */
     public function get(string $name, object | null $entity = null): Form

@@ -20,9 +20,6 @@ class Signature extends AbstractItem
 {
     /**
      * Signature constructor.
-     *
-     * @param string $hash
-     * @param string $encoded
      */
     public function __construct(string $hash = '', string $encoded = '')
     {
@@ -30,9 +27,6 @@ class Signature extends AbstractItem
         $this->data['hash']    = $hash;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->data['hash'];

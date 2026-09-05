@@ -70,7 +70,6 @@ class ConfigFactory extends AbstractFactory
      *
      * @phpstan-param ConfigInterface|config_options|string $config
      *
-     * @return ConfigInterface
      * @throws Exception
      */
     public function load(mixed $config): ConfigInterface
@@ -105,10 +104,6 @@ class ConfigFactory extends AbstractFactory
      *
      * @phpstan-param config_callbacks|int|string|null $params
      *
-     * @param string $name
-     * @param string $fileName
-     *
-     * @return ConfigInterface
      * @throws BaseException
      */
     public function newInstance(

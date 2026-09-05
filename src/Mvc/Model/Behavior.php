@@ -33,10 +33,6 @@ abstract class Behavior implements BehaviorInterface
     /**
      * Acts as fallbacks when a missing method is called on the model
      *
-     * @param ModelInterface $model
-     * @param string         $method
-     * @param array          $arguments
-     *
      * @return null
      *
      * @phpstan-param array<array-key, mixed> $arguments
@@ -52,9 +48,6 @@ abstract class Behavior implements BehaviorInterface
     /**
      * This method receives the notifications from the EventsManager
      *
-     * @param string         $type
-     * @param ModelInterface $model
-     *
      * @return null
      *
      * @phpstan-return mixed
@@ -66,8 +59,6 @@ abstract class Behavior implements BehaviorInterface
 
     /**
      * Returns the behavior options related to an event
-     *
-     * @param string|null $eventName
      *
      * @return mixed
      *
@@ -84,10 +75,6 @@ abstract class Behavior implements BehaviorInterface
 
     /**
      * Checks whether the behavior must take action on certain event
-     *
-     * @param string $eventName
-     *
-     * @return bool
      */
     protected function mustTakeAction(string $eventName): bool
     {

@@ -50,21 +50,13 @@ class Complex extends Resultset
     /**
      * Unserialized result-set hydrated all rows already. unserialize() sets
      * disableHydration to true
-     *
-     * @var bool
      */
     protected bool $disableHydration = false;
 
     /**
      * Phalcon\Mvc\Model\Resultset\Complex constructor
      *
-     * @param mixed                $columnTypes
-     * @param ResultInterface|null $result
-     * @param mixed|null           $cache
-     * @param string               $resultsetRowClass
-     *
      * @throws Exception
-     *
      */
     public function __construct(
         protected mixed $columnTypes,
@@ -76,8 +68,6 @@ class Complex extends Resultset
     }
 
     /**
-     * @return array
-     *
      * @phpstan-return mvc_resultset_complex_state
      */
     public function __serialize(): array
@@ -106,10 +96,6 @@ class Complex extends Resultset
     }
 
     /**
-     * @param array $data
-     *
-     * @return void
-     *
      * @phpstan-param mvc_resultset_complex_state $data
      */
     public function __unserialize(array $data): void
@@ -129,8 +115,9 @@ class Complex extends Resultset
     /**
      * Returns current row in the resultset
      *
-     * @return mixed
      * @throws Exception
+     *
+     * @phpstan-return mixed
      */
     final public function current(): mixed
     {
@@ -333,7 +320,6 @@ class Complex extends Resultset
      * Serializing a resultset will dump all related rows into a big array,
      * serialize it and return the resulting string
      *
-     * @return string
      * @throws Exception
      */
     public function serialize(): string
@@ -370,8 +356,6 @@ class Complex extends Resultset
      * Returns a complete resultset as an array, if the resultset has a big
      * number of rows it could consume more memory than currently it does.
      *
-     * @return array
-     *
      * @phpstan-return array<array-key, mixed>
      */
     public function toArray(): array
@@ -394,9 +378,6 @@ class Complex extends Resultset
      * Unserializing a resultset will allow to only works on the rows present
      * in the saved state
      *
-     * @param mixed $data
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param string $data

@@ -57,9 +57,6 @@ class Memory extends AbstractAdapter
     /**
      * Memory constructor.
      *
-     * @param SerializerFactory $factory
-     * @param array             $options
-     *
      * @phpstan-param storage_adapter_options $options
      *
      * @throws BaseException
@@ -85,10 +82,6 @@ class Memory extends AbstractAdapter
 
     /**
      * Stores data in the adapter
-     *
-     * @param string $prefix
-     *
-     * @return array
      *
      * @phpstan-return storage_keys
      */

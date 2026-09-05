@@ -23,22 +23,11 @@ use function strlen;
  */
 class IsoIek implements PadInterface
 {
-    /**
-     * @param int $paddingSize
-     *
-     * @return string
-     */
     public function pad(int $paddingSize): string
     {
         return chr(0x80) . str_repeat(chr(0), $paddingSize - 1);
     }
 
-    /**
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return int
-     */
     public function unpad(string $input, int $blockSize): int
     {
         $paddingSize = 0;

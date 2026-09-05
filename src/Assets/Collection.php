@@ -211,9 +211,6 @@ class Collection implements Countable, IteratorAggregate
         return new ArrayIterator($this->assets);
     }
 
-    /**
-     * @return bool
-     */
     public function getJoin(): bool
     {
         return $this->join;
@@ -221,8 +218,6 @@ class Collection implements Countable, IteratorAggregate
 
     /**
      * Returns the prefix
-     *
-     * @return string
      */
     public function getPrefix(): string
     {

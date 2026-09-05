@@ -28,17 +28,11 @@ interface EventsAware
 {
     /**
      * Returns the internal events manager
-     *
-     * @return ManagerInterface|null
      */
     public function getEventsManager(): ManagerInterface | null;
 
     /**
      * Sets the events manager
-     *
-     * @param ManagerInterface $eventsManager
-     *
-     * @return void
      */
     public function setEventsManager(ManagerInterface $eventsManager): void;
 }

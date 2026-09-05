@@ -160,8 +160,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     public const TYPE_UPDATE = 300;
 
     /**
-     * @var array|null
-     *
      * @phpstan-var array<array-key, mvc_query_ir>|null
      */
     protected static array | null $internalPhqlCache = null;
@@ -175,118 +173,72 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected array $ast;
 
     /**
-     * @var array
-     *
      * @phpstan-var mvc_model_bind_params
      */
     protected array $bindParams = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var mvc_model_bind_types
      */
     protected array $bindTypes = [];
 
-    /**
-     * @var CacheInterface|null
-     */
     protected CacheInterface | null $cache = null;
 
     /**
-     * @var array|null
-     *
      * @phpstan-var mvc_model_cache_options|null
      */
     protected array | null $cacheOptions = null;
 
-    /**
-     * @var bool
-     */
     protected bool $enableImplicitJoins;
 
     /**
-     * @var array|null
-     *
      * @phpstan-var mvc_query_ir|null
      */
     protected array | null $intermediate = null;
 
-    /**
-     * @var ManagerInterface|null
-     */
     protected ManagerInterface | null $manager = null;
 
-    /**
-     * @var MetaDataInterface|null
-     */
     protected MetaDataInterface | null $metaData = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $models = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, ModelInterface>
      */
     protected array $modelsInstances = [];
 
-    /**
-     * @var int
-     */
     protected int $nestingLevel = -1;
 
-    /**
-     * @var Parser
-     */
     protected Parser $parser;
 
-    /**
-     * @var string
-     */
     protected string $resultsetRowClass = "";
 
-    /**
-     * @var bool
-     */
     protected bool $sharedLock = false;
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $sqlAliases = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $sqlAliasesModels = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, ModelInterface>
      */
     protected array $sqlAliasesModelsInstances = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<int, array<string, bool>>
      */
     protected array $sqlColumnAliases = [];
 
     /**
-     * @var array
-     *
      * @phpstan-var array<string, string>
      */
     protected array $sqlModelsAliases = [];
@@ -296,27 +248,15 @@ class Query implements QueryInterface, InjectionAwareInterface
      * around batch updates and intermediate selects within the transaction.
      * however if a model got a transaction set inside it will use the local
      * transaction instead of this one
-     *
-     * @var TransactionInterface|null
      */
     protected TransactionInterface | null $transaction = null;
 
-    /**
-     * @var int|null
-     */
     protected int | null $type = null;
 
-    /**
-     * @var bool
-     */
     protected bool $uniqueRow = false;
 
     /**
      * Phalcon\Mvc\Model\Query constructor
-     *
-     * @param string|null      $phql
-     * @param DiInterface|null $container
-     * @param array            $options
      *
      * @throws Exception
      *
@@ -348,8 +288,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Destroys the internal PHQL cache
-     *
-     * @return void
      */
     public static function clean(): void
     {
@@ -358,10 +296,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Sets the cache parameters of the query
-     *
-     * @param array $cacheOptions
-     *
-     * @return QueryInterface
      *
      * @phpstan-param mvc_model_cache_options $cacheOptions
      */
@@ -374,9 +308,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Executes a parsed PHQL statement
-     *
-     * @param array $bindParams
-     * @param array $bindTypes
      *
      * @return mixed
      * @throws Exception
@@ -541,8 +472,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns default bind params
      *
-     * @return array
-     *
      * @phpstan-return mvc_model_bind_params
      */
     public function getBindParams(): array
@@ -553,8 +482,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns default bind types
      *
-     * @return array
-     *
      * @phpstan-return mvc_model_bind_types
      */
     public function getBindTypes(): array
@@ -564,8 +491,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Returns the current cache backend instance
-     *
-     * @return CacheInterface|null
      */
     public function getCache(): \Phalcon\Cache\CacheInterface | null
     {
@@ -574,8 +499,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Returns the current cache options
-     *
-     * @return array
      *
      * @phpstan-return mvc_model_cache_options
      */
@@ -586,8 +509,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Returns the intermediate representation of the PHQL statement
-     *
-     * @return array
      *
      * @phpstan-return mvc_query_ir
      */
@@ -606,8 +527,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Returns the class that will be used to hydrate rows that are not mapped
      * to a model (custom columns/joins). An empty string means the default
      * Phalcon\Mvc\Model\Row is used.
-     *
-     * @return string
      */
     public function getResultsetRowClass(): string
     {
@@ -617,10 +536,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Executes the query returning the first result
      *
-     * @param array $bindParams
-     * @param array $bindTypes
-     *
-     * @return ModelInterface
      * @throws Exception
      * @throws InvalidArgumentException
      *
@@ -662,7 +577,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * ]
      *```
      *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return array<string, mixed>
@@ -694,9 +608,6 @@ class Query implements QueryInterface, InjectionAwareInterface
         throw new MultipleSqlStatementsNotSupported();
     }
 
-    /**
-     * @return TransactionInterface|null
-     */
     public function getTransaction(): TransactionInterface | null
     {
         return $this->transaction;
@@ -704,8 +615,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Gets the type of PHQL statement executed
-     *
-     * @return int
      */
     public function getType(): int
     {
@@ -721,8 +630,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Check if the query is programmed to get only the first row in the
      * resultset
-     *
-     * @return bool
      */
     public function getUniqueRow(): bool
     {
@@ -834,11 +741,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Set default bind parameters
      *
-     * @param array $bindParams
-     * @param bool  $merge
-     *
-     * @return QueryInterface
-     *
      * @phpstan-param mvc_model_bind_params $bindParams
      */
     public function setBindParams(
@@ -858,11 +760,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Set default bind parameters
      *
-     * @param array $bindTypes
-     * @param bool  $merge
-     *
-     * @return QueryInterface
-     *
      * @phpstan-param mvc_model_bind_types $bindTypes
      */
     public function setBindTypes(
@@ -881,9 +778,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Sets the dependency injection container
      *
-     * @param DiInterface $container
-     *
-     * @return void
      * @throws Exception
      */
     public function setDI(DiInterface $container): void
@@ -919,10 +813,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Allows to set the IR to be executed
      *
-     * @param array $intermediate
-     *
-     * @return QueryInterface
-     *
      * @phpstan-param mvc_query_ir $intermediate
      */
     public function setIntermediate(array $intermediate): QueryInterface
@@ -936,10 +826,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Sets the class used to hydrate rows that are not mapped to a model
      * (custom columns/joins). The class must be a subclass of
      * Phalcon\Mvc\Model\Row.
-     *
-     * @param string $resultsetRowClass
-     *
-     * @return QueryInterface
      */
     public function setResultsetRowClass(string $resultsetRowClass): QueryInterface
     {
@@ -958,10 +844,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Set SHARED LOCK clause
-     *
-     * @param bool $sharedLock
-     *
-     * @return QueryInterface
      */
     public function setSharedLock(bool $sharedLock = false): QueryInterface
     {
@@ -972,10 +854,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * allows to wrap a transaction around all queries
-     *
-     * @param TransactionInterface $transaction
-     *
-     * @return QueryInterface
      */
     public function setTransaction(TransactionInterface $transaction): QueryInterface
     {
@@ -986,10 +864,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Sets the type of PHQL statement to be executed
-     *
-     * @param int $type
-     *
-     * @return QueryInterface
      */
     public function setType(int $type): QueryInterface
     {
@@ -1001,10 +875,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Tells to the query if only the first row in the resultset must be
      * returned
-     *
-     * @param bool $uniqueRow
-     *
-     * @return QueryInterface
      */
     public function setUniqueRow(bool $uniqueRow): QueryInterface
     {
@@ -1017,11 +887,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Executes the DELETE intermediate representation producing a
      * Phalcon\Mvc\Model\Query\Status
      *
-     * @param array $intermediate
-     * @param array $bindParams
-     * @param array $bindTypes
-     *
-     * @return StatusInterface
      * @throws Exception
      *
      * @phpstan-param mvc_query_ir $intermediate
@@ -1137,11 +1002,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Executes the INSERT intermediate representation producing a
      * Phalcon\Mvc\Model\Query\Status
      *
-     * @param array $intermediate
-     * @param array $bindParams
-     * @param array $bindTypes
-     *
-     * @return StatusInterface
      * @throws Exception
      *
      * @phpstan-param mvc_query_ir $intermediate
@@ -1301,12 +1161,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Executes the SELECT intermediate representation producing a
      * Phalcon\Mvc\Model\Resultset
      *
-     * @param array $intermediate
-     * @param array $bindParams
-     * @param array $bindTypes
-     * @param bool  $simulate
-     *
-     * @return array|ResultsetInterface
      * @throws Exception
      *
      * @phpstan-param mvc_query_ir $intermediate
@@ -1767,12 +1621,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Executes the UPDATE intermediate representation producing a
      * Phalcon\Mvc\Model\Query\Status
      *
-     * @param array $intermediate
-     * @param array $bindParams
-     * @param array $bindTypes
-     *
-     * @return StatusInterface
-     *
      * @phpstan-param mvc_query_ir $intermediate
      * @phpstan-param mvc_model_bind_params $bindParams
      * @phpstan-param mvc_model_bind_types $bindTypes
@@ -2024,8 +1872,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves an expression in a single call argument
      *
-     * @param array $argument
-     *
      * @return array|string[]
      * @throws Exception
      *
@@ -2046,9 +1892,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves an expression in a single call argument
      *
-     * @param array $expr
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed> $expr
@@ -2099,9 +1942,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Resolves an expression from its intermediate code into an array
-     *
-     * @param array $expr
-     * @param bool  $quoting
      *
      * @return array<array-key, list<array<string>>|string>
      * @throws Exception
@@ -2826,9 +2666,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves an expression in a single call argument
      *
-     * @param array $expr
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed> $expr
@@ -2904,8 +2741,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns a processed group clause for a SELECT statement
      *
-     * @param array $group
-     *
      * @return list<array<list<array<string>>|string>>
      * @throws Exception
      *
@@ -2935,9 +2770,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * Resolves a JOIN clause checking if the associated models exist
-     *
-     * @param ManagerInterface $manager
-     * @param array            $join
      *
      * @return array{
      *     schema: string|null,
@@ -2981,9 +2813,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Processes the JOINs in the query returning an internal representation for
      * the database dialect
      *
-     * @param array $select
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param mvc_query_ir $select
@@ -3348,9 +3177,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves a JOIN type
      *
-     * @param array $join
-     *
-     * @return string
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed> $join
@@ -3386,9 +3212,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns a processed limit clause for a SELECT statement
      *
-     * @param array $limitClause
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed> $limitClause
@@ -3421,13 +3244,8 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves joins involving many-to-many relations
      *
-     * @param string            $joinType
-     * @param string            $joinSource
-     * @param string            $modelAlias
-     * @param string            $joinAlias
-     * @param RelationInterface $relation
+     * @param string $joinSource
      *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed>|string $joinSource
@@ -3622,9 +3440,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Returns a processed order clause for a SELECT statement
      *
-     * @param mixed $order
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return array<array-key, mixed>
@@ -3675,8 +3490,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Replaces the model's name to its source name in a qualified-name
      * expression
-     *
-     * @param array $expr
      *
      * @return string[]
      * @throws Exception
@@ -3852,12 +3665,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Gets the read connection from the model if there is no transaction set
      * inside the query object
      *
-     * @param ModelInterface $model
-     * @param array|null     $intermediate
-     * @param array          $bindParams
-     * @param array          $bindTypes
-     *
-     * @return AdapterInterface
      * @throws Exception
      *
      * @phpstan-param mvc_query_ir|null $intermediate
@@ -3899,12 +3706,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Query the records on which the UPDATE/DELETE operation will be done
      *
-     * @param ModelInterface $model
-     * @param array          $intermediate
-     * @param array          $bindParams
-     * @param array          $bindTypes
-     *
-     * @return ResultsetInterface
      * @throws Exception
      * @throws InvalidArgumentException
      *
@@ -3983,9 +3784,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Resolves a column from its intermediate representation into an array
      * used to determine if the resultset produced is simple or complex
      *
-     * @param array $column
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param array<array-key, mixed> $column
@@ -4141,13 +3939,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves joins involving has-one/belongs-to/has-many relations
      *
-     * @param string            $joinType
-     * @param mixed             $joinSource
-     * @param string            $modelAlias
-     * @param string            $joinAlias
-     * @param RelationInterface $relation
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return array<string, mixed>
@@ -4252,9 +4043,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Resolves a table in a SELECT statement checking if the model exists
      *
-     * @param ManagerInterface $manager
-     * @param array            $qualifiedName
-     *
      * @return array|string
      * @throws Exception
      *
@@ -4286,12 +4074,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Gets the write connection from the model if there is no transaction
      * inside the query object
      *
-     * @param ModelInterface $model
-     * @param array|null     $intermediate
-     * @param array          $bindParams
-     * @param array          $bindTypes
-     *
-     * @return AdapterInterface
      * @throws Exception
      *
      * @phpstan-param mvc_query_ir|null $intermediate
@@ -4333,7 +4115,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Analyzes a DELETE intermediate code and produces an array to be executed
      * later
      *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_query_ir
@@ -4445,7 +4226,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Analyzes an INSERT intermediate code and produces an array to be executed
      * later
      *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_query_ir
@@ -4540,10 +4320,6 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Analyzes a SELECT intermediate code and produces an array to be executed later
      *
-     * @param mixed|null $ast
-     * @param bool       $merge
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-param mvc_query_ast|null $ast
@@ -4967,7 +4743,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Analyzes an UPDATE intermediate code and produces an array to be executed
      * later
      *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_query_ir
@@ -5145,10 +4920,6 @@ class Query implements QueryInterface, InjectionAwareInterface
      * string only, so a model that switches its schema or source at
      * runtime (for instance via setSchema()/setSource() in initialize())
      * would otherwise see the value frozen at first parse. See #17020.
-     *
-     * @param array $irPhql
-     *
-     * @return array
      *
      * @phpstan-param mvc_query_ir $irPhql
      * @phpstan-return mvc_query_ir

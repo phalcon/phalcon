@@ -86,8 +86,6 @@ final class Psr14LayerTest extends AbstractUnitTestCase
      *
      * When events are registered but none match the dispatched event name
      * or class, dispatch() falls through to return null.
-     *
-     * @return void
      */
     public function testDispatchReturnsNullWhenNoMatch(): void
     {
@@ -107,8 +105,6 @@ final class Psr14LayerTest extends AbstractUnitTestCase
      *
      * When dispatch() is called with an array $name, it joins the parts
      * with ':' to form the event type string.
-     *
-     * @return void
      */
     public function testDispatchWithArrayName(): void
     {

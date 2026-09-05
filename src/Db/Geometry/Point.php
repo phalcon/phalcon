@@ -17,14 +17,8 @@ use Phalcon\Db\Column;
 
 class Point extends AbstractGeometry
 {
-    /**
-     * @var float
-     */
     protected float $x;
 
-    /**
-     * @var float
-     */
     protected float $y;
 
     public function __construct(float $x, float $y, int $srid = 0)

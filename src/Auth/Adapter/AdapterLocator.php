@@ -27,7 +27,6 @@ use Phalcon\Support\AbstractLocator;
  * to be used here.
  *
  * @extends AbstractLocator<Adapter>
- *
  */
 class AdapterLocator extends AbstractLocator
 {

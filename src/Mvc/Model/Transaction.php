@@ -64,51 +64,24 @@ use Phalcon\Mvc\ModelInterface;
  */
 class Transaction implements TransactionInterface
 {
-    /**
-     * @var bool
-     */
     protected bool $activeTransaction = false;
 
-    /**
-     * @var AdapterInterface
-     */
     protected AdapterInterface $connection;
 
-    /**
-     * @var bool
-     */
     protected bool $isNewTransaction = true;
 
-    /**
-     * @var ManagerInterface|null
-     */
     protected ManagerInterface | null $manager = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var list<MessageInterface>
      */
-    protected array $messages = [];
-    /**
-     * @var bool
-     */
-    protected bool $rollbackOnAbort = false;
-    /**
-     * @var ModelInterface|null
-     */
+    protected array $messages                       = [];
+    protected bool $rollbackOnAbort                 = false;
     protected ModelInterface | null $rollbackRecord = null;
-    /**
-     * @var bool
-     */
-    protected bool $rollbackThrowException = false;
+    protected bool $rollbackThrowException          = false;
 
     /**
      * Phalcon\Mvc\Model\Transaction constructor
-     *
-     * @param DiInterface $container
-     * @param bool        $autoBegin
-     * @param string      $service
      */
     public function __construct(
         DiInterface $container,
@@ -127,8 +100,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Starts the transaction
-     *
-     * @return bool
      */
     public function begin(): bool
     {
@@ -137,8 +108,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Commits the transaction
-     *
-     * @return bool
      */
     public function commit(): bool
     {
@@ -151,8 +120,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Returns the connection related to transaction
-     *
-     * @return AdapterInterface
      */
     public function getConnection(): AdapterInterface
     {
@@ -169,8 +136,6 @@ class Transaction implements TransactionInterface
     /**
      * Returns validations messages from last save try
      *
-     * @return array
-     *
      * @phpstan-return list<MessageInterface>
      */
     public function getMessages(): array
@@ -180,8 +145,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Checks whether transaction is managed by a transaction manager
-     *
-     * @return bool
      */
     public function isManaged(): bool
     {
@@ -190,8 +153,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Checks whether internal connection is under an active transaction
-     *
-     * @return bool
      */
     public function isValid(): bool
     {
@@ -228,10 +189,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Sets if is a reused transaction or new once
-     *
-     * @param bool $isNew
-     *
-     * @return void
      */
     public function setIsNewTransaction(bool $isNew): void
     {
@@ -240,10 +197,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Sets object which generates rollback action
-     *
-     * @param ModelInterface $record
-     *
-     * @return void
      */
     public function setRollbackedRecord(ModelInterface $record): void
     {
@@ -252,10 +205,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Sets flag to rollback on abort the HTTP connection
-     *
-     * @param bool $rollbackOnAbort
-     *
-     * @return void
      */
     public function setRollbackOnAbort(bool $rollbackOnAbort): void
     {
@@ -264,10 +213,6 @@ class Transaction implements TransactionInterface
 
     /**
      * Sets transaction manager related to the transaction
-     *
-     * @param ManagerInterface $manager
-     *
-     * @return void
      */
     public function setTransactionManager(ManagerInterface $manager): void
     {

@@ -25,8 +25,6 @@ class PdoFactory extends AbstractFactory
 {
     /**
      * Constructor.
-     *
-     * @param array $services
      */
     public function __construct(array $services = [])
     {
@@ -51,7 +49,6 @@ class PdoFactory extends AbstractFactory
      *                                      ]
      *                                      ]
      *
-     * @return AdapterInterface
      * @throws SupportException
      * @throws BaseException
      */
@@ -71,10 +68,6 @@ class PdoFactory extends AbstractFactory
     /**
      * Create a new instance of the adapter
      *
-     * @param string $name
-     * @param array  $options
-     *
-     * @return AdapterInterface
      * @throws BaseException
      */
     public function newInstance(

@@ -23,7 +23,6 @@ class Pluck
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param string                  $element
      *
      * @return array<array-key, mixed>
      */
@@ -40,7 +39,6 @@ class Pluck
 
     /**
      * @param array<array-key, mixed> $filtered
-     * @param string                  $element
      * @param mixed                   $item
      *
      * @return array<array-key, mixed>
@@ -56,7 +54,6 @@ class Pluck
 
     /**
      * @param array<array-key, mixed> $filtered
-     * @param string                  $element
      * @param mixed                   $item
      *
      * @return array<array-key, mixed>

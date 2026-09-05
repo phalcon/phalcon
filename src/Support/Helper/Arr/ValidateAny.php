@@ -21,9 +21,6 @@ class ValidateAny extends AbstractArr
 {
     /**
      * @param array<array-key, mixed> $collection
-     * @param callable                $method
-     *
-     * @return bool
      */
     public function __invoke(array $collection, callable $method): bool
     {

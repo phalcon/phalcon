@@ -23,22 +23,11 @@ use function strlen;
  */
 class Space implements PadInterface
 {
-    /**
-     * @param int $paddingSize
-     *
-     * @return string
-     */
     public function pad(int $paddingSize): string
     {
         return str_repeat(" ", $paddingSize);
     }
 
-    /**
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return int
-     */
     public function unpad(string $input, int $blockSize): int
     {
         $length      = strlen($input);

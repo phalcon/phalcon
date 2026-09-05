@@ -33,9 +33,6 @@ use Throwable;
  */
 abstract class AbstractHttpFront implements FrontController
 {
-    /**
-     * @var Container|null
-     */
     protected ?Container $container = null;
 
     public function __construct(

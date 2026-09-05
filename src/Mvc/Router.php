@@ -112,9 +112,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public const URI_SOURCE_GET_URL            = 0;
     public const URI_SOURCE_SERVER_REQUEST_URI = 1;
 
-    /**
-     * @var string
-     */
     protected string $action = "";
 
     /**
@@ -124,7 +121,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * The "*" key itself holds only the no-constraint routes - used when the
      * request method has no specific bucket.
      *
-     * @var array
      * @phpstan-var mvc_router_method_buckets
      */
     protected array $candidatesByMethod = [];
@@ -135,7 +131,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * only when the bucket has no hostname routes and all patterns are
      * the standard `#^...$#u` shape.
      *
-     * @var array
      * @phpstan-var mvc_router_regex_chunks
      */
     protected array $combinedRegexByMethod = [];
@@ -144,7 +139,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Boolean per method bucket: true when the combined regex cannot be
      * built.
      *
-     * @var array
      * @phpstan-var mvc_router_regex_disabled
      */
     protected array $combinedRegexDisabled = [];
@@ -155,38 +149,21 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      *   combinedRegexMarkMap[method][chunkIdx][markLabel] = routeIdx
      *
-     * @var array
      * @phpstan-var mvc_router_regex_mark_map
      */
     protected array $combinedRegexMarkMap = [];
 
-    /**
-     * @var string
-     */
     protected string $controller = "";
 
-    /**
-     * @var string
-     */
     protected string $defaultAction = "";
 
-    /**
-     * @var string
-     */
     protected string $defaultController = "";
 
-    /**
-     * @var string
-     */
     protected string $defaultModule = "";
 
-    /**
-     * @var string
-     */
     protected string $defaultNamespace = "";
 
     /**
-     * @var array
      * @phpstan-var mvc_router_params
      */
     protected array $defaultParams = [];
@@ -196,7 +173,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * raw hostname string. Routes are referenced by their integer index
      * into candidatesByMethod[method].
      *
-     * @var array
      * @phpstan-var mvc_router_hostname_buckets
      */
     protected array $hostnameByMethod = [];
@@ -205,63 +181,44 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Per-method indices of routes without a hostname constraint, in
      * attach order.
      *
-     * @var array
      * @phpstan-var mvc_router_index_buckets
      */
     protected array $hostnameLessByMethod = [];
 
     /**
-     * @var array
      * @phpstan-var array<array-key, int|string>
      */
     protected array $keyRouteIds = [];
 
     /**
-     * @var array
      * @phpstan-var array<string, int|string>
      */
     protected array $keyRouteNames = [];
 
-    /**
-     * @var RouteInterface|null
-     */
     protected RouteInterface | null $matchedRoute = null;
 
     /**
-     * @var array
      * @phpstan-var mvc_router_matches
      */
     protected array $matches = [];
 
     /**
-     * @var array
      * @phpstan-var mvc_router_method_buckets
      */
     protected array $methodRoutes = [];
 
-    /**
-     * @var bool
-     */
     protected bool $methodRoutesDirty = true;
 
-    /**
-     * @var string
-     */
     protected string $module = "";
 
-    /**
-     * @var string
-     */
     protected string $namespaceName = "";
 
     /**
-     * @var array|string|null
      * @phpstan-var mvc_router_paths|string|null
      */
     protected array | string | null $notFoundPaths = null;
 
     /**
-     * @var array
      * @phpstan-var mvc_router_params
      */
     protected array $params = [];
@@ -271,19 +228,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * writes buildDispatcherDump() to this cache after a successful
      * rebuild on cache miss, then clears the property to skip subsequent
      * writes.
-     *
-     * @var CacheAdapterInterface|null
      */
     protected CacheAdapterInterface | null $pendingCache = null;
 
-    /**
-     * @var string
-     */
     protected string $pendingCacheKey = "";
 
-    /**
-     * @var bool
-     */
     protected bool $removeExtraSlashes = false;
 
     /**
@@ -299,13 +248,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *     "beforeMatch": callable|null
      *   ]
      *
-     * @var array
      * @phpstan-var array<string, mvc_router_route_meta>
      */
     protected array $routeMeta = [];
 
     /**
-     * @var array
      * @phpstan-var list<RouteInterface>
      */
     protected array $routes = [];
@@ -315,7 +262,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * bucket (including "*"), maps URI => list of routes whose compiled
      * pattern is a literal string equal to that URI.
      *
-     * @var array
      * @phpstan-var mvc_router_static_buckets
      */
     protected array $staticByMethod = [];
@@ -326,25 +272,16 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * route - the fast path MUST NOT be used; fall through to the dynamic
      * loop so the regex wins (reverse-iteration semantics).
      *
-     * @var array
      * @phpstan-var mvc_router_shadow_buckets
      */
     protected array $staticShadowedByMethod = [];
 
-    /**
-     * @var int
-     */
     protected int $uriSource = self::URI_SOURCE_GET_URL;
 
-    /**
-     * @var bool
-     */
     protected bool $wasMatched = false;
 
     /**
      * Phalcon\Mvc\Router constructor
-     *
-     * @param bool $defaultRoutes
      *
      * @throws Exception
      */
@@ -399,19 +336,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * );
      *```
      *
-     * @param string $pattern
-     * @param mixed  $paths       = [
-     *                            'module => '',
-     *                            'controller' => '',
-     *                            'action' => '',
-     *                            'namespace' => ''
-     *                            ]
-     * @param mixed  $httpMethods
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function add(
         string $pattern,
@@ -432,18 +364,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is CONNECT
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addConnect(
         string $pattern,
@@ -456,18 +384,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is DELETE
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addDelete(
         string $pattern,
@@ -480,18 +404,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is GET
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addGet(
         string $pattern,
@@ -504,18 +424,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is HEAD
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addHead(
         string $pattern,
@@ -528,18 +444,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Add a route to the router that only match if the HTTP method is OPTIONS
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addOptions(
         string $pattern,
@@ -552,18 +464,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is PATCH
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPatch(
         string $pattern,
@@ -576,18 +484,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is POST
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPost(
         string $pattern,
@@ -601,18 +505,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Adds a route to the router that only match if the HTTP method is PURGE
      * (Squid and Varnish support)
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPurge(
         string $pattern,
@@ -625,18 +525,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addPut(
         string $pattern,
@@ -649,18 +545,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a route to the router that only match if the HTTP method is TRACE
      *
-     * @param string $pattern
-     * @param mixed  $paths    = [
-     *                         'module => '',
-     *                         'controller' => '',
-     *                         'action' => '',
-     *                         'namespace' => ''
-     *                         ]
-     * @param int    $position
+     * @param mixed $paths = [
+     *                     'module => '',
+     *                     'controller' => '',
+     *                     'action' => '',
+     *                     'namespace' => ''
+     *                     ]
      *
-     * @return RouteInterface
      * @throws Exception
-     *
      */
     public function addTrace(
         string $pattern,
@@ -688,9 +580,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *     Router::POSITION_FIRST
      * );
      * ```
-     *
-     * @param RouteInterface $route
-     * @param int            $position
      *
      * @return RouterInterface
      * @throws Exception
@@ -725,8 +614,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *
      * Throws when a route has a Closure beforeMatch or converter - those
      * cannot be cached.
-     *
-     * @return array
      *
      * @throws Exception
      *
@@ -826,8 +713,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Removes all the pre-defined routes
-     *
-     * @return void
      */
     public function clear(): void
     {
@@ -850,10 +735,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * a `<?php return [...];` file, atomically (temp + rename) so concurrent
      * dumps don't corrupt the result.
      *
-     * @param string $path
-     *
-     * @return void
-     *
      * @throws Exception
      */
     public function dumpDispatcher(string $path): void
@@ -874,8 +755,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the processed action name
-     *
-     * @return string
      */
     public function getActionName(): string
     {
@@ -884,8 +763,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the processed controller name
-     *
-     * @return string
      */
     public function getControllerName(): string
     {
@@ -911,8 +788,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * @return array
-     *
      * @phpstan-return array<array-key, int|string>
      */
     public function getKeyRouteIds(): array
@@ -921,8 +796,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * @return array
-     *
      * @phpstan-return array<string, int|string>
      */
     public function getKeyRouteNames(): array
@@ -932,8 +805,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the route that matches the handled URI
-     *
-     * @return RouteInterface|null
      */
     public function getMatchedRoute(): RouteInterface | null
     {
@@ -942,8 +813,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the sub expressions in the regular expression matched
-     *
-     * @return array
      *
      * @phpstan-return mvc_router_matches
      */
@@ -955,8 +824,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Returns routes indexed by HTTP method, building the index if needed.
      * Unconstrained routes are stored under the "*" key.
-     *
-     * @return array
      *
      * @phpstan-return mvc_router_method_buckets
      */
@@ -971,8 +838,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the processed module name
-     *
-     * @return string
      */
     public function getModuleName(): string
     {
@@ -981,8 +846,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the processed namespace name
-     *
-     * @return string
      */
     public function getNamespaceName(): string
     {
@@ -991,8 +854,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns the processed parameters
-     *
-     * @return array
      *
      * @phpstan-return mvc_router_params
      */
@@ -1032,10 +893,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns a route object by its id
-     *
-     * @param mixed $routeId
-     *
-     * @return bool|RouteInterface
      */
     public function getRouteById(mixed $routeId): bool | RouteInterface
     {
@@ -1076,10 +933,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns a route object by its name
-     *
-     * @param string $name
-     *
-     * @return bool|RouteInterface
      */
     public function getRouteByName(string $name): bool | RouteInterface
     {
@@ -1129,9 +982,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * $router->handle("/posts/edit/1");
      *```
      *
-     * @param string $uri
-     *
-     * @return void
      * @throws Exception
      * @throws EventsException
      */
@@ -1616,8 +1466,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Returns whether controller name should not be mangled
-     *
-     * @return bool
      */
     public function isExactControllerName(): bool
     {
@@ -1627,10 +1475,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * File-shaped helper around loadDispatcherFromArray(). Includes the
      * file (opcache-friendly) and forwards the return value.
-     *
-     * @param string $path
-     *
-     * @return void
      *
      * @throws Exception
      */
@@ -1658,10 +1502,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Inverse of buildDispatcherDump(). Reconstructs every Route from the
      * scalar `routes` entries (preserving subclass and routeId), restores
      * every index, and marks the indexes clean so handle() skips rebuild.
-     *
-     * @param array $dump
-     *
-     * @return void
      *
      * @throws Exception
      *
@@ -1793,11 +1633,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * );
      * ```
      *
-     * @param mixed $config
-     *
      * @return RouterInterface
      * @throws Exception
-     *
      *
      * @phpstan-return static
      */
@@ -1865,8 +1702,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Mounts a group of routes in the router
      *
-     * @param GroupInterface $group
-     *
      * @return RouterInterface
      * @throws EventsException
      * @throws Exception
@@ -1914,10 +1749,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Set a group of paths to be returned when none of the defined routes are
      * matched
      *
-     * @param mixed $paths
-     *
      * @return RouterInterface
-     *
      *
      * @phpstan-return static
      */
@@ -1937,8 +1769,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Set whether router must remove the extra slashes in the handled routes
      *
-     * @param bool $remove
-     *
      * @return RouterInterface
      *
      * @phpstan-return static
@@ -1952,8 +1782,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Sets the default action name
-     *
-     * @param string $actionName
      *
      * @return RouterInterface
      *
@@ -1969,8 +1797,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Sets the default controller name
      *
-     * @param string $controllerName
-     *
      * @return RouterInterface
      *
      * @phpstan-return static
@@ -1985,8 +1811,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Sets the name of the default module
      *
-     * @param string $moduleName
-     *
      * @return RouterInterface
      *
      * @phpstan-return static
@@ -2000,8 +1824,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Sets the name of the default namespace
-     *
-     * @param string $namespaceName
      *
      * @return RouterInterface
      *
@@ -2027,8 +1849,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      *     ]
      * );
      *```
-     *
-     * @param array $defaults
      *
      * @return RouterInterface
      *
@@ -2069,8 +1889,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * @param array $routeIds
-     *
      * @return Router
      *
      * @phpstan-param array<array-key, int|string> $routeIds
@@ -2085,8 +1903,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * @param array $routeNames
-     *
      * @return Router
      *
      * @phpstan-param array<string, int|string> $routeNames
@@ -2122,11 +1938,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * next handle() completes - at which point buildDispatcherDump() is
      * written to the cache key.
      *
-     * @param CacheAdapterInterface $cache
-     * @param string                $key
-     *
-     * @return void
-     *
      * @throws Exception
      */
     public function useCache(
@@ -2155,8 +1966,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Checks if the router matches any of the defined routes
-     *
-     * @return bool
      */
     public function wasMatched(): bool
     {
@@ -2166,9 +1975,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Adds a single route from a config array entry. Used by loadFromConfig.
      *
-     * @param array $routeData
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param array<string, mixed> $routeData
@@ -2223,11 +2029,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         }
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return string
-     */
     protected function extractRealUri(string $uri): string
     {
         $urlParts = explode("?", $uri, 2);
@@ -2238,9 +2039,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     /**
      * Builds a Group from a config entry and mounts it. Used by loadFromConfig.
      *
-     * @param array $groupData
-     *
-     * @return void
      * @throws EventsException
      * @throws Exception
      *

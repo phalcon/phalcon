@@ -24,8 +24,6 @@ class EscaperFactory
 {
     /**
      * Create a new instance of the object
-     *
-     * @return Escaper
      */
     public function newInstance(): Escaper
     {

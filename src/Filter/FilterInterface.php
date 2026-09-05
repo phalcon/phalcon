@@ -30,13 +30,7 @@ interface FilterInterface
      * returned - recursion is one level deep only. When `$noRecursive` is
      * `true`, the whole array is passed to the sanitizer as a single value.
      *
-     * @param mixed $value
-     * @param mixed $sanitizers
-     * @param bool  $noRecursive
-     *
      * @phpstan-param filter_sanitizers|string $sanitizers
-     *
-     * @return mixed
      */
     public function sanitize(
         mixed $value,

@@ -29,8 +29,6 @@ class Manager
 
     /**
      * Manager constructor.
-     *
-     * @param FormsLocator|null $locator
      */
     public function __construct(FormsLocator | null $locator = null)
     {

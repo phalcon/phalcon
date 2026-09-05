@@ -18,13 +18,6 @@ namespace Phalcon\Support\Helper\Number;
  */
 class IsBetween
 {
-    /**
-     * @param int $value
-     * @param int $start
-     * @param int $end
-     *
-     * @return bool
-     */
     public function __invoke(int $value, int $start, int $end): bool
     {
         return $value >= $start && $value <= $end;

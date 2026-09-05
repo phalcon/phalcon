@@ -37,32 +37,19 @@ class Relation implements RelationInterface
     public const NO_ACTION        = 0;
 
     /**
-     * @var array|string
-     *
      * @phpstan-var mvc_relation_fields
      */
     protected array | string $intermediateFields;
 
-    /**
-     * @var string|null
-     */
     protected string | null $intermediateModel = null;
 
     /**
-     * @var array|string
-     *
      * @phpstan-var mvc_relation_fields
      */
     protected array | string $intermediateReferencedFields;
 
     /**
      * Phalcon\Mvc\Model\Relation constructor
-     *
-     * @param int    $type
-     * @param string $referencedModel
-     * @param mixed  $fields
-     * @param mixed  $referencedFields
-     * @param array  $options
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -144,8 +131,6 @@ class Relation implements RelationInterface
      * Returns an option by the specified name
      * If the option does not exist null is returned
      *
-     * @param string $name
-     *
      * @return mixed
      */
     public function getOption(string $name)
@@ -155,8 +140,6 @@ class Relation implements RelationInterface
 
     /**
      * Returns the options
-     *
-     * @return array
      *
      * @phpstan-return mvc_relation_options
      */
@@ -206,8 +189,6 @@ class Relation implements RelationInterface
 
     /**
      * Returns the referenced model
-     *
-     * @return string
      */
     public function getReferencedModel(): string
     {
@@ -216,8 +197,6 @@ class Relation implements RelationInterface
 
     /**
      * Returns the relation type
-     *
-     * @return int
      */
     public function getType(): int
     {
@@ -226,8 +205,6 @@ class Relation implements RelationInterface
 
     /**
      * Check whether the relation act as a foreign key
-     *
-     * @return bool
      */
     public function isForeignKey(): bool
     {
@@ -236,8 +213,6 @@ class Relation implements RelationInterface
 
     /**
      * Check if records returned by getting belongs-to/has-many are implicitly cached during the current request
-     *
-     * @return bool
      */
     public function isReusable(): bool
     {
@@ -248,8 +223,6 @@ class Relation implements RelationInterface
 
     /**
      * Check whether the relation is a 'many-to-many' relation or not
-     *
-     * @return bool
      */
     public function isThrough(): bool
     {
@@ -259,12 +232,7 @@ class Relation implements RelationInterface
     /**
      * Sets the intermediate model data for has-*-through relations
      *
-     * @param mixed  $intermediateFields
-     * @param string $intermediateModel
-     * @param mixed  $intermediateReferencedFields
-     *
      * @return void
-     *
      */
     public function setIntermediateRelation(
         mixed $intermediateFields,

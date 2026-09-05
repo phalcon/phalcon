@@ -31,9 +31,6 @@ class Timestampable extends Behavior
     /**
      * Listens for notifications from the models manager
      *
-     * @param string         $type
-     * @param ModelInterface $model
-     *
      * @return void|null
      * @throws Exception
      */
@@ -79,8 +76,6 @@ class Timestampable extends Behavior
     }
 
     /**
-     * @param array $options
-     *
      * @return string
      *
      * @phpstan-param array<string, mixed> $options

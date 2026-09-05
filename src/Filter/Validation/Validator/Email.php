@@ -73,9 +73,6 @@ use const FILTER_VALIDATE_EMAIL;
  */
 class Email extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must be an email address";
 
     /**

@@ -54,8 +54,6 @@ class Order
 
     /**
      * @param array<array-key, mixed> $sorted
-     * @param string                  $attribute
-     * @param mixed                   $item
      *
      * @return array<array-key, mixed>
      */
@@ -75,8 +73,6 @@ class Order
 
     /**
      * @param array<array-key, mixed> $sorted
-     * @param string                  $attribute
-     * @param mixed                   $item
      *
      * @return array<array-key, mixed>
      */

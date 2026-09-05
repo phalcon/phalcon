@@ -70,13 +70,6 @@ interface GroupInterface
      *```php
      * router->add("/about", "About::index");
      *```
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     * @param mixed  $httpMethods
-     *
-     *
-     * @return RouteInterface
      */
     public function add(
         string $pattern,
@@ -86,12 +79,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is CONNECT
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addConnect(
         string $pattern,
@@ -100,12 +87,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is DELETE
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addDelete(
         string $pattern,
@@ -114,12 +95,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is GET
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addGet(
         string $pattern,
@@ -128,12 +103,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is HEAD
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addHead(
         string $pattern,
@@ -142,12 +111,6 @@ interface GroupInterface
 
     /**
      * Add a route to the router that only match if the HTTP method is OPTIONS
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addOptions(
         string $pattern,
@@ -156,12 +119,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is PATCH
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addPatch(
         string $pattern,
@@ -170,12 +127,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is POST
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addPost(
         string $pattern,
@@ -184,12 +135,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is PURGE
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addPurge(
         string $pattern,
@@ -198,12 +143,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addPut(
         string $pattern,
@@ -212,12 +151,6 @@ interface GroupInterface
 
     /**
      * Adds a route to the router that only match if the HTTP method is TRACE
-     *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     *
-     * @return RouteInterface
      */
     public function addTrace(
         string $pattern,
@@ -228,17 +161,11 @@ interface GroupInterface
      * Sets a callback that is called if the route is matched.
      * The developer can implement any arbitrary conditions here
      * If the callback returns false the route is treated as not matched
-     *
-     * @param mixed $beforeMatch
-     *
-     * @return GroupInterface
      */
     public function beforeMatch(mixed $beforeMatch): GroupInterface;
 
     /**
      * Removes all the pre-defined routes
-     *
-     * @return void
      */
     public function clear(): void;
 
@@ -251,15 +178,11 @@ interface GroupInterface
 
     /**
      * Returns the hostname restriction
-     *
-     * @return string|null
      */
     public function getHostname(): string | null;
 
     /**
      * Returns the common paths defined for this group
-     *
-     * @return array|string|null
      *
      * @phpstan-return mvc_router_paths|string|null
      */
@@ -267,15 +190,11 @@ interface GroupInterface
 
     /**
      * Returns the common prefix for all the routes
-     *
-     * @return string|null
      */
     public function getPrefix(): string | null;
 
     /**
      * Returns the routes added to the group
-     *
-     * @return array
      *
      * @phpstan-return list<RouteInterface>
      */
@@ -283,29 +202,16 @@ interface GroupInterface
 
     /**
      * Set a hostname restriction for all the routes in the group
-     *
-     * @param string $hostname
-     *
-     * @return GroupInterface
      */
     public function setHostname(string $hostname): GroupInterface;
 
     /**
      * Set common paths for all the routes in the group
-     *
-     * @param mixed $paths
-     *
-     *
-     * @return GroupInterface
      */
     public function setPaths(mixed $paths): GroupInterface;
 
     /**
      * Set a common uri prefix for all the routes in this group
-     *
-     * @param string $prefix
-     *
-     * @return GroupInterface
      */
     public function setPrefix(string $prefix): GroupInterface;
 }

@@ -38,8 +38,6 @@ class ServiceNotFound extends Exception
     /**
      * Service not found
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

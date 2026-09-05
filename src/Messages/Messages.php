@@ -170,9 +170,6 @@ class Messages implements MessagesContract, JsonSerializable
         return $records;
     }
 
-    /**
-     * @param mixed $value
-     */
     private function checkSerializable(mixed $value): mixed
     {
         if (

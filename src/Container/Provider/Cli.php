@@ -65,10 +65,6 @@ class Cli implements Provider
 {
     /**
      * Provider for commonly used CLI applications
-     *
-     * @param Collection $services
-     *
-     * @return void
      */
     public function provide(Collection $services): void
     {

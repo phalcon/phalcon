@@ -53,8 +53,6 @@ interface RelationInterface
 
     /**
      * Gets the intermediate model for has-*-through relations
-     *
-     * @return string
      */
     public function getIntermediateModel(): string;
 
@@ -71,16 +69,12 @@ interface RelationInterface
      * Returns an option by the specified name
      * If the option does not exist null is returned
      *
-     * @param string $name
-     *
      * @return mixed
      */
     public function getOption(string $name);
 
     /**
      * Returns the options
-     *
-     * @return array
      *
      * @phpstan-return mvc_relation_options
      */
@@ -106,49 +100,34 @@ interface RelationInterface
 
     /**
      * Returns the referenced model
-     *
-     * @return string
      */
     public function getReferencedModel(): string;
 
     /**
      * Returns the relations type
-     *
-     * @return int
      */
     public function getType(): int;
 
     /**
      * Check whether the relation act as a foreign key
-     *
-     * @return bool
      */
     public function isForeignKey(): bool;
 
     /**
      * Check if records returned by getting belongs-to/has-many are implicitly
      * cached during the current request
-     *
-     * @return bool
      */
     public function isReusable(): bool;
 
     /**
      * Check whether the relation is a 'many-to-many' relation or not
-     *
-     * @return bool
      */
     public function isThrough(): bool;
 
     /**
      * Sets the intermediate model data for has-*-through relations
      *
-     * @param mixed  $intermediateFields
-     * @param string $intermediateModel
-     * @param mixed  $intermediateReferencedFields
-     *
      * @return mixed
-     *
      */
     public function setIntermediateRelation(
         mixed $intermediateFields,

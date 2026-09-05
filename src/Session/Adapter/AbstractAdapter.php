@@ -46,10 +46,6 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
 
     /**
      * Garbage Collector
-     *
-     * @param int $max_lifetime
-     *
-     * @return false|int
      */
     public function gc(int $max_lifetime): false | int
     {

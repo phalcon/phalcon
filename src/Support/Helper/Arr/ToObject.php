@@ -20,8 +20,6 @@ class ToObject
 {
     /**
      * @param array<array-key, mixed> $collection
-     *
-     * @return object
      */
     public function __invoke(array $collection): object
     {

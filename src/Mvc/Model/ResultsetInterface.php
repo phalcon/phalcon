@@ -24,10 +24,6 @@ interface ResultsetInterface
 {
     /**
      * Deletes every record in the resultset
-     *
-     * @param Closure|null $conditionCallback
-     *
-     * @return bool
      */
     public function delete(Closure | null $conditionCallback = null): bool;
 
@@ -43,8 +39,6 @@ interface ResultsetInterface
      *     }
      * );
      *```
-     *
-     * @param mixed $filter
      *
      * @return ModelInterface[]
      */
@@ -71,8 +65,6 @@ interface ResultsetInterface
 
     /**
      * Get last row in the resultset
-     *
-     * @return ModelInterface|Row|null
      */
     public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | null;
 
@@ -85,33 +77,21 @@ interface ResultsetInterface
 
     /**
      * Returns the internal type of data retrieval that the resultset is using
-     *
-     * @return int
      */
     public function getType(): int;
 
     /**
      * Tell if the resultset is fresh or an old one cached
-     *
-     * @return bool
      */
     public function isFresh(): bool;
 
     /**
      * Sets the hydration mode in the resultset
-     *
-     * @param int $hydrateMode
-     *
-     * @return ResultsetInterface
      */
     public function setHydrateMode(int $hydrateMode): ResultsetInterface;
 
     /**
      * Set if the resultset is fresh or an old one cached
-     *
-     * @param bool $isFresh
-     *
-     * @return ResultsetInterface
      */
     public function setIsFresh(bool $isFresh): ResultsetInterface;
 
@@ -119,19 +99,12 @@ interface ResultsetInterface
      * Returns a complete resultset as an array, if the resultset has a big
      * number of rows it could consume more memory than currently it does.
      *
-     * @return array
-     *
      * @phpstan-return array<array-key, mixed>
      */
     public function toArray(): array;
 
     /**
      * Updates every record in the resultset
-     *
-     * @param mixed        $data
-     * @param Closure|null $conditionCallback
-     *
-     * @return bool
      */
     public function update(
         mixed $data,

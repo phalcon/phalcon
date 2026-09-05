@@ -54,8 +54,6 @@ trait GetSetHasTrait
      * Get the element from the collection
      *
      * @phpstan-return T|mixed
-     *
-     * @return mixed
      */
     abstract public function get(
         string $element,

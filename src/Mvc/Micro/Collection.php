@@ -49,12 +49,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function delete(
         string $routePattern,
@@ -68,12 +62,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is GET.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function get(
         string $routePattern,
@@ -98,8 +86,6 @@ class Collection implements CollectionInterface
     /**
      * Returns the registered handlers
      *
-     * @return array
-     *
      * @phpstan-return mvc_micro_handlers
      */
     public function getHandlers(): array
@@ -109,8 +95,6 @@ class Collection implements CollectionInterface
 
     /**
      * Returns the collection prefix if any
-     *
-     * @return string
      */
     public function getPrefix(): string
     {
@@ -119,12 +103,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is HEAD.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function head(
         string $routePattern,
@@ -138,8 +116,6 @@ class Collection implements CollectionInterface
 
     /**
      * Returns if the main handler must be lazy loaded
-     *
-     * @return bool
      */
     public function isLazy(): bool
     {
@@ -148,12 +124,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function map(
         string $routePattern,
@@ -176,14 +146,6 @@ class Collection implements CollectionInterface
      *     'test'
      * );
      * ```
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param mixed       $method
-     * @param string|null $name
-     *
-     * @return CollectionInterface
-     *
      */
     public function mapVia(
         string $routePattern,
@@ -199,12 +161,6 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is
      * OPTIONS.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function options(
         string $routePattern,
@@ -218,12 +174,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is PATCH.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function patch(
         string $routePattern,
@@ -237,12 +187,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is POST.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function post(
         string $routePattern,
@@ -256,12 +200,6 @@ class Collection implements CollectionInterface
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is PUT.
-     *
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return CollectionInterface
      */
     public function put(
         string $routePattern,
@@ -275,11 +213,6 @@ class Collection implements CollectionInterface
 
     /**
      * Sets the main handler.
-     *
-     * @param mixed $handler
-     * @param bool  $isLazy
-     *
-     * @return CollectionInterface
      */
     public function setHandler(mixed $handler, bool $isLazy = false): CollectionInterface
     {
@@ -292,10 +225,6 @@ class Collection implements CollectionInterface
 
     /**
      * Sets if the main handler must be lazy loaded
-     *
-     * @param bool $isLazy
-     *
-     * @return CollectionInterface
      */
     public function setLazy(bool $isLazy): CollectionInterface
     {
@@ -306,10 +235,6 @@ class Collection implements CollectionInterface
 
     /**
      * Sets a prefix for all routes added to the collection
-     *
-     * @param string $prefix
-     *
-     * @return CollectionInterface
      */
     public function setPrefix(string $prefix): CollectionInterface
     {
@@ -320,14 +245,6 @@ class Collection implements CollectionInterface
 
     /**
      * Internal function to add a handler to the group.
-     *
-     * @param mixed       $method
-     * @param string      $routePattern
-     * @param mixed       $handler
-     * @param string|null $name
-     *
-     * @return void
-     *
      */
     protected function addMap(
         mixed $method,

@@ -35,8 +35,6 @@ abstract class AbstractSeries extends AbstractHelper
      */
     protected array $store = [];
 
-    /**
-     */
     public function __invoke(
         string $indent = '    ',
         ?string $delimiter = null
@@ -76,8 +74,6 @@ abstract class AbstractSeries extends AbstractHelper
 
     /**
      * Returns the tag name.
-     *
-     * @return string
      */
     abstract protected function getTag(): string;
 

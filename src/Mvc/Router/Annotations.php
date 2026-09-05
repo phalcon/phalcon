@@ -95,10 +95,6 @@ class Annotations extends Router
      * A resource is a class that contains routing annotations
      * The class is located in a module
      *
-     * @param string      $module
-     * @param string      $handler
-     * @param string|null $prefix
-     *
      * @return self
      *
      * @phpstan-return static
@@ -116,9 +112,6 @@ class Annotations extends Router
     /**
      * Adds a resource to the annotations handler
      * A resource is a class that contains routing annotations
-     *
-     * @param string      $handler
-     * @param string|null $prefix
      *
      * @return $this
      *
@@ -144,8 +137,6 @@ class Annotations extends Router
     /**
      * Return the registered resources
      *
-     * @return array
-     *
      * @phpstan-return list<array{0: string|null, 1: string, 2?: string}>
      */
     public function getResources(): array
@@ -156,9 +147,6 @@ class Annotations extends Router
     /**
      * Produce the routing parameters from the rewrite information
      *
-     * @param string $uri
-     *
-     * @return void
      * @throws Exception|\Phalcon\Mvc\Router\Exception
      * @throws EventsException
      */
@@ -323,13 +311,6 @@ class Annotations extends Router
     /**
      * Checks for annotations in the public methods of the controller
      *
-     * @param string     $module
-     * @param string     $namespaceName
-     * @param string     $controller
-     * @param string     $action
-     * @param Annotation $annotation
-     *
-     * @return void
      * @throws Exception|\Phalcon\Mvc\Router\Exception
      */
     public function processActionAnnotation(
@@ -499,9 +480,6 @@ class Annotations extends Router
     /**
      * Checks for annotations in the controller docblock
      *
-     * @param string     $handler
-     * @param Annotation $annotation
-     *
      * @return void
      */
     public function processControllerAnnotation(
@@ -547,8 +525,6 @@ class Annotations extends Router
      * $annotationRouter->setActionPreformatCallback();
      * ```
      *
-     * @param mixed $callback
-     *
      * @return Annotations
      * @throws Exception
      *
@@ -574,8 +550,6 @@ class Annotations extends Router
     /**
      * Changes the action method suffix
      *
-     * @param string $actionSuffix
-     *
      * @return Annotations
      *
      * @phpstan-return static
@@ -589,8 +563,6 @@ class Annotations extends Router
 
     /**
      * Changes the controller class suffix
-     *
-     * @param string $controllerSuffix
      *
      * @return Annotations
      *

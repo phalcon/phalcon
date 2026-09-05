@@ -26,8 +26,6 @@ interface ValidatorInterface
     /**
      * Returns an option in the validator's options
      * Returns null if the option hasn't set
-     *
-     * @return mixed
      */
     public function getOption(string $key, mixed $defaultValue = null): mixed;
 

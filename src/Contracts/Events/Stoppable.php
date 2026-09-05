@@ -21,8 +21,6 @@ interface Stoppable
     /**
      * Returns true when the event must stop propagating to subsequent
      * listeners.
-     *
-     * @return bool
      */
     public function isPropagationStopped(): bool;
 }

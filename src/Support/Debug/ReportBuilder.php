@@ -54,7 +54,6 @@ class ReportBuilder
      * @phpstan-param support_debug_blacklist $blacklist
      * @phpstan-param support_debug_variables $data
      *
-     * @return ExceptionReport
      * @throws ReflectionException
      */
     public function build(
@@ -138,10 +137,7 @@ class ReportBuilder
      * @phpstan-param support_debug_trace $trace
      *
      * @param array<array-key, mixed> $trace
-     * @param bool                    $showFiles
-     * @param bool                    $showFileFragment
      *
-     * @return BacktraceItem
      * @throws ReflectionException
      */
     private function buildItem(array $trace, bool $showFiles, bool $showFileFragment): BacktraceItem

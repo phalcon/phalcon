@@ -51,85 +51,61 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Connection ID
-     *
-     * @var int
      */
     protected static int $connectionConsecutive = 0;
 
     /**
      * Active connection ID
-     *
-     * @var int
      */
     protected int $connectionId;
 
     /**
      * Descriptor used to connect to a database
-     *
-     * @var array
      */
     protected array $descriptor = [];
 
     /**
      * Dialect instance
-     *
-     * @var DialectInterface
      */
     protected DialectInterface $dialect;
 
     /**
      * Name of the dialect used
-     *
-     * @var string
      */
     protected string $dialectType;
 
     /**
      * The real SQL statement - what was executed
-     *
-     * @var string
      */
     protected string $realSqlStatement = "";
 
     /**
      * Active SQL Bind Types
-     *
-     * @var array
      */
     protected array $sqlBindTypes = [];
 
     /**
      * Active SQL Statement
-     *
-     * @var string
      */
     protected string $sqlStatement;
 
     /**
      * Active SQL bound parameter variables
-     *
-     * @var array
      */
     protected array $sqlVariables = [];
 
     /**
      * Current transaction level
-     *
-     * @var int
      */
     protected int $transactionLevel = 0;
 
     /**
      * Whether the database supports transactions with save points
-     *
-     * @var bool
      */
     protected bool $transactionsWithSavepoints = false;
 
     /**
      * Type of database system the adapter is used for
-     *
-     * @var string
      */
     protected string $type;
 
@@ -195,8 +171,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * constructor calls `setup()` whenever a descriptor carries an `options`
      * key, constructing one adapter with `options` can change the SQL another,
      * already-configured connection generates.
-     *
-     * @param array $options
      */
     public static function setup(array $options): void
     {
@@ -205,12 +179,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Adds a CHECK constraint to a table.
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param CheckInterface $check
-     *
-     * @return bool
      */
     public function addCheck(
         string $tableName,
@@ -224,12 +192,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Adds a column to a table
-     *
-     * @param string          $tableName
-     * @param string          $schemaName
-     * @param ColumnInterface $column
-     *
-     * @return bool
      */
     public function addColumn(
         string $tableName,
@@ -247,12 +209,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Adds a foreign key to a table
-     *
-     * @param string             $tableName
-     * @param string             $schemaName
-     * @param ReferenceInterface $reference
-     *
-     * @return bool
      */
     public function addForeignKey(
         string $tableName,
@@ -270,12 +226,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Adds an index to a table
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return bool
      */
     public function addIndex(
         string $tableName,
@@ -293,12 +243,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Adds a primary key to a table
-     *
-     * @param string         $tableName
-     * @param string         $schemaName
-     * @param IndexInterface $index
-     *
-     * @return bool
      */
     public function addPrimaryKey(
         string $tableName,
@@ -316,12 +260,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Creates a materialized view (PostgreSQL only).
-     *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return bool
      */
     public function createMaterializedView(
         string $viewName,
@@ -340,9 +278,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Creates a new savepoint
      *
-     * @param string $name
-     *
-     * @return bool
      * @throws Exception
      */
     public function createSavepoint(string $name): bool
@@ -355,11 +290,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Creates a table
      *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param array  $definition
-     *
-     * @return bool
      * @throws Exception
      */
     public function createTable(
@@ -384,11 +314,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Creates a view
      *
-     * @param string      $viewName
-     * @param array       $definition
-     * @param string|null $schemaName
-     *
-     * @return bool
      * @throws Exception
      */
     public function createView(
@@ -424,13 +349,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * ```
      *
      * Warning! If $whereCondition is string it not escaped.
-     *
-     * @param array|string $tableName
-     * @param string|null  $whereCondition
-     * @param array        $placeholders
-     * @param array        $dataTypes
-     *
-     * @return bool
      */
     public function delete(
         array | string $tableName,
@@ -466,7 +384,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * adapter must override this method. All bundled adapters except PostgreSQL
      * override it.
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|IndexInterface[]
@@ -517,7 +434,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * PostgreSQL, SQLite) overrides it, so this base implementation has no
      * in-tree caller and effectively assumes the PostgreSQL row shape.
      *
-     * @param string $tableName
      * @param string $schemaName
      *
      * @return array|ReferenceInterface[]
@@ -569,12 +485,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a CHECK constraint from a table.
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $checkName
-     *
-     * @return bool
      */
     public function dropCheck(
         string $tableName,
@@ -588,12 +498,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a column from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $columnName
-     *
-     * @return bool
      */
     public function dropColumn(
         string $tableName,
@@ -611,12 +515,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a foreign key from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $referenceName
-     *
-     * @return bool
      */
     public function dropForeignKey(
         string $tableName,
@@ -634,12 +532,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drop an index from a table
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     * @param string $indexName
-     *
-     * @return bool
      */
     public function dropIndex(
         string $tableName,
@@ -657,12 +549,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a materialized view (PostgreSQL only).
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return bool
      */
     public function dropMaterializedView(
         string $viewName,
@@ -680,11 +566,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a table's primary key
-     *
-     * @param string $tableName
-     * @param string $schemaName
-     *
-     * @return bool
      */
     public function dropPrimaryKey(string $tableName, string $schemaName): bool
     {
@@ -698,12 +579,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a table from a schema/database
-     *
-     * @param string      $tableName
-     * @param string|null $schemaName
-     * @param bool        $ifExists
-     *
-     * @return bool
      */
     public function dropTable(
         string $tableName,
@@ -722,11 +597,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Drops a view
      *
-     * @param string $viewName
      * @param string $schemaName
-     * @param bool   $ifExists
-     *
-     * @return bool
      */
     public function dropView(
         string $viewName,
@@ -759,8 +630,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *```
      *
      * @param array|string $identifier
-     *
-     * @return string
      */
     public function escapeIdentifier(array | float | int | string $identifier): string
     {
@@ -798,13 +667,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *     print_r($invoice);
      * }
      *```
-     *
-     * @param string $sqlQuery
-     * @param int    $fetchMode
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return array
      */
     public function fetchAll(
         string $sqlQuery,
@@ -868,13 +730,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      * print_r($invoice);
      *```
-     *
-     * @param string $sqlQuery
-     * @param int    $fetchMode
-     * @param array  $bindParams
-     * @param array  $bindTypes
-     *
-     * @return array|bool
      */
     public function fetchOne(
         string $sqlQuery,
@@ -895,10 +750,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns a SQL modified with a FOR UPDATE clause
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function forUpdate(string $sqlQuery, string $modifier = ''): string
     {
@@ -907,10 +758,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns the SQL column definition from a column
-     *
-     * @param ColumnInterface $column
-     *
-     * @return string
      */
     public function getColumnDefinition(ColumnInterface $column): string
     {
@@ -919,10 +766,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Gets a list of columns
-     *
-     * @param array $columnList
-     *
-     * @return string
      */
     public function getColumnList(array $columnList): string
     {
@@ -931,8 +774,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Gets the active connection unique identifier
-     *
-     * @return int
      */
     public function getConnectionId(): int
     {
@@ -958,8 +799,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *     ]
      * );
      *```
-     *
-     * @return RawValue
      */
     public function getDefaultIdValue(): RawValue
     {
@@ -985,9 +824,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @return RawValue
      * @todo Return NULL if this is not supported by the adapter
-     *
      */
     public function getDefaultValue(): RawValue
     {
@@ -996,8 +833,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Return descriptor used to connect to the active database
-     *
-     * @return array
      */
     public function getDescriptor(): array
     {
@@ -1006,8 +841,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns internal dialect instance
-     *
-     * @return DialectInterface
      */
     public function getDialect(): DialectInterface
     {
@@ -1016,8 +849,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Name of the dialect used
-     *
-     * @return string
      */
     public function getDialectType(): string
     {
@@ -1026,8 +857,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns the savepoint name to use for nested transactions
-     *
-     * @return string
      */
     public function getNestedTransactionSavepointName(): string
     {
@@ -1036,8 +865,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL statement in the object without replace bound parameters
-     *
-     * @return string
      */
     public function getRealSQLStatement(): string
     {
@@ -1046,8 +873,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL statement in the object
-     *
-     * @return array
      */
     public function getSQLBindTypes(): array
     {
@@ -1056,8 +881,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL statement in the object
-     *
-     * @return string
      */
     public function getSQLStatement(): string
     {
@@ -1066,8 +889,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL variables in the object
-     *
-     * @return array
      */
     public function getSQLVariables(): array
     {
@@ -1076,8 +897,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Type of database system the adapter is used for
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -1099,12 +918,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * INSERT INTO `co_invoices` (`inv_title`, `inv_total`) VALUES ("Test Invoice", 100);
      * ```
      *
-     * @param string $tableName
-     * @param array  $values
-     * @param array  $fields
-     * @param array  $dataTypes
+     * @param array $fields
      *
-     * @return bool
      * @throws Exception
      */
     public function insert(
@@ -1194,11 +1009,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * INSERT INTO `co_invoices` (`inv_title`, `inv_total`) VALUES ("Test Invoice", 100);
      * ```
      *
-     * @param string $tableName
-     * @param array  $data
-     * @param array  $dataTypes
-     *
-     * @return bool
      * @throws Exception
      */
     public function insertAsDict(
@@ -1221,8 +1031,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns if nested transactions should use savepoints
-     *
-     * @return bool
      */
     public function isNestedTransactionsWithSavepoints(): bool
     {
@@ -1236,10 +1044,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * echo $connection->limit("SELECT * FROM co_invoices", 5);
      * ```
      *
-     * @param string    $sqlQuery
      * @param array|int $number
-     *
-     * @return string
      */
     public function limit(string $sqlQuery, mixed $number): string
     {
@@ -1257,7 +1062,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @param string $schemaName
      *
-     * @return array
      * @todo optimize this
      */
     public function listTables(string | null $schemaName = null): array
@@ -1285,8 +1089,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *```
      *
      * @param string $schemaName
-     *
-     * @return array
      */
     public function listViews(string | null $schemaName = null): array
     {
@@ -1305,13 +1107,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Modifies a table column based on a definition
-     *
-     * @param string               $tableName
-     * @param string               $schemaName
-     * @param ColumnInterface      $column
-     * @param ColumnInterface|null $currentColumn
-     *
-     * @return bool
      */
     public function modifyColumn(
         string $tableName,
@@ -1332,12 +1127,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Appends an ON CONFLICT (...) DO UPDATE SET col = excluded.col upsert
      * clause to the supplied INSERT statement.
-     *
-     * @param string $sqlQuery
-     * @param array  $conflictColumns
-     * @param array  $updateColumns
-     *
-     * @return string
      */
     public function onConflictUpdate(
         string $sqlQuery,
@@ -1353,12 +1142,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Refreshes a materialized view (PostgreSQL only).
-     *
-     * @param string      $viewName
-     * @param string|null $schemaName
-     * @param bool        $concurrent
-     *
-     * @return bool
      */
     public function refreshMaterializedView(
         string $viewName,
@@ -1377,9 +1160,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Releases given savepoint
      *
-     * @param string $name
-     *
-     * @return bool
      * @throws Exception
      */
     public function releaseSavepoint(string $name): bool
@@ -1395,11 +1175,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Appends a RETURNING clause to an INSERT/UPDATE/DELETE statement.
-     *
-     * @param string $sqlQuery
-     * @param array  $columns
-     *
-     * @return string
      */
     public function returning(string $sqlQuery, array $columns): string
     {
@@ -1409,9 +1184,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Rollbacks given savepoint
      *
-     * @param string $name
-     *
-     * @return bool
      * @throws Exception
      */
     public function rollbackSavepoint(string $name): bool
@@ -1423,10 +1195,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Sets the dialect used to produce the SQL
-     *
-     * @param DialectInterface $dialect
-     *
-     * @return void
      */
     public function setDialect(DialectInterface $dialect): void
     {
@@ -1436,9 +1204,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Set if nested transactions should use savepoints
      *
-     * @param bool $flag
-     *
-     * @return AdapterInterface
      * @throws Exception
      */
     public function setNestedTransactionsWithSavepoints(
@@ -1457,10 +1222,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Returns a SQL modified with a LOCK IN SHARE MODE clause
-     *
-     * @param string $sqlQuery
-     *
-     * @return string
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {
@@ -1481,8 +1242,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Check whether the database system requires a sequence to produce
      * auto-numeric values
-     *
-     * @return bool
      */
     public function supportSequences(): bool
     {
@@ -1498,10 +1257,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return bool
      */
     public function tableExists(
         string $tableName,
@@ -1526,10 +1282,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $tableName
      * @param string $schemaName
-     *
-     * @return array
      */
     public function tableOptions(
         string $tableName,
@@ -1585,13 +1338,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * Warning! If $whereCondition is string, it is not escaped.
      *
-     * @param string       $tableName
-     * @param array        $fields
-     * @param array        $values
-     * @param array|string $whereCondition
-     * @param array        $dataTypes
-     *
-     * @return bool
      * @throws Exception
      */
     public function update(
@@ -1712,12 +1458,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * UPDATE `co_invoices` SET `inv_title` = "New Test Invoice" WHERE inv_id = 101
      * ```
      *
-     * @param string       $tableName
-     * @param array        $data
-     * @param array|string $whereCondition
-     * @param array        $dataTypes
-     *
-     * @return bool
      * @throws Exception
      */
     public function updateAsDict(
@@ -1742,8 +1482,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Check whether the database system requires an explicit value for identity
      * columns
-     *
-     * @return bool
      */
     public function useExplicitIdValue(): bool
     {
@@ -1759,10 +1497,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $viewName
      * @param string $schemaName
-     *
-     * @return bool
      */
     public function viewExists(
         string $viewName,
@@ -1776,7 +1511,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Check if savepoints are supported
      *
-     * @return void
      * @throws Exception
      */
     protected function checkSavepoints(): void
@@ -1800,12 +1534,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *  - "value":       the value to bind (when "bind" is true)
      *  - "hasBindType": whether "bindType" must be collected
      *  - "bindType":    the bind type to collect (when applicable)
-     *
-     * @param mixed      $value
-     * @param int|string $position
-     * @param array      $dataTypes
-     *
-     * @return array
      */
     private function buildValuePlaceholder(
         mixed $value,

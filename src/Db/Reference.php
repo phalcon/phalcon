@@ -43,52 +43,35 @@ class Reference implements ReferenceInterface
 {
     /**
      * Local reference columns
-     *
-     * @var array
      */
     protected array $columns;
     /**
      * ON DELETE
-     *
-     * @var string|null
      */
     protected ?string $onDelete = null;
     /**
      * ON UPDATE
-     *
-     * @var string|null
      */
     protected ?string $onUpdate = null;
     /**
      * Referenced Columns
-     *
-     * @var array
      */
     protected array $referencedColumns;
     /**
      * Referenced Schema
-     *
-     * @var string|null
      */
     protected ?string $referencedSchema = null;
     /**
      * Referenced Table
-     *
-     * @var string
      */
     protected string $referencedTable;
     /**
      * Schema name
-     *
-     * @var string|null
      */
     protected ?string $schemaName = null;
 
     /**
      * Phalcon\Db\Reference constructor
-     *
-     * @param string $name
-     * @param array  $definition
      *
      * @throws Exception
      */
@@ -126,8 +109,6 @@ class Reference implements ReferenceInterface
 
     /**
      * Local reference columns
-     *
-     * @return array
      */
     public function getColumns(): array
     {
@@ -136,8 +117,6 @@ class Reference implements ReferenceInterface
 
     /**
      * Constraint name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -146,8 +125,6 @@ class Reference implements ReferenceInterface
 
     /**
      * ON DELETE
-     *
-     * @return string|null
      */
     public function getOnDelete(): ?string
     {
@@ -156,8 +133,6 @@ class Reference implements ReferenceInterface
 
     /**
      * ON UPDATE
-     *
-     * @return string|null
      */
     public function getOnUpdate(): ?string
     {
@@ -166,8 +141,6 @@ class Reference implements ReferenceInterface
 
     /**
      * Referenced Columns
-     *
-     * @return array
      */
     public function getReferencedColumns(): array
     {
@@ -176,8 +149,6 @@ class Reference implements ReferenceInterface
 
     /**
      * Referenced Schema
-     *
-     * @return string
      */
     public function getReferencedSchema(): ?string
     {
@@ -186,8 +157,6 @@ class Reference implements ReferenceInterface
 
     /**
      * Referenced Table
-     *
-     * @return string
      */
     public function getReferencedTable(): string
     {
@@ -196,8 +165,6 @@ class Reference implements ReferenceInterface
 
     /**
      * Schema name
-     *
-     * @return string
      */
     public function getSchemaName(): ?string
     {

@@ -46,8 +46,6 @@ abstract class AbstractSerializer implements SerializerInterface
     /**
      * Serialize data
      *
-     * @return array
-     *
      * @phpstan-return storage_serializer_data
      */
     public function __serialize(): array

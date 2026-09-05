@@ -38,8 +38,6 @@ class NoClassSet extends Exception
     /**
      * No set for service
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

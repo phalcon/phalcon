@@ -18,22 +18,11 @@ namespace Phalcon\Encryption\Crypt\Padding;
  */
 class Noop implements PadInterface
 {
-    /**
-     * @param int $paddingSize
-     *
-     * @return string
-     */
     public function pad(int $paddingSize): string
     {
         return "";
     }
 
-    /**
-     * @param string $input
-     * @param int    $blockSize
-     *
-     * @return int
-     */
     public function unpad(string $input, int $blockSize): int
     {
         return 0;

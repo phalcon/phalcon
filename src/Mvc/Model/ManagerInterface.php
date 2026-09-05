@@ -40,11 +40,6 @@ interface ManagerInterface
 {
     /**
      * Binds a behavior to a model
-     *
-     * @param ModelInterface    $model
-     * @param BehaviorInterface $behavior
-     *
-     * @return void
      */
     public function addBehavior(
         ModelInterface $model,
@@ -53,14 +48,6 @@ interface ManagerInterface
 
     /**
      * Setup a relation reverse 1-1  between two models
-     *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -75,14 +62,6 @@ interface ManagerInterface
     /**
      * Setup a relation 1-n between two models
      *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
-     *
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasMany(
@@ -95,17 +74,6 @@ interface ManagerInterface
 
     /**
      * Setups a relation n-m between two models
-     *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $intermediateModel
-     * @param mixed          $intermediateFields
-     * @param mixed          $intermediateReferencedFields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -123,14 +91,6 @@ interface ManagerInterface
     /**
      * Setup a 1-1 relation between two models
      *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
-     *
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasOne(
@@ -143,17 +103,6 @@ interface ManagerInterface
 
     /**
      * Setups a 1-1 relation between two models using an intermediate table
-     *
-     * @param ModelInterface $model
-     * @param mixed          $fields
-     * @param string         $intermediateModel
-     * @param mixed          $intermediateFields
-     * @param mixed          $intermediateReferencedFields
-     * @param string         $referencedModel
-     * @param mixed          $referencedFields
-     * @param array          $options
-     *
-     * @return RelationInterface
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -170,18 +119,11 @@ interface ManagerInterface
 
     /**
      * Clears the internal reusable list
-     *
-     * @return void
      */
     public function clearReusableObjects(): void;
 
     /**
      * Creates a Phalcon\Mvc\Model\Query\Builder
-     *
-     * @param mixed $params
-     *
-     * @return BuilderInterface
-     *
      */
     public function createBuilder(
         mixed $params = null
@@ -189,23 +131,14 @@ interface ManagerInterface
 
     /**
      * Creates a Phalcon\Mvc\Model\Query without execute it
-     *
-     * @param string $phql
-     *
-     * @return QueryInterface
      */
     public function createQuery(string $phql): QueryInterface;
 
     /**
      * Creates a Phalcon\Mvc\Model\Query and execute it
      *
-     * @param string $phql
-     * @param mixed  $placeholders
-     * @param mixed  $types
-     *
      * @return mixed
      * @return ResultsetInterface|StatusInterface
-     *
      */
     public function executeQuery(
         string $phql,
@@ -216,21 +149,12 @@ interface ManagerInterface
     /**
      * Gets belongsTo relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return RelationInterface[]
      */
     public function getBelongsTo(ModelInterface $model): array;
 
     /**
      * Gets belongsTo related records from a model
-     *
-     * @param string         $modelName
-     * @param string         $modelRelation
-     * @param ModelInterface $record
-     * @param mixed          $parameters
-     * @param string|null    $method
-     *
      */
     public function getBelongsToRecords(
         string $modelName,
@@ -242,15 +166,11 @@ interface ManagerInterface
 
     /**
      * Returns the newly created Phalcon\Mvc\Model\Query\Builder or null
-     *
-     * @return BuilderInterface|null
      */
     public function getBuilder(): BuilderInterface | null;
 
     /**
      * Gets hasMany relations defined on a model
-     *
-     * @param ModelInterface $model
      *
      * @return RelationInterface[]
      */
@@ -258,13 +178,6 @@ interface ManagerInterface
 
     /**
      * Gets hasMany related records from a model
-     *
-     * @param string         $modelName
-     * @param string         $modelRelation
-     * @param ModelInterface $record
-     * @param mixed          $parameters
-     * @param string|null    $method
-     *
      */
     public function getHasManyRecords(
         string $modelName,
@@ -277,16 +190,12 @@ interface ManagerInterface
     /**
      * Gets hasManyToMany relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return RelationInterface[]
      */
     public function getHasManyToMany(ModelInterface $model): array;
 
     /**
      * Gets hasOne relations defined on a model
-     *
-     * @param ModelInterface $model
      *
      * @return RelationInterface[]
      */
@@ -295,21 +204,12 @@ interface ManagerInterface
     /**
      * Gets hasOne relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return RelationInterface[]
      */
     public function getHasOneAndHasMany(ModelInterface $model): array;
 
     /**
      * Gets hasOne related records from a model
-     *
-     * @param string         $modelName
-     * @param string         $modelRelation
-     * @param ModelInterface $record
-     * @param mixed          $parameters
-     * @param string|null    $method
-     *
      */
     public function getHasOneRecords(
         string $modelName,
@@ -322,69 +222,42 @@ interface ManagerInterface
     /**
      * Gets hasOneThrough relations defined on a model
      *
-     * @param ModelInterface $model
-     *
      * @return RelationInterface[]
      */
     public function getHasOneThrough(ModelInterface $model): array;
 
     /**
      * Get last initialized model
-     *
-     * @return ModelInterface|null
      */
     public function getLastInitialized(): ModelInterface | null;
 
     /**
      * Returns the last query created or executed in the models manager
-     *
-     * @return QueryInterface
      */
     public function getLastQuery(): QueryInterface;
 
     /**
      * Returns the mapped schema for a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string|null
      */
     public function getModelSchema(ModelInterface $model): string | null;
 
     /**
      * Returns the mapped source for a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string
      */
     public function getModelSource(ModelInterface $model): string;
 
     /**
      * Returns the connection to read data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return AdapterInterface
      */
     public function getReadConnection(ModelInterface $model): AdapterInterface;
 
     /**
      * Returns the connection service name used to read data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string
      */
     public function getReadConnectionService(ModelInterface $model): string;
 
     /**
      * Returns a relation by its alias
-     *
-     * @param string $modelName
-     * @param string $alias
-     *
-     * @return bool|RelationInterface
      */
     public function getRelationByAlias(
         string $modelName,
@@ -394,13 +267,7 @@ interface ManagerInterface
     /**
      * Helper method to query records based on a relation definition
      *
-     * @param RelationInterface $relation
-     * @param ModelInterface    $record
-     * @param mixed             $parameters
-     * @param string|null       $method
-     *
      * @return false|int|ModelInterface|Simple
-     *
      */
     public function getRelationRecords(
         RelationInterface $relation,
@@ -412,17 +279,12 @@ interface ManagerInterface
     /**
      * Query all the relationships defined on a model
      *
-     * @param string $modelName
-     *
      * @return RelationInterface[]
      */
     public function getRelations(string $modelName): array;
 
     /**
      * Query the relations between two models
-     *
-     * @param string $first
-     * @param string $second
      *
      * @return bool|RelationInterface[]
      */
@@ -434,58 +296,32 @@ interface ManagerInterface
     /**
      * Returns a reusable object from the internal list
      *
-     * @param string $modelName
-     * @param string $key
-     *
      * @return mixed
      */
     public function getReusableRecords(string $modelName, string $key);
 
     /**
      * Returns the connection to write data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return AdapterInterface
      */
     public function getWriteConnection(ModelInterface $model): AdapterInterface;
 
     /**
      * Returns the connection service name used to write data related to a model
-     *
-     * @param ModelInterface $model
-     *
-     * @return string
      */
     public function getWriteConnectionService(ModelInterface $model): string;
 
     /**
      * Checks whether a model has a belongsTo relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasBelongsTo(string $modelName, string $modelRelation): bool;
 
     /**
      * Checks whether a model has a hasMany relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasMany(string $modelName, string $modelRelation): bool;
 
     /**
      * Checks whether a model has a hasManyToMany relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasManyToMany(
         string $modelName,
@@ -494,21 +330,11 @@ interface ManagerInterface
 
     /**
      * Checks whether a model has a hasOne relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasOne(string $modelName, string $modelRelation): bool;
 
     /**
      * Checks whether a model has a hasOneThrough relation with another model
-     *
-     * @param string $modelName
-     * @param string $modelRelation
-     *
-     * @return bool
      */
     public function hasHasOneThrough(
         string $modelName,
@@ -518,36 +344,22 @@ interface ManagerInterface
     /**
      * Initializes a model in the model manager
      *
-     * @param ModelInterface $model
-     *
      * @return mixed
      */
     public function initialize(ModelInterface $model);
 
     /**
      * Check of a model is already initialized
-     *
-     * @param string $className
-     *
-     * @return bool
      */
     public function isInitialized(string $className): bool;
 
     /**
      * Checks if a model is keeping snapshots for the queried records
-     *
-     * @param ModelInterface $model
-     *
-     * @return bool
      */
     public function isKeepingSnapshots(ModelInterface $model): bool;
 
     /**
      * Checks if a model is using dynamic update instead of all-field update
-     *
-     * @param ModelInterface $model
-     *
-     * @return bool
      */
     public function isUsingDynamicUpdate(ModelInterface $model): bool;
 
@@ -560,11 +372,6 @@ interface ManagerInterface
      *     "inv_title"
      * );
      * ```
-     *
-     * @param ModelInterface $model
-     * @param string         $property
-     *
-     * @return bool
      */
     public function isVisibleModelProperty(
         ModelInterface $model,
@@ -573,11 +380,6 @@ interface ManagerInterface
 
     /**
      * Sets if a model must keep snapshots
-     *
-     * @param ModelInterface $model
-     * @param bool           $keepSnapshots
-     *
-     * @return void
      */
     public function keepSnapshots(
         ModelInterface $model,
@@ -586,10 +388,6 @@ interface ManagerInterface
 
     /**
      * Loads a model throwing an exception if it does not exist
-     *
-     * @param string $modelName
-     *
-     * @return ModelInterface
      */
     public function load(string $modelName): ModelInterface;
 
@@ -597,10 +395,6 @@ interface ManagerInterface
      * Dispatch an event to the listeners and behaviors
      * This method expects that the endpoint listeners/behaviors returns true
      * meaning that a least one is implemented
-     *
-     * @param ModelInterface $model
-     * @param string         $eventName
-     * @param mixed          $data
      *
      * @return mixed
      */
@@ -615,9 +409,6 @@ interface ManagerInterface
      * events-manager if available. Notify the behaviors that are listening
      * in the model
      *
-     * @param string         $eventName
-     * @param ModelInterface $model
-     *
      * @return mixed
      */
     public function notifyEvent(string $eventName, ModelInterface $model);
@@ -625,20 +416,11 @@ interface ManagerInterface
     /**
      * Marks the model's write connection service as written-to for the
      * current request cycle (sticky connections)
-     *
-     * @param ModelInterface $model
-     *
-     * @return void
      */
     public function registerWrite(ModelInterface $model): void;
 
     /**
      * Removes a behavior from a model
-     *
-     * @param ModelInterface $model
-     * @param string         $behaviorClass
-     *
-     * @return void
      */
     public function removeBehavior(
         ModelInterface $model,
@@ -647,18 +429,11 @@ interface ManagerInterface
 
     /**
      * Clears the per-request sticky write tracking
-     *
-     * @return void
      */
     public function resetConnectionState(): void;
 
     /**
      * Sets both write and read connection service for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $connectionService
-     *
-     * @return void
      */
     public function setConnectionService(
         ModelInterface $model,
@@ -667,31 +442,16 @@ interface ManagerInterface
 
     /**
      * Sets the mapped schema for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $schema
-     *
-     * @return void
      */
     public function setModelSchema(ModelInterface $model, string $schema): void;
 
     /**
      * Sets the mapped source for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $source
-     *
-     * @return void
      */
     public function setModelSource(ModelInterface $model, string $source): void;
 
     /**
      * Sets read connection service for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $connectionService
-     *
-     * @return void
      */
     public function setReadConnectionService(
         ModelInterface $model,
@@ -700,12 +460,6 @@ interface ManagerInterface
 
     /**
      * Stores a reusable record in the internal list
-     *
-     * @param string $modelName
-     * @param string $key
-     * @param mixed  $records
-     *
-     * @return void
      */
     public function setReusableRecords(
         string $modelName,
@@ -715,18 +469,11 @@ interface ManagerInterface
 
     /**
      * Enables or disables sticky connections
-     *
-     * @param bool $sticky
-     *
-     * @return void
      */
     public function setSticky(bool $sticky): void;
 
     /**
      * Sets write connection service for a model
-     *
-     * @param ModelInterface $model
-     * @param string         $connectionService
      *
      * @return mixed
      */
@@ -737,11 +484,6 @@ interface ManagerInterface
 
     /**
      * Sets if a model must use dynamic update instead of the all-field update
-     *
-     * @param ModelInterface $model
-     * @param bool           $dynamicUpdate
-     *
-     * @return void
      */
     public function useDynamicUpdate(
         ModelInterface $model,

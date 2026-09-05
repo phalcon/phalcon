@@ -30,7 +30,6 @@ class Libmemcached extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Libmemcached constructor
      *
-     * @param AdapterFactory       $factory
      * @param array<string, mixed> $options
      *
      * @throws Exception

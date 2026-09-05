@@ -209,9 +209,6 @@ abstract class AbstractQuery
 
     /**
      * Sets a flag for the query such as "DISTINCT"
-     *
-     * @param string $flag
-     * @param bool   $enable
      */
     public function setFlag(string $flag, bool $enable = true): void
     {
@@ -242,8 +239,6 @@ abstract class AbstractQuery
 
     /**
      * Builds the `RETURNING` clause
-     *
-     * @return string
      */
     protected function buildReturning(): string
     {
@@ -257,12 +252,7 @@ abstract class AbstractQuery
     /**
      * Indents a collection
      *
-     * @param array  $collection
-     * @param string $glue
-     *
      * @phpstan-param datamapper_clauses $collection
-     *
-     * @return string
      */
     protected function indent(array $collection, string $glue = ""): string
     {

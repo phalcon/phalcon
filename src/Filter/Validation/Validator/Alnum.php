@@ -57,9 +57,6 @@ use function ctype_alnum;
  */
 class Alnum extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must contain only letters and numbers";
 
     /**

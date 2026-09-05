@@ -36,14 +36,8 @@ class Doctype
     public const XHTML20              = 10;
     public const XHTML5               = 11;
 
-    /**
-     * @var string
-     */
     private string $delimiter = PHP_EOL;
 
-    /**
-     * @var int
-     */
     private int $type = self::HTML5;
 
     /**

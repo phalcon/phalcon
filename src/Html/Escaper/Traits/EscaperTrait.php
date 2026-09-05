@@ -35,8 +35,6 @@ trait EscaperTrait
     protected string $encoding   = 'utf-8';
     /**
      * ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401
-     *
-     * @var int
      */
     protected int $flags = ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401;
 
@@ -44,10 +42,6 @@ trait EscaperTrait
      * Detects the character encoding of a string. Special-handling for
      * chr(172) and chr(128) to chr(159) which fail to be detected by
      * `mb_detect_encoding()`.
-     *
-     * @param string $input
-     *
-     * @return string|null
      */
     final public function detectEncoding(string $input): string | null
     {
@@ -99,9 +93,6 @@ trait EscaperTrait
         return $converted;
     }
 
-    /**
-     * @param bool $doubleEncode
-     */
     public function setDoubleEncode(bool $doubleEncode): static
     {
         $this->doubleEncode = $doubleEncode;
@@ -109,9 +100,6 @@ trait EscaperTrait
         return $this;
     }
 
-    /**
-     * @param string $encoding
-     */
     public function setEncoding(string $encoding): static
     {
         $this->encoding = $encoding;
@@ -119,9 +107,6 @@ trait EscaperTrait
         return $this;
     }
 
-    /**
-     * @param int $flags
-     */
     public function setFlags(int $flags): static
     {
         $this->flags = $flags;

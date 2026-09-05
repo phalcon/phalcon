@@ -38,8 +38,6 @@ class NoFactorySet extends Exception
     /**
      * No factory for service
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

@@ -47,10 +47,6 @@ class Bag extends Collection implements BagInterface, InjectionAwareInterface
     private string $name;
     private ManagerInterface $session;
 
-    /**
-     * @param ManagerInterface $session
-     * @param string           $name
-     */
     public function __construct(ManagerInterface $session, string $name)
     {
         $this->session = $session;

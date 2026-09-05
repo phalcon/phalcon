@@ -38,7 +38,6 @@ class Headers implements HeadersInterface, IteratorAggregate
     /**
      * Gets a header value from the internal bag
      *
-     * @return bool|string|null
      * @todo change the raw headers not to return null
      */
     public function get(string $name): bool | string | null

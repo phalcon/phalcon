@@ -43,7 +43,6 @@ class Apcu extends MetaData
     /**
      * Phalcon\Mvc\Model\MetaData\Apcu constructor
      *
-     * @param AdapterFactory       $factory
      * @param array<string, mixed> $options
      *
      * @throws Exception

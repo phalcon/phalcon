@@ -60,7 +60,6 @@ class CacheFactory extends AbstractConfigFactory
      *                                                     ]
      *                                                     ]
      *
-     * @return CacheInterface
      * @throws Exception
      */
     public function load(mixed $config): CacheInterface
@@ -107,7 +106,6 @@ class CacheFactory extends AbstractConfigFactory
      *
      * @phpstan-param storage_adapter_options $options
      *
-     * @return CacheInterface
      * @throws Exception
      */
     public function newInstance(string $name, array $options = []): CacheInterface

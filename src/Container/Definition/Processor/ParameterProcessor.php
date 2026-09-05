@@ -43,10 +43,6 @@ class ParameterProcessor implements Processor
 {
     /**
      * Whetehr the definition is a parameter
-     *
-     * @param mixed $definition
-     *
-     * @return bool
      */
     public function canProcess(mixed $definition): bool
     {
@@ -55,12 +51,6 @@ class ParameterProcessor implements Processor
 
     /**
      * Process the parameter
-     *
-     * @param string $name
-     * @param mixed  $definition
-     * @param object $container
-     *
-     * @return ServiceDefinition
      */
     public function process(
         string $name,

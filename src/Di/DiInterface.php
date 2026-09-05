@@ -33,8 +33,6 @@ interface DiInterface extends ArrayAccess
     /**
      * Set a default dependency injection container to be obtained into static
      * methods
-     *
-     * @param DiInterface $container
      */
     public static function setDefault(DiInterface $container): void;
     /**
@@ -42,9 +40,7 @@ interface DiInterface extends ArrayAccess
      * Only is successful if a service hasn't been registered previously
      * with the same name
      *
-     * @param string $name
-     * @param mixed  $definition
-     * @param bool   $shared
+     * @param mixed $definition
      *
      * @return bool|ServiceInterface
      */
@@ -59,29 +55,16 @@ interface DiInterface extends ArrayAccess
      */
     /**
      * Resolves the service based on its configuration
-     *
-     * @param string $name
-     * @param mixed  $parameters
-     *
-     * @return mixed
      */
     public function get(string $name, mixed $parameters = null): mixed;
 
     /**
      * Returns a service definition without resolving
-     *
-     * @param string $name
-     *
-     * @return mixed
      */
     public function getRaw(string $name): mixed;
 
     /**
      * Returns the corresponding Phalcon\Di\Service instance for a service
-     *
-     * @param string $name
-     *
-     * @return ServiceInterface
      */
     public function getService(string $name): ServiceInterface;
 
@@ -94,20 +77,11 @@ interface DiInterface extends ArrayAccess
 
     /**
      * Returns a shared service based on their configuration
-     *
-     * @param string $name
-     * @param mixed  $parameters
-     *
-     * @return mixed
      */
     public function getShared(string $name, mixed $parameters = null): mixed;
 
     /**
      * Check whether the DI contains a service by a name
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool;
 
@@ -118,17 +92,11 @@ interface DiInterface extends ArrayAccess
      * this method reports only on the resolved-instance cache populated by
      * `getShared()`. A service can be registered (`has()` returns true)
      * without yet having a shared instance (`hasShared()` returns false).
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasShared(string $name): bool;
 
     /**
      * Removes a service in the services container
-     *
-     * @param string $name
      */
     public function remove(string $name): void;
 
@@ -139,21 +107,13 @@ interface DiInterface extends ArrayAccess
      * Useful in fork-based multi-process setups where a child inherits the
      * parent's resource handle (e.g. a database connection) and needs to
      * discard the cached instance without re-registering the service.
-     *
-     * @param string $name
-     *
-     * @return void
      */
     public function removeShared(string $name): void;
 
     /**
      * Registers a service in the services container
      *
-     * @param string $name
-     * @param mixed  $definition
-     * @param bool   $shared
-     *
-     * @return ServiceInterface
+     * @param mixed $definition
      */
     public function set(
         string $name,
@@ -163,11 +123,6 @@ interface DiInterface extends ArrayAccess
 
     /**
      * Sets a service using a raw Phalcon\Di\Service definition
-     *
-     * @param string           $name
-     * @param ServiceInterface $rawDefinition
-     *
-     * @return ServiceInterface
      */
     public function setService(
         string $name,
@@ -177,10 +132,7 @@ interface DiInterface extends ArrayAccess
     /**
      * Registers an "always shared" service in the services container
      *
-     * @param string $name
-     * @param mixed  $definition
-     *
-     * @return ServiceInterface
+     * @param mixed $definition
      */
     public function setShared(string $name, $definition): ServiceInterface;
 }

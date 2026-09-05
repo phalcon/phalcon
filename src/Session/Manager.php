@@ -64,10 +64,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Alias: Gets a session variable from an application context
-     *
-     * @param string $key
-     *
-     * @return mixed
      */
     public function __get(string $key): mixed
     {
@@ -76,10 +72,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Alias: Check whether a session variable is set in an application context
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     public function __isset(string $key): bool
     {
@@ -88,9 +80,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Alias: Sets a session variable in an application context
-     *
-     * @param string $key
-     * @param mixed  $value
      */
     public function __set(string $key, mixed $value): void
     {
@@ -99,8 +88,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Alias: Removes a session variable from an application context
-     *
-     * @param string $key
      */
     public function __unset(string $key): void
     {
@@ -121,8 +108,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Check whether the session has been started
-     *
-     * @return bool
      */
     public function exists(): bool
     {
@@ -131,10 +116,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Gets a session variable from an application context
-     *
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     * @param bool       $remove
      *
      * @return mixed|null
      */
@@ -263,7 +244,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
     /**
      * Set session Id
      *
-     * @return ManagerInterface
      * @throws InvalidSessionId
      * @throws SessionAlreadyStarted
      */
@@ -286,9 +266,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
      * Set the session name. Throw exception if the session has started
      * and do not allow poop names
      *
-     * @param string $name
-     *
-     * @return ManagerInterface
      * @throws InvalidSessionName
      * @throws SessionModificationDenied
      */
@@ -390,10 +367,6 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 
     /**
      * Returns the key prefixed
-     *
-     * @param string $key
-     *
-     * @return string
      */
     private function getUniqueKey(string $key): string
     {

@@ -25,8 +25,6 @@ trait ConfigTrait
      * purpose: anything that is neither an array nor a `ConfigInterface` is
      * rejected here at runtime.
      *
-     * @param mixed $config
-     *
      * @return array<string, mixed>
      */
     protected function checkConfig(mixed $config): array
@@ -53,7 +51,6 @@ trait ConfigTrait
      * Checks if the config has a specific element
      *
      * @param array<string, mixed> $config
-     * @param string               $element
      *
      * @return array<string, mixed>
      */

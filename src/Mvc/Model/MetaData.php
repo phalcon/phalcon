@@ -98,42 +98,32 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 {
     use IniTrait;
 
-    public const MODELS_ATTRIBUTES               = 0;
-    public const MODELS_AUTOMATIC_DEFAULT_INSERT = 10;
-    public const MODELS_AUTOMATIC_DEFAULT_UPDATE = 11;
-    public const MODELS_COLUMN_MAP               = 0;
-    public const MODELS_DATA_TYPES               = 4;
-    public const MODELS_DATA_TYPES_BIND          = 9;
-    public const MODELS_DATA_TYPES_NUMERIC       = 5;
-    public const MODELS_DATE_AT                  = 6;
-    public const MODELS_DATE_IN                  = 7;
-    public const MODELS_DEFAULT_VALUES           = 12;
-    public const MODELS_EMPTY_STRING_VALUES      = 13;
-    public const MODELS_IDENTITY_COLUMN          = 8;
-    public const MODELS_NON_PRIMARY_KEY          = 2;
-    public const MODELS_NOT_NULL                 = 3;
-    public const MODELS_PRIMARY_KEY              = 1;
-    public const MODELS_REVERSE_COLUMN_MAP       = 1;
-    /**
-     * @var CacheAdapterInterface|null
-     */
+    public const MODELS_ATTRIBUTES                  = 0;
+    public const MODELS_AUTOMATIC_DEFAULT_INSERT    = 10;
+    public const MODELS_AUTOMATIC_DEFAULT_UPDATE    = 11;
+    public const MODELS_COLUMN_MAP                  = 0;
+    public const MODELS_DATA_TYPES                  = 4;
+    public const MODELS_DATA_TYPES_BIND             = 9;
+    public const MODELS_DATA_TYPES_NUMERIC          = 5;
+    public const MODELS_DATE_AT                     = 6;
+    public const MODELS_DATE_IN                     = 7;
+    public const MODELS_DEFAULT_VALUES              = 12;
+    public const MODELS_EMPTY_STRING_VALUES         = 13;
+    public const MODELS_IDENTITY_COLUMN             = 8;
+    public const MODELS_NON_PRIMARY_KEY             = 2;
+    public const MODELS_NOT_NULL                    = 3;
+    public const MODELS_PRIMARY_KEY                 = 1;
+    public const MODELS_REVERSE_COLUMN_MAP          = 1;
     protected CacheAdapterInterface | null $adapter = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var mvc_metadata_column_map_store
      */
     protected array $columnMap = [];
 
-    /**
-     * @var DiInterface|null
-     */
     protected DiInterface | null $container = null;
 
     /**
-     * @var array
-     *
      * @phpstan-var mvc_metadata_store
      */
     protected array $metaData = [];
@@ -144,21 +134,14 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * initialize() while the child's source had not yet been set).  Applied
      * inside initializeMetaData() after the real schema is loaded.
      *
-     * @var array
-     *
      * @phpstan-var mvc_metadata_store
      */
     protected array $pendingMetaDataWrites = [];
 
-    /**
-     * @var StrategyInterface|null
-     */
     protected StrategyInterface | null $strategy = null;
 
     /**
      * Return the internal cache adapter
-     *
-     * @return CacheAdapterInterface|null
      */
     public function getAdapter(): CacheAdapterInterface | null
     {
@@ -176,9 +159,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_model_attributes
@@ -203,9 +183,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return array<string, mixed>
@@ -232,9 +209,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return array<string, mixed>
@@ -261,9 +235,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_types
@@ -290,9 +261,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_column_map|null
@@ -312,9 +280,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Returns a ColumnMap Unique key for meta-data is created using className
      *
-     * @param ModelInterface $model
-     *
-     * @return string|null
      * @throws Exception
      */
     final public function getColumnMapUniqueKey(ModelInterface $model): string | null
@@ -341,9 +306,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_types
@@ -370,9 +332,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_types
@@ -399,9 +358,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_default_values
@@ -420,7 +376,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Returns the DependencyInjector container
      *
-     * @return DiInterface
      * @throws Exception
      */
     public function getDI(): DiInterface
@@ -444,9 +399,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return array<string, mixed>
@@ -473,9 +425,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return bool|string|null
      * @throws Exception
      */
     public function getIdentityField(ModelInterface $model): bool | string | null
@@ -488,9 +437,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Returns a MetaData Unique key for meta-data is created using className
      *
-     * @param ModelInterface $model
-     *
-     * @return string|null
      * @throws Exception
      */
     final public function getMetaDataUniqueKey(ModelInterface $model): string | null
@@ -509,10 +455,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Returns the model UniqueID based on model and array row primary key(s) value(s)
      *
-     * @param ModelInterface $model
-     * @param array          $row
-     *
-     * @return string|null
      * @throws Exception
      *
      * @phpstan-param array<string, scalar|null> $row
@@ -545,9 +487,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_model_attributes
@@ -574,9 +513,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_model_attributes
@@ -603,9 +539,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_model_attributes
@@ -632,9 +565,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_column_map|null
@@ -652,8 +582,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * Return the strategy to obtain the meta-data
-     *
-     * @return StrategyInterface
      */
     public function getStrategy(): StrategyInterface
     {
@@ -676,10 +604,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param string         $attribute
-     *
-     * @return bool
      * @throws Exception
      */
     public function hasAttribute(ModelInterface $model, string $attribute): bool
@@ -700,8 +624,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *     $metaData->isEmpty()
      * );
      * ```
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -710,11 +632,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * Compares if two models are the same in memory
-     *
-     * @param ModelInterface $first
-     * @param ModelInterface $other
-     *
-     * @return bool
      */
     public function modelEquals(ModelInterface $first, ModelInterface $other): bool
     {
@@ -723,10 +640,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * Reads metadata from the adapter
-     *
-     * @param mixed $key
-     *
-     * @return array|null
      *
      * @phpstan-return mvc_metadata_index|null
      */
@@ -756,9 +669,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_column_maps|null
@@ -789,10 +699,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param int            $index
-     *
-     * @return array|bool|string|null
      * @throws Exception
      *
      * The store is read back as it was written, so a corrupt slot reaches
@@ -828,9 +734,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     *
-     * @return array|null
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_model|null
@@ -857,10 +760,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param int            $index
-     *
-     * @return array|bool|string|null
      * @throws Exception
      * @todo check the return type; 8 seems to be only string
      *
@@ -882,8 +781,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      *```php
      * $metaData->reset();
      *```
-     *
-     * @return void
      */
     public function reset(): void
     {
@@ -904,10 +801,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param array          $attributes
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param array<string, mixed> $attributes
@@ -929,10 +822,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param array          $attributes
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param array<string, mixed> $attributes
@@ -956,10 +845,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param array          $attributes
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param array<string, mixed> $attributes
@@ -975,10 +860,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
 
     /**
      * Set the meta-data extraction strategy
-     *
-     * @param StrategyInterface $strategy
-     *
-     * @return void
      */
     public function setStrategy(StrategyInterface $strategy): void
     {
@@ -988,10 +869,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Writes the metadata to adapter
      *
-     * @param string $key
-     * @param array  $data
-     *
-     * @return void
      * @throws Exception
      *
      * @phpstan-param mvc_metadata_index $data
@@ -1029,11 +906,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * );
      *```
      *
-     * @param ModelInterface $model
-     * @param int            $index
-     * @param mixed          $data
-     *
-     * @return void
      * @throws Exception
      */
     final public function writeMetaDataIndex(
@@ -1057,14 +929,8 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Initialize old behavior for compatability
      *
-     * @param ModelInterface $model
-     * @param                $key
-     * @param                $table
-     * @param                $schema
-     *
      * @return void
      * @throws Exception
-     *
      */
     final protected function initialize(ModelInterface $model, mixed $key, mixed $table, mixed $schema)
     {
@@ -1075,12 +941,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Initialize ColumnMap for a certain table
      *
-     * @param ModelInterface $model
-     * @param                $key
-     *
-     * @return bool
      * @throws Exception
-     *
      */
     final protected function initializeColumnMap(ModelInterface $model, mixed $key): bool
     {
@@ -1144,10 +1005,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Initialize the metadata for certain table
      *
-     * @param ModelInterface $model
-     * @param mixed          $key
-     *
-     * @return bool
      * @throws Exception
      */
     final protected function initializeMetaData(ModelInterface $model, mixed $key): bool
@@ -1222,9 +1079,6 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     /**
      * Throws an exception when the metadata cannot be written
      *
-     * @param mixed $option
-     *
-     * @return void
      * @throws Exception
      */
     private function throwWriteException(mixed $option): void

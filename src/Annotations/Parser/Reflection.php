@@ -35,30 +35,16 @@ use function is_array;
  */
 class Reflection
 {
-    /**
-     * @var Collection|null
-     */
     protected Collection | null $classAnnotations = null;
 
-    /**
-     * @var array
-     */
     protected array $constantAnnotations = [];
 
-    /**
-     * @var array
-     */
     protected array $methodAnnotations = [];
 
-    /**
-     * @var array
-     */
     protected array $propertyAnnotations = [];
 
     /**
      * Constructor
-     *
-     * @param array $reflectionData
      */
     public function __construct(
         protected array $reflectionData = []
@@ -67,8 +53,6 @@ class Reflection
 
     /**
      * Returns the annotations found in the class docblock
-     *
-     * @return Collection|null
      */
     public function getClassAnnotations(): Collection | null
     {
@@ -124,20 +108,12 @@ class Reflection
     /**
      * Returns the raw parsing intermediate definitions used to construct the
      * reflection
-     *
-     * @return array
      */
     public function getReflectionData(): array
     {
         return $this->reflectionData;
     }
 
-    /**
-     * @param string $element
-     * @param string $collection
-     *
-     * @return array
-     */
     private function traverseCollection(string $element, string $collection): array
     {
         $reflectionArray = $this->reflectionData[$element] ?? null;

@@ -39,9 +39,6 @@ class SysNodeProvider implements NodeProviderInterface
     use FileTrait;
     use InfoTrait;
 
-    /**
-     * @var string|null
-     */
     private string | null $node = null;
 
     /**

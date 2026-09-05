@@ -25,9 +25,6 @@ abstract class AbstractItem
      */
     protected array $data = [];
 
-    /**
-     * @return string
-     */
     public function getEncoded(): string
     {
         return $this->data['encoded'];

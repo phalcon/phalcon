@@ -30,8 +30,6 @@ class Form extends AbstractHelper
      * Produce a `<form>` tag.
      *
      * @phpstan-param html_attributes $attributes
-     *
-     * @return string
      */
     public function __invoke(array $attributes = []): string
     {

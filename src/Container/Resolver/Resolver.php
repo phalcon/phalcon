@@ -76,7 +76,6 @@ class Resolver implements ResolverService
      *
      * @phpstan-param container_arguments $arguments
      *
-     * @return mixed
      * @throws ReflectionException
      */
     public function resolveCall(

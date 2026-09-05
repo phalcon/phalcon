@@ -53,7 +53,6 @@ abstract class Select
      *                                 'emptyText' => '',
      *                                 ]
      *
-     * @return string
      * @throws Exception
      */
     public static function selectField(

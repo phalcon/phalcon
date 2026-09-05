@@ -46,8 +46,6 @@ class Check implements CheckInterface
 {
     /**
      * The boolean SQL predicate this constraint enforces.
-     *
-     * @var string
      */
     protected string $expression;
 
@@ -55,16 +53,11 @@ class Check implements CheckInterface
      * The CHECK constraint name. An empty string indicates an unnamed
      * constraint - the dialect will emit the clause without a `CONSTRAINT`
      * prefix in that case.
-     *
-     * @var string
      */
     protected string $name;
 
     /**
      * Phalcon\Db\Check constructor.
-     *
-     * @param string $name
-     * @param array  $definition
      *
      * @throws Exception
      */
@@ -86,8 +79,6 @@ class Check implements CheckInterface
 
     /**
      * Returns the CHECK expression
-     *
-     * @return string
      */
     public function getExpression(): string
     {
@@ -96,8 +87,6 @@ class Check implements CheckInterface
 
     /**
      * Returns the constraint name (may be an empty string for unnamed)
-     *
-     * @return string
      */
     public function getName(): string
     {

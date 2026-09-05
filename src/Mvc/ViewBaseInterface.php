@@ -20,15 +20,11 @@ interface ViewBaseInterface
 {
     /**
      * Returns cached output from another view stage
-     *
-     * @return string
      */
     public function getContent(): string;
 
     /**
      * Returns parameters to views
-     *
-     * @return array
      *
      * @phpstan-return array<string, mixed>
      */
@@ -37,17 +33,12 @@ interface ViewBaseInterface
     /**
      * Gets views directory
      *
-     * @return array|string
-     *
      * @phpstan-return list<string>|string
      */
     public function getViewsDir(): array | string;
 
     /**
      * Renders a partial view
-     *
-     * @param string     $partialPath
-     * @param mixed|null $params
      *
      * @return mixed
      */
@@ -56,17 +47,12 @@ interface ViewBaseInterface
     /**
      * Externally sets the view content
      *
-     * @param string $content
-     *
      * @return mixed
      */
     public function setContent(string $content);
 
     /**
      * Adds parameters to views (alias of setVar)
-     *
-     * @param string $key
-     * @param mixed  $value
      *
      * @return mixed
      */
@@ -75,9 +61,6 @@ interface ViewBaseInterface
     /**
      * Adds parameters to views
      *
-     * @param string $key
-     * @param mixed  $value
-     *
      * @return mixed
      */
     public function setVar(string $key, mixed $value);
@@ -85,8 +68,6 @@ interface ViewBaseInterface
     /**
      * Sets views directory. Depending of your platform, always add a trailing
      * slash or backslash
-     *
-     * @param string $viewsDir
      *
      * @return mixed
      */

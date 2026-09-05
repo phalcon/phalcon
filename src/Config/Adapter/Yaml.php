@@ -67,7 +67,6 @@ class Yaml extends Config
     /**
      * Yaml constructor.
      *
-     * @param string                       $filePath
      * @param array<string, callable>|null $callbacks
      *
      * @throws Exception

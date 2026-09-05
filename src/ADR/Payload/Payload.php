@@ -36,34 +36,16 @@ use Throwable;
  */
 class Payload implements PayloadContract
 {
-    /**
-     * @var Throwable|null
-     */
     protected ?Throwable $exception = null;
 
-    /**
-     * @var mixed
-     */
     protected mixed $extras = null;
 
-    /**
-     * @var mixed
-     */
     protected mixed $input = null;
 
-    /**
-     * @var mixed
-     */
     protected mixed $messages = null;
 
-    /**
-     * @var mixed
-     */
     protected mixed $result = null;
 
-    /**
-     * @var mixed
-     */
     protected mixed $status = null;
 
     /**

@@ -95,8 +95,6 @@ class Di extends stdClass implements DiInterface
     protected array $services = [];
     /**
      * List of shared instances
-     *
-     * @var array
      */
     protected array $sharedInstances = [];
 
@@ -112,9 +110,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Magic method to get or set services using setters/getters
-     *
-     * @param string $method
-     * @param array  $arguments
      *
      * @return mixed|void
      * @throws Exception
@@ -151,8 +146,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Return the latest DI created
-     *
-     * @return DiInterface|null
      */
     public static function getDefault(): DiInterface | null
     {
@@ -161,8 +154,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Resets the internal default DI
-     *
-     * @return void
      */
     public static function reset(): void
     {
@@ -172,10 +163,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Set a default dependency injection container to be obtained into static
      * methods
-     *
-     * @param DiInterface $container
-     *
-     * @return void
      */
     public static function setDefault(DiInterface $container): void
     {
@@ -186,10 +173,6 @@ class Di extends stdClass implements DiInterface
      * Attempts to register a service in the services container
      * Only is successful if a service hasn't been registered previously
      * with the same name
-     *
-     * @param string $name
-     * @param mixed  $definition
-     * @param bool   $shared
      *
      * @return bool|mixed|Service|ServiceInterface
      */
@@ -210,10 +193,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Resolves the service based on its configuration
      *
-     * @param string $name
-     * @param mixed  $parameters
-     *
-     * @return mixed
      * @throws Exception
      */
     public function get(string $name, mixed $parameters = null): mixed
@@ -294,10 +273,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Return the alias based on a passed key. Returns an empty string if
      * the alias does not exist
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function getAlias(string $name): string
     {
@@ -306,8 +281,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Returns the internal event manager
-     *
-     * @return ManagerInterface|null
      */
     public function getInternalEventsManager(): ManagerInterface | null
     {
@@ -317,9 +290,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Returns a service definition without resolving
      *
-     * @param string $name
-     *
-     * @return mixed
      * @throws Exception
      */
     public function getRaw(string $name): mixed
@@ -332,9 +302,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Returns a Phalcon\Di\Service instance
      *
-     * @param string $name
-     *
-     * @return ServiceInterface
      * @throws Exception
      */
     public function getService(string $name): ServiceInterface
@@ -353,8 +320,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Return the services registered in the DI
-     *
-     * @return array
      */
     public function getServices(): array
     {
@@ -365,10 +330,6 @@ class Di extends stdClass implements DiInterface
      * Resolves a service, the resolved service is stored in the DI, subsequent
      * requests for this service will return the same instance
      *
-     * @param string $name
-     * @param mixed  $parameters
-     *
-     * @return mixed
      * @throws DiException
      */
     public function getShared(string $name, mixed $parameters = null): mixed
@@ -388,10 +349,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Check whether the DI contains a service by a name
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -409,10 +366,6 @@ class Di extends stdClass implements DiInterface
      * Unlike `has()`, which reports on the service *definition* registry,
      * this method reports only on the resolved-instance cache populated by
      * `getShared()`.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasShared(string $name): bool
     {
@@ -444,10 +397,6 @@ class Di extends stdClass implements DiInterface
      *     }
      * }
      * ```
-     *
-     * @param ServiceProviderInterface $provider
-     *
-     * @return void
      */
     public function register(ServiceProviderInterface $provider): void
     {
@@ -457,10 +406,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Removes a service in the services container
      * It also removes any shared instance created for the service
-     *
-     * @param string $name
-     *
-     * @return void
      */
     public function remove(string $name): void
     {
@@ -489,10 +434,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Removes the cached shared instance for a service, leaving the service
      * definition intact so the next `getShared()` call rebuilds it.
-     *
-     * @param string $name
-     *
-     * @return void
      */
     public function removeShared(string $name): void
     {
@@ -515,12 +456,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Registers a service in the services container
-     *
-     * @param string $name
-     * @param mixed  $definition
-     * @param bool   $shared
-     *
-     * @return ServiceInterface
      */
     public function set(
         string $name,
@@ -539,9 +474,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Sets one or more aliases to the given name.
-     *
-     * @param string       $name
-     * @param array|string $aliases
      *
      * @return $this
      * @throws DiException
@@ -573,8 +505,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Sets the internal event manager
-     *
-     * @param ManagerInterface $eventsManager
      */
     public function setInternalEventsManager(ManagerInterface $eventsManager): void
     {
@@ -583,11 +513,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Sets a service using a raw Phalcon\Di\Service definition
-     *
-     * @param string           $name
-     * @param ServiceInterface $rawDefinition
-     *
-     * @return ServiceInterface
      */
     public function setService(string $name, ServiceInterface $rawDefinition): ServiceInterface
     {
@@ -598,11 +523,6 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Registers an "always shared" service in the services container
-     *
-     * @param string $name
-     * @param mixed  $definition
-     *
-     * @return ServiceInterface
      */
     public function setShared(string $name, mixed $definition): ServiceInterface
     {
@@ -610,11 +530,6 @@ class Di extends stdClass implements DiInterface
     }
 
     /**
-     * @param string                $name
-     * @param array|null            $parameters
-     * @param ServiceInterface|null $service
-     * @param mixed                 $instance
-     *
      * @return mixed|null
      * @throws Exception
      */
@@ -642,11 +557,6 @@ class Di extends stdClass implements DiInterface
     }
 
     /**
-     * @param string                $name
-     * @param array|null            $parameters
-     * @param ServiceInterface|null $service
-     * @param mixed                 $instance
-     *
      * @return mixed|null
      * @throws Exception
      */
@@ -672,9 +582,6 @@ class Di extends stdClass implements DiInterface
     /**
      * Resolve an alias to its actual service name
      *
-     * @param string $name
-     *
-     * @return string
      * @throws Exception
      */
     private function resolveAlias(string $name): string

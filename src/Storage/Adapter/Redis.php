@@ -58,21 +58,20 @@ class Redis extends AbstractAdapter
     /**
      * Redis constructor.
      *
-     * @param SerializerFactory $factory
-     * @param array             $options = [
-     *                                   "host"           => "127.0.0.1",
-     *                                   "port"           => 6379,
-     *                                   "index"          => 0,
-     *                                   "timeout"        => 0,
-     *                                   "persistent"     => false,
-     *                                   "persistentId"   => "",
-     *                                   "auth"           => "",
-     *                                   "socket"         => "",
-     *                                   "connectTimeout" => 0,
-     *                                   "retryInterval"  => 0,
-     *                                   "readTimeout"    => 0,
-     *                                   "ssl"            => [],
-     *                                   ]
+     * @param array $options = [
+     *                       "host"           => "127.0.0.1",
+     *                       "port"           => 6379,
+     *                       "index"          => 0,
+     *                       "timeout"        => 0,
+     *                       "persistent"     => false,
+     *                       "persistentId"   => "",
+     *                       "auth"           => "",
+     *                       "socket"         => "",
+     *                       "connectTimeout" => 0,
+     *                       "retryInterval"  => 0,
+     *                       "readTimeout"    => 0,
+     *                       "ssl"            => [],
+     *                       ]
      *
      * @phpstan-param storage_redis_options $options
      */
@@ -89,7 +88,6 @@ class Redis extends AbstractAdapter
     /**
      * Flushes/clears the cache
      *
-     * @return bool
      * @throws StorageException
      */
     public function clear(): bool
@@ -223,9 +221,6 @@ class Redis extends AbstractAdapter
     /**
      * Decrements a stored number
      *
-     * @param string $key
-     * @param int    $value
-     *
      * @throws RedisException
      * @throws StorageException
      */
@@ -304,11 +299,8 @@ class Redis extends AbstractAdapter
      * item has expired. If you need to set this key forever, you should use
      * the `setForever()` method.
      *
-     * @param string                $key
-     * @param mixed                 $value
      * @param DateInterval|int|null $ttl
      *
-     * @return bool
      * @throws BaseException
      */
     protected function doSet(string $key, mixed $value, mixed $ttl = null): bool
@@ -364,8 +356,6 @@ class Redis extends AbstractAdapter
     }
 
     /**
-     * @param RedisService $connection
-     *
      * @throws AuthenticationFailed
      */
     private function checkAuth(RedisService $connection): static

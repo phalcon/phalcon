@@ -56,15 +56,10 @@ class Config extends Collection implements ConfigInterface
 {
     public const DEFAULT_PATH_DELIMITER = ".";
 
-    /**
-     * @var string
-     */
     protected string $pathDelimiter = self::DEFAULT_PATH_DELIMITER;
 
     /**
      * Gets the default path delimiter
-     *
-     * @return string
      */
     public function getPathDelimiter(): string
     {
@@ -88,7 +83,6 @@ class Config extends Collection implements ConfigInterface
      *
      * @phpstan-param config_data|ConfigInterface $toMerge
      *
-     * @return ConfigInterface
      * @throws Exception
      */
     public function merge(mixed $toMerge): ConfigInterface
@@ -118,12 +112,6 @@ class Config extends Collection implements ConfigInterface
      *```php
      * echo $config->path("unknown.path", "default", ".");
      *```
-     *
-     * @param string      $path
-     * @param mixed|null  $defaultValue
-     * @param string|null $delimiter
-     *
-     * @return mixed
      */
     public function path(
         string $path,
@@ -176,10 +164,6 @@ class Config extends Collection implements ConfigInterface
 
     /**
      * Sets the default path delimiter
-     *
-     * @param string|null $delimiter
-     *
-     * @return ConfigInterface
      */
     public function setPathDelimiter(string | null $delimiter = null): ConfigInterface
     {
@@ -224,8 +208,6 @@ class Config extends Collection implements ConfigInterface
      * `sort()` and `where()` would otherwise fail on any adapter instance.
      *
      * @param array<int|string, mixed> $data
-     *
-     * @return static
      */
     protected function cloneEmpty(array $data = []): static
     {
@@ -270,9 +252,6 @@ class Config extends Collection implements ConfigInterface
      * `strictNull` and `type` flags of this instance. The `type` guard is
      * applied to leaf values only - arrays are not validated themselves;
      * the nested Config validates its own leaves.
-     *
-     * @param mixed $element
-     * @param mixed $value
      */
     protected function setData(mixed $element, mixed $value): void
     {

@@ -24,9 +24,6 @@ trait DiArrayAccessTrait
      * Resolves a service, the resolved service is stored in the DI, subsequent
      * requests for this service will return the same instance
      *
-     * @param string     $name
-     * @param array|null $parameters
-     *
      * @return InjectionAwareInterface|mixed|null
      * @throws Exception
      */
@@ -34,10 +31,6 @@ trait DiArrayAccessTrait
 
     /**
      * Check whether the DI contains a service by a name
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     abstract public function has(string $name): bool;
 
@@ -45,8 +38,6 @@ trait DiArrayAccessTrait
      * Check if a service is registered using the array syntax
      *
      * @param mixed $name
-     *
-     * @return bool
      */
     #[ReturnTypeWillChange]
     public function offsetExists($name): bool
@@ -102,19 +93,11 @@ trait DiArrayAccessTrait
     /**
      * Removes a service in the services container
      * It also removes any shared instance created for the service
-     *
-     * @param string $name
      */
     abstract public function remove(string $name): void;
 
     /**
      * Registers a service in the services container
-     *
-     * @param string $name
-     * @param mixed  $definition
-     * @param bool   $shared
-     *
-     * @return ServiceInterface
      */
     abstract public function set(
         string $name,
@@ -124,11 +107,6 @@ trait DiArrayAccessTrait
 
     /**
      * Registers an "always shared" service in the services container
-     *
-     * @param string $name
-     * @param mixed  $definition
-     *
-     * @return ServiceInterface
      */
     public function setShared(string $name, mixed $definition): ServiceInterface
     {

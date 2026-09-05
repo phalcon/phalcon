@@ -30,27 +30,14 @@ use Phalcon\Encryption\Security\JWT\Validator;
  */
 class Token
 {
-    /**
-     * @var Item
-     */
     private Item $claims;
 
-    /**
-     * @var Item
-     */
     private Item $headers;
 
-    /**
-     * @var Signature
-     */
     private Signature $signature;
 
     /**
      * Token constructor.
-     *
-     * @param Item      $headers
-     * @param Item      $claims
-     * @param Signature $signature
      */
     public function __construct(
         Item $headers,
@@ -64,8 +51,6 @@ class Token
 
     /**
      * Return the registered claims
-     *
-     * @return Item
      */
     public function getClaims(): Item
     {
@@ -74,8 +59,6 @@ class Token
 
     /**
      * Return the registered headers
-     *
-     * @return Item
      */
     public function getHeaders(): Item
     {
@@ -84,8 +67,6 @@ class Token
 
     /**
      * Return the payload
-     *
-     * @return string
      */
     public function getPayload(): string
     {
@@ -94,8 +75,6 @@ class Token
 
     /**
      * Return the signature
-     *
-     * @return Signature
      */
     public function getSignature(): Signature
     {
@@ -104,8 +83,6 @@ class Token
 
     /**
      * Return the token
-     *
-     * @return string
      */
     public function getToken(): string
     {
@@ -123,8 +100,6 @@ class Token
      * Always also call verify() (or Validator::validateSignature()) and treat
      * an empty error array as valid only after the signature check passes.
      * A signature-aware default is planned for a future major version.
-     *
-     * @param Validator $validator
      *
      * @return array<array-key, string>
      */
@@ -151,11 +126,6 @@ class Token
 
     /**
      * Verify the signature
-     *
-     * @param SignerInterface $signer
-     * @param string          $key
-     *
-     * @return bool
      */
     public function verify(SignerInterface $signer, string $key): bool
     {

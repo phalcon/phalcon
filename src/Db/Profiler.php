@@ -75,8 +75,6 @@ class Profiler
 
     /**
      * Active Item
-     *
-     * @var Item|null
      */
     protected ?Item $activeProfile = null;
 
@@ -91,22 +89,16 @@ class Profiler
      * Maximum number of profiles to retain. 0 (default) keeps the
      * original unbounded behavior; a positive value drops the oldest
      * profile FIFO before a new one is appended.
-     *
-     * @var int
      */
     protected int $maxProfiles = 0;
 
     /**
      * Total time spent by all profiles to complete in nanoseconds
-     *
-     * @var float
      */
     protected float $totalNanoseconds = 0;
 
     /**
      * Returns the last profile executed in the profiler
-     *
-     * @return Item|null
      */
     public function getLastProfile(): ?Item
     {
@@ -116,8 +108,6 @@ class Profiler
     /**
      * Returns the configured maximum number of retained profiles
      * (0 = unlimited)
-     *
-     * @return int
      */
     public function getMaxProfiles(): int
     {
@@ -126,8 +116,6 @@ class Profiler
 
     /**
      * Returns the total number of SQL statements processed
-     *
-     * @return int
      */
     public function getNumberTotalStatements(): int
     {
@@ -146,8 +134,6 @@ class Profiler
 
     /**
      * Returns the total time in nanoseconds spent by the profiles
-     *
-     * @return float
      */
     public function getTotalElapsedNanoseconds(): float
     {
@@ -170,8 +156,6 @@ class Profiler
      * Sets the maximum number of retained profiles. 0 disables the cap
      * (the default; preserves the original unbounded behavior).
      *
-     * @param int $maxProfiles
-     *
      * @return $this
      */
     public function setMaxProfiles(int $maxProfiles): static
@@ -183,10 +167,6 @@ class Profiler
 
     /**
      * Starts the profile of a SQL sentence
-     *
-     * @param string $sqlStatement
-     * @param array  $sqlVariables
-     * @param array  $sqlBindTypes
      *
      * @return $this
      */

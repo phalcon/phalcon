@@ -59,9 +59,6 @@ use function str_split;
  */
 class CreditCard extends AbstractValidator
 {
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field is not valid for a credit card number";
 
     /**

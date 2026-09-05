@@ -49,14 +49,8 @@ use function substr;
  */
 class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 {
-    /**
-     * @var bool
-     */
     protected bool $collect = false;
 
-    /**
-     * @var bool
-     */
     protected bool $enablePriorities = false;
 
     /**
@@ -65,8 +59,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * hash lookup.
      *
      * Shape: `eventNameCache[$eventType] = [typePrefix, eventName]`
-     *
-     * @var array
      */
     protected array $eventNameCache = [];
 
@@ -87,8 +79,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      *   1 - [obj, method] array callable
      *   2 - plain object: method named after the event
      *   3 - generic callable (string fn name, invokable object, etc.)
-     *
-     * @var array
      */
     protected array $events = [];
 
@@ -96,8 +86,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Re-entrancy depth of fire()/fireAll(). 0 means no fire is in progress.
      * Used to keep nested fire() calls from clobbering the outer caller's
      * `$this->responses` accumulator.
-     *
-     * @var int
      */
     protected int $fireDepth = 0;
 
@@ -105,24 +93,18 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Manager-level kill switch. When true, every fire()/fireAll()/
      * fireQueue() call returns immediately without dispatching. Cleared by
      * resume().
-     *
-     * @var bool
      */
     protected bool $halted = false;
 
     /**
      * Memoized method_exists() results for the plain-object dispatch path.
      * Keyed by `handlerClass => [methodName => bool]`.
-     *
-     * @var array
      */
     protected array $methodExistsCache = [];
 
     /**
      * Maximum number of distinct handler classes retained in
      * methodExistsCache. 0 (default) keeps the unbounded behavior.
-     *
-     * @var int
      */
     protected int $methodExistsCacheLimit = 0;
 
@@ -135,39 +117,26 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * When true, a listener returning literal `false` (with the event's
      * `cancelable` flag on) short-circuits the dispatch loop and pins the
      * fire() return as `false`. Default off.
-     *
-     * @var bool
      */
     protected bool $stopOnFalse = false;
 
     /**
      * When true, fire()/fireAll() throw on dispatch of an event that has zero
      * matching listeners. Default off.
-     *
-     * @var bool
      */
     protected bool $strict = false;
 
     /**
      * Memoized getSubscribedEvents() maps keyed by Subscriber class name.
-     *
-     * @var array
      */
     protected array $subscriberEventsCache = [];
 
-    /**
-     * @var array
-     */
     protected array $subscribers = [];
 
     /**
      * Registers an event subscriber. The subscriber's getSubscribedEvents()
      * map is parsed and each entry is attached through the regular listener
      * pipeline.
-     *
-     * @param Subscriber $subscriber
-     *
-     * @return void
      */
     public function addSubscriber(Subscriber $subscriber): void
     {
@@ -186,8 +155,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Returns if priorities are enabled
-     *
-     * @return bool
      */
     public function arePrioritiesEnabled(): bool
     {
@@ -198,10 +165,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Attach a listener to the events manager
      *
      * @param string|string[] $eventType
-     * @param callable|object $handler
-     * @param int             $priority
      *
-     * @return void
      * @throws InvalidEventHandler
      */
     final public function attach(
@@ -252,8 +216,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Removes every registered subscriber and detaches each listener they
      * contributed. Listeners attached via attach() are untouched.
-     *
-     * @return void
      */
     public function clearSubscribers(): void
     {
@@ -267,10 +229,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Tells the event manager if it needs to collect all the responses returned
      * by every registered listener in a single fire
-     *
-     * @param bool $collect
-     *
-     * @return void
      */
     public function collectResponses(bool $collect): void
     {
@@ -280,10 +238,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Detach the listener from the events manager
      *
-     * @param string          $eventType
-     * @param callable|object $handler
-     *
-     * @return void
      * @throws InvalidEventHandler
      */
     public function detach(string $eventType, callable | object $handler): void
@@ -314,10 +268,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Removes all events from the EventsManager
-     *
-     * @param string|null $type
-     *
-     * @return void
      */
     public function detachAll(string | null $type = null): void
     {
@@ -378,10 +328,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Set if priorities are enabled in the EventsManager.
-     *
-     * @param bool $enablePriorities
-     *
-     * @return void
      */
     public function enablePriorities(bool $enablePriorities): void
     {
@@ -396,12 +342,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * $eventsManager->fire("db", $connection);
      *```
      *
-     * @param string $eventType
-     * @param object $source
-     * @param mixed  $data
-     * @param bool   $cancelable
-     *
-     * @return mixed
      * @throws InvalidEventType
      * @throws NoListenersForEvent
      */
@@ -540,12 +480,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * array. Independent of collectResponses(); the caller's collected state
      * on `$this->responses` is preserved (stashed and restored).
      *
-     * @param string $eventType
-     * @param object $source
-     * @param mixed  $data
-     * @param bool   $cancelable
-     *
-     * @return array
      * @throws InvalidEventType
      * @throws NoListenersForEvent
      */
@@ -649,11 +583,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Internal handler to call a queue of events.
      *
      * Kept as a thin BC wrapper around the private dispatch loop.
-     *
-     * @param array          $queue
-     * @param EventInterface $event
-     *
-     * @return mixed
      */
     final public function fireQueue(array $queue, EventInterface $event): mixed
     {
@@ -698,8 +627,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Returns all the attached listeners of a certain type
      *
-     * @param string $type
-     *
      * @return array<array-key, mixed>
      */
     public function getListeners(string $type): array
@@ -717,8 +644,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Returns the configured method_exists-cache cap (0 = unlimited).
-     *
-     * @return int
      */
     public function getMethodExistsCacheLimit(): int
     {
@@ -738,8 +663,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Returns the list of registered subscriber instances.
-     *
-     * @return array
      */
     public function getSubscribers(): array
     {
@@ -750,8 +673,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Manager-level kill switch. After halt(), every fire()/fireAll()/
      * fireQueue() call returns immediately without dispatching, until
      * resume() is called.
-     *
-     * @return void
      */
     public function halt(): void
     {
@@ -760,10 +681,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Check whether certain type of event has listeners
-     *
-     * @param string $type
-     *
-     * @return bool
      */
     public function hasListeners(string $type): bool
     {
@@ -773,8 +690,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Check if the events manager is collecting all the responses returned by
      * every registered listener in a single fire
-     *
-     * @return bool
      */
     public function isCollecting(): bool
     {
@@ -783,8 +698,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Returns whether the manager-level kill switch is engaged. See halt().
-     *
-     * @return bool
      */
     public function isHalted(): bool
     {
@@ -793,8 +706,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Returns whether the stop-on-false short-circuit is enabled.
-     *
-     * @return bool
      */
     public function isStopOnFalse(): bool
     {
@@ -803,19 +714,12 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Returns whether strict mode is enabled.
-     *
-     * @return bool
      */
     public function isStrict(): bool
     {
         return $this->strict;
     }
 
-    /**
-     * @param mixed $handler
-     *
-     * @return bool
-     */
     public function isValidHandler(mixed $handler): bool
     {
         if (!is_object($handler) && !is_callable($handler)) {
@@ -828,10 +732,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Removes a previously registered subscriber. Detaches every listener the
      * subscriber declared via getSubscribedEvents(). Idempotent.
-     *
-     * @param Subscriber $subscriber
-     *
-     * @return void
      */
     public function removeSubscriber(Subscriber $subscriber): void
     {
@@ -856,8 +756,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Clears the manager-level kill switch set by halt().
-     *
-     * @return void
      */
     public function resume(): void
     {
@@ -867,10 +765,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Caps the number of distinct handler classes retained in the
      * method_exists memoization cache. 0 disables the cap.
-     *
-     * @param int $methodExistsCacheLimit
-     *
-     * @return void
      */
     public function setMethodExistsCacheLimit(int $methodExistsCacheLimit): void
     {
@@ -879,10 +773,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
     /**
      * Enables/disables the stop-on-false short-circuit. Default off.
-     *
-     * @param bool $flag
-     *
-     * @return void
      */
     public function setStopOnFalse(bool $flag): void
     {
@@ -892,10 +782,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Enables/disables strict mode. When true, fire()/fireAll() throw when
      * dispatching an event with zero matching listeners.
-     *
-     * @param bool $strict
-     *
-     * @return void
      */
     public function setStrict(bool $strict): void
     {
@@ -905,14 +791,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Extension seam invoked after an event has been dispatched to its
      * listener queues. The base implementation returns `status` unchanged.
-     *
-     * @param mixed  $status
-     * @param string $eventType
-     * @param object $source
-     * @param mixed  $data
-     * @param bool   $cancelable
-     *
-     * @return mixed
      */
     protected function afterFire(
         mixed $status,
@@ -928,13 +806,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Extension seam invoked before an event is dispatched. The base
      * implementation returns true, so dispatch proceeds. Returning false
      * aborts the dispatch entirely.
-     *
-     * @param string $eventType
-     * @param object $source
-     * @param mixed  $data
-     * @param bool   $cancelable
-     *
-     * @return bool
      */
     protected function beforeFire(
         string $eventType,
@@ -950,14 +821,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      *
      * type=2 tuples carry a 4th element `className` so the dispatch loop can
      * skip the per-fire get_class() lookup against methodExistsCache.
-     *
-     * @param string $eventType
-     * @param mixed  $handler
-     * @param int    $type
-     * @param int    $priority
-     * @param mixed  $className
-     *
-     * @return void
      */
     private function insertHandlerEntry(
         string $eventType,
@@ -1020,12 +883,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * Parses one entry of a subscriber's getSubscribedEvents() map and either
      * attaches or detaches the resulting listeners.
      *
-     * @param object $subscriber
-     * @param string $eventName
-     * @param mixed  $params
-     * @param bool   $detaching
-     *
-     * @return void
      * @throws InvalidSubscriberConfiguration
      */
     private function processSubscriberEntry(
@@ -1106,11 +963,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * handlers resolve to the model lifecycle method (via ModelEventNameEnum)
      * or fall back to __invoke. Propagation stops when the event implements
      * StoppableEventInterface and reports it is stopped.
-     *
-     * @param array  $queue
-     * @param object $event
-     *
-     * @return mixed
      */
     private function runObjectQueue(
         array $queue,
@@ -1169,16 +1021,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
      * 1. Last non-null wins.
      * 2. stop() determinism: a listener that stops the event makes its return
      *    the dispatch return (even if null) and the queue is abandoned.
-     *
-     * @param array          $queue
-     * @param EventInterface $event
-     * @param string         $eventName
-     * @param mixed          $source
-     * @param mixed          $data
-     * @param bool           $cancelable
-     * @param bool           $collect
-     *
-     * @return mixed
      */
     private function runQueue(
         array $queue,

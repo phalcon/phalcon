@@ -145,8 +145,6 @@ interface ElementInterface
 
     /**
      * Generate the HTML to label the element
-     *
-     * @return string
      */
     public function label(): string;
 

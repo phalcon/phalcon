@@ -29,9 +29,6 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
 
     /**
      * Phalcon\Mvc\View\Engine constructor
-     *
-     * @param ViewBaseInterface $view
-     * @param DiInterface|null  $container
      */
     public function __construct(
         protected ViewBaseInterface $view,
@@ -42,8 +39,6 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
 
     /**
      * Returns cached output on another view stage
-     *
-     * @return string
      */
     public function getContent(): string
     {
@@ -52,8 +47,6 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
 
     /**
      * Returns the view component related to the adapter
-     *
-     * @return ViewBaseInterface
      */
     public function getView(): ViewBaseInterface
     {
@@ -62,11 +55,6 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
 
     /**
      * Renders a partial inside another view
-     *
-     * @param string     $partialPath
-     * @param mixed|null $params
-     *
-     * @return void
      */
     public function partial(
         string $partialPath,

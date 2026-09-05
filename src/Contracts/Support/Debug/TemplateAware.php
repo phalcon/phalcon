@@ -22,20 +22,11 @@ interface TemplateAware
     /**
      * Returns the template for the given name (override if set, default
      * otherwise).
-     *
-     * @param string $name
-     *
-     * @return string
      */
     public function getTemplate(string $name): string;
 
     /**
      * Overrides the template for the given name.
-     *
-     * @param string $name
-     * @param string $template
-     *
-     * @return static
      */
     public function setTemplate(string $name, string $template): static;
 }

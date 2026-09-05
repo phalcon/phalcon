@@ -23,9 +23,6 @@ use Phalcon\Storage\Adapter\Memory as StorageMemory;
 class Memory extends StorageMemory implements AdapterInterface
 {
     /**
-     * @param string     $key
-     * @param mixed|null $defaultValue
-     *
      * @return mixed|Reflection
      */
     public function get(string $key, mixed $defaultValue = null): mixed

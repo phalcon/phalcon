@@ -131,10 +131,6 @@ class Gd extends AbstractAdapter
      * than the named file. Prefer Gd::create() for the canvas case; this dual
      * mode is slated for removal in the next major version.
      *
-     * @param string   $file
-     * @param int|null $width
-     * @param int|null $height
-     *
      * @throws Exception
      */
     public function __construct(

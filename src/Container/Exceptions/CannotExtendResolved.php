@@ -38,8 +38,6 @@ class CannotExtendResolved extends Exception
     /**
      * Cannot extend a resolved service
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

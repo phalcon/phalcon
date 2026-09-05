@@ -43,8 +43,6 @@ class LazyFactory
 {
     /**
      * @phpstan-param container_values $values
-     *
-     * @return ArrayValues
      */
     public static function arrayValues(array $values): ArrayValues
     {
@@ -84,8 +82,6 @@ class LazyFactory
     /**
      * @phpstan-param callable-string     $functionName
      * @phpstan-param container_arguments $args
-     *
-     * @return FunctionCall
      */
     public static function functionCall(string $functionName, array $args): FunctionCall
     {
@@ -99,8 +95,6 @@ class LazyFactory
 
     /**
      * @phpstan-param container_arguments $args
-     *
-     * @return GetCall
      */
     public static function getCall(string $id, string $method, array $args): GetCall
     {
@@ -109,8 +103,6 @@ class LazyFactory
 
     /**
      * @phpstan-param container_arguments $args
-     *
-     * @return NewCall
      */
     public static function newCall(string $id, string $method, array $args): NewCall
     {
@@ -124,8 +116,6 @@ class LazyFactory
 
     /**
      * @phpstan-param container_arguments $args
-     *
-     * @return StaticCall
      */
     public static function staticCall(string $className, string $method, array $args): StaticCall
     {

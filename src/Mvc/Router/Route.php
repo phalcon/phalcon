@@ -117,12 +117,7 @@ class Route implements RouteInterface
     /**
      * Phalcon\Mvc\Router\Route constructor
      *
-     * @param string $pattern
-     * @param mixed  $paths
-     * @param mixed  $httpMethods
-     *
      * @throws Exception
-     *
      */
     public function __construct(
         string $pattern,
@@ -146,9 +141,6 @@ class Route implements RouteInterface
     /**
      * Returns routePaths
      *
-     * @param mixed $paths
-     *
-     * @return array
      * @throws Exception
      *
      * @phpstan-return mvc_router_paths
@@ -237,8 +229,6 @@ class Route implements RouteInterface
 
     /**
      * Resets the internal route id generator
-     *
-     * @return void
      */
     public static function reset(): void
     {
@@ -268,10 +258,6 @@ class Route implements RouteInterface
      *     }
      * );
      *```
-     *
-     * @param mixed $callback
-     *
-     * @return RouteInterface
      */
     public function beforeMatch(mixed $callback): RouteInterface
     {
@@ -318,11 +304,6 @@ class Route implements RouteInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @param string $name
-     * @param mixed  $converter
-     *
-     * @return RouteInterface
      */
     public function convert(string $name, mixed $converter): RouteInterface
     {
@@ -338,10 +319,6 @@ class Route implements RouteInterface
 
     /**
      * Extracts parameters from a string
-     *
-     * @param string $pattern
-     *
-     * @return array|bool
      *
      * @phpstan-return mvc_router_named_params|false
      */
@@ -513,8 +490,6 @@ class Route implements RouteInterface
      *
      * The result is cached after first computation; setHostname() clears
      * the cache.
-     *
-     * @return string|null
      */
     public function getCompiledHostName(): ?string
     {
@@ -553,8 +528,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's compiled pattern
-     *
-     * @return string
      */
     public function getCompiledPattern(): string
     {
@@ -571,8 +544,6 @@ class Route implements RouteInterface
     /**
      * Returns the router converter
      *
-     * @return array
-     *
      * @phpstan-return mvc_router_converters
      */
     public function getConverters(): array
@@ -582,8 +553,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the group associated with the route
-     *
-     * @return GroupInterface|null
      */
     public function getGroup(): GroupInterface | null
     {
@@ -600,8 +569,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the HTTP methods that constraint matching the route
-     *
-     * @return array|string|null
      *
      * @phpstan-return mvc_router_http_methods|string|null
      */
@@ -622,8 +589,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's name
-     *
-     * @return string|null
      */
     public function getName(): string | null
     {
@@ -632,8 +597,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths
-     *
-     * @return array
      *
      * @phpstan-return mvc_router_paths
      */
@@ -644,8 +607,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's pattern
-     *
-     * @return string
      */
     public function getPattern(): string
     {
@@ -654,8 +615,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths using positions as keys and names as values
-     *
-     * @return array
      *
      * @phpstan-return mvc_router_reversed_paths
      */
@@ -668,8 +627,6 @@ class Route implements RouteInterface
 
     /**
      * Returns the route's id
-     *
-     * @return string
      */
     public function getRouteId(): string
     {
@@ -703,12 +660,7 @@ class Route implements RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string $pattern
-     * @param mixed  $paths
-     *
-     * @return void
      * @throws Exception
-     *
      */
     public function reConfigure(
         string $pattern,
@@ -762,10 +714,6 @@ class Route implements RouteInterface
 
     /**
      * Sets the group associated with the route
-     *
-     * @param GroupInterface $group
-     *
-     * @return RouteInterface
      */
     public function setGroup(GroupInterface $group): RouteInterface
     {
@@ -780,10 +728,6 @@ class Route implements RouteInterface
      *```php
      * $route->setHostname("localhost");
      *```
-     *
-     * @param string $hostname
-     *
-     * @return RouteInterface
      */
     public function setHostname(string $hostname): RouteInterface
     {
@@ -806,11 +750,6 @@ class Route implements RouteInterface
      *     ]
      * );
      *```
-     *
-     * @param mixed $httpMethods
-     *
-     * @return RouteInterface
-     *
      */
     public function setHttpMethods(mixed $httpMethods): RouteInterface
     {
@@ -828,10 +767,6 @@ class Route implements RouteInterface
      *     ]
      * )->setName("about");
      *```
-     *
-     * @param string $name
-     *
-     * @return RouteInterface
      */
     public function setName(string $name): RouteInterface
     {
@@ -844,10 +779,6 @@ class Route implements RouteInterface
      * Sets the route's id. Intended for restoring cached routes - most
      * applications should rely on the auto-incrementing id assigned by
      * the constructor.
-     *
-     * @param string $routeId
-     *
-     * @return RouteInterface
      */
     public function setRouteId(string $routeId): RouteInterface
     {
@@ -869,11 +800,6 @@ class Route implements RouteInterface
      *     ]
      * );
      *```
-     *
-     * @param mixed $httpMethods
-     *
-     * @return RouteInterface
-     *
      */
     public function via(mixed $httpMethods): RouteInterface
     {

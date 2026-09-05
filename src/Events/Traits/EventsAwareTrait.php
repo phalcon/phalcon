@@ -26,8 +26,6 @@ trait EventsAwareTrait
 
     /**
      * Returns the internal event manager
-     *
-     * @return ManagerInterface|null
      */
     public function getEventsManager(): ManagerInterface | null
     {
@@ -36,8 +34,6 @@ trait EventsAwareTrait
 
     /**
      * Sets the events manager
-     *
-     * @param ManagerInterface $eventsManager
      */
     public function setEventsManager(ManagerInterface $eventsManager): void
     {
@@ -53,10 +49,6 @@ trait EventsAwareTrait
 
     /**
      * Helper method to fire an event
-     *
-     * @param string $eventName
-     * @param mixed  $data
-     * @param bool   $cancellable
      *
      * @return bool|mixed|null
      * @throws EventsException

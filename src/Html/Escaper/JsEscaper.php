@@ -25,21 +25,11 @@ use function str_replace;
  */
 class JsEscaper extends AbstractEscaper
 {
-    /**
-     * @param string $input
-     *
-     * @return string
-     */
     public function __invoke(string $input): string
     {
         return $this->escape($input);
     }
 
-    /**
-     * @param string $input
-     *
-     * @return string
-     */
     public function escape(string $input): string
     {
         if (empty($input)) {

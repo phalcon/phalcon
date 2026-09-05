@@ -88,9 +88,6 @@ class Update extends AbstractConditions
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStatement(): string
     {
         return "UPDATE"

@@ -32,10 +32,6 @@ class Builder
     /**
      * Builds a service using a complex service definition
      *
-     * @param DiInterface $container
-     * @param array       $definition
-     * @param array|null  $parameters
-     *
      * @return mixed
      * @throws Exception
      */
@@ -141,10 +137,6 @@ class Builder
     /**
      * Resolves a constructor/call parameter
      *
-     * @param DiInterface $container
-     * @param int         $position
-     * @param array       $argument
-     *
      * @return mixed|void
      * @throws Exception
      */
@@ -193,10 +185,6 @@ class Builder
     /**
      * Resolves an array of parameters
      *
-     * @param DiInterface $container
-     * @param array       $arguments
-     *
-     * @return array
      * @throws Exception
      */
     private function buildParameters(
@@ -217,11 +205,6 @@ class Builder
     }
 
     /**
-     * @param DiInterface $container
-     * @param array       $definition
-     * @param array|null  $parameters
-     *
-     * @return array
      * @throws Exception
      */
     private function checkPassedParameters(

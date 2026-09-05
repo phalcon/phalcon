@@ -108,9 +108,6 @@ class Random
      * echo $random->base58(); // 4kUgL2pdQMSCQtjE
      *```
      *
-     * @param int $len
-     *
-     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
      *
      * @link   https://en.wikipedia.org/wiki/Base58
@@ -140,9 +137,6 @@ class Random
      * echo $random->base62(); // z0RkwHfh8ErDM1xw
      *```
      *
-     * @param int $len
-     *
-     * @return string
      * @throws Exception If secure random number generator is not available or unexpected partial read
      */
     public function base62(int $len = 16): string
@@ -167,9 +161,6 @@ class Random
      * echo $random->base64(12); // 3rcq39QzGK9fUqh8
      *```
      *
-     * @param int $len
-     *
-     * @return string
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     public function base64(int $len = 16): string
@@ -194,10 +185,6 @@ class Random
      * echo $random->base64Safe(); // GD8JojhzSTrqX7Q8J6uug
      *```
      *
-     * @param int  $len
-     * @param bool $padding
-     *
-     * @return string
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      *
      * @link https://www.ietf.org/rfc/rfc3548.txt
@@ -230,9 +217,6 @@ class Random
      * // Possible output: string(32) "00f6c04b144b41fad6a59111c126e1ee"
      *```
      *
-     * @param int $len
-     *
-     * @return string
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     public function bytes(int $len = 16): string
@@ -256,9 +240,6 @@ class Random
      * echo $random->hex(10); // a29f470508d5ccb8e289
      *```
      *
-     * @param int $len
-     *
-     * @return string
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     public function hex(int $len = 16): string
@@ -279,9 +260,6 @@ class Random
      * echo $random->number(16); // 8
      *```
      *
-     * @param int $len
-     *
-     * @return int
      * @throws BaseException If secure random number generator is not available, unexpected partial read or $len <= 0
      */
     public function number(int $len): int
@@ -312,7 +290,6 @@ class Random
      * echo $random->uuid(); // 1378c906-64bb-4f81-a8d6-4ae1bfcdec22
      *```
      *
-     * @return string
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      *
      * @link https://www.ietf.org/rfc/rfc4122.txt
@@ -327,11 +304,6 @@ class Random
      * Generates a random string based on the number ($base) of characters
      * ($alphabet).
      *
-     * @param string $alphabet
-     * @param int    $base
-     * @param int    $number
-     *
-     * @return string
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
     protected function base(string $alphabet, int $base, int $number = 16): string

@@ -80,10 +80,6 @@ class Web implements Provider
 {
     /**
      * Provider for commonly used Web applications
-     *
-     * @param Collection $services
-     *
-     * @return void
      */
     public function provide(Collection $services): void
     {

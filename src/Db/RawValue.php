@@ -38,8 +38,6 @@ class RawValue
 {
     /**
      * Raw value without quoting or formatting
-     *
-     * @var string
      */
     protected string $value;
 
@@ -57,17 +55,11 @@ class RawValue
         }
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return $this->value;
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;

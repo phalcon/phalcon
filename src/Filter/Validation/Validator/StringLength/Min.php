@@ -80,9 +80,6 @@ class Min extends AbstractValidator
 {
     use InfoTrait;
 
-    /**
-     * @var string|null
-     */
     protected string | null $template = "Field :field must be at least :min characters long";
 
     /**

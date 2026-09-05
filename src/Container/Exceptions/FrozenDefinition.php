@@ -38,8 +38,6 @@ class FrozenDefinition extends Exception
     /**
      * Definition is frozen
      *
-     * @param string $name
-     *
      * @return static
      */
     public function __construct(string $name)

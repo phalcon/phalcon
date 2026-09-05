@@ -98,7 +98,6 @@ class Select extends AbstractList
      *
      * Flat entries: key = option value, value = label string.
      * Optgroup entries: key = group label, value = [value => label] array.
-     *
      */
     public function fromData(SelectData $data): static
     {
@@ -160,7 +159,6 @@ class Select extends AbstractList
      * Adds a non-selectable placeholder option as the first entry. Renders
      * as `<option value="" disabled selected>$text</option>`, matching the
      * common HTML idiom for "Choose..."-style prompts.
-     *
      */
     public function placeholder(string $text): static
     {

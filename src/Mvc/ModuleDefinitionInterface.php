@@ -23,16 +23,12 @@ interface ModuleDefinitionInterface
     /**
      * Registers an autoloader related to the module
      *
-     * @param DiInterface|null $container
-     *
      * @return void
      */
     public function registerAutoloaders(DiInterface | null $container = null);
 
     /**
      * Registers services related to the module
-     *
-     * @param DiInterface $container
      *
      * @return void
      */

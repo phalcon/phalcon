@@ -66,7 +66,6 @@ class Session extends AbstractFlash
      * Returns the messages in the session flasher
      *
      * @param string|null $type
-     * @param bool        $remove
      *
      * @phpstan-return ($type is null ? flash_session_messages : list<mixed>)
      * @throws Exception
@@ -79,7 +78,6 @@ class Session extends AbstractFlash
     /**
      * Returns the Session Service
      *
-     * @return ManagerInterface
      * @throws Exception
      */
     public function getSessionService(): ManagerInterface
@@ -165,9 +163,6 @@ class Session extends AbstractFlash
 
     /**
      * Returns the messages stored in session
-     *
-     * @param bool        $remove
-     * @param string|null $type
      *
      * @phpstan-return ($type is null ? flash_session_messages : list<mixed>)
      * @throws Exception
