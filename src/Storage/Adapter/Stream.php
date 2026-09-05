@@ -61,7 +61,7 @@ class Stream extends AbstractAdapter
     use FilePathTrait;
     use FileTrait;
 
-    protected string $prefix = 'ph-strm';
+    protected string $prefix     = 'ph-strm';
     protected string $storageDir = '';
 
     /**

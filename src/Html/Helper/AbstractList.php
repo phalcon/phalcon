@@ -32,7 +32,7 @@ abstract class AbstractList extends AbstractHelper
     /**
      * @phpstan-var html_attributes
      */
-    protected array $attributes = [];
+    protected array $attributes  = [];
     protected string $elementTag = 'li';
     /**
      * @phpstan-var html_element_store

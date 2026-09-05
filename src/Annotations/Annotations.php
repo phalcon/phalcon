@@ -23,7 +23,7 @@ class Annotations
 {
     private const CACHE_PREFIX = '_PHATN';
     protected AdapterInterface $adapter;
-    protected array $attributes = [];
+    protected array $attributes     = [];
     protected Reader | null $reader = null;
 
     public function __construct(AdapterInterface $adapter)

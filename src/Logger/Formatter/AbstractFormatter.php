@@ -32,8 +32,8 @@ abstract class AbstractFormatter implements FormatterInterface
     /**
      * Default date format
      */
-    protected string $dateFormat = 'c';
-    protected string $interpolatorLeft = '%';
+    protected string $dateFormat        = 'c';
+    protected string $interpolatorLeft  = '%';
     protected string $interpolatorRight = '%';
 
     public function getDateFormat(): string

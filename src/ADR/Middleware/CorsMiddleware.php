@@ -52,7 +52,7 @@ class CorsMiddleware implements Middleware
      * @var list<string>
      */
     protected array $allowedOrigins = [];
-    protected int $maxAge = 0;
+    protected int $maxAge           = 0;
 
     /**
      * @phpstan-param adr_cors_config $config

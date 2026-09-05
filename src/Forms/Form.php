@@ -85,9 +85,9 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     /**
      * @phpstan-var forms_options
      */
-    protected array $options = [];
-    protected int $position = 0;
-    protected ?TagFactory $tagFactory = null;
+    protected array $options                   = [];
+    protected int $position                    = 0;
+    protected ?TagFactory $tagFactory          = null;
     protected ?ValidationInterface $validation = null;
     /**
      * @phpstan-var forms_whitelist

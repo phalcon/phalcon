@@ -43,13 +43,13 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
     use HeaderTrait;
 
     private SessionHandlerInterface | null $adapter = null;
-    private string $name = '';
+    private string $name                            = '';
     /**
      * @var array<string, mixed>
      *
      * @phpstan-var session_options
      */
-    private array $options = [];
+    private array $options   = [];
     private string $uniqueId = '';
 
     /**

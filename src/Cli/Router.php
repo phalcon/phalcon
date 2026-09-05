@@ -55,14 +55,14 @@ use function substr;
  */
 class Router extends AbstractInjectionAware implements RouterInterface
 {
-    protected string $action = "";
+    protected string $action        = "";
     protected string $defaultAction = "";
     protected string $defaultModule = "";
     /**
      * @phpstan-var cli_parameters
      */
-    protected array $defaultParams = [];
-    protected string $defaultTask = "";
+    protected array $defaultParams          = [];
+    protected string $defaultTask           = "";
     protected ?RouteInterface $matchedRoute = null;
     /**
      * @var array<array-key, string>
@@ -76,8 +76,8 @@ class Router extends AbstractInjectionAware implements RouterInterface
     /**
      * @phpstan-var cli_routes
      */
-    protected array $routes = [];
-    protected string $task = "";
+    protected array $routes    = [];
+    protected string $task     = "";
     protected bool $wasMatched = false;
 
     /**
@@ -117,7 +117,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      */
     public function add(string $pattern, mixed $paths = null): RouteInterface
     {
-        $route   = new Route($pattern, $paths);
+        $route                              = new Route($pattern, $paths);
         $this->routes[$route->getRouteId()] = $route;
 
         return $route;

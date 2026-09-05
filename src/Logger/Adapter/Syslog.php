@@ -46,8 +46,8 @@ use const LOG_WARNING;
 class Syslog extends AbstractAdapter
 {
     protected int $facility = 0;
-    protected bool $opened = false;
-    protected int $option = 0;
+    protected bool $opened  = false;
+    protected int $option   = 0;
 
     /**
      * Syslog constructor.

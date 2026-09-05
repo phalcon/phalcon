@@ -21,10 +21,10 @@ class Enum
 
     // Flipping directions
     public const HORIZONTAL = 11;
-    public const INVERSE = 5;
-    public const NONE    = 1;
-    public const PRECISE = 6;
-    public const TENSILE = 7;
+    public const INVERSE    = 5;
+    public const NONE       = 1;
+    public const PRECISE    = 6;
+    public const TENSILE    = 7;
     public const VERTICAL   = 12;
-    public const WIDTH   = 2;
+    public const WIDTH      = 2;
 }

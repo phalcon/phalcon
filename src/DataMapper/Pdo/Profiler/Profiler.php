@@ -38,7 +38,7 @@ class Profiler implements ProfilerInterface
     /**
      * @phpstan-var datamapper_profiler_context
      */
-    protected array $context = [];
+    protected array $context    = [];
     protected string $logFormat = "";
     protected LoggerInterface $logger;
     protected int | string $logLevel = 0;

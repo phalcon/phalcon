@@ -51,7 +51,7 @@ abstract class AbstractGroup extends AbstractHelper
      * @var mixed
      */
     protected mixed $checked = null;
-    protected string $name = '';
+    protected string $name   = '';
     /**
      * @phpstan-var html_group_options
      */
@@ -60,7 +60,7 @@ abstract class AbstractGroup extends AbstractHelper
      * @phpstan-var html_attributes
      */
     protected array $sharedAttributes = [];
-    protected string $type = 'checkbox';
+    protected string $type            = 'checkbox';
 
     /**
      * @phpstan-param html_group_options $options

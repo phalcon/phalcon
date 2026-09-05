@@ -94,8 +94,8 @@ class ManagerFactory
         ?AccessLocator $accessLocator = null,
     ) {
         $this->adapterLocator = $adapterLocator ?? new AdapterLocator($container);
-        $this->guardLocator   = $guardLocator   ?? new GuardLocator($container);
-        $this->accessLocator  = $accessLocator  ?? new AccessLocator($container);
+        $this->guardLocator   = $guardLocator ?? new GuardLocator($container);
+        $this->accessLocator  = $accessLocator ?? new AccessLocator($container);
     }
 
     /**

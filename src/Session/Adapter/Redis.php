@@ -38,13 +38,13 @@ class Redis extends AbstractAdapter
      * release still avoids deleting the newer lock). Raise this above the
      * longest expected request to retain the lock for the whole request.
      */
-    protected int $lockExpiry = 30;
+    protected int $lockExpiry      = 30;
     protected bool $lockingEnabled = false;
-    protected string $lockKey = '';
-    protected int $lockRetries = 100;
-    protected string $lockToken = '';
-    protected int $lockWaitTime = 50000;
-    protected string $prefix = '';
+    protected string $lockKey      = '';
+    protected int $lockRetries     = 100;
+    protected string $lockToken    = '';
+    protected int $lockWaitTime    = 50000;
+    protected string $prefix       = '';
 
     /**
      * Constructor

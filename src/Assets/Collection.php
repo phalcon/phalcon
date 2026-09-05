@@ -55,11 +55,11 @@ class Collection implements Countable, IteratorAggregate
     /**
      * @var assets_filters
      */
-    protected array $filters = [];
-    protected bool $join = true;
-    protected string $prefix = '';
+    protected array $filters      = [];
+    protected bool $join          = true;
+    protected string $prefix      = '';
     protected bool $targetIsLocal = true;
-    protected string $version = '';
+    protected string $version     = '';
 
     /**
      * Adds an asset to the collection

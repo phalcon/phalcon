@@ -55,14 +55,14 @@ class File implements FileInterface
 {
     use GetTrait;
 
-    protected int $error = 0;
+    protected int $error        = 0;
     protected string $extension = '';
-    protected string $key = '';
-    protected string $name = '';
+    protected string $key       = '';
+    protected string $name      = '';
     protected string $realType;
-    protected int $size = 0;
+    protected int $size       = 0;
     protected string $tmpName = '';
-    protected string $type = '';
+    protected string $type    = '';
 
     /**
      * Constructor

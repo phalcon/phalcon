@@ -34,7 +34,7 @@ abstract class AbstractInput extends AbstractHelper
      * @phpstan-var html_attributes
      */
     protected array $attributes = [];
-    protected string $type = 'text';
+    protected string $type      = 'text';
 
     /**
      * @phpstan-param html_attributes $attributes

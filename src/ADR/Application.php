@@ -47,12 +47,12 @@ use Phalcon\Http\ResponseInterface;
 final class Application implements ApplicationInterface
 {
     protected string $actionDirectory = "";
-    protected string $baseNamespace = "";
+    protected string $baseNamespace   = "";
     protected Container $container;
     /**
      * @phpstan-var adr_middleware_map
      */
-    protected array $middlewareMap = [];
+    protected array $middlewareMap  = [];
     protected string $wordSeparator = "";
 
     public function __construct(?Container $container = null)

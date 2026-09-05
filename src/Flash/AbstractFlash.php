@@ -44,7 +44,7 @@ abstract class AbstractFlash extends AbstractInjectionAware implements FlashInte
 {
     use InterpolateTrait;
 
-    protected bool $autoescape = true;
+    protected bool $autoescape    = true;
     protected bool $automaticHtml = true;
     /**
      * @phpstan-var flash_css_classes
@@ -53,14 +53,14 @@ abstract class AbstractFlash extends AbstractInjectionAware implements FlashInte
     /**
      * @phpstan-var flash_css_classes
      */
-    protected array $cssIconClasses = [];
-    protected string $customTemplate = '';
+    protected array $cssIconClasses                   = [];
+    protected string $customTemplate                  = '';
     protected EscaperInterface | null $escaperService = null;
-    protected bool $implicitFlush = true;
+    protected bool $implicitFlush                     = true;
     /**
      * @phpstan-var flash_messages
      */
-    protected array $messages = [];
+    protected array $messages                         = [];
     protected SessionInterface | null $sessionService = null;
 
     /**

@@ -22,7 +22,7 @@ class Check extends AbstractElement
     /**
      * @var mixed
      */
-    protected mixed $uncheckedValue = null;
+    protected mixed $uncheckedValue   = null;
     protected bool $uncheckedValueSet = false;
 
     /**

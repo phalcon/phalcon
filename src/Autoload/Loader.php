@@ -80,10 +80,10 @@ class Loader
     /**
      * @var autoload_strings
      */
-    protected array $files = [];
+    protected array $files             = [];
     protected string | null $foundPath = null;
-    protected bool $isDebug = false;
-    protected bool $isRegistered = false;
+    protected bool $isDebug            = false;
+    protected bool $isRegistered       = false;
 
     /**
      * @var autoload_namespaces

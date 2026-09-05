@@ -34,9 +34,9 @@ class Title extends AbstractHelper
     /**
      * @phpstan-var list<string>
      */
-    protected array $prepend = [];
+    protected array $prepend    = [];
     protected string $separator = '';
-    protected string $title = '';
+    protected string $title     = '';
 
     /**
      * Sets the separator and returns the object back

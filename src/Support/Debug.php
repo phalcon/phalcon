@@ -45,14 +45,14 @@ class Debug
     /**
      * @phpstan-var support_debug_variables
      */
-    protected array $data = [];
+    protected array $data            = [];
     protected bool $hideDocumentRoot = false;
     protected Renderer $renderer;
     protected ReportBuilder $reportBuilder;
-    protected bool $showBackTrace = true;
+    protected bool $showBackTrace    = true;
     protected bool $showFileFragment = false;
-    protected bool $showFiles = true;
-    protected string $uri = "https://assets.phalcon.io/debug/6.0.x/";
+    protected bool $showFiles        = true;
+    protected string $uri            = "https://assets.phalcon.io/debug/6.0.x/";
 
     public function __construct()
     {

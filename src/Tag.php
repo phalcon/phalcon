@@ -65,7 +65,7 @@ class Tag
     public const XHTML20              = 10;
     public const XHTML5               = 11;
 
-    protected static bool $autoEscape = true;
+    protected static bool $autoEscape              = true;
     protected static DiInterface | null $container = null;
     /**
      * @phpstan-var tag_display_values
@@ -78,12 +78,12 @@ class Tag
     /**
      * @phpstan-var tag_title_parts
      */
-    protected static array $documentPrependTitle = [];
-    protected static string | null $documentTitle = "";
-    protected static string | null $documentTitleSeparator = "";
-    protected static int $documentType = 11;
+    protected static array $documentPrependTitle             = [];
+    protected static string | null $documentTitle            = "";
+    protected static string | null $documentTitleSeparator   = "";
+    protected static int $documentType                       = 11;
     protected static EscaperInterface | null $escaperService = null;
-    protected static UrlInterface | null $urlService = null;
+    protected static UrlInterface | null $urlService         = null;
 
     /**
      * Appends a text to current document title

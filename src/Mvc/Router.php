@@ -2477,7 +2477,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 $combinedBodyMatch = [];
                 if (!preg_match('/^#\\^(.+)\\$#u$/', $bucketPattern, $combinedBodyMatch)) {
                     $this->combinedRegexDisabled[$method] = true;
-                    $combinedAlternatives = [];
+                    $combinedAlternatives                 = [];
                     break;
                 }
 

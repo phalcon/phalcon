@@ -53,9 +53,9 @@ class SessionGuardConfig extends AbstractGuardConfig
         $this->validateNonEmpty('name', $name);
         $this->validateNonEmpty('rememberName', $rememberName);
 
-        $this->name         = $name ?? $this->derive('auth', $suffix);
-        $this->rememberName = $rememberName ?? $this->derive('remember', $suffix);
-        $this->rememberTtl  = $rememberTtl ?? self::DEFAULT_REMEMBER_TTL;
+        $this->name           = $name ?? $this->derive('auth', $suffix);
+        $this->rememberName   = $rememberName ?? $this->derive('remember', $suffix);
+        $this->rememberTtl    = $rememberTtl ?? self::DEFAULT_REMEMBER_TTL;
         $this->rememberSecure = $rememberSecure;
 
         if ($this->name === $this->rememberName) {

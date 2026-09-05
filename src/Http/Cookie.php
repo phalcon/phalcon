@@ -45,14 +45,14 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
     use GetTrait;
 
     protected FilterInterface | null $filter = null;
-    protected bool $isRead = false;
-    protected bool $isRestored = false;
+    protected bool $isRead                   = false;
+    protected bool $isRestored               = false;
 
     /**
      * The cookie's sign key.
      */
     protected string | null $signKey = null;
-    protected mixed $value = null;
+    protected mixed $value           = null;
 
     /**
      * Phalcon\Http\Cookie constructor.
@@ -234,7 +234,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                     }
 
                     /** @var FilterInterface $filter */
-                    $filter = $this->container->getShared('filter');
+                    $filter       = $this->container->getShared('filter');
                     $this->filter = $filter;
                 }
 

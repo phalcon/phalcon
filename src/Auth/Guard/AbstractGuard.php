@@ -33,7 +33,7 @@ abstract class AbstractGuard implements Guard
     use EventsAwareTrait;
 
     protected ?AuthUser $lastUserAttempted = null;
-    protected ?AuthUser $user = null;
+    protected ?AuthUser $user              = null;
 
     /**
      * @phpstan-param TConfig $config

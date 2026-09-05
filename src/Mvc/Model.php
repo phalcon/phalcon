@@ -1201,7 +1201,7 @@ abstract class Model extends AbstractInjectionAware implements
                     Column::TYPE_MULTILINESTRING,
                     Column::TYPE_MULTIPOLYGON,
                     Column::TYPE_GEOMETRYCOLLECTION => self::castSpatial($value),
-                    default                  => $value,
+                    default                         => $value,
                 };
             } else {
                 $castValue = match ($attribute[1]) {
@@ -3184,8 +3184,8 @@ abstract class Model extends AbstractInjectionAware implements
                         'Error processing model event',
                         [
                             'exception' => $t,
-                            'class' => $className,
-                            'event' => $eventName,
+                            'class'     => $className,
+                            'event'     => $eventName,
                         ]
                     );
                 }
@@ -3197,8 +3197,8 @@ abstract class Model extends AbstractInjectionAware implements
                         'Error processing model event',
                         [
                             'exception' => $t,
-                            'class' => $className,
-                            'event' => $eventName,
+                            'class'     => $className,
+                            'event'     => $eventName,
                         ]
                     );
                 }
@@ -3264,8 +3264,8 @@ abstract class Model extends AbstractInjectionAware implements
                         'Error processing model event',
                         [
                             'exception' => $t,
-                            'class' => $className,
-                            'event' => $eventName,
+                            'class'     => $className,
+                            'event'     => $eventName,
                         ]
                     );
                 }
@@ -3277,8 +3277,8 @@ abstract class Model extends AbstractInjectionAware implements
                         'Error processing model event',
                         [
                             'exception' => $t,
-                            'class' => $className,
-                            'event' => $eventName,
+                            'class'     => $className,
+                            'event'     => $eventName,
                         ]
                     );
                 }
@@ -6935,14 +6935,14 @@ abstract class Model extends AbstractInjectionAware implements
                                 $referencedFieldsCount = count($referencedFields) - 1;
 
                                 for ($j = 0; $j <= $referencedFieldsCount; $j++) {
-                                    $columnA          = $referencedFields[$j];
-                                    $t                = $j + $i;
-                                    $loopConditions[] = "[" . $intermediateReferencedFields[$j] . "] = :APR" . $t . ":";
+                                    $columnA                      = $referencedFields[$j];
+                                    $t                            = $j + $i;
+                                    $loopConditions[]             = "[" . $intermediateReferencedFields[$j] . "] = :APR" . $t . ":";
                                     $loopPlaceholders["APR" . $t] = $recordAfter->readAttribute($columnA);
                                 }
                             } else {
                                 /** @var string $intermediateReferencedFields */
-                                $loopConditions[] = "[" . $intermediateReferencedFields . "] = :APR" . $i . ":";
+                                $loopConditions[]             = "[" . $intermediateReferencedFields . "] = :APR" . $i . ":";
                                 $loopPlaceholders["APR" . $i] = $recordAfter->readAttribute($referencedFields);
                             }
                         }

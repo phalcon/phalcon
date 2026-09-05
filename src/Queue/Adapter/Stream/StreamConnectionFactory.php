@@ -49,7 +49,7 @@ class StreamConnectionFactory implements ConnectionFactoryInterface
 
     public function createContext(): ContextInterface
     {
-        $storageDir = $this->options["storageDir"] ?? sys_get_temp_dir() . "/phalcon_queue";
+        $storageDir   = $this->options["storageDir"] ?? sys_get_temp_dir() . "/phalcon_queue";
         $pollInterval = (int) ($this->options["pollInterval"] ?? 200);
 
         return new StreamContext($storageDir, $pollInterval);

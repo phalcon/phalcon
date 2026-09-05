@@ -59,7 +59,7 @@ class Gettext extends AbstractAdapter
 {
     use InfoTrait;
 
-    protected int $category = LC_ALL;
+    protected int $category         = LC_ALL;
     protected string $defaultDomain = "messages";
 
     /**

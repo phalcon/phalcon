@@ -71,8 +71,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @phpstan-var storage_options
      */
-    protected array $options = [];
-    protected string $prefix = 'ph-memo-';
+    protected array $options                         = [];
+    protected string $prefix                         = 'ph-memo-';
     protected SerializerInterface | null $serializer = null;
     /**
      * Whether a leading prefix is stripped from incoming keys before the

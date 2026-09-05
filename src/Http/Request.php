@@ -100,9 +100,9 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     use EventsAwareTrait;
     use FileTrait;
 
-    protected AttributeBag | null $attributes = null;
+    protected AttributeBag | null $attributes       = null;
     protected FilterInterface | null $filterService = null;
-    protected bool $methodOverride = false;
+    protected bool $methodOverride                  = false;
     /**
      * @phpstan-var http_form_data|null
      */
@@ -110,13 +110,13 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     /**
      * @phpstan-var http_parameter_filters
      */
-    protected array $queryFilters = [];
-    protected string $rawBody = '';
+    protected array $queryFilters   = [];
+    protected string $rawBody       = '';
     protected bool $strictHostCheck = false;
     /**
      * @phpstan-var list<string>
      */
-    protected array $trustedProxies = [];
+    protected array $trustedProxies      = [];
     protected string $trustedProxyHeader = '';
 
     /**
@@ -1687,7 +1687,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         $subnetByte = ord($subnetBits[$maskBytes]);
 
         $tempMask = (1 << (8 - $remainingBits)) - 1;
-        $mask = 0xFF ^ $tempMask;
+        $mask     = 0xFF ^ $tempMask;
 
         return ($ipByte & $mask) === ($subnetByte & $mask);
     }

@@ -787,7 +787,7 @@ class Route implements RouteInterface
      */
     public function setHostname(string $hostname): RouteInterface
     {
-        $this->hostname        = $hostname;
+        $this->hostname         = $hostname;
         $this->compiledHostName = false;
 
         return $this;

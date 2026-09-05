@@ -67,7 +67,7 @@ abstract class AbstractLogger
      * @phpstan-var logger_excluded
      */
     protected array $excluded = [];
-    protected int $logLevel = Enum::CUSTOM;
+    protected int $logLevel   = Enum::CUSTOM;
     protected DateTimeZone $timezone;
 
     /**

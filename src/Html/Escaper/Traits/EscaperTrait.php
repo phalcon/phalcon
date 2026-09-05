@@ -32,7 +32,7 @@ use const ENT_SUBSTITUTE;
 trait EscaperTrait
 {
     protected bool $doubleEncode = true;
-    protected string $encoding = 'utf-8';
+    protected string $encoding   = 'utf-8';
     /**
      * ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401
      *

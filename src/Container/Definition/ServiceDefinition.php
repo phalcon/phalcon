@@ -57,7 +57,7 @@ class ServiceDefinition
     /**
      * @phpstan-var container_arguments
      */
-    protected array $arguments = [];
+    protected array $arguments         = [];
     protected string | null $className = null;
     /**
      * @phpstan-var container_arguments

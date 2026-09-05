@@ -35,7 +35,7 @@ class Concat extends AbstractStr
      */
     public function __invoke(string $delimiter, string ...$many): string
     {
-        $data = [];
+        $data   = [];
         $prefix = "";
         $suffix = "";
 

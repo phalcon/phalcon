@@ -224,7 +224,7 @@ class Crypt implements CryptInterface
         if (true === $this->useSigning) {
             $hashLength = $this->hashLengthCache[$hashAlgorithm] ?? null;
             if (!$hashLength) {
-                $hashLength = strlen($this->phpHash($hashAlgorithm, "", true));
+                $hashLength                            = strlen($this->phpHash($hashAlgorithm, "", true));
                 $this->hashLengthCache[$hashAlgorithm] = $hashLength;
             }
 
@@ -821,7 +821,7 @@ class Crypt implements CryptInterface
     ): string {
         $localDecrypted = $decrypted;
         if (true === $this->checkIsMode(["cbc"], $mode)) {
-            $padding   = $this->padding;
+            $padding        = $this->padding;
             $localDecrypted = $this->cryptUnpadText(
                 $decrypted,
                 $mode,

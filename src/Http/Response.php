@@ -74,8 +74,8 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
     private const DATETIME_FORMAT = 'D, d M Y H:i:s';
 
     protected DiInterface | null $container = null;
-    protected string | null $content = null;
-    protected ?CookiesInterface $cookies = null;
+    protected string | null $content        = null;
+    protected ?CookiesInterface $cookies    = null;
     protected Encode $encode;
     protected string | null $file = null;
     protected Headers $headers;
@@ -263,7 +263,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
 
         if (empty($header)) {
             /** @var UrlInterface $url */
-            $url = $container->getShared('url');
+            $url    = $container->getShared('url');
             $header = $url->get($location);
         }
 

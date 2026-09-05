@@ -106,7 +106,7 @@ class Libmemcached extends AbstractAdapter
                 /** @var storage_libmemcached_servers $servers */
                 $servers = $this->options['servers'] ?? [];
                 /** @var storage_libmemcached_client $client */
-                $client = $this->options['client'] ?? [];
+                $client   = $this->options['client'] ?? [];
                 $saslUser = $sasl['user'] ?? '';
                 $saslPass = $sasl['pass'] ?? '';
                 $failover = [

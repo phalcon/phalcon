@@ -810,7 +810,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                     Opcode::INSERT->value => $this->prepareInsert(),
                     Opcode::UPDATE->value => $this->prepareUpdate(),
                     Opcode::DELETE->value => $this->prepareDelete(),
-                    default             => throw new UnknownPhqlStatement((string) $type),
+                    default               => throw new UnknownPhqlStatement((string) $type),
                 };
             }
         }
@@ -1606,8 +1606,8 @@ class Query implements QueryInterface, InjectionAwareInterface
         foreach ($rawWildcards as $wildcard) {
             /** @var RawValue $rawWildcardValue */
             $rawWildcardValue = $processed[$wildcard];
-            $rawValue    = (string) $rawWildcardValue;
-            $placeholder = substr((string) $wildcard, 0, 1) === ":"
+            $rawValue         = (string) $rawWildcardValue;
+            $placeholder      = substr((string) $wildcard, 0, 1) === ":"
                 ? substr((string) $wildcard, 1)
                 : (string) $wildcard;
 

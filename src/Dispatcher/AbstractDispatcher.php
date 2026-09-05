@@ -82,7 +82,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 {
     use EventsAwareTrait;
 
-    protected string $actionName = "";
+    protected string $actionName   = "";
     protected string $actionSuffix = "Action";
 
     /**
@@ -96,12 +96,12 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * @phpstan-var dispatcher_method_map
      */
-    protected array $camelCaseMap = [];
-    protected string $defaultAction = "";
-    protected string $defaultHandler = "";
+    protected array $camelCaseMap      = [];
+    protected string $defaultAction    = "";
+    protected string $defaultHandler   = "";
     protected string $defaultNamespace = "";
-    protected bool $finished = false;
-    protected bool $forwarded = false;
+    protected bool $finished           = false;
+    protected bool $forwarded          = false;
     /**
      * @phpstan-var dispatcher_handler_hashes
      */
@@ -109,18 +109,18 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     /**
      * @phpstan-var dispatcher_hook_cache
      */
-    protected array $handlerHookCache = [];
-    protected string $handlerName = "";
-    protected string $handlerSuffix = "";
+    protected array $handlerHookCache      = [];
+    protected string $handlerName          = "";
+    protected string $handlerSuffix        = "";
     protected bool $isControllerInitialize = false;
     /**
      * @var mixed
      */
-    protected mixed $lastHandler = null;
+    protected mixed $lastHandler            = null;
     protected ?BinderInterface $modelBinder = null;
-    protected bool $modelBinding = false;
-    protected ?string $moduleName = "";
-    protected string $namespaceName = "";
+    protected bool $modelBinding            = false;
+    protected ?string $moduleName           = "";
+    protected string $namespaceName         = "";
     /**
      * @phpstan-var dispatcher_params
      */

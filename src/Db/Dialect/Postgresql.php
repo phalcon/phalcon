@@ -258,11 +258,11 @@ class Postgresql extends Dialect
             throw new MissingDefinitionKey("columns");
         }
 
-        $tableName = $this->prepareTable($tableName, $schemaName);
+        $tableName    = $this->prepareTable($tableName, $schemaName);
         $options      = $definition["options"] ?? [];
         $tableComment = $options["TABLE_COMMENT"] ?? "";
         $temporary    = $options["temporary"] ?? "";
-        $temporary = empty($temporary) ? "" : " TEMPORARY";
+        $temporary    = empty($temporary) ? "" : " TEMPORARY";
         /**
          * Create a temporary or normal table
          */

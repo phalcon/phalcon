@@ -134,7 +134,7 @@ class Parser
      */
     private function decodeSignature(Item $headers, string $signature): Signature
     {
-        $algo    = $headers->get(Enum::ALGO, 'none');
+        $algo             = $headers->get(Enum::ALGO, 'none');
         $decoded          = '';
         $encodedSignature = '';
         if ('none' !== $algo) {
