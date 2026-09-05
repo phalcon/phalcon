@@ -18,6 +18,7 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
+use Phalcon\Db\Event\Factory as DbEventFactory;
 use Phalcon\Db\Exceptions\InvalidWkb;
 use Phalcon\Db\Geometry\WkbParser;
 use Phalcon\Db\RawValue;
@@ -3161,14 +3162,17 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         $container = $this->getDI();
-        if (
-            ($em = $this->getEventsManager()) &&
-            $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
-        ) {
-            /**
-             * The event factory builds the event object.
-             */
-            /** @var object $eventObject */
+        $em        = $this->getEventsManager();
+
+        /**
+         * `Di::get()` gives back `mixed`, so the event factory goes in a typed
+         * local. Get the service only when there is an events manager, as the
+         * short-circuit did before.
+         */
+        /** @var DbEventFactory|null $eventFactory */
+        $eventFactory = $em ? $container?->get('modelsEventFactory') : null;
+
+        if ($em && $eventObject = $eventFactory?->create($eventName, $this)) {
             $logger = $this->getEventLogger($container);
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
                 // make sure that every event has a chance to be fired
@@ -3237,14 +3241,17 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         $container = $this->getDI();
-        if (
-            ($em = $this->getEventsManager()) &&
-            $eventObject = $container?->get('modelsEventFactory')->create($eventName, $this)
-        ) {
-            /**
-             * The event factory builds the event object.
-             */
-            /** @var object $eventObject */
+        $em        = $this->getEventsManager();
+
+        /**
+         * `Di::get()` gives back `mixed`, so the event factory goes in a typed
+         * local. Get the service only when there is an events manager, as the
+         * short-circuit did before.
+         */
+        /** @var DbEventFactory|null $eventFactory */
+        $eventFactory = $em ? $container?->get('modelsEventFactory') : null;
+
+        if ($em && $eventObject = $eventFactory?->create($eventName, $this)) {
             $logger = $this->getEventLogger($container);
 
             foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {

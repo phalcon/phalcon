@@ -126,11 +126,16 @@ class Simple extends Resultset
      */
     final public function current(): ModelInterface | Row | null
     {
-        /** @var ModelInterface|Row|null $activeRow */
+        /** @var false|ModelInterface|Row|null $activeRow */
         $activeRow = $this->activeRow;
 
         if ($activeRow !== null) {
-            return $activeRow;
+            /**
+             * `false` marks a row that could not hydrate. It stops the row
+             * check below running a second time; it is not a value to give
+             * back.
+             */
+            return $activeRow === false ? null : $activeRow;
         }
 
         /**

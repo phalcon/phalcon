@@ -263,6 +263,15 @@ parameters:
                 - ../src/Mvc/Model/Query.php
                 - ../src/Mvc/Model/Query/Builder.php
             reportUnmatched: false
+        # `Result::fetchAll()` declares no parameters, as the Zephir contract
+        # does, while `Db\Result\PdoResult` - the only implementation -
+        # declares the optional `mode`, `fetchArgument` and `constructorArgs`.
+        # `materialize()` passes the fetch mode. Widening the contract is a
+        # next major change, because it breaks every implementation.
+        -
+            message: "#Method Phalcon\\\\Contracts\\\\Db\\\\Result::fetchAll\\(\\) invoked with 1 parameter, 0 required#"
+            path: ../src/Mvc/Model/Resultset.php
+            reportUnmatched: false
         # `__set()` returns the assigned value, as the Zephir source does.
         # PHP discards it and PHPStan hardcodes the magic method as `void`,
         # so the returns cannot be described in a docblock. Adding a native
