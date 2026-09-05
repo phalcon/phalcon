@@ -42,7 +42,7 @@ class Annotations implements StrategyInterface
      *
      * @phpstan-return mvc_metadata_index
      */
-    public function getColumnMaps(ModelInterface $model, DiInterface $container): array
+    final public function getColumnMaps(ModelInterface $model, DiInterface $container): array
     {
         $propertiesAnnotations = $this->getProperties($model, $container);
 
@@ -103,7 +103,7 @@ class Annotations implements StrategyInterface
      *
      * @phpstan-return mvc_metadata_index
      */
-    public function getMetaData(ModelInterface $model, DiInterface $container): array
+    final public function getMetaData(ModelInterface $model, DiInterface $container): array
     {
         $propertiesAnnotations = $this->getProperties($model, $container);
 

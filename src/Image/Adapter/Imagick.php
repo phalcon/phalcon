@@ -92,8 +92,10 @@ class Imagick extends AbstractAdapter
     ) {
         $this->check();
 
+        $image = new ImagickNative();
+
         $this->file      = $file;
-        $this->image     = new ImagickNative();
+        $this->image     = $image;
         $this->maxPixels = $maxPixels > 0 ? $maxPixels : self::DEFAULT_MAX_PIXELS;
 
         if (true === $this->phpFileExists($this->file)) {
@@ -104,34 +106,35 @@ class Imagick extends AbstractAdapter
              * dimensions before readImage() decodes the full pixel buffer
              * (CWE-409).
              */
-            if (true === $this->image->pingImage($this->realpath)) {
+            if (true === $image->pingImage($this->realpath)) {
                 $this->assertPixelLimit(
-                    (int)$this->image->getImageWidth(),
-                    (int)$this->image->getImageHeight()
+                    (int)$image->getImageWidth(),
+                    (int)$image->getImageHeight()
                 );
 
-                $this->image->clear();
+                $image->clear();
             }
 
-            if (true !== $this->image->readImage($this->realpath)) {
+            if (true !== $image->readImage($this->realpath)) {
                 throw new ImageLoadFailed($this->file);
             }
 
-            if (!$this->image->getImageAlphaChannel()) {
-                $this->image->setImageAlphaChannel(ImagickNative::ALPHACHANNEL_SET);
+            if (!$image->getImageAlphaChannel()) {
+                $image->setImageAlphaChannel(ImagickNative::ALPHACHANNEL_SET);
             }
-            $this->type = $this->image->getImageType();
+            $this->type = $image->getImageType();
 
             /**
              * GIF. The format, not the image type: getImageType() reports an
              * Imagick IMGTYPE_* value, which never equals an IMAGETYPE_* one.
              */
-            if ("GIF" === strtoupper($this->image->getImageFormat())) {
-                $image = $this->image->coalesceImages();
+            if ("GIF" === strtoupper($image->getImageFormat())) {
+                $coalesced = $image->coalesceImages();
 
-                $this->image->clear();
-                $this->image->destroy();
+                $image->clear();
+                $image->destroy();
 
+                $image       = $coalesced;
                 $this->image = $image;
             }
         } else {
@@ -139,22 +142,22 @@ class Imagick extends AbstractAdapter
                 throw new ImageLoadFailed($this->file);
             }
 
-            $this->image->newImage(
+            $image->newImage(
                 $width,
                 $height,
                 new ImagickPixel("transparent")
             );
 
-            $this->image->setFormat("png");
-            $this->image->setImageFormat("png");
+            $image->setFormat("png");
+            $image->setImageFormat("png");
 
             $this->realpath = $this->file;
         }
 
-        $this->width  = $this->image->getImageWidth();
-        $this->height = $this->image->getImageHeight();
-        $this->type   = $this->image->getImageType();
-        $this->mime   = "image/" . $this->image->getImageFormat();
+        $this->width  = $image->getImageWidth();
+        $this->height = $image->getImageHeight();
+        $this->type   = $image->getImageType();
+        $this->mime   = "image/" . $image->getImageFormat();
     }
 
     /**
@@ -493,7 +496,14 @@ class Imagick extends AbstractAdapter
                 0
             );
 
-            if (true !== $reflection->nextImage()) {
+            /**
+             * The result is kept in a local because PHPStan carries the
+             * narrowing of a repeated call expression past the loop, and it
+             * cannot know that nextImage() moves an internal cursor.
+             */
+            $hasNext = $reflection->nextImage();
+
+            if (true !== $hasNext) {
                 break;
             }
         }
@@ -528,7 +538,9 @@ class Imagick extends AbstractAdapter
                 ImagickNative::CHANNEL_ALPHA
             );
 
-            if (true !== $reflection->nextImage()) {
+            $hasNext = $reflection->nextImage();
+
+            if (true !== $hasNext) {
                 break;
             }
         }

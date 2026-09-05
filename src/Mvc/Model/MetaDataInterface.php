@@ -26,6 +26,7 @@ use Phalcon\Mvc\ModelInterface;
  * @phpstan-import-type mvc_metadata_column_map from MvcTypes
  * @phpstan-import-type mvc_metadata_default_values from MvcTypes
  * @phpstan-import-type mvc_metadata_index from MvcTypes
+ * @phpstan-import-type mvc_metadata_model from MvcTypes
  * @phpstan-import-type mvc_metadata_slot from MvcTypes
  * @phpstan-import-type mvc_metadata_types from MvcTypes
  */
@@ -214,7 +215,7 @@ interface MetaDataInterface
      *
      * @return array|null
      *
-     * @phpstan-return mvc_metadata_index
+     * @phpstan-return mvc_metadata_index|null
      */
     public function read(string $key): array | null;
 
@@ -251,7 +252,7 @@ interface MetaDataInterface
      *
      * @return array|null
      *
-     * @phpstan-return mvc_metadata_index
+     * @phpstan-return mvc_metadata_model|null
      */
     public function readMetaData(ModelInterface $model): array | null;
 
@@ -263,7 +264,7 @@ interface MetaDataInterface
      *
      * @return array|bool|string|null
      *
-     * @phpstan-return mvc_metadata_index
+     * @phpstan-return mvc_metadata_slot
      */
     public function readMetaDataIndex(ModelInterface $model, int $index): array | bool | string | null;
 

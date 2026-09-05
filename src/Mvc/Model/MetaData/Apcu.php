@@ -48,7 +48,7 @@ class Apcu extends MetaData
      *
      * @throws Exception
      */
-    public function __construct(AdapterFactory $factory, array | null $options = [])
+    public function __construct(AdapterFactory $factory, array | null $options = null)
     {
         $options["prefix"]   = $options["prefix"] ?? "ph-mm-apcu-";
         $options["lifetime"] = $options["lifetime"] ?? 172800;

@@ -1532,7 +1532,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @return \Phalcon\Mvc\Model\Resultset<int, static>
      *
-     * @phpstan-param mvc_model_parameters|string|null $parameters
+     * @phpstan-param mvc_model_parameters|int|string|null $parameters
      */
     public static function find(
         mixed $parameters = null
@@ -4328,14 +4328,13 @@ abstract class Model extends AbstractInjectionAware implements
      * This method is used internally to set snapshot data when the model was
      * set up to keep snapshot data
      *
-     * @param array      $data
-     * @param array|null $columnMap
+     * @param array $data
+     * @param mixed $columnMap
      *
      * @return void
      * @throws Exception
      *
-     * @phpstan-param array<string, mixed> $data
-     * @phpstan-param mvc_hydration_column_map|null $columnMap
+     * @phpstan-param mvc_model_data $data
      */
     public function setSnapshotData(array $data, mixed $columnMap = null): void
     {
@@ -4343,6 +4342,11 @@ abstract class Model extends AbstractInjectionAware implements
          * Build the snapshot based on a column map
          */
         if (is_array($columnMap)) {
+            /**
+             * The guard above proves the map, so it can be read as one here
+             * without narrowing the parameter, which is `var` in Zephir.
+             */
+            /** @var mvc_hydration_column_map $columnMap */
             $snapshot = [];
 
             foreach ($data as $key => $value) {

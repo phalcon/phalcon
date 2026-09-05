@@ -119,7 +119,7 @@ interface ViewInterface extends ViewBaseInterface
     /**
      * Executes render process from dispatching data
      *
-     * @phpstan-param array<array-key, mixed> $params
+     * @phpstan-param array<string, mixed> $params
      */
     public function render(
         string $controllerName,

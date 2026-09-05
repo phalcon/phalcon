@@ -1009,11 +1009,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * @param string $actionName
      * @param array  $params
      *
-     * @return $this|bool|View
+     * @return bool|static
      * @throws EventsException
      * @throws Exception
-     *
-     * @phpstan-return bool|static
      *
      * @phpstan-param array<string, mixed> $params
      */

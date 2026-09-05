@@ -792,7 +792,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * @param ModelInterface $model
      * @param int            $index
      *
-     * @return array|null
+     * @return array|bool|string|null
      * @throws Exception
      *
      * The store is read back as it was written, so a corrupt slot reaches

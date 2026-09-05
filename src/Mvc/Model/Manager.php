@@ -81,7 +81,6 @@ use function strtolower;
  * @phpstan-import-type mvc_model_bind_params from MvcTypes
  * @phpstan-import-type mvc_model_bind_types from MvcTypes
  * @phpstan-import-type mvc_model_parameters from MvcTypes
- * @phpstan-import-type mvc_relation_fields from MvcTypes
  * @phpstan-import-type mvc_relation_options from MvcTypes
  */
 class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
@@ -442,8 +441,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return RelationInterface
      *
-     * @phpstan-param mvc_relation_fields  $fields
-     * @phpstan-param mvc_relation_fields  $referencedFields
      * @phpstan-param mvc_relation_options $options
      */
     public function addBelongsTo(
@@ -544,8 +541,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return RelationInterface
      *
-     * @phpstan-param mvc_relation_fields  $fields
-     * @phpstan-param mvc_relation_fields  $referencedFields
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasMany(
@@ -648,10 +643,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return RelationInterface
      *
-     * @phpstan-param mvc_relation_fields  $fields
-     * @phpstan-param mvc_relation_fields  $intermediateFields
-     * @phpstan-param mvc_relation_fields  $intermediateReferencedFields
-     * @phpstan-param mvc_relation_fields  $referencedFields
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasManyToMany(
@@ -791,8 +782,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return RelationInterface
      *
-     * @phpstan-param mvc_relation_fields  $fields
-     * @phpstan-param mvc_relation_fields  $referencedFields
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasOne(
@@ -895,10 +884,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @return RelationInterface
      *
-     * @phpstan-param mvc_relation_fields  $fields
-     * @phpstan-param mvc_relation_fields  $intermediateFields
-     * @phpstan-param mvc_relation_fields  $intermediateReferencedFields
-     * @phpstan-param mvc_relation_fields  $referencedFields
      * @phpstan-param mvc_relation_options $options
      */
     public function addHasOneThrough(

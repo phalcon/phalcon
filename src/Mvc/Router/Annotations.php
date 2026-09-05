@@ -279,7 +279,10 @@ class Annotations extends Router
                 $annotations = $classAnnotations->getAnnotations();
 
                 foreach ($annotations as $annotation) {
-                    $this->processControllerAnnotation($annotation);
+                    $this->processControllerAnnotation(
+                        $controllerName,
+                        $annotation
+                    );
                 }
             }
 
@@ -496,12 +499,15 @@ class Annotations extends Router
     /**
      * Checks for annotations in the controller docblock
      *
+     * @param string     $handler
      * @param Annotation $annotation
      *
      * @return void
      */
-    public function processControllerAnnotation(Annotation $annotation)
-    {
+    public function processControllerAnnotation(
+        string $handler,
+        Annotation $annotation
+    ) {
         /**
          * @RoutePrefix add a prefix for all the routes defined in the model
          */

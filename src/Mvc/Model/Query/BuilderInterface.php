@@ -162,6 +162,7 @@ interface BuilderInterface
      *
      * @return BuilderInterface
      *
+     * @phpstan-param mvc_query_columns $models
      */
     public function from(mixed $models): BuilderInterface;
 
@@ -188,7 +189,7 @@ interface BuilderInterface
      *
      * @return array|string|null
      *
-     * @phpstan-return mvc_query_columns
+     * @phpstan-return mvc_query_columns|null
      */
     public function getColumns();
 
@@ -204,7 +205,7 @@ interface BuilderInterface
      *
      * @return array|string|null
      *
-     * @phpstan-return mvc_query_columns
+     * @phpstan-return mvc_query_columns|null
      */
     public function getFrom();
 
@@ -238,7 +239,7 @@ interface BuilderInterface
      *
      * @return array|string
      *
-     * @phpstan-return array{number: int|string, offset?: int|string}|int|string
+     * @phpstan-return array<array-key, mixed>|int|string|null
      */
     public function getLimit();
 
@@ -263,7 +264,7 @@ interface BuilderInterface
      *
      * @return array|string|null
      *
-     * @phpstan-return mvc_query_order
+     * @phpstan-return array<array-key, int|string>|string|null
      */
     public function getOrderBy();
 
@@ -296,6 +297,8 @@ interface BuilderInterface
      * @param mixed $group
      *
      * @return BuilderInterface
+     *
+     * @phpstan-param array<array-key, string>|string|null $group
      */
     public function groupBy(mixed $group): BuilderInterface;
 

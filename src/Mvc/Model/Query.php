@@ -1068,7 +1068,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          *
          * They come from a SELECT, so they arrive in a resultset.
          *
-         * @var Resultset<array-key, ModelInterface> $records
+         * @var Resultset<int, ModelInterface> $records
          */
         $records = $this->getRelatedRecords(
             $model,
@@ -1957,7 +1957,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          * The related records come from a SELECT, so they arrive in a
          * resultset.
          *
-         * @var Resultset<array-key, ModelInterface> $records
+         * @var Resultset<int, ModelInterface> $records
          */
         $records = $this->getRelatedRecords(
             $model,

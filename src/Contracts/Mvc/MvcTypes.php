@@ -178,7 +178,7 @@ use Phalcon\Mvc\Router\RouteInterface;
  *     3: string|null,
  * }
  * @phpstan-type mvc_query_builder_params array{
- *     0?: array<array-key, mixed>|string,
+ *     0?: array<array-key, mixed>|int|string,
  *     bind?: mvc_model_bind_params,
  *     bindTypes?: mvc_model_bind_types,
  *     columns?: mvc_query_columns,

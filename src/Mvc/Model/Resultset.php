@@ -73,7 +73,7 @@ use function method_exists;
  * }
  * ```
  *
- * @template TKey
+ * @template TKey of int
  * @template TValue
  * @implements Iterator<TKey, TValue>
  * @implements ArrayAccess<TKey, TValue>
@@ -559,8 +559,6 @@ abstract class Resultset implements
      * Gets pointer number of active row in the resultset
      *
      * @return TKey|null
-     *
-     * @phpstan-return int|null
      */
     public function key(): int | null
     {
@@ -568,7 +566,13 @@ abstract class Resultset implements
             return null;
         }
 
-        return $this->pointer;
+        /**
+         * The pointer is the key of the row, and `TKey` is bound to `int`.
+         */
+        /** @var TKey $pointer */
+        $pointer = $this->pointer;
+
+        return $pointer;
     }
 
     /**

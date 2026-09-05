@@ -421,6 +421,8 @@ class Group implements GroupInterface
      * Returns the routes added to the group
      *
      * @return RouteInterface[]
+     *
+     * @phpstan-return list<RouteInterface>
      */
     public function getRoutes(): array
     {

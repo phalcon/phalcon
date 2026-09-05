@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine\Volt;
 
+use Exception as PhpException;
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\View\Exception as BaseException;
 
@@ -30,17 +31,18 @@ class Exception extends BaseException
     protected array $statement = [];
 
     /**
-     * @param string             $message
-     * @param array              $statement
+     * @param string            $message
+     * @param array             $statement
+     * @param int               $code
+     * @param PhpException|null $previous
+     *
      * @phpstan-param mvc_volt_node $statement
-     * @param int                $code
-     * @param BaseException|null $previous
      */
     public function __construct(
         string $message = "",
         array $statement = [],
         int $code = 0,
-        BaseException | null $previous = null
+        PhpException | null $previous = null
     ) {
         $this->statement = $statement;
 
