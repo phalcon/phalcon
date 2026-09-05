@@ -194,7 +194,7 @@ interface Dispatcher
      * Set a param by its name or numeric index
      *
      * @phpstan-param array-key $param
-     * @param mixed      $value
+     * @param mixed $value
      *
      * @return void
      * @deprecated Use setParameter() instead

@@ -29,9 +29,9 @@ interface CriteriaInterface
     /**
      * Appends a condition to the current conditions using an AND operator
      *
-     * @param string     $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string $conditions
+     * @param mixed  $bindParams
+     * @param mixed  $bindTypes
      *
      * @return CriteriaInterface
      *
@@ -350,9 +350,9 @@ interface CriteriaInterface
     /**
      * Appends a condition to the current conditions using an OR operator
      *
-     * @param string     $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string $conditions
+     * @param mixed  $bindParams
+     * @param mixed  $bindTypes
      *
      * @return CriteriaInterface
      *
@@ -407,9 +407,9 @@ interface CriteriaInterface
     /**
      * Sets the conditions parameter in the criteria
      *
-     * @param string     $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string $conditions
+     * @param mixed  $bindParams
+     * @param mixed  $bindTypes
      *
      * @return CriteriaInterface
      *

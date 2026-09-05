@@ -46,7 +46,7 @@ class PdoResult implements ResultInterface
 
     /**
      * @var mixed
-     * TODO: Check if this property is used
+     *            TODO: Check if this property is used
      */
     protected $result;
 

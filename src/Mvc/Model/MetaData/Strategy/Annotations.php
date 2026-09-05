@@ -33,8 +33,8 @@ class Annotations implements StrategyInterface
     /**
      * Read the model's column map, this can't be inferred
      *
-     * @param ModelInterface                  $model
-     * @param DiInterface   $container
+     * @param ModelInterface $model
+     * @param DiInterface    $container
      *
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
@@ -94,8 +94,8 @@ class Annotations implements StrategyInterface
     /**
      * The meta-data is obtained by reading the column descriptions from the database information schema
      *
-     * @param ModelInterface                  $model
-     * @param DiInterface   $container
+     * @param ModelInterface $model
+     * @param DiInterface    $container
      *
      * @return array
      * @throws \Phalcon\Annotations\Parser\Exception
@@ -296,8 +296,8 @@ class Annotations implements StrategyInterface
     }
 
     /**
-     * @param ModelInterface                  $model
-     * @param DiInterface   $container
+     * @param ModelInterface $model
+     * @param DiInterface    $container
      *
      * @return Collection[]
      * @throws Exception

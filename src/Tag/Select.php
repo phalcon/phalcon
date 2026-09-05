@@ -45,13 +45,13 @@ abstract class Select
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'useEmpty' => false,
-     *     'emptyValue' => '',
-     *     'emptyText' => '',
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'useEmpty' => false,
+     *                                 'emptyValue' => '',
+     *                                 'emptyText' => '',
+     *                                 ]
      *
      * @return string
      * @throws Exception

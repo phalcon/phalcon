@@ -146,7 +146,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Checks if the needle is included in the haystack
      *
-     * @param mixed        $needle
+     * @param mixed $needle
      * @param mixed $haystack
      *
      * @return bool
@@ -330,7 +330,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
     /**
      * Extracts a slice from a string/array/traversable object value
      *
-     * @param mixed      $value
+     * @param mixed $value
      * @phpstan-param array<array-key, mixed>|string|(Countable&Iterator<array-key, mixed>) $value
      * @param int        $start
      * @param mixed|null $end

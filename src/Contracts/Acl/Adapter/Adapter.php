@@ -48,8 +48,8 @@ interface Adapter
     /**
      * Adds access to components
      *
-     * @param string  $componentName
-     * @param mixed   $accessList
+     * @param string $componentName
+     * @param mixed  $accessList
      *
      * @phpstan-param acl_access_list $accessList
      *

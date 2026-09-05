@@ -33,13 +33,13 @@ interface EvolvableLinkInterface extends LinkInterface
      * Returns an instance with the specified href.
      *
      * @param string $href
-     *       The href value to include.  It must be one of:
-     *       - An absolute URI, as defined by RFC 5988.
-     *       - A relative URI, as defined by RFC 5988. The base of the relative
-     *       link is assumed to be known based on context by the client.
-     *       - A URI template as defined by RFC 6570.
-     *       - An object implementing __toString() that produces one of the
-     *       above values.
+     *                     The href value to include.  It must be one of:
+     *                     - An absolute URI, as defined by RFC 5988.
+     *                     - A relative URI, as defined by RFC 5988. The base of the relative
+     *                     link is assumed to be known based on context by the client.
+     *                     - A URI template as defined by RFC 6570.
+     *                     - An object implementing __toString() that produces one of the
+     *                     above values.
      *
      * An implementing library SHOULD evaluate a passed object to a string
      * immediately rather than waiting for it to be returned later.

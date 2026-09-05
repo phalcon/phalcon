@@ -75,15 +75,15 @@ class RedisCluster extends Redis
      * The `context` is an array of values used for ssl/tls stream context
      * options eg `["verify_peer" => 0, "local_cert" => "file:///path/to/cert.pem"]`
      *
-     * @param array             $options = [
-     *     "name"        => null,
-     *     "hosts"       => ["127.0.0.1:6379"],
-     *     "timeout"     => 0,
-     *     "readTimeout" => 0,
-     *     "persistent"  => false,
-     *     "auth"        => "",
-     *     "context"     => null,
-     * ]
+     * @param array $options = [
+     *                       "name"        => null,
+     *                       "hosts"       => ["127.0.0.1:6379"],
+     *                       "timeout"     => 0,
+     *                       "readTimeout" => 0,
+     *                       "persistent"  => false,
+     *                       "auth"        => "",
+     *                       "context"     => null,
+     *                       ]
      *
      * @phpstan-param storage_rediscluster_options $options
      *

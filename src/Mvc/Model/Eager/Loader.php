@@ -82,7 +82,7 @@ class Loader
      * select produces, and it has no relation cache.
      *
      * @param mixed $record   ModelInterface or Row
-     * @param array  $eagerMap
+     * @param array $eagerMap
      *
      * @return void
      *
@@ -186,8 +186,8 @@ class Loader
     /**
      * Builds one level of the map.
      *
-     * @param array  $parents attribute-keyed row arrays at the root, or
-     *                        ModelInterface / Row instances below it
+     * @param array  $parents   attribute-keyed row arrays at the root, or
+     *                          ModelInterface / Row instances below it
      * @param string $modelName
      * @param array  $tree
      *
@@ -707,7 +707,7 @@ class Loader
      * Lookup key for an already-hydrated record.
      *
      * @param mixed $record
-     * @param array  $fields
+     * @param array $fields
      *
      * @return string
      *

@@ -63,7 +63,7 @@ class Manager extends AbstractInjectionAware
     /**
      * Manager constructor.
      *
-     * @param TagFactory $tagFactory
+     * @param TagFactory     $tagFactory
      * @param assets_options $options
      */
     public function __construct(
@@ -860,10 +860,10 @@ class Manager extends AbstractInjectionAware
     }
 
     /**
-     * @param Collection       $collection
-     * @param string           $completeTargetPath
-     * @param assets_callback  $callback
-     * @param string           $output
+     * @param Collection      $collection
+     * @param string          $completeTargetPath
+     * @param assets_callback $callback
+     * @param string          $output
      *
      * @return string
      */

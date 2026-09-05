@@ -305,9 +305,9 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Phalcon\Mvc\Model constructor
      *
-     * @param mixed                     $data
-     * @param DiInterface|null $container
-     * @param ManagerInterface|null          $modelsManager
+     * @param mixed                 $data
+     * @param DiInterface|null      $container
+     * @param ManagerInterface|null $modelsManager
      *
      * @throws Exception
      *
@@ -1885,9 +1885,9 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Generate a PHQL SELECT statement for an aggregate
      *
-     * @param string            $functionName
-     * @param string            $alias
-     * @param mixed $parameters
+     * @param string $functionName
+     * @param string $alias
+     * @param mixed  $parameters
      *
      * @return mixed
      *
@@ -2175,7 +2175,7 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * Attempts to find key case-insensitively
      *
-     * @param mixed  $columnMap
+     * @param mixed $columnMap
      * @param mixed $key
      *
      * @return string
@@ -2215,8 +2215,8 @@ abstract class Model extends AbstractInjectionAware implements
     /**
      * shared prepare query logic for find and findFirst method
      *
-     * @param mixed $params
-     * @param mixed|null        $limit
+     * @param mixed      $params
+     * @param mixed|null $limit
      *
      * @return QueryInterface
      *
@@ -4552,7 +4552,7 @@ abstract class Model extends AbstractInjectionAware implements
      *```
      *
      * @param mixed $columns
-     * @param mixed  $useGetter
+     * @param mixed $useGetter
      *
      * @return array
      * @throws Exception
@@ -4904,7 +4904,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed  $fields
      * @param string $referenceModel
      * @param string $referencedFields
-     * @param array  $options {
+     * @param array  $options          {
      *
      * @option bool   "reusable"
      * @option string "alias"
@@ -5397,8 +5397,8 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param MetaDataInterface $metaData
      * @param AdapterInterface  $connection
-     * @param mixed      $table
-     * @param mixed       $identityField
+     * @param mixed             $table
+     * @param mixed             $identityField
      *
      * @return bool
      * @throws Exception
@@ -5739,7 +5739,7 @@ abstract class Model extends AbstractInjectionAware implements
      *
      * @param MetaDataInterface $metaData
      * @param AdapterInterface  $connection
-     * @param mixed      $table
+     * @param mixed             $table
      *
      * @return bool
      * @throws Exception
@@ -6383,7 +6383,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed        $fields
      * @param string       $referenceModel
      * @param array|string $referencedFields
-     * @param array  $options {
+     * @param array        $options          {
      *
      * @option bool   "reusable"
      * @option string "alias"
@@ -6466,7 +6466,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array|string $intermediateReferencedFields
      * @param string       $referenceModel
      * @param string       $referencedFields
-     * @param array        $options {
+     * @param array        $options                      {
      *
      * @option bool   "reusable"
      * @option string "alias"
@@ -6548,7 +6548,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param mixed  $fields
      * @param string $referenceModel
      * @param string $referencedFields
-     * @param array  $options {
+     * @param array  $options          {
      *
      * @option bool   "reusable"
      * @option string "alias"
@@ -6630,7 +6630,7 @@ abstract class Model extends AbstractInjectionAware implements
      * @param array|string $intermediateReferencedFields
      * @param string       $referenceModel
      * @param string       $referencedFields
-     * @param array        $options {
+     * @param array        $options                      {
      *
      * @option bool   "reusable"
      * @option string "alias"

@@ -110,6 +110,18 @@ return (new Config())
                 'sort_algorithm'  => 'alpha',
                 'null_adjustment' => 'always_last',
             ],
+            'phpdoc_align'           => [
+                'align' => 'vertical',
+                'tags'  => [
+                    'method',
+                    'param',
+                    'property',
+                    'return',
+                    'throws',
+                    'type',
+                    'var',
+                ],
+            ],
             'phpdoc_types_order'     => [
                 'sort_algorithm'  => 'alpha',
                 'null_adjustment' => 'always_last',

@@ -52,8 +52,8 @@ interface ValidationInterface
      * Assigns the data to an entity
      * The entity is used to obtain the validation values
      *
-     * @param object        $entity
-     * @param array|object  $data
+     * @param object       $entity
+     * @param array|object $data
      *
      * @phpstan-param mixed                       $entity
      * @phpstan-param filter_validation_data      $data
@@ -148,8 +148,8 @@ interface ValidationInterface
     /**
      * Validate a set of data according to a set of rules
      *
-     * @param array|object  $data
-     * @param object        $entity
+     * @param array|object $data
+     * @param object       $entity
      *
      * @phpstan-param mixed $data
      * @phpstan-param filter_validation_whitelist $whitelist

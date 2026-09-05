@@ -117,9 +117,9 @@ class Route implements RouteInterface
     /**
      * Phalcon\Mvc\Router\Route constructor
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param mixed $httpMethods
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param mixed  $httpMethods
      *
      * @throws Exception
      *
@@ -703,8 +703,8 @@ class Route implements RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string            $pattern
-     * @param mixed $paths
+     * @param string $pattern
+     * @param mixed  $paths
      *
      * @return void
      * @throws Exception

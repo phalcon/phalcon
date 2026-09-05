@@ -109,12 +109,12 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * );
      *```
      *
-     * @param mixed $uri = [
-     *                               'for' => '',
-     *                               ]
-     * @param mixed|null        $arguments
-     * @param bool|null         $local
-     * @param mixed|null        $baseUri
+     * @param mixed      $uri       = [
+     *                              'for' => '',
+     *                              ]
+     * @param mixed|null $arguments
+     * @param bool|null  $local
+     * @param mixed|null $baseUri
      *
      * @return string
      * @throws Exception
@@ -331,8 +331,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *```
      *
      * @param mixed $uri = [
-     *                               'for' => ''
-     *                               ]
+     *                   'for' => ''
+     *                   ]
      *
      * @return string
      * @throws Exception
@@ -484,7 +484,7 @@ class Url extends AbstractInjectionAware implements UrlInterface
      * @param int    $markerPos    index of the opening delimiter ({ or ( or :)
      * @param int    $cursorPos    index of the closing delimiter (} or ) or first non-alpha)
      *
-     * @return string|null  the replacement value, or null if none found
+     * @return string|null the replacement value, or null if none found
      *
      * @phpstan-param mvc_router_reversed_paths $paths
      * @phpstan-param array<array-key, mixed> $replacements

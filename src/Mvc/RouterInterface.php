@@ -37,10 +37,10 @@ interface RouterInterface
     /**
      * Adds a route to the router on any HTTP method
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param mixed $httpMethods
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param mixed  $httpMethods
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -55,9 +55,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is CONNECT
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -71,9 +71,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is DELETE
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -87,9 +87,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is GET
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -103,9 +103,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is HEAD
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -119,9 +119,9 @@ interface RouterInterface
     /**
      * Add a route to the router that only match if the HTTP method is OPTIONS
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -135,9 +135,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is PATCH
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -151,9 +151,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is POST
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -168,9 +168,9 @@ interface RouterInterface
      * Adds a route to the router that only match if the HTTP method is PURGE
      * (Squid and Varnish support)
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -184,9 +184,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is PUT
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface
@@ -200,9 +200,9 @@ interface RouterInterface
     /**
      * Adds a route to the router that only match if the HTTP method is TRACE
      *
-     * @param string            $pattern
-     * @param mixed $paths
-     * @param int               $position
+     * @param string $pattern
+     * @param mixed  $paths
+     * @param int    $position
      *
      *
      * @return RouteInterface

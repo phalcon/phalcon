@@ -63,7 +63,7 @@ class Redis extends AbstractAdapter
      *                                'lockExpiry'     => 30,
      *                                'lockRetries'    => 100,
      *                                'lockWaitTime'   => 50000,
-     * ]
+     *                                ]
      *
      * @phpstan-param session_redis_options $options
      *

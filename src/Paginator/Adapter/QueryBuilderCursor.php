@@ -93,11 +93,11 @@ class QueryBuilderCursor extends AbstractAdapter
      * Phalcon\Paginator\Adapter\QueryBuilderCursor
      *
      * @param paginator_config $config = [
-     *     'limit'        => 10,
-     *     'builder'      => null,
-     *     'cursorColumn' => 'id',
-     *     'cursor'       => null
-     * ]
+     *                                 'limit'        => 10,
+     *                                 'builder'      => null,
+     *                                 'cursorColumn' => 'id',
+     *                                 'cursor'       => null
+     *                                 ]
      */
     public function __construct(array $config)
     {

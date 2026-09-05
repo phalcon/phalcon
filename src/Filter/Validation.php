@@ -562,7 +562,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Alias of `add` method
      *
-     * @param array|string       $field
+     * @param array|string $field
      *
      * @phpstan-param mixed $field
      *
@@ -596,7 +596,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Sets the bound entity
      *
-     * @param mixed       $entity
+     * @param mixed $entity
      *
      * @return void
      */
@@ -817,7 +817,7 @@ class Validation extends Injectable implements ValidationInterface
     /**
      * Internal validations, if it returns true, then skip the current validator
      *
-     * @param array|string $field
+     * @param array|string       $field
      * @param ValidatorInterface $validator
      *
      * @phpstan-param mixed $field

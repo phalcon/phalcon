@@ -96,10 +96,10 @@ class Model extends AbstractAdapter
      * Phalcon\Paginator\Adapter\Model constructor
      *
      * @param paginator_config $config = [
-     *     'model'  => null,
-     *     'limit'  => 10,
-     *     'page'   => 1
-     * ]
+     *                                 'model'  => null,
+     *                                 'limit'  => 10,
+     *                                 'page'   => 1
+     *                                 ]
      */
     public function __construct(array $config)
     {

@@ -1145,7 +1145,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * Initialize the metadata for certain table
      *
      * @param ModelInterface $model
-     * @param mixed    $key
+     * @param mixed          $key
      *
      * @return bool
      * @throws Exception

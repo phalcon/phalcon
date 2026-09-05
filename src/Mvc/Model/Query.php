@@ -168,7 +168,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     /**
      * @var array
-     * TODO: Add default value, instead of null, also remove type check
+     *            TODO: Add default value, instead of null, also remove type check
      *
      * @phpstan-var mvc_query_ast
      */
@@ -314,9 +314,9 @@ class Query implements QueryInterface, InjectionAwareInterface
     /**
      * Phalcon\Mvc\Model\Query constructor
      *
-     * @param string|null                  $phql
-     * @param DiInterface|null  $container
-     * @param array                        $options
+     * @param string|null      $phql
+     * @param DiInterface|null $container
+     * @param array            $options
      *
      * @throws Exception
      *
@@ -4142,7 +4142,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * Resolves joins involving has-one/belongs-to/has-many relations
      *
      * @param string            $joinType
-     * @param mixed            $joinSource
+     * @param mixed             $joinSource
      * @param string            $modelAlias
      * @param string            $joinAlias
      * @param RelationInterface $relation

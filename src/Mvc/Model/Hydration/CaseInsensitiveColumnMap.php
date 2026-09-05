@@ -18,7 +18,7 @@ class CaseInsensitiveColumnMap
     /**
      * Attempts to find key case-insensitively
      *
-     * @param mixed  $columnMap
+     * @param mixed $columnMap
      * @param mixed $key
      *
      * @return string

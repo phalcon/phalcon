@@ -30,7 +30,7 @@ enum ModelEventNameEnum: string
     /**
      * Get an enum case from event class name
      *
-     * @param string $eventClassName
+     * @param  string                    $eventClassName
      * @return self
      * @throws UnknownEventTypeException
      */

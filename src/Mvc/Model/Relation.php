@@ -58,11 +58,11 @@ class Relation implements RelationInterface
     /**
      * Phalcon\Mvc\Model\Relation constructor
      *
-     * @param int          $type
-     * @param string       $referencedModel
-     * @param mixed $fields
-     * @param mixed $referencedFields
-     * @param array        $options
+     * @param int    $type
+     * @param string $referencedModel
+     * @param mixed  $fields
+     * @param mixed  $referencedFields
+     * @param array  $options
      *
      * @phpstan-param mvc_relation_options $options
      */
@@ -259,9 +259,9 @@ class Relation implements RelationInterface
     /**
      * Sets the intermediate model data for has-*-through relations
      *
-     * @param mixed $intermediateFields
-     * @param string       $intermediateModel
-     * @param mixed $intermediateReferencedFields
+     * @param mixed  $intermediateFields
+     * @param string $intermediateModel
+     * @param mixed  $intermediateReferencedFields
      *
      * @return void
      *

@@ -21,8 +21,8 @@ use Phalcon\Contracts\Filter\Sanitizer;
 class Ip implements Sanitizer
 {
     /**
-     * @param string $input
-     * @param int $filter
+     * @param  string       $input
+     * @param  int          $filter
      * @return false|string
      */
     public function __invoke(string $input, int $filter = 0): false | string

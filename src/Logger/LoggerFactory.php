@@ -46,21 +46,21 @@ class LoggerFactory extends AbstractConfigFactory
      * @phpstan-param ConfigInterface|logger_factory_config $config
      *
      * @param array|ConfigInterface $config = [
-     *     'name'    => 'messages',
-     *     'options' => [
-     *         'adapters' => [
-     *             'adapter-name' => [
-     *                  'adapter' => 'stream',
-     *                  'name'    => 'file.log',
-     *                  'options' => [
-     *                      'mode'     => 'ab',
-     *                      'option'   => null,
-     *                      'facility' => null
-     *                  ],
-     *             ],
-     *         ],
-     *     ]
-     * ]
+     *                                      'name'    => 'messages',
+     *                                      'options' => [
+     *                                      'adapters' => [
+     *                                      'adapter-name' => [
+     *                                      'adapter' => 'stream',
+     *                                      'name'    => 'file.log',
+     *                                      'options' => [
+     *                                      'mode'     => 'ab',
+     *                                      'option'   => null,
+     *                                      'facility' => null
+     *                                      ],
+     *                                      ],
+     *                                      ],
+     *                                      ]
+     *                                      ]
      */
     public function load(mixed $config): Logger
     {

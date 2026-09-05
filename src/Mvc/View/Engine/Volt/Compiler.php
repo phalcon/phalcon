@@ -527,7 +527,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string
      * @throws Exception
@@ -566,7 +566,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string
      */
@@ -581,7 +581,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $caseClause
+     * @param bool $caseClause
      *
      * @return string
      * @throws Exception
@@ -792,7 +792,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string
      * @throws Exception
@@ -993,7 +993,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string
      * @throws Exception
@@ -1129,7 +1129,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string
      * @throws Exception
@@ -1393,7 +1393,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statement
      * @phpstan-param mvc_volt_node $statement
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string
      * @throws Exception
@@ -1461,7 +1461,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $expr
      * @phpstan-param mvc_volt_node $expr
-     * @param bool  $doubleQuotes
+     * @param bool $doubleQuotes
      *
      * @return string
      * @throws Exception
@@ -1958,7 +1958,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $expr
      * @phpstan-param mvc_volt_node $expr
-     * @param bool  $doubleQuotes
+     * @param bool $doubleQuotes
      *
      * @return string
      * @throws Exception
@@ -2365,7 +2365,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Resolves filter intermediate code into a valid PHP expression
      *
-     * @param array  $test
+     * @param array $test
      * @phpstan-param mvc_volt_node $test
      * @param string $left
      *
@@ -2675,7 +2675,7 @@ class Compiler implements InjectionAwareInterface
     /**
      * Resolves filter intermediate code into PHP function calls
      *
-     * @param array  $filter
+     * @param array $filter
      * @phpstan-param mvc_volt_node $filter
      * @param string $left
      *
@@ -2885,7 +2885,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @param array $statements
      * @phpstan-param mvc_volt_node $statements
-     * @param bool  $extendsMode
+     * @param bool $extendsMode
      *
      * @return string|null
      * @phpstan-return string

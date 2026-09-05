@@ -27,11 +27,11 @@ use Phalcon\Contracts\Mvc\MvcTypes;
  * every route it holds. They join the interface in the next major; until
  * then the tags below record the contract that all implementations meet.
  *
- * @method RouteInterface beforeMatch(callable $callback)
- * @method callable|null getBeforeMatch()
- * @method string|null getCompiledHostName()
+ * @method RouteInterface        beforeMatch(callable $callback)
+ * @method callable|null         getBeforeMatch()
+ * @method string|null           getCompiledHostName()
  * @method mvc_router_converters getConverters()
- * @method callable|null getMatch()
+ * @method callable|null         getMatch()
  */
 interface RouteInterface
 {
@@ -125,8 +125,8 @@ interface RouteInterface
     /**
      * Reconfigure the route adding a new pattern and a set of paths
      *
-     * @param string            $pattern
-     * @param mixed $paths
+     * @param string $pattern
+     * @param mixed  $paths
      *
      *
      * @return void

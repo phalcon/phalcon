@@ -34,7 +34,7 @@ use Phalcon\Mvc\ModelInterface;
  * tags below record what all implementations provide.
  *
  * @method EventsManagerInterface|null getCustomEventsManager(ModelInterface $model)
- * @method void setCustomEventsManager(ModelInterface $model, EventsManagerInterface $eventsManager)
+ * @method void                        setCustomEventsManager(ModelInterface $model, EventsManagerInterface $eventsManager)
  */
 interface ManagerInterface
 {
@@ -199,9 +199,9 @@ interface ManagerInterface
     /**
      * Creates a Phalcon\Mvc\Model\Query and execute it
      *
-     * @param string     $phql
-     * @param mixed $placeholders
-     * @param mixed $types
+     * @param string $phql
+     * @param mixed  $placeholders
+     * @param mixed  $types
      *
      * @return mixed
      * @return ResultsetInterface|StatusInterface
@@ -225,11 +225,11 @@ interface ManagerInterface
     /**
      * Gets belongsTo related records from a model
      *
-     * @param string            $modelName
-     * @param string            $modelRelation
-     * @param ModelInterface    $record
-     * @param mixed $parameters
-     * @param string|null       $method
+     * @param string         $modelName
+     * @param string         $modelRelation
+     * @param ModelInterface $record
+     * @param mixed          $parameters
+     * @param string|null    $method
      *
      */
     public function getBelongsToRecords(
@@ -259,11 +259,11 @@ interface ManagerInterface
     /**
      * Gets hasMany related records from a model
      *
-     * @param string            $modelName
-     * @param string            $modelRelation
-     * @param ModelInterface    $record
-     * @param mixed $parameters
-     * @param string|null       $method
+     * @param string         $modelName
+     * @param string         $modelRelation
+     * @param ModelInterface $record
+     * @param mixed          $parameters
+     * @param string|null    $method
      *
      */
     public function getHasManyRecords(
@@ -304,11 +304,11 @@ interface ManagerInterface
     /**
      * Gets hasOne related records from a model
      *
-     * @param string            $modelName
-     * @param string            $modelRelation
-     * @param ModelInterface    $record
-     * @param mixed $parameters
-     * @param string|null       $method
+     * @param string         $modelName
+     * @param string         $modelRelation
+     * @param ModelInterface $record
+     * @param mixed          $parameters
+     * @param string|null    $method
      *
      */
     public function getHasOneRecords(
@@ -396,7 +396,7 @@ interface ManagerInterface
      *
      * @param RelationInterface $relation
      * @param ModelInterface    $record
-     * @param mixed $parameters
+     * @param mixed             $parameters
      * @param string|null       $method
      *
      * @return false|int|ModelInterface|Simple

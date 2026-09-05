@@ -54,9 +54,9 @@ class QueueFactory extends AbstractConfigFactory
      * Builds a Context from a config array/object.
      *
      * @param array<string, mixed>|ConfigInterface $config = [
-     *     'adapter' => 'memory',
-     *     'options' => [],
-     * ]
+     *                                                     'adapter' => 'memory',
+     *                                                     'options' => [],
+     *                                                     ]
      */
     public function load(mixed $config): ContextInterface
     {

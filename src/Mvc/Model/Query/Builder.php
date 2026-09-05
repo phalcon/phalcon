@@ -191,7 +191,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      * Phalcon\Mvc\Model\Query\Builder constructor
      *
      * @param mixed            $params
-     * @param DiInterface|null  $container
+     * @param DiInterface|null $container
      *
      */
     public function __construct(

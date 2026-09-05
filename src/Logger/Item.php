@@ -22,10 +22,10 @@ use Phalcon\Contracts\Logger\LoggerTypes;
  * Represents each item in a logging transaction
  *
  * @property array<string, mixed> $context
- * @property string            $message
- * @property int               $level
- * @property string            $levelName
- * @property DateTimeImmutable $dateTime
+ * @property string               $message
+ * @property int                  $level
+ * @property string               $levelName
+ * @property DateTimeImmutable    $dateTime
  *
  * @phpstan-import-type logger_context from LoggerTypes
  */

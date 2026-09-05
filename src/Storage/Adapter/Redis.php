@@ -60,19 +60,19 @@ class Redis extends AbstractAdapter
      *
      * @param SerializerFactory $factory
      * @param array             $options = [
-     *     "host"           => "127.0.0.1",
-     *     "port"           => 6379,
-     *     "index"          => 0,
-     *     "timeout"        => 0,
-     *     "persistent"     => false,
-     *     "persistentId"   => "",
-     *     "auth"           => "",
-     *     "socket"         => "",
-     *     "connectTimeout" => 0,
-     *     "retryInterval"  => 0,
-     *     "readTimeout"    => 0,
-     *     "ssl"            => [],
-     * ]
+     *                                   "host"           => "127.0.0.1",
+     *                                   "port"           => 6379,
+     *                                   "index"          => 0,
+     *                                   "timeout"        => 0,
+     *                                   "persistent"     => false,
+     *                                   "persistentId"   => "",
+     *                                   "auth"           => "",
+     *                                   "socket"         => "",
+     *                                   "connectTimeout" => 0,
+     *                                   "retryInterval"  => 0,
+     *                                   "readTimeout"    => 0,
+     *                                   "ssl"            => [],
+     *                                   ]
      *
      * @phpstan-param storage_redis_options $options
      */

@@ -1105,9 +1105,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * $manager->executeQuery('DELETE FROM Invoices WHERE inv_id = :id:', ['id' => 1]);
      * ```
      *
-     * @param string     $phql
-     * @param mixed $placeholders
-     * @param mixed $types
+     * @param string $phql
+     * @param mixed  $placeholders
+     * @param mixed  $types
      *
      * @return ResultsetInterface|StatusInterface
      * @throws Exception
@@ -1529,7 +1529,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * @param RelationInterface $relation
      * @param ModelInterface    $record
-     * @param mixed $parameters
+     * @param mixed             $parameters
      * @param string|null       $method
      *
      * @return false|int|ModelInterface|Simple

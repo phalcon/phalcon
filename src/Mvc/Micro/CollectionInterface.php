@@ -26,7 +26,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is DELETE
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -41,7 +41,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is GET
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -79,7 +79,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is HEAD
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -101,7 +101,7 @@ interface CollectionInterface
      * Maps a route to a handler
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -116,7 +116,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is OPTIONS
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -131,7 +131,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is PATCH
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -146,7 +146,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is POST
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface
@@ -161,7 +161,7 @@ interface CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is PUT
      *
      * @param string      $routePattern
-     * @param mixed    $handler
+     * @param mixed       $handler
      * @param string|null $name
      *
      * @return CollectionInterface

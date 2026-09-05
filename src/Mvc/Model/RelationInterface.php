@@ -143,9 +143,9 @@ interface RelationInterface
     /**
      * Sets the intermediate model data for has-*-through relations
      *
-     * @param mixed $intermediateFields
-     * @param string       $intermediateModel
-     * @param mixed $intermediateReferencedFields
+     * @param mixed  $intermediateFields
+     * @param string $intermediateModel
+     * @param mixed  $intermediateReferencedFields
      *
      * @return mixed
      *

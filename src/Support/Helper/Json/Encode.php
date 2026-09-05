@@ -37,7 +37,7 @@ class Encode
     use EncodeTrait;
 
     /**
-     * @param int<1, max> $depth   Recursion depth.
+     * @param int<1, max> $depth Recursion depth.
      *
      * @throws JsonEncodeError if the JSON cannot be encoded.
      * @link https://www.php.net/manual/en/function.json-encode.php

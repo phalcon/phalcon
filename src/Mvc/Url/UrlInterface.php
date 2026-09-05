@@ -21,11 +21,11 @@ interface UrlInterface
     /**
      * Generates a URL
      *
-     * @param mixed $uri       URI
-     * @param mixed $arguments Optional arguments to be appended to the query string
-     * @param bool|null         $local
-     * @param mixed             $baseUri
-     * @param bool              $replaceArgs
+     * @param mixed     $uri         URI
+     * @param mixed     $arguments   Optional arguments to be appended to the query string
+     * @param bool|null $local
+     * @param mixed     $baseUri
+     * @param bool      $replaceArgs
      *
      *
      * @return string

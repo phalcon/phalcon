@@ -41,15 +41,15 @@ use Phalcon\Mvc\Model\TransactionInterface;
  * interface. They join the interface in the next major; until then the tags
  * below record the contract that all implementations meet.
  *
- * @method DiInterface|null getDI()
- * @method ManagerInterface getModelsManager()
+ * @method DiInterface|null   getDI()
+ * @method ManagerInterface   getModelsManager()
  * @method mvc_model_snapshot getOldSnapshotData()
  * @method mvc_model_snapshot getSnapshotData()
- * @method bool hasChanged(mixed $fieldName = null, bool $allFields = false)
- * @method bool hasSnapshotData()
- * @method mixed readAttribute(string $attribute)
- * @method mixed setOldSnapshotData(array<string, mixed> $data, mixed $columnMap = null)
- * @method void writeAttribute(string $attribute, mixed $value)
+ * @method bool               hasChanged(mixed $fieldName = null, bool $allFields = false)
+ * @method bool               hasSnapshotData()
+ * @method mixed              readAttribute(string $attribute)
+ * @method mixed              setOldSnapshotData(array<string, mixed> $data, mixed $columnMap = null)
+ * @method void               writeAttribute(string $attribute, mixed $value)
  */
 interface ModelInterface
 {

@@ -47,8 +47,8 @@ class ResultsetData implements SelectData
     protected ?array $resolvedOptions = null;
 
     /**
-     * @param html_select_using            $using
-     * @param html_select_attributes_map   $attributesMap
+     * @param html_select_using          $using
+     * @param html_select_attributes_map $attributesMap
      */
     public function __construct(
         protected ResultsetInterface $resultset,

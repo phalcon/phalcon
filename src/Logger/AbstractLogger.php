@@ -38,11 +38,11 @@ use function strtolower;
  * developers to create new instances of the Logger or load them from config
  * files (see Phalcon\Config\Config object).
  *
- * @property AdapterInterface[] $adapters
+ * @property AdapterInterface[]     $adapters
  * @property array<array-key, bool> $excluded
- * @property int                $logLevel
- * @property string             $name
- * @property DateTimeZone       $timezone
+ * @property int                    $logLevel
+ * @property string                 $name
+ * @property DateTimeZone           $timezone
  *
  * @phpstan-import-type logger_adapters from LoggerTypes
  * @phpstan-import-type logger_context from LoggerTypes

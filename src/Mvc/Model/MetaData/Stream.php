@@ -96,7 +96,7 @@ class Stream extends MetaData
      * Writes the meta-data to files
      *
      * @param mixed $key
-     * @param array       $data
+     * @param array $data
      *
      * @return void
      * @throws Exception

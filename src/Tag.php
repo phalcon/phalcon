@@ -105,11 +105,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function checkField(array | string $parameters): string
     {
@@ -122,11 +122,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function colorField(array | string $parameters): string
     {
@@ -139,11 +139,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function dateField(array | string $parameters): string
     {
@@ -156,11 +156,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function dateTimeField(array | string $parameters): string
     {
@@ -173,11 +173,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function dateTimeLocalField(array | string $parameters): string
     {
@@ -198,11 +198,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function emailField(array | string $parameters): string
     {
@@ -223,11 +223,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function fileField(array | string $parameters): string
     {
@@ -240,13 +240,13 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'method' => 'post',
-     *     'action' => '',
-     *     'parameters' => '',
-     *     'name' => '',
-     *     'class' => '',
-     *     'id' => ''
-     * ]
+     *                                 'method' => 'post',
+     *                                 'action' => '',
+     *                                 'parameters' => '',
+     *                                 'name' => '',
+     *                                 'class' => '',
+     *                                 'id' => ''
+     *                                 ]
      */
     public static function formLegacy(array | string $parameters): string
     {
@@ -519,12 +519,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function hiddenField(array | string $parameters): string
     {
@@ -537,11 +537,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'src' => '',
-     *     'class' => '',
-     *     'id' => '',
-     *     'name' => ''
-     * ]
+     *                                 'src' => '',
+     *                                 'class' => '',
+     *                                 'id' => '',
+     *                                 'name' => ''
+     *                                 ]
      */
     public static function image(
         array | string $parameters = [],
@@ -584,11 +584,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => ''
+     *                                 ]
      */
     public static function imageInput(array | string $parameters): string
     {
@@ -601,11 +601,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'local' => false,
-     *     'src' => '',
-     *     'type' => 'text/javascript'
-     *     'rel' => ''
-     * ]
+     *                                 'local' => false,
+     *                                 'src' => '',
+     *                                 'type' => 'text/javascript'
+     *                                 'rel' => ''
+     *                                 ]
      */
     public static function javascriptInclude(
         array | string $parameters = [],
@@ -651,15 +651,15 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'action' => '',
-     *     'text' => '',
-     *     'local' => false,
-     *     'query' => '',
-     *     'class' => '',
-     *     'name' => '',
-     *     'href' => '',
-     *     'id' => ''
-     * ]
+     *                                 'action' => '',
+     *                                 'text' => '',
+     *                                 'local' => false,
+     *                                 'query' => '',
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'href' => '',
+     *                                 'id' => ''
+     *                                 ]
      */
     public static function linkTo(
         array | string $parameters,
@@ -715,12 +715,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function monthField(array | string $parameters): string
     {
@@ -733,12 +733,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function numericField(array | string $parameters): string
     {
@@ -751,12 +751,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function passwordField(array | string $parameters): string
     {
@@ -826,12 +826,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function radioField(array | string $parameters): string
     {
@@ -844,12 +844,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function rangeField(array | string $parameters): string
     {
@@ -860,17 +860,17 @@ class Tag
      * Renders parameters keeping order in their HTML attributes
      *
      * @param array $attributes = [
-     *     'rel' => null,
-     *     'type' => null,
-     *     'for' => null,
-     *     'src' => null,
-     *     'href' => null,
-     *     'action' => null,
-     *     'id' => null,
-     *     'name' => null,
-     *     'value' => null,
-     *     'class' => null
-     * ]
+     *                          'rel' => null,
+     *                          'type' => null,
+     *                          'for' => null,
+     *                          'src' => null,
+     *                          'href' => null,
+     *                          'action' => null,
+     *                          'id' => null,
+     *                          'name' => null,
+     *                          'value' => null,
+     *                          'class' => null
+     *                          ]
      *
      * @phpstan-param tag_attributes $attributes
      */
@@ -968,12 +968,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'class' => '',
-     *     'name' => '',
-     *     'src' => '',
-     *     'id' => '',
-     *     'value' => ''
-     * ]
+     *                                 'class' => '',
+     *                                 'name' => '',
+     *                                 'src' => '',
+     *                                 'id' => '',
+     *                                 'value' => ''
+     *                                 ]
      */
     public static function searchField(array | string $parameters): string
     {
@@ -986,13 +986,13 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'useEmpty' => false,
-     *     'emptyValue' => '',
-     *     'emptyText' => '',
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'useEmpty' => false,
+     *                                 'emptyValue' => '',
+     *                                 'emptyText' => '',
+     *                                 ]
      */
     public static function select(array | string $parameters, mixed $data = null): string
     {
@@ -1005,13 +1005,13 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'useEmpty' => false,
-     *     'emptyValue' => '',
-     *     'emptyText' => '',
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'useEmpty' => false,
+     *                                 'emptyValue' => '',
+     *                                 'emptyText' => '',
+     *                                 ]
      */
     public static function selectStatic(array | string $parameters, mixed $data = null): string
     {
@@ -1213,11 +1213,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => ''
+     *                                 ]
      */
     public static function telField(array | string $parameters): string
     {
@@ -1230,11 +1230,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => ''
+     *                                 ]
      */
     public static function textArea(array | string $parameters): string
     {
@@ -1286,11 +1286,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => ''
+     *                                 ]
      */
     public static function textField(array | string $parameters): string
     {
@@ -1303,11 +1303,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => ''
+     *                                 ]
      */
     public static function timeField(array | string $parameters): string
     {
@@ -1320,11 +1320,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => ''
+     *                                 ]
      */
     public static function urlField(array | string $parameters): string
     {
@@ -1337,11 +1337,11 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => ''
+     *                                 ]
      */
     public static function weekField(array | string $parameters): string
     {
@@ -1377,12 +1377,12 @@ class Tag
      * @phpstan-param tag_parameters|string $parameters
      *
      * @param array|string $parameters = [
-     *     'id' => '',
-     *     'name' => '',
-     *     'value' => '',
-     *     'class' => '',
-     *     'type' => ''
-     * ]
+     *                                 'id' => '',
+     *                                 'name' => '',
+     *                                 'value' => '',
+     *                                 'class' => '',
+     *                                 'type' => ''
+     *                                 ]
      */
     final protected static function inputField(
         string $type,

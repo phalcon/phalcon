@@ -63,7 +63,7 @@ interface LinkInterface
      * Returns whether this is a templated link.
      *
      * @return bool
-     *   True if this link object is templated, False otherwise.
+     *              True if this link object is templated, False otherwise.
      */
     public function isTemplated(): bool;
 }

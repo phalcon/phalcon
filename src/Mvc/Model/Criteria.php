@@ -87,9 +87,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      * Builds a Phalcon\Mvc\Model\Criteria based on an input array like $_POST
      *
      * @param DiInterface $container
-     * @param string                 $modelName
-     * @param array                  $data
-     * @param string                 $operator
+     * @param string      $modelName
+     * @param array       $data
+     * @param string      $operator
      *
      * @return CriteriaInterface
      *
@@ -175,9 +175,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Appends a condition to the current conditions using an AND operator
      *
-     * @param string     $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string $conditions
+     * @param mixed  $bindParams
+     * @param mixed  $bindTypes
      *
      * @return CriteriaInterface
      *
@@ -943,9 +943,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Appends a condition to the current conditions using an OR operator
      *
-     * @param string     $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string $conditions
+     * @param mixed  $bindParams
+     * @param mixed  $bindTypes
      *
      * @return CriteriaInterface
      *
@@ -1029,9 +1029,9 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
     /**
      * Sets the conditions parameter in the criteria
      *
-     * @param string     $conditions
-     * @param mixed $bindParams
-     * @param mixed $bindTypes
+     * @param string $conditions
+     * @param mixed  $bindParams
+     * @param mixed  $bindTypes
      *
      * @return CriteriaInterface
      *

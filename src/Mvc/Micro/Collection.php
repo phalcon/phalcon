@@ -40,30 +40,19 @@ class Collection implements CollectionInterface
      * @var callable
      */
     protected mixed $handler;
-
     /**
-     * @var array
-     *
      * @phpstan-var mvc_micro_handlers
      */
     protected array $handlers = [];
-
-    /**
-     * @var bool
-     */
-    protected bool $isLazy = false;
-
-    /**
-     * @var string
-     */
-    protected string $prefix = '';
+    protected bool $isLazy    = false;
+    protected string $prefix  = '';
 
     /**
      * Maps a route to a handler that only matches if the HTTP method is DELETE.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -80,9 +69,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is GET.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -131,9 +120,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is HEAD.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -160,9 +149,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -188,10 +177,10 @@ class Collection implements CollectionInterface
      * );
      * ```
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param mixed    $method
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param mixed       $method
+     * @param string|null $name
      *
      * @return CollectionInterface
      *
@@ -211,9 +200,9 @@ class Collection implements CollectionInterface
      * Maps a route to a handler that only matches if the HTTP method is
      * OPTIONS.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -230,9 +219,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is PATCH.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -249,9 +238,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is POST.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -268,9 +257,9 @@ class Collection implements CollectionInterface
     /**
      * Maps a route to a handler that only matches if the HTTP method is PUT.
      *
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return CollectionInterface
      */
@@ -332,10 +321,10 @@ class Collection implements CollectionInterface
     /**
      * Internal function to add a handler to the group.
      *
-     * @param mixed    $method
-     * @param string          $routePattern
-     * @param mixed $handler
-     * @param string|null     $name
+     * @param mixed       $method
+     * @param string      $routePattern
+     * @param mixed       $handler
+     * @param string|null $name
      *
      * @return void
      *

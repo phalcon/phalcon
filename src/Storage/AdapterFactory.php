@@ -51,25 +51,25 @@ class AdapterFactory extends AbstractFactory
      * Create a new instance of the adapter
      *
      * @param array $options = [
-     *     'servers' => [
-     *         [
-     *             'host' => '127.0.0.1',
-     *             'port' => 11211,
-     *             'weight' => 1
-     *         ]
-     *     ],
-     *     'defaultSerializer' => 'Php',
-     *     'lifetime' => 3600,
-     *     'serializer' => null,
-     *     'prefix' => '',
-     *     'host' => '127.0.0.1',
-     *     'port' => 6379,
-     *     'index' => 0,
-     *     'persistent' => false,
-     *     'auth' => '',
-     *     'socket' => '',
-     *     'storageDir' => '',
-     * ]
+     *                       'servers' => [
+     *                       [
+     *                       'host' => '127.0.0.1',
+     *                       'port' => 11211,
+     *                       'weight' => 1
+     *                       ]
+     *                       ],
+     *                       'defaultSerializer' => 'Php',
+     *                       'lifetime' => 3600,
+     *                       'serializer' => null,
+     *                       'prefix' => '',
+     *                       'host' => '127.0.0.1',
+     *                       'port' => 6379,
+     *                       'index' => 0,
+     *                       'persistent' => false,
+     *                       'auth' => '',
+     *                       'socket' => '',
+     *                       'storageDir' => '',
+     *                       ]
      *
      * @phpstan-param storage_options $options
      *

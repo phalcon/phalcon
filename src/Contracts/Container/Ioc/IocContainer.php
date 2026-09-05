@@ -64,7 +64,7 @@ interface IocContainer
      *       logic defines the service lifetime, not the container (per se) and
      *       not the caller requesting the service.
      *
-     * @param ioc_service_name_string $serviceName
+     * @param  ioc_service_name_string $serviceName
      * @return ioc_service_object
      */
     public function getService(string $serviceName): object;

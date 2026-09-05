@@ -89,10 +89,10 @@ class QueryBuilder extends AbstractAdapter
      * subquery). It has no effect on plain queries.
      *
      * @param paginator_config $config = [
-     *     'limit' => 10,
-     *     'builder' => null,
-     *     'columns' => ''
-     * ]
+     *                                 'limit' => 10,
+     *                                 'builder' => null,
+     *                                 'columns' => ''
+     *                                 ]
      */
     public function __construct(array $config)
     {

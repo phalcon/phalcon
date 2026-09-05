@@ -210,8 +210,8 @@ class Di extends stdClass implements DiInterface
     /**
      * Resolves the service based on its configuration
      *
-     * @param string     $name
-     * @param mixed $parameters
+     * @param string $name
+     * @param mixed  $parameters
      *
      * @return mixed
      * @throws Exception
@@ -365,8 +365,8 @@ class Di extends stdClass implements DiInterface
      * Resolves a service, the resolved service is stored in the DI, subsequent
      * requests for this service will return the same instance
      *
-     * @param string     $name
-     * @param mixed $parameters
+     * @param string $name
+     * @param mixed  $parameters
      *
      * @return mixed
      * @throws DiException

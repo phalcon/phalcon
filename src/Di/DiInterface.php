@@ -60,8 +60,8 @@ interface DiInterface extends ArrayAccess
     /**
      * Resolves the service based on its configuration
      *
-     * @param string     $name
-     * @param mixed $parameters
+     * @param string $name
+     * @param mixed  $parameters
      *
      * @return mixed
      */
@@ -95,8 +95,8 @@ interface DiInterface extends ArrayAccess
     /**
      * Returns a shared service based on their configuration
      *
-     * @param string     $name
-     * @param mixed $parameters
+     * @param string $name
+     * @param mixed  $parameters
      *
      * @return mixed
      */

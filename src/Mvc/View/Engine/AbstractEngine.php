@@ -30,8 +30,8 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     /**
      * Phalcon\Mvc\View\Engine constructor
      *
-     * @param ViewBaseInterface    $view
-     * @param DiInterface|null $container
+     * @param ViewBaseInterface $view
+     * @param DiInterface|null  $container
      */
     public function __construct(
         protected ViewBaseInterface $view,
