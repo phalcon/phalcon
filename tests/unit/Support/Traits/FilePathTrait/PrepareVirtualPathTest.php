@@ -25,13 +25,13 @@ final class PrepareVirtualPathTest extends AbstractUnitTestCase
     public static function getExamples(): array
     {
         return [
-            'forward slashes'  => ['/some/path/to/file', '_', '_some_path_to_file'],
-            'backslashes'      => ['some\\path\\to\\file', '_', 'some_path_to_file'],
-            'colons'           => ['C:/Windows/System32', '_', 'c__windows_system32'],
-            'mixed'            => ['C:\\some/path:file', '_', 'c__some_path_file'],
-            'custom separator' => ['/some/path', '-', '-some-path'],
-            'no special chars' => ['simplepath', '_', 'simplepath'],
-            'lower-cases key'  => ['MixedCaseKey', '_', 'mixedcasekey'],
+            'forward slashes'   => ['/some/path/to/file', '_', '_some_path_to_file'],
+            'backslashes'       => ['some\\path\\to\\file', '_', 'some_path_to_file'],
+            'colons'            => ['C:/Windows/System32', '_', 'c__windows_system32'],
+            'mixed'             => ['C:\\some/path:file', '_', 'c__some_path_file'],
+            'custom separator'  => ['/some/path', '-', '-some-path'],
+            'no special chars'  => ['simplepath', '_', 'simplepath'],
+            'lower-cases key'   => ['MixedCaseKey', '_', 'mixedcasekey'],
             'truncates at null' => ["safe\0../etc/passwd", '_', 'safe'],
         ];
     }

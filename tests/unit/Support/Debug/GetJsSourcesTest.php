@@ -25,7 +25,7 @@ final class GetJsSourcesTest extends AbstractUnitTestCase
     public function testSupportDebugGetJsSources(): void
     {
         $debug = new Debug();
-        $uri = 'https://assets.phalcon.io/debug/6.0.x/';
+        $uri   = 'https://assets.phalcon.io/debug/6.0.x/';
 
         $expected = "
     <script src='{$uri}debug.js'></script>";

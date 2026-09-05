@@ -13,7 +13,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 {
     public function testAllListenersCalledWithoutCancel(): void
     {
-        $manager = new Manager();
+        $manager   = new Manager();
         $callOrder = [];
 
         $manager->attach('cancelable', function (CancelableEventObject $event) use (&$callOrder) {
@@ -31,7 +31,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 
     public function testCancelByClassNameDispatch(): void
     {
-        $manager = new Manager();
+        $manager   = new Manager();
         $callOrder = [];
 
         $manager->attach(CancelableEventObject::class, function (CancelableEventObject $event) use (&$callOrder) {
@@ -50,7 +50,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 
     public function testCancelStopsPropagationToSubsequentListeners(): void
     {
-        $manager = new Manager();
+        $manager   = new Manager();
         $callOrder = [];
 
         $manager->attach('cancelable', function (CancelableEventObject $event) use (&$callOrder) {
@@ -69,7 +69,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 
     public function testDispatchNamedEvent(): void
     {
-        $result = false;
+        $result  = false;
         $manager = new Manager();
         $manager->attach('test', function ($model) use (&$result) {
             $this->assertTrue(true, 'Event was not dispatched');
@@ -125,7 +125,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 
     public function testDispatchWithObject(): void
     {
-        $result = false;
+        $result  = false;
         $manager = new Manager();
         $manager->attach(EmptyEventObject::class, function ($model) use (&$result) {
             $this->assertTrue(true, 'Event was not dispatched');
@@ -137,7 +137,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
     }
     public function testDispatchWithStringName(): void
     {
-        $result = false;
+        $result  = false;
         $manager = new Manager();
         $manager->attach('test', function () use (&$result) {
             $this->assertTrue(true, 'Event was not dispatched');
@@ -161,7 +161,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
 
     public function testNonCancelableEventIsNotAffectedByStoppableCheck(): void
     {
-        $manager = new Manager();
+        $manager   = new Manager();
         $callOrder = [];
 
         $manager->attach('noncancelable', function (EmptyEventObject $event) use (&$callOrder) {

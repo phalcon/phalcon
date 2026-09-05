@@ -182,9 +182,9 @@ final class ConstructTest extends AbstractUnitTestCase
         $container = new FactoryDefault();
 
         $params = match ($service) {
-            'sessionBag' => ['someName'],
+            'sessionBag'         => ['someName'],
             'modelsEventFactory' => [$container],
-            default => null,
+            default              => null,
         };
 
         $actual = $container->get($service, $params);
