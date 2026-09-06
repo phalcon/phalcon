@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Parser;
 
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use ReflectionClass;
 use ReflectionException;
 
@@ -20,11 +21,15 @@ use function count;
 
 /**
  * Parses classes returning an array with the found annotations
+ *
+ * @phpstan-import-type annotations_reflection_data from AnnotationsTypes
  */
 class Reader implements ReaderInterface
 {
     /**
      * Reads annotations from the class, its methods and/or properties
+     *
+     * @phpstan-return annotations_reflection_data
      *
      * @throws ReflectionException
      */
@@ -35,6 +40,7 @@ class Reader implements ReaderInterface
         /**
          * A ReflectionClass is used to obtain the annotations.
          */
+        /** @var class-string $className */
         $reflection = new ReflectionClass($className);
 
         $classAnnotations = $reflection->getAttributes();

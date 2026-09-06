@@ -13,13 +13,19 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Parser;
 
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
+
 /**
  * Parses attributes returning an array with the found attributes
+ *
+ * @phpstan-import-type annotations_reflection_data from AnnotationsTypes
  */
 interface ReaderInterface
 {
     /**
      * Reads attributes from the class, properties and methods
+     *
+     * @phpstan-return annotations_reflection_data
      */
     public function parse(string $className): array;
 }

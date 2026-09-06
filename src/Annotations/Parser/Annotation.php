@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Parser;
 
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use ReflectionAttribute;
 
 use function count;
@@ -21,11 +22,15 @@ use function strrchr;
 
 /**
  * Represents a single attribute in an attributes collection
+ *
+ * @phpstan-import-type annotations_arguments from AnnotationsTypes
  */
 class Annotation
 {
     /**
      * Attribute Arguments
+     *
+     * @phpstan-var annotations_arguments
      */
     protected array $arguments = [];
 
@@ -36,11 +41,15 @@ class Annotation
 
     /**
      * Constructor
+     *
+     * @param ReflectionAttribute<object> $reflectionData
      */
     public function __construct(ReflectionAttribute $reflectionData)
     {
-        $this->name      = ltrim(strrchr($reflectionData->getName() ?: "", '\\'), '\\');
-        $this->arguments = $reflectionData->getArguments() ?? [];
+        $name = $reflectionData->getName();
+
+        $this->name      = ltrim(strrchr($name, '\\') ?: $name, '\\');
+        $this->arguments = $reflectionData->getArguments();
     }
 
     /**
@@ -53,6 +62,8 @@ class Annotation
 
     /**
      * Returns the expression arguments
+     *
+     * @phpstan-return annotations_arguments
      */
     public function getArguments(): array
     {
@@ -64,7 +75,7 @@ class Annotation
      */
     public function getCleanName(): string
     {
-        return ltrim(strrchr($this->name, '\\'), '\\');
+        return ltrim(strrchr($this->name, '\\') ?: $this->name, '\\');
     }
 
     /**

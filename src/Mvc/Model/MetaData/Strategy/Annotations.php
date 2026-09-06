@@ -291,7 +291,7 @@ class Annotations implements StrategyInterface
      * @return Collection[]
      * @throws Exception
      *
-     * @phpstan-return array<string, Collection<int, Annotation>>
+     * @phpstan-return array<string, Collection>
      */
     private function getProperties(ModelInterface $model, DiInterface $container): array
     {
@@ -313,7 +313,7 @@ class Annotations implements StrategyInterface
          * Get the properties defined in
          */
         // The annotations of every property are keyed by the property name.
-        /** @var array<string, Collection<int, Annotation>> $propertiesAnnotations */
+        /** @var array<string, Collection> $propertiesAnnotations */
         $propertiesAnnotations = $reflection->getPropertiesAnnotations();
 
         if (empty($propertiesAnnotations)) {

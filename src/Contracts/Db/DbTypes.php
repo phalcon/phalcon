@@ -33,6 +33,12 @@ use Phalcon\Db\ReferenceInterface;
  * generic names such as `row` or `options` from clashing with an alias
  * imported from another namespace into the same file.
  *
+ * The list is alphabetical, with one exception: an alias that another alias
+ * names must be defined before it. Psalm reads the aliases in file order and
+ * cannot resolve a forward reference; it reports the name as a missing class
+ * instead. PHPStan does not care about the order, so a forward reference is
+ * invisible until the cphalcon stubs are analyzed.
+ *
  * @phpstan-type db_bind_counts array<string, int>
  * @phpstan-type db_bind_params array<array-key, mixed>
  * @phpstan-type db_bind_types array<array-key, int>
@@ -78,13 +84,14 @@ use Phalcon\Db\ReferenceInterface;
  * @phpstan-type db_geometry_coordinates list<float>
  * @phpstan-type db_identifier array<array-key, string>|float|int|string
  * @phpstan-type db_table_identifier array<array-key, string>|string
+ * @phpstan-type db_index_columns array<array-key, RawValue|string>
+ * @phpstan-type db_index_directions array<array-key, string>
  * @phpstan-type db_index_build array{
  *     columns: db_index_columns,
  *     directions: db_index_directions,
  *     invisible?: bool,
  *     type: string,
  * }
- * @phpstan-type db_index_columns array<array-key, RawValue|string>
  * @phpstan-type db_index_definition array{
  *     columns: db_index_columns,
  *     concurrently?: bool,
@@ -93,7 +100,6 @@ use Phalcon\Db\ReferenceInterface;
  *     type?: string,
  *     where?: string,
  * }
- * @phpstan-type db_index_directions array<array-key, string>
  * @phpstan-type db_indexes array<array-key, IndexInterface>
  * @phpstan-type db_limit_number array{0: mixed, 1?: mixed}|int
  * @phpstan-type db_pdo_options array<int, mixed>
@@ -122,6 +128,7 @@ use Phalcon\Db\ReferenceInterface;
  *     escapeSqlIdentifiers?: bool|int,
  *     forceCasting?: bool|int,
  * }
+ * @phpstan-type db_table_options array<string, mixed>
  * @phpstan-type db_table_definition array{
  *     checks?: array<array-key, CheckInterface>,
  *     columns?: db_columns,
@@ -131,7 +138,6 @@ use Phalcon\Db\ReferenceInterface;
  *     temporary?: bool,
  * }
  * @phpstan-type db_table_names array<array-key, string>
- * @phpstan-type db_table_options array<string, mixed>
  * @phpstan-type db_value_placeholder array{
  *     placeholder: string,
  *     bind: bool,

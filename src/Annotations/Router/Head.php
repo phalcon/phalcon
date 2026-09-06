@@ -14,14 +14,23 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use Phalcon\Http\Message\RequestMethodInterface;
 
+/**
+ * @phpstan-import-type annotations_route_params from AnnotationsTypes
+ */
 #[Attribute(Attribute::TARGET_METHOD)]
 class Head extends Route
 {
+    /**
+     * @param mixed ...$params
+     */
     public function __construct(...$params)
     {
         $params['methods'] = RequestMethodInterface::METHOD_HEAD;
+
+        /** @var annotations_route_params $params */
         parent::__construct(...$params);
     }
 }

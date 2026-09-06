@@ -17,14 +17,22 @@ use Phalcon\Annotations\Parser\Collection;
 use Phalcon\Annotations\Parser\Reader;
 use Phalcon\Annotations\Parser\ReaderInterface;
 use Phalcon\Annotations\Parser\Reflection;
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use Phalcon\Storage\Adapter\AdapterInterface;
 
+/**
+ * @phpstan-import-type annotations_attributes from AnnotationsTypes
+ * @phpstan-import-type annotations_collection_map from AnnotationsTypes
+ */
 class Annotations
 {
     private const CACHE_PREFIX = '_PHATN';
     protected AdapterInterface $adapter;
-    protected array $attributes     = [];
-    protected Reader | null $reader = null;
+    /**
+     * @phpstan-var annotations_attributes
+     */
+    protected array $attributes              = [];
+    protected ReaderInterface | null $reader = null;
 
     public function __construct(AdapterInterface $adapter)
     {
@@ -33,6 +41,8 @@ class Annotations
 
     /**
      * Parses or retrieves all the attributes found in a class
+     *
+     * @param object|string $className
      */
     public function get(mixed $className): Reflection
     {
@@ -77,6 +87,8 @@ class Annotations
 
     /**
      * Returns the attributes found in all the class' constants
+     *
+     * @phpstan-return annotations_collection_map
      */
     public function getConstants(string $className): array
     {
@@ -104,6 +116,8 @@ class Annotations
 
     /**
      * Returns the attributes found in all the class' methods
+     *
+     * @phpstan-return annotations_collection_map
      */
     public function getMethods(string $className): array
     {
@@ -112,6 +126,8 @@ class Annotations
 
     /**
      * Returns the attributes found in all the class' properties
+     *
+     * @phpstan-return annotations_collection_map
      */
     public function getProperties(string $className): array
     {
@@ -138,10 +154,15 @@ class Annotations
 
     /**
      * Reads parsed annotations from memory
+     *
+     * @phpstan-return Reflection|false
      */
     public function read(string $key): bool | Reflection
     {
-        return $this->adapter->get(strtolower($key)) ?? false;
+        /** @var Reflection|null $data */
+        $data = $this->adapter->get(strtolower($key));
+
+        return $data ?? false;
     }
 
     /**

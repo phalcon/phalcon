@@ -292,6 +292,8 @@ abstract class AbstractPdo extends AbstractAdapter
      * // Reconnect
      * $connection->connect();
      * ```
+     *
+     * @phpstan-param db_descriptor $descriptor
      */
     public function connect(array $descriptor = []): void
     {

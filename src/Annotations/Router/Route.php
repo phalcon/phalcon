@@ -14,11 +14,24 @@ declare(strict_types=1);
 namespace Phalcon\Annotations\Router;
 
 use Attribute;
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use Phalcon\Http\Message\RequestMethodInterface;
 
+/**
+ * @phpstan-import-type annotations_route_before_match from AnnotationsTypes
+ * @phpstan-import-type annotations_route_converters from AnnotationsTypes
+ * @phpstan-import-type annotations_route_methods from AnnotationsTypes
+ * @phpstan-import-type annotations_route_paths from AnnotationsTypes
+ */
 #[Attribute(Attribute::TARGET_METHOD)]
 class Route
 {
+    /**
+     * @phpstan-param annotations_route_methods      $methods
+     * @phpstan-param annotations_route_paths        $paths
+     * @phpstan-param annotations_route_converters   $converters
+     * @phpstan-param annotations_route_before_match $beforeMatch
+     */
     public function __construct(
         public string $route,
         public array | string $methods = [

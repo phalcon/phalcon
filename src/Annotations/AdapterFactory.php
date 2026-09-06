@@ -32,7 +32,7 @@ use Phalcon\Storage\SerializerFactory;
  */
 class AdapterFactory extends AbstractFactory
 {
-    private SerializerFactory | null $serializerFactory;
+    private SerializerFactory $serializerFactory;
 
     /**
      * AdapterFactory constructor.
@@ -76,6 +76,7 @@ class AdapterFactory extends AbstractFactory
      */
     public function newInstance(string $name, array $options = []): AdapterInterface
     {
+        /** @var class-string<AdapterInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition(

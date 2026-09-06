@@ -58,6 +58,7 @@ use function strpos;
  * @phpstan-import-type db_row from DbTypes
  * @phpstan-import-type db_rows from DbTypes
  * @phpstan-import-type db_setup_options from DbTypes
+ * @phpstan-import-type db_table_definition from DbTypes
  * @phpstan-import-type db_table_names from DbTypes
  * @phpstan-import-type db_table_options from DbTypes
  * @phpstan-import-type db_value_placeholder from DbTypes
@@ -323,6 +324,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Creates a table
+     *
+     * @phpstan-param db_table_definition $definition
      *
      * @throws Exception
      */
@@ -703,6 +706,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *     print_r($invoice);
      * }
      *```
+     *
+     * @phpstan-param db_bind_params $bindParams
+     * @phpstan-param db_bind_types  $bindTypes
+     *
+     * @phpstan-return db_rows
      */
     public function fetchAll(
         string $sqlQuery,
@@ -879,6 +887,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Return descriptor used to connect to the active database
+     *
+     * @phpstan-return db_descriptor
      */
     public function getDescriptor(): array
     {
@@ -919,6 +929,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Active SQL statement in the object
+     *
+     * @phpstan-return db_bind_types
      */
     public function getSQLBindTypes(): array
     {
@@ -1112,7 +1124,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $schemaName
+     * @phpstan-return db_table_names
      *
      * @todo optimize this
      */
@@ -1141,7 +1153,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $schemaName
+     * @phpstan-return db_table_names
      */
     public function listViews(string | null $schemaName = null): array
     {
@@ -1341,7 +1353,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      *```
      *
-     * @param string $schemaName
+     * @phpstan-return db_table_options
      */
     public function tableOptions(
         string $tableName,

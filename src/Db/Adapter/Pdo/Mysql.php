@@ -59,6 +59,7 @@ use function substr;
  * @phpstan-import-type db_describe_row from DbTypes
  * @phpstan-import-type db_error_info from DbTypes
  * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_dsn_defaults from DbTypes
  * @phpstan-import-type db_index_build from DbTypes
  * @phpstan-import-type db_pdo_options from DbTypes
  * @phpstan-import-type db_reference_build from DbTypes
@@ -805,7 +806,7 @@ class Mysql extends PdoAdapter
     /**
      * Returns PDO adapter DSN defaults as a key-value map.
      *
-     * @return string[]
+     * @phpstan-return db_dsn_defaults
      */
     protected function getDsnDefaults(): array
     {

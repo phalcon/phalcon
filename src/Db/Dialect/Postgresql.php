@@ -40,6 +40,9 @@ class Postgresql extends Dialect
 {
     protected string $escapeChar = "\"";
 
+    /**
+     * @var list<string>
+     */
     protected array $supportedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
 
     /**

@@ -52,6 +52,7 @@ use function trigger_error;
  *
  * @phpstan-import-type db_describe_row from DbTypes
  * @phpstan-import-type db_descriptor from DbTypes
+ * @phpstan-import-type db_dsn_defaults from DbTypes
  * @phpstan-import-type db_reference_build from DbTypes
  * @phpstan-import-type db_table_definition from DbTypes
  */
@@ -790,6 +791,8 @@ class Postgresql extends PdoAdapter
 
     /**
      * Returns PDO adapter DSN defaults as a key-value map.
+     *
+     * @phpstan-return db_dsn_defaults
      */
     protected function getDsnDefaults(): array
     {

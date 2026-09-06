@@ -277,7 +277,7 @@ class Annotations extends Router
             /**
              * Process method annotations
              */
-            /** @var array<string, Collection<int, Annotation>> $methodAnnotations */
+            /** @var array<string, Collection> $methodAnnotations */
             $methodAnnotations = $handlerAnnotations->getMethodsAnnotations();
 
             $lowerControllerName = $this->toUncamelize($controllerName);
