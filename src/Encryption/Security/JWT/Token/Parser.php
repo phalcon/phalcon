@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT\Token;
 
+use Phalcon\Contracts\Encryption\EncryptionTypes;
 use Phalcon\Encryption\Security\JWT\Exceptions\InvalidClaims;
 use Phalcon\Encryption\Security\JWT\Exceptions\InvalidHeader;
 use Phalcon\Encryption\Security\JWT\Exceptions\MalformedJwtString;
@@ -29,6 +30,8 @@ use function is_array;
  * It parses a token by validating if it is formed properly and splits it into
  * three parts. The headers are decoded, then the claims and finally the
  * signature. It returns a token object populated with the decoded information.
+ *
+ * @phpstan-import-type encryption_jwt_payload from EncryptionTypes
  */
 class Parser
 {
@@ -85,6 +88,7 @@ class Parser
             $decoded[Enum::AUDIENCE] = [$decoded[Enum::AUDIENCE]];
         }
 
+        /** @phpstan-var encryption_jwt_payload $decoded */
         return new Item($decoded, $claims);
     }
 
@@ -103,6 +107,7 @@ class Parser
             throw new MissingJwtTypHeader();
         }
 
+        /** @phpstan-var encryption_jwt_payload $decoded */
         return new Item($decoded, $headers);
     }
 

@@ -29,6 +29,9 @@ class Signature extends AbstractItem
 
     public function getHash(): string
     {
-        return $this->data['hash'];
+        /** @phpstan-var string $hash */
+        $hash = $this->data['hash'];
+
+        return $hash;
     }
 }

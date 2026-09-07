@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption;
 
+use Phalcon\Contracts\Encryption\EncryptionTypes;
 use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Encryption\Security\Exception;
@@ -39,6 +40,9 @@ use ValueError;
  *     }
  * }
  *```
+ *
+ * @phpstan-import-type encryption_hash_information from EncryptionTypes
+ * @phpstan-import-type encryption_hash_options from EncryptionTypes
  */
 class Security extends AbstractInjectionAware implements SecurityContract
 {
@@ -105,14 +109,20 @@ class Security extends AbstractInjectionAware implements SecurityContract
 
     protected int $workFactor = 10;
 
+    private RequestInterface | null $localRequest = null;
+
+    private SessionInterface | null $localSession = null;
+
     /**
      * Security constructor.
      */
     public function __construct(
-        private SessionInterface | null $session = null,
-        private RequestInterface | null $request = null
+        SessionInterface | null $session = null,
+        RequestInterface | null $request = null
     ) {
-        $this->random = new Random();
+        $this->random       = new Random();
+        $this->localRequest = $request;
+        $this->localSession = $session;
     }
 
     /**
@@ -134,6 +144,8 @@ class Security extends AbstractInjectionAware implements SecurityContract
     /**
      * Check if the CSRF token sent in the request is the same that the current
      * in session
+     *
+     * @param string|null $tokenValue
      */
     public function checkToken(
         ?string $tokenKey = null,
@@ -199,7 +211,8 @@ class Security extends AbstractInjectionAware implements SecurityContract
      */
     public function destroyToken(): static
     {
-        $session = $this->getLocalService("session");
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService("session", "localSession");
 
         if ($session) {
             $session->remove($this->tokenKeySessionId);
@@ -223,6 +236,8 @@ class Security extends AbstractInjectionAware implements SecurityContract
 
     /**
      * Returns information regarding a hash
+     *
+     * @phpstan-return encryption_hash_information
      */
     public function getHashInformation(string $hash): array
     {
@@ -286,10 +301,14 @@ class Security extends AbstractInjectionAware implements SecurityContract
      */
     public function getSessionToken(): string | null
     {
-        $session = $this->getLocalService("session");
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService("session", "localSession");
 
         if ($session) {
-            return $session->get($this->tokenValueSessionId);
+            /** @phpstan-var string|null $sessionToken */
+            $sessionToken = $session->get($this->tokenValueSessionId);
+
+            return $sessionToken;
         }
 
         return null;
@@ -305,7 +324,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
     {
         if (null === $this->token) {
             /** @var SessionInterface|null $session */
-            $session = $this->getLocalService("session");
+            $session = $this->getLocalService("session", "localSession");
 
             /**
              * When auto-refresh is disabled, reuse any existing session
@@ -314,6 +333,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
              * Redis with billing per write, etc.) would otherwise incur.
              */
             if (false === $this->autoRefresh && null !== $session) {
+                /** @phpstan-var string|null $sessionToken */
                 $sessionToken = $session->get($this->tokenValueSessionId);
                 if (null !== $sessionToken) {
                     $this->token        = $sessionToken;
@@ -347,13 +367,14 @@ class Security extends AbstractInjectionAware implements SecurityContract
     {
         if (null === $this->tokenKey) {
             /** @var SessionInterface|null $session */
-            $session = $this->getLocalService("session");
+            $session = $this->getLocalService("session", "localSession");
             if (null !== $session) {
                 /**
                  * Auto-refresh disabled: reuse the existing session value
                  * if present, so no write occurs on read-only requests.
                  */
                 if (false === $this->autoRefresh) {
+                    /** @phpstan-var string|null $sessionTokenKey */
                     $sessionTokenKey = $session->get($this->tokenKeySessionId);
                     if (null !== $sessionTokenKey) {
                         $this->tokenKey = $sessionTokenKey;
@@ -383,6 +404,8 @@ class Security extends AbstractInjectionAware implements SecurityContract
      *
      * Any `defaultHash` value that is not explicitly handled (including the
      * deprecated, unimplemented constants) resolves to bcrypt.
+     *
+     * @phpstan-param encryption_hash_options $options
      */
     public function hash(string $password, array $options = []): string
     {
@@ -476,7 +499,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
         $this->requestToken = null;
 
         /** @var SessionInterface|null $session */
-        $session = $this->getLocalService("session");
+        $session = $this->getLocalService("session", "localSession");
         if (null !== $session) {
             $session->set($this->tokenValueSessionId, $this->token);
             $session->set($this->tokenKeySessionId, $this->tokenKey);
@@ -532,17 +555,20 @@ class Security extends AbstractInjectionAware implements SecurityContract
     /**
      * @return RequestInterface|SessionInterface|null
      */
-    protected function getLocalService(string $name)
+    protected function getLocalService(string $name, string $property)
     {
         if (
-            null === $this->$name &&
+            null === $this->$property &&
             null !== $this->container &&
             true === $this->container->has($name)
         ) {
-            $this->$name = $this->container->getShared($name);
+            $this->$property = $this->container->getShared($name);
         }
 
-        return $this->$name;
+        /** @var RequestInterface|SessionInterface|null $service */
+        $service = $this->$property;
+
+        return $service;
     }
 
     /**
@@ -565,6 +591,9 @@ class Security extends AbstractInjectionAware implements SecurityContract
     /**
      * We check if the algorithm is Argon based. If yes, options are set for
      * `password_hash` such as `memory_cost`, `time_cost` and `threads`
+     *
+     * @phpstan-param  encryption_hash_options $options
+     * @phpstan-return encryption_hash_options
      */
     private function processArgonOptions(array $options): array
     {
@@ -597,9 +626,12 @@ class Security extends AbstractInjectionAware implements SecurityContract
     /**
      * Checks the options array for `cost`. If not defined it is set to 10.
      * It also checks the cost if it is between 4 and 31
+     *
+     * @phpstan-param encryption_hash_options $options
      */
     private function processCost(array $options = []): int
     {
+        /** @phpstan-var int|null $cost */
         $cost = $options["cost"] ?? null;
         if (!$cost) {
             $cost = $this->workFactor;
@@ -618,9 +650,11 @@ class Security extends AbstractInjectionAware implements SecurityContract
 
     private function processTokenKey(string | null $tokenKey = null): string | null
     {
-        $key     = $tokenKey;
-        $session = $this->getLocalService("session");
+        $key = $tokenKey;
+        /** @var SessionInterface|null $session */
+        $session = $this->getLocalService("session", "localSession");
         if (null !== $session && true === empty($key)) {
+            /** @phpstan-var string|null $key */
             $key = $session->get($this->tokenKeySessionId);
         }
 
@@ -634,7 +668,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
         $userToken = $tokenValue;
         if (!$tokenValue) {
             /** @var RequestInterface|null $request */
-            $request = $this->getLocalService("request");
+            $request = $this->getLocalService("request", "localRequest");
 
             /**
              * We always check if the value is correct in post

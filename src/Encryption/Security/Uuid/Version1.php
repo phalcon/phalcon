@@ -31,6 +31,9 @@ use DateTimeInterface;
  */
 class Version1 extends AbstractUuid implements TimeBasedUuidInterface
 {
+    /**
+     * @param string|null $node
+     */
     public function __construct(
         DateTimeInterface | null $dateTime = null,
         mixed $node = null

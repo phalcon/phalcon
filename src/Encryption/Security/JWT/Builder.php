@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT;
 
+use Phalcon\Contracts\Encryption\EncryptionTypes;
 use Phalcon\Encryption\Security\JWT\Exceptions\EmptyPassphrase;
+use Phalcon\Encryption\Security\JWT\Exceptions\InvalidAudience;
 use Phalcon\Encryption\Security\JWT\Exceptions\InvalidExpirationTime;
 use Phalcon\Encryption\Security\JWT\Exceptions\InvalidNotBefore;
 use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
@@ -28,21 +30,32 @@ use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Helper\Json\Encode;
 use Phalcon\Traits\Php\Base64Trait;
 
+use function is_array;
 use function is_string;
 
 /**
  * JWT Builder
  *
  * @link https://tools.ietf.org/html/rfc7519
+ *
+ * @phpstan-import-type encryption_jwt_audience from EncryptionTypes
+ * @phpstan-import-type encryption_jwt_claims from EncryptionTypes
+ * @phpstan-import-type encryption_jwt_headers from EncryptionTypes
  */
 class Builder
 {
     use Base64Trait;
 
+    /**
+     * @phpstan-var CollectionInterface<mixed>
+     */
     private CollectionInterface $claims;
 
     private Encode $encode;
 
+    /**
+     * @phpstan-var CollectionInterface<mixed>
+     */
     private CollectionInterface $jose;
 
     private string $passphrase;
@@ -60,8 +73,6 @@ class Builder
 
     /**
      * Adds a custom claim
-     *
-     * @return Builder
      */
     public function addClaim(string $name, mixed $value): static
     {
@@ -72,8 +83,6 @@ class Builder
 
     /**
      * Adds a custom claim
-     *
-     * @return Builder
      */
     public function addHeader(string $name, mixed $value): static
     {
@@ -83,57 +92,84 @@ class Builder
     }
 
     /**
-     * @return string|string[]
+     * @phpstan-return encryption_jwt_audience
      */
-    public function getAudience(): array | string
+    public function getAudience(): mixed
     {
-        return $this->claims->get(Enum::AUDIENCE, []);
+        /** @phpstan-var encryption_jwt_audience $audience */
+        $audience = $this->claims->get(Enum::AUDIENCE, []);
+
+        return $audience;
     }
 
     /**
-     * @return array<string, mixed>
+     * @phpstan-return encryption_jwt_claims
      */
     public function getClaims(): array
     {
-        return $this->claims->toArray();
+        /** @phpstan-var encryption_jwt_claims $claims */
+        $claims = $this->claims->toArray();
+
+        return $claims;
     }
 
     public function getContentType(): string | null
     {
-        return $this->jose->get(Enum::CONTENT_TYPE, null, 'string');
+        /** @phpstan-var string|null $contentType */
+        $contentType = $this->jose->get(Enum::CONTENT_TYPE, null, 'string');
+
+        return $contentType;
     }
 
     public function getExpirationTime(): int | null
     {
-        return $this->claims->get(Enum::EXPIRATION_TIME, null, 'int');
+        /** @phpstan-var int|null $expirationTime */
+        $expirationTime = $this->claims->get(Enum::EXPIRATION_TIME, null, 'int');
+
+        return $expirationTime;
     }
 
     /**
-     * @return array<string, string>
+     * @phpstan-return encryption_jwt_headers
      */
     public function getHeaders(): array
     {
-        return $this->jose->toArray();
+        /** @phpstan-var encryption_jwt_headers $headers */
+        $headers = $this->jose->toArray();
+
+        return $headers;
     }
 
     public function getId(): string | null
     {
-        return $this->claims->get(Enum::ID, null, 'string');
+        /** @phpstan-var string|null $jwtId */
+        $jwtId = $this->claims->get(Enum::ID, null, 'string');
+
+        return $jwtId;
     }
 
     public function getIssuedAt(): int | null
     {
-        return $this->claims->get(Enum::ISSUED_AT, null, 'int');
+        /** @phpstan-var int|null $issuedAt */
+        $issuedAt = $this->claims->get(Enum::ISSUED_AT, null, 'int');
+
+        return $issuedAt;
     }
 
     public function getIssuer(): string | null
     {
-        return $this->claims->get(Enum::ISSUER, null, 'string');
+        /** @phpstan-var string|null $issuer */
+        $issuer = $this->claims->get(Enum::ISSUER, null, 'string');
+
+        return $issuer;
     }
 
     public function getNotBefore(): int | null
     {
-        return $this->claims->get(Enum::NOT_BEFORE, null, 'int');
+        /** @phpstan-var int|null $notBefore */
+        $notBefore = $this->claims->get(Enum::NOT_BEFORE, null, 'int');
+
+        return $notBefore;
     }
 
     public function getPassphrase(): string
@@ -143,7 +179,10 @@ class Builder
 
     public function getSubject(): string | null
     {
-        return $this->claims->get(Enum::SUBJECT, null, 'string');
+        /** @phpstan-var string|null $subject */
+        $subject = $this->claims->get(Enum::SUBJECT, null, 'string');
+
+        return $subject;
     }
 
     /**
@@ -169,19 +208,19 @@ class Builder
         return new Token($urlHeaders, $urlClaims, $signature);
     }
 
-    /**
-     * @return Builder
-     */
     public function init(): static
     {
-        $this->passphrase = '';
-        $this->claims     = new Collection();
-        $this->jose       = new Collection(
+        /** @phpstan-var CollectionInterface<mixed> $jose */
+        $jose = new Collection(
             [
                 Enum::TYPE => 'JWT',
                 Enum::ALGO => 'none',
             ]
         );
+
+        $this->passphrase = '';
+        $this->claims     = new Collection();
+        $this->jose       = $jose;
 
         return $this;
     }
@@ -199,21 +238,25 @@ class Builder
      * interpretation of audience values is generally application specific.
      * Use of this claim is OPTIONAL.
      *
-     * @return Builder
+     * @throws ValidatorException
      */
-    public function setAudience(array | string $audience): static
+    public function setAudience(mixed $audience): static
     {
-        if (is_string($audience)) {
-            $audience = [$audience];
+        if (!is_string($audience) && !is_array($audience)) {
+            throw new InvalidAudience();
         }
 
-        return $this->setClaim(Enum::AUDIENCE, $audience);
+        if (is_string($audience)) {
+            $aud = [$audience];
+        } else {
+            $aud = $audience;
+        }
+
+        return $this->setClaim(Enum::AUDIENCE, $aud);
     }
 
     /**
      * Sets the content type header 'cty'
-     *
-     * @return Builder
      */
     public function setContentType(string $contentType): static
     {
@@ -231,7 +274,6 @@ class Builder
      * a few minutes, to account for clock skew.  Its value MUST be a number
      * containing a NumericDate value.  Use of this claim is OPTIONAL.
      *
-     * @return Builder
      * @throws ValidatorException
      */
     public function setExpirationTime(int $timestamp): static
@@ -252,8 +294,6 @@ class Builder
      * produced by different issuers as well.  The "jti" claim can be used
      * to prevent the JWT from being replayed.  The "jti" value is a case-
      * sensitive string.  Use of this claim is OPTIONAL.
-     *
-     * @return Builder
      */
     public function setId(string $jwtId): static
     {
@@ -265,8 +305,6 @@ class Builder
      * issued.  This claim can be used to determine the age of the JWT.  Its
      * value MUST be a number containing a NumericDate value.  Use of this
      * claim is OPTIONAL.
-     *
-     * @return Builder
      */
     public function setIssuedAt(int $timestamp): static
     {
@@ -278,8 +316,6 @@ class Builder
      * JWT.  The processing of this claim is generally application specific.
      * The "iss" value is a case-sensitive string containing a StringOrURI
      * value.  Use of this claim is OPTIONAL.
-     *
-     * @return Builder
      */
     public function setIssuer(string $issuer): static
     {
@@ -295,7 +331,6 @@ class Builder
      * account for clock skew.  Its value MUST be a number containing a
      * NumericDate value.  Use of this claim is OPTIONAL.
      *
-     * @return Builder
      * @throws ValidatorException
      */
     public function setNotBefore(int $timestamp): static
@@ -308,7 +343,6 @@ class Builder
     }
 
     /**
-     * @return Builder
      * @throws ValidatorException
      */
     public function setPassphrase(string $passphrase): static
@@ -335,8 +369,6 @@ class Builder
      * The processing of this claim is generally application specific.  The
      * "sub" value is a case-sensitive string containing a StringOrURI
      * value.  Use of this claim is OPTIONAL.
-     *
-     * @return Builder
      */
     public function setSubject(string $subject): static
     {
@@ -345,8 +377,6 @@ class Builder
 
     /**
      * Sets a registered claim
-     *
-     * @return Builder
      */
     protected function setClaim(string $name, mixed $value): static
     {

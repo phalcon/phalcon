@@ -191,7 +191,20 @@ class Random
      */
     public function base64Safe(int $len = 16, bool $padding = false): string
     {
-        $output = $this->doEncodeUrl($this->base64($len));
+        $output = strtr(
+            $this->phpBase64Encode(
+                $this->base64($len)
+            ),
+            '+/',
+            '-_'
+        );
+
+        /** @phpstan-var string $output */
+        $output = preg_replace(
+            '#[^a-z0-9_=-]+#i',
+            '',
+            $output
+        );
 
         if (!$padding) {
             return rtrim($output, '=');
@@ -244,9 +257,13 @@ class Random
      */
     public function hex(int $len = 16): string
     {
+        /** @phpstan-var array<array-key, string> $unpacked */
         $unpacked = unpack('H*', $this->bytes($len));
 
-        return array_shift($unpacked);
+        /** @phpstan-var string $hex */
+        $hex = array_shift($unpacked);
+
+        return $hex;
     }
 
     /**
@@ -309,7 +326,8 @@ class Random
     protected function base(string $alphabet, int $base, int $number = 16): string
     {
         $byteString = '';
-        $bytes      = unpack('C*', $this->bytes($number));
+        /** @phpstan-var array<array-key, int> $bytes */
+        $bytes = unpack('C*', $this->bytes($number));
         foreach ($bytes as $index) {
             $index = $index % 64;
 

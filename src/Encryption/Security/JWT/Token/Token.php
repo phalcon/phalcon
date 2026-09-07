@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT\Token;
 
+use Phalcon\Contracts\Encryption\EncryptionTypes;
 use Phalcon\Encryption\Security\JWT\Signer\SignerInterface;
 use Phalcon\Encryption\Security\JWT\Validator;
 
@@ -27,6 +28,8 @@ use Phalcon\Encryption\Security\JWT\Validator;
  * @property Signature $signature
  *
  * @link https://tools.ietf.org/html/rfc7519
+ *
+ * @phpstan-import-type encryption_jwt_errors from EncryptionTypes
  */
 class Token
 {
@@ -101,7 +104,7 @@ class Token
      * an empty error array as valid only after the signature check passes.
      * A signature-aware default is planned for a future major version.
      *
-     * @return array<array-key, string>
+     * @phpstan-return encryption_jwt_errors
      */
     public function validate(Validator $validator): array
     {
@@ -117,6 +120,7 @@ class Token
 
         foreach ($methods as $method => $claimValue) {
             if (null !== $claimValue) {
+                /** @phpstan-var string $method */
                 $validator->$method($claimValue);
             }
         }

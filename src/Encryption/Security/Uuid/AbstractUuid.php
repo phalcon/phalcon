@@ -102,23 +102,31 @@ abstract class AbstractUuid implements UuidInterface
      */
     protected function namespaceToBytes(string $uuid): string
     {
-        return hex2bin(
+        /** @phpstan-var string $bytes */
+        $bytes = hex2bin(
             str_replace("-", "", $uuid)
         );
+
+        return $bytes;
     }
 
     /**
      * Converts a 60-bit UUID timestamp (100-ns intervals since UUID epoch) to
      * a DateTimeImmutable. Used by Version1 and Version6.
+     *
+     * @param int $timestamp
      */
     protected function uuidTimestampToDateTime(mixed $timestamp): DateTimeImmutable
     {
         $sec  = intdiv($timestamp, 10000000) - 12219292800;
         $usec = intdiv($timestamp % 10000000, 10);
 
-        return DateTimeImmutable::createFromFormat(
+        /** @phpstan-var DateTimeImmutable $dateTime */
+        $dateTime = DateTimeImmutable::createFromFormat(
             "U u",
             $sec . " " . str_pad((string) $usec, 6, "0", STR_PAD_LEFT)
         );
+
+        return $dateTime;
     }
 }

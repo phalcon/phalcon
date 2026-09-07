@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption\Security\JWT;
 
+use Phalcon\Contracts\Encryption\EncryptionTypes;
+use Phalcon\Encryption\Security\JWT\Exceptions\InvalidAudienceType;
+use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\SignerInterface;
 use Phalcon\Encryption\Security\JWT\Token\Enum;
 use Phalcon\Encryption\Security\JWT\Token\Token;
@@ -20,16 +23,20 @@ use Phalcon\Time\Clock\ClockInterface;
 
 /**
  * Class Validator
+ *
+ * @phpstan-import-type encryption_jwt_audience from EncryptionTypes
+ * @phpstan-import-type encryption_jwt_errors from EncryptionTypes
+ * @phpstan-import-type encryption_jwt_validator_claims from EncryptionTypes
  */
 class Validator
 {
     /**
-     * @var array<string, int|string|null>
+     * @phpstan-var encryption_jwt_validator_claims
      */
     private array $claims;
 
     /**
-     * @var array<array-key, string>
+     * @phpstan-var encryption_jwt_errors
      */
     private array $errors = [];
 
@@ -75,6 +82,8 @@ class Validator
 
     /**
      * Return an array with validation errors (if any)
+     *
+     * @phpstan-return encryption_jwt_errors
      */
     public function getErrors(): array
     {
@@ -83,8 +92,6 @@ class Validator
 
     /**
      * Set the value of a claim, for comparison with the token values
-     *
-     * @return Validator
      */
     public function set(string $claim, mixed $value): static
     {
@@ -95,8 +102,6 @@ class Validator
 
     /**
      * Set the token to be validated
-     *
-     * @return Validator
      */
     public function setToken(Token $token): static
     {
@@ -108,17 +113,19 @@ class Validator
     /**
      * Validate the audience
      *
-     * @param string|string[] $audience
-     *
-     * @return Validator
+     * @throws ValidatorException
      */
-    public function validateAudience(array | string $audience): static
+    public function validateAudience(mixed $audience): static
     {
+        if (!is_string($audience) && !is_array($audience)) {
+            throw new InvalidAudienceType();
+        }
+
         if (is_string($audience)) {
             $audience = [$audience];
         }
 
-        /** @var array $tokenAudience */
+        /** @phpstan-var array<array-key, mixed> $tokenAudience */
         $tokenAudience = $this->token->getClaims()
                                      ->get(Enum::AUDIENCE, [])
         ;
@@ -134,8 +141,6 @@ class Validator
 
     /**
      * Validate a claim
-     *
-     * @return Validator
      */
     public function validateClaim(string $name, bool | int | string $value): static
     {
@@ -150,12 +155,13 @@ class Validator
 
     /**
      * Validate the expiration time of the token
-     *
-     * @return Validator
      */
     public function validateExpiration(int $timestamp): static
     {
-        $tokenExpirationTime = (int) $this->token->getClaims()->get(Enum::EXPIRATION_TIME);
+        /** @phpstan-var int|string|null $claimValue */
+        $claimValue = $this->token->getClaims()->get(Enum::EXPIRATION_TIME);
+
+        $tokenExpirationTime = (int) $claimValue;
 
         if (
             $this->token->getClaims()->has(Enum::EXPIRATION_TIME) &&
@@ -171,8 +177,6 @@ class Validator
      * Validate the id of the token
      *
      * A null id expresses no expectation and is skipped.
-     *
-     * @return Validator
      */
     public function validateId(string | null $jwtId = null): static
     {
@@ -180,7 +184,10 @@ class Validator
             return $this;
         }
 
-        $tokenId = (string)$this->token->getClaims()->get(Enum::ID);
+        /** @phpstan-var int|string|null $claimValue */
+        $claimValue = $this->token->getClaims()->get(Enum::ID);
+
+        $tokenId = (string) $claimValue;
 
         if ($jwtId !== $tokenId) {
             $this->errors[] = "Validation: incorrect Id";
@@ -194,14 +201,15 @@ class Validator
      *
      * A token issued at exactly $timestamp is valid. Only a token issued after
      * it, i.e. in the future, is rejected.
-     *
-     * @return Validator
      */
     public function validateIssuedAt(int $timestamp): static
     {
-        $tokenIssuedAt = (int)$this->token->getClaims()
-                                          ->get(Enum::ISSUED_AT)
+        /** @phpstan-var int|string|null $claimValue */
+        $claimValue = $this->token->getClaims()
+                                  ->get(Enum::ISSUED_AT)
         ;
+
+        $tokenIssuedAt = (int) $claimValue;
 
         if ($this->getTimestamp($timestamp) < $tokenIssuedAt) {
             $this->errors[] = "Validation: the token cannot be used yet (future)";
@@ -214,8 +222,6 @@ class Validator
      * Validate the issuer of the token
      *
      * A null issuer expresses no expectation and is skipped.
-     *
-     * @return Validator
      */
     public function validateIssuer(string | null $issuer = null): static
     {
@@ -223,9 +229,12 @@ class Validator
             return $this;
         }
 
-        $tokenIssuer = (string)$this->token->getClaims()
-                                           ->get(Enum::ISSUER)
+        /** @phpstan-var int|string|null $claimValue */
+        $claimValue = $this->token->getClaims()
+                                  ->get(Enum::ISSUER)
         ;
+
+        $tokenIssuer = (string) $claimValue;
 
         if ($issuer !== $tokenIssuer) {
             $this->errors[] = "Validation: incorrect issuer";
@@ -239,14 +248,15 @@ class Validator
      *
      * A token is valid at exactly $timestamp. Only a timestamp before the
      * "nbf" claim is rejected.
-     *
-     * @return Validator
      */
     public function validateNotBefore(int $timestamp): static
     {
-        $tokenNotBefore = (int)$this->token->getClaims()
-                                           ->get(Enum::NOT_BEFORE)
+        /** @phpstan-var int|string|null $claimValue */
+        $claimValue = $this->token->getClaims()
+                                  ->get(Enum::NOT_BEFORE)
         ;
+
+        $tokenNotBefore = (int) $claimValue;
 
         if ($this->getTimestamp($timestamp) < $tokenNotBefore) {
             $this->errors[] = "Validation: the token cannot be used yet (not before)";
@@ -257,8 +267,6 @@ class Validator
 
     /**
      * Validate the signature of the token
-     *
-     * @return Validator
      */
     public function validateSignature(
         SignerInterface $signer,
@@ -282,8 +290,6 @@ class Validator
      * Validate the subject of the token
      *
      * A null subject expresses no expectation and is skipped.
-     *
-     * @return Validator
      */
     public function validateSubject(string | null $subject = null): static
     {
@@ -291,9 +297,12 @@ class Validator
             return $this;
         }
 
-        $tokenSubject = (string)$this->token->getClaims()
-                                            ->get(Enum::SUBJECT)
+        /** @phpstan-var int|string|null $claimValue */
+        $claimValue = $this->token->getClaims()
+                                  ->get(Enum::SUBJECT)
         ;
+
+        $tokenSubject = (string) $claimValue;
 
         if ($subject !== $tokenSubject) {
             $this->errors[] = "Validation: incorrect subject";

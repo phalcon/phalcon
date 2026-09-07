@@ -52,6 +52,7 @@ class SysNodeProvider implements NodeProviderInterface
         }
 
         if ($this->phpFunctionExists("apcu_fetch")) {
+            /** @phpstan-var false|string $cached */
             $cached = apcu_fetch("__phalcon_uuid_node");
             if ($cached !== false) {
                 $this->node = $cached;
@@ -72,7 +73,10 @@ class SysNodeProvider implements NodeProviderInterface
                         continue;
                     }
 
-                    $node = trim($this->phpFileGetContents($address));
+                    /** @phpstan-var string $contents */
+                    $contents = $this->phpFileGetContents($address);
+
+                    $node = trim($contents);
                     $node = str_replace(":", "", $node);
 
                     if ($this->isValidNode($node)) {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Encryption;
 
+use Phalcon\Contracts\Encryption\EncryptionTypes;
 use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Encryption\Crypt\Exception\DecryptionFailed;
 use Phalcon\Encryption\Crypt\Exception\EmptyDecryptionKey;
@@ -52,6 +53,10 @@ use Throwable;
  *
  * echo $crypt->decrypt($encrypted, $key);
  * ```
+ *
+ * @phpstan-import-type encryption_cipher_list from EncryptionTypes
+ * @phpstan-import-type encryption_hash_algorithms from EncryptionTypes
+ * @phpstan-import-type encryption_hash_length_cache from EncryptionTypes
  */
 class Crypt implements CryptInterface
 {
@@ -81,6 +86,8 @@ class Crypt implements CryptInterface
 
     /**
      * Available cipher methods.
+     *
+     * @phpstan-var encryption_cipher_list
      */
     protected array $availableCiphers = [];
 
@@ -96,6 +103,8 @@ class Crypt implements CryptInterface
      * algorithm name. The hash output length is deterministic for a
      * given algorithm, so this collapses the per-decrypt strlen+hash
      * call to a single hash lookup after warm-up.
+     *
+     * @phpstan-var encryption_hash_length_cache
      */
     protected array $hashLengthCache = [];
 
@@ -255,8 +264,6 @@ class Crypt implements CryptInterface
     /**
      * Decrypt a text that is coded as a base64 string.
      *
-     * @param mixed|null $key
-     *
      * @throws Exception
      * @throws Mismatch
      */
@@ -335,8 +342,6 @@ class Crypt implements CryptInterface
     /**
      * Encrypts a text returning the result as a base64 string.
      *
-     * @param mixed|null $key
-     *
      * @throws Exception
      */
     public function encryptBase64(
@@ -386,6 +391,8 @@ class Crypt implements CryptInterface
 
     /**
      * Returns a list of available ciphers.
+     *
+     * @phpstan-return encryption_cipher_list
      */
     public function getAvailableCiphers(): array
     {
@@ -394,6 +401,8 @@ class Crypt implements CryptInterface
 
     /**
      * Return a list of registered hashing algorithms suitable for hash_hmac.
+     *
+     * @phpstan-return encryption_hash_algorithms
      */
     public function getAvailableHashAlgorithms(): array
     {
@@ -742,6 +751,7 @@ class Crypt implements CryptInterface
                 $authTagLength
             );
 
+            /** @phpstan-var non-empty-string $authTag */
             $this->authTag = $authTag;
         } else {
             $encrypted = openssl_encrypt(
@@ -814,6 +824,8 @@ class Crypt implements CryptInterface
 
     /**
      * Checks if a mode (string) is in the values to compare (modes array)
+     *
+     * @phpstan-param encryption_cipher_list $modes
      */
     private function checkIsMode(array $modes, string $mode): bool
     {

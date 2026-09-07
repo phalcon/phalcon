@@ -48,6 +48,7 @@ class PadFactory extends AbstractFactory
      */
     public function newInstance(string $name): PadInterface
     {
+        /** @var class-string<PadInterface> $definition */
         $definition = $this->getService($name);
 
         return new $definition();

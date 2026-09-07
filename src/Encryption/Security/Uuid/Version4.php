@@ -28,15 +28,19 @@ class Version4 extends AbstractUuid
 {
     public function __construct()
     {
-        $ary = array_values(
-            unpack("N1a/n1b/n1c/n1d/n1e/N1f", random_bytes(16))
-        );
+        /** @phpstan-var array<array-key, int> $unpacked */
+        $unpacked = unpack("N1a/n1b/n1c/n1d/n1e/N1f", random_bytes(16));
+
+        $ary = array_values($unpacked);
 
         $ary[2] = ($ary[2] & 0x0fff) | 0x4000;
         $ary[3] = ($ary[3] & 0x3fff) | 0x8000;
 
         array_unshift($ary, "%08x-%04x-%04x-%04x-%04x%08x");
 
-        $this->uid = call_user_func_array("sprintf", $ary);
+        /** @phpstan-var string $uid */
+        $uid = call_user_func_array("sprintf", $ary);
+
+        $this->uid = $uid;
     }
 }
