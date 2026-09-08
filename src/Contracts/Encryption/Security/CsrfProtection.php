@@ -17,7 +17,7 @@ interface CsrfProtection
 {
     public function checkToken(
         string | null $tokenKey = null,
-        string | null $tokenValue = null,
+        mixed $tokenValue = null,
         bool $destroyIfValid = true
     ): bool;
 

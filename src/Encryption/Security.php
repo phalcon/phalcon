@@ -144,8 +144,6 @@ class Security extends AbstractInjectionAware implements SecurityContract
     /**
      * Check if the CSRF token sent in the request is the same that the current
      * in session
-     *
-     * @param string|null $tokenValue
      */
     public function checkToken(
         ?string $tokenKey = null,
@@ -164,6 +162,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
         /**
          * The value is the same?
          */
+        /** @phpstan-var string|null $tokenValue */
         $userToken  = $this->processUserToken($tokenKey, $tokenValue);
         $knownToken = $this->getRequestToken();
         if (null === $knownToken || null === $userToken) {
