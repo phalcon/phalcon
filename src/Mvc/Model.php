@@ -64,6 +64,7 @@ use Phalcon\Mvc\Model\Exceptions\StaticMethodRequiresOneArgument;
 use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerHydration;
 use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerResultset;
 use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
+use Phalcon\Mvc\Model\Hydration\CaseInsensitiveColumnMap;
 use Phalcon\Mvc\Model\Hydration\CloneResultMapHydrate;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\ManagerInterface;
@@ -2065,30 +2066,6 @@ abstract class Model extends AbstractInjectionAware implements
         }
     }
 
-    /**
-     * Attempts to find key case-insensitively
-     */
-    private static function caseInsensitiveColumnMap(
-        mixed $columnMap,
-        mixed $key
-    ): string {
-        // The column map is an array. Its keys are the column names.
-        // The key is a column name.
-        /**
-         * @var array<array-key, mixed> $columnMap
-         * @var string                  $key
-         * @var list<string>            $keys
-         */
-        $keys = array_keys($columnMap);
-        foreach ($keys as $cmKey) {
-            if (strtolower($cmKey) == strtolower($key)) {
-                return $cmKey;
-            }
-        }
-
-        return $key;
-    }
-
     private static function castSpatial(mixed $value): mixed
     {
         try {
@@ -2463,7 +2440,7 @@ abstract class Model extends AbstractInjectionAware implements
                 !isset($columnMap[$attribute]) &&
                 Settings::get("orm.case_insensitive_column_map")
             ) {
-                $attribute = self::caseInsensitiveColumnMap(
+                $attribute = CaseInsensitiveColumnMap::caseInsensitiveColumnMap(
                     $columnMap,
                     $attribute
                 );
@@ -4131,7 +4108,7 @@ abstract class Model extends AbstractInjectionAware implements
                     !isset($columnMap[$key]) &&
                     Settings::get("orm.case_insensitive_column_map")
                 ) {
-                    $key = self::caseInsensitiveColumnMap($columnMap, $key);
+                    $key = CaseInsensitiveColumnMap::caseInsensitiveColumnMap($columnMap, $key);
                 }
 
                 /**
@@ -4326,7 +4303,7 @@ abstract class Model extends AbstractInjectionAware implements
                     !isset($columnMap[$attribute]) &&
                     Settings::get("orm.case_insensitive_column_map")
                 ) {
-                    $attribute = self::caseInsensitiveColumnMap(
+                    $attribute = CaseInsensitiveColumnMap::caseInsensitiveColumnMap(
                         $columnMap,
                         $attribute
                     );
