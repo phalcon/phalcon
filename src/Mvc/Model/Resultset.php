@@ -913,6 +913,11 @@ abstract class Resultset implements
             $this->seek($this->pointer);
         }
 
-        return is_array($this->row);
+        /**
+         * `null` and `false` are the two sentinels seek() leaves behind for
+         * "no row here". The row itself can be of any type - an unserialized
+         * complex resultset holds rows that are already hydrated objects.
+         */
+        return $this->row !== null && $this->row !== false;
     }
 }
