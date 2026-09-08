@@ -66,6 +66,7 @@ use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerResultset;
 use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
 use Phalcon\Mvc\Model\Hydration\CaseInsensitiveColumnMap;
 use Phalcon\Mvc\Model\Hydration\CloneResultMapHydrate;
+use Phalcon\Mvc\Model\Hydration\GetPrivateProperties;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\ManagerInterface;
 use Phalcon\Mvc\Model\MetaDataInterface;
@@ -209,14 +210,6 @@ abstract class Model extends AbstractInjectionAware implements
     public const OP_UPDATE              = 2;
     public const TRANSACTION_INDEX      = "transaction";
 
-    /**
-     * Per-process cache of declared private model properties as
-     * [class name => [property name => ReflectionProperty]], used during
-     * hydration - see getPrivateProperties()
-     *
-     * @phpstan-var array<class-string, array<string, \ReflectionProperty>>
-     */
-    private static array $privatePropertiesCache = [];
     /**
      * @phpstan-var mvc_model_related
      */
@@ -900,9 +893,9 @@ abstract class Model extends AbstractInjectionAware implements
 
         /**
          * Declared private properties must be written via reflection during
-         * hydration - see getPrivateProperties()
+         * hydration - see Hydration\GetPrivateProperties
          */
-        $privateProperties = self::getPrivateProperties(get_class($instance));
+        $privateProperties = GetPrivateProperties::getPrivateProperties(get_class($instance));
 
         /**
          * Mark the object as persistent
@@ -963,9 +956,9 @@ abstract class Model extends AbstractInjectionAware implements
 
         /**
          * Declared private properties must be written via reflection during
-         * hydration - see getPrivateProperties()
+         * hydration - see Hydration\GetPrivateProperties
          */
-        $privateProperties = self::getPrivateProperties(get_class($instance));
+        $privateProperties = GetPrivateProperties::getPrivateProperties(get_class($instance));
 
         if ($instance instanceof Model) {
             $metaData          = $instance->getModelsMetaData();
@@ -2149,53 +2142,6 @@ abstract class Model extends AbstractInjectionAware implements
         return $query;
     }
 
-    /**
-     * Returns the declared private properties of a class (including inherited
-     * ones) as [property name => ReflectionProperty], cached per class.
-     *
-     * Hydration (cloneResult/cloneResultMap) cannot write private properties
-     * directly: the write from Model scope falls back to __set(), which
-     * invokes a possible setter - or throws for a non-public property
-     * without one. Writing through ReflectionProperty stores the raw
-     * database value instead.
-     *
-     * @return array<string, \ReflectionProperty>
-     *
-     * @see https://github.com/phalcon/cphalcon/issues/16454
-     *
-     * @phpstan-param class-string $className
-     */
-    private static function getPrivateProperties(string $className): array
-    {
-        if (!isset(self::$privatePropertiesCache[$className])) {
-            $privateProperties = [];
-            $reflection        = new \ReflectionClass($className);
-
-            while ($reflection instanceof \ReflectionClass) {
-                $reflectionProperties = $reflection->getProperties(
-                    \ReflectionProperty::IS_PRIVATE
-                );
-
-                foreach ($reflectionProperties as $reflectionProperty) {
-                    if ($reflectionProperty->isStatic()) {
-                        continue;
-                    }
-
-                    $propertyName = $reflectionProperty->getName();
-
-                    if (!isset($privateProperties[$propertyName])) {
-                        $privateProperties[$propertyName] = $reflectionProperty;
-                    }
-                }
-
-                $reflection = $reflection->getParentClass();
-            }
-
-            self::$privatePropertiesCache[$className] = $privateProperties;
-        }
-
-        return self::$privatePropertiesCache[$className];
-    }
 
     /**
      * Pre-loads the relations named by the `eager` find parameter.
