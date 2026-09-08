@@ -17,16 +17,32 @@
     "phalcon/traits": "^4.1",
     "psr/event-dispatcher": "^1.0"
   },
-  "suggest": {
-    "ext-apcu": "to use Cache\\Adapter\\Apcu, Storage\\Adapter\\Apcu",
-    "ext-gd": "to use Image\\Adapter\\Gd",
-    "ext-igbinary": "to use Storage\\Serializer\\Igbinary",
-    "ext-imagick": "to use Image\\Adapter\\Imagick",
-    "ext-memcached": "to use Cache\\Adapter\\Libmemcached, Session\\Adapter\\Libmemcached, Storage\\Adapter\\Libmemcached",
-    "ext-openssl": "to use Encryption\\Crypt",
-    "ext-pcntl": "to use signal-based graceful shutdown in Queue\\Consumer\\Worker",
-    "ext-redis": "to use Cache\\Adapter\\Redis, Session\\Adapter\\Redis, Storage\\Adapter\\Redis",
-    "ext-yaml": "to use Config\\Adapter\\Yaml"
+  "require-dev": {
+    "ext-gettext": "*",
+    "ext-yaml": "*",
+    "friendsofphp/php-cs-fixer": "^3.95",
+    "pds/composer-script-names": "^1.0",
+    "pds/skeleton": "^1.0",
+    "phalcon/phql": "1.0.x-dev",
+    "phalcon/quill": "^0.5.0",
+    "phalcon/talon": "^1.0.0",
+    "phalcon/code-quality": "^1.0",
+    "phalcon/volt": "1.0.x-dev",
+    "phpbench/phpbench": "^1.4",
+    "phpstan/phpstan": "^2.2",
+    "phpunit/phpunit": "^10.5",
+    "predis/predis": "^3.4",
+    "squizlabs/php_codesniffer": "^4.0",
+    "vlucas/phpdotenv": "^5.6"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "allow-plugins": {
+      "infection/extension-installer": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   },
   "autoload": {
     "psr-4": {
@@ -45,23 +61,16 @@
       "tests/support/assets/"
     ]
   },
-  "require-dev": {
-    "ext-gettext": "*",
-    "ext-yaml": "*",
-    "friendsofphp/php-cs-fixer": "^3.95",
-    "pds/composer-script-names": "^1.0",
-    "pds/skeleton": "^1.0",
-    "phalcon/phql": "1.0.x-dev",
-    "phalcon/talon": "^1.0.0",
-    "phalcon/volt": "1.0.x-dev",
-    "phpbench/phpbench": "^1.4",
-    "phpstan/phpstan": "^2.2",
-    "phpunit/phpunit": "^10.5",
-    "predis/predis": "^3.4",
-    "squizlabs/php_codesniffer": "^4.0",
-    "vlucas/phpdotenv": "^5.6",
-    "phalcon/quill": "^0.5.0",
-    "phalcon/code-quality": "^1.0"
+  "suggest": {
+    "ext-apcu": "to use Cache\\Adapter\\Apcu, Storage\\Adapter\\Apcu",
+    "ext-gd": "to use Image\\Adapter\\Gd",
+    "ext-igbinary": "to use Storage\\Serializer\\Igbinary",
+    "ext-imagick": "to use Image\\Adapter\\Imagick",
+    "ext-memcached": "to use Cache\\Adapter\\Libmemcached, Session\\Adapter\\Libmemcached, Storage\\Adapter\\Libmemcached",
+    "ext-openssl": "to use Encryption\\Crypt",
+    "ext-pcntl": "to use signal-based graceful shutdown in Queue\\Consumer\\Worker",
+    "ext-redis": "to use Cache\\Adapter\\Redis, Session\\Adapter\\Redis, Storage\\Adapter\\Redis",
+    "ext-yaml": "to use Config\\Adapter\\Yaml"
   },
   "scripts": {
     "analyze": "vendor/bin/phpstan analyse -c resources/phpstan.neon --memory-limit 1024M",
@@ -138,11 +147,5 @@
       "Composer\\Config::disableProcessTimeout",
       "talon run all"
     ]
-  },
-  "config": {
-    "allow-plugins": {
-      "infection/extension-installer": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
-    }
   }
 }
