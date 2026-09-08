@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Container\Fake;
 
+use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 
-class InjectionAwareComponent implements InjectionAwareInterface
+class InjectionAwareComponent extends AbstractInjectionAware implements InjectionAwareInterface
 {
-    use InjectionAwareTrait;
 }

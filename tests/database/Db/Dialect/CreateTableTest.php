@@ -150,6 +150,13 @@ final class CreateTableTest extends AbstractDatabaseTestCase
         $this->assertSame($expected, $actual);
     }
 
+    /**
+     * A column comment is a string literal: quotes and backslashes are
+     * escaped like the DEFAULT clause, so a comment cannot end the literal.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
+     */
     #[Group('mysql')]
     public function testDbDialectCreateTableEscapesComment(): void
     {
