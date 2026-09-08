@@ -155,8 +155,11 @@ class Query implements QueryInterface, InjectionAwareInterface
     use InjectionAwareTrait;
 
     public const TYPE_DELETE = 303;
+
     public const TYPE_INSERT = 306;
+
     public const TYPE_SELECT = 309;
+
     public const TYPE_UPDATE = 300;
 
     /**
@@ -1725,11 +1728,11 @@ class Query implements QueryInterface, InjectionAwareInterface
                     unset($selectBindTypes[$wildcard]);
 
                     break;
-                /**
-                 * @todo duplicate branch
-                 */
-//                case Opcode::BPLACEHOLDER->value:
-//                    throw new Exception("Not supported");
+                    /**
+                     * @todo duplicate branch
+                     */
+                    //                case Opcode::BPLACEHOLDER->value:
+                    //                    throw new Exception("Not supported");
 
                 default:
                     $sqlExpr = $dialect->getSqlExpression($exprValue);

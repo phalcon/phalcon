@@ -25,6 +25,7 @@ class Manager
      * @phpstan-var array<string, Form>
      */
     protected array $forms = [];
+
     protected FormsLocator $locator;
 
     /**
@@ -91,7 +92,7 @@ class Manager
 
         $this->locator->set(
             $name,
-            fn(object | null $e) => (new Form($e))->load($schema, $locator)
+            fn (object | null $e) => (new Form($e))->load($schema, $locator)
         );
 
         return $form;

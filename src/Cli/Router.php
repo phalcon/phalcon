@@ -56,28 +56,39 @@ use function substr;
 class Router extends AbstractInjectionAware implements RouterInterface
 {
     protected string $action        = "";
+
     protected string $defaultAction = "";
+
     protected string $defaultModule = "";
+
     /**
      * @phpstan-var cli_parameters
      */
     protected array $defaultParams          = [];
+
     protected string $defaultTask           = "";
+
     protected ?RouteInterface $matchedRoute = null;
+
     /**
      * @var array<array-key, string>
      */
     protected array $matches = [];
+
     protected string $module = "";
+
     /**
      * @phpstan-var cli_parameters
      */
     protected array $parameters = [];
+
     /**
      * @phpstan-var cli_routes
      */
     protected array $routes    = [];
+
     protected string $task     = "";
+
     protected bool $wasMatched = false;
 
     /**

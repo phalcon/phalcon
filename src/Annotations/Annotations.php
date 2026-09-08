@@ -27,11 +27,14 @@ use Phalcon\Storage\Adapter\AdapterInterface;
 class Annotations
 {
     private const CACHE_PREFIX = '_PHATN';
+
     protected AdapterInterface $adapter;
+
     /**
      * @phpstan-var annotations_attributes
      */
     protected array $attributes              = [];
+
     protected ReaderInterface | null $reader = null;
 
     public function __construct(AdapterInterface $adapter)

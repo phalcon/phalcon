@@ -42,6 +42,7 @@ abstract class AbstractValidator implements ValidatorInterface
      * @phpstan-var filter_validator_options
      */
     protected array $options = [];
+
     /**
      * Message template
      */

@@ -30,7 +30,9 @@ use Phalcon\Translate\InterpolatorFactory;
 abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
 {
     protected string $defaultInterpolator                = '';
+
     protected InterpolatorInterface | null $interpolator = null;
+
     protected bool $triggerError                         = false;
 
     /**

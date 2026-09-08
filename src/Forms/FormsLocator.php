@@ -178,20 +178,20 @@ class FormsLocator
     protected function getDefaultServices(): array
     {
         return [
-            'check'      => fn(string $n, array $o, array $a): ElementInterface => new Check($n, $a),
-            'checkgroup' => fn(string $n, array $o, array $a): ElementInterface => new CheckGroup($n, $o, $a),
-            'date'       => fn(string $n, array $o, array $a): ElementInterface => new Date($n, $a),
-            'email'      => fn(string $n, array $o, array $a): ElementInterface => new Email($n, $a),
-            'file'       => fn(string $n, array $o, array $a): ElementInterface => new File($n, $a),
-            'hidden'     => fn(string $n, array $o, array $a): ElementInterface => new Hidden($n, $a),
-            'numeric'    => fn(string $n, array $o, array $a): ElementInterface => new Numeric($n, $a),
-            'password'   => fn(string $n, array $o, array $a): ElementInterface => new Password($n, $a),
-            'radio'      => fn(string $n, array $o, array $a): ElementInterface => new Radio($n, $a),
-            'radiogroup' => fn(string $n, array $o, array $a): ElementInterface => new RadioGroup($n, $o, $a),
-            'select'     => fn(string $n, array $o, array $a): ElementInterface => new Select($n, $o, $a),
-            'submit'     => fn(string $n, array $o, array $a): ElementInterface => new Submit($n, $a),
-            'text'       => fn(string $n, array $o, array $a): ElementInterface => new Text($n, $a),
-            'textarea'   => fn(string $n, array $o, array $a): ElementInterface => new TextArea($n, $a),
+            'check'      => fn (string $n, array $o, array $a): ElementInterface => new Check($n, $a),
+            'checkgroup' => fn (string $n, array $o, array $a): ElementInterface => new CheckGroup($n, $o, $a),
+            'date'       => fn (string $n, array $o, array $a): ElementInterface => new Date($n, $a),
+            'email'      => fn (string $n, array $o, array $a): ElementInterface => new Email($n, $a),
+            'file'       => fn (string $n, array $o, array $a): ElementInterface => new File($n, $a),
+            'hidden'     => fn (string $n, array $o, array $a): ElementInterface => new Hidden($n, $a),
+            'numeric'    => fn (string $n, array $o, array $a): ElementInterface => new Numeric($n, $a),
+            'password'   => fn (string $n, array $o, array $a): ElementInterface => new Password($n, $a),
+            'radio'      => fn (string $n, array $o, array $a): ElementInterface => new Radio($n, $a),
+            'radiogroup' => fn (string $n, array $o, array $a): ElementInterface => new RadioGroup($n, $o, $a),
+            'select'     => fn (string $n, array $o, array $a): ElementInterface => new Select($n, $o, $a),
+            'submit'     => fn (string $n, array $o, array $a): ElementInterface => new Submit($n, $a),
+            'text'       => fn (string $n, array $o, array $a): ElementInterface => new Text($n, $a),
+            'textarea'   => fn (string $n, array $o, array $a): ElementInterface => new TextArea($n, $a),
         ];
     }
 }

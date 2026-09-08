@@ -129,55 +129,65 @@ class Memory extends AbstractAdapter
      * @var array<string, int>
      */
     protected array $access = [];
+
     /**
      * Access List
      *
      * @var array<string, bool>
      */
     protected array $accessList = ["*!*" => true];
+
     /**
      * Returns the latest function used to acquire access
      */
     protected mixed $activeFunction;
+
     /**
      * Returns number of additional arguments(excluding role and resource) for
      * active function
      */
     protected int $activeFunctionCustomArgumentsCount = 0;
+
     /**
      * Returns the latest key used to acquire access
      *
      * @var string|null
      */
     protected mixed $activeKey = null;
+
     /**
      * Components
      *
      * @var acl_components
      */
     protected array $components = [];
+
     /**
      * Component Names
      *
      * @var array<string, bool>
      */
     protected array $componentsNames = ["*" => true];
+
     /**
      * Function List
      *
      * @var array<string, callable|string>
      */
     protected array $functions = [];
+
     /**
      * Default action for no arguments is `deny`
      */
     protected int $noArgumentsDefaultAction = Enum::DENY;
+
     /**
      * Role Inherits
      *
      * @var array<string, array<int, string>>
      */
     protected array $roleInherits = [];
+
     /**
      * Roles
      *

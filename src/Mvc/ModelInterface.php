@@ -172,6 +172,7 @@ interface ModelInterface
      * Allows to calculate a sum on a column that match the specified conditions
      */
     public static function sum(mixed $parameters = null): float | ResultsetInterface;
+
     /**
      * Appends a customized message on the validation process
      */

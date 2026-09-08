@@ -88,14 +88,17 @@ class Column implements ColumnInterface
      * Big integer abstract data type
      */
     public const TYPE_BIGINTEGER = 14;
+
     /**
      * Binary abstract data type
      */
     public const TYPE_BINARY = 27;
+
     /**
      * Bit abstract data type
      */
     public const TYPE_BIT = 19;
+
     /**
      * Blob abstract data type
      */

@@ -20,8 +20,11 @@ namespace Phalcon\Assets\Traits;
 trait SourceTargetTrait
 {
     protected bool $isLocal      = true;
+
     protected string $sourcePath = '';
+
     protected string $targetPath = '';
+
     protected string $targetUri  = '';
 
     public function getSourcePath(): string

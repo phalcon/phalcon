@@ -64,26 +64,32 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      * Render Level: To the action view
      */
     public const LEVEL_ACTION_VIEW = 1;
+
     /**
      * Render Level: Render to the templates "after"
      */
     public const LEVEL_AFTER_TEMPLATE = 4;
+
     /**
      * Render Level: To the templates "before"
      */
     public const LEVEL_BEFORE_TEMPLATE = 2;
+
     /**
      * Render Level: To the controller layout
      */
     public const LEVEL_LAYOUT = 3;
+
     /**
      * Render Level: To the main layout
      */
     public const LEVEL_MAIN_LAYOUT = 5;
+
     /**
      * Render Level: No render any view
      */
     public const LEVEL_NO_RENDER = 0;
+
     protected string $actionName;
 
     /**

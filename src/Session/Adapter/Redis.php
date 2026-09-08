@@ -31,6 +31,7 @@ use function usleep;
 class Redis extends AbstractAdapter
 {
     protected bool $lockAcquired = false;
+
     /**
      * Lock time-to-live in seconds. The lock is not refreshed during the
      * request: a request that runs longer than this expiry loses its lock
@@ -39,11 +40,17 @@ class Redis extends AbstractAdapter
      * longest expected request to retain the lock for the whole request.
      */
     protected int $lockExpiry      = 30;
+
     protected bool $lockingEnabled = false;
+
     protected string $lockKey      = '';
+
     protected int $lockRetries     = 100;
+
     protected string $lockToken    = '';
+
     protected int $lockWaitTime    = 50000;
+
     protected string $prefix       = '';
 
     /**

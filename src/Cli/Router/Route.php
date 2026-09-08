@@ -49,26 +49,36 @@ class Route implements RouteInterface
      * @var string
      */
     public const DEFAULT_DELIMITER          = " ";
+
     protected static ?string $delimiterPath = self::DEFAULT_DELIMITER;
+
     protected static int $uniqueId          = 0;
 
     /**
      * @var mixed|null
      */
     protected mixed $beforeMatch      = null;
+
     protected string $compiledPattern = "";
+
     /**
      * @phpstan-var cli_route_converters
      */
     protected array $converters = [];
+
     protected ?string $delimiter;
+
     protected string $description = "";
+
     protected string $name        = "";
+
     /**
      * @phpstan-var cli_route_paths
      */
     protected array $paths    = [];
+
     protected string $pattern = "";
+
     protected string $routeId;
 
     /**

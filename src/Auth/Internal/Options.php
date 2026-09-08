@@ -81,7 +81,6 @@ final class Options
         return $value;
     }
 
-
     /**
      * @param array<string, mixed> $options
      */

@@ -29,20 +29,26 @@ final class ExceptionReport
      * @var BacktraceItem[]
      */
     private array $backtrace = [];
+
     /**
      * @phpstan-var support_debug_included_files
      */
     private array $includedFiles = [];
+
     private int $memoryUsage     = 0;
+
     private int $peakMemoryUsage = 0;
+
     /**
      * @phpstan-var support_debug_superglobal
      */
     private array $request = [];
+
     /**
      * @phpstan-var support_debug_superglobal
      */
     private array $server = [];
+
     /**
      * @phpstan-var support_debug_variables
      */

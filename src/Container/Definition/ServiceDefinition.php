@@ -58,24 +58,32 @@ class ServiceDefinition
      * @phpstan-var container_arguments
      */
     protected array $arguments         = [];
+
     protected string | null $className = null;
+
     /**
      * @phpstan-var container_arguments
      */
     protected array $constructorArgs = [];
 
     protected object | null $container = null;
+
     /**
      * @phpstan-var container_extenders
      */
     protected array $extenders = [];
+
     /**
      * @var callable|null
      */
     protected mixed $factory    = null;
+
     protected bool $frozen      = false;
+
     protected bool $isCacheable = false;
+
     protected string $lifetime  = ServiceLifetime::SCOPED;
+
     /**
      * @phpstan-var container_tags
      */

@@ -38,7 +38,9 @@ use const PHP_EOL;
 abstract class AbstractHelper
 {
     protected string $delimiter = PHP_EOL;
+
     protected string $indent    = '    ';
+
     protected int $indentLevel  = 1;
 
     /**

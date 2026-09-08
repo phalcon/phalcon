@@ -68,6 +68,7 @@ interface IocContainer
      * @return ioc_service_object
      */
     public function getService(string $serviceName): object;
+
     /**
      * Is the container able to return an instance of the `$serviceName`?
      *

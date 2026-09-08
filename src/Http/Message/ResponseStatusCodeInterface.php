@@ -47,10 +47,12 @@ interface ResponseStatusCodeInterface
      * @var int
      */
     public const STATUS_ACCEPTED                        = 202;
+
     /**
      * @var int
      */
     public const STATUS_ALREADY_REPORTED                = 208;
+
     /**
      * @var int
      */
@@ -61,75 +63,93 @@ interface ResponseStatusCodeInterface
      * @var int
      */
     public const STATUS_BAD_REQUEST                     = 400;
+
     /**
      * @var int
      */
     public const STATUS_BANDWIDTH_LIMIT_EXCEEDED             = 509; // Unofficial - Apache/cPanel
+
     /**
      * @var int
      */
     public const STATUS_BLOCKED_BY_WINDOWS_PARENTAL_CONTROLS = 450; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_CLIENT_CLOSED_REQUEST                = 499; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_CONFLICT                        = 409;
+
     /**
      * @var int
      */
     public const STATUS_CONNECTION_TIMEOUT                   = 522; // Unofficial - Cloudflare
+
     // Informational 1xx
     /**
      * @var int
      */
     public const STATUS_CONTINUE                        = 100;
+
     /**
      * @var int
      */
     public const STATUS_CREATED                         = 201;
+
     /**
      * @var int
      */
     public const STATUS_EARLY_HINTS                     = 103;
+
     /**
      * @var int
      */
     public const STATUS_EXPECTATION_FAILED              = 417;
+
     /**
      * @var int
      */
     public const STATUS_FAILED_DEPENDENCY               = 424;
+
     /**
      * @var int
      */
     public const STATUS_FORBIDDEN                       = 403;
+
     /**
      * @var int
      */
     public const STATUS_FOUND                           = 302;
+
     /**
      * @var int
      */
     public const STATUS_GATEWAY_TIMEOUT                 = 504;
+
     /**
      * @var int
      */
     public const STATUS_GONE                            = 410;
+
     /**
      * @var int
      */
     public const STATUS_HTTP_REQUEST_SENT_TO_HTTPS_PORT      = 497; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_IM_A_TEAPOT                     = 418;
+
     /**
      * @var int
      */
     public const STATUS_IM_USED                         = 226;
+
     /**
      * @var int
      */
@@ -140,46 +160,57 @@ interface ResponseStatusCodeInterface
      * @var int
      */
     public const STATUS_INTERNAL_SERVER_ERROR           = 500;
+
     /**
      * @var int
      */
     public const STATUS_INVALID_SSL_CERTIFICATE              = 526; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_INVALID_TOKEN_ESRI                   = 498; // Unofficial - ESRI
+
     /**
      * @var int
      */
     public const STATUS_LENGTH_REQUIRED                 = 411;
+
     /**
      * @var int
      */
     public const STATUS_LOCKED                          = 423;
+
     /**
      * @var int
      */
     public const STATUS_LOGIN_TIMEOUT                        = 440; // Unofficial - IIS
+
     /**
      * @var int
      */
     public const STATUS_LOOP_DETECTED                   = 508;
+
     /**
      * @var int
      */
     public const STATUS_METHOD_FAILURE                       = 420; // Unofficial - Spring Framework
+
     /**
      * @var int
      */
     public const STATUS_METHOD_NOT_ALLOWED              = 405;
+
     /**
      * @var int
      */
     public const STATUS_MISDIRECTED_REQUEST             = 421;
+
     /**
      * @var int
      */
     public const STATUS_MOVED_PERMANENTLY               = 301;
+
     /**
      * @var int
      */
@@ -190,46 +221,57 @@ interface ResponseStatusCodeInterface
      * @var int
      */
     public const STATUS_MULTIPLE_CHOICES                = 300;
+
     /**
      * @var int
      */
     public const STATUS_NETWORK_AUTHENTICATION_REQUIRED = 511;
+
     /**
      * @var int
      */
     public const STATUS_NETWORK_CONNECT_TIMEOUT_ERROR        = 599; // Unofficial
+
     /**
      * @var int
      */
     public const STATUS_NETWORK_READ_TIMEOUT_ERROR           = 598; // Unofficial
+
     /**
      * @var int
      */
     public const STATUS_NO_CONTENT                      = 204;
+
     /**
      * @var int
      */
     public const STATUS_NO_RESPONSE                          = 444; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_NON_AUTHORITATIVE_INFORMATION   = 203;
+
     /**
      * @var int
      */
     public const STATUS_NOT_ACCEPTABLE                  = 406;
+
     /**
      * @var int
      */
     public const STATUS_NOT_EXTENDED                    = 510;
+
     /**
      * @var int
      */
     public const STATUS_NOT_FOUND                       = 404;
+
     /**
      * @var int
      */
     public const STATUS_NOT_IMPLEMENTED                 = 501;
+
     /**
      * @var int
      */
@@ -240,106 +282,132 @@ interface ResponseStatusCodeInterface
      * @var int
      */
     public const STATUS_OK                              = 200;
+
     /**
      * @var int
      */
     public const STATUS_ORIGIN_DNS_ERROR                     = 530; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_ORIGIN_IS_UNREACHABLE                = 523; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_PAGE_EXPIRED                         = 419; // Unofficial - Laravel Framework
+
     /**
      * @var int
      */
     public const STATUS_PARTIAL_CONTENT                 = 206;
+
     /**
      * @var int
      */
     public const STATUS_PAYLOAD_TOO_LARGE               = 413;
+
     /**
      * @var int
      */
     public const STATUS_PAYMENT_REQUIRED                = 402;
+
     /**
      * @var int
      */
     public const STATUS_PERMANENT_REDIRECT              = 308;
+
     /**
      * @var int
      */
     public const STATUS_PRECONDITION_FAILED             = 412;
+
     /**
      * @var int
      */
     public const STATUS_PRECONDITION_REQUIRED           = 428;
+
     /**
      * @var int
      */
     public const STATUS_PROCESSING                      = 102;
+
     /**
      * @var int
      */
     public const STATUS_PROXY_AUTHENTICATION_REQUIRED   = 407;
+
     /**
      * @var int
      */
     public const STATUS_RAILGUN_ERROR                        = 527; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_RANGE_NOT_SATISFIABLE           = 416;
+
     /**
      * @var int
      */
     public const STATUS_REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
+
     /**
      * @var int
      */
     public const STATUS_REQUEST_HEADER_TOO_LARGE             = 494; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_REQUEST_TIMEOUT                 = 408;
+
     /**
      * @var int
      */
     public const STATUS_RESERVED                        = 306;
+
     /**
      * @var int
      */
     public const STATUS_RESET_CONTENT                   = 205;
+
     /**
      * @var int
      */
     public const STATUS_RETRY_WITH                           = 449; // Unofficial - IIS
+
     /**
      * @var int
      */
     public const STATUS_SEE_OTHER                       = 303;
+
     /**
      * @var int
      */
     public const STATUS_SERVICE_UNAVAILABLE             = 503;
+
     /**
      * @var int
      */
     public const STATUS_SSL_CERTIFICATE_ERROR                = 495; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_SSL_CERTIFICATE_REQUIRED             = 496; // Unofficial - nginx
+
     /**
      * @var int
      */
     public const STATUS_SSL_HANDSHAKE_FAILED                 = 525; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_SWITCHING_PROTOCOLS             = 101;
+
     /**
      * @var int
      */
@@ -350,58 +418,72 @@ interface ResponseStatusCodeInterface
      * @var int
      */
     public const STATUS_THIS_IS_FINE                         = 218; // Unofficial - Apache Web Server
+
     /**
      * @var int
      */
     public const STATUS_TIMEOUT_OCCURRED                     = 524; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_TOO_EARLY                       = 425;
+
     /**
      * @var int
      */
     public const STATUS_TOO_MANY_REQUESTS               = 429;
+
     /**
      * @var int
      */
     public const STATUS_UNAUTHORIZED                    = 401;
+
     /**
      * @var int
      */
     public const STATUS_UNAVAILABLE_FOR_LEGAL_REASONS   = 451;
+
     /**
      * @var int
      */
     public const STATUS_UNKNOWN_ERROR                        = 520; // Unofficial - Cloudflare
+
     /**
      * @var int
      */
     public const STATUS_UNPROCESSABLE_ENTITY            = 422;
+
     /**
      * @var int
      */
     public const STATUS_UNSUPPORTED_MEDIA_TYPE          = 415;
+
     /**
      * @var int
      */
     public const STATUS_UPGRADE_REQUIRED                = 426;
+
     /**
      * @var int
      */
     public const STATUS_URI_TOO_LONG                    = 414;
+
     /**
      * @var int
      */
     public const STATUS_USE_PROXY                       = 305;
+
     /**
      * @var int
      */
     public const STATUS_VARIANT_ALSO_NEGOTIATES         = 506;
+
     /**
      * @var int
      */
     public const STATUS_VERSION_NOT_SUPPORTED           = 505;
+
     /**
      * @var int
      */

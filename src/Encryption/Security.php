@@ -49,41 +49,53 @@ class Security extends AbstractInjectionAware implements SecurityContract
     use HashTrait;
 
     public const CRYPT_ARGON2I    = 10;
+
     public const CRYPT_ARGON2ID   = 11;
+
     public const CRYPT_BCRYPT     = 0;
+
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
     public const CRYPT_BLOWFISH   = 4;
+
     public const CRYPT_BLOWFISH_A = 5;
+
     public const CRYPT_BLOWFISH_X = 6;
+
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
     public const CRYPT_BLOWFISH_Y = 7;
+
     public const CRYPT_DEFAULT    = 0;
+
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
     public const CRYPT_EXT_DES    = 2;
+
     /**
      * Weak legacy algorithm, easier to brute-force than bcrypt or Argon2. Use
      * `CRYPT_DEFAULT` (bcrypt) or the Argon2 algorithms and rehash stored
      * passwords on login. To be removed in a future major version.
      */
     public const CRYPT_MD5        = 3;
+
     /**
      * Weak legacy algorithm, easier to brute-force than bcrypt or Argon2. Use
      * `CRYPT_DEFAULT` (bcrypt) or the Argon2 algorithms and rehash stored
      * passwords on login. To be removed in a future major version.
      */
     public const CRYPT_SHA256     = 8;
+
     /**
      * Weak legacy algorithm, easier to brute-force than bcrypt or Argon2. Use
      * `CRYPT_DEFAULT` (bcrypt) or the Argon2 algorithms and rehash stored
      * passwords on login. To be removed in a future major version.
      */
     public const CRYPT_SHA512     = 9;
+
     /**
      * @deprecated Not implemented; resolves to bcrypt. To be removed.
      */
@@ -435,16 +447,16 @@ class Security extends AbstractInjectionAware implements SecurityContract
                 $prefix = "$6$";
                 $bytes  = 16;
                 break;
-            /*
-             * Blowfish hashing with a salt as follows: "$2a$", "$2x$" or
-             * "$2y$", a two digit cost parameter, "$", and 22 characters
-             * from the alphabet "./0-9A-Za-z". Using characters outside
-             * this range in the salt will cause `crypt()` to return a
-             * zero-length string. The two digit cost parameter is the
-             * base-2 logarithm of the iteration count for the underlying
-             * Blowfish-based hashing algorithm and must be in range 04-31,
-             * values outside this range will cause crypt() to fail.
-             */
+                /*
+                 * Blowfish hashing with a salt as follows: "$2a$", "$2x$" or
+                 * "$2y$", a two digit cost parameter, "$", and 22 characters
+                 * from the alphabet "./0-9A-Za-z". Using characters outside
+                 * this range in the salt will cause `crypt()` to return a
+                 * zero-length string. The two digit cost parameter is the
+                 * base-2 logarithm of the iteration count for the underlying
+                 * Blowfish-based hashing algorithm and must be in range 04-31,
+                 * values outside this range will cause crypt() to fail.
+                 */
             case self::CRYPT_BLOWFISH_A:
                 $prefix = sprintf("$2a$%s$", $formatted);
                 break;

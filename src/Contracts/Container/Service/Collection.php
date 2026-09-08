@@ -45,10 +45,15 @@ interface Collection extends IocContainer
 {
     // Our additions - Container-specific
     public function bind(string $interfaceName, string $concrete): ServiceDefinition;
+
     public function callableGet(string $name): Closure;
+
     public function callableNew(string $name): Closure;
+
     public function extend(string $name, callable $callableObject): void;
+
     public function get(string $name): mixed;
+
     // From service-interop/ServiceCollection - alias management
     public function getAlias(string $name): string;
 
@@ -65,24 +70,44 @@ interface Collection extends IocContainer
 
     // Our additions - scalar parameters
     public function getParameter(string $name): mixed;
+
     public function getResolver(): Resolver;
+
     public function has(string $name): bool;
+
     public function hasAlias(string $name): bool;
+
     public function hasDefinition(string $name): bool;
+
     public function hasInstance(string $name): bool;
+
     public function hasParameter(string $name): bool;
+
     public function isAutowireEnabled(): bool;
+
     public function new(string $name): mixed;
+
     public function newDefinition(string $name): ServiceDefinition;
+
     public function set(string $name, mixed $definition): ServiceDefinition;
+
     public function setAlias(string $name, string $alias): static;
+
     public function setAutowire(bool $enabled): static;
+
     public function setDefinition(string $name, ServiceDefinition $definition): static;
+
     public function setInstance(string $name, object $instance, string $lifetime): static;
+
     public function setParameter(string $name, mixed $value): static;
+
     public function unsetAlias(string $name): void;
+
     public function unsetDefinition(string $name): void;
+
     public function unsetInstance(string $name): void;
+
     public function unsetInstances(string $lifetime): void;
+
     public function unsetParameter(string $name): void;
 }

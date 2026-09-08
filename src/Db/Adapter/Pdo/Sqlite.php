@@ -187,9 +187,9 @@ class Sqlite extends PdoAdapter
                     $columnType             = "boolean"; // Change column type to skip size check
 
                     break;
-                /**
-                 * ENUM
-                 */
+                    /**
+                     * ENUM
+                     */
                 case str_contains($lowerType, "enum"):
                     /**
                      * Enum are treated as char
@@ -197,9 +197,9 @@ class Sqlite extends PdoAdapter
                     $definition["type"] = Column::TYPE_CHAR;
 
                     break;
-                /**
-                 * DATE/DATETIME
-                 */
+                    /**
+                     * DATE/DATETIME
+                     */
                 case str_contains($lowerType, "datetime"):
                     /**
                      * Special type for datetime
@@ -207,9 +207,9 @@ class Sqlite extends PdoAdapter
                     $definition["type"] = Column::TYPE_DATETIME;
 
                     break;
-                /**
-                 * ENUM
-                 */
+                    /**
+                     * ENUM
+                     */
                 case str_contains($lowerType, "date"):
                     /**
                      * Date/Datetime are varchars
@@ -217,9 +217,9 @@ class Sqlite extends PdoAdapter
                     $definition["type"] = Column::TYPE_DATE;
 
                     break;
-                /**
-                 * FLOAT/DECIMAL/DOUBLE
-                 */
+                    /**
+                     * FLOAT/DECIMAL/DOUBLE
+                     */
                 case str_contains($lowerType, "decimal"):
                     /**
                      * Decimals are floats
@@ -247,9 +247,9 @@ class Sqlite extends PdoAdapter
                     $definition["bindType"]  = Column::BIND_PARAM_DECIMAL;
 
                     break;
-                /**
-                 * TIMESTAMP
-                 */
+                    /**
+                     * TIMESTAMP
+                     */
                 case str_contains($lowerType, "timestamp"):
                     /**
                      * Timestamp as date
@@ -257,9 +257,9 @@ class Sqlite extends PdoAdapter
                     $definition["type"] = Column::TYPE_TIMESTAMP;
 
                     break;
-                /**
-                 * TEXT/VARCHAR/CHAR
-                 */
+                    /**
+                     * TEXT/VARCHAR/CHAR
+                     */
                 case str_contains($lowerType, "varchar"):
                     /**
                      * Varchar are varchars
@@ -274,9 +274,9 @@ class Sqlite extends PdoAdapter
                     $definition["type"] = Column::TYPE_CHAR;
 
                     break;
-                /**
-                 * TEXT
-                 */
+                    /**
+                     * TEXT
+                     */
                 case str_contains($lowerType, "text"):
                     $definition["type"] = Column::TYPE_TEXT;
 

@@ -35,6 +35,7 @@ interface DiInterface extends ArrayAccess
      * methods
      */
     public static function setDefault(DiInterface $container): void;
+
     /**
      * Attempts to register a service in the services container
      * Only is successful if a service hasn't been registered previously

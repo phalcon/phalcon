@@ -118,6 +118,7 @@ final class ComponentManagerTest extends AbstractUnitTestCase
         // The manager is also registered in the DI container
         $this->assertSame($manager, $di->get('eventsManager'));
     }
+
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09

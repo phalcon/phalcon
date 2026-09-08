@@ -51,20 +51,36 @@ namespace Phalcon\DataMapper\Pdo;
 class Events
 {
     public const AFTER_BEGIN_TRANSACTION  = "dm:afterBeginTransaction";
+
     public const AFTER_COMMIT             = "dm:afterCommit";
+
     public const AFTER_CONNECT            = "dm:afterConnect";
+
     public const AFTER_DISCONNECT         = "dm:afterDisconnect";
+
     public const AFTER_EXEC               = "dm:afterExec";
+
     public const AFTER_PERFORM            = "dm:afterPerform";
+
     public const AFTER_QUERY              = "dm:afterQuery";
+
     public const AFTER_ROLLBACK           = "dm:afterRollBack";
+
     public const BEFORE_BEGIN_TRANSACTION = "dm:beforeBeginTransaction";
+
     public const BEFORE_COMMIT            = "dm:beforeCommit";
+
     public const BEFORE_CONNECT           = "dm:beforeConnect";
+
     public const BEFORE_DISCONNECT        = "dm:beforeDisconnect";
+
     public const BEFORE_EXEC              = "dm:beforeExec";
+
     public const BEFORE_PERFORM           = "dm:beforePerform";
+
     public const BEFORE_QUERY             = "dm:beforeQuery";
+
     public const BEFORE_ROLLBACK          = "dm:beforeRollBack";
+
     public const CONNECTION_LOST          = "dm:connectionLost";
 }

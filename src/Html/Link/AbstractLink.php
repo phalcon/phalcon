@@ -27,11 +27,14 @@ abstract class AbstractLink
      * @phpstan-var Collection<link_attribute_value>
      */
     protected Collection $attributes;
+
     protected string $href = "";
+
     /**
      * @phpstan-var Collection<bool>
      */
     protected Collection $rels;
+
     protected bool $templated = false;
 
     /**

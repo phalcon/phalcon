@@ -25,7 +25,9 @@ use SessionHandlerInterface;
 interface ManagerInterface
 {
     public const SESSION_ACTIVE   = 2;
+
     public const SESSION_DISABLED = 0;
+
     public const SESSION_NONE     = 1;
 
     /**

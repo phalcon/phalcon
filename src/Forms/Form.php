@@ -62,27 +62,37 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * @phpstan-var forms_data
      */
     protected array $data = [];
+
     /**
      * @phpstan-var forms_elements
      */
     protected array $elements = [];
+
     /**
      * @phpstan-var forms_elements_indexed
      */
     protected array $elementsIndexed = [];
+
     protected object | null $entity  = null;
+
     /**
      * @phpstan-var forms_data
      */
     protected array $filteredData = [];
+
     protected Messages $messages;
+
     /**
      * @phpstan-var forms_options
      */
     protected array $options                   = [];
+
     protected int $position                    = 0;
+
     protected ?TagFactory $tagFactory          = null;
+
     protected ?ValidationInterface $validation = null;
+
     /**
      * @phpstan-var forms_whitelist
      */

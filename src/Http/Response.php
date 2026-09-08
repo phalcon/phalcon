@@ -74,11 +74,17 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
     private const DATETIME_FORMAT = 'D, d M Y H:i:s';
 
     protected DiInterface | null $container = null;
+
     protected string | null $content        = null;
+
     protected ?CookiesInterface $cookies    = null;
+
     protected Encode $encode;
+
     protected string | null $file = null;
+
     protected Headers $headers;
+
     protected bool $sent = false;
 
     /**

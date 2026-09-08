@@ -51,28 +51,34 @@ class Reference implements ReferenceInterface
      * @var db_column_names
      */
     protected array $columns;
+
     /**
      * ON DELETE
      */
     protected ?string $onDelete = null;
+
     /**
      * ON UPDATE
      */
     protected ?string $onUpdate = null;
+
     /**
      * Referenced Columns
      *
      * @var db_column_names
      */
     protected array $referencedColumns;
+
     /**
      * Referenced Schema
      */
     protected ?string $referencedSchema = null;
+
     /**
      * Referenced Table
      */
     protected string $referencedTable;
+
     /**
      * Schema name
      */

@@ -61,6 +61,7 @@ class BeanstalkConnection
      * @var resource|null
      */
     protected $connection = null;
+
     /**
      * Tube currently selected with `use`. A fresh connection uses "default".
      */

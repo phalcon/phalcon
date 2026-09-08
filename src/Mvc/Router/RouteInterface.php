@@ -39,6 +39,7 @@ interface RouteInterface
      * Resets the internal route id generator
      */
     public static function reset(): void;
+
     /**
      * Replaces placeholders from pattern returning a valid PCRE regular expression
      */

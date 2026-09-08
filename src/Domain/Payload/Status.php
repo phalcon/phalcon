@@ -38,24 +38,43 @@ namespace Phalcon\Domain\Payload;
 class Status
 {
     public const ACCEPTED          = "ACCEPTED";
+
     public const AUTHENTICATED     = "AUTHENTICATED";
+
     public const AUTHORIZED        = "AUTHORIZED";
+
     public const CREATED           = "CREATED";
+
     public const DELETED           = "DELETED";
+
     public const ERROR             = "ERROR";
+
     public const FAILURE           = "FAILURE";
+
     public const FOUND             = "FOUND";
+
     public const NOT_ACCEPTED      = "NOT_ACCEPTED";
+
     public const NOT_AUTHENTICATED = "NOT_AUTHENTICATED";
+
     public const NOT_AUTHORIZED    = "NOT_AUTHORIZED";
+
     public const NOT_CREATED       = "NOT_CREATED";
+
     public const NOT_DELETED       = "NOT_DELETED";
+
     public const NOT_FOUND         = "NOT_FOUND";
+
     public const NOT_UPDATED       = "NOT_UPDATED";
+
     public const NOT_VALID         = "NOT_VALID";
+
     public const PROCESSING        = "PROCESSING";
+
     public const SUCCESS           = "SUCCESS";
+
     public const UPDATED           = "UPDATED";
+
     public const VALID             = "VALID";
 
     /**

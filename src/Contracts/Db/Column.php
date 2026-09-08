@@ -86,7 +86,6 @@ interface Column
      */
     public function getTypeValues(): array | int | string;
 
-
     /**
      * Check whether column has default value
      */

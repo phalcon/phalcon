@@ -45,6 +45,7 @@ class Bag extends Collection implements BagInterface, InjectionAwareInterface
     use InjectionAwareTrait;
 
     private string $name;
+
     private ManagerInterface $session;
 
     public function __construct(ManagerInterface $session, string $name)

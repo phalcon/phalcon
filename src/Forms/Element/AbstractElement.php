@@ -47,16 +47,24 @@ abstract class AbstractElement implements ElementInterface
      * @var forms_filters
      */
     protected array $filters       = [];
+
     protected Form | null $form    = null;
+
     protected string | null $label = null;
+
     protected Messages $messages;
+
     protected string $method = "inputText";
+
     protected string $name;
+
     /**
      * @var forms_options
      */
     protected array $options                = [];
+
     protected TagFactory | null $tagFactory = null;
+
     /**
      * @var forms_validators
      */

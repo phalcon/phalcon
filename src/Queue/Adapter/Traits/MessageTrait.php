@@ -41,14 +41,17 @@ use function is_scalar;
 trait MessageTrait
 {
     protected string $body = "";
+
     /**
      * @phpstan-var queue_message_headers
      */
     protected array $headers = [];
+
     /**
      * @phpstan-var queue_message_properties
      */
     protected array $properties = [];
+
     protected bool $redelivered = false;
 
     /**

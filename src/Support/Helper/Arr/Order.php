@@ -27,6 +27,7 @@ use const SORT_REGULAR;
 class Order
 {
     public const ORDER_ASC  = 1;
+
     public const ORDER_DESC = 2;
 
     /**

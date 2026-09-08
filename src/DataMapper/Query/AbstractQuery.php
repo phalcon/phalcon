@@ -37,7 +37,9 @@ use function implode;
 abstract class AbstractQuery
 {
     protected Bind $bind;
+
     protected Connection $connection;
+
     /**
      * @phpstan-var datamapper_query_store
      */

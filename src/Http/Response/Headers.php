@@ -33,6 +33,7 @@ class Headers implements HeadersInterface, IteratorAggregate
      * @phpstan-var http_response_headers
      */
     protected array $headers = [];
+
     protected bool $isSent   = false;
 
     /**

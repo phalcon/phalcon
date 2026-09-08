@@ -75,6 +75,7 @@ class Collection implements
     JsonSerializable
 {
     use ArrayAccessTrait;
+
     /** @use GetSetHasTrait<T> */
     use GetSetHasTrait;
 
@@ -82,6 +83,7 @@ class Collection implements
      * @var array<string, T>
      */
     protected array $data = [];
+
     /**
      * Maps the case-insensitive key back to the original one it was stored
      * under.
@@ -89,6 +91,7 @@ class Collection implements
      * @var array<string, string>
      */
     protected array $lowerKeys = [];
+
     /**
      * Collection constructor.
      *

@@ -83,48 +83,71 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     use EventsAwareTrait;
 
     protected string $actionName   = "";
+
     protected string $actionSuffix = "Action";
 
     /**
      * @var object|null
      */
     protected $activeHandler = null;
+
     /**
      * @phpstan-var dispatcher_method_map
      */
     protected array $activeMethodMap = [];
+
     /**
      * @phpstan-var dispatcher_method_map
      */
     protected array $camelCaseMap      = [];
+
     protected string $defaultAction    = "";
+
     protected string $defaultHandler   = "";
+
     protected string $defaultNamespace = "";
+
     protected bool $finished           = false;
+
     protected bool $forwarded          = false;
+
     /**
      * @phpstan-var dispatcher_handler_hashes
      */
     protected array $handlerHashes = [];
+
     /**
      * @phpstan-var dispatcher_hook_cache
      */
     protected array $handlerHookCache       = [];
+
     protected string $handlerName           = "";
+
     protected string $handlerSuffix         = "";
+
     protected bool $isControllerInitialize  = false;
+
     protected mixed $lastHandler            = null;
+
     protected ?BinderInterface $modelBinder = null;
+
     protected bool $modelBinding            = false;
+
     protected ?string $moduleName           = "";
+
     protected string $namespaceName         = "";
+
     /**
      * @phpstan-var dispatcher_params
      */
     protected array $params                 = [];
+
     protected string $previousActionName    = "";
+
     protected string $previousHandlerName   = "";
+
     protected string $previousNamespaceName = "";
+
     /**
      * @todo fix the type in v7
      */
@@ -867,7 +890,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         return $this->defaultNamespace;
     }
 
-
     /**
      * Possible class name that will be located to dispatch the request
      */
@@ -1105,7 +1127,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     {
         $this->defaultNamespace = $defaultNamespace;
     }
-
 
     /**
      * Sets the default suffix for the handler

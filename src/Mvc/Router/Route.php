@@ -43,6 +43,7 @@ class Route implements RouteInterface
      * @mixed $int
      */
     protected static int $uniqueId = 0;
+
     /**
      * @mixed $callable|null
      *

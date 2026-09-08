@@ -51,10 +51,12 @@ class QueueConsumer extends AbstractEventsAware implements EventsAwareInterface
      * @var array<string, BoundProcessor>
      */
     protected array $bindings = [];
+
     /**
      * Milliseconds slept between poll passes when nothing was received.
      */
     protected int $pollInterval = 200;
+
     protected bool $shouldStop  = false;
 
     public function __construct(protected ContextInterface $context)

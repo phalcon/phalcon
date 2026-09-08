@@ -51,6 +51,7 @@ class Console extends AbstractApplication
      * @phpstan-var cli_arguments
      */
     protected mixed $arguments = [];
+
     /**
      * @phpstan-var cli_options
      */

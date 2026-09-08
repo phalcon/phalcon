@@ -241,7 +241,6 @@ class Asset implements AssetInterface
         return $this;
     }
 
-
     /**
      * Sets the asset's path
      */

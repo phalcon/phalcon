@@ -87,12 +87,14 @@ class Di extends stdClass implements DiInterface
      * @var array<string, string>
      */
     protected array $aliases = [];
+
     /**
      * List of registered services
      *
      * @var ServiceInterface[]
      */
     protected array $services = [];
+
     /**
      * List of shared instances
      */

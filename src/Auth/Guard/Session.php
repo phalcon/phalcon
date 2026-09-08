@@ -44,6 +44,7 @@ use Phalcon\Time\Clock\SystemClock;
 class Session extends AbstractGuard implements GuardStateful, BasicAuth
 {
     protected ClockInterface $clock;
+
     protected bool $viaRemember = false;
 
     public function __construct(

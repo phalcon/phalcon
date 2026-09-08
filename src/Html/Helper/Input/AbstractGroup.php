@@ -48,15 +48,19 @@ use const PHP_EOL;
 abstract class AbstractGroup extends AbstractHelper
 {
     protected mixed $checked = null;
+
     protected string $name   = '';
+
     /**
      * @phpstan-var html_group_options
      */
     protected array $options = [];
+
     /**
      * @phpstan-var html_attributes
      */
     protected array $sharedAttributes = [];
+
     protected string $type            = 'checkbox';
 
     /**

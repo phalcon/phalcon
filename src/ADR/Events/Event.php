@@ -25,22 +25,27 @@ class Event
      * @var string
      */
     public const ADR_AFTER_EXECUTE_ACTION  = 'adr:afterExecuteAction';
+
     /**
      * @var string
      */
     public const ADR_BEFORE_EXECUTE_ACTION = 'adr:beforeExecuteAction';
+
     /**
      * @var string
      */
     public const APPLICATION_AFTER_HANDLE  = 'application:afterHandle';
+
     /**
      * @var string
      */
     public const APPLICATION_BEFORE_HANDLE = 'application:beforeHandle';
+
     /**
      * @var string
      */
     public const PIPELINE_AFTER_DISPATCH   = 'pipeline:afterDispatch';
+
     /**
      * @var string
      */

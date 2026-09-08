@@ -58,6 +58,7 @@ class Manager extends AbstractInjectionAware
      * @var assets_collections
      */
     protected array $collections   = [];
+
     protected bool $implicitOutput = true;
 
     /**

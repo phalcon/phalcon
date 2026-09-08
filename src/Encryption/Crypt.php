@@ -65,17 +65,24 @@ class Crypt implements CryptInterface
     use OpensslTrait;
 
     public const DEFAULT_ALGORITHM = "sha256";
+
     public const DEFAULT_CIPHER    = "aes-256-cfb";
 
     /**
      * Padding
      */
     public const PADDING_ANSI_X_923     = 1;
+
     public const PADDING_DEFAULT        = 0;
+
     public const PADDING_ISO_10126      = 3;
+
     public const PADDING_ISO_IEC_7816_4 = 4;
+
     public const PADDING_PKCS7          = 2;
+
     public const PADDING_SPACE          = 6;
+
     public const PADDING_ZERO           = 5;
 
     protected string $authData = "";

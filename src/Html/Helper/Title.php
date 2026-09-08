@@ -31,11 +31,14 @@ class Title extends AbstractHelper
      * @phpstan-var list<string>
      */
     protected array $append = [];
+
     /**
      * @phpstan-var list<string>
      */
     protected array $prepend    = [];
+
     protected string $separator = '';
+
     protected string $title     = '';
 
     /**

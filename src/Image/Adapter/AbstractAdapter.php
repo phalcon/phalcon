@@ -53,6 +53,7 @@ abstract class AbstractAdapter implements AdapterInterface
     public const DEFAULT_MAX_PIXELS = 50000000;
 
     protected string $file;
+
     protected int $height;
 
     /**
@@ -70,6 +71,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected int $maxPixels = 0;
 
     protected string $mime;
+
     protected string $realpath;
 
     /**

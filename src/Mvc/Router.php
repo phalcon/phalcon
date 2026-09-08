@@ -101,6 +101,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     use EventsAwareTrait;
 
     public const POSITION_FIRST = 0;
+
     public const POSITION_LAST  = 1;
 
     /**
@@ -110,6 +111,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     public const REGEX_CHUNK_SIZE = 10;
 
     public const URI_SOURCE_GET_URL            = 0;
+
     public const URI_SOURCE_SERVER_REQUEST_URI = 1;
 
     protected string $action = "";
@@ -1220,9 +1222,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 $params    = [];
                 $matches   = null;
 
-            /**
-             * Look for hostname constraints
-             */
+                /**
+                 * Look for hostname constraints
+                 */
                 $hostname = $routeMeta["hostname"];
                 if (null !== $hostname) {
                     /**
@@ -1258,9 +1260,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                 $this->fireManagerEvent('router:beforeCheckRoute', $route);
 
-            /**
-             * If the route has parentheses use preg_match
-             */
+                /**
+                 * If the route has parentheses use preg_match
+                 */
                 $pattern = $routeMeta["pattern"];
 
                 if ($routeMeta["isRegex"]) {
@@ -1269,9 +1271,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     $routeFound = $pattern === $handledUri;
                 }
 
-            /**
-             * Check for beforeMatch conditions
-             */
+                /**
+                 * Check for beforeMatch conditions
+                 */
                 if ($routeFound) {
                     $this->fireManagerEvent('router:matchedRoute', $route);
 

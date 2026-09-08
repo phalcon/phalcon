@@ -33,8 +33,11 @@ use function is_numeric;
 class Select extends AbstractList
 {
     protected string $elementTag = 'option';
+
     protected bool $inOptGroup   = false;
+
     protected string $selected   = '';
+
     protected bool $strict       = false;
 
     /**

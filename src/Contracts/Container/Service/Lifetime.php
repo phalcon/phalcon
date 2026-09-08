@@ -36,6 +36,8 @@ namespace Phalcon\Contracts\Container\Service;
 class Lifetime
 {
     public const SCOPED    = 'SCOPED';
+
     public const SINGLETON = 'SINGLETON';
+
     public const TRANSIENT = 'TRANSIENT';
 }

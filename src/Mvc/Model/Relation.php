@@ -28,12 +28,19 @@ use function is_callable;
 class Relation implements RelationInterface
 {
     public const ACTION_CASCADE   = 2;
+
     public const ACTION_RESTRICT  = 1;
+
     public const BELONGS_TO       = 0;
+
     public const HAS_MANY         = 2;
+
     public const HAS_MANY_THROUGH = 4;
+
     public const HAS_ONE          = 1;
+
     public const HAS_ONE_THROUGH  = 3;
+
     public const NO_ACTION        = 0;
 
     /**

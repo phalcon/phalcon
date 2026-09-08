@@ -142,11 +142,11 @@ class SysNodeProvider implements NodeProviderInterface
             $output = ob_get_clean();
 
             if (
-                    preg_match(
-                        "/([0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2})/i",
-                        $output,
-                        $matches
-                    )
+                preg_match(
+                    "/([0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2}:[0-9a-f]{2})/i",
+                    $output,
+                    $matches
+                )
             ) {
                 $node = str_replace(":", "", $matches[1]);
             }

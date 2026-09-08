@@ -40,6 +40,7 @@ class Settings
      * @var array<string, bool|int>
      */
     protected static array $overrides = [];
+
     /**
      * Hardcoded defaults - mirror of the C extension's compiled-in global
      * defaults. Used as the final fallback when ini_get() returns false

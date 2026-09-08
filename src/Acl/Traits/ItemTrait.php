@@ -22,6 +22,7 @@ trait ItemTrait
      * Role/Component description
      */
     protected string | null $description = null;
+
     /**
      * Role/Component name
      */

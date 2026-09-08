@@ -32,7 +32,9 @@ namespace Phalcon\Contracts\Queue;
 interface Processor
 {
     public const ACK     = "enqueue.ack";
+
     public const REJECT  = "enqueue.reject";
+
     public const REQUEUE = "enqueue.requeue";
 
     /**

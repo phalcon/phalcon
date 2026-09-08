@@ -57,17 +57,21 @@ abstract class AbstractLogger
      * @phpstan-var logger_adapters
      */
     protected array $adapters = [];
+
     /**
      * Clock used to timestamp log items
      */
     protected ClockInterface $clock;
+
     /**
      * The excluded adapters for this log process
      *
      * @phpstan-var logger_excluded
      */
     protected array $excluded = [];
+
     protected int $logLevel   = Enum::CUSTOM;
+
     protected DateTimeZone $timezone;
 
     /**
@@ -259,7 +263,6 @@ abstract class AbstractLogger
 
         return $this;
     }
-
 
     /**
      * Adds a message to each handler for processing

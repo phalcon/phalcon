@@ -39,6 +39,7 @@ final class AttachTest extends AbstractUnitTestCase
 
         $this->assertTrue($called);
     }
+
     /**
      * @author @author Kamil Skowron <kamil@hedonsoftware.com>
      * @since  2020-09-09

@@ -48,6 +48,7 @@ class BeanstalkProducer extends AbstractProducer
      * Delivery delay in milliseconds, or null when not set.
      */
     protected ?int $deliveryDelay = null;
+
     /**
      * Job priority, or null when not set.
      */

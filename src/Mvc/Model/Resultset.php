@@ -88,9 +88,13 @@ abstract class Resultset implements
     JsonSerializable
 {
     public const HYDRATE_ARRAYS      = 1;
+
     public const HYDRATE_OBJECTS     = 2;
+
     public const HYDRATE_RECORDS     = 0;
+
     public const TYPE_RESULT_FULL    = 0;
+
     public const TYPE_RESULT_PARTIAL = 1;
 
     /**

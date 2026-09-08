@@ -51,8 +51,11 @@ use function call_user_func_array;
 class Dispatcher extends CliDispatcher implements DispatcherInterface
 {
     protected string $defaultAction  = "main";
+
     protected string $defaultHandler = "main";
+
     protected string $handlerSuffix  = "Task";
+
     /**
      * @phpstan-var cli_options
      */

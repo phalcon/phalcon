@@ -76,8 +76,11 @@ class Transaction implements TransactionInterface
      * @phpstan-var list<MessageInterface>
      */
     protected array $messages                       = [];
+
     protected bool $rollbackOnAbort                 = false;
+
     protected ModelInterface | null $rollbackRecord = null;
+
     protected bool $rollbackThrowException          = false;
 
     /**

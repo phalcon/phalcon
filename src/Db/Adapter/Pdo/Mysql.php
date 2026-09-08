@@ -229,9 +229,9 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * MEDIUMINT
-                 */
+                    /**
+                     * MEDIUMINT
+                     */
                 case str_starts_with($columnType, "mediumint"):
                     $definition["type"]      = Column::TYPE_MEDIUMINTEGER;
                     $definition["isNumeric"] = true;
@@ -239,9 +239,9 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * SMALLINT
-                 */
+                    /**
+                     * SMALLINT
+                     */
                 case str_starts_with($columnType, "smallint"):
                     $definition["type"]      = Column::TYPE_SMALLINTEGER;
                     $definition["isNumeric"] = true;
@@ -249,9 +249,9 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * TINYINT
-                 */
+                    /**
+                     * TINYINT
+                     */
                 case str_starts_with($columnType, "tinyint"):
                     /**
                      * Smallint/Bigint/Integers/Int are int
@@ -262,9 +262,9 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * INT
-                 */
+                    /**
+                     * INT
+                     */
                 case str_starts_with($columnType, "int"):
                     $definition["type"]      = Column::TYPE_INTEGER;
                     $definition["isNumeric"] = true;
@@ -272,52 +272,52 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * BIT
-                 */
+                    /**
+                     * BIT
+                     */
                 case str_starts_with($columnType, "bit"):
                     $definition["type"]     = Column::TYPE_BIT;
                     $definition["bindType"] = Column::BIND_PARAM_INT;
 
                     break;
 
-                /**
-                 * ENUM
-                 */
+                    /**
+                     * ENUM
+                     */
                 case str_starts_with($columnType, "enum"):
                     $definition["type"] = Column::TYPE_ENUM;
 
                     break;
 
-                /**
-                 * DATE
-                 */
+                    /**
+                     * DATE
+                     */
                 case str_starts_with($columnType, "datetime"):
                     $definition["type"] = Column::TYPE_DATETIME;
 
                     break;
 
-                /**
-                 * DATETIME
-                 */
+                    /**
+                     * DATETIME
+                     */
                 case str_starts_with($columnType, "date"):
                     $definition["type"] = Column::TYPE_DATE;
 
                     break;
 
-                /**
-                 * DECIMAL - This will need to be a string so as not to lose
-                 * the decimals
-                 */
+                    /**
+                     * DECIMAL - This will need to be a string so as not to lose
+                     * the decimals
+                     */
                 case str_starts_with($columnType, "decimal"):
                     $definition["type"]      = Column::TYPE_DECIMAL;
                     $definition["isNumeric"] = true;
 
                     break;
 
-                /**
-                 * DOUBLE
-                 */
+                    /**
+                     * DOUBLE
+                     */
                 case str_starts_with($columnType, "double"):
                     $definition["type"]      = Column::TYPE_DOUBLE;
                     $definition["isNumeric"] = true;
@@ -325,9 +325,9 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * FLOAT
-                 */
+                    /**
+                     * FLOAT
+                     */
                 case str_starts_with($columnType, "float"):
                     $definition["type"]      = Column::TYPE_FLOAT;
                     $definition["isNumeric"] = true;
@@ -335,130 +335,130 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * MEDIUMBLOB
-                 */
+                    /**
+                     * MEDIUMBLOB
+                     */
                 case str_starts_with($columnType, "mediumblob"):
                     $definition["type"] = Column::TYPE_MEDIUMBLOB;
 
                     break;
 
-                /**
-                 * LONGBLOB
-                 */
+                    /**
+                     * LONGBLOB
+                     */
                 case str_starts_with($columnType, "longblob"):
                     $definition["type"] = Column::TYPE_LONGBLOB;
 
                     break;
 
-                /**
-                 * TINYBLOB
-                 */
+                    /**
+                     * TINYBLOB
+                     */
                 case str_starts_with($columnType, "tinyblob"):
                     $definition["type"] = Column::TYPE_TINYBLOB;
 
                     break;
 
-                /**
-                 * BLOB
-                 */
+                    /**
+                     * BLOB
+                     */
                 case str_starts_with($columnType, "blob"):
                     $definition["type"] = Column::TYPE_BLOB;
 
                     break;
 
-                /**
-                 * TIMESTAMP
-                 */
+                    /**
+                     * TIMESTAMP
+                     */
                 case str_starts_with($columnType, "timestamp"):
                     $definition["type"] = Column::TYPE_TIMESTAMP;
 
                     break;
 
-                /**
-                 * TIME
-                 */
+                    /**
+                     * TIME
+                     */
                 case str_starts_with($columnType, "time"):
                     $definition["type"] = Column::TYPE_TIME;
 
                     break;
 
-                /**
-                 * JSON
-                 */
+                    /**
+                     * JSON
+                     */
                 case str_starts_with($columnType, "json"):
                     $definition["type"] = Column::TYPE_JSON;
 
                     break;
 
-                /**
-                 * LONGTEXT
-                 */
+                    /**
+                     * LONGTEXT
+                     */
                 case str_starts_with($columnType, "longtext"):
                     $definition["type"] = Column::TYPE_LONGTEXT;
 
                     break;
 
-                /**
-                 * MEDIUMTEXT
-                 */
+                    /**
+                     * MEDIUMTEXT
+                     */
                 case str_starts_with($columnType, "mediumtext"):
                     $definition["type"] = Column::TYPE_MEDIUMTEXT;
 
                     break;
 
-                /**
-                 * TINYTEXT
-                 */
+                    /**
+                     * TINYTEXT
+                     */
                 case str_starts_with($columnType, "tinytext"):
                     $definition["type"] = Column::TYPE_TINYTEXT;
 
                     break;
 
-                /**
-                 * TEXT
-                 */
+                    /**
+                     * TEXT
+                     */
                 case str_starts_with($columnType, "text"):
                     $definition["type"] = Column::TYPE_TEXT;
 
                     break;
 
-                /**
-                 * VARCHAR
-                 */
+                    /**
+                     * VARCHAR
+                     */
                 case str_starts_with($columnType, "varchar"):
                     $definition["type"] = Column::TYPE_VARCHAR;
 
                     break;
 
-                /**
-                 * CHAR
-                 */
+                    /**
+                     * CHAR
+                     */
                 case str_starts_with($columnType, "char"):
                     $definition["type"] = Column::TYPE_CHAR;
 
                     break;
 
-                /**
-                 * VARBINARY
-                 */
+                    /**
+                     * VARBINARY
+                     */
                 case str_starts_with($columnType, "varbinary"):
                     $definition["type"] = Column::TYPE_VARBINARY;
 
                     break;
 
-                /**
-                 * BINARY
-                 */
+                    /**
+                     * BINARY
+                     */
                 case str_starts_with($columnType, "binary"):
                     $definition["type"] = Column::TYPE_BINARY;
 
                     break;
 
-                /**
-                 * Spatial types - order matters: detect the multi-* and
-                 * geometrycollection variants before the bare names.
-                 */
+                    /**
+                     * Spatial types - order matters: detect the multi-* and
+                     * geometrycollection variants before the bare names.
+                     */
                 case str_starts_with($columnType, "multipoint"):
                     $definition["type"] = Column::TYPE_MULTIPOINT;
 
@@ -499,9 +499,9 @@ class Mysql extends PdoAdapter
 
                     break;
 
-                /**
-                 * Default
-                 */
+                    /**
+                     * Default
+                     */
                 default:
                     $definition["type"] = Column::TYPE_VARCHAR;
 

@@ -26,6 +26,7 @@ trait ElapsedTimeTrait
     {
         return $this->getTotalElapsedNanoseconds() / 1000000;
     }
+
     /**
      * Returns the total time in nanoseconds spent by the profiles. Implemented
      * by the using class.

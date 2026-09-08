@@ -108,6 +108,7 @@ class Compiler implements InjectionAwareInterface
     protected int $exprLevel = 0;
 
     protected bool $extended = false;
+
     /**
      * @var array|bool
      * @phpstan-var array<array-key, mixed>|bool|string
@@ -115,19 +116,24 @@ class Compiler implements InjectionAwareInterface
      * TODO: Make it always array
      */
     protected array | bool | string $extendedBlocks;
+
     /**
      * @phpstan-var list<object>
      */
     protected array $extensions = [];
+
     /**
      * @phpstan-var array<string, mixed>
      */
     protected array $filters    = [];
+
     protected int $foreachLevel = 0;
+
     /**
      * @phpstan-var array<int, string>
      */
     protected array $forElsePointers = [];
+
     /**
      * @phpstan-var array<string, mixed>
      */
@@ -2229,7 +2235,6 @@ class Compiler implements InjectionAwareInterface
         return $this->prefix;
     }
 
-
     /**
      * Parses a Volt template returning its intermediate representation
      *
@@ -2712,6 +2717,7 @@ class Compiler implements InjectionAwareInterface
                 } else {
                     return "strtolower(" . $arguments . ")";
                 }
+                // no break
             case "right_trim":
                 return "rtrim(" . $arguments . ")";
             case "nl2br":
@@ -2738,6 +2744,7 @@ class Compiler implements InjectionAwareInterface
                 } else {
                     return "strtoupper(" . $arguments . ")";
                 }
+                // no break
             case "url_encode":
                 return "urlencode(" . $arguments . ")";
             default:

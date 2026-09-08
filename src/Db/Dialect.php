@@ -61,7 +61,9 @@ abstract class Dialect implements DialectInterface
      * @var db_custom_functions
      */
     protected array $customFunctions = [];
+
     protected string $escapeChar;
+
     /**
      * Dialect-specific operators that a concrete dialect must opt into via
      * $supportedOperators; using one elsewhere throws.
@@ -69,6 +71,7 @@ abstract class Dialect implements DialectInterface
      * @var list<string>
      */
     protected array $guardedOperators = ["@@", "@>", "<@", "&&", "||", "->", "->>", "#>", "#>>"];
+
     /**
      * Subset of $guardedOperators that this dialect emits. Overridden per
      * dialect.
@@ -342,9 +345,9 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve object expressions
-             */
+                /**
+                 * Resolve object expressions
+                 */
             case "object":
                 return $this->getSqlExpressionObject(
                     $expression,
@@ -352,15 +355,15 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve qualified expressions
-             */
+                /**
+                 * Resolve qualified expressions
+                 */
             case "qualified":
                 return $this->getSqlExpressionQualified($expression, $escapeChar);
 
-            /**
-             * Resolve literal OR placeholder expressions
-             */
+                /**
+                 * Resolve literal OR placeholder expressions
+                 */
             case "literal":
                 /** @var string $literal */
                 $literal = $expression["value"];
@@ -395,9 +398,9 @@ abstract class Dialect implements DialectInterface
 
                 return $value;
 
-            /**
-             * Resolve binary operations expressions
-             */
+                /**
+                 * Resolve binary operations expressions
+                 */
             case "binary-op":
                 return $this->getSqlExpressionBinaryOperations(
                     $expression,
@@ -405,9 +408,9 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve unary operations expressions
-             */
+                /**
+                 * Resolve unary operations expressions
+                 */
             case "unary-op":
                 return $this->getSqlExpressionUnaryOperations(
                     $expression,
@@ -415,9 +418,9 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve parentheses
-             */
+                /**
+                 * Resolve parentheses
+                 */
             case "parentheses":
                 /** @var db_expression $left */
                 $left = $expression["left"];
@@ -426,9 +429,9 @@ abstract class Dialect implements DialectInterface
                     . $this->getSqlExpression($left, $escapeChar, $bindCounts)
                     . ")";
 
-            /**
-             * Resolve function calls
-             */
+                /**
+                 * Resolve function calls
+                 */
             case "functionCall":
                 return $this->getSqlExpressionFunctionCall(
                     $expression,
@@ -436,9 +439,9 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve lists
-             */
+                /**
+                 * Resolve lists
+                 */
             case "list":
                 return $this->getSqlExpressionList(
                     $expression,
@@ -446,22 +449,22 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve *
-             */
+                /**
+                 * Resolve *
+                 */
             case "all":
                 return $this->getSqlExpressionAll($expression, $escapeChar);
 
-            /**
-             * Resolve SELECT
-             *
-             * Propagate the outer bindCounts into the nested SELECT
-             * definition so that array placeholders inside a sub-select
-             * are re-expanded against the current bind values instead of
-             * the parse-time `times` baked into the cached irPhql. The
-             * local copy avoids mutating the cached intermediate. See
-             * issue #17004.
-             */
+                /**
+                 * Resolve SELECT
+                 *
+                 * Propagate the outer bindCounts into the nested SELECT
+                 * definition so that array placeholders inside a sub-select
+                 * are re-expanded against the current bind values instead of
+                 * the parse-time `times` baked into the cached irPhql. The
+                 * local copy avoids mutating the cached intermediate. See
+                 * issue #17004.
+                 */
             case "select":
                 /** @var db_select_definition $nestedDefinition */
                 $nestedDefinition = $expression["value"];
@@ -470,9 +473,9 @@ abstract class Dialect implements DialectInterface
                 }
                 return "(" . $this->select($nestedDefinition) . ")";
 
-            /**
-             * Resolve CAST of values
-             */
+                /**
+                 * Resolve CAST of values
+                 */
             case "cast":
                 return $this->getSqlExpressionCastValue(
                     $expression,
@@ -480,9 +483,9 @@ abstract class Dialect implements DialectInterface
                     $bindCounts
                 );
 
-            /**
-             * Resolve CONVERT of values encodings
-             */
+                /**
+                 * Resolve CONVERT of values encodings
+                 */
             case "convert":
                 return $this->getSqlExpressionConvertValue(
                     $expression,

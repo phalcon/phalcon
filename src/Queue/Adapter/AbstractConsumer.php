@@ -43,6 +43,7 @@ abstract class AbstractConsumer implements ConsumerInterface
      * Milliseconds slept between poll attempts.
      */
     protected int $pollInterval = 200;
+
     /**
      * The queue this consumer reads from.
      */

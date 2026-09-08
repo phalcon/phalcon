@@ -46,21 +46,25 @@ class Breadcrumbs extends AbstractHelper
      * @phpstan-var html_breadcrumb_attributes
      */
     private array $attributes = [];
+
     /**
      * Keeps all the breadcrumbs
      *
      * @phpstan-var html_breadcrumb_data
      */
     private array $data = [];
+
     /**
      * Link prefix prepended to every non-empty link during rendering.
      * Auto-populated from the Url service when one is injected.
      */
     private string $prefix = '';
+
     /**
      * Crumb separator
      */
     private string $separator = "<li>/</li>";
+
     /**
      * The HTML template to use to render the breadcrumbs.
      *

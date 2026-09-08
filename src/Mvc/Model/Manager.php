@@ -227,25 +227,30 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      * @phpstan-var array<string, string>
      */
     protected array $readConnectionServices = [];
+
     /**
      * Stores a list of reusable instances
      *
      * @phpstan-var array<string, mixed>
      */
     protected array $reusable = [];
+
     /**
      * @phpstan-var array<string, string>
      */
     protected array $schemas = [];
+
     /**
      * @phpstan-var array<string, string>
      */
     protected array $sources = [];
+
     /**
      * Whether reads should stick to the write connection after a write has
      * occurred during the current request cycle.
      */
     protected bool $sticky = false;
+
     /**
      * @phpstan-var array<string, string>
      */

@@ -37,6 +37,7 @@ use function str_contains;
 abstract class Select
 {
     protected const OPTION_CLOSE = '</option>';
+
     protected const SELECT_CLOSE = '</select>';
 
     /**

@@ -50,7 +50,7 @@ final class PrepareVirtualPathTest extends AbstractUnitTestCase
         string $separator,
         string $expected
     ): void {
-        $object = new class {
+        $object = new class () {
             use FilePathTrait;
         };
 
@@ -66,7 +66,7 @@ final class PrepareVirtualPathTest extends AbstractUnitTestCase
      */
     public function testSupportTraitsFilePathTraitPrepareVirtualPathDefaultSeparator(): void
     {
-        $object = new class {
+        $object = new class () {
             use FilePathTrait;
         };
 

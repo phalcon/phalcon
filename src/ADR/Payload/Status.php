@@ -44,82 +44,102 @@ class Status
      * @var string
      */
     public const ACCEPTED           = 'ACCEPTED';
+
     /**
      * @var string
      */
     public const AUTHENTICATED      = 'AUTHENTICATED';
+
     /**
      * @var string
      */
     public const AUTHORIZED         = 'AUTHORIZED';
+
     /**
      * @var string
      */
     public const CREATED            = 'CREATED';
+
     /**
      * @var string
      */
     public const DELETED            = 'DELETED';
+
     /**
      * @var string
      */
     public const ERROR              = 'ERROR';
+
     /**
      * @var string
      */
     public const FAILURE            = 'FAILURE';
+
     /**
      * @var string
      */
     public const FOUND              = 'FOUND';
+
     /**
      * @var string
      */
     public const METHOD_NOT_ALLOWED = 'METHOD_NOT_ALLOWED';
+
     /**
      * @var string
      */
     public const NOT_ACCEPTED       = 'NOT_ACCEPTED';
+
     /**
      * @var string
      */
     public const NOT_AUTHENTICATED  = 'NOT_AUTHENTICATED';
+
     /**
      * @var string
      */
     public const NOT_AUTHORIZED     = 'NOT_AUTHORIZED';
+
     /**
      * @var string
      */
     public const NOT_CREATED        = 'NOT_CREATED';
+
     /**
      * @var string
      */
     public const NOT_DELETED        = 'NOT_DELETED';
+
     /**
      * @var string
      */
     public const NOT_FOUND          = 'NOT_FOUND';
+
     /**
      * @var string
      */
     public const NOT_UPDATED        = 'NOT_UPDATED';
+
     /**
      * @var string
      */
     public const NOT_VALID          = 'NOT_VALID';
+
     /**
      * @var string
      */
     public const PROCESSING         = 'PROCESSING';
+
     /**
      * @var string
      */
     public const SUCCESS            = 'SUCCESS';
+
     /**
      * @var string
      */
     public const UPDATED            = 'UPDATED';
+
     /**
      * @var string
      */

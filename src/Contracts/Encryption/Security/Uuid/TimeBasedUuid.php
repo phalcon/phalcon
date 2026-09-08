@@ -21,5 +21,6 @@ use DateTimeImmutable;
 interface TimeBasedUuid
 {
     public function getDateTime(): DateTimeImmutable;
+
     public function getNode(): string;
 }

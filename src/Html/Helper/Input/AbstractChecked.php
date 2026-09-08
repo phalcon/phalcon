@@ -46,6 +46,7 @@ abstract class AbstractChecked extends AbstractInput
         'text'  => '',
         'end'   => '',
     ];
+
     protected bool $strict = false;
 
     /**

@@ -235,9 +235,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * BIGINT
-                 */
+                    /**
+                     * BIGINT
+                     */
                 case str_contains($columnType, "bigint"):
                     $definition["type"]      = Column::TYPE_BIGINTEGER;
                     $definition["isNumeric"] = true;
@@ -245,9 +245,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * MEDIUMINT
-                 */
+                    /**
+                     * MEDIUMINT
+                     */
                 case str_contains($columnType, "mediumint"):
                     $definition["type"]      = Column::TYPE_MEDIUMINTEGER;
                     $definition["isNumeric"] = true;
@@ -255,9 +255,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * SMALLINT
-                 */
+                    /**
+                     * SMALLINT
+                     */
                 case str_contains($columnType, "smallint"):
                     $definition["type"]      = Column::TYPE_SMALLINTEGER;
                     $definition["isNumeric"] = true;
@@ -265,9 +265,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * TINYINT
-                 */
+                    /**
+                     * TINYINT
+                     */
                 case str_contains($columnType, "tinyint"):
                     $definition["type"]      = Column::TYPE_TINYINTEGER;
                     $definition["isNumeric"] = true;
@@ -275,9 +275,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * INT
-                 */
+                    /**
+                     * INT
+                     */
                 case str_contains($columnType, "int"):
                     $definition["type"]      = Column::TYPE_INTEGER;
                     $definition["isNumeric"] = true;
@@ -285,45 +285,45 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * BIT
-                 */
+                    /**
+                     * BIT
+                     */
                 case str_contains($columnType, "bit"):
                     $definition["type"] = Column::TYPE_BIT;
                     $definition["size"] = $numericSize;
 
                     break;
 
-                /**
-                 * ENUM
-                 */
+                    /**
+                     * ENUM
+                     */
                 case str_contains($columnType, "enum"):
                     $definition["type"] = Column::TYPE_ENUM;
 
                     break;
 
-                /**
-                 * DATE
-                 */
+                    /**
+                     * DATE
+                     */
                 case str_contains($columnType, "datetime"):
                     $definition["type"] = Column::TYPE_DATETIME;
                     $definition["size"] = 0;
 
                     break;
 
-                /**
-                 * DATETIME
-                 */
+                    /**
+                     * DATETIME
+                     */
                 case str_contains($columnType, "date"):
                     $definition["type"] = Column::TYPE_DATE;
                     $definition["size"] = 0;
 
                     break;
 
-                /**
-                 * NUMERIC -> DECIMAL - This will need to be a string so as not
-                 * to lose the decimals
-                 */
+                    /**
+                     * NUMERIC -> DECIMAL - This will need to be a string so as not
+                     * to lose the decimals
+                     */
                 case str_contains($columnType, "decimal"):
                 case str_contains($columnType, "numeric"):
                     $definition["type"]      = Column::TYPE_DECIMAL;
@@ -333,9 +333,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * DOUBLE
-                 */
+                    /**
+                     * DOUBLE
+                     */
                 case str_contains($columnType, "double precision"):
                     $definition["type"]      = Column::TYPE_DOUBLE;
                     $definition["isNumeric"] = true;
@@ -344,9 +344,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * FLOAT
-                 */
+                    /**
+                     * FLOAT
+                     */
                 case str_contains($columnType, "float"):
                 case str_contains($columnType, "real"):
                     $definition["type"]      = Column::TYPE_FLOAT;
@@ -356,105 +356,105 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * MEDIUMBLOB
-                 */
+                    /**
+                     * MEDIUMBLOB
+                     */
                 case str_contains($columnType, "mediumblob"):
                     $definition["type"] = Column::TYPE_TEXT;
 
                     break;
 
-                /**
-                 * LONGBLOB
-                 */
+                    /**
+                     * LONGBLOB
+                     */
                 case str_contains($columnType, "longblob"):
                     $definition["type"] = Column::TYPE_LONGBLOB;
 
                     break;
 
-                /**
-                 * TINYBLOB
-                 */
+                    /**
+                     * TINYBLOB
+                     */
                 case str_contains($columnType, "tinyblob"):
                     $definition["type"] = Column::TYPE_TINYBLOB;
 
                     break;
 
-                /**
-                 * BLOB
-                 */
+                    /**
+                     * BLOB
+                     */
                 case str_contains($columnType, "blob"):
                     $definition["type"] = Column::TYPE_BLOB;
 
                     break;
 
-                /**
-                 * TIMESTAMP
-                 */
+                    /**
+                     * TIMESTAMP
+                     */
                 case str_contains($columnType, "timestamp"):
                     $definition["type"] = Column::TYPE_TIMESTAMP;
 
                     break;
 
-                /**
-                 * TIME
-                 */
+                    /**
+                     * TIME
+                     */
                 case str_contains($columnType, "time"):
                     $definition["type"] = Column::TYPE_TIME;
 
                     break;
 
-                /**
-                 * JSONB
-                 */
+                    /**
+                     * JSONB
+                     */
                 case str_contains($columnType, "jsonb"):
                     $definition["type"] = Column::TYPE_JSONB;
 
                     break;
 
-                /**
-                 * JSON
-                 */
+                    /**
+                     * JSON
+                     */
                 case str_contains($columnType, "json"):
                     $definition["type"] = Column::TYPE_JSON;
 
                     break;
 
-                /**
-                 * LONGTEXT
-                 */
+                    /**
+                     * LONGTEXT
+                     */
                 case str_contains($columnType, "longtext"):
                     $definition["type"] = Column::TYPE_LONGTEXT;
 
                     break;
 
-                /**
-                 * MEDIUMTEXT
-                 */
+                    /**
+                     * MEDIUMTEXT
+                     */
                 case str_contains($columnType, "mediumtext"):
                     $definition["type"] = Column::TYPE_MEDIUMTEXT;
 
                     break;
 
-                /**
-                 * TINYTEXT
-                 */
+                    /**
+                     * TINYTEXT
+                     */
                 case str_contains($columnType, "tinytext"):
                     $definition["type"] = Column::TYPE_TINYTEXT;
 
                     break;
 
-                /**
-                 * TEXT
-                 */
+                    /**
+                     * TEXT
+                     */
                 case str_contains($columnType, "text"):
                     $definition["type"] = Column::TYPE_TEXT;
 
                     break;
 
-                /**
-                 * VARCHAR
-                 */
+                    /**
+                     * VARCHAR
+                     */
                 case str_contains($columnType, "varying"):
                 case str_contains($columnType, "varchar"):
                     $definition["type"] = Column::TYPE_VARCHAR;
@@ -462,59 +462,59 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * CHAR
-                 */
+                    /**
+                     * CHAR
+                     */
                 case str_contains($columnType, "char"):
                     $definition["type"] = Column::TYPE_CHAR;
                     $definition["size"] = $charSize;
 
                     break;
 
-                /**
-                 * UUID
-                 */
+                    /**
+                     * UUID
+                     */
                 case str_contains($columnType, "uuid"):
                     $definition["type"] = Column::TYPE_UUID;
 
                     break;
 
-                /**
-                 * BYTEA
-                 */
+                    /**
+                     * BYTEA
+                     */
                 case str_contains($columnType, "bytea"):
                     $definition["type"] = Column::TYPE_BYTEA;
 
                     break;
 
-                /**
-                 * INET
-                 */
+                    /**
+                     * INET
+                     */
                 case str_contains($columnType, "inet"):
                     $definition["type"] = Column::TYPE_INET;
 
                     break;
 
-                /**
-                 * CIDR
-                 */
+                    /**
+                     * CIDR
+                     */
                 case str_contains($columnType, "cidr"):
                     $definition["type"] = Column::TYPE_CIDR;
 
                     break;
 
-                /**
-                 * MACADDR
-                 */
+                    /**
+                     * MACADDR
+                     */
                 case str_contains($columnType, "macaddr"):
                     $definition["type"] = Column::TYPE_MACADDR;
 
                     break;
 
-                /**
-                 * Range types - order matters: more-specific names first
-                 * (`tstzrange` before `tsrange`, etc.).
-                 */
+                    /**
+                     * Range types - order matters: more-specific names first
+                     * (`tstzrange` before `tsrange`, etc.).
+                     */
                 case str_contains($columnType, "int4range"):
                     $definition["type"] = Column::TYPE_INT4RANGE;
 
@@ -545,9 +545,9 @@ class Postgresql extends PdoAdapter
 
                     break;
 
-                /**
-                 * Default
-                 */
+                    /**
+                     * Default
+                     */
                 default:
                     $definition["type"] = Column::TYPE_VARCHAR;
 

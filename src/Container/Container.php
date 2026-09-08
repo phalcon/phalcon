@@ -77,28 +77,36 @@ class Container implements Collection, Enumerable
      * @phpstan-var container_aliases
      */
     protected array $aliases = [];
+
     protected bool $autowire = true;
+
     /**
      * @phpstan-var container_instance_lifetimes
      */
     protected array $instanceLifetimes = [];
+
     /**
      * @phpstan-var container_instances
      */
     protected array $instances = [];
+
     /**
      * @phpstan-var container_parameters
      */
     protected array $parameters = [];
+
     /**
      * @phpstan-var container_processors
      */
     protected array $processors = [];
+
     protected Resolver $resolver;
+
     /**
      * @phpstan-var container_services
      */
     protected array $services = [];
+
     /**
      * @phpstan-var container_service_tags
      */

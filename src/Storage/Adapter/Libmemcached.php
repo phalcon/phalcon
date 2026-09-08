@@ -200,7 +200,7 @@ class Libmemcached extends AbstractAdapter
 
         // deleteMulti returns [key => true] on success, [key => result_code] on failure
         // all values must be true for a complete success
-        return [] === array_filter($result, fn($v) => $v !== true);
+        return [] === array_filter($result, fn ($v) => $v !== true);
     }
 
     /**

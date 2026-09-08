@@ -57,7 +57,9 @@ use function substr;
 class Url extends AbstractInjectionAware implements UrlInterface
 {
     protected string | null $basePath      = null;
+
     protected string | null $baseUri       = null;
+
     protected string | null $staticBaseUri = null;
 
     public function __construct(

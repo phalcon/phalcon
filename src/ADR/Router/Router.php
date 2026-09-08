@@ -91,11 +91,14 @@ use ReflectionClass;
 final class Router implements RouterInterface
 {
     protected string $actionDirectory = '';
+
     protected string $baseNamespace   = '';
+
     /**
      * @phpstan-var adr_middleware_map
      */
     protected array $middlewareMap  = [];
+
     protected string $wordSeparator = '-';
 
     /**

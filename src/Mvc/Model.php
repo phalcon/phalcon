@@ -45,7 +45,6 @@ use Phalcon\Mvc\Model\Exceptions\ColumnNotInTableMap;
 use Phalcon\Mvc\Model\Exceptions\DataTypeNotDefined;
 use Phalcon\Mvc\Model\Exceptions\IdentityNotInColumnMap;
 use Phalcon\Mvc\Model\Exceptions\IdentityNotInTableColumns;
-use Phalcon\Mvc\Model\Exceptions\InvalidDumpResultKey;
 use Phalcon\Mvc\Model\Exceptions\InvalidEagerParameter;
 use Phalcon\Mvc\Model\Exceptions\InvalidFindParameters;
 use Phalcon\Mvc\Model\Exceptions\InvalidModelsManagerService;
@@ -65,6 +64,7 @@ use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerHydration;
 use Phalcon\Mvc\Model\Exceptions\UnsupportedEagerResultset;
 use Phalcon\Mvc\Model\Exceptions\UpdateSnapshotDisabled;
 use Phalcon\Mvc\Model\Hydration\CaseInsensitiveColumnMap;
+use Phalcon\Mvc\Model\Hydration\CloneResult;
 use Phalcon\Mvc\Model\Hydration\CloneResultMapHydrate;
 use Phalcon\Mvc\Model\Hydration\GetPrivateProperties;
 use Phalcon\Mvc\Model\Manager;
@@ -90,7 +90,6 @@ use Throwable;
 
 use function array_intersect;
 use function array_key_exists;
-use function array_keys;
 use function array_merge;
 use function floatval;
 use function get_called_class;
@@ -202,19 +201,28 @@ abstract class Model extends AbstractInjectionAware implements
     use UncamelizeTrait;
 
     public const DIRTY_STATE_DETACHED   = 2;
+
     public const DIRTY_STATE_PERSISTENT = 0;
+
     public const DIRTY_STATE_TRANSIENT  = 1;
+
     public const OP_CREATE              = 1;
+
     public const OP_DELETE              = 3;
+
     public const OP_NONE                = 0;
+
     public const OP_UPDATE              = 2;
+
     public const TRANSACTION_INDEX      = "transaction";
 
     /**
      * @phpstan-var mvc_model_related
      */
     protected array $dirtyRelated = [];
+
     protected int $dirtyState     = 1;
+
     /**
      * @phpstan-var mvc_model_messages
      */
@@ -223,19 +231,24 @@ abstract class Model extends AbstractInjectionAware implements
     protected ManagerInterface | null $modelsManager = null;
 
     protected MetaDataInterface | null $modelsMetaData = null;
+
     /**
      * @phpstan-var mvc_model_snapshot
      */
     protected array $oldSnapshot = [];
+
     protected int $operationMade = 0;
+
     /**
      * @phpstan-var array<string, mixed>
      */
     protected array $rawValues = [];
+
     /**
      * @phpstan-var mvc_model_related
      */
     protected array $related = [];
+
     protected bool $skipped  = false;
 
     /**
@@ -886,41 +899,7 @@ abstract class Model extends AbstractInjectionAware implements
         array $data,
         int $dirtyState = 0
     ): ModelInterface {
-        /**
-         * Clone the base record
-         */
-        $instance = clone $base;
-
-        /**
-         * Declared private properties must be written via reflection during
-         * hydration - see Hydration\GetPrivateProperties
-         */
-        $privateProperties = GetPrivateProperties::getPrivateProperties(get_class($instance));
-
-        /**
-         * Mark the object as persistent
-         */
-        $instance->setDirtyState($dirtyState);
-
-        foreach ($data as $key => $value) {
-            if (!is_string($key)) {
-                throw new InvalidDumpResultKey(get_class($base));
-            }
-
-            if (isset($privateProperties[$key])) {
-                $privateProperties[$key]->setValue($instance, $value);
-            } else {
-                $instance->$key = $value;
-            }
-        }
-
-        /**
-         * Call afterFetch, this allows the developer to execute actions after a
-         * record is fetched from the database
-         */
-        $instance->fireEvent("afterFetch");
-
-        return $instance;
+        return CloneResult::cloneResult($base, $data, $dirtyState);
     }
 
     /**
@@ -2142,7 +2121,6 @@ abstract class Model extends AbstractInjectionAware implements
         return $query;
     }
 
-
     /**
      * Pre-loads the relations named by the `eager` find parameter.
      *
@@ -3361,23 +3339,23 @@ abstract class Model extends AbstractInjectionAware implements
          * If there are any arguments, Manager with handle the caching of the records
          */
         if ($arguments === null) {
-//            /**
-//             * If the related records are already in cache and the relation is reusable,
-//             * we return the cached records.
-//             */
-//            if relation->isReusable() && this->isRelationshipLoaded(lowerAlias) {
-//                $result = $this->related[lowerAlias];
-//            } else {
-//                /**
-//                 * Call the 'getRelationRecords' in the models manager.
-//                 */
-//                $result = manager->getRelationRecords(relation, this, arguments);
-//
-//                /**
-//                 * We store relationship objects in the related cache if there were no arguments.
-//                 */
-//                $this->related[lowerAlias] = result;
-//            }
+            //            /**
+            //             * If the related records are already in cache and the relation is reusable,
+            //             * we return the cached records.
+            //             */
+            //            if relation->isReusable() && this->isRelationshipLoaded(lowerAlias) {
+            //                $result = $this->related[lowerAlias];
+            //            } else {
+            //                /**
+            //                 * Call the 'getRelationRecords' in the models manager.
+            //                 */
+            //                $result = manager->getRelationRecords(relation, this, arguments);
+            //
+            //                /**
+            //                 * We store relationship objects in the related cache if there were no arguments.
+            //                 */
+            //                $this->related[lowerAlias] = result;
+            //            }
             if (isset($this->dirtyRelated[$lowerAlias])) {
                 return $this->dirtyRelated[$lowerAlias];
             }

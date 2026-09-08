@@ -85,14 +85,17 @@ class Dump implements TemplateAware
     use TemplateAwareTrait;
 
     protected bool $detailed = false;
+
     /**
      * @var array<array-key, class-string>
      */
     protected array $methods = [];
+
     /**
      * @phpstan-var support_debug_styles
      */
     protected array $styles = [];
+
     private Encode $encode;
 
     /**

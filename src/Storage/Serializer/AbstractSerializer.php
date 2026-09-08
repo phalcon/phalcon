@@ -31,6 +31,7 @@ abstract class AbstractSerializer implements SerializerInterface
      * @var mixed
      */
     protected $data           = null;
+
     protected bool $isSuccess = true;
 
     /**

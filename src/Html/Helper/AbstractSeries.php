@@ -30,6 +30,7 @@ abstract class AbstractSeries extends AbstractHelper
      * @phpstan-var html_attributes
      */
     protected array $attributes = [];
+
     /**
      * @phpstan-var html_element_store
      */

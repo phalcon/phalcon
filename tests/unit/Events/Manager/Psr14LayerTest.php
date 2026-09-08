@@ -131,6 +131,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $manager->dispatch(new EmptyEventObject());
         $this->assertTrue($result, 'Event was dispatched');
     }
+
     public function testDispatchWithStringName(): void
     {
         $result  = false;
@@ -173,7 +174,6 @@ final class Psr14LayerTest extends AbstractUnitTestCase
         $this->assertSame(['first', 'second'], $callOrder, 'Both listeners should run for non-cancelable events');
     }
 
-
     public function testOldStyleAttachAndNewStyleDispatch(): void
     {
         $manager = new Manager();
@@ -183,6 +183,7 @@ final class Psr14LayerTest extends AbstractUnitTestCase
             public function __construct(private &$c)
             {
             }
+
             public function __invoke()
             {
                 $this->c++;

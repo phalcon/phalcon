@@ -58,9 +58,13 @@ use const ENT_SUBSTITUTE;
 class Escaper implements EscaperInterface
 {
     protected AttributeEscaper $attributeEscaper;
+
     protected CssEscaper $cssEscaper;
+
     protected HtmlEscaper $htmlEscaper;
+
     protected JsEscaper $jsEscaper;
+
     protected UrlEscaper $urlEscaper;
 
     /**

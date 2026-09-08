@@ -26,6 +26,7 @@ interface CsrfProtection
     public function getRequestToken(): string | null;
 
     public function getSessionToken(): string | null;
+
     public function getToken(): string | null;
 
     public function getTokenKey(): string | null;

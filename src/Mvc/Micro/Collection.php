@@ -40,11 +40,14 @@ class Collection implements CollectionInterface
      * @var callable
      */
     protected mixed $handler;
+
     /**
      * @phpstan-var mvc_micro_handlers
      */
     protected array $handlers = [];
+
     protected bool $isLazy    = false;
+
     protected string $prefix  = '';
 
     /**

@@ -45,10 +45,12 @@ class Breadcrumbs
      * @phpstan-var html_breadcrumb_elements
      */
     private array $elements = [];
+
     /**
      * Crumb separator
      */
     private string $separator = " / ";
+
     /**
      * The HTML template to use to render the breadcrumbs.
      */

@@ -71,6 +71,7 @@ final class CreateTest extends AbstractUnitTestCase
         $this->assertInstanceOf(BeforeDeleteEvent::class, $factory->create('beforeDelete', $model));
         $this->assertInstanceOf(BeforeSaveEvent::class, $factory->create('beforeSave', $model));
     }
+
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-18

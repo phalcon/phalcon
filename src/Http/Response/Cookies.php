@@ -84,8 +84,11 @@ class Cookies extends AbstractInjectionAware implements CookiesInterface
      * @phpstan-var http_cookie_bag
      */
     protected array $cookies     = [];
+
     protected bool $isRegistered = false;
+
     protected bool $isSent       = false;
+
     /**
      * The cookie's sign key.
      */

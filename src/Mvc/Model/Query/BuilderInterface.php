@@ -27,6 +27,7 @@ use Phalcon\Mvc\Model\QueryInterface;
 interface BuilderInterface
 {
     public const OPERATOR_AND = "and";
+
     public const OPERATOR_OR  = "or";
 
     /**

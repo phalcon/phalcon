@@ -101,22 +101,30 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     use FileTrait;
 
     protected AttributeBag | null $attributes       = null;
+
     protected FilterInterface | null $filterService = null;
+
     protected bool $methodOverride                  = false;
+
     /**
      * @phpstan-var http_form_data|null
      */
     protected array | null $postCache = null;
+
     /**
      * @phpstan-var http_parameter_filters
      */
     protected array $queryFilters   = [];
+
     protected string $rawBody       = '';
+
     protected bool $strictHostCheck = false;
+
     /**
      * @phpstan-var list<string>
      */
     protected array $trustedProxies      = [];
+
     protected string $trustedProxyHeader = '';
 
     /**

@@ -19,6 +19,7 @@ use Phalcon\Support\Helper\Json\Encode;
 class Json extends AbstractSerializer
 {
     private Decode $decode;
+
     private Encode $encode;
 
     /**

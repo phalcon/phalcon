@@ -316,7 +316,6 @@ class Random
         return (string) (new Uuid())->v4();
     }
 
-
     /**
      * Generates a random string based on the number ($base) of characters
      * ($alphabet).

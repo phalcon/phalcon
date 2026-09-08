@@ -54,35 +54,54 @@ use const PHP_EOL;
 class Tag
 {
     public const HTML32               = 1;
+
     public const HTML401_FRAMESET     = 4;
+
     public const HTML401_STRICT       = 2;
+
     public const HTML401_TRANSITIONAL = 3;
+
     public const HTML5                = 5;
+
     public const XHTML10_FRAMESET     = 8;
+
     public const XHTML10_STRICT       = 6;
+
     public const XHTML10_TRANSITIONAL = 7;
+
     public const XHTML11              = 9;
+
     public const XHTML20              = 10;
+
     public const XHTML5               = 11;
 
     protected static bool $autoEscape              = true;
+
     protected static DiInterface | null $container = null;
+
     /**
      * @phpstan-var tag_display_values
      */
     protected static array $displayValues = [];
+
     /**
      * @phpstan-var tag_title_parts
      */
     protected static array $documentAppendTitle = [];
+
     /**
      * @phpstan-var tag_title_parts
      */
     protected static array $documentPrependTitle             = [];
+
     protected static string | null $documentTitle            = "";
+
     protected static string | null $documentTitleSeparator   = "";
+
     protected static int $documentType                       = 11;
+
     protected static EscaperInterface | null $escaperService = null;
+
     protected static UrlInterface | null $urlService         = null;
 
     /**

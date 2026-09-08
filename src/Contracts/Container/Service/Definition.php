@@ -41,28 +41,42 @@ use Phalcon\Contracts\Container\Ioc\IocContainer;
 interface Definition
 {
     public function addExtender(callable $extender): static;
+
     public function buildService(IocContainer $ioc): object;
+
     public function getClass(): string;
 
     /**
      * @phpstan-return container_extenders
      */
     public function getExtenders(): array;
+
     public function getFactory(): callable;
+
     public function getLifetime(): string;
+
     public function getServiceName(): string;
+
     public function hasClass(): bool;
+
     public function hasExtenders(): bool;
+
     public function hasFactory(): bool;
+
     public function setClass(string $className): static;
 
     /**
      * @phpstan-param container_extenders $extenders
      */
     public function setExtenders(array $extenders): static;
+
     public function setFactory(callable $factory): static;
+
     public function setLifetime(string $lifetime): static;
+
     public function unsetClass(): static;
+
     public function unsetExtenders(): static;
+
     public function unsetFactory(): static;
 }
