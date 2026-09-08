@@ -2007,7 +2007,16 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Dispatch events to the global events manager
          */
         if (null !== $this->eventsManager) {
-            $status = $this->fireManagerEvent("model:" . $eventName, $model);
+            /**
+             * The model is the event source, matching cphalcon and the custom
+             * events manager below. `fireManagerEvent()` cannot be used here:
+             * it sends this manager as the source and the model as the data,
+             * which is a different contract for the listener.
+             */
+            $status = $this->eventsManager->fire(
+                "model:" . $eventName,
+                $model
+            );
 
             if ($status === false) {
                 return $status;
