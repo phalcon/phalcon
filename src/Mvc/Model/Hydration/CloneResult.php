@@ -13,9 +13,14 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Hydration;
 
+use Phalcon\Contracts\Mvc\MvcTypes;
+use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Exceptions\InvalidDumpResultKey;
 use Phalcon\Mvc\ModelInterface;
 
+/**
+ * @phpstan-import-type mvc_model_data from MvcTypes
+ */
 class CloneResult
 {
     /**
