@@ -32,8 +32,6 @@ interface Manager
 
     /**
      * Attach a listener to the events manager.
-     *
-     * @param callable|object $handler
      */
     public function attach(
         string $eventType,
@@ -54,8 +52,6 @@ interface Manager
 
     /**
      * Detach a listener from the events manager.
-     *
-     * @param callable|object $handler
      */
     public function detach(string $eventType, mixed $handler): void;
 
@@ -81,16 +77,22 @@ interface Manager
 
     /**
      * Returns all listeners attached to the given event type.
+     *
+     * @return array<array-key, mixed>
      */
     public function getListeners(string $type): array;
 
     /**
      * Returns the responses recorded during the last fire (when collecting).
+     *
+     * @return array<array-key, mixed>
      */
     public function getResponses(): array;
 
     /**
      * Returns the list of registered subscriber instances.
+     *
+     * @phpstan-return list<Subscriber>
      */
     public function getSubscribers(): array;
 

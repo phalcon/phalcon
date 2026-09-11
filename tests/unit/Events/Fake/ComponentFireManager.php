@@ -13,15 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Fake;
 
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Events\AbstractEventsAware;
 
 /**
  * Fake component that exposes fireManagerEvent() for coverage.
  */
-class ComponentFireManager
+class ComponentFireManager extends AbstractEventsAware
 {
-    use EventsAwareTrait;
-
     public function callFireManagerEvent(string $eventName, mixed $data = null): mixed
     {
         return $this->fireManagerEvent($eventName, $data);

@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Fake;
 
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Events\AbstractEventsAware;
 
-class ComponentWithEvents
+class ComponentWithEvents extends AbstractEventsAware
 {
-    use EventsAwareTrait;
 }

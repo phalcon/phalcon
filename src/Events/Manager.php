@@ -15,6 +15,7 @@ namespace Phalcon\Events;
 
 use Closure;
 use Phalcon\Contracts\Events\Enumerable;
+use Phalcon\Contracts\Events\EventsTypes;
 use Phalcon\Contracts\Events\Stoppable;
 use Phalcon\Contracts\Events\Subscriber;
 use Phalcon\Events\Exceptions\InvalidEventHandler;
@@ -42,6 +43,14 @@ use function substr;
  * needed, the normal flow of operation. With the EventsManager the developer
  * can create hooks or plugins that will offer monitoring of data, manipulation,
  * conditional execution and much more.
+ *
+ * @phpstan-import-type events_method_exists_cache from EventsTypes
+ * @phpstan-import-type events_name_cache from EventsTypes
+ * @phpstan-import-type events_queue from EventsTypes
+ * @phpstan-import-type events_storage from EventsTypes
+ * @phpstan-import-type events_subscriber_events_cache from EventsTypes
+ * @phpstan-import-type events_subscriber_listener from EventsTypes
+ * @phpstan-import-type events_subscribers from EventsTypes
  */
 class Manager implements ManagerInterface, Enumerable
 {
@@ -55,6 +64,8 @@ class Manager implements ManagerInterface, Enumerable
      * hash lookup.
      *
      * Shape: `eventNameCache[$eventType] = [typePrefix, eventName]`
+     *
+     * @phpstan-var events_name_cache
      */
     protected array $eventNameCache = [];
 
@@ -75,6 +86,8 @@ class Manager implements ManagerInterface, Enumerable
      *   1 - [obj, method] array callable
      *   2 - plain object: method named after the event
      *   3 - generic callable (string fn name, invokable object, etc.)
+     *
+     * @phpstan-var events_storage
      */
     protected array $events = [];
 
@@ -95,6 +108,8 @@ class Manager implements ManagerInterface, Enumerable
     /**
      * Memoized method_exists() results for the plain-object dispatch path.
      * Keyed by `handlerClass => [methodName => bool]`.
+     *
+     * @phpstan-var events_method_exists_cache
      */
     protected array $methodExistsCache = [];
 
@@ -124,9 +139,14 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Memoized getSubscribedEvents() maps keyed by Subscriber class name.
+     *
+     * @phpstan-var events_subscriber_events_cache
      */
     protected array $subscriberEventsCache = [];
 
+    /**
+     * @phpstan-var events_subscribers
+     */
     protected array $subscribers = [];
 
     /**
@@ -159,8 +179,6 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Attach a listener to the events manager
-     *
-     * @param callable|object $handler
      *
      * @throws InvalidEventHandler
      */
@@ -229,8 +247,6 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Detach the listener from the events manager
-     *
-     * @param callable|object $handler
      *
      * @throws InvalidEventHandler
      */
@@ -472,6 +488,8 @@ class Manager implements ManagerInterface, Enumerable
      * array. Independent of collectResponses(); the caller's collected state
      * on `$this->responses` is preserved (stashed and restored).
      *
+     * @return array<array-key, mixed>
+     *
      * @throws InvalidEventType
      * @throws NoListenersForEvent
      */
@@ -575,6 +593,8 @@ class Manager implements ManagerInterface, Enumerable
      * Internal handler to call a queue of events.
      *
      * Kept as a thin BC wrapper around the private dispatch loop.
+     *
+     * @phpstan-param events_queue $queue
      */
     final public function fireQueue(array $queue, EventInterface $event): mixed
     {
@@ -582,6 +602,13 @@ class Manager implements ManagerInterface, Enumerable
             return null;
         }
 
+        /**
+         * The contract does not declare getSource(), and its getType() gives
+         * mixed. Event declares both. An event without getSource() fails
+         * here at run time. Remove this when the contract declares both.
+         *
+         * @phpstan-var Event $event
+         */
         return $this->runQueue(
             $queue,
             $event,
@@ -655,6 +682,8 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Returns the list of registered subscriber instances.
+     *
+     * @phpstan-return list<Subscriber>
      */
     public function getSubscribers(): array
     {
@@ -813,6 +842,8 @@ class Manager implements ManagerInterface, Enumerable
      *
      * type=2 tuples carry a 4th element `className` so the dispatch loop can
      * skip the per-fire get_class() lookup against methodExistsCache.
+     *
+     * @phpstan-param string|null $className
      */
     private function insertHandlerEntry(
         string $eventType,
@@ -909,6 +940,11 @@ class Manager implements ManagerInterface, Enumerable
         $firstParam = $params[0];
 
         if (is_string($firstParam)) {
+            /**
+             * The Subscriber contract gives this entry as [method, priority].
+             *
+             * @phpstan-var events_subscriber_listener $params
+             */
             $methodName = $firstParam;
             $priority   = $params[1] ?? self::DEFAULT_PRIORITY;
 
@@ -928,6 +964,12 @@ class Manager implements ManagerInterface, Enumerable
 
         if (is_array($firstParam)) {
             foreach ($params as $listener) {
+                /**
+                 * The Subscriber contract gives each entry as
+                 * [method, priority].
+                 *
+                 * @phpstan-var events_subscriber_listener $listener
+                 */
                 $methodName = $listener[0];
                 $priority   = $listener[1] ?? self::DEFAULT_PRIORITY;
 
@@ -955,6 +997,12 @@ class Manager implements ManagerInterface, Enumerable
      * the dispatch name (when provided) or fall back to __invoke. Propagation
      * stops when the event implements Phalcon\Contracts\Events\Stoppable and
      * reports it is stopped.
+     *
+     * The listener type that attach() sets gives the handler shape. PHPStan
+     * cannot follow that link, thus each branch declares the shape.
+     *
+     * @phpstan-param events_queue $queue
+     * @phpstan-param string|null  $methodName
      */
     private function runObjectQueue(
         array $queue,
@@ -969,9 +1017,14 @@ class Manager implements ManagerInterface, Enumerable
             $type    = $tuple[1];
 
             if (0 === $type || 1 === $type || 3 === $type) {
+                /** @phpstan-var callable $handler */
                 $ret = $handler($event);
             } else {
-                // type 2: plain object handler.
+                /**
+                 * type 2: plain object handler.
+                 *
+                 * @phpstan-var object $handler
+                 */
                 if (null !== $methodName && method_exists($handler, $methodName)) {
                     $ret = $handler->{$methodName}($event);
                 } elseif (method_exists($handler, '__invoke')) {
@@ -1003,6 +1056,11 @@ class Manager implements ManagerInterface, Enumerable
      * 1. Last non-null wins.
      * 2. stop() determinism: a listener that stops the event makes its return
      *    the dispatch return (even if null) and the queue is abandoned.
+     *
+     * The listener type that attach() sets gives the handler shape. PHPStan
+     * cannot follow that link, thus each branch declares the shape.
+     *
+     * @phpstan-param events_queue $queue
      */
     private function runQueue(
         array $queue,
@@ -1024,10 +1082,16 @@ class Manager implements ManagerInterface, Enumerable
             $type    = $tuple[1];
 
             if (0 === $type) {
+                /** @phpstan-var Closure $handler */
                 $ret = $handler($event, $source, $data);
             } elseif (1 === $type) {
+                /** @phpstan-var array{0: object, 1: string} $handler */
                 $ret = $handler[0]->{$handler[1]}($event, $source, $data);
             } elseif (2 === $type) {
+                /**
+                 * @phpstan-var object                                     $handler
+                 * @phpstan-var array{0: object, 1: int, 2: int, 3: string} $tuple
+                 */
                 $handlerClass = $tuple[3];
 
                 if (!isset($this->methodExistsCache[$handlerClass][$eventName])) {
@@ -1048,6 +1112,7 @@ class Manager implements ManagerInterface, Enumerable
 
                 $ret = $handler->{$eventName}($event, $source, $data);
             } else {
+                /** @phpstan-var callable $handler */
                 $ret = call_user_func_array($handler, [$event, $source, $data]);
             }
 
@@ -1067,10 +1132,16 @@ class Manager implements ManagerInterface, Enumerable
             $type    = $tuple[1];
 
             if (0 === $type) {
+                /** @phpstan-var Closure $handler */
                 $ret = $handler($event, $source, $data);
             } elseif (1 === $type) {
+                /** @phpstan-var array{0: object, 1: string} $handler */
                 $ret = $handler[0]->{$handler[1]}($event, $source, $data);
             } elseif (2 === $type) {
+                /**
+                 * @phpstan-var object                                     $handler
+                 * @phpstan-var array{0: object, 1: int, 2: int, 3: string} $tuple
+                 */
                 $handlerClass = $tuple[3];
 
                 if (!isset($this->methodExistsCache[$handlerClass][$eventName])) {
@@ -1091,6 +1162,7 @@ class Manager implements ManagerInterface, Enumerable
 
                 $ret = $handler->{$eventName}($event, $source, $data);
             } else {
+                /** @phpstan-var callable $handler */
                 $ret = call_user_func_array($handler, [$event, $source, $data]);
             }
 

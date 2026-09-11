@@ -37,9 +37,6 @@ final class ComponentManagerTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Traits\EventsAwareTrait :: fireManagerEvent() - with
-     * eventsManager set (L69-72)
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2024-01-01
      */

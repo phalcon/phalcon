@@ -26,11 +26,15 @@ namespace Phalcon\Contracts\Events;
  *       ['methodName1'],
  *       ['methodName2', priority],
  *   ]
+ *
+ * @phpstan-import-type events_subscribed_events from EventsTypes
  */
 interface Subscriber
 {
     /**
      * Returns a map of event name => listener config.
+     *
+     * @phpstan-return events_subscribed_events
      */
     public static function getSubscribedEvents(): array;
 }

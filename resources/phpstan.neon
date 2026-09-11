@@ -35,6 +35,13 @@ parameters:
             message: "#Call to an undefined method object::(beforeExecuteRoute|initialize|afterBinding|afterExecuteRoute)\\(\\)#"
             path: ../src/Dispatcher/AbstractDispatcher.php
             reportUnmatched: false
+        # The trait reads `container` only after property_exists() finds it.
+        # In a class that does not declare the property, PHPStan types the
+        # access as mixed. The Zephir trait reads it the same way.
+        -
+            message: "#Cannot call method set\\(\\) on mixed#"
+            path: ../src/Events/Traits/EventsAwareTrait.php
+            reportUnmatched: false
         # `params` is a typed array property here, so the guard is unreachable
         # in PHP. It is kept because the Zephir property is untyped, where the
         # same guard is live and raises EXCEPTION_INVALID_PARAMS.

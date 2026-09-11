@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Fake;
 
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Events\AbstractEventsAware;
 
-class ComponentTwo
+class ComponentTwo extends AbstractEventsAware
 {
-    use EventsAwareTrait;
-
     public function doAction(): void
     {
         $this->eventsManager->fire('another:beforeAction', $this);

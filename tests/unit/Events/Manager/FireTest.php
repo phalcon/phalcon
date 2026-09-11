@@ -116,8 +116,6 @@ final class FireTest extends AbstractUnitTestCase
     }
 
     /**
-     * Tests Phalcon\Events\Manager :: fire() - with priorities
-     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
