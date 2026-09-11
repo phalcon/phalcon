@@ -241,7 +241,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
                     $this->filter = $filter;
                 }
 
-                /** @var array<array-key, mixed>|string $sanitizers */
+                /** @var array<array-key, array<array-key, mixed>|string>|string $sanitizers */
                 $sanitizers = $filters;
 
                 return $this->filter->sanitize($decryptedValue, $sanitizers);

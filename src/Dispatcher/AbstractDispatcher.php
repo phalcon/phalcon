@@ -1010,7 +1010,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         $container = $this->container;
         /** @var FilterInterface $filter */
         $filter = $container->getShared("filter");
-        /** @var array<array-key, mixed>|string $filters */
+        /** @var array<array-key, array<array-key, mixed>|string>|string $filters */
 
         return $filter->sanitize($paramValue, $filters);
     }

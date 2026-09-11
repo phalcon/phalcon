@@ -145,6 +145,9 @@ abstract class Select
         if (is_object($options)) {
             /**
              * Create the SELECT's option from a resultset
+             * An object here is a resultset, as in cphalcon.
+             *
+             * @var ResultsetInterface $options
              */
             $code .= self::optionsFromResultset(
                 $options,

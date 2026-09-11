@@ -2615,6 +2615,10 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Join the conditions in the array using an AND operator
          * Do the deletion
+         *
+         * The bind types come from the metadata as Column::BIND_* integers.
+         *
+         * @var array<int> $bindTypes
          */
         $success = $writeConnection->delete(
             $table,
@@ -5134,7 +5138,10 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * The low level insert is performed
          *
-         * @var string $table
+         * The bind types come from the metadata as Column::BIND_* integers.
+         *
+         * @var string     $table
+         * @var array<int> $bindTypes
          */
         $success = $connection->insert($table, $values, $fields, $bindTypes);
 
@@ -5557,7 +5564,12 @@ abstract class Model extends AbstractInjectionAware implements
          * We build the conditions as an array
          * Perform the low level update
          *
-         * @var string $table
+         * The bind types come from the metadata as Column::BIND_* integers.
+         * has() sets the unique key before an update runs.
+         *
+         * @var string     $table
+         * @var array<int> $bindTypes
+         * @var string     $uniqueKey
          */
         $success = $connection->update(
             $table,

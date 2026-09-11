@@ -45,7 +45,7 @@ class Decode
         bool $associative = false,
         int $depth = 512,
         int $options = 79
-    ) {
+    ): mixed {
         try {
             return $this->toDecode($data, $associative, $depth, $options);
         } catch (JsonException $ex) {

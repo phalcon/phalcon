@@ -1538,7 +1538,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         }
 
         if (null !== $filters) {
-            /** @var array<array-key, mixed>|string $sanitizers */
+            /** @var array<array-key, array<array-key, mixed>|string>|string $sanitizers */
             $sanitizers = $filters;
 
             $filterService = $this->getFilterService();

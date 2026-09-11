@@ -119,7 +119,7 @@ class Model extends AbstractAdapter
         $limit      = (int)$this->limitRows;
         $pageNumber = (int)$this->page;
 
-        /** @var class-string<ModelInterface<mixed>> $modelClass */
+        /** @var class-string<ModelInterface> $modelClass */
         $modelClass = $this->config["model"];
 
         $parameters = $this->config["parameters"] ?? [];

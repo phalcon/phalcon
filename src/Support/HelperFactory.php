@@ -161,7 +161,7 @@ class HelperFactory extends AbstractFactory
      *
      * @throws Exception
      */
-    public function __call(string $name, array $arguments)
+    public function __call(string $name, array $arguments): mixed
     {
         $helper = $this->newInstance($name);
 

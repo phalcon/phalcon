@@ -38,7 +38,7 @@ interface Manager
     public function access(string $accessName): self;
 
     /**
-     * @param array<string, class-string<Access>> $accessList
+     * @phpstan-param array<string, class-string<Access>> $accessList
      */
     public function addAccessList(array $accessList): self;
 
@@ -68,7 +68,7 @@ interface Manager
     public function getAccess(): ?Access;
 
     /**
-     * @return array<string, class-string<Access>>
+     * @phpstan-return array<string, class-string<Access>>
      */
     public function getAccessList(): array;
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Cache;
 
+use DateInterval;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 
 /**
@@ -69,6 +70,8 @@ interface Cache
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional
      * expiration TTL time.
+     *
+     * @phpstan-param DateInterval|int|null $ttl
      */
     public function set(
         string $key,
@@ -80,6 +83,8 @@ interface Cache
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
      * @phpstan-param iterable<string, mixed> $values
+     *
+     * @phpstan-param DateInterval|int|null $ttl
      */
     public function setMultiple(
         mixed $values,

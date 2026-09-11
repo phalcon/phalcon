@@ -319,6 +319,8 @@ interface Adapter
      * @phpstan-param db_bind_params $placeholders
      *
      * @return bool|string
+     *
+     * @phpstan-param int|string $column
      */
     public function fetchColumn(
         string $sqlQuery,

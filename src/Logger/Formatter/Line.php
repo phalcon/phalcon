@@ -59,7 +59,7 @@ class Line extends AbstractFormatter
          * (CWE-117) or inject terminal control sequences. The record separator
          * the adapter appends is added after formatting, so it is not touched.
          */
-        return preg_replace_callback(
+        return (string) preg_replace_callback(
             '/[\x00-\x08\x0A-\x1F\x7F]/',
             function ($matches) {
                 return sprintf('\x%02X', ord($matches[0]));

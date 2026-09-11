@@ -176,7 +176,7 @@ class Model extends AbstractAdapter implements RememberAdapter
      */
     private function findFirstAsAuthUser(array $parameters): ?AuthUser
     {
-        /** @var class-string<ModelInterface<mixed>> $modelClass */
+        /** @var class-string<ModelInterface> $modelClass */
         $modelClass = $this->config->getModel();
 
         $found = $modelClass::findFirst($parameters);

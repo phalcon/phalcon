@@ -84,7 +84,7 @@ abstract class AbstractChecked extends AbstractInput
      */
     public function label(array $attributes = []): static
     {
-        $text = $this->escaper->html($attributes['text'] ?? '');
+        $text = $this->escaper->html((string) ($attributes['text'] ?? ''));
         unset($attributes['text']);
 
         $attributes = array_merge(

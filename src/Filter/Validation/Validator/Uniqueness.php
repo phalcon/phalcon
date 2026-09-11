@@ -179,7 +179,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         /**
          * `isUniqueness()` only reaches the model path for a model record.
          *
-         * @var EntityInterface&InjectionAwareInterface&ModelInterface<mixed> $record
+         * @var EntityInterface&InjectionAwareInterface&ModelInterface $record
          */
         // Caching columnMap
         if (Settings::get("orm.column_renaming") && !$this->columnMap) {
@@ -277,7 +277,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         /**
          * `isUniqueness()` only reaches this method for a model record.
          *
-         * @var EntityInterface&InjectionAwareInterface&ModelInterface<mixed> $record
+         * @var EntityInterface&InjectionAwareInterface&ModelInterface $record
          */
         $exceptConditions = [];
         $index            = 0;

@@ -812,6 +812,7 @@ class Tag
              */
             /** @var ResponseInterface $response */
             $response = $container->get("response");
+            /** @var array<string, array<string>|bool|float|int|string|null> $attributes */
             $link     = new Link(
                 "preload",
                 str_replace("'", "", $href),

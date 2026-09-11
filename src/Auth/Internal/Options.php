@@ -48,9 +48,9 @@ final class Options
     }
 
     /**
-     * @param array<string, mixed> $options
+     * @phpstan-param array<string, mixed> $options
      *
-     * @return array<string, mixed>
+     * @phpstan-return array<string, mixed>
      * @throws Exception
      */
     public static function requireArray(array $options, string $key, string $context): array
@@ -66,7 +66,7 @@ final class Options
     }
 
     /**
-     * @param array<string, mixed> $options
+     * @phpstan-param array<string, mixed> $options
      *
      * @throws Exception
      */

@@ -224,7 +224,7 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
     /**
      * Sets a session variable in an application context
      */
-    public function set(string $key, $value): void
+    public function set(string $key, mixed $value): void
     {
         // To use $_SESSION variable we need to start session first
         if (true === $this->exists()) {

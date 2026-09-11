@@ -122,7 +122,7 @@ class Session extends AbstractFlash
      *
      * @throws Exception
      */
-    public function message(string $type, $message): string | null
+    public function message(string $type, mixed $message): string | null
     {
         $messages = $this->getSessionMessages(false);
 

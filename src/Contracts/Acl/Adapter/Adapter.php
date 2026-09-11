@@ -79,6 +79,8 @@ interface Adapter
      * Allow access to a role on a component. You can use `*` as wildcard
      *
      * @phpstan-param acl_access_list $access
+     *
+     * @phpstan-param callable|null $func
      */
     public function allow(
         string $roleName,
@@ -91,6 +93,8 @@ interface Adapter
      * Deny access to a role on a component. You can use `*` as wildcard
      *
      * @phpstan-param acl_access_list $access
+     *
+     * @phpstan-param callable|null $func
      */
     public function deny(
         string $roleName,

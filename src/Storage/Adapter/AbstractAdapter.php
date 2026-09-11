@@ -97,11 +97,13 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         $lifetime = $this->getArrVal($options, 'lifetime', 3600);
         /** @var SerializerInterface|null $serializer */
         $serializer = $this->getArrVal($options, 'serializer', null);
+        /** @var array<int, string>|bool $allowedClasses */
+        $allowedClasses = $this->getArrVal($options, 'allowedClasses', true);
 
         /**
          * Lets set some defaults and options here
          */
-        $this->allowedClasses    = $this->getArrVal($options, 'allowedClasses', true);
+        $this->allowedClasses    = $allowedClasses;
         $this->defaultSerializer = mb_strtolower($defaultSerializer);
         $this->lifetime          = $lifetime;
         $this->serializer        = $serializer;

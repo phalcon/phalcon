@@ -1,7 +1,7 @@
 parameters:
     paths:
         - ../src
-    level: 1
+    level: max
     tmpDir: ../tests/_output
     ignoreErrors:
         - "#Unsafe usage of new static#"
@@ -34,6 +34,51 @@ parameters:
         -
             message: "#Call to an undefined method object::(beforeExecuteRoute|initialize|afterBinding|afterExecuteRoute)\\(\\)#"
             path: ../src/Dispatcher/AbstractDispatcher.php
+            reportUnmatched: false
+        # `insertAsDict()` and `updateAsDict()` accept `mixed` data, as in
+        # cphalcon. Only the `db_dict` docblock makes the guard look
+        # redundant. It returns false for data that is not an array, as the
+        # Zephir implementation does.
+        -
+            message: "#Call to function is_array\\(\\) with array<string, mixed> will always evaluate to true#"
+            path: ../src/Db/Adapter/AbstractAdapter.php
+            reportUnmatched: false
+        # `findFirst()` is documented without `false`, but the Zephir
+        # implementation checks for it. The guard is kept the same in both.
+        -
+            message: "#Strict comparison using === between Phalcon\\\\Mvc\\\\Model\\\\Row\\|Phalcon\\\\Mvc\\\\ModelInterface\\|null and false will always evaluate to false#"
+            path: ../src/Auth/Adapter/Model.php
+            reportUnmatched: false
+        # `getDI()` never returns null in PHP. The Zephir implementation checks
+        # the container for null, and the guard is kept the same in both.
+        -
+            message: "#Strict comparison using === between null and Phalcon\\\\Di\\\\DiInterface will always evaluate to false#"
+            path: ../src/Filter/Validation.php
+            reportUnmatched: false
+        # `current()` returns false past the end, as in cphalcon. A foreach
+        # never gets there, because `valid()` stops it first.
+        -
+            message: "#Method Phalcon\\\\Forms\\\\Form::current\\(\\) should return Phalcon\\\\Forms\\\\Element\\\\ElementInterface but returns false#"
+            path: ../src/Forms/Form.php
+            reportUnmatched: false
+        # `isMethod()` is documented as array|string, but `$methods` is
+        # `mixed`. The guards for other types are live in the Zephir
+        # implementation, where the parameter is untyped.
+        -
+            message: "#(Call to function is_array\\(\\) with array<mixed> will always evaluate to true|Parameter \\#1 \\$methods of method Phalcon\\\\Http\\\\Request::isMethod\\(\\) expects array<mixed>\\|string, mixed given|Unreachable statement - code above always terminates)#"
+            path: ../src/Http/Request.php
+            reportUnmatched: false
+        # The polling loop only ends through a return. The final return is
+        # kept, as in the Zephir implementation.
+        -
+            message: "#Unreachable statement - code above always terminates#"
+            path: ../src/Queue/Adapter/AbstractConsumer.php
+            reportUnmatched: false
+        # On PHP 8.3 and later, `modify()` throws on an invalid modifier. The
+        # stubs for the analysed PHP version do not declare it.
+        -
+            message: "#Dead catch - Throwable is never thrown in the try block#"
+            path: ../src/Time/Clock/FrozenClock.php
             reportUnmatched: false
         # The trait reads `container` only after property_exists() finds it.
         # In a class that does not declare the property, PHPStan types the

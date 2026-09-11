@@ -297,7 +297,7 @@ class QueryBuilder extends AbstractAdapter
                 $modelClass = array_values($modelClass)[0];
             }
 
-            /** @var class-string<ModelInterface<mixed>> $modelClass */
+            /** @var class-string<ModelInterface> $modelClass */
             $model     = new $modelClass();
             $dbService = $model->getReadConnectionService();
 
