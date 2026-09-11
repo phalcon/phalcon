@@ -222,11 +222,11 @@ class Mysql extends Dialect
      * ```
      */
     public function describeColumns(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
-        $schemaClause = $schemaName
-            ? "'" . $this->escapeStringLiteral($schemaName) . "'"
+        $schemaClause = $schema
+            ? "'" . $this->escapeStringLiteral($schema) . "'"
             : 'DATABASE()';
 
         /**
@@ -245,7 +245,7 @@ class Mysql extends Dialect
             . "GENERATION_EXPRESSION AS `GenerationExpression` "
             . "FROM `INFORMATION_SCHEMA`.`COLUMNS` "
             . "WHERE `TABLE_SCHEMA` = " . $schemaClause . " "
-            . "AND `TABLE_NAME` = '" . $this->escapeStringLiteral($tableName) . "' "
+            . "AND `TABLE_NAME` = '" . $this->escapeStringLiteral($table) . "' "
             . "ORDER BY `ORDINAL_POSITION`";
     }
 
@@ -253,19 +253,19 @@ class Mysql extends Dialect
      * Generates SQL to query indexes on a table
      */
     public function describeIndexes(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
         return "SHOW INDEXES FROM "
-            . $this->prepareTable($tableName, $schemaName);
+            . $this->prepareTable($table, $schema);
     }
 
     /**
      * Generates SQL to query foreign keys on a table
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
         $sql = "SELECT DISTINCT KCU.TABLE_NAME, KCU.COLUMN_NAME, "
             . "KCU.CONSTRAINT_NAME, KCU.REFERENCED_TABLE_SCHEMA, "
@@ -277,15 +277,15 @@ class Mysql extends Dialect
             . "AND RC.CONSTRAINT_SCHEMA = KCU.CONSTRAINT_SCHEMA "
             . "WHERE KCU.REFERENCED_TABLE_NAME IS NOT NULL AND ";
 
-        if (!empty($schemaName)) {
+        if (!empty($schema)) {
             $sql .= "KCU.CONSTRAINT_SCHEMA = '"
-                . $this->escapeStringLiteral($schemaName)
+                . $this->escapeStringLiteral($schema)
                 . "' AND KCU.TABLE_NAME = '"
-                . $this->escapeStringLiteral($tableName)
+                . $this->escapeStringLiteral($table)
                 . "'";
         } else {
             $sql .= "KCU.CONSTRAINT_SCHEMA = DATABASE() "
-                . "AND KCU.TABLE_NAME = '" . $this->escapeStringLiteral($tableName) . "'";
+                . "AND KCU.TABLE_NAME = '" . $this->escapeStringLiteral($table) . "'";
         }
 
         return $sql;
@@ -850,8 +850,8 @@ class Mysql extends Dialect
      * Generates the SQL to describe the table creation options
      */
     public function tableOptions(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
         return "SELECT TABLES.TABLE_TYPE AS table_type,"
             . "TABLES.AUTO_INCREMENT AS auto_increment,"
@@ -859,8 +859,8 @@ class Mysql extends Dialect
             . "TABLES.TABLE_COLLATION AS table_collation,"
             . "TABLES.TABLE_COMMENT AS table_comment "
             . "FROM INFORMATION_SCHEMA.TABLES WHERE "
-            . "TABLES.TABLE_SCHEMA = " . $this->getMysqlSchemaString($schemaName) . " "
-            . "AND TABLES.TABLE_NAME = '" . $this->escapeStringLiteral($tableName) . "'";
+            . "TABLES.TABLE_SCHEMA = " . $this->getMysqlSchemaString($schema) . " "
+            . "AND TABLES.TABLE_NAME = '" . $this->escapeStringLiteral($table) . "'";
     }
 
     /**

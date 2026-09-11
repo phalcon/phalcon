@@ -297,11 +297,11 @@ class Memory extends AbstractAdapter
      * $acl->addRole("administrator", ["consultant", "consultant2"]);
      * ```
      *
-     * @phpstan-param acl_role_to_inherit $roleToInherit
+     * @phpstan-param acl_role_to_inherit $roleToInherits
      */
     public function addInherit(
         string $roleName,
-        array | RoleInterface | string $roleToInherit
+        mixed $roleToInherits
     ): bool {
         $this->checkExists($this->roles, $roleName, 'Role', 'role list');
 
@@ -312,9 +312,9 @@ class Memory extends AbstractAdapter
         /**
          * Type conversion
          */
-        $roleToInheritList = $roleToInherit;
-        if (!is_array($roleToInherit)) {
-            $roleToInheritList = [$roleToInherit];
+        $roleToInheritList = $roleToInherits;
+        if (!is_array($roleToInherits)) {
+            $roleToInheritList = [$roleToInherits];
         }
 
         /**
@@ -588,7 +588,7 @@ class Memory extends AbstractAdapter
      *
      * @return array<string, ComponentInterface>
      */
-    public function getComponents(): array | null
+    public function getComponents(): array
     {
         return $this->components;
     }

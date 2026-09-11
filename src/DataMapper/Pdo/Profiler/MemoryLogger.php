@@ -23,7 +23,6 @@ use Phalcon\Logger\Adapter\AdapterInterface;
 use Phalcon\Logger\Adapter\Noop;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\LoggerInterface;
-use Stringable;
 
 use function strtr;
 
@@ -39,27 +38,27 @@ class MemoryLogger implements LoggerInterface
      */
     protected array $messages = [];
 
-    public function alert(string | Stringable $message, array $context = []): void
+    public function alert(string $message, array $context = []): void
     {
         $this->log(Enum::ALERT, $message, $context);
     }
 
-    public function critical(string | Stringable $message, array $context = []): void
+    public function critical(string $message, array $context = []): void
     {
         $this->log(Enum::CRITICAL, $message, $context);
     }
 
-    public function debug(string | Stringable $message, array $context = []): void
+    public function debug(string $message, array $context = []): void
     {
         $this->log(Enum::DEBUG, $message, $context);
     }
 
-    public function emergency(string | Stringable $message, array $context = []): void
+    public function emergency(string $message, array $context = []): void
     {
         $this->log(Enum::EMERGENCY, $message, $context);
     }
 
-    public function error(string | Stringable $message, array $context = []): void
+    public function error(string $message, array $context = []): void
     {
         $this->log(Enum::ERROR, $message, $context);
     }
@@ -106,7 +105,7 @@ class MemoryLogger implements LoggerInterface
         return "memory logger";
     }
 
-    public function info(string | Stringable $message, array $context = []): void
+    public function info(string $message, array $context = []): void
     {
         $this->log(Enum::INFO, $message, $context);
     }
@@ -114,7 +113,7 @@ class MemoryLogger implements LoggerInterface
     /**
      * Logs a message.
      */
-    public function log(mixed $level, string | Stringable $message, array $context = []): void
+    public function log(mixed $level, string $message, array $context = []): void
     {
         $replace = [];
 
@@ -125,17 +124,17 @@ class MemoryLogger implements LoggerInterface
         $this->messages[] = strtr((string)$message, $replace);
     }
 
-    public function notice(string | Stringable $message, array $context = []): void
+    public function notice(string $message, array $context = []): void
     {
         $this->log(Enum::NOTICE, $message, $context);
     }
 
-    public function trace(string | Stringable $message, array $context = []): void
+    public function trace(string $message, array $context = []): void
     {
         $this->log(Enum::TRACE, $message, $context);
     }
 
-    public function warning(string | Stringable $message, array $context = []): void
+    public function warning(string $message, array $context = []): void
     {
         $this->log(Enum::WARNING, $message, $context);
     }

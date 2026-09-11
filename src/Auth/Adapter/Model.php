@@ -118,7 +118,10 @@ class Model extends AbstractAdapter implements RememberAdapter
         return $found;
     }
 
-    public function retrieveById(int | string $id): ?AuthUser
+    /**
+     * @param int|string $id
+     */
+    public function retrieveById(mixed $id): ?AuthUser
     {
         return $this->findFirstAsAuthUser(
             [
@@ -130,9 +133,11 @@ class Model extends AbstractAdapter implements RememberAdapter
 
     /**
      * Retrieve a user by the remember-me cookie payload.
+     *
+     * @param int|string $id
      */
     public function retrieveByToken(
-        int | string $id,
+        mixed $id,
         string $token,
         ?string $userAgent = null
     ): ?AuthUser {

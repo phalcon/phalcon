@@ -417,11 +417,11 @@ class Postgresql extends Dialect
      * ```
      */
     public function describeColumns(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
-        if (empty($schemaName)) {
-            $schemaName = "public";
+        if (empty($schema)) {
+            $schema = "public";
         }
 
         return "SELECT DISTINCT c.column_name AS Field, "
@@ -458,19 +458,19 @@ class Postgresql extends Dialect
             . "JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid ) des "
             . "ON ( des.objsubid = C.ordinal_position "
             . "AND C.table_schema = des.nspname AND C.TABLE_NAME = des.relname ) "
-            . "WHERE c.table_schema='" . $this->escapeStringLiteral($schemaName)
-            . "' AND c.table_name='" . $this->escapeStringLiteral($tableName)
+            . "WHERE c.table_schema='" . $this->escapeStringLiteral($schema)
+            . "' AND c.table_name='" . $this->escapeStringLiteral($table)
             . "' ORDER BY c.ordinal_position";
     }
 
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $schemaName
+     * @param string $schema
      */
     public function describeIndexes(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
         return "SELECT 0 as c0, "
             . "t.relname as table_name, "
@@ -483,7 +483,7 @@ class Postgresql extends Dialect
             . "AND a.attrelid = t.oid "
             . "AND a.attnum = ANY(ix.indkey) "
             . "AND t.relkind = 'r' "
-            . "AND t.relname = '" . $this->escapeStringLiteral($tableName) . "' "
+            . "AND t.relname = '" . $this->escapeStringLiteral($table) . "' "
             . "ORDER BY t.relname, i.relname;";
     }
 
@@ -491,11 +491,11 @@ class Postgresql extends Dialect
      * Generates SQL to query foreign keys on a table
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
-        if (empty($schemaName)) {
-            $schemaName = "public";
+        if (empty($schema)) {
+            $schema = "public";
         }
 
         return "SELECT DISTINCT tc.table_name AS TABLE_NAME, "
@@ -517,8 +517,8 @@ class Postgresql extends Dialect
             . "AND tc.constraint_name = rc.constraint_name "
             . "AND tc.constraint_type = 'FOREIGN KEY' "
             . "WHERE constraint_type = 'FOREIGN KEY' "
-            . "AND tc.table_schema = '" . $this->escapeStringLiteral($schemaName) . "' "
-            . "AND tc.table_name='" . $this->escapeStringLiteral($tableName) . "'";
+            . "AND tc.table_schema = '" . $this->escapeStringLiteral($schema) . "' "
+            . "AND tc.table_name='" . $this->escapeStringLiteral($table) . "'";
     }
 
     /**
@@ -1149,16 +1149,16 @@ class Postgresql extends Dialect
      * Generates the SQL to describe the table creation options
      */
     public function tableOptions(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
         $sql = "SELECT obj_description(c.oid, 'pg_class') AS table_comment "
             . "FROM pg_class c "
             . "JOIN pg_namespace n ON n.oid = c.relnamespace "
-            . "WHERE c.relname = '" . $this->escapeStringLiteral($tableName) . "' AND ";
+            . "WHERE c.relname = '" . $this->escapeStringLiteral($table) . "' AND ";
 
-        if (!empty($schemaName)) {
-            return $sql . "n.nspname = '" . $this->escapeStringLiteral($schemaName) . "'";
+        if (!empty($schema)) {
+            return $sql . "n.nspname = '" . $this->escapeStringLiteral($schema) . "'";
         }
 
         return $sql . "n.nspname = current_schema()";

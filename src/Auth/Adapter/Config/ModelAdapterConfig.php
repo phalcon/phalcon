@@ -39,7 +39,7 @@ class ModelAdapterConfig extends AbstractAdapterConfig
         return $this->idColumn;
     }
 
-    public function getModel(): string
+    public function getModel(): string | null
     {
         /** @var string */
         return $this->model;

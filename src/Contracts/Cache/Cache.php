@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Cache;
 
-use DateInterval;
 use Phalcon\Cache\Exception\InvalidArgumentException;
 
 /**
@@ -46,7 +45,7 @@ interface Cache
      *
      * @phpstan-param iterable<array-key, string> $keys
      */
-    public function deleteMultiple(iterable $keys): bool;
+    public function deleteMultiple(mixed $keys): bool;
 
     /**
      * Fetches a value from the cache.
@@ -57,8 +56,10 @@ interface Cache
      * Obtains multiple cache items by their unique keys.
      *
      * @phpstan-param iterable<array-key, string> $keys
+     *
+     * @phpstan-return iterable<string, mixed>
      */
-    public function getMultiple(iterable $keys, mixed $defaultValue = null): iterable;
+    public function getMultiple(mixed $keys, mixed $defaultValue = null): mixed;
 
     /**
      * Determines whether an item is present in the cache.
@@ -72,7 +73,7 @@ interface Cache
     public function set(
         string $key,
         mixed $value,
-        DateInterval | int | null $ttl = null
+        mixed $ttl = null
     ): bool;
 
     /**
@@ -81,7 +82,7 @@ interface Cache
      * @phpstan-param iterable<string, mixed> $values
      */
     public function setMultiple(
-        iterable $values,
-        DateInterval | int | null $ttl = null
+        mixed $values,
+        mixed $ttl = null
     ): bool;
 }

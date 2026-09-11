@@ -35,11 +35,12 @@ interface Adapter
      * Access names can be a particular action, for instance `search`, `update`
      * `delete` etc. or a list of them.
      *
-     * @param acl_access_list $accessList
+     * @phpstan-param ComponentInterface|string $componentValue
+     * @phpstan-param acl_access_list           $accessList
      */
     public function addComponent(
-        ComponentInterface | string $componentObject,
-        array | string $accessList
+        mixed $componentValue,
+        mixed $accessList
     ): bool;
 
     /**
@@ -55,58 +56,57 @@ interface Adapter
     /**
      * Add a role which inherits from an existing role
      *
-     * @param acl_role_to_inherit $roleToInherit
+     * @phpstan-param acl_role_to_inherit $roleToInherits
      */
     public function addInherit(
         string $roleName,
-        array | RoleInterface | string $roleToInherit
+        mixed $roleToInherits
     ): bool;
 
     /**
      * Adds a role to the ACL list. The second parameter lets to inherit access
      * from an existing role
      *
-     * @param acl_role_to_inherit|null $accessInherits
-     *
-     * @phpstan-param RoleInterface|string $roleObject
+     * @phpstan-param RoleInterface|string     $role
+     * @phpstan-param acl_role_to_inherit|null $accessInherits
      */
     public function addRole(
-        mixed $roleObject,
-        array | RoleInterface | string | null $accessInherits = null
+        mixed $role,
+        mixed $accessInherits = null
     ): bool;
 
     /**
      * Allow access to a role on a component. You can use `*` as wildcard
      *
-     * @param acl_access_list $access
+     * @phpstan-param acl_access_list $access
      */
     public function allow(
         string $roleName,
         string $componentName,
-        array | string $access,
-        callable | null $function = null
+        mixed $access,
+        mixed $func = null
     ): void;
 
     /**
      * Deny access to a role on a component. You can use `*` as wildcard
      *
-     * @param acl_access_list $access
+     * @phpstan-param acl_access_list $access
      */
     public function deny(
         string $roleName,
         string $componentName,
-        array | string $access,
-        callable | null $function = null
+        mixed $access,
+        mixed $func = null
     ): void;
 
     /**
      * Removes access from a component
      *
-     * @param acl_access_list $accessList
+     * @phpstan-param acl_access_list $accessList
      */
     public function dropComponentAccess(
         string $componentName,
-        array | string $accessList
+        mixed $accessList
     ): void;
 
     /**
@@ -129,9 +129,9 @@ interface Adapter
     /**
      * Return an array with every component registered in the list
      *
-     * @return acl_components
+     * @phpstan-return acl_components
      */
-    public function getComponents(): array | null;
+    public function getComponents(): array;
 
     /**
      * Returns the default action
@@ -145,7 +145,7 @@ interface Adapter
      *
      * @return array<int|string, array<int, string>|string>
      */
-    public function getInheritedRoles(string $roleName = ''): array | null;
+    public function getInheritedRoles(string $roleName = ''): array;
 
     /**
      * Returns the default ACL access level for no arguments provided in
@@ -156,9 +156,9 @@ interface Adapter
     /**
      * Return an array with every role registered in the list
      *
-     * @return acl_roles
+     * @phpstan-return acl_roles
      */
-    public function getRoles(): array | null;
+    public function getRoles(): array;
 
     /**
      * Check whether a role is allowed to access an action from a component

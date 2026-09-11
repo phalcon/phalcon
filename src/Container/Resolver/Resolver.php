@@ -211,7 +211,7 @@ class Resolver implements ResolverService
      */
     public function resolveType(
         object $ioc,
-        ReflectionType $type
+        mixed $type
     ): mixed {
         if ($type instanceof ReflectionNamedType) {
             return $type->getName();

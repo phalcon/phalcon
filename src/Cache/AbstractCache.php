@@ -62,11 +62,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     /**
      * Persists data in the cache, uniquely referenced by a key with an
      * optional expiration TTL time.
+     *
+     * @phpstan-param DateInterval|int|null $ttl
      */
     abstract public function set(
         string $key,
         mixed $value,
-        DateInterval | int | null $ttl = null
+        mixed $ttl = null
     ): bool;
 
     /**
@@ -124,7 +126,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @phpstan-param iterable<array-key, string> $keys
      */
-    protected function doDeleteMultiple(iterable $keys): bool
+    protected function doDeleteMultiple(mixed $keys): bool
     {
         $this->checkKeys($keys);
 
@@ -167,7 +169,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      *
      * @phpstan-return array<string, mixed>
      */
-    protected function doGetMultiple(iterable $keys, mixed $defaultValue = null): iterable
+    protected function doGetMultiple(mixed $keys, mixed $defaultValue = null): array
     {
         $this->checkKeys($keys);
 
@@ -262,11 +264,13 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional
      * expiration TTL time.
+     *
+     * @phpstan-param DateInterval|int|null $ttl
      */
     protected function doSet(
         string $key,
         mixed $value,
-        DateInterval | int | null $ttl = null
+        mixed $ttl = null
     ): bool {
         $this->checkKey($key);
 
@@ -285,7 +289,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
      * @phpstan-param iterable<string, mixed> $values
      * @phpstan-param DateInterval|int|null   $ttl
      */
-    protected function doSetMultiple(iterable $values, mixed $ttl = null): bool
+    protected function doSetMultiple(mixed $values, mixed $ttl = null): bool
     {
         $this->checkKeys($values);
 

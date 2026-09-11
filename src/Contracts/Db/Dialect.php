@@ -144,8 +144,8 @@ interface Dialect
      * Generates SQL to describe a table
      */
     public function describeColumns(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string;
 
     /**
@@ -156,8 +156,8 @@ interface Dialect
      * column name.
      */
     public function describeIndexes(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string;
 
     /**
@@ -169,8 +169,8 @@ interface Dialect
      * referenced column.
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string;
 
     /**
@@ -258,7 +258,7 @@ interface Dialect
      */
     public function getSqlExpression(
         array $expression,
-        string $escapeChar = "",
+        string | null $escapeChar = null,
         array $bindCounts = []
     ): string;
 
@@ -267,7 +267,7 @@ interface Dialect
      *
      * @phpstan-param db_limit_number $number
      */
-    public function limit(string $sqlQuery, array | int $number): string;
+    public function limit(string $sqlQuery, mixed $number): string;
 
     /**
      * List all tables in database
@@ -336,8 +336,8 @@ interface Dialect
      * Generates the SQL to describe the table creation options
      */
     public function tableOptions(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string;
 
     /**

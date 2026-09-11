@@ -325,9 +325,14 @@ abstract class Dialect implements DialectInterface
      */
     public function getSqlExpression(
         array $expression,
-        string $escapeChar = "",
+        string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
+        /**
+         * Null and "" both mean: use the dialect escape character.
+         */
+        $escapeChar = $escapeChar ?? "";
+
         if (!isset($expression["type"])) {
             throw new InvalidSqlExpression();
         }

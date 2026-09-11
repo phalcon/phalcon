@@ -423,9 +423,9 @@ abstract class AbstractPdo extends AbstractAdapter
      * $escapedStr = $connection->escapeString("some dangerous value");
      *```
      */
-    public function escapeString(string $input): string
+    public function escapeString(string $str): string
     {
-        return $this->pdo->quote($input);
+        return $this->pdo->quote($str);
     }
 
     /**
@@ -634,7 +634,7 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Return internal PDO handler
      */
-    public function getInternalHandler(): PDO | null
+    public function getInternalHandler(): mixed
     {
         return $this->pdo;
     }

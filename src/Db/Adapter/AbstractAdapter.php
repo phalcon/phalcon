@@ -388,12 +388,12 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Warning! If $whereCondition is string it not escaped.
      */
     public function delete(
-        array | string $tableName,
+        mixed $table,
         string | null $whereCondition = null,
         array $placeholders = [],
         array $dataTypes = []
     ): bool {
-        $sql = "DELETE FROM " . $this->escapeIdentifier($tableName);
+        $sql = "DELETE FROM " . $this->escapeIdentifier($table);
 
         if (!empty($whereCondition)) {
             $sql .= " WHERE " . $whereCondition;
@@ -421,17 +421,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * adapter must override this method. All bundled adapters except PostgreSQL
      * override it.
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return array|IndexInterface[]
      */
     public function describeIndexes(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array {
         $indexes = [];
         $records = $this->fetchAll(
-            $this->dialect->describeIndexes($tableName, $schemaName),
+            $this->dialect->describeIndexes($table, $schema),
             Enum::FETCH_NUM
         );
 
@@ -472,18 +472,18 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * PostgreSQL, SQLite) overrides it, so this base implementation has no
      * in-tree caller and effectively assumes the PostgreSQL row shape.
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array {
         $references = [];
         $records    = $this->fetchAll(
-            $this->dialect->describeReferences($tableName, $schemaName),
+            $this->dialect->describeReferences($table, $schema),
             Enum::FETCH_NUM
         );
 
@@ -575,8 +575,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function dropIndex(
         string $tableName,
         string $schemaName,
-        string $indexName
+        mixed $indexName
     ): bool {
+        /**
+         * The dialect accepts a string only and rejects any other type, as
+         * in cphalcon.
+         *
+         * @phpstan-var string $indexName
+         */
         return $this->execute(
             $this->dialect->dropIndex(
                 $tableName,
@@ -670,7 +676,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @phpstan-param db_identifier $identifier
      */
-    public function escapeIdentifier(array | float | int | string $identifier): string
+    public function escapeIdentifier(mixed $identifier): string
     {
         if (is_array($identifier)) {
             return $this->dialect->escape($identifier[0])
@@ -748,11 +754,13 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * );
      * print_r($invoice);
      *```
+     *
+     * @phpstan-param int|string $column
      */
     public function fetchColumn(
         string $sqlQuery,
         array $placeholders = [],
-        int | string $column = 0
+        mixed $column = 0
     ): mixed {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
@@ -784,7 +792,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public function fetchOne(
         string $sqlQuery,
-        int $fetchMode = Enum::FETCH_ASSOC,
+        mixed $fetchMode = Enum::FETCH_ASSOC,
         array $bindParams = [],
         array $bindTypes = []
     ): array | bool {
@@ -794,7 +802,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             return [];
         }
 
-        $result->setFetchMode($fetchMode);
+        if (null !== $fetchMode) {
+            /**
+             * The fetch mode is one of the Enum::FETCH_* integers, as in
+             * cphalcon.
+             *
+             * @phpstan-var int $fetchMode
+             */
+            $result->setFetchMode($fetchMode);
+        }
 
         /** @var bool|db_row $row */
         $row = $result->fetch();
@@ -821,7 +837,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Gets a list of columns
      */
-    public function getColumnList(array $columnList): string
+    public function getColumnList(mixed $columnList): string
     {
         return $this->dialect->getColumnList($columnList);
     }
@@ -985,16 +1001,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function insert(
-        string $tableName,
+        string $table,
         array $values,
-        array | null $fields = null,
-        array $dataTypes = []
+        mixed $fields = null,
+        mixed $dataTypes = null
     ): bool {
         /**
          * A valid array with more than one element is required
          */
         if (empty($values)) {
-            throw new CannotInsertWithoutData($tableName);
+            throw new CannotInsertWithoutData($table);
         }
 
         $placeholders  = [];
@@ -1021,11 +1037,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             }
         }
 
-        if (strpos($tableName, ".") > 0) {
-            $tableName = explode(".", $tableName);
+        if (strpos($table, ".") > 0) {
+            $table = explode(".", $table);
         }
 
-        $escapedTable = $this->escapeIdentifier($tableName);
+        $escapedTable = $this->escapeIdentifier($table);
 
         /**
          * Build the final SQL INSERT statement
@@ -1076,17 +1092,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function insertAsDict(
-        string $tableName,
-        array $data,
-        array $dataTypes = []
+        string $table,
+        mixed $data,
+        mixed $dataTypes = null
     ): bool {
-        if (empty($data)) {
+        if (!is_array($data) || empty($data)) {
             return false;
         }
 
 
         return $this->insert(
-            $tableName,
+            $table,
             array_values($data),
             array_keys($data),
             $dataTypes
@@ -1278,7 +1294,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function setNestedTransactionsWithSavepoints(
-        bool $flag
+        bool $nestedTransactionsWithSavepoints
     ): AdapterInterface {
         if ($this->transactionLevel > 0) {
             throw new NestedTransactionChangeBlocked();
@@ -1286,7 +1302,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         $this->checkSavepoints();
 
-        $this->transactionsWithSavepoints = $flag;
+        $this->transactionsWithSavepoints = $nestedTransactionsWithSavepoints;
 
         return $this;
     }
@@ -1415,11 +1431,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function update(
-        string $tableName,
-        array $fields,
-        array $values,
-        array | string $whereCondition = [],
-        array $dataTypes = []
+        string $table,
+        mixed $fields,
+        mixed $values,
+        mixed $whereCondition = null,
+        mixed $dataTypes = null
     ): bool {
         $placeholders  = [];
         $updateValues  = [];
@@ -1454,11 +1470,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         /**
          * Check if we got table and schema and escape it accordingly
          */
-        if (strpos($tableName, ".") > 0) {
-            $tableName = explode(".", $tableName);
+        if (strpos($table, ".") > 0) {
+            $table = explode(".", $table);
         }
 
-        $escapedTable = $this->escapeIdentifier($tableName);
+        $escapedTable = $this->escapeIdentifier($table);
         $setClause    = implode(", ", $placeholders);
 
         $updateSql = "UPDATE " . $escapedTable . " SET " . $setClause;
@@ -1538,17 +1554,17 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * @throws Exception
      */
     public function updateAsDict(
-        string $tableName,
-        array $data,
-        array | string $whereCondition = [],
-        array $dataTypes = []
+        string $table,
+        mixed $data,
+        mixed $whereCondition = null,
+        mixed $dataTypes = null
     ): bool {
-        if (empty($data)) {
+        if (!is_array($data) || empty($data)) {
             return false;
         }
 
         return $this->update(
-            $tableName,
+            $table,
             array_keys($data),
             array_values($data),
             $whereCondition,
@@ -1613,14 +1629,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *  - "hasBindType": whether "bindType" must be collected
      *  - "bindType":    the bind type to collect (when applicable)
      *
-     * @phpstan-param db_bind_types $dataTypes
+     * @phpstan-param int|string         $position
+     * @phpstan-param db_bind_types|null $dataTypes
      *
      * @phpstan-return db_value_placeholder
      */
     private function buildValuePlaceholder(
         mixed $value,
-        int | string $position,
-        array $dataTypes
+        mixed $position,
+        mixed $dataTypes
     ): array {
         if ($value instanceof RawValue) {
             return [

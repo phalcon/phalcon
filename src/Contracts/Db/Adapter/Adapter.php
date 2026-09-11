@@ -160,12 +160,12 @@ interface Adapter
     /**
      * Deletes data from a table using custom RDBMS SQL syntax
      *
-     * @phpstan-param db_table_identifier $tableName
+     * @phpstan-param db_table_identifier $table
      * @phpstan-param db_bind_params $placeholders
      * @phpstan-param db_bind_types  $dataTypes
      */
     public function delete(
-        array | string $tableName,
+        mixed $table,
         string | null $whereCondition = null,
         array $placeholders = [],
         array $dataTypes = []
@@ -174,37 +174,37 @@ interface Adapter
     /**
      * Returns an array of Phalcon\Db\Column objects describing a table
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return ColumnInterface[]
      */
     public function describeColumns(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array;
 
     /**
      * Lists table indexes
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return IndexInterface[]
      */
     public function describeIndexes(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array;
 
     /**
      * Lists table references
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return ReferenceInterface[]
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array;
 
     /**
@@ -264,12 +264,12 @@ interface Adapter
      *
      * @phpstan-param db_identifier $identifier
      */
-    public function escapeIdentifier(array | float | int | string $identifier): string;
+    public function escapeIdentifier(mixed $identifier): string;
 
     /**
      * Escapes a value to avoid SQL injections
      */
-    public function escapeString(string $input): string;
+    public function escapeString(string $str): string;
 
     /**
      * Sends SQL statements to the database server returning the success state.
@@ -323,7 +323,7 @@ interface Adapter
     public function fetchColumn(
         string $sqlQuery,
         array $placeholders = [],
-        int | string $column = 0
+        mixed $column = 0
     ): mixed;
 
     /**
@@ -356,7 +356,7 @@ interface Adapter
      *
      * @phpstan-param db_column_list $columnList
      */
-    public function getColumnList(array $columnList): string;
+    public function getColumnList(mixed $columnList): string;
 
     /**
      * Gets the active connection unique identifier
@@ -455,10 +455,10 @@ interface Adapter
      * @phpstan-param db_bind_types     $dataTypes
      */
     public function insert(
-        string $tableName,
+        string $table,
         array $values,
-        array | null $fields = null,
-        array $dataTypes = []
+        mixed $fields = null,
+        mixed $dataTypes = null
     ): bool;
 
     /**
@@ -482,9 +482,9 @@ interface Adapter
      * @phpstan-param db_bind_types $dataTypes
      */
     public function insertAsDict(
-        string $tableName,
-        array $data,
-        array $dataTypes = []
+        string $table,
+        mixed $data,
+        mixed $dataTypes = null
     ): bool;
 
     /**
@@ -511,7 +511,7 @@ interface Adapter
      *
      * @phpstan-param db_limit_number $number
      */
-    public function limit(string $sqlQuery, array | int $number): string;
+    public function limit(string $sqlQuery, mixed $number): string;
 
     /**
      * List all tables on a database
@@ -570,7 +570,7 @@ interface Adapter
      * Set if nested transactions should use savepoints
      */
     public function setNestedTransactionsWithSavepoints(
-        bool $flag
+        bool $nestedTransactionsWithSavepoints
     ): \Phalcon\Db\Adapter\AdapterInterface;
 
     /**
@@ -620,11 +620,11 @@ interface Adapter
      * @phpstan-param db_bind_types      $dataTypes
      */
     public function update(
-        string $tableName,
-        array $fields,
-        array $values,
-        array | string $whereCondition = [],
-        array $dataTypes = []
+        string $table,
+        mixed $fields,
+        mixed $values,
+        mixed $whereCondition = null,
+        mixed $dataTypes = null
     ): bool;
 
     /**
@@ -650,10 +650,10 @@ interface Adapter
      * @phpstan-param db_bind_types     $dataTypes
      */
     public function updateAsDict(
-        string $tableName,
-        array $data,
-        array | string $whereCondition = [],
-        array $dataTypes = []
+        string $table,
+        mixed $data,
+        mixed $whereCondition = null,
+        mixed $dataTypes = null
     ): bool;
 
     /**

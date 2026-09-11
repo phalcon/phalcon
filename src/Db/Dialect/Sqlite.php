@@ -345,15 +345,15 @@ class Sqlite extends Dialect
      * ```
      */
     public function describeColumns(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
         /**
          * `table_xinfo` mirrors `table_info` but exposes the `hidden` column:
          *   0 = ordinary, 1 = hidden (virtual table internal),
          *   2 = VIRTUAL generated, 3 = STORED generated.
          */
-        return "PRAGMA table_xinfo('" . $this->escapeStringLiteral($tableName) . "')";
+        return "PRAGMA table_xinfo('" . $this->escapeStringLiteral($table) . "')";
     }
 
     /**
@@ -367,25 +367,25 @@ class Sqlite extends Dialect
     /**
      * Generates SQL to query indexes on a table
      *
-     * @param string $schemaName
+     * @param string $schema
      */
     public function describeIndexes(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
-        return "PRAGMA index_list('" . $this->escapeStringLiteral($tableName) . "')";
+        return "PRAGMA index_list('" . $this->escapeStringLiteral($table) . "')";
     }
 
     /**
      * Generates SQL to query foreign keys on a table
      *
-     * @param string $schemaName
+     * @param string $schema
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): string {
-        return "PRAGMA foreign_key_list('" . $this->escapeStringLiteral($tableName) . "')";
+        return "PRAGMA foreign_key_list('" . $this->escapeStringLiteral($table) . "')";
     }
 
     /**
@@ -811,9 +811,9 @@ class Sqlite extends Dialect
     /**
      * Generates the SQL to describe the table creation options
      *
-     * @param string $schemaName
+     * @param string $schema
      */
-    public function tableOptions(string $tableName, string | null $schemaName = null): string
+    public function tableOptions(string $table, string | null $schema = null): string
     {
         return "";
     }

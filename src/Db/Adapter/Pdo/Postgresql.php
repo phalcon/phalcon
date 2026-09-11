@@ -168,14 +168,14 @@ class Postgresql extends PdoAdapter
      * );
      * ```
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return array|ColumnInterface[]
      * @throws Exception
      */
     public function describeColumns(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array {
         $oldColumn = null;
         $columns   = [];
@@ -186,7 +186,7 @@ class Postgresql extends PdoAdapter
          * 6: key, 7: extra, 8: position, 9 default
          */
         $fields = $this->fetchAll(
-            $this->dialect->describeColumns($tableName, $schemaName),
+            $this->dialect->describeColumns($table, $schema),
             Enum::FETCH_NUM
         );
 
@@ -647,19 +647,19 @@ class Postgresql extends PdoAdapter
      * );
      *```
      *
-     * @param string $schemaName
+     * @param string $schema
      *
      * @return array|ReferenceInterface[]
      * @throws Exception
      */
     public function describeReferences(
-        string $tableName,
-        string | null $schemaName = null
+        string $table,
+        string | null $schema = null
     ): array {
         /** @var array<string, db_reference_build> $references */
         $references = [];
         $records    = $this->fetchAll(
-            $this->dialect->describeReferences($tableName, $schemaName),
+            $this->dialect->describeReferences($table, $schema),
             Enum::FETCH_NUM
         );
 

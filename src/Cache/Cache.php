@@ -52,7 +52,7 @@ class Cache extends AbstractCache
      *
      * @phpstan-param iterable<array-key, string> $keys
      */
-    public function deleteMultiple(iterable $keys): bool
+    public function deleteMultiple(mixed $keys): bool
     {
         return $this->doDeleteMultiple($keys);
     }
@@ -72,7 +72,7 @@ class Cache extends AbstractCache
      *
      * @phpstan-return array<string, mixed>
      */
-    public function getMultiple(iterable $keys, mixed $defaultValue = null): iterable
+    public function getMultiple(mixed $keys, mixed $defaultValue = null): mixed
     {
         return $this->doGetMultiple($keys, $defaultValue);
     }
@@ -88,11 +88,13 @@ class Cache extends AbstractCache
     /**
      * Persists data in the cache, uniquely referenced by a key with an optional
      * expiration TTL time.
+     *
+     * @phpstan-param DateInterval|int|null $ttl
      */
     public function set(
         string $key,
         mixed $value,
-        DateInterval | int | null $ttl = null
+        mixed $ttl = null
     ): bool {
         return $this->doSet($key, $value, $ttl);
     }
@@ -101,10 +103,12 @@ class Cache extends AbstractCache
      * Persists a set of key => value pairs in the cache, with an optional TTL.
      *
      * @phpstan-param iterable<string, mixed> $values
+     *
+     * @phpstan-param DateInterval|int|null $ttl
      */
     public function setMultiple(
-        iterable $values,
-        DateInterval | int | null $ttl = null
+        mixed $values,
+        mixed $ttl = null
     ): bool {
         return $this->doSetMultiple($values, $ttl);
     }
