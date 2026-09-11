@@ -41,7 +41,6 @@ use Phalcon\Container\Resolver\Lazy\LazyFactory;
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Contracts\Container\Service\Provider;
 use Phalcon\Contracts\Encryption\Security\Security as SecurityContract;
-use Phalcon\Db\Event\Factory as DbEventFactory;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Encryption\Security;
@@ -142,9 +141,6 @@ class Web implements Provider
         $services->set(AssetsManager::class, AssetsManager::class)
                  ->setArgument(0, LazyFactory::get(TagFactory::class));
         $services->setAlias(AssetsManager::class, 'assets');
-
-        $services->set(DbEventFactory::class, DbEventFactory::class);
-        $services->setAlias(DbEventFactory::class, 'modelsEventFactory');
 
         $services->set(Direct::class, Direct::class);
         $services->setAlias(Direct::class, 'flash');

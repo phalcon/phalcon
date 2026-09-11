@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Events\Fake;
 
-use Phalcon\Events\PsrEventInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 
 /**
- * Fake component that exposes fireManagerEvent() and firePsrEvent()
- * for coverage of EventsAwareTrait L69-72 and L80-81.
+ * Fake component that exposes fireManagerEvent() for coverage.
  */
 class ComponentFireManager
 {
@@ -27,10 +25,5 @@ class ComponentFireManager
     public function callFireManagerEvent(string $eventName, mixed $data = null): mixed
     {
         return $this->fireManagerEvent($eventName, $data);
-    }
-
-    public function callFirePsrEvent(PsrEventInterface $event, ?string $name = null): mixed
-    {
-        return $this->firePsrEvent($event, $name);
     }
 }

@@ -36,7 +36,6 @@ namespace Phalcon\Tests\Unit\Container\Provider;
 use Phalcon\Container\Container;
 use Phalcon\Container\ContainerFactory;
 use Phalcon\Container\Provider\Web;
-use Phalcon\Db\Event\Factory as DbEventFactory;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Encryption\Security;
@@ -104,7 +103,7 @@ final class WebTest extends AbstractUnitTestCase
         $names = [
             'annotations', 'annotationsMemory', 'assets', 'cookies', 'crypt',
             'dispatcher', 'escaper', 'eventsManager', 'filter', 'flash',
-            'flashSession', 'helper', 'modelsEventFactory', 'modelsManager',
+            'flashSession', 'helper', 'modelsManager',
             'modelsMetadata', 'request', 'response', 'router', 'security',
             'settings', 'storageSerializer', 'tag', 'transactionManager', 'url',
         ];
@@ -246,15 +245,6 @@ final class WebTest extends AbstractUnitTestCase
     public function testContainerProviderWebResolvesHelper(): void
     {
         $this->assertInstanceOf(HelperFactory::class, $this->container->get('helper'));
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-18
-     */
-    public function testContainerProviderWebResolvesModelsEventFactory(): void
-    {
-        $this->assertInstanceOf(DbEventFactory::class, $this->container->get('modelsEventFactory'));
     }
 
     /**

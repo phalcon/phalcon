@@ -18,7 +18,6 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Column;
 use Phalcon\Db\Enum;
-use Phalcon\Db\Event\Factory as DbEventFactory;
 use Phalcon\Db\Exceptions\InvalidWkb;
 use Phalcon\Db\Geometry\WkbParser;
 use Phalcon\Db\RawValue;
@@ -27,7 +26,6 @@ use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Filter\Validation\ValidationInterface;
-use Phalcon\Logger\LoggerInterface;
 use Phalcon\Messages\Message;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\BehaviorInterface;
@@ -85,8 +83,6 @@ use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Settings;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
-use Psr\EventDispatcher\StoppableEventInterface;
-use Throwable;
 
 use function array_intersect;
 use function array_key_exists;
@@ -2910,50 +2906,6 @@ abstract class Model extends AbstractInjectionAware implements
             $this->$eventName();
         }
 
-        $container = $this->getDI();
-        $em        = $this->getEventsManager();
-
-        /**
-         * `Di::get()` gives back `mixed`, so the event factory goes in a typed
-         * local. Get the service only when there is an events manager, as the
-         * short-circuit did before.
-         */
-        /** @var DbEventFactory|null $eventFactory */
-        $eventFactory = $em ? $container?->get('modelsEventFactory') : null;
-
-        if ($em && $eventObject = $eventFactory?->create($eventName, $this)) {
-            $logger = $this->getEventLogger($container);
-            foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
-                // make sure that every event has a chance to be fired
-                try {
-                    // wildcard event
-                    $em->dispatch($eventObject, name: $className, source: $this);
-                } catch (Throwable $t) {
-                    $logger?->error(
-                        'Error processing model event',
-                        [
-                            'exception' => $t,
-                            'class'     => $className,
-                            'event'     => $eventName,
-                        ]
-                    );
-                }
-                try {
-                    // specific event
-                    $em->dispatch($eventObject, name: [$className, $eventName], source: $this);
-                } catch (Throwable $t) {
-                    $logger?->error(
-                        'Error processing model event',
-                        [
-                            'exception' => $t,
-                            'class'     => $className,
-                            'event'     => $eventName,
-                        ]
-                    );
-                }
-            }
-        }
-
         /**
          * Send a notification to the events manager
          */
@@ -2982,63 +2934,6 @@ abstract class Model extends AbstractInjectionAware implements
          * Check if there is a method with the same name of the event
          */
         if (method_exists($this, $eventName) && $this->$eventName() === false) {
-            return false;
-        }
-
-        $container = $this->getDI();
-        $em        = $this->getEventsManager();
-
-        /**
-         * `Di::get()` gives back `mixed`, so the event factory goes in a typed
-         * local. Get the service only when there is an events manager, as the
-         * short-circuit did before.
-         */
-        /** @var DbEventFactory|null $eventFactory */
-        $eventFactory = $em ? $container?->get('modelsEventFactory') : null;
-
-        if ($em && $eventObject = $eventFactory?->create($eventName, $this)) {
-            $logger = $this->getEventLogger($container);
-
-            foreach ([static::class, ...class_parents($this), ...class_implements($this)] as $className) {
-                // make sure that every event has a chance to be fired
-                try {
-                    // wildcard event
-                    $em->dispatch($eventObject, name: $className, source: $this);
-                } catch (Throwable $t) {
-                    $logger?->error(
-                        'Error processing model event',
-                        [
-                            'exception' => $t,
-                            'class'     => $className,
-                            'event'     => $eventName,
-                        ]
-                    );
-                }
-                try {
-                    // specific event
-                    $em->dispatch($eventObject, name: [$className, $eventName], source: $this);
-                } catch (Throwable $t) {
-                    $logger?->error(
-                        'Error processing model event',
-                        [
-                            'exception' => $t,
-                            'class'     => $className,
-                            'event'     => $eventName,
-                        ]
-                    );
-                }
-
-                if ($eventObject instanceof StoppableEventInterface && $eventObject->isPropagationStopped()) {
-                    break;
-                }
-            }
-        }
-
-        if (
-            isset($eventObject) &&
-            $eventObject instanceof StoppableEventInterface &&
-            $eventObject->isPropagationStopped()
-        ) {
             return false;
         }
 
@@ -5699,31 +5594,6 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         return $success;
-    }
-
-    /**
-     * Resolves an optional logger from the container. Returns null when
-     * no logger service is registered: logging model-event dispatch errors is
-     * best-effort and must not abort the operation. The container's get()
-     * throws on a missing service, so has() is checked first.
-     */
-    protected function getEventLogger(object | null $container): LoggerInterface | null
-    {
-        if (!$container instanceof DiInterface) {
-            return null;
-        }
-
-        foreach (['logger', LoggerInterface::class] as $service) {
-            if ($container->has($service)) {
-                $logger = $container->get($service);
-
-                if ($logger instanceof LoggerInterface) {
-                    return $logger;
-                }
-            }
-        }
-
-        return null;
     }
 
     /**

@@ -16,7 +16,6 @@ namespace Phalcon\Di;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as AssetsManager;
-use Phalcon\Db\Event\Factory;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
@@ -54,7 +53,6 @@ use Phalcon\Support\Settings;
  * @property Dispatcher         $dispatcher
  * @property Escaper            $escaper
  * @property EventsManager      $eventsManager
- * @property Factory            $modelsEventFactory
  * @property Direct             $flash
  * @property Session            $flashSession
  * @property Filter             $filter
@@ -130,7 +128,6 @@ class FactoryDefault extends Di
             'filter'             => new Service($filterFactory->newInstance(), true),
             'helper'             => new Service(HelperFactory::class, true),
             'settings'           => new Service(Settings::class, true),
-            'modelsEventFactory' => new Service(Factory::class, true),
             'modelsManager'      => new Service(ModelsManager::class, true),
             'modelsMetadata'     => new Service(MetadataManager::class, true),
             'queueFactory'       => new Service(QueueFactory::class, true),

@@ -19,7 +19,6 @@ use Phalcon\Events\Manager;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Events\Fake\ComponentFireManager;
 use Phalcon\Tests\Unit\Events\Fake\ComponentWithEvents;
-use Phalcon\Tests\Unit\Events\Fake\PsrEventObject;
 
 use function method_exists;
 
@@ -63,40 +62,6 @@ final class ComponentManagerTest extends AbstractUnitTestCase
         $result = $component->callFireManagerEvent('test:action');
         $this->assertTrue($called);
         $this->assertSame('fired', $result);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testEventsAwareTraitFirePsrEventNoManagerReturnsTrue(): void
-    {
-        $component = new ComponentFireManager();
-
-        $result = $component->callFirePsrEvent(new PsrEventObject());
-        $this->assertTrue($result);
-    }
-
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testEventsAwareTraitFirePsrEventWithManager(): void
-    {
-        $called    = false;
-        $manager   = new Manager();
-        $component = new ComponentFireManager();
-        $component->setEventsManager($manager);
-
-        $manager->attach(
-            PsrEventObject::class,
-            function () use (&$called) {
-                $called = true;
-            }
-        );
-
-        $component->callFirePsrEvent(new PsrEventObject());
-        $this->assertTrue($called);
     }
 
     /**
