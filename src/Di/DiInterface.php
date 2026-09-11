@@ -17,6 +17,8 @@ use ArrayAccess;
 
 /**
  * Interface for Phalcon\Di
+ *
+ * @extends ArrayAccess<string, mixed>
  */
 interface DiInterface extends ArrayAccess
 {

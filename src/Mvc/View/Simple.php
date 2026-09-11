@@ -412,10 +412,9 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                  */
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
-                $this->checkContainer(
-                    SimpleViewServicesUnavailable::class,
-                    'the application services'
-                );
+                if (!is_object($this->container)) {
+                    throw new SimpleViewServicesUnavailable();
+                }
 
                 foreach ($this->registeredEngines as $extension => $engineService) {
                     if (is_object($engineService)) {

@@ -341,10 +341,9 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         $realHandler = null;
 
-        $this->checkContainer(
-            ContainerRequired::class,
-            'micro services'
-        );
+        if (null === $this->container) {
+            throw new ContainerRequired();
+        }
 
         try {
             $returnedValue = null;

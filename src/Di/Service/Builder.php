@@ -13,24 +13,44 @@ declare(strict_types=1);
 
 namespace Phalcon\Di\Service;
 
+use Phalcon\Contracts\Di\DiTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Exception;
-use Phalcon\Di\Traits\DiExceptionsTrait;
-use Phalcon\Di\Traits\DiInstanceTrait;
+use Phalcon\Di\Exceptions\ArgumentTypeRequired;
+use Phalcon\Di\Exceptions\CallArgumentsMustBeArray;
+use Phalcon\Di\Exceptions\MethodCallMustBeArray;
+use Phalcon\Di\Exceptions\MethodNameRequired;
+use Phalcon\Di\Exceptions\MissingClassNameParameter;
+use Phalcon\Di\Exceptions\MissingParameterKey;
+use Phalcon\Di\Exceptions\PropertyInjectionRequiresInstance;
+use Phalcon\Di\Exceptions\PropertyMustBeArray;
+use Phalcon\Di\Exceptions\PropertyNameRequired;
+use Phalcon\Di\Exceptions\PropertyValueRequired;
+use Phalcon\Di\Exceptions\SetterInjectionRequiresInstance;
+use Phalcon\Di\Exceptions\SetterParametersMustBeArray;
+use Phalcon\Di\Exceptions\UnknownServiceType;
 
 use function call_user_func;
 use function call_user_func_array;
+use function is_array;
+use function is_object;
 
 /**
+ * Phalcon\Di\Service\Builder
+ *
  * This class builds instances based on complex definitions
+ *
+ * @phpstan-import-type di_parameters from DiTypes
+ * @phpstan-import-type di_service_argument from DiTypes
+ * @phpstan-import-type di_service_definition from DiTypes
  */
 class Builder
 {
-    use DiExceptionsTrait;
-    use DiInstanceTrait;
-
     /**
      * Builds a service using a complex service definition
+     *
+     * @phpstan-param di_service_definition $definition
+     * @phpstan-param di_parameters|null    $parameters
      *
      * @return mixed
      * @throws Exception
@@ -40,42 +60,82 @@ class Builder
         array $definition,
         array | null $parameters = null
     ) {
-        $this->checkClassNameExists($definition);
+        /**
+         * The class name is required
+         */
+        if (!isset($definition['className'])) {
+            throw new MissingClassNameParameter();
+        }
 
         $className = $definition['className'];
-        $params    = $this->checkPassedParameters(
-            $container,
-            $definition,
-            $parameters
-        );
-        $instance  = $this->createInstance($className, $params);
+
+        if (is_array($parameters)) {
+            /**
+             * Build the instance overriding the definition constructor
+             * parameters
+             */
+            if (!empty($parameters)) {
+                $instance = new $className(...$parameters);
+            } else {
+                $instance = new $className();
+            }
+        } else {
+            /**
+             * Check if the argument has constructor arguments
+             */
+            if (isset($definition['arguments'])) {
+                /**
+                 * Create the instance based on the parameters
+                 */
+                $instance = new $className(
+                    ...$this->buildParameters($container, $definition['arguments'])
+                );
+            } else {
+                $instance = new $className();
+            }
+        }
 
         /**
          * The definition has calls?
          */
         if (isset($definition['calls'])) {
-            $this->checkSetterInjectionConstructor($instance);
+            if (!is_object($instance)) {
+                throw new SetterInjectionRequiresInstance();
+            }
+
             $paramCalls = $definition['calls'];
-            $this->checkSetterInjectionParameters($paramCalls);
+            if (!is_array($paramCalls)) {
+                throw new SetterParametersMustBeArray();
+            }
 
             /**
-             * The method call has parameters - element already checked if
-             * it is an array
+             * The method call has parameters
              */
             foreach ($paramCalls as $methodPosition => $method) {
-                $this->checkMethodCallPosition($method, $methodPosition);
-                $this->checkMethodMethodExists($method, $methodPosition);
+                /**
+                 * The call parameter must be an array of arrays
+                 */
+                if (!is_array($method)) {
+                    throw new MethodCallMustBeArray($methodPosition);
+                }
+
+                /**
+                 * A param 'method' is required
+                 */
+                if (!isset($method['method'])) {
+                    throw new MethodNameRequired($methodPosition);
+                }
 
                 /**
                  * Create the method call
                  */
-                $methodCall = [$instance, $method["method"]];
+                $methodCall = [$instance, $method['method']];
+
                 if (isset($method['arguments'])) {
                     $arguments = $method['arguments'];
-                    $this->checkMethodArgumentsIsArray(
-                        $arguments,
-                        $methodPosition
-                    );
+                    if (!is_array($arguments)) {
+                        throw new CallArgumentsMustBeArray((int) $methodPosition);
+                    }
 
                     if (!empty($arguments)) {
                         /**
@@ -104,18 +164,39 @@ class Builder
          * The definition has properties?
          */
         if (isset($definition['properties'])) {
-            $this->checkPropertiesInjectionConstruct($instance);
+            if (!is_object($instance)) {
+                throw new PropertyInjectionRequiresInstance();
+            }
 
             $paramCalls = $definition['properties'];
-            $this->checkSetterInjectionParameters($paramCalls);
+            if (!is_array($paramCalls)) {
+                throw new SetterParametersMustBeArray();
+            }
 
             /**
              * The method call has parameters
              */
             foreach ($paramCalls as $propertyPosition => $property) {
-                $this->checkPropertyIsArray($property, $propertyPosition);
-                $this->checkPropertyNameExists($property, $propertyPosition);
-                $this->checkPropertyValueExists($property, $propertyPosition);
+                /**
+                 * The call parameter must be an array of arrays
+                 */
+                if (!is_array($property)) {
+                    throw new PropertyMustBeArray($propertyPosition);
+                }
+
+                /**
+                 * A param 'name' is required
+                 */
+                if (!isset($property['name'])) {
+                    throw new PropertyNameRequired($propertyPosition);
+                }
+
+                /**
+                 * A param 'value' is required
+                 */
+                if (!isset($property['value'])) {
+                    throw new PropertyValueRequired($propertyPosition);
+                }
 
                 /**
                  * Update the public property
@@ -137,7 +218,9 @@ class Builder
     /**
      * Resolves a constructor/call parameter
      *
-     * @return mixed|void
+     * @phpstan-param di_service_argument $argument
+     *
+     * @return mixed
      * @throws Exception
      */
     private function buildParameter(
@@ -145,45 +228,73 @@ class Builder
         int $position,
         array $argument
     ) {
-        $this->checkArgumentTypeExists($position, $argument);
-
-        $type = $argument['type'];
         /**
-         * If the argument type is 'parameter', we assign the value as it is
+         * All the arguments must have a type
          */
-        if ('parameter' === $type) {
-            $this->checkServiceParameters($argument, 'value', $position);
-
-            return $argument['value'];
+        if (!isset($argument['type'])) {
+            throw new ArgumentTypeRequired($position);
         }
 
-        /**
-         * Get 'service' and 'instance' from the container
-         */
-        $field = ('service' === $type) ? 'name' : '';
-        $field = ('instance' === $type) ? 'className' : $field;
+        switch ($argument['type']) {
+            case 'service':
+                /**
+                 * If the argument type is 'service', we obtain the service from the
+                 * DI
+                 */
+                if (!isset($argument['name'])) {
+                    throw new MissingParameterKey('name', $position);
+                }
 
-        if ('service' === $type || 'instance' === $type) {
-            $this->checkServiceParameters($argument, $field, $position);
+                return $container->get($argument['name']);
 
-            $name = $argument[$field];
+            case 'parameter':
+                /**
+                 * If the argument type is 'parameter', we assign the value as it is
+                 */
+                if (!isset($argument['value'])) {
+                    throw new MissingParameterKey('value', $position);
+                }
 
-            /**
-             * For 'service' this will have nothing so it will default to `null`
-             */
-            $args = $argument['arguments'] ?? null;
+                return $argument['value'];
 
-            return $container->get($name, $args);
+            case 'instance':
+                /**
+                 * If the argument type is 'instance', we assign the value as it is
+                 */
+                if (!isset($argument['className'])) {
+                    throw new MissingParameterKey('className', $position);
+                }
+
+                if (isset($argument['arguments'])) {
+                    /**
+                     * Build the instance with arguments
+                     */
+                    return $container->get(
+                        $argument['className'],
+                        $argument['arguments']
+                    );
+                }
+
+                /**
+                 * The instance parameter does not have arguments for its
+                 * constructor
+                 */
+                return $container->get($argument['className']);
+
+            default:
+                /**
+                 * Unknown parameter type
+                 */
+                throw new UnknownServiceType($position);
         }
-
-        /**
-         * If we are here, then we have not found anything
-         */
-        $this->throwUnknownServiceInParameter($position);
     }
 
     /**
      * Resolves an array of parameters
+     *
+     * @phpstan-param array<int, di_service_argument> $arguments
+     *
+     * @phpstan-return list<mixed>
      *
      * @throws Exception
      */
@@ -202,25 +313,5 @@ class Builder
         }
 
         return $buildArguments;
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function checkPassedParameters(
-        DiInterface $container,
-        array $definition,
-        array | null $parameters = null
-    ): array {
-        if (null !== $parameters) {
-            return $parameters;
-        }
-
-        /**
-         * Check if the argument has constructor arguments
-         */
-        $args = $definition['arguments'] ?? [];
-
-        return $this->buildParameters($container, $args);
     }
 }

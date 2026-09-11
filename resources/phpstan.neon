@@ -377,3 +377,33 @@ parameters:
             message: "#Method Phalcon\\\\Mvc\\\\Model::__set\\(\\) with return type void returns .* but should not return anything#"
             path: ../src/Mvc/Model.php
             reportUnmatched: false
+        # The service definition is `var` in the Zephir source, so the type
+        # guards in `Builder::build()` are live there and are what raise the
+        # `Di\Exceptions` errors for a malformed definition. Only the
+        # documented shape makes them look dead. The `is_object()` guards
+        # follow the Zephir source, where the created instance is `var`.
+        -
+            message: "#Call to function is_(array|object)\\(\\) with .* will always evaluate to true#"
+            path: ../src/Di/Service/Builder.php
+            reportUnmatched: false
+        # The method name comes from the service definition, so the callable
+        # is only known at run time.
+        -
+            message: "#Parameter \\#1 \\$callback of function call_user_func(_array)? expects callable\\(\\): mixed, array\\{object, string\\} given#"
+            path: ../src/Di/Service/Builder.php
+            reportUnmatched: false
+        # `Service` only proves that the definition is an array. `Builder`
+        # checks the shape at run time and raises the `Di\Exceptions` errors.
+        # An array definition also needs the container, which `Di::get()`
+        # always passes. The Zephir source has the same precondition.
+        -
+            message: "#Parameter \\#(1 \\$container|2 \\$definition) of method Phalcon\\\\Di\\\\Service\\\\Builder::build\\(\\) expects .*, (Phalcon\\\\Di\\\\DiInterface\\|null|array<mixed, mixed>) given#"
+            path: ../src/Di/Service.php
+            reportUnmatched: false
+        # `ArrayAccess::offsetSet()` receives null for `$di[] = $value`, which
+        # has no service name. The container does not support appending, and
+        # `setShared()` rejects the null name.
+        -
+            message: "#Parameter \\#1 \\$name of method Phalcon\\\\Di\\\\Di::setShared\\(\\) expects string, string\\|null given#"
+            path: ../src/Di/Di.php
+            reportUnmatched: false

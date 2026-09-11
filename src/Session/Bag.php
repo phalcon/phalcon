@@ -16,7 +16,6 @@ namespace Phalcon\Session;
 use Phalcon\Contracts\Session\SessionTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Support\Collection;
 
 use function is_array;
@@ -33,6 +32,7 @@ use function is_array;
  * $user->age  = 22;
  * ```
  *
+ * @property DiInterface|null $container
  * @property string           $name
  * @property ManagerInterface $session;
  *
@@ -42,7 +42,7 @@ use function is_array;
  */
 class Bag extends Collection implements BagInterface, InjectionAwareInterface
 {
-    use InjectionAwareTrait;
+    private DiInterface | null $container = null;
 
     private string $name;
 
@@ -82,6 +82,14 @@ class Bag extends Collection implements BagInterface, InjectionAwareInterface
     }
 
     /**
+     * Returns the DependencyInjector container
+     */
+    public function getDI(): DiInterface | null
+    {
+        return $this->container;
+    }
+
+    /**
      * Initialize internal array
      *
      * @phpstan-param session_bag_data $data
@@ -111,5 +119,13 @@ class Bag extends Collection implements BagInterface, InjectionAwareInterface
         parent::set($element, $value);
 
         $this->session->set($this->name, $this->data);
+    }
+
+    /**
+     * Sets the DependencyInjector container
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
     }
 }

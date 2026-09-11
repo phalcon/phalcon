@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Di;
 
 use Closure;
+use Phalcon\Contracts\Di\DiTypes;
 use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Exceptions\DefinitionMustBeArrayForRead;
 use Phalcon\Di\Exceptions\DefinitionMustBeArrayForUpdate;
 use Phalcon\Di\Service\Builder;
-use Phalcon\Di\Traits\DiInstanceTrait;
 
+use function call_user_func;
+use function call_user_func_array;
 use function class_exists;
 use function is_array;
 use function is_object;
@@ -37,15 +39,12 @@ use function is_string;
  * $request = service->resolve();
  *```
  *
- * @property array $definition
- * @property bool  $resolved
- * @property bool  $shared
- * @property mixed $sharedInstance
+ * @phpstan-import-type di_parameters from DiTypes
+ * @phpstan-import-type di_service_argument from DiTypes
+ * @phpstan-import-type di_service_definition from DiTypes
  */
 class Service implements ServiceInterface
 {
-    use DiInstanceTrait;
-
     protected mixed $definition;
 
     protected bool $resolved = false;
@@ -83,7 +82,10 @@ class Service implements ServiceInterface
             throw new DefinitionMustBeArrayForRead();
         }
 
-        return $this->definition['arguments'][$position] ?? null;
+        /** @var di_service_definition $definition */
+        $definition = $this->definition;
+
+        return $definition['arguments'][$position] ?? null;
     }
 
     /**
@@ -105,6 +107,8 @@ class Service implements ServiceInterface
     /**
      * Resolves the service
      *
+     * @phpstan-param di_parameters|null $parameters
+     *
      * @return mixed|null
      * @throws Exception
      * @throws ServiceResolutionException
@@ -120,53 +124,67 @@ class Service implements ServiceInterface
             return $this->sharedInstance;
         }
 
-        $instanceDefinition = $this->definition;
+        $found    = true;
+        $instance = null;
 
-        if (is_string($instanceDefinition)) {
+        $definition = $this->definition;
+        if (is_string($definition)) {
             /**
              * String definitions can be class names without implicit parameters
              */
-            if (true === class_exists($instanceDefinition)) {
-                $instance = $this->createInstance($instanceDefinition, $parameters);
+            if (class_exists($definition)) {
+                if (is_array($parameters) && !empty($parameters)) {
+                    $instance = new $definition(...$parameters);
+                } else {
+                    $instance = new $definition();
+                }
             } else {
-                throw new ServiceResolutionException();
+                $found = false;
             }
         } else {
             /**
              * Object definitions can be a Closure or an already resolved
              * instance
              */
-            if (is_object($instanceDefinition)) {
-                if ($instanceDefinition instanceof Closure) {
+            if (is_object($definition)) {
+                if ($definition instanceof Closure) {
                     /**
                      * Bounds the closure to the current DI
                      */
-                    if (is_object($container)) {
-                        $instanceDefinition = Closure::bind($instanceDefinition, $container);
+                    if (null !== $container) {
+                        $definition = Closure::bind($definition, $container);
                     }
 
-                    $instance = $this->createClosureInstance(
-                        $instanceDefinition,
-                        $parameters
-                    );
+                    if (is_array($parameters)) {
+                        $instance = call_user_func_array($definition, $parameters);
+                    } else {
+                        $instance = call_user_func($definition);
+                    }
                 } else {
-                    $instance = $instanceDefinition;
+                    $instance = $definition;
                 }
             } else {
                 /**
                  * Array definitions require a 'className' parameter
                  */
-                if (is_array($instanceDefinition)) {
+                if (is_array($definition)) {
                     $builder  = new Builder();
                     $instance = $builder->build(
                         $container,
-                        $instanceDefinition,
+                        $definition,
                         $parameters
                     );
                 } else {
-                    throw new ServiceResolutionException();
+                    $found = false;
                 }
             }
+        }
+
+        /**
+         * If the service can't be built, we must throw an exception
+         */
+        if (false === $found) {
+            throw new ServiceResolutionException();
         }
 
         /**
@@ -192,6 +210,8 @@ class Service implements ServiceInterface
     /**
      * Changes a parameter in the definition without resolve the service
      *
+     * @phpstan-param di_service_argument $parameter
+     *
      * @throws Exception
      */
     public function setParameter(int $position, array $parameter): ServiceInterface
@@ -200,11 +220,14 @@ class Service implements ServiceInterface
             throw new DefinitionMustBeArrayForUpdate();
         }
 
+        /** @var di_service_definition $definition */
+        $definition = $this->definition;
+
         /**
          * Update the parameter
          */
-        if (isset($this->definition['arguments'])) {
-            $arguments            = $this->definition['arguments'];
+        if (isset($definition['arguments'])) {
+            $arguments            = $definition['arguments'];
             $arguments[$position] = $parameter;
         } else {
             $arguments = [$position => $parameter];

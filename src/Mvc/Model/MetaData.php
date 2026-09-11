@@ -17,6 +17,7 @@ use Phalcon\Cache\Adapter\AdapterInterface as CacheAdapterInterface;
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
+use Phalcon\Mvc\Model\MetaData\Exceptions\ContainerRequired;
 use Phalcon\Mvc\Model\MetaData\Exceptions\CorruptedMetaData;
 use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataStrategyFailed;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
@@ -27,6 +28,7 @@ use Phalcon\Traits\Php\IniTrait;
 
 use function get_class;
 use function is_array;
+use function is_object;
 use function method_exists;
 use function spl_object_id;
 use function trigger_error;
@@ -396,12 +398,13 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     public function getDI(): DiInterface
     {
-        $this->checkContainer(
-            Exception::class,
-            'internal services'
-        );
+        $container = $this->container;
 
-        return $this->container;
+        if (!is_object($container)) {
+            throw new ContainerRequired();
+        }
+
+        return $container;
     }
 
     /**

@@ -1330,10 +1330,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                  */
                 $engines[".phtml"] = new PhpEngine($this, $this->container);
             } else {
-                $this->checkContainer(
-                    ViewServicesUnavailable::class,
-                    'the application services'
-                );
+                if (!is_object($this->container)) {
+                    throw new ViewServicesUnavailable();
+                }
 
                 foreach ($registeredEngines as $extension => $engineService) {
                     if (is_object($engineService)) {

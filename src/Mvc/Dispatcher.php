@@ -227,11 +227,9 @@ class Dispatcher extends BaseDispatcher implements DispatcherInterface
      */
     protected function throwDispatchException(string $message, int $exceptionCode = 0)
     {
-        $this->checkContainer(
-            ResponseServiceUnavailable::class,
-            "the 'response' service",
-            Exception::EXCEPTION_NO_DI
-        );
+        if (null === $this->container) {
+            throw new ResponseServiceUnavailable();
+        }
 
         /** @var DiInterface $container */
         $container = $this->container;

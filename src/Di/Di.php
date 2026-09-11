@@ -13,18 +13,18 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
+use Phalcon\Config\Adapter\Php;
+use Phalcon\Config\Adapter\Yaml;
+use Phalcon\Config\ConfigInterface;
+use Phalcon\Contracts\Config\ConfigTypes;
+use Phalcon\Contracts\Di\DiTypes;
 use Phalcon\Di\Exception as DiException;
 use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Exceptions\AliasAlreadyInUse;
 use Phalcon\Di\Exceptions\AliasNameMustBeString;
 use Phalcon\Di\Exceptions\CircularAliasReference;
-use Phalcon\Di\Traits\DiArrayAccessTrait;
-use Phalcon\Di\Traits\DiEventsTrait;
-use Phalcon\Di\Traits\DiExceptionsTrait;
-use Phalcon\Di\Traits\DiInstanceTrait;
-use Phalcon\Di\Traits\DiLoadTrait;
+use Phalcon\Di\Exceptions\ServiceCannotBeResolved;
 use Phalcon\Events\ManagerInterface;
-use Phalcon\Events\Traits\EventsAwareTrait;
 use stdClass;
 
 /**
@@ -64,20 +64,14 @@ use stdClass;
  *
  * $request = $di->getRequest();
  *```
+ *
+ * @phpstan-import-type config_callbacks from ConfigTypes
+ * @phpstan-import-type di_parameters from DiTypes
  */
 class Di extends stdClass implements DiInterface
 {
-    use DiArrayAccessTrait;
-    use DiEventsTrait;
-    use DiExceptionsTrait;
-    use DiInstanceTrait;
-    use DiLoadTrait;
-    use EventsAwareTrait;
-
     /**
      * Latest DI build
-     *
-     * @var object|null
      */
     protected static DiInterface | null $defaultContainer = null;
 
@@ -89,6 +83,11 @@ class Di extends stdClass implements DiInterface
     protected array $aliases = [];
 
     /**
+     * Events Manager
+     */
+    protected ManagerInterface | null $eventsManager = null;
+
+    /**
      * List of registered services
      *
      * @var ServiceInterface[]
@@ -97,6 +96,8 @@ class Di extends stdClass implements DiInterface
 
     /**
      * List of shared instances
+     *
+     * @var array<string, mixed>
      */
     protected array $sharedInstances = [];
 
@@ -112,6 +113,8 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Magic method to get or set services using setters/getters
+     *
+     * @param list<mixed> $arguments
      *
      * @return mixed|void
      * @throws Exception
@@ -143,7 +146,7 @@ class Di extends stdClass implements DiInterface
             }
         }
 
-        $this->throwUndefinedMethod($method);
+        throw Exception::undefinedMethod($method);
     }
 
     /**
@@ -199,8 +202,9 @@ class Di extends stdClass implements DiInterface
      */
     public function get(string $name, mixed $parameters = null): mixed
     {
-        $instance = null;
         $service  = null;
+        $isShared = false;
+        $instance = null;
 
         /**
          * Resolve the alias, if any
@@ -212,12 +216,10 @@ class Di extends stdClass implements DiInterface
          * immediately return it without triggering events.
          */
         if (isset($this->services[$name])) {
-            $service = $this->services[$name];
+            $service  = $this->services[$name];
+            $isShared = $service->isShared();
 
-            if (
-                true === $service->isShared() &&
-                isset($this->sharedInstances[$name])
-            ) {
+            if (true === $isShared && isset($this->sharedInstances[$name])) {
                 return $this->sharedInstances[$name];
             }
         }
@@ -226,50 +228,79 @@ class Di extends stdClass implements DiInterface
          * Allows for custom creation of instances through the
          * "di:beforeServiceResolve" event.
          */
-        $instance = $this->fireBeforeServiceResolve(
-            $this->eventsManager,
-            $name,
-            $parameters,
-            $instance
-        );
+        if (null !== $this->eventsManager) {
+            $instance = $this->eventsManager->fire(
+                'di:beforeServiceResolve',
+                $this,
+                [
+                    'name'       => $name,
+                    'parameters' => $parameters,
+                ]
+            );
+        }
 
-        if (!is_object($instance)) {
-            $instance = $this->processObjectNotNullService(
-                $name,
-                $parameters,
-                $service,
-                $instance
-            );
-            $instance = $this->processObjectNullService(
-                $name,
-                $parameters,
-                $service,
-                $instance
-            );
+        if (null === $instance) {
+            if (null !== $service) {
+                // The service is registered in the DI.
+                /** @var di_parameters|null $parameters */
+                try {
+                    $instance = $service->resolve($parameters, $this);
+                } catch (ServiceResolutionException) {
+                    throw new ServiceCannotBeResolved($name);
+                }
+
+                // If the service is shared then we'll cache the instance.
+                if (true === $isShared) {
+                    $this->sharedInstances[$name] = $instance;
+                }
+            } else {
+                /**
+                 * The DI also acts as builder for any class even if it isn't
+                 * defined in the DI
+                 */
+                if (!class_exists($name)) {
+                    throw Exception::serviceNotFound($name);
+                }
+
+                if (is_array($parameters) && !empty($parameters)) {
+                    $instance = new $name(...$parameters);
+                } else {
+                    $instance = new $name();
+                }
+            }
         }
 
         /**
          * Pass the DI to the instance if it implements
          * \Phalcon\Di\InjectionAwareInterface
          */
-        if ($instance instanceof InjectionAwareInterface) {
-            $instance->setDI($this);
-        }
+        if (is_object($instance)) {
+            if ($instance instanceof InjectionAwareInterface) {
+                $instance->setDI($this);
+            }
 
-        if ($instance instanceof InitializationAwareInterface) {
-            $instance->initialize();
+            if ($instance instanceof InitializationAwareInterface) {
+                $instance->initialize();
+            }
         }
 
         /**
          * Allows for post creation instance configuration through the
          * "di:afterServiceResolve" event.
          */
-        return $this->fireAfterServiceResolve(
-            $this->eventsManager,
-            $name,
-            $parameters,
-            $instance
-        );
+        if (null !== $this->eventsManager) {
+            $this->eventsManager->fire(
+                'di:afterServiceResolve',
+                $this,
+                [
+                    'name'       => $name,
+                    'parameters' => $parameters,
+                    'instance'   => $instance,
+                ]
+            );
+        }
+
+        return $instance;
     }
 
     /**
@@ -314,7 +345,7 @@ class Di extends stdClass implements DiInterface
         $name = $this->resolveAlias($name);
 
         if (true !== $this->has($name)) {
-            $this->throwServiceNotFound($name);
+            throw Exception::serviceNotFound($name);
         }
 
         return $this->services[$name];
@@ -377,6 +408,129 @@ class Di extends stdClass implements DiInterface
         $name = $this->resolveAlias($name);
 
         return isset($this->sharedInstances[$name]);
+    }
+
+    /**
+     * Loads services from a php config file.
+     *
+     * ```php
+     * $di->loadFromPhp("path/services.php");
+     * ```
+     *
+     * And the services can be specified in the file as:
+     *
+     * ```php
+     * return [
+     *      'myComponent' => [
+     *          'className' => '\Acme\Components\MyComponent',
+     *          'shared' => true,
+     *      ],
+     *      'group' => [
+     *          'className' => '\Acme\Group',
+     *          'arguments' => [
+     *              [
+     *                  'type' => 'service',
+     *                  'service' => 'myComponent',
+     *              ],
+     *          ],
+     *      ],
+     *      'user' => [
+     *          'className' => '\Acme\User',
+     *      ],
+     * ];
+     * ```
+     *
+     * @link https://docs.phalcon.io/latest/di/
+     */
+    public function loadFromPhp(string $filePath): void
+    {
+        $services = new Php($filePath);
+
+        $this->loadFromConfig($services);
+    }
+
+    /**
+     * Loads services from a yaml file.
+     *
+     * ```php
+     * $di->loadFromYaml(
+     *     "path/services.yaml",
+     *     [
+     *         "!approot" => function ($value) {
+     *             return dirname(__DIR__) . $value;
+     *         }
+     *     ]
+     * );
+     * ```
+     *
+     * And the services can be specified in the file as:
+     *
+     * ```php
+     * myComponent:
+     *     className: \Acme\Components\MyComponent
+     *     shared: true
+     *
+     * group:
+     *     className: \Acme\Group
+     *     arguments:
+     *         - type: service
+     *           name: myComponent
+     *
+     * user:
+     *    className: \Acme\User
+     * ```
+     *
+     * @phpstan-param config_callbacks|null $callbacks
+     *
+     * @link https://docs.phalcon.io/latest/di/
+     */
+    public function loadFromYaml(
+        string $filePath,
+        array | null $callbacks = null
+    ): void {
+        $services = new Yaml($filePath, $callbacks);
+
+        $this->loadFromConfig($services);
+    }
+
+    /**
+     * Check if a service is registered using the array syntax
+     */
+    public function offsetExists(mixed $name): bool
+    {
+        return $this->has($name);
+    }
+
+    /**
+     * Allows to obtain a shared service using the array syntax
+     *
+     *```php
+     * var_dump($di["request"]);
+     *```
+     */
+    public function offsetGet(mixed $name): mixed
+    {
+        return $this->getShared($name);
+    }
+
+    /**
+     * Allows to register a shared service using the array syntax
+     *
+     *```php
+     * $di["request"] = new \Phalcon\Http\Request();
+     *```
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        $this->setShared($offset, $value);
+    }
+
+    /**
+     * Removes a service from the services container using the array syntax
+     */
+    public function offsetUnset(mixed $name): void
+    {
+        $this->remove($name);
     }
 
     /**
@@ -452,7 +606,10 @@ class Di extends stdClass implements DiInterface
          * `getShared()` call goes through full resolution.
          */
         if (isset($this->services[$name])) {
-            $this->services[$name]->setSharedInstance(null);
+            $service = $this->services[$name];
+            if ($service instanceof Service) {
+                $service->setSharedInstance(null);
+            }
         }
     }
 
@@ -477,13 +634,15 @@ class Di extends stdClass implements DiInterface
     /**
      * Sets one or more aliases to the given name.
      *
+     * @param array<array-key, mixed>|string $aliases
+     *
      * @return $this
      * @throws DiException
      */
     public function setAlias(string $name, array | string $aliases): self
     {
         if (true !== $this->has($name)) {
-            $this->throwServiceNotFound($name);
+            throw Exception::serviceNotFound($name);
         }
 
         if (true !== is_array($aliases)) {
@@ -532,53 +691,19 @@ class Di extends stdClass implements DiInterface
     }
 
     /**
-     * @return mixed|null
-     * @throws Exception
+     * Loads services from a Config object.
      */
-    private function processObjectNotNullService(
-        string $name,
-        array | null $parameters = null,
-        ServiceInterface | null $service = null,
-        mixed $instance = null
-    ) {
-        if (null !== $service) {
-            // The service is registered in the DI.
-            try {
-                $instance = $service->resolve($parameters, $this);
-            } catch (ServiceResolutionException) {
-                $this->throwCannotResolveService($name);
-            }
+    protected function loadFromConfig(ConfigInterface $config): void
+    {
+        $services = $config->toArray();
 
-            // If the service is shared then we'll cache the instance.
-            if (true === $service->isShared()) {
-                $this->sharedInstances[$name] = $instance;
-            }
+        foreach ($services as $name => $service) {
+            $this->set(
+                $name,
+                $service,
+                is_array($service) && isset($service['shared']) && $service['shared']
+            );
         }
-
-        return $instance;
-    }
-
-    /**
-     * @return mixed|null
-     * @throws Exception
-     */
-    private function processObjectNullService(
-        string $name,
-        array | null $parameters = null,
-        ServiceInterface | null $service = null,
-        mixed $instance = null
-    ): mixed {
-        if (null === $service) {
-            /**
-             * The DI also acts as builder for any class even if it isn't
-             * defined in the DI
-             */
-            $this->checkClassExists($name);
-
-            $instance = $this->createInstance($name, $parameters);
-        }
-
-        return $instance;
     }
 
     /**

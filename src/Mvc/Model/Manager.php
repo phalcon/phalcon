@@ -18,7 +18,6 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
@@ -86,7 +85,6 @@ use function strtolower;
 class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
-    use InjectionAwareTrait;
     use UncamelizeTrait;
 
     /**
@@ -116,6 +114,8 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     protected array $belongsToSingle = [];
 
     protected BuilderInterface | null $builder = null;
+
+    protected DiInterface | null $container = null;
 
     /**
      * @phpstan-var array<string, EventsManagerInterface>
@@ -920,10 +920,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createBuilder(mixed $params = null): BuilderInterface
     {
-        $this->checkContainer(
-            ManagerOrmServicesUnavailable::class,
-            'the services related to the ORM'
-        );
+        if (!is_object($this->container)) {
+            throw new ManagerOrmServicesUnavailable();
+        }
 
         /**
          * Gets Builder instance from DI container
@@ -949,10 +948,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      */
     public function createQuery(string $phql): QueryInterface
     {
-        $this->checkContainer(
-            ManagerOrmServicesUnavailable::class,
-            'the services related to the ORM'
-        );
+        if (!is_object($this->container)) {
+            throw new ManagerOrmServicesUnavailable();
+        }
 
         /**
          * Create a query
@@ -1103,6 +1101,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         ModelInterface $model
     ): EventsManagerInterface | null {
         return $this->customEventsManager[mb_strtolower(get_class($model))] ?? null;
+    }
+
+    /**
+     * Returns the DependencyInjector container
+     */
+    public function getDI(): DiInterface | null
+    {
+        return $this->container;
     }
 
     /**
@@ -2113,6 +2119,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Sets the DependencyInjector container
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
+    }
+
+    /**
      * Sets the prefix for all model sources.
      *
      * ```php
@@ -2215,10 +2229,9 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     ): AdapterInterface {
         $service = $this->getConnectionService($model, $connectionServices);
 
-        $this->checkContainer(
-            ManagerOrmServicesUnavailable::class,
-            'the services related to the ORM'
-        );
+        if (!is_object($this->container)) {
+            throw new ManagerOrmServicesUnavailable();
+        }
 
         /**
          * Request the connection service from the DI

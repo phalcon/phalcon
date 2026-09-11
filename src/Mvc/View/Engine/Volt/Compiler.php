@@ -15,8 +15,8 @@ namespace Phalcon\Mvc\View\Engine\Volt;
 
 use Closure;
 use Phalcon\Contracts\Mvc\MvcTypes;
+use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CannotOpenCompiledFile;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatement;
@@ -86,7 +86,6 @@ class Compiler implements InjectionAwareInterface
 {
     use CamelizeTrait;
     use FilePathTrait;
-    use InjectionAwareTrait;
 
     protected bool $autoescape = false;
 
@@ -100,6 +99,8 @@ class Compiler implements InjectionAwareInterface
     protected array | null $blocks = null;
 
     protected string | null $compiledTemplatePath;
+
+    protected DiInterface | null $container = null;
 
     protected string | null $currentBlock = null;
 
@@ -2133,6 +2134,14 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
+     * Returns the internal dependency injector
+     */
+    public function getDI(): DiInterface | null
+    {
+        return $this->container;
+    }
+
+    /**
      * Returns the list of extensions registered in Volt
      *
      * @phpstan-return list<object>
@@ -2323,6 +2332,14 @@ class Compiler implements InjectionAwareInterface
          * Fall back to the equals operator
          */
         return $left . " == " . $this->expression($test);
+    }
+
+    /**
+     * Sets the dependency injector
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
     }
 
     /**

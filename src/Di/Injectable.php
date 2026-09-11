@@ -17,7 +17,7 @@ use Phalcon\Annotations\Adapter\AdapterInterface as AnnotationsAdapterInterface;
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
 use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Db\Adapter\AdapterInterface as DbAdapterInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
+use Phalcon\Di\Exceptions\ContainerRequired;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Crypt\CryptInterface;
 use Phalcon\Encryption\Security;
@@ -81,7 +81,10 @@ use stdClass;
  */
 abstract class Injectable extends stdClass implements InjectionAwareInterface
 {
-    use InjectionAwareTrait;
+    /**
+     * Dependency Injector
+     */
+    protected DiInterface | null $container = null;
 
     /**
      * Magic method __get
@@ -102,13 +105,16 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
          * Accessing the persistent property will create a session bag on any class
          */
         if ('persistent' === $propertyName) {
-            $this->persistent = $container->get(
+            /** @var BagInterface $persistent */
+            $persistent = $container->get(
                 'sessionBag',
                 [
                     get_class($this),
                     $container,
                 ]
             );
+
+            $this->persistent = $persistent;
 
             return $this->persistent;
         }
@@ -149,12 +155,31 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
     /**
      * Returns the internal dependency injector
      */
-    public function getDI(): DiInterface | null
+    public function getDI(): DiInterface
     {
-        if (null === $this->container) {
-            $this->container = Di::getDefault();
+        $container = $this->container;
+
+        if (null === $container) {
+            $container = Di::getDefault();
+
+            if (!is_object($container)) {
+                throw new ContainerRequired();
+            }
+
+            /**
+             * Set container for future reuse on next `getDI()` calls.
+             */
+            $this->setDI($container);
         }
 
-        return $this->container;
+        return $container;
+    }
+
+    /**
+     * Sets the dependency injector
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
     }
 }

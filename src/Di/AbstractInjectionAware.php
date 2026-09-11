@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Phalcon\Di;
 
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use stdClass;
 
 /**
@@ -21,5 +20,24 @@ use stdClass;
  */
 abstract class AbstractInjectionAware extends stdClass implements InjectionAwareInterface
 {
-    use InjectionAwareTrait;
+    /**
+     * Dependency Injector
+     */
+    protected DiInterface | null $container = null;
+
+    /**
+     * Returns the internal dependency injector
+     */
+    public function getDI(): DiInterface | null
+    {
+        return $this->container;
+    }
+
+    /**
+     * Sets the dependency injector
+     */
+    public function setDI(DiInterface $container): void
+    {
+        $this->container = $container;
+    }
 }

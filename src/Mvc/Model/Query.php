@@ -23,7 +23,6 @@ use Phalcon\Db\RawValue;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Di\Traits\InjectionAwareTrait;
 use Phalcon\Mvc\Model\Query\Exceptions\AmbiguousColumn;
 use Phalcon\Mvc\Model\Query\Exceptions\AmbiguousJoinRelation;
 use Phalcon\Mvc\Model\Query\Exceptions\BindParameterNotInPlaceholders;
@@ -152,8 +151,6 @@ use function str_replace;
  */
 class Query implements QueryInterface, InjectionAwareInterface
 {
-    use InjectionAwareTrait;
-
     public const TYPE_DELETE = 303;
 
     public const TYPE_INSERT = 306;
@@ -191,6 +188,8 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @phpstan-var mvc_model_cache_options|null
      */
     protected array | null $cacheOptions = null;
+
+    protected DiInterface | null $container = null;
 
     protected bool $enableImplicitJoins;
 
@@ -508,6 +507,14 @@ class Query implements QueryInterface, InjectionAwareInterface
     public function getCacheOptions(): array
     {
         return $this->cacheOptions ?? [];
+    }
+
+    /**
+     * Returns the dependency injection container
+     */
+    public function getDI(): DiInterface | null
+    {
+        return $this->container;
     }
 
     /**

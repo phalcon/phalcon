@@ -94,7 +94,9 @@ class Application extends AbstractApplication
      */
     public function handle(string $uri): bool | ResponseInterface
     {
-        $this->checkContainer(ContainerRequired::class, 'internal services');
+        if (null === $this->container) {
+            throw new ContainerRequired();
+        }
 
         /**
          * Call boot event, this allows the developer to perform initialization

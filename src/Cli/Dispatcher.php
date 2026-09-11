@@ -127,11 +127,12 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
             return $optionValue;
         }
 
-        $this->checkContainer(
-            Exception::class,
-            "the 'filter' service",
-            DispatcherException::EXCEPTION_NO_DI
-        );
+        if (null === $this->container) {
+            $this->throwDispatchException(
+                "A dependency injection container is required to access the 'filter' service",
+                DispatcherException::EXCEPTION_NO_DI
+            );
+        }
 
         /** @var DiInterface $container */
         $container = $this->container;

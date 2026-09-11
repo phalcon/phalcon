@@ -31,6 +31,7 @@ use Phalcon\Mvc\Router\Exceptions\InvalidConfigSource;
 use Phalcon\Mvc\Router\Exceptions\InvalidRoutePosition;
 use Phalcon\Mvc\Router\Exceptions\MissingGroupRouteKey;
 use Phalcon\Mvc\Router\Exceptions\MissingRouteConfigKey;
+use Phalcon\Mvc\Router\Exceptions\RequestServiceUnavailable;
 use Phalcon\Mvc\Router\Exceptions\UnknownHttpMethod;
 use Phalcon\Mvc\Router\Exceptions\WrongPathsKey;
 use Phalcon\Mvc\Router\Group;
@@ -1023,10 +1024,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         /**
          * Retrieve the request service from the container
          */
-        $this->checkContainer(
-            Exception::class,
-            "the 'request' service"
-        );
+        if (null === $this->container) {
+            throw new RequestServiceUnavailable();
+        }
 
         /** @var RequestInterface $request */
         $request = $this->container->get("request");
