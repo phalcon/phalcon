@@ -1968,7 +1968,7 @@ class Compiler implements InjectionAwareInterface
                 if (is_array($extendedBlocks)) {
                     $currentBlock = $this->currentBlock;
 
-                    if (isset($extendedBlocks[$currentBlock])) {
+                    if (null !== $currentBlock && isset($extendedBlocks[$currentBlock])) {
                         $block     = $extendedBlocks[$currentBlock];
                         $exprLevel = $this->exprLevel;
 

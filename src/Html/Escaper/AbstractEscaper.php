@@ -78,7 +78,7 @@ abstract class AbstractEscaper
         $result = '';
 
         for ($i = $offset; $i < $len; $i += 4) {
-            /** @phpstan-var array<int, int> $unpacked */
+            /** @phpstan-var array<int, int<0, max>> $unpacked */
             $unpacked = unpack($format, substr($input, $i, 4));
             $value    = $unpacked[1];
 

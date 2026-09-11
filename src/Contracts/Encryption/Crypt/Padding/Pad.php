@@ -25,6 +25,9 @@ namespace Phalcon\Contracts\Encryption\Crypt\Padding;
  */
 interface Pad
 {
+    /**
+     * @phpstan-param int<0, 255> $paddingSize
+     */
     public function pad(int $paddingSize): string;
 
     public function unpad(string $input, int $blockSize): int;

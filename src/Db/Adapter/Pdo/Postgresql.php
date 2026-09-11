@@ -664,7 +664,12 @@ class Postgresql extends PdoAdapter
         );
 
         foreach ($records as $reference) {
-            /** @var db_describe_row $reference */
+            /**
+             * PostgreSQL does not store a null constraint name.
+             *
+             * @var db_describe_row $reference
+             * @var string          $constraintName
+             */
             $constraintName    = $reference[2];
             $columns           = $references[$constraintName]["columns"] ?? [];
             $referenceDelete   = $references[$constraintName]["onDelete"] ?? $reference[7];

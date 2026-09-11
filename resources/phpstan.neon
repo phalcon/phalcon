@@ -2,6 +2,12 @@ parameters:
     paths:
         - ../src
     level: max
+    # The project supports PHP 8.1 to 8.5 (the CI matrix). Analyse for the
+    # whole range, so the result does not depend on the PHP version that runs
+    # PHPStan (8.1 in the containers, 8.5 in the CI analyze job).
+    phpVersion:
+        min: 80100
+        max: 80599
     tmpDir: ../tests/_output
     ignoreErrors:
         - "#Unsafe usage of new static#"
@@ -78,6 +84,20 @@ parameters:
         # stubs for the analysed PHP version do not declare it.
         -
             message: "#Dead catch - Throwable is never thrown in the try block#"
+            path: ../src/Time/Clock/FrozenClock.php
+            reportUnmatched: false
+        # `imagecopy()` and `imagecopyresampled()` return bool before PHP 8.5
+        # and true from 8.5 on. The check is kept, as in the Zephir
+        # implementation.
+        -
+            message: "#Strict comparison using \\!== between false and true will always evaluate to true#"
+            path: ../src/Image/Adapter/Gd.php
+            reportUnmatched: false
+        # Before PHP 8.3, `modify()` returns false on an invalid modifier. From
+        # 8.3 on it throws, so the check can only be true on older versions.
+        # It is kept, as in the Zephir implementation.
+        -
+            message: "#Strict comparison using === between false and DateTimeImmutable will always evaluate to false#"
             path: ../src/Time/Clock/FrozenClock.php
             reportUnmatched: false
         # The trait reads `container` only after property_exists() finds it.
