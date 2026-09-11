@@ -17,14 +17,10 @@ use Closure;
 use Phalcon\Contracts\Events\Enumerable;
 use Phalcon\Contracts\Events\Stoppable;
 use Phalcon\Contracts\Events\Subscriber;
-use Phalcon\Db\Event\AbstractModelEvent;
-use Phalcon\Db\Event\ModelEventNameEnum;
 use Phalcon\Events\Exceptions\InvalidEventHandler;
 use Phalcon\Events\Exceptions\InvalidEventType;
 use Phalcon\Events\Exceptions\InvalidSubscriberConfiguration;
 use Phalcon\Events\Exceptions\NoListenersForEvent;
-use Psr\EventDispatcher\EventDispatcherInterface;
-use Psr\EventDispatcher\StoppableEventInterface;
 use Throwable;
 
 use function array_splice;
@@ -47,7 +43,7 @@ use function substr;
  * can create hooks or plugins that will offer monitoring of data, manipulation,
  * conditional execution and much more.
  */
-class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
+class Manager implements ManagerInterface, Enumerable
 {
     protected bool $collect = false;
 
@@ -164,19 +160,13 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     /**
      * Attach a listener to the events manager
      *
-     * @param string|string[] $eventType
-     *
      * @throws InvalidEventHandler
      */
     final public function attach(
-        array | string $eventType,
+        string $eventType,
         callable | object $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
-        if (is_array($eventType)) {
-            $eventType = join(':', $eventType);
-        }
-
         // Classify the handler type ONCE so the dispatch loop doesn't have to
         // run instanceof / is_callable per fire per listener.
         if ($handler instanceof Closure) {
@@ -281,17 +271,13 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     }
 
     /**
-     * Dispatches an object event to the appropriate event listeners.
+     * Dispatches an object event to its listeners, routed by an explicit name
+     * (a string, or a [class, method] array) or, failing that, by the event's
+     * class name. Listeners receive the event object. Propagation stops when
+     * the event implements Phalcon\Contracts\Events\Stoppable and reports it
+     * is stopped.
      *
-     * PSR-14 shaped: listeners receive the (possibly mutated) event object.
-     * Propagation stops when the event implements
-     * {@see StoppableEventInterface} and reports it is stopped.
-     *
-     * @param object               $event  The event object to be dispatched.
-     * @param string|string[]|null $name   Optional event name to look for.
-     * @param object|null          $source Optional source object.
-     *
-     * @return mixed The last listener result or null when no listener matches.
+     * @param string|string[]|null $name
      */
     public function dispatch(
         object $event,
@@ -383,13 +369,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
             $colonPos = strpos($eventType, ':');
 
             if (false === $colonPos) {
-                // PSR-14 bridge: a colon-less event type with an object as
-                // its data is delegated to dispatch() so object events can be
-                // fired through the legacy fire() entry point.
-                if (is_object($data)) {
-                    return $this->dispatch($data, $eventType, $source);
-                }
-
                 throw new InvalidEventType($eventType);
             }
 
@@ -958,11 +937,11 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
     }
 
     /**
-     * Object-event dispatch loop used by dispatch(). Generic:
-     * closure/callable handlers receive the event object; plain-object
-     * handlers resolve to the model lifecycle method (via ModelEventNameEnum)
-     * or fall back to __invoke. Propagation stops when the event implements
-     * StoppableEventInterface and reports it is stopped.
+     * Object-event dispatch loop used by dispatch(). Closure/callable handlers
+     * receive the event object; plain-object handlers call the method named by
+     * the dispatch name (when provided) or fall back to __invoke. Propagation
+     * stops when the event implements Phalcon\Contracts\Events\Stoppable and
+     * reports it is stopped.
      */
     private function runObjectQueue(
         array $queue,
@@ -982,13 +961,6 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
                 // type 2: plain object handler.
                 if (null !== $methodName && method_exists($handler, $methodName)) {
                     $ret = $handler->{$methodName}($event);
-                } elseif (
-                    $event instanceof AbstractModelEvent
-                    && null !== ($modelMethod = ModelEventNameEnum::tryFromEventClass($event::class)?->value)
-                    && method_exists($handler, $modelMethod)
-                ) {
-                    // Bridge: model lifecycle event -> resolved method.
-                    $ret = $handler->{$modelMethod}($event);
                 } elseif (method_exists($handler, '__invoke')) {
                     $ret = $handler->__invoke($event);
                 } else {
@@ -1002,10 +974,7 @@ class Manager implements ManagerInterface, EventDispatcherInterface, Enumerable
 
             $status = $ret;
 
-            if (
-                ($event instanceof Stoppable && $event->isPropagationStopped())
-                || ($event instanceof StoppableEventInterface && $event->isPropagationStopped())
-            ) {
+            if ($event instanceof Stoppable && $event->isPropagationStopped()) {
                 break;
             }
         }

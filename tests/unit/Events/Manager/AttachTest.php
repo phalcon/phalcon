@@ -18,28 +18,9 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Listener\OneListener;
 use Phalcon\Tests\Support\Listener\TwoListener;
 use Phalcon\Tests\Unit\Events\Fake\ComponentOne;
-use stdClass;
 
 final class AttachTest extends AbstractUnitTestCase
 {
-    /**
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2024-01-01
-     */
-    public function testEventsManagerAttachArrayEventType(): void
-    {
-        $manager = new Manager();
-        $called  = false;
-
-        $manager->attach(['ab', 'beforeAction'], function () use (&$called) {
-            $called = true;
-        });
-
-        $manager->fire('ab:beforeAction', new stdClass());
-
-        $this->assertTrue($called);
-    }
-
     /**
      * @author @author Kamil Skowron <kamil@hedonsoftware.com>
      * @since  2020-09-09

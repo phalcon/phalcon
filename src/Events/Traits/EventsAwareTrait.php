@@ -16,7 +16,6 @@ namespace Phalcon\Events\Traits;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Manager;
 use Phalcon\Events\ManagerInterface;
-use Phalcon\Events\PsrEventInterface;
 
 use function property_exists;
 
@@ -77,15 +76,6 @@ trait EventsAwareTrait
                 ->eventsManager
                 ->fire($eventName, $this, $data, $cancellable)
             ;
-        }
-
-        return true;
-    }
-
-    protected function firePsrEvent(PsrEventInterface $event, ?string $name = null): mixed
-    {
-        if (null !== $this->eventsManager) {
-            return $this->eventsManager->dispatch($event, $name, $this);
         }
 
         return true;
