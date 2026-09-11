@@ -49,7 +49,6 @@ trait EventsAwareTrait
     /**
      * Helper method to fire an event
      *
-     * @return bool|mixed|null
      * @throws EventsException
      */
     protected function fireManagerEvent(
@@ -57,7 +56,7 @@ trait EventsAwareTrait
         mixed $data = null,
         bool $cancellable = true,
         bool $stopOnFalse = false
-    ) {
+    ): mixed {
         if (null !== $this->eventsManager) {
             /**
              * A security boundary asks for stop-on-false so a listener's

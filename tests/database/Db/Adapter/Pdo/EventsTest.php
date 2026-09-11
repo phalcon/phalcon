@@ -21,8 +21,8 @@ final class EventsTest extends AbstractUnitTestCase
         return [
             ['SELECT 1', 'query', ['beforeQuery', 'afterQuery']],
             ['CREATE TABLE test (id INT)', 'execute', ['beforeQuery', 'afterQuery']],
-            ['', 'commit', ['beginTransaction', 'commitTransaction', 'transactionCommitted']],
-            ['', 'rollback', ['beginTransaction', 'rollbackTransaction', 'transactionRolledBack']],
+            ['', 'commit', ['beginTransaction', 'commitTransaction']],
+            ['', 'rollback', ['beginTransaction', 'rollbackTransaction']],
         ];
     }
 

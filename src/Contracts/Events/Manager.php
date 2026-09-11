@@ -32,10 +32,12 @@ interface Manager
 
     /**
      * Attach a listener to the events manager.
+     *
+     * @param callable|object $handler
      */
     public function attach(
         string $eventType,
-        callable | object $handler,
+        mixed $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void;
 
@@ -52,8 +54,10 @@ interface Manager
 
     /**
      * Detach a listener from the events manager.
+     *
+     * @param callable|object $handler
      */
-    public function detach(string $eventType, callable | object $handler): void;
+    public function detach(string $eventType, mixed $handler): void;
 
     /**
      * Removes all listeners -- globally or for a single event type.

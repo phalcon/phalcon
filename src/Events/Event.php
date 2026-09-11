@@ -15,6 +15,10 @@ namespace Phalcon\Events;
 
 use Phalcon\Contracts\Events\Stoppable;
 use Phalcon\Events\Exceptions\EventNotCancelable;
+use Phalcon\Events\Exceptions\InvalidEventSource;
+
+use function gettype;
+use function is_object;
 
 /**
  * Phalcon\Events\Event
@@ -34,19 +38,49 @@ use Phalcon\Events\Exceptions\EventNotCancelable;
 class Event implements EventInterface, Stoppable
 {
     /**
+     * Is event cancelable?
+     */
+    protected bool $cancelable;
+
+    /**
+     * Event data
+     */
+    protected mixed $data;
+
+    /**
+     * Event source
+     */
+    protected object | null $source = null;
+
+    /**
      * Is event propagation stopped?
      */
     protected bool $stopped = false;
 
     /**
+     * Event type
+     */
+    protected string $type;
+
+    /**
      * Event constructor.
+     *
+     * @throws InvalidEventSource
      */
     public function __construct(
-        protected string $type,
-        protected object | null $source = null,
-        protected mixed $data = null,
-        protected bool $cancelable = true
+        string $type,
+        mixed $source = null,
+        mixed $data = null,
+        bool $cancelable = true
     ) {
+        if (null !== $source && !is_object($source)) {
+            throw new InvalidEventSource($type, gettype($source));
+        }
+
+        $this->type       = $type;
+        $this->source     = $source;
+        $this->data       = $data;
+        $this->cancelable = $cancelable;
     }
 
     public function getData(): mixed

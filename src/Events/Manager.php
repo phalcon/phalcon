@@ -160,11 +160,13 @@ class Manager implements ManagerInterface, Enumerable
     /**
      * Attach a listener to the events manager
      *
+     * @param callable|object $handler
+     *
      * @throws InvalidEventHandler
      */
     final public function attach(
         string $eventType,
-        callable | object $handler,
+        mixed $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
         // Classify the handler type ONCE so the dispatch loop doesn't have to
@@ -228,9 +230,11 @@ class Manager implements ManagerInterface, Enumerable
     /**
      * Detach the listener from the events manager
      *
+     * @param callable|object $handler
+     *
      * @throws InvalidEventHandler
      */
-    public function detach(string $eventType, callable | object $handler): void
+    public function detach(string $eventType, mixed $handler): void
     {
         if (false === $this->isValidHandler($handler)) {
             throw new InvalidEventHandler();
@@ -278,11 +282,12 @@ class Manager implements ManagerInterface, Enumerable
      * is stopped.
      *
      * @param string|string[]|null $name
+     * @param object|null          $source
      */
     public function dispatch(
         object $event,
-        array | string | null $name = null,
-        ?object $source = null
+        mixed $name = null,
+        mixed $source = null
     ): mixed {
         if (empty($this->events)) {
             return null;
@@ -298,6 +303,8 @@ class Manager implements ManagerInterface, Enumerable
             if (false !== $colonPos) {
                 $methodName = substr($name, $colonPos + 1);
             }
+        } else {
+            $name = null;
         }
 
         if (null !== $name && !empty($this->events[$name])) {
@@ -328,6 +335,8 @@ class Manager implements ManagerInterface, Enumerable
      * $eventsManager->fire("db", $connection);
      *```
      *
+     * @param bool|null $stopOnFalse
+     *
      * @throws InvalidEventType
      * @throws NoListenersForEvent
      */
@@ -336,14 +345,18 @@ class Manager implements ManagerInterface, Enumerable
         object $source,
         mixed $data = null,
         bool $cancelable = true,
-        ?bool $stopOnFalse = null
+        mixed $stopOnFalse = null
     ): mixed {
         /**
          * Per-call override of setStopOnFalse(): `true` makes a listener's
          * `false` final for this fire only, `false` keeps last-wins, `null`
          * uses the manager setting. Not part of the Manager contract.
          */
-        $stop = $stopOnFalse ?? $this->stopOnFalse;
+        if (null === $stopOnFalse) {
+            $stop = $this->stopOnFalse;
+        } else {
+            $stop = (bool) $stopOnFalse;
+        }
 
         // Manager-level kill switch.
         if ($this->halted) {
@@ -946,7 +959,7 @@ class Manager implements ManagerInterface, Enumerable
     private function runObjectQueue(
         array $queue,
         object $event,
-        ?string $methodName = null
+        mixed $methodName
     ): mixed {
         $status  = null;
         $collect = $this->collect;
