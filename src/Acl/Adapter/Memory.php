@@ -129,55 +129,65 @@ class Memory extends AbstractAdapter
      * @phpstan-var array<string, int>
      */
     protected array $access = [];
+
     /**
      * Access List
      *
      * @phpstan-var array<string, bool>
      */
     protected array $accessList = ["*!*" => true];
+
     /**
      * Returns the latest function used to acquire access
      */
     protected mixed $activeFunction;
+
     /**
      * Returns number of additional arguments(excluding role and resource) for
      * active function
      */
     protected int $activeFunctionCustomArgumentsCount = 0;
+
     /**
      * Returns the latest key used to acquire access
      *
      * @var string|null
      */
     protected mixed $activeKey = null;
+
     /**
      * Components
      *
      * @phpstan-var acl_components
      */
     protected array $components = [];
+
     /**
      * Component Names
      *
      * @phpstan-var array<string, bool>
      */
     protected array $componentsNames = ["*" => true];
+
     /**
      * Function List
      *
      * @phpstan-var array<string, callable|string>
      */
     protected array $functions = [];
+
     /**
      * Default action for no arguments is `deny`
      */
     protected int $noArgumentsDefaultAction = Enum::DENY;
+
     /**
      * Role Inherits
      *
      * @phpstan-var array<string, array<int, string>>
      */
     protected array $roleInherits = [];
+
     /**
      * Roles
      *

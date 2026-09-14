@@ -37,6 +37,7 @@ use function implode;
 abstract class AbstractQuery
 {
     protected Bind $bind;
+
     protected Connection $connection;
 
     /**

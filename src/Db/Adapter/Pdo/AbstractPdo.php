@@ -71,6 +71,7 @@ abstract class AbstractPdo extends AbstractAdapter
      * Last affected rows
      */
     protected int $affectedRows = 0;
+
     /**
      * Whether to transparently reconnect and retry once when a query fails
      * because the connection was lost. Opt-in; off by default.

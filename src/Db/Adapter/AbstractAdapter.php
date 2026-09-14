@@ -181,16 +181,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Phalcon\Db\Adapter constructor
      *
      * @param array $descriptor = [
-     *     'host' => 'localhost',
-     *     'port' => '3306',
-     *     'dbname' => 'blog',
-     *     'username' => 'sigma'
-     *     'password' => 'secret',
-     *     'dialectClass' => null,
-     *     'options' => [],
-     *     'dsn' => null,
-     *     'charset' => 'utf8mb4'
-     * ]
+     *                          'host' => 'localhost',
+     *                          'port' => '3306',
+     *                          'dbname' => 'blog',
+     *                          'username' => 'sigma'
+     *                          'password' => 'secret',
+     *                          'dialectClass' => null,
+     *                          'options' => [],
+     *                          'dsn' => null,
+     *                          'charset' => 'utf8mb4'
+     *                          ]
      *
      * Note: the `options` key is forwarded to the static `setup()` method,
      * which writes process-global settings affecting every connection in the

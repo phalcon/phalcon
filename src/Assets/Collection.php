@@ -44,21 +44,28 @@ class Collection implements Countable, IteratorAggregate
      * @var assets_asset_map
      */
     protected array $assets = [];
+
     /**
      * Should version be determined from file modification time
      */
     protected bool $autoVersion = false;
+
     /**
      * @var assets_codes
      */
     protected array $codes = [];
+
     /**
      * @var assets_filters
      */
     protected array $filters      = [];
+
     protected bool $join          = true;
+
     protected string $prefix      = '';
+
     protected bool $targetIsLocal = true;
+
     protected string $version     = '';
 
     /**

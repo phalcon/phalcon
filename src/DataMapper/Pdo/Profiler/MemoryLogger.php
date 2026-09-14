@@ -124,7 +124,6 @@ class MemoryLogger implements LoggerInterface
         $this->messages[] = strtr((string)$message, $replace);
     }
 
-
     public function notice(string $message, array $context = []): void
     {
         $this->log(Enum::NOTICE, $message, $context);

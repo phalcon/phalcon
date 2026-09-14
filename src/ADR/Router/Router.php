@@ -193,7 +193,7 @@ final class Router implements RouterInterface
             '\\',
             substr($className, strlen($this->baseNamespace) + 1)
         );
-        
+
         array_pop($parts);
 
         if (empty($parts)) {
