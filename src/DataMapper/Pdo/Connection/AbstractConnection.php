@@ -81,7 +81,10 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      */
     protected bool $autoReconnect = false;
 
-    protected ?PDO $pdo;
+    /**
+     * @var PDO|null
+     */
+    protected $pdo;
 
     protected ProfilerInterface $profiler;
 
