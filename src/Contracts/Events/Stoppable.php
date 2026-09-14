@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Contracts\Events;
 
 /**
- * Phalcon's local mirror of PSR-14 StoppableEventInterface.
+ * Phalcon's local mirror of PSR-14 StoppableEventInterface. Identical shape;
+ * not extended from the PSR interface because the Zephir extension cannot
+ * reference Composer-loaded interfaces at build time. A separate bridge
+ * package exposes a PSR-14 adapter.
  */
 interface Stoppable
 {

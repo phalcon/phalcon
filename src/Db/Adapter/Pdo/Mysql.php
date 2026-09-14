@@ -67,7 +67,6 @@ use function substr;
 class Mysql extends PdoAdapter
 {
     protected string $dialectType = "mysql";
-
     protected string $type = "mysql";
 
     /**

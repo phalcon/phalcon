@@ -32,7 +32,7 @@ use Phalcon\Http\ResponseInterface;
 class FormatResponder implements Responder
 {
     /**
-     * @param list<Formatter> $formatters
+     * @phpstan-param list<Formatter> $formatters
      */
     public function __construct(
         protected array $formatters = []

@@ -43,7 +43,6 @@ use Phalcon\Contracts\Container\Ioc\IocContainer;
  */
 interface Collection extends IocContainer
 {
-    // Our additions - Container-specific
     public function bind(string $interfaceName, string $concrete): ServiceDefinition;
 
     public function callableGet(string $name): Closure;
@@ -54,7 +53,6 @@ interface Collection extends IocContainer
 
     public function get(string $name): mixed;
 
-    // From service-interop/ServiceCollection - alias management
     public function getAlias(string $name): string;
 
     /**
@@ -62,13 +60,10 @@ interface Collection extends IocContainer
      */
     public function getByTag(string $tag): array;
 
-    // From service-interop/ServiceCollection - definition management
     public function getDefinition(string $name): ServiceDefinition;
 
-    // From service-interop/ServiceCollection - instance management
     public function getInstance(string $name): object;
 
-    // Our additions - scalar parameters
     public function getParameter(string $name): mixed;
 
     public function getResolver(): Resolver;

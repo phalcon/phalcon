@@ -49,7 +49,7 @@ use function str_ends_with;
  * ## Error protocol
  *
  * Subclasses (including third-party ones) MUST implement the two abstract
- * error hooks {@see throwDispatchException()} and {@see handleException()}.
+ * error hooks throwDispatchException() and handleException().
  * The dispatch loop calls them on every error/exception path; a subclass that
  * omits them cannot be loaded.
  *
@@ -60,16 +60,18 @@ use function str_ends_with;
  *
  * 1. **Events-manager listener** - e.g. `dispatch:beforeExecuteRoute`. A
  *    listener returning `false` cancels; calling `forward()` re-enters the
- *    loop; throwing routes through {@see handleException()}.
+ *    loop; throwing routes through handleException().
  * 2. **Duck-typed handler method** - e.g. a `beforeExecuteRoute()` method on
  *    the controller/task itself (presence is cached per class). Same
  *    `false` / `forward()` cancellation semantics as the event.
  * 3. **`dispatch:beforeCallAction` observer** - fired by
- *    {@see callActionMethod()} with a `Phalcon\Support\Collection` carrying
+ *    callActionMethod() with a `Phalcon\Support\Collection` carrying
  *    the mutable keys `handler`, `action` and `params`. Listeners may rewrite
  *    those keys to change *what* gets invoked; the substituted callable is
  *    re-validated before the call. `dispatch:afterCallAction` receives the
  *    same Collection plus a `result` key.
+ *
+ * @todo fix the returnValue type in v7
  *
  * @phpstan-import-type dispatcher_bound_models from DispatcherTypes
  * @phpstan-import-type dispatcher_forward from DispatcherTypes
@@ -83,60 +85,41 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
     use EventsAwareTrait;
 
     protected string $actionName   = "";
-
     protected string $actionSuffix = "Action";
-
     /**
      * @var object|null
      */
     protected $activeHandler = null;
-
     /**
      * @phpstan-var dispatcher_method_map
      */
     protected array $activeMethodMap = [];
-
     /**
      * @phpstan-var dispatcher_method_map
      */
     protected array $camelCaseMap      = [];
-
     protected string $defaultAction    = "";
-
     protected string $defaultHandler   = "";
-
     protected string $defaultNamespace = "";
-
     protected bool $finished           = false;
-
     protected bool $forwarded          = false;
-
     /**
      * @phpstan-var dispatcher_handler_hashes
      */
     protected array $handlerHashes = [];
-
     /**
      * @phpstan-var dispatcher_hook_cache
      */
     protected array $handlerHookCache       = [];
-
     protected string $handlerName           = "";
-
     protected string $handlerSuffix         = "";
-
     protected bool $isControllerInitialize  = false;
 
     protected mixed $lastHandler            = null;
-
     protected ?BinderInterface $modelBinder = null;
-
     protected bool $modelBinding            = false;
-
     protected ?string $moduleName           = "";
-
     protected string $namespaceName         = "";
-
     /**
      * @phpstan-var dispatcher_params
      */
@@ -776,6 +759,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      *     ]
      * );
      * ```
+     *
+     * @phpstan-param dispatcher_forward $forward
      */
     public function forward(array $forward): void
     {
@@ -1027,6 +1012,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Gets action params
      *
      * @deprecated Use getParameters() instead
+     *
+     * @phpstan-return dispatcher_params
      */
     public function getParams(): array
     {
@@ -1226,6 +1213,8 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
      * Sets action params to be dispatched
      *
      * @deprecated Use setParameters() instead
+     *
+     * @phpstan-param dispatcher_params $params
      */
     public function setParams(array $params): void
     {

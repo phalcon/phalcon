@@ -35,8 +35,7 @@ interface Dispatcher extends DispatcherContract
 
     /**
      * Get dispatched options
-     */
-    /**
+     *
      * @phpstan-return cli_options
      */
     public function getOptions(): array;
@@ -58,8 +57,7 @@ interface Dispatcher extends DispatcherContract
 
     /**
      * Set the options to be dispatched
-     */
-    /**
+     *
      * @phpstan-param cli_options $options
      */
     public function setOptions(array $options): void;

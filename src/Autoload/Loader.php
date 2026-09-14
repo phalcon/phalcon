@@ -57,27 +57,22 @@ class Loader
     private const EVENT_PATH_FOUND         = "loader:pathFound";
 
     protected string | null $checkedPath = null;
-
     /**
      * @var autoload_strings
      */
     protected array $classes = [];
-
     /**
      * @var array<int, string>
      */
     protected array $debug = [];
-
     /**
      * @var autoload_strings
      */
     protected array $directories = [];
-
     /**
      * @var autoload_strings
      */
     protected array $extensions = [];
-
     /**
      * Always holds a callable. The setter accepts a callable or a callable
      * string and rejects anything else.
@@ -85,23 +80,17 @@ class Loader
      * @var callable
      */
     protected $fileCheckingCallback = "is_file";
-
     /**
      * @var autoload_strings
      */
     protected array $files             = [];
-
     protected string | null $foundPath = null;
-
     protected bool $isDebug            = false;
-
     protected bool $isRegistered       = false;
-
     /**
      * @var autoload_namespaces
      */
     protected array $namespaces = [];
-
     protected int $nestingLevel = 0;
 
     /**

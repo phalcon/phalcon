@@ -19,6 +19,11 @@ namespace Phalcon\Auth\Adapter\Config;
 use Phalcon\Auth\Adapter\Config\Traits\ModelConfigTrait;
 use Phalcon\Contracts\Auth\Adapter\AdapterConfig;
 
+/**
+ * @todo Remove in v7. Kept only for backwards compatibility; compose
+ * Phalcon\Auth\Adapter\Config\Traits\ModelConfigTrait directly instead of
+ * extending this.
+ */
 abstract class AbstractAdapterConfig implements AdapterConfig
 {
     use ModelConfigTrait;

@@ -78,7 +78,7 @@ class QueryBuilder extends AbstractAdapter
      *
      * @var paginator_columns|null
      */
-    protected array | string | null $columns = null;
+    protected mixed $columns = null;
 
     /**
      * Phalcon\Paginator\Adapter\QueryBuilder

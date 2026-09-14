@@ -23,6 +23,7 @@ use Stringable;
 
 /**
  * Central registry of the array shapes used across the DataMapper namespace.
+ *
  * @phpstan-type datamapper_pdo_options array<int, mixed>
  * @phpstan-type datamapper_queries list<string>
  * @phpstan-type datamapper_connection_arguments array{

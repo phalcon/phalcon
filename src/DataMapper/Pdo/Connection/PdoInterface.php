@@ -92,13 +92,13 @@ interface PdoInterface
      *
      * @phpstan-param datamapper_pdo_options $options
      */
-    public function prepare(string $statement, array $options = []): false | PDOStatement;
+    public function prepare(string $statement, array $options = []): bool | PDOStatement;
 
     /**
      * Queries the database and returns a PDOStatement. If the profiler is
      * enabled, the operation will be recorded.
      */
-    public function query(string $statement): false | PDOStatement;
+    public function query(string $statement): bool | PDOStatement;
 
     /**
      * Quotes a value for use in an SQL statement. This differs from

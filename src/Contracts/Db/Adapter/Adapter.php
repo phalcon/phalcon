@@ -344,7 +344,9 @@ interface Adapter
     ): array | bool;
 
     /**
-     * Returns a SQL modified with a FOR UPDATE clause
+     * Returns a SQL modified with a FOR UPDATE clause. The optional `modifier`
+     * appends a row-lock disposition keyword - pass `Dialect::LOCK_NOWAIT`
+     * or `Dialect::LOCK_SKIP_LOCKED` (or leave as `Dialect::LOCK_NONE`).
      */
     public function forUpdate(string $sqlQuery, string $modifier = ''): string;
 
@@ -576,7 +578,10 @@ interface Adapter
     ): \Phalcon\Db\Adapter\AdapterInterface;
 
     /**
-     * Returns a SQL modified with a LOCK IN SHARE MODE clause
+     * Returns a SQL modified with a shared-lock clause. See the dialect's
+     * `sharedLock()` for per-engine semantics. The optional `modifier` is
+     * passed straight through (use `Dialect::LOCK_NOWAIT` /
+     * `Dialect::LOCK_SKIP_LOCKED` for PostgreSQL).
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string;
 

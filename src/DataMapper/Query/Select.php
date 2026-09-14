@@ -65,7 +65,6 @@ class Select extends AbstractConditions
     public const JOIN_RIGHT = "RIGHT";
 
     protected string $asAlias = "";
-
     protected bool $forUpdate = false;
 
     /**

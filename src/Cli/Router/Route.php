@@ -53,32 +53,23 @@ class Route implements RouteInterface
     protected static ?string $delimiterPath = self::DEFAULT_DELIMITER;
 
     protected static int $uniqueId          = 0;
-
     /**
      * @var mixed|null
      */
     protected mixed $beforeMatch      = null;
-
     protected string $compiledPattern = "";
-
     /**
      * @phpstan-var cli_route_converters
      */
     protected array $converters = [];
-
     protected ?string $delimiter;
-
     protected string $description = "";
-
     protected string $name        = "";
-
     /**
      * @phpstan-var cli_route_paths
      */
     protected array $paths    = [];
-
     protected string $pattern = "";
-
     protected string $routeId;
 
     /**
@@ -370,8 +361,7 @@ class Route implements RouteInterface
 
     /**
      * Returns the router converter
-     */
-    /**
+     *
      * @phpstan-return cli_route_converters
      */
     public function getConverters(): array
@@ -397,8 +387,7 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths
-     */
-    /**
+     *
      * @phpstan-return cli_route_paths
      */
     public function getPaths(): array
@@ -416,8 +405,7 @@ class Route implements RouteInterface
 
     /**
      * Returns the paths using positions as keys and names as values
-     */
-    /**
+     *
      * @phpstan-return cli_route_reversed_paths
      */
     public function getReversedPaths(): array

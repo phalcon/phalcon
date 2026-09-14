@@ -19,6 +19,7 @@ use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Db\Adapter\Pdo\Postgresql;
 use Phalcon\Db\Adapter\Pdo\Sqlite;
+use Phalcon\Db\Exception;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Support\Exception as SupportException;
 
@@ -96,7 +97,7 @@ class PdoFactory extends AbstractFactory
      */
     protected function getExceptionClass(): string
     {
-        return "Phalcon\\Db\\Exception";
+        return Exception::class;
     }
 
     /**

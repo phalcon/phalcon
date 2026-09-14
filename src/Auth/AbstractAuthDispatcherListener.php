@@ -57,7 +57,7 @@ abstract class AbstractAuthDispatcherListener
     protected function enforce(
         string $actionName,
         array $context = [],
-        ?callable $forwardHandler = null
+        mixed $forwardHandler = null
     ): bool {
         $access = $this->manager->getAccess();
         if ($access === null) {

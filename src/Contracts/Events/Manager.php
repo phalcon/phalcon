@@ -21,7 +21,9 @@ interface Manager
     public const DEFAULT_PRIORITY = 100;
 
     /**
-     * Registers an event subscriber.
+     * Registers an event subscriber. The subscriber's getSubscribedEvents()
+     * map is parsed and each entry is attached through the regular listener
+     * pipeline.
      */
     public function addSubscriber(Subscriber $subscriber): void;
 
@@ -41,7 +43,7 @@ interface Manager
 
     /**
      * Removes every registered subscriber and detaches each listener they
-     * contributed.
+     * contributed. Listeners attached via attach() are untouched.
      */
     public function clearSubscribers(): void;
 
@@ -112,7 +114,8 @@ interface Manager
     public function isValidHandler(mixed $handler): bool;
 
     /**
-     * Removes a previously registered subscriber.
+     * Removes a previously registered subscriber. Detaches every listener the
+     * subscriber declared via getSubscribedEvents(). Idempotent.
      */
     public function removeSubscriber(Subscriber $subscriber): void;
 }

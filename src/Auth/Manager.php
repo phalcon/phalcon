@@ -40,7 +40,6 @@ use Phalcon\Contracts\Auth\Manager as ManagerContract;
 class Manager implements ManagerContract
 {
     protected ?Access $activeAccess = null;
-
     protected ?Guard $defaultGuard = null;
 
     /**

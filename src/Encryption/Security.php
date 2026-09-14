@@ -102,27 +102,16 @@ class Security extends AbstractInjectionAware implements SecurityContract
     public const CRYPT_STD_DES    = 1;
 
     protected bool $autoRefresh = true;
-
     protected int $defaultHash = self::CRYPT_DEFAULT;
-
     protected int $numberBytes = 16;
-
     protected Random $random;
-
     protected ?string $requestToken = null;
-
     protected ?string $token = null;
-
     protected ?string $tokenKey = null;
-
     protected string $tokenKeySessionId = '$PHALCON/CSRF/KEY$';
-
     protected string $tokenValueSessionId = '$PHALCON/CSRF$';
-
     protected int $workFactor = 10;
-
     private RequestInterface | null $localRequest = null;
-
     private SessionInterface | null $localSession = null;
 
     /**

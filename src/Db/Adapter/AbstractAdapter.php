@@ -33,6 +33,7 @@ use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Support\Settings;
 use Stringable;
 
 use function array_keys;
@@ -45,7 +46,49 @@ use function is_string;
 use function strpos;
 
 /**
- * Base class for Phalcon\Db\Adapter adapters
+ * Base class for Phalcon\Db\Adapter adapters.
+ *
+ * This class and its related classes provide a simple SQL database interface
+ * for Phalcon Framework. The Phalcon\Db is the basic class you use to connect
+ * your PHP application to an RDBMS. There is a different adapter class for each
+ * brand of RDBMS.
+ *
+ * This component is intended to lower level database operations. If you want to
+ * interact with databases using higher level of abstraction use
+ * Phalcon\Mvc\Model.
+ *
+ * Phalcon\Db\AbstractDb is an abstract class. You only can use it with a
+ * database adapter like Phalcon\Db\Adapter\Pdo
+ *
+ *```php
+ * use Phalcon\Db;
+ * use Phalcon\Db\Exception;
+ * use Phalcon\Db\Adapter\Pdo\Mysql as MysqlConnection;
+ *
+ * try {
+ *     $connection = new MysqlConnection(
+ *         [
+ *             "host"     => "192.168.0.11",
+ *             "username" => "sigma",
+ *             "password" => "secret",
+ *             "dbname"   => "blog",
+ *             "port"     => "3306",
+ *         ]
+ *     );
+ *
+ *     $result = $connection->query(
+ *         "SELECT * FROM co_invoices LIMIT 5"
+ *     );
+ *
+ *     $result->setFetchMode(Enum::FETCH_NUM);
+ *
+ *     while ($invoice = $result->fetch()) {
+ *         print_r($invoice);
+ *     }
+ * } catch (Exception $e) {
+ *     echo $e->getMessage(), PHP_EOL;
+ * }
+ * ```
  *
  * @phpstan-import-type db_bind_params from DbTypes
  * @phpstan-import-type db_bind_types from DbTypes
@@ -138,16 +181,16 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      * Phalcon\Db\Adapter constructor
      *
      * @param array $descriptor = [
-     *                          'host'         => 'localhost',
-     *                          'port'         => '3306',
-     *                          'dbname'       => 'blog',
-     *                          'username'     => 'sigma'
-     *                          'password'     => 'secret',
-     *                          'dialectClass' => null,
-     *                          'options'      => [],
-     *                          'dsn'          => null,
-     *                          'charset'      => 'utf8mb4'
-     *                          ]
+     *     'host' => 'localhost',
+     *     'port' => '3306',
+     *     'dbname' => 'blog',
+     *     'username' => 'sigma'
+     *     'password' => 'secret',
+     *     'dialectClass' => null,
+     *     'options' => [],
+     *     'dsn' => null,
+     *     'charset' => 'utf8mb4'
+     * ]
      *
      * Note: the `options` key is forwarded to the static `setup()` method,
      * which writes process-global settings affecting every connection in the
@@ -207,11 +250,24 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      */
     public static function setup(array $options): void
     {
-        \Phalcon\Db\AbstractDb::setup($options);
+        /**
+         * Enables/Disables globally the escaping of SQL identifiers
+         */
+        if (isset($options["escapeSqlIdentifiers"])) {
+            Settings::set("db.escape_identifiers", $options["escapeSqlIdentifiers"]);
+        }
+
+        /**
+         * Force cast bound values in the PHP userland
+         */
+        if (isset($options["forceCasting"])) {
+            Settings::set("db.force_casting", $options["forceCasting"]);
+        }
     }
 
     /**
-     * Adds a CHECK constraint to a table.
+     * Adds a CHECK constraint to a table. MySQL 8.0.16+ and PostgreSQL
+     * issue `ALTER TABLE ... ADD CONSTRAINT ... CHECK (...)`; SQLite throws.
      */
     public function addCheck(
         string $tableName,
@@ -292,7 +348,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Creates a materialized view (PostgreSQL only).
+     * Creates a materialized view (PostgreSQL only - MySQL and SQLite
+     * throw via the dialect).
      *
      * @phpstan-param db_view_definition $definition
      */
@@ -313,7 +370,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Creates a new savepoint
      *
-     * @throws Exception
+     * @throws SavepointsNotSupported
      */
     public function createSavepoint(string $name): bool
     {
@@ -327,7 +384,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
      *
      * @phpstan-param db_table_definition $definition
      *
-     * @throws Exception
+     * @throws TableMustHaveColumn
      */
     public function createTable(
         string $tableName,
@@ -351,7 +408,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Creates a view
      *
-     * @throws Exception
+     * @throws TableMustHaveColumn
      */
     public function createView(
         string $viewName,
@@ -523,7 +580,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Drops a CHECK constraint from a table.
+     * Drops a CHECK constraint from a table. SQLite throws.
      */
     public function dropCheck(
         string $tableName,
@@ -641,8 +698,6 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Drops a view
-     *
-     * @param string $schemaName
      */
     public function dropView(
         string $viewName,
@@ -1207,8 +1262,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Appends an ON CONFLICT (...) DO UPDATE SET col = excluded.col upsert
-     * clause to the supplied INSERT statement.
+     * Appends an `ON CONFLICT (...) DO UPDATE SET col = excluded.col`
+     * upsert clause to the supplied INSERT statement. Supported by
+     * PostgreSQL and SQLite 3.24+; MySQL throws.
      *
      * @phpstan-param db_column_names $conflictColumns
      * @phpstan-param db_column_names $updateColumns
@@ -1226,7 +1282,8 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Refreshes a materialized view (PostgreSQL only).
+     * Refreshes a materialized view (PostgreSQL only). Pass
+     * `concurrent = true` for non-blocking refresh.
      */
     public function refreshMaterializedView(
         string $viewName,
@@ -1259,7 +1316,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Appends a RETURNING clause to an INSERT/UPDATE/DELETE statement.
+     * Appends a RETURNING clause to an INSERT/UPDATE/DELETE SQL statement
+     * and returns the modified SQL. Supported by PostgreSQL and SQLite 3.35+;
+     * MySQL throws (no RETURNING construct). Pass `["*"]` for `RETURNING *`.
      *
      * @phpstan-param db_column_names $columns
      */
@@ -1308,7 +1367,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     }
 
     /**
-     * Returns a SQL modified with a LOCK IN SHARE MODE clause
+     * Returns a SQL modified with a shared-lock clause. The optional
+     * `modifier` is passed straight to the dialect (use
+     * `Dialect::LOCK_NOWAIT` / `Dialect::LOCK_SKIP_LOCKED` for PostgreSQL).
      */
     public function sharedLock(string $sqlQuery, string $modifier = ''): string
     {

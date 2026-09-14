@@ -81,9 +81,7 @@ class ManagerFactory
     use ConfigTrait;
 
     protected readonly AccessLocator $accessLocator;
-
     protected readonly AdapterLocator $adapterLocator;
-
     protected readonly GuardLocator $guardLocator;
 
     public function __construct(

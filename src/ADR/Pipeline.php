@@ -31,7 +31,7 @@ use Phalcon\Http\ResponseInterface;
 final class Pipeline implements Handler
 {
     /**
-     * @param list<Middleware> $middleware
+     * @phpstan-param list<Middleware> $middleware
      */
     public function __construct(
         protected array $middleware,

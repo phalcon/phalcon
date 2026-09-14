@@ -71,7 +71,6 @@ abstract class AbstractPdo extends AbstractAdapter
      * Last affected rows
      */
     protected int $affectedRows = 0;
-
     /**
      * Whether to transparently reconnect and retry once when a query fails
      * because the connection was lost. Opt-in; off by default.
@@ -961,8 +960,7 @@ abstract class AbstractPdo extends AbstractAdapter
     /**
      * Runs the actual write against PDO and returns the affected-rows count
      * (or the raw exec() return for unprepared statements).
-     */
-    /**
+     *
      * @phpstan-param db_bind_params $bindParams
      * @phpstan-param db_bind_types  $bindTypes
      */

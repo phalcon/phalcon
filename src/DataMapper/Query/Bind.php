@@ -36,7 +36,6 @@ use function is_int;
 class Bind
 {
     protected int $inlineCount = 0;
-
     /**
      * @phpstan-var datamapper_bind_store
      */

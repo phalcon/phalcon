@@ -160,7 +160,11 @@ final class Router implements RouterInterface
 
         $located = $this->locate($method, $path);
         if (is_array($located)) {
-            return new RouterMatch($located[0], $located[1], $this->middlewareFor($located[0]));
+            return new RouterMatch(
+                $located[0],
+                $located[1],
+                $this->middlewareFor($located[0])
+            );
         }
 
         foreach ($this->verbs() as $other) {
@@ -185,20 +189,26 @@ final class Router implements RouterInterface
             return null;
         }
 
-        $parts = explode('\\', substr($className, strlen($this->baseNamespace) + 1));
+        $parts = explode(
+            '\\',
+            substr($className, strlen($this->baseNamespace) + 1)
+        );
+        
         array_pop($parts);
 
         if (empty($parts)) {
             return '/';
         }
 
-        // Placeholders are emitted at the level that declares them, so the
-        // result is the route as it is actually written - `/photo/{id}/edit`,
-        // not `/photo/edit`. A level that declares nothing contributes none,
-        // which is why an Action without params() reverses to a static path.
-        // Only this class is consulted - never a parent, never a sibling. That
-        // is what makes the reverse local: adding or removing any other Action
-        // cannot change the path this one answers.
+        /**
+         * Placeholders are emitted at the level that declares them, so the
+         * result is the route as it is actually written - `/photo/{id}/edit`,
+         * not `/photo/edit`. A level that declares nothing contributes none,
+         * which is why an Action without params() reverses to a static path.
+         * Only this class is consulted - never a parent, never a sibling. That
+         * is what makes the reverse local: adding or removing any other Action
+         * cannot change the path this one answers.
+         */
         $path = '';
 
         foreach ($parts as $part) {
@@ -342,9 +352,11 @@ final class Router implements RouterInterface
             . $subNamespace
             . '\\' . $verb . implode('', $parts);
 
-        // Everything the walk did not consume is a positional attribute. The
-        // boundary is found once and never revisited, which is what makes the
-        // class name alone sufficient to reconstruct the path.
+        /**
+         * Everything the walk did not consume is a positional attribute. The
+         * boundary is found once and never revisited, which is what makes the
+         * class name alone sufficient to reconstruct the path.
+         */
         return [[$className, $segments]];
     }
 

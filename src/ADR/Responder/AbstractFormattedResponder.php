@@ -25,7 +25,7 @@ use Phalcon\Contracts\ADR\Responder\Formatter\Formatter;
 abstract class AbstractFormattedResponder extends ChainResponder
 {
     /**
-     * @param list<Formatter> $formatters
+     * @phpstan-param list<Formatter> $formatters
      */
     public function __construct(array $formatters = [])
     {

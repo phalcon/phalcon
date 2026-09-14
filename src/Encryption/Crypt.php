@@ -30,6 +30,7 @@ use Phalcon\Encryption\Crypt\Exception\MissingOpensslExtension;
 use Phalcon\Encryption\Crypt\Exception\RandomBytesGenerationFailed;
 use Phalcon\Encryption\Crypt\Exception\UnsupportedAlgorithm;
 use Phalcon\Encryption\Crypt\PadFactory;
+use Phalcon\Traits\Php\Base64Trait;
 use Phalcon\Traits\Php\HashTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\OpensslTrait;
@@ -60,6 +61,7 @@ use Throwable;
  */
 class Crypt implements CryptInterface
 {
+    use Base64Trait;
     use HashTrait;
     use InfoTrait;
     use OpensslTrait;
@@ -86,11 +88,8 @@ class Crypt implements CryptInterface
     public const PADDING_ZERO           = 5;
 
     protected string $authData = "";
-
     protected string $authTag = "";
-
     protected int $authTagLength = 16;
-
     /**
      * Available cipher methods.
      *
@@ -99,12 +98,10 @@ class Crypt implements CryptInterface
     protected array $availableCiphers = [];
 
     protected string $cipher = self::DEFAULT_CIPHER;
-
     /**
      * The name of hashing algorithm.
      */
     protected string $hashAlgorithm = self::DEFAULT_ALGORITHM;
-
     /**
      * Memoized `strlen(hash($algo, "", true))` results, keyed by
      * algorithm name. The hash output length is deterministic for a
@@ -114,18 +111,13 @@ class Crypt implements CryptInterface
      * @phpstan-var encryption_hash_length_cache
      */
     protected array $hashLengthCache = [];
-
     /**
      * The cipher iv length.
      */
     protected int $ivLength = 16;
-
     protected string $key = "";
-
     protected int $padding = 0;
-
     protected PadFactory $padFactory;
-
     /**
      * Whether calculating message digest enabled or not.
      */
@@ -280,8 +272,7 @@ class Crypt implements CryptInterface
         bool $safe = false
     ): string {
         if ($safe) {
-            $input = strtr($input, "-_", "+/")
-                . substr("===", (strlen($input) + 3) % 4);
+            return $this->decrypt($this->doDecodeUrl($input), $key);
         }
 
         return $this->decrypt(base64_decode($input), $key);

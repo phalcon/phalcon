@@ -114,7 +114,9 @@ trait SubscriptionConsumerTrait
     }
 
     /**
-     * Resolves a consumer's queue name.
+     * Resolves a consumer's queue name. The `consumer` parameter is typed
+     * `var` so the call is dynamic; this avoids Zephir resolving the
+     * Consumer::getQueue() return type's short name in the wrong namespace.
      */
     private function resolveQueueName(ConsumerInterface $consumer): string
     {

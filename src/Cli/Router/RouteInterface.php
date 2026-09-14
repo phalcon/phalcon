@@ -83,8 +83,7 @@ interface RouteInterface
 
     /**
      * Returns the paths using positions as keys and names as values
-     */
-    /**
+     *
      * @phpstan-return cli_route_reversed_paths
      */
     public function getReversedPaths(): array;

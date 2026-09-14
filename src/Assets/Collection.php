@@ -44,28 +44,21 @@ class Collection implements Countable, IteratorAggregate
      * @var assets_asset_map
      */
     protected array $assets = [];
-
     /**
      * Should version be determined from file modification time
      */
     protected bool $autoVersion = false;
-
     /**
      * @var assets_codes
      */
     protected array $codes = [];
-
     /**
      * @var assets_filters
      */
     protected array $filters      = [];
-
     protected bool $join          = true;
-
     protected string $prefix      = '';
-
     protected bool $targetIsLocal = true;
-
     protected string $version     = '';
 
     /**
@@ -81,11 +74,12 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds a CSS asset to the collection
      *
+     * @param bool|null         $isLocal
      * @param assets_attributes $attributes
      */
     public function addCss(
         string $path,
-        bool | null $isLocal = null,
+        mixed $isLocal = null,
         bool $filter = true,
         array $attributes = [],
         string | null $version = null,
@@ -151,11 +145,12 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds a JavaScript asset to the collection
      *
+     * @param bool|null         $isLocal
      * @param assets_attributes $attributes
      */
     public function addJs(
         string $path,
-        bool | null $isLocal = null,
+        mixed $isLocal = null,
         bool $filter = true,
         array $attributes = [],
         string | null $version = null,
@@ -397,12 +392,13 @@ class Collection implements Countable, IteratorAggregate
     /**
      * Adds an inline asset
      *
+     * @param bool|null         $isLocal
      * @param assets_attributes $attributes
      */
     private function processAdd(
         string $className,
         string $path,
-        bool | null $isLocal = null,
+        mixed $isLocal = null,
         bool $filter = true,
         array $attributes = [],
         string | null $version = null,
