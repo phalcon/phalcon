@@ -2147,8 +2147,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
      *
      * echo $invoices->getSource(); // wp_co_invoices
      * ```
-     *
-     * $param string $prefix
      */
     public function setModelPrefix(string $prefix): void
     {

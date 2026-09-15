@@ -1217,16 +1217,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.8.0",
+            "version": "v5.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "044a6a392ff8ad0d61f14370a5fbbd0a0107152f"
+                "reference": "9e33da9553fe7786f0962b35f4e4ecf01be89def"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/044a6a392ff8ad0d61f14370a5fbbd0a0107152f",
-                "reference": "044a6a392ff8ad0d61f14370a5fbbd0a0107152f",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9e33da9553fe7786f0962b35f4e4ecf01be89def",
+                "reference": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
                 "shasum": ""
             },
             "require": {
@@ -1268,9 +1268,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.8.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.9.0"
             },
-            "time": "2026-07-04T14:30:18+00:00"
+            "time": "2026-09-13T18:51:52+00:00"
         },
         {
             "name": "pds/composer-script-names",
@@ -1479,12 +1479,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "41ce4994a02ae0b9af944935fda49de56f4a5cdd"
+                "reference": "424cb3b1b825a068cc8f051dae0bfe0c2a7e9ff2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/41ce4994a02ae0b9af944935fda49de56f4a5cdd",
-                "reference": "41ce4994a02ae0b9af944935fda49de56f4a5cdd",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/424cb3b1b825a068cc8f051dae0bfe0c2a7e9ff2",
+                "reference": "424cb3b1b825a068cc8f051dae0bfe0c2a7e9ff2",
                 "shasum": ""
             },
             "require": {
@@ -1549,7 +1549,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-09-09T02:18:46+00:00"
+            "time": "2026-09-14T09:52:31+00:00"
         },
         {
             "name": "phalcon/quill",
@@ -1621,16 +1621,16 @@
         },
         {
             "name": "phalcon/talon",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/talon.git",
-                "reference": "02e017c369e454bf04979d4ea0a06c1eb715e0c5"
+                "reference": "714766c29770c4f50719765d7f2076e4be1f95c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/talon/zipball/02e017c369e454bf04979d4ea0a06c1eb715e0c5",
-                "reference": "02e017c369e454bf04979d4ea0a06c1eb715e0c5",
+                "url": "https://api.github.com/repos/phalcon/talon/zipball/714766c29770c4f50719765d7f2076e4be1f95c7",
+                "reference": "714766c29770c4f50719765d7f2076e4be1f95c7",
                 "shasum": ""
             },
             "require": {
@@ -1647,6 +1647,7 @@
                 "friendsofphp/php-cs-fixer": "^3",
                 "pds/composer-script-names": "^1",
                 "pds/skeleton": "^1",
+                "phalcon/code-quality": "^1.0",
                 "phalcon/phalcon": "^6.0@beta || ^6.0",
                 "phpstan/phpstan": "^2",
                 "phpunit/phpcov": "^9",
@@ -1683,7 +1684,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phalcon/talon/issues",
-                "source": "https://github.com/phalcon/talon/tree/v1.0.3"
+                "source": "https://github.com/phalcon/talon/tree/v1.0.4"
             },
             "funding": [
                 {
@@ -1695,7 +1696,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-08-28T14:58:27+00:00"
+            "time": "2026-09-09T02:58:32+00:00"
         },
         {
             "name": "phalcon/volt",
@@ -2127,11 +2128,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.13",
+            "version": "2.2.14",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
-                "reference": "9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
+                "reference": "9c672e7a8e791dfc3d30e55f683e73fc0b63a3ac",
                 "shasum": ""
             },
             "require": {
@@ -2187,7 +2188,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-03T20:38:19+00:00"
+            "time": "2026-09-12T21:39:33+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
