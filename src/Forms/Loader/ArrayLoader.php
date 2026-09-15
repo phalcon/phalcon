@@ -27,7 +27,7 @@ class ArrayLoader implements Schema
      * @param array<int, array<string, mixed>> $definitions
      */
     public function __construct(
-        private readonly array $definitions
+        protected readonly array $definitions
     ) {
     }
 

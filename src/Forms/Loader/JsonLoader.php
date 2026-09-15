@@ -42,7 +42,7 @@ class JsonLoader implements Schema
      * @param string $source JSON string or path to a JSON file
      */
     public function __construct(
-        private readonly string $source
+        protected readonly string $source
     ) {
     }
 

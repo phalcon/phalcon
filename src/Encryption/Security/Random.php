@@ -244,7 +244,6 @@ class Random
     /**
      * Generates a random hex string
      *
-     * If $len is not specified, 16 is assumed. It may be larger in future.
      * The length of the result string is usually greater of $len.
      *
      *```php

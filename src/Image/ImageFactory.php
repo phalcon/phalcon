@@ -46,9 +46,9 @@ class ImageFactory extends AbstractFactory
      *
      * @param array|ConfigInterface $config = [
      *                                      'adapter' => 'gd',
-     *                                      'file' => 'image.jpg',
-     *                                      'height' => null,
-     *                                      'width' => null
+     *                                      'file'    => 'image.jpg',
+     *                                      'height'  => null,
+     *                                      'width'   => null
      *                                      ]
      */
     public function load(mixed $config): AdapterInterface

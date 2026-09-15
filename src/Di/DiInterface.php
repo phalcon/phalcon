@@ -16,7 +16,7 @@ namespace Phalcon\Di;
 use ArrayAccess;
 
 /**
- * Interface for Phalcon\Di
+ * Interface for Phalcon\Di\Di
  *
  * @extends ArrayAccess<string, mixed>
  */
@@ -53,9 +53,6 @@ interface DiInterface extends ArrayAccess
         bool $shared = false
     );
 
-    /**
-     * Resolves the service based on its configuration
-     */
     /**
      * Resolves the service based on its configuration
      */

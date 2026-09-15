@@ -72,30 +72,20 @@ use function method_exists;
 class Group implements GroupInterface
 {
     /**
-     * @mixed $callable|null
-     *
      * @phpstan-var callable|null
      */
     protected mixed $beforeMatch = null;
 
-    /**
-     * @mixed string|null
-     */
     protected string | null $hostname = null;
 
     /**
-     * @mixed array|string|null
      * @phpstan-var mvc_router_paths|string|null
      */
     protected array | string | null $paths = null;
 
-    /**
-     * @mixed string|null
-     */
     protected string | null $prefix = null;
 
     /**
-     * @mixed array
      * @phpstan-var list<RouteInterface>
      */
     protected array $routes = [];

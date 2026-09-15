@@ -269,8 +269,6 @@ interface RequestInterface
      *```
      *
      * @todo check the filters
-     *
-     * @return mixed
      */
     public function getQuery(
         string | null $name = null,
@@ -278,7 +276,7 @@ interface RequestInterface
         mixed $defaultValue = null,
         bool $notAllowEmpty = false,
         bool $noRecursive = false
-    );
+    ): mixed;
 
     /**
      * Return the HTTP raw request body

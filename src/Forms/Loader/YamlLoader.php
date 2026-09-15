@@ -41,7 +41,7 @@ class YamlLoader implements Schema
      * @param string $source YAML string or path to a YAML file
      */
     public function __construct(
-        private readonly string $source
+        protected readonly string $source
     ) {
     }
 

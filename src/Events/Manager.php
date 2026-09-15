@@ -60,10 +60,15 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Parsed-eventType cache. Memoizes the strpos + substr work done in
-     * fire() so the same event name fired repeatedly collapses to a single
+     * fire() so the same event name fired repeatedly (the common case
+     * for db:beforeQuery, model:afterSave, etc.) collapses to a single
      * hash lookup.
      *
      * Shape: `eventNameCache[$eventType] = [typePrefix, eventName]`
+     *
+     * Unbounded by design - distinct event types in a typical Phalcon
+     * application are well under 100 keys, and the cache never needs
+     * invalidation (parse is deterministic for a given eventType string).
      *
      * @phpstan-var events_name_cache
      */
@@ -79,35 +84,47 @@ class Manager implements ManagerInterface, Enumerable
      *       ...
      *   ]
      *
-     * `type` is classified once at attach() time so the dispatch loop can
+     * Kept sorted by priority descending when priorities are enabled
+     * (FIFO within the same priority); otherwise listeners are simply
+     * appended in attach order.
+     *
+     * `type` is classified once at attach() time so dispatch() can
      * route via a simple branch:
      *
-     *   0 - Closure
-     *   1 - [obj, method] array callable
-     *   2 - plain object: method named after the event
-     *   3 - generic callable (string fn name, invokable object, etc.)
+     *   0 - Closure: direct invocation via `{handler}(args)`, no
+     *       arg-array alloc per call
+     *   1 - [obj, method] array callable: direct dynamic dispatch
+     *       `handler[0]->{handler[1]}(args)`
+     *   2 - plain object: dynamic dispatch via method named after the
+     *       event (the classic Phalcon listener pattern); class name is
+     *       captured at attach time to skip get_class() per fire
+     *   3 - generic callable (string fn name, invokable object,
+     *       [class, staticMethod]): call_user_func_array
      *
      * @phpstan-var events_storage
      */
     protected array $events = [];
 
     /**
-     * Re-entrancy depth of fire()/fireAll(). 0 means no fire is in progress.
-     * Used to keep nested fire() calls from clobbering the outer caller's
-     * `$this->responses` accumulator.
+     * Re-entrancy depth of fire()/fireAll(). 0 means no fire is in
+     * progress. Incremented on every fire entry, decremented on exit.
+     * Used to keep nested fire() calls from clobbering the outer
+     * caller's `$this->responses` accumulator.
      */
     protected int $fireDepth = 0;
 
     /**
      * Manager-level kill switch. When true, every fire()/fireAll()/
-     * fireQueue() call returns immediately without dispatching. Cleared by
-     * resume().
+     * fireQueue() call returns immediately (null or empty array) without
+     * dispatching. Cleared by resume(). Survives across fire() calls,
+     * unlike Event::stop() which only stops the current dispatch chain.
      */
     protected bool $halted = false;
 
     /**
-     * Memoized method_exists() results for the plain-object dispatch path.
-     * Keyed by `handlerClass => [methodName => bool]`.
+     * Memoized method_exists() results for the OBJECT_METHOD dispatch
+     * path in dispatch(). Keyed by `handlerClass => [methodName => bool]`.
+     * A class doesn't gain methods at runtime so the lookup is permanent.
      *
      * @phpstan-var events_method_exists_cache
      */
@@ -115,7 +132,11 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Maximum number of distinct handler classes retained in
-     * methodExistsCache. 0 (default) keeps the unbounded behavior.
+     * methodExistsCache. 0 (default) keeps the original unbounded
+     * behavior; a positive value clears the cache when adding a new
+     * class would exceed it. Re-warming is cheap (method_exists is
+     * O(1)) and the cap is meant for very long-lived workers that see
+     * many distinct listener classes over time.
      */
     protected int $methodExistsCacheLimit = 0;
 
@@ -126,19 +147,23 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * When true, a listener returning literal `false` (with the event's
-     * `cancelable` flag on) short-circuits the dispatch loop and pins the
-     * fire() return as `false`. Default off.
+     * `cancelable` flag on) short-circuits the dispatch loop and pins
+     * the fire() return as `false`. Default off - preserves the pre-5.13
+     * "last-wins" contract for codebases that rely on later listeners
+     * overriding an earlier false return [#17019].
      */
     protected bool $stopOnFalse = false;
 
     /**
-     * When true, fire()/fireAll() throw on dispatch of an event that has zero
-     * matching listeners. Default off.
+     * When true, fire()/fireAll() throw on dispatch of an event that
+     * has zero matching listeners. Catches typos in dev. Default off.
      */
     protected bool $strict = false;
 
     /**
      * Memoized getSubscribedEvents() maps keyed by Subscriber class name.
+     * The static method's return is stable for the lifetime of a class
+     * definition, so the cache never needs invalidation.
      *
      * @phpstan-var events_subscriber_events_cache
      */
@@ -187,8 +212,14 @@ class Manager implements ManagerInterface, Enumerable
         mixed $handler,
         int $priority = self::DEFAULT_PRIORITY
     ): void {
-        // Classify the handler type ONCE so the dispatch loop doesn't have to
+        // Classify the handler type ONCE so fireQueue() doesn't have to
         // run instanceof / is_callable per fire per listener.
+        //
+        //   0 - Closure: direct invocation via Zephir {handler}(args)
+        //   1 - [obj, method] array callable: direct dynamic dispatch
+        //   2 - plain object, method named after the event (classic Phalcon)
+        //   3 - generic callable: string function, invokable object,
+        //       [class, staticMethod] etc.
         if ($handler instanceof Closure) {
             $type = 0;
         } elseif (
@@ -226,6 +257,9 @@ class Manager implements ManagerInterface, Enumerable
     /**
      * Removes every registered subscriber and detaches each listener they
      * contributed. Listeners attached via attach() are untouched.
+     *
+     * Iterates a snapshot of `subscribers` so removeSubscriber() can safely
+     * mutate the original property during the walk.
      */
     public function clearSubscribers(): void
     {
@@ -337,6 +371,14 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Set if priorities are enabled in the EventsManager.
+     *
+     * A priority queue of events is a data structure similar
+     * to a regular queue of events: we can also put and extract
+     * elements from it. The difference is that each element in a
+     * priority queue is associated with a value called priority.
+     * This value is used to order elements of a queue: elements
+     * with higher priority are retrieved before the elements with
+     * lower priority.
      */
     public function enablePriorities(bool $enablePriorities): void
     {
@@ -374,7 +416,8 @@ class Manager implements ManagerInterface, Enumerable
             $stop = (bool) $stopOnFalse;
         }
 
-        // Manager-level kill switch.
+        // Manager-level kill switch - halt() trips this and every fire
+        // returns null without dispatching until resume() clears it.
         if ($this->halted) {
             return null;
         }
@@ -384,6 +427,9 @@ class Manager implements ManagerInterface, Enumerable
         }
 
         // Fast exit on a manager with no listeners attached at all.
+        // Done BEFORE parsing the eventType so a misformed name (no
+        // colon) doesn't raise "Invalid event type" on a manager that
+        // would have had nothing to dispatch to anyway.
         if (empty($this->events)) {
             if ($this->strict) {
                 throw new NoListenersForEvent($eventType);
@@ -392,6 +438,9 @@ class Manager implements ManagerInterface, Enumerable
             return null;
         }
 
+        // Cache hit: the eventType parse is deterministic, and the same
+        // names fire over and over (db:beforeQuery × N per request etc.).
+        // After warm-up this collapses to a single hash lookup.
         if (isset($this->eventNameCache[$eventType])) {
             [$type, $eventName] = $this->eventNameCache[$eventType];
         } else {
@@ -410,6 +459,9 @@ class Manager implements ManagerInterface, Enumerable
         $hasTypeQueue = isset($this->events[$type]);
         $hasFullQueue = isset($this->events[$eventType]);
 
+        // Short-circuit BEFORE allocating Event: in production most fires
+        // have zero matching listeners (a model lifecycle event with no
+        // user-attached behavior, a DB event without a tracer, etc.).
         if (!$hasTypeQueue && !$hasFullQueue) {
             if ($this->strict) {
                 throw new NoListenersForEvent($eventType);
@@ -418,6 +470,9 @@ class Manager implements ManagerInterface, Enumerable
             return null;
         }
 
+        // Increment reentrancy depth. Nested fire() calls stash and
+        // restore $this->responses so the outer caller's collected
+        // state is never clobbered.
         $wasDepth        = $this->fireDepth;
         $this->fireDepth = $wasDepth + 1;
         $collect         = $this->collect;
@@ -431,6 +486,10 @@ class Manager implements ManagerInterface, Enumerable
             $this->responses = [];
         }
 
+        // Wrap dispatch in try/catch so a throwing listener cannot
+        // leak the incremented fireDepth or the stashed responses -
+        // important for long-lived managers (workers, daemons) where
+        // a single dirty teardown would poison every subsequent fire.
         try {
             $event  = new Event($eventName, $source, $data, $cancelable);
             $status = null;
@@ -448,6 +507,9 @@ class Manager implements ManagerInterface, Enumerable
                 );
             }
 
+            // stopOnFalse propagation: dispatch already short-circuited
+            // its queue; skip the fully-qualified queue too and pin
+            // the fire() return as false.
             if (
                 !($stop && $cancelable && false === $status)
                 && $hasFullQueue
@@ -484,9 +546,14 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Fires an event and returns every listener's return value as an indexed
-     * array. Independent of collectResponses(); the caller's collected state
-     * on `$this->responses` is preserved (stashed and restored).
+     * Fires an event and returns every listener's return value as an
+     * indexed array. Independent of collectResponses(); the caller's
+     * collected state on `$this->responses` is preserved (stashed and
+     * restored across the call).
+     *
+     *```php
+     * $results = $eventsManager->fireAll("db:beforeQuery", $connection);
+     *```
      *
      * @return array<array-key, mixed>
      *
@@ -592,7 +659,10 @@ class Manager implements ManagerInterface, Enumerable
     /**
      * Internal handler to call a queue of events.
      *
-     * Kept as a thin BC wrapper around the private dispatch loop.
+     * Kept at its original 2-arg signature for BC; thin wrapper around
+     * the private `dispatch()` helper. Direct callers pay the cost of
+     * re-extracting metadata from the Event; the framework's own fire()
+     * path bypasses this wrapper and calls dispatch() with hoisted args.
      *
      * @phpstan-param events_queue $queue
      */
@@ -663,6 +733,7 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Returns the configured method_exists-cache cap (0 = unlimited).
+     * See setMethodExistsCacheLimit().
      */
     public function getMethodExistsCacheLimit(): int
     {
@@ -681,7 +752,8 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Returns the list of registered subscriber instances.
+     * Returns the list of registered subscriber instances. Useful for
+     * introspection and test setup/teardown.
      *
      * @phpstan-return list<Subscriber>
      */
@@ -693,7 +765,9 @@ class Manager implements ManagerInterface, Enumerable
     /**
      * Manager-level kill switch. After halt(), every fire()/fireAll()/
      * fireQueue() call returns immediately without dispatching, until
-     * resume() is called.
+     * resume() is called. Use this when a listener needs to abort all
+     * subsequent event activity for the lifetime of the manager (e.g.
+     * a security check that cancels everything downstream).
      */
     public function halt(): void
     {
@@ -709,8 +783,8 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Check if the events manager is collecting all the responses returned by
-     * every registered listener in a single fire
+     * Check if the events manager is collecting all all the responses returned
+     * by every registered listener in a single fire
      */
     public function isCollecting(): bool
     {
@@ -727,6 +801,7 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Returns whether the stop-on-false short-circuit is enabled.
+     * See setStopOnFalse().
      */
     public function isStopOnFalse(): bool
     {
@@ -734,7 +809,9 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Returns whether strict mode is enabled.
+     * Returns whether strict mode is enabled. When true, fire()/fireAll()
+     * throw when an event has no matching listeners - useful in dev to
+     * catch typos. Default off.
      */
     public function isStrict(): bool
     {
@@ -752,7 +829,8 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Removes a previously registered subscriber. Detaches every listener the
-     * subscriber declared via getSubscribedEvents(). Idempotent.
+     * subscriber declared via getSubscribedEvents(). Idempotent - calling
+     * with a subscriber that was never added (or already removed) is a no-op.
      */
     public function removeSubscriber(Subscriber $subscriber): void
     {
@@ -776,7 +854,8 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Clears the manager-level kill switch set by halt().
+     * Clears the manager-level kill switch set by halt(). Subsequent
+     * fire()/fireAll()/fireQueue() calls resume normal dispatch.
      */
     public function resume(): void
     {
@@ -785,7 +864,10 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Caps the number of distinct handler classes retained in the
-     * method_exists memoization cache. 0 disables the cap.
+     * method_exists memoization cache. 0 disables the cap (the
+     * default; preserves the original unbounded behavior). When the
+     * cap is exceeded, the cache is cleared and re-warms on subsequent
+     * fires.
      */
     public function setMethodExistsCacheLimit(int $methodExistsCacheLimit): void
     {
@@ -793,7 +875,13 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Enables/disables the stop-on-false short-circuit. Default off.
+     * Enables/disables the stop-on-false short-circuit. When true, a
+     * listener returning literal `false` (with cancelable=true) stops
+     * the current event's queue and pins the fire() return as `false`.
+     * Later listeners cannot overwrite the cancel. Default off.
+     *
+     * Independent of halt() / event->stop() - only governs how the
+     * dispatch loop reacts to a `false` listener return.
      */
     public function setStopOnFalse(bool $flag): void
     {
@@ -801,8 +889,8 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Enables/disables strict mode. When true, fire()/fireAll() throw when
-     * dispatching an event with zero matching listeners.
+     * Enables/disables strict mode. When true, fire()/fireAll() throw
+     * when dispatching an event with zero matching listeners.
      */
     public function setStrict(bool $strict): void
     {
@@ -811,7 +899,13 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Extension seam invoked after an event has been dispatched to its
-     * listener queues. The base implementation returns `status` unchanged.
+     * listener queues. Receives the computed dispatch result as `status`
+     * and returns the value fire() hands back to its caller; the base
+     * implementation returns `status` unchanged. A subclass can override
+     * it to run bookkeeping or to post-process / rewrite the result.
+     *
+     * Only called when the event was actually dispatched; the halted and
+     * no-listener short-circuits in fire() return before reaching it.
      */
     protected function afterFire(
         mixed $status,
@@ -825,8 +919,12 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Extension seam invoked before an event is dispatched. The base
-     * implementation returns true, so dispatch proceeds. Returning false
-     * aborts the dispatch entirely.
+     * implementation returns true, so dispatch proceeds unchanged. A
+     * subclass can override it to inspect the source and data and, by
+     * returning false, abort the dispatch entirely - for example to
+     * redirect a deferred event onto an external queue. Invoked before the
+     * no-listener short-circuits, so it sees every fire(), including those
+     * with no locally attached listeners.
      */
     protected function beforeFire(
         string $eventType,
@@ -838,9 +936,12 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Stores a pre-classified listener tuple in the queue for an event type.
+     * Stores a pre-classified listener tuple in the queue for an event
+     * type. Bypasses attach()'s type classification - callers that
+     * already know the type (the subscriber path) skip the instanceof /
+     * is_callable cascade.
      *
-     * type=2 tuples carry a 4th element `className` so the dispatch loop can
+     * type=2 tuples carry a 4th element `className` so dispatch() can
      * skip the per-fire get_class() lookup against methodExistsCache.
      *
      * @phpstan-param string|null $className
@@ -904,7 +1005,7 @@ class Manager implements ManagerInterface, Enumerable
 
     /**
      * Parses one entry of a subscriber's getSubscribedEvents() map and either
-     * attaches or detaches the resulting listeners.
+     * attaches or detaches the resulting listeners depending on `detaching`.
      *
      * @throws InvalidSubscriberConfiguration
      */
@@ -1049,13 +1150,26 @@ class Manager implements ManagerInterface, Enumerable
     }
 
     /**
-     * Hot dispatch loop for string events. Called by fire()/fireAll() with
-     * hoisted args and by fireQueue() as a BC wrapper. Owns the aggregation
-     * contract:
+     * Hot dispatch loop. Called by fire()/fireAll() with hoisted args,
+     * and by fireQueue() as a BC wrapper. Owns the documented
+     * aggregation contract:
      *
-     * 1. Last non-null wins.
-     * 2. stop() determinism: a listener that stops the event makes its return
-     *    the dispatch return (even if null) and the queue is abandoned.
+     * 1. **Last non-null wins** - `status` only updates when a listener
+     *    returns a non-null value. A chain of nulls leaves the last
+     *    real return intact.
+     * 2. **stop() determinism** - when a listener calls
+     *    `$event->stop()` (and cancelable=true), that listener's
+     *    return value becomes the dispatch return - even if null.
+     *
+     * Note: returning `false` from a listener does **not** short-circuit
+     * the queue. Callers that want to stop downstream listeners must call
+     * `$event->stop()`. (Some consumers, like the dispatcher, check the
+     * return value of `fire()` for `false` and act on it themselves; that
+     * remains in their own dispatch logic.)
+     *
+     * Appends every listener's return to $this->responses when
+     * `collect` is true (the caller manages stashing/restoring around
+     * nested fires).
      *
      * The listener type that attach() sets gives the handler shape. PHPStan
      * cannot follow that link, thus each branch declares the shape.
@@ -1131,6 +1245,11 @@ class Manager implements ManagerInterface, Enumerable
             $handler = $tuple[0];
             $type    = $tuple[1];
 
+            // Closure: direct invocation via Zephir's `{var}(...)`
+            // callable-invocation syntax. Routes through PHP's normal
+            // closure call path so arity mismatch is tolerated, unlike
+            // `handler->__invoke(...)` which uses a strict C call path
+            // that segfaults on mismatch.
             if (0 === $type) {
                 /** @phpstan-var Closure $handler */
                 $ret = $handler($event, $source, $data);
@@ -1170,14 +1289,22 @@ class Manager implements ManagerInterface, Enumerable
                 $this->responses[] = $ret;
             }
 
+            // Opt-in hard `false`-cancel: when setStopOnFalse(true) has
+            // been called, a listener returning false short-circuits
+            // the queue and pins the dispatch return as false. fire()
+            // checks the return and propagates accordingly.
             if ($stopOnFalse && $cancelable && false === $ret) {
                 return false;
             }
 
+            // stop() determinism: if the listener stopped the event,
+            // its return is the dispatch result (even if null) and the
+            // queue is abandoned.
             if ($cancelable && $event->isStopped()) {
                 return $ret;
             }
 
+            // Last non-null wins.
             if (null !== $ret) {
                 $status = $ret;
             }

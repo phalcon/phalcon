@@ -33,7 +33,7 @@ class Validator
     /**
      * @phpstan-var encryption_jwt_validator_claims
      */
-    private array $claims;
+    private array $claims = [];
 
     /**
      * @phpstan-var encryption_jwt_errors
@@ -178,9 +178,9 @@ class Validator
      *
      * A null id expresses no expectation and is skipped.
      */
-    public function validateId(string | null $jwtId = null): static
+    public function validateId(string | null $id = null): static
     {
-        if (null === $jwtId) {
+        if (null === $id) {
             return $this;
         }
 
@@ -189,7 +189,7 @@ class Validator
 
         $tokenId = (string) $claimValue;
 
-        if ($jwtId !== $tokenId) {
+        if ($id !== $tokenId) {
             $this->errors[] = "Validation: incorrect Id";
         }
 
