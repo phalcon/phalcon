@@ -40,6 +40,7 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
+use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Volt\Compiler\Opcode;
 use Phalcon\Volt\Parser\Parser;
@@ -49,9 +50,6 @@ use function array_key_exists;
 use function array_unshift;
 use function call_user_func;
 use function call_user_func_array;
-use function file_exists;
-use function file_get_contents;
-use function file_put_contents;
 use function filemtime;
 use function implode;
 use function is_array;
@@ -86,6 +84,7 @@ class Compiler implements InjectionAwareInterface
 {
     use CamelizeTrait;
     use FilePathTrait;
+    use FileTrait;
 
     protected bool $autoescape = false;
 
@@ -415,7 +414,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Compile always must be used only in the development stage
          */
-        if (!file_exists($compiledTemplatePath) || $compileAlways) {
+        if (!$this->phpFileExists($compiledTemplatePath) || $compileAlways) {
             /**
              * The file needs to be compiled because it either does not exist or
              * needs to compiled every time
@@ -443,7 +442,7 @@ class Compiler implements InjectionAwareInterface
                          * In extends mode we read the file that must
                          * contains a serialized array of blocks
                          */
-                        $blocksCode = file_get_contents($compiledTemplatePath);
+                        $blocksCode = $this->phpFileGetContents($compiledTemplatePath);
 
                         if ($blocksCode === false) {
                             throw new CannotOpenCompiledFile($compiledTemplatePath);
@@ -584,7 +583,7 @@ class Compiler implements InjectionAwareInterface
     }
 
     /**
-     * Compiles a {% raw %}`{{` `}}`{% endraw %} statement returning PHP code
+     * Compiles a `{{` `}}` statement returning PHP code
      *
      * @phpstan-param mvc_volt_node $statement
      *
@@ -687,7 +686,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if the template does exist
          */
-        if (!file_exists($path)) {
+        if (!$this->phpFileExists($path)) {
             throw new TemplateFileNotFound($path);
         }
 
@@ -695,7 +694,7 @@ class Compiler implements InjectionAwareInterface
          * Always use file_get_contents instead of read the file directly, this
          * respect the open_basedir directive
          */
-        $viewCode = file_get_contents($path);
+        $viewCode = $this->phpFileGetContents($path);
 
         if ($viewCode === false) {
             throw new TemplateFileNotOpenable($path);
@@ -717,7 +716,7 @@ class Compiler implements InjectionAwareInterface
          * Always use file_put_contents to write files instead of write the file
          * directly, this respect the open_basedir directive
          */
-        if (file_put_contents($compiledPath, $finalCompilation) === false) {
+        if ($this->phpFilePutContents($compiledPath, $finalCompilation) === false) {
             throw new VoltDirectoryNotWritable();
         }
 
@@ -1019,7 +1018,7 @@ class Compiler implements InjectionAwareInterface
                  * Use file-get-contents to respect the openbase_dir
                  * directive
                  */
-                $compilation = file_get_contents(
+                $compilation = $this->phpFileGetContents(
                     $subCompiler->getCompiledTemplatePath()
                 );
             }
@@ -1286,7 +1285,7 @@ class Compiler implements InjectionAwareInterface
      * Compiles a template into a string
      *
      *```php
-     * echo $compiler->compileString({% raw %}'{{ "hello world" }}'{% endraw %});
+     * echo $compiler->compileString('{{ "hello world" }}');
      *```
      *
      * @throws Exception
@@ -2249,7 +2248,7 @@ class Compiler implements InjectionAwareInterface
      *
      *```php
      * print_r(
-     *     $compiler->parse("{% raw %}{{ 3 + 2 }}{% endraw %}")
+     *     $compiler->parse("{{ 3 + 2 }}")
      * );
      *```
      *
@@ -2550,7 +2549,7 @@ class Compiler implements InjectionAwareInterface
                 $viewsDir = '';
 
                 foreach ($viewsDirs as $viewsDir) {
-                    if (file_exists($viewsDir . $path)) {
+                    if ($this->phpFileExists($viewsDir . $path)) {
                         return $viewsDir . $path;
                     }
                 }
@@ -2960,7 +2959,7 @@ class Compiler implements InjectionAwareInterface
                      * compiled path
                      */
                     if ($tempCompilation === null) {
-                        $tempCompilation = file_get_contents(
+                        $tempCompilation = $this->phpFileGetContents(
                             $subCompiler->getCompiledTemplatePath()
                         );
                     }

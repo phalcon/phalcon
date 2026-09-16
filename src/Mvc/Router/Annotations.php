@@ -62,32 +62,19 @@ class Annotations extends Router
     use UncamelizeTrait;
 
     /**
-     * @mixed callable|string|null
-     *
      * @phpstan-var callable|string|null
      */
     protected mixed $actionPreformatCallback = null;
 
-    /**
-     * @mixed string
-     */
     protected string $actionSuffix = "Action";
 
-    /**
-     * @mixed string
-     */
     protected string $controllerSuffix = "Controller";
 
     /**
-     * @mixed array
-     *
      * @phpstan-var list<array{0: string|null, 1: string, 2?: string}>
      */
     protected array $handlers = [];
 
-    /**
-     * @mixed string
-     */
     protected string $routePrefix = "";
 
     /**

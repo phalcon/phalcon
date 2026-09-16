@@ -100,6 +100,17 @@ class Url extends AbstractInjectionAware implements UrlInterface
      *     null,
      *     false
      * );
+     *
+     * // Override existing query string keys instead of appending duplicates.
+     * // Without the fifth argument: "http://example.com?page=1&page=5".
+     * // With it set to true:        "http://example.com?page=5".
+     * echo $url->get(
+     *     "http://example.com?page=1",
+     *     ["page" => 5],
+     *     null,
+     *     null,
+     *     true
+     * );
      *```
      *
      * @param mixed $uri = [

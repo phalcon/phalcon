@@ -31,7 +31,6 @@ use function count;
 use function explode;
 use function feof;
 use function fsockopen;
-use function fwrite;
 use function is_numeric;
 use function is_resource;
 use function pfsockopen;
@@ -362,7 +361,7 @@ class BeanstalkConnection
 
         $packet = $data . "\r\n";
 
-        return fwrite($connection, $packet, strlen($packet));
+        return $this->phpFwrite($connection, $packet, strlen($packet));
     }
 
     /**

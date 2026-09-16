@@ -1019,6 +1019,51 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Checks whether a model has a belongsTo relation with another model
+     * @deprecated
+     */
+    public function existsBelongsTo(string $modelName, string $modelRelation): bool
+    {
+        return $this->hasBelongsTo($modelName, $modelRelation);
+    }
+
+    /**
+     * Checks whether a model has a hasMany relation with another model
+     * @deprecated
+     */
+    public function existsHasMany(string $modelName, string $modelRelation): bool
+    {
+        return $this->hasHasMany($modelName, $modelRelation);
+    }
+
+    /**
+     * Checks whether a model has a hasManyToMany relation with another model
+     * @deprecated
+     */
+    public function existsHasManyToMany(string $modelName, string $modelRelation): bool
+    {
+        return $this->hasHasManyToMany($modelName, $modelRelation);
+    }
+
+    /**
+     * Checks whether a model has a hasOne relation with another model
+     * @deprecated
+     */
+    public function existsHasOne(string $modelName, string $modelRelation): bool
+    {
+        return $this->hasHasOne($modelName, $modelRelation);
+    }
+
+    /**
+     * Checks whether a model has a hasOneThrough relation with another model
+     * @deprecated
+     */
+    public function existsHasOneThrough(string $modelName, string $modelRelation): bool
+    {
+        return $this->hasHasOneThrough($modelName, $modelRelation);
+    }
+
+    /**
      * Gets all the belongsTo relations defined in a model
      *
      *```php

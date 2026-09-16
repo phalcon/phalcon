@@ -625,6 +625,12 @@ abstract class Model extends AbstractInjectionAware implements
 
                         unset($this->related[$lowerProperty]);
 
+                        /**
+                         * For many-to-many keep an (even empty) entry so that
+                         * save() can synchronize the relationship - assigning an
+                         * empty array must be able to clear all intermediate rows
+                         * when syncing is enabled.
+                         */
                         if (
                             !empty($related) ||
                             $relation->getType() === Relation::HAS_MANY_THROUGH

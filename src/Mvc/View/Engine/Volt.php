@@ -174,6 +174,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
     /**
      * Parses the preload element passed and sets the necessary link headers
+
      *
      * @phpstan-param array{
      *     0?: string,

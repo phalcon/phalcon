@@ -38,6 +38,7 @@ use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Mvc\Router\RouteInterface;
+use Phalcon\Traits\Php\FileTrait;
 
 use function array_merge;
 use function array_reverse;
@@ -100,6 +101,7 @@ use function ucfirst;
 class Router extends AbstractInjectionAware implements RouterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
+    use FileTrait;
 
     public const POSITION_FIRST = 0;
 
@@ -124,6 +126,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * The "*" key itself holds only the no-constraint routes - used when the
      * request method has no specific bucket.
      *
+     * Built in rebuildMethodIndex(); consumed by handle() in reverse.
+     *
      * @phpstan-var mvc_router_method_buckets
      */
     protected array $candidatesByMethod = [];
@@ -140,7 +144,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Boolean per method bucket: true when the combined regex cannot be
-     * built.
+     * built (hostname route present, exotic pattern shape, etc.).
      *
      * @phpstan-var mvc_router_regex_disabled
      */
@@ -173,8 +177,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
     /**
      * Per-method buckets of routes with hostname constraints, grouped by
-     * raw hostname string. Routes are referenced by their integer index
-     * into candidatesByMethod[method].
+     * raw hostname string. Routes are referenced by their index into
+     * candidatesByMethod[method]. Built in rebuildMethodIndex().
+     *
+     * Shape: hostnameByMethod[method][hostname] = list of route indices.
      *
      * @phpstan-var mvc_router_hostname_buckets
      */
@@ -184,6 +190,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Per-method indices of routes without a hostname constraint, in
      * attach order.
      *
+     * Shape: hostnameLessByMethod[method] = list of route indices into
+     * candidatesByMethod[method].
      * @phpstan-var mvc_router_index_buckets
      */
     protected array $hostnameLessByMethod = [];
@@ -244,7 +252,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * replication of metadata arrays. Built once in rebuildMethodIndex().
      *
      * Shape: routeMeta[routeId] = [
-     *     "pattern":     string,
+     *     "pattern":     string,        // compiled pattern
      *     "isRegex":     bool,
      *     "hostname":    string|null,
      *     "hostRegex":   string|null,
@@ -618,7 +626,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * Throws when a route has a Closure beforeMatch or converter - those
      * cannot be cached.
      *
-     * @throws Exception
+     * @throws \Phalcon\Mvc\Router\Exception
      *
      * @phpstan-return mvc_router_dump
      */
@@ -738,7 +746,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * a `<?php return [...];` file, atomically (temp + rename) so concurrent
      * dumps don't corrupt the result.
      *
-     * @throws Exception
+     * @throws \Phalcon\Mvc\Router\Exception
      */
     public function dumpDispatcher(string $path): void
     {
@@ -746,12 +754,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $php     = "<?php\nreturn " . var_export($dump, true) . ";\n";
         $tmpPath = $path . ".tmp." . (string) getmypid();
 
-        if (file_put_contents($tmpPath, $php) === false) {
+        if ($this->phpFilePutContents($tmpPath, $php) === false) {
             throw new Exception("Failed to write router cache temp file: " . $tmpPath);
         }
 
         if (!rename($tmpPath, $path)) {
-            unlink($tmpPath);
+            $this->phpUnlink($tmpPath);
             throw new Exception("Failed to commit router cache: " . $path);
         }
     }
@@ -825,8 +833,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
     }
 
     /**
-     * Returns routes indexed by HTTP method, building the index if needed.
-     * Unconstrained routes are stored under the "*" key.
+     * Returns the routes indexed by HTTP method.
+     * Routes with no HTTP constraint are stored under the "*" key.
      *
      * @phpstan-return mvc_router_method_buckets
      */
@@ -1032,7 +1040,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $request = $this->container->get("request");
 
         /**
-         * Rebuild the method index if routes were added/changed since last handle
+         * Build a candidate list of routes that match the request method.
+         * Routes with no HTTP constraint are stored under "*" and are always
+         * included. This avoids iterating the full route array per request.
          */
         if ($this->methodRoutesDirty) {
             $this->rebuildMethodIndex();
@@ -1050,7 +1060,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         /**
          * Resolve the current hostname once if any hostname-constrained
-         * route exists in the candidate bucket.
+         * route exists in the candidate bucket. Subsequent per-route
+         * checks below see a non-null currentHostName and skip their own
+         * lazy fetch.
          */
         if (
             (isset($this->hostnameByMethod[$requestMethod]) && !empty($this->hostnameByMethod[$requestMethod]))
@@ -1062,8 +1074,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         /**
          * Static-route fast path: O(1) lookup for literal URIs that are not
          * shadowed by a later-attached regex in the same bucket. Disabled
-         * when an events manager is attached so per-route events keep firing
-         * from the regular loop with their existing semantics.
+         * when an events manager is attached, so per-route events fire from
+         * the regular loop and preserve their existing semantics.
          */
         if ($this->eventsManager === null) {
             $staticBucketMethod = null;
@@ -1478,11 +1490,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * File-shaped helper around loadDispatcherFromArray(). Includes the
      * file (opcache-friendly) and forwards the return value.
      *
-     * @throws Exception
+     * @throws \Phalcon\Mvc\Router\Exception
      */
     public function loadDispatcher(string $path): void
     {
-        if (!file_exists($path)) {
+        if (!$this->phpFileExists($path)) {
             throw new Exception("Router cache not found: " . $path);
         }
 
@@ -1505,7 +1517,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * scalar `routes` entries (preserving subclass and routeId), restores
      * every index, and marks the indexes clean so handle() skips rebuild.
      *
-     * @throws Exception
+     * @throws \Phalcon\Mvc\Router\Exception
      *
      * @phpstan-param array<string, mixed> $dump
      */
@@ -1940,7 +1952,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      * next handle() completes - at which point buildDispatcherDump() is
      * written to the cache key.
      *
-     * @throws Exception
+     * @throws \Phalcon\Mvc\Router\Exception
      */
     public function useCache(
         CacheAdapterInterface $cache,
@@ -2184,8 +2196,9 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         }
 
         /**
-         * Single-source per-route metadata cache: one entry per route,
-         * keyed by intrinsic id.
+         * Build the single-source per-route metadata cache, keyed by the
+         * route's intrinsic id. One entry per route - replaces the previous
+         * per-method-bucket replication.
          */
         foreach ($this->routes as $candidateRoute) {
             $candidatePattern = $candidateRoute->getCompiledPattern();
@@ -2200,7 +2213,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         }
 
         /**
-         * Build the static-route hash + shadow flags.
+         * Build the static-route hash + shadow flags. For each method bucket
+         * (already merged with "*" routes), walk in attach order; when a
+         * regex route is encountered, mark any earlier-registered static URI
+         * it would match as shadowed. The fast path consults staticByMethod
+         * only when staticShadowedByMethod has no entry for that URI.
          */
         foreach ($this->candidatesByMethod as $method => $candidates) {
             foreach ($candidates as $bucketRoute) {
@@ -2229,7 +2246,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         /**
          * Hostname bucketing: split each method bucket into hostname-keyed
-         * sub-buckets and a hostname-less list.
+         * sub-buckets and a hostname-less list. Routes are referenced by
+         * their integer index into candidatesByMethod[method].
          */
         $this->hostnameByMethod     = [];
         $this->hostnameLessByMethod = [];
@@ -2251,8 +2269,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         /**
          * Combined-regex builder: for each method bucket without hostname
-         * constraints, combine all regex routes into a chunked PCRE pattern
-         * list with (?|...) branch reset and (*:N) mark labels.
+         * constraints, combine all regex routes into a single PCRE pattern
+         * with (?|...) branch reset and (*:N) mark labels. Alternatives
+         * are ordered in reverse-attach so PCRE's left-to-right first-match
+         * yields reverse-iteration semantics.
          */
         $this->combinedRegexByMethod = [];
         $this->combinedRegexMarkMap  = [];
@@ -2295,8 +2315,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             }
 
             /**
-             * Reverse so first-match-wins gives reverse-attach. Chunk into
-             * groups of REGEX_CHUNK_SIZE. chunks[0] holds LATEST-attached.
+             * Reverse alternatives so PCRE's left-to-right first-match
+             * gives reverse-attach-wins. Then chunk into groups of
+             * REGEX_CHUNK_SIZE so each chunk stays below the PCRE
+             * optimizer cliff. chunks[0] holds the LATEST-attached batch
+             * - handle() tries chunks 0..N in order.
              */
             $combinedAlternatives = array_reverse($combinedAlternatives);
             $reversedMarkIds      = array_reverse(array_keys($combinedMark));

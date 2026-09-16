@@ -18,8 +18,6 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\ModelInterface;
 
 /**
- * Interface for Phalcon\Mvc\Model\MetaData strategies
- *
  * @phpstan-import-type mvc_metadata_index from MvcTypes
  */
 interface StrategyInterface

@@ -196,7 +196,9 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      * Returns attributes that must be ignored from the INSERT SQL generation
      *
      *```php
-     * print_r(eadColumnMapIndex)
+     * print_r(
+     *     $metaData->getAutomaticCreateAttributes(
+     *         new Invoices()
      *     )
      * );
      *```
@@ -1081,6 +1083,12 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                     $this->write($prefixKey, $modelMetadata);
                 }
 
+                /**
+                 * Apply any metadata index writes that were buffered before
+                 * this model's metadata was properly initialized (e.g. from
+                 * skipAttributes() called during a parent model's initialize()
+                 * while the child's source had not yet been set).
+                 */
                 if (isset($this->pendingMetaDataWrites[$key])) {
                     foreach ($this->pendingMetaDataWrites[$key] as $pendingIndex => $pendingData) {
                         $this->metaData[$key][$pendingIndex] = $pendingData;

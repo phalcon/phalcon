@@ -39,14 +39,9 @@ use function substr;
  */
 class Route implements RouteInterface
 {
-    /**
-     * @mixed $int
-     */
     protected static int $uniqueId = 0;
 
     /**
-     * @mixed $callable|null
-     *
      * @phpstan-var callable|null
      */
     protected mixed $beforeMatch = null;
@@ -55,64 +50,39 @@ class Route implements RouteInterface
      * Cached compiled hostname regex. `false` means "not yet computed";
      * `null` means "hostname is literal - use string equality"; any string
      * means "use this as the PCRE pattern."
-     *
-     * @mixed string|null|false
      */
     protected false | string | null $compiledHostName = false;
 
-    /**
-     * @mixed string|null
-     */
     protected string | null $compiledPattern = null;
 
     /**
-     * @mixed array
      * @phpstan-var mvc_router_converters
      */
     protected array $converters = [];
 
-    /**
-     * @mixed GroupInterface|null
-     */
     protected GroupInterface | null $group = null;
 
-    /**
-     * @mixed string|null
-     */
     protected string | null $hostname = null;
 
     /**
-     * @mixed callable|null
-     *
      * @phpstan-var callable|null
      */
     protected mixed $match = null;
 
     /**
-     * @mixed array|string|null
      * @phpstan-var mvc_router_http_methods|string|null
      */
     protected array | string | null $methods = [];
 
-    /**
-     * @mixed string|null
-     */
     protected string | null $name = null;
 
     /**
-     * @mixed array
      * @phpstan-var mvc_router_paths
      */
     protected array $paths = [];
 
-    /**
-     * @mixed string
-     */
     protected string $pattern = '';
 
-    /**
-     * @mixed string
-     */
     protected string $routeId = "";
 
     /**

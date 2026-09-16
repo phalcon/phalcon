@@ -26,6 +26,7 @@ use Phalcon\Mvc\View\Exceptions\ViewNotFound;
 use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
 use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
 use Phalcon\Mvc\View\Traits\ViewParamsTrait;
+use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 use const PHP_OS;
@@ -58,6 +59,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
 {
     use DirSeparatorTrait;
     use EventsAwareTrait;
+    use FileTrait;
     use ViewParamsTrait;
 
     /**
@@ -517,7 +519,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         $extKeys = array_keys($engines);
         foreach ($this->getViewsDirs() as $viewsDir) {
             foreach ($extKeys as $extension) {
-                if (file_exists($basePath . $viewsDir . $view . $extension)) {
+                if ($this->phpFileExists($basePath . $viewsDir . $view . $extension)) {
                     return true;
                 }
             }
@@ -1242,7 +1244,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             foreach ($engines as $extension => $engine) {
                 $viewEnginePath = $viewsDirPath . $extension;
 
-                if (file_exists($viewEnginePath)) {
+                if ($this->phpFileExists($viewEnginePath)) {
                     /**
                      * Call beforeRenderView if there is an events manager
                      * available

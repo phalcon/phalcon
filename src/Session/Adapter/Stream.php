@@ -25,7 +25,6 @@ use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 use function error_clear_last;
 use function error_get_last;
 use function error_reporting;
-use function file_exists;
 
 /**
  * Phalcon\Session\Adapter\Stream
@@ -115,8 +114,8 @@ class Stream extends Noop
     {
         $file = $this->path . $this->getPrefixedName($id);
 
-        if (file_exists($file) && is_file($file)) {
-            unlink($file);
+        if ($this->phpFileExists($file) && is_file($file)) {
+            $this->phpUnlink($file);
         }
 
         return true;
@@ -141,11 +140,11 @@ class Stream extends Noop
         if (!empty($glob)) {
             foreach ($glob as $file) {
                 if (
-                    file_exists($file) &&
+                    $this->phpFileExists($file) &&
                     is_file($file) &&
                     filemtime($file) < $time
                 ) {
-                    unlink($file);
+                    $this->phpUnlink($file);
                 }
             }
         }
@@ -177,7 +176,7 @@ class Stream extends Noop
                 $data = $this->phpFileGetContents($name);
             }
 
-            fclose($pointer);
+            $this->phpFclose($pointer);
 
             if (false === $data) {
                 return "";

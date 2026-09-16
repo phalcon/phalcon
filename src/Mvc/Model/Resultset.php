@@ -18,6 +18,7 @@ use Closure;
 use Countable;
 use Iterator;
 use JsonSerializable;
+use Phalcon\Cache\CacheInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Mvc\Model\Exceptions\CursorIsImmutable;
@@ -102,7 +103,7 @@ abstract class Resultset implements
      */
     protected mixed $activeRow = null;
 
-    protected mixed $cache = null;
+    protected ?CacheInterface $cache = null;
 
     /**
      * Number of rows, or null while it has not been worked out yet. Resolved
@@ -385,7 +386,7 @@ abstract class Resultset implements
     /**
      * Returns the associated cache for the resultset
      */
-    public function getCache(): mixed
+    public function getCache(): CacheInterface | null
     {
         return $this->cache;
     }

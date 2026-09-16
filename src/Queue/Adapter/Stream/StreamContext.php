@@ -40,9 +40,7 @@ use function base64_encode;
 use function error_clear_last;
 use function error_reporting;
 use function explode;
-use function file_exists;
 use function flock;
-use function fopen;
 use function ftruncate;
 use function implode;
 use function preg_replace;
@@ -109,11 +107,11 @@ class StreamContext extends AbstractContext
     {
         $filepath = $this->getFilepath($queueName);
 
-        if (!file_exists($filepath)) {
+        if (!$this->phpFileExists($filepath)) {
             return null;
         }
 
-        $pointer = fopen($filepath, "c+");
+        $pointer = $this->phpFopen($filepath, "c+");
 
         if ($pointer === false) {
             return null;

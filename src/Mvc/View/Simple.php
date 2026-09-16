@@ -27,11 +27,11 @@ use Phalcon\Mvc\View\Exceptions\SimpleViewNotFound;
 use Phalcon\Mvc\View\Exceptions\SimpleViewServicesUnavailable;
 use Phalcon\Mvc\View\Traits\ViewParamsTrait;
 use Phalcon\Mvc\ViewBaseInterface;
+use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
 use function array_merge;
 use function call_user_func;
-use function file_exists;
 use function is_array;
 use function is_object;
 use function is_string;
@@ -67,6 +67,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
 {
     use DirSeparatorTrait;
     use EventsAwareTrait;
+    use FileTrait;
     use ViewParamsTrait;
 
     protected string $activeRenderPath;
@@ -342,11 +343,11 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
          * Views are rendered in each engine
          */
         foreach ($engines as $extension => $engine) {
-            if (file_exists($viewsDirPath . $extension)) {
+            if ($this->phpFileExists($viewsDirPath . $extension)) {
                 $viewEnginePath = $viewsDirPath . $extension;
             } elseif (
                 str_ends_with($viewsDirPath, $extension) &&
-                file_exists($viewsDirPath)
+                $this->phpFileExists($viewsDirPath)
             ) {
                 /**
                  * if passed filename with engine extension

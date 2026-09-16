@@ -28,7 +28,6 @@ use SplFileInfo;
 
 use function error_clear_last;
 use function error_reporting;
-use function fclose;
 use function flock;
 use function is_int;
 use function restore_error_handler;
@@ -352,7 +351,7 @@ class Stream extends AbstractAdapter
             $payload = $this->phpFileGetContents($filepath);
         }
 
-        fclose($pointer);
+        $this->phpFclose($pointer);
 
         /**
          * No results

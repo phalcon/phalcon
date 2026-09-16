@@ -19,10 +19,9 @@ use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataDirectoryNotWritable;
 use Phalcon\Support\Settings;
 use Phalcon\Support\Traits\FilePathTrait;
+use Phalcon\Traits\Php\FileTrait;
 
 use function array_key_exists;
-use function file_exists;
-use function file_put_contents;
 use function var_export;
 
 /**
@@ -43,6 +42,7 @@ use function var_export;
 class Stream extends MetaData
 {
     use FilePathTrait;
+    use FileTrait;
 
     protected string $metaDataDir = "./";
 
@@ -78,7 +78,7 @@ class Stream extends MetaData
          * @var string $key
          */
         $path = $this->getFilePath($key);
-        if (false === file_exists($path)) {
+        if (false === $this->phpFileExists($path)) {
             return null;
         }
         /** @var mvc_metadata_index */
@@ -106,7 +106,7 @@ class Stream extends MetaData
             $path = $this->getFilePath($key);
 
             if (
-                false === file_put_contents($path, "<?php return " . var_export($data, true) . "; ")
+                false === $this->phpFilePutContents($path, "<?php return " . var_export($data, true) . "; ")
             ) {
                 $this->throwWriteException($option);
             }

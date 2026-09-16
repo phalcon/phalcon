@@ -723,11 +723,11 @@ class Imagick extends AbstractAdapter
                 $image->optimizeImageLayers();
 
                 /** @var resource $fp */
-                $fp = fopen($file, "w");
+                $fp = $this->phpFopen($file, "w");
 
                 $image->writeImagesFile($fp);
 
-                fclose($fp);
+                $this->phpFclose($fp);
 
                 return true;
             case "jpg":
