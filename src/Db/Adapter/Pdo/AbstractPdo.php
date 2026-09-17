@@ -246,7 +246,6 @@ abstract class AbstractPdo extends AbstractAdapter
          * Check if the current database system supports nested transactions
          */
         if (
-            0 === $this->transactionLevel ||
             false === $nesting ||
             false === $this->isNestedTransactionsWithSavepoints()
         ) {
@@ -894,7 +893,6 @@ abstract class AbstractPdo extends AbstractAdapter
          * Check if the current database system supports nested transactions
          */
         if (
-            0 === $this->transactionLevel ||
             false === $nesting ||
             false === $this->isNestedTransactionsWithSavepoints()
         ) {
