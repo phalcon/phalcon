@@ -132,6 +132,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function begin(bool $nesting = true): bool
     {
+        $this->resetStaleTransactionLevel();
+
         /**
          * Increase the transaction nesting level
          */
@@ -146,7 +148,17 @@ abstract class AbstractPdo extends AbstractAdapter
              */
             $this->fireManagerEvent("db:beginTransaction");
 
-            return $this->pdo->beginTransaction();
+            /**
+             * Decrease the transaction nesting level if the transaction
+             * does not start
+             */
+            try {
+                return $this->pdo->beginTransaction();
+            } catch (Throwable $exception) {
+                $this->transactionLevel--;
+
+                throw $exception;
+            }
         }
 
         /**
@@ -167,7 +179,17 @@ abstract class AbstractPdo extends AbstractAdapter
          */
         $this->fireManagerEvent("db:createSavepoint", $savepointName);
 
-        return $this->createSavepoint($savepointName);
+        /**
+         * Decrease the transaction nesting level if the savepoint is not
+         * created
+         */
+        try {
+            return $this->createSavepoint($savepointName);
+        } catch (Throwable $exception) {
+            $this->transactionLevel--;
+
+            throw $exception;
+        }
     }
 
     /**
@@ -187,6 +209,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function commit(bool $nesting = true): bool
     {
+        $this->resetStaleTransactionLevel();
+
         /**
          * Check the transaction nesting level
          */
@@ -205,13 +229,24 @@ abstract class AbstractPdo extends AbstractAdapter
              */
             $this->transactionLevel--;
 
-            return $this->pdo->commit();
+            /**
+             * Increase the transaction nesting level if the transaction
+             * does not commit
+             */
+            try {
+                return $this->pdo->commit();
+            } catch (Throwable $exception) {
+                $this->transactionLevel++;
+
+                throw $exception;
+            }
         }
 
         /**
          * Check if the current database system supports nested transactions
          */
         if (
+            0 === $this->transactionLevel ||
             false === $nesting ||
             false === $this->isNestedTransactionsWithSavepoints()
         ) {
@@ -237,7 +272,17 @@ abstract class AbstractPdo extends AbstractAdapter
          */
         $this->transactionLevel--;
 
-        return $this->releaseSavepoint($savepointName);
+        /**
+         * Increase the transaction nesting level if the savepoint is not
+         * released
+         */
+        try {
+            return $this->releaseSavepoint($savepointName);
+        } catch (Throwable $exception) {
+            $this->transactionLevel++;
+
+            throw $exception;
+        }
     }
 
     /**
@@ -821,6 +866,8 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function rollback(bool $nesting = true): bool
     {
+        $this->resetStaleTransactionLevel();
+
         /**
          * Check the transaction nesting level
          */
@@ -835,7 +882,8 @@ abstract class AbstractPdo extends AbstractAdapter
             $this->fireManagerEvent("db:rollbackTransaction");
 
             /**
-             * Reduce the transaction nesting level
+             * Reduce the transaction nesting level. The level stays reduced
+             * if the rollback fails
              */
             $this->transactionLevel--;
 
@@ -846,6 +894,7 @@ abstract class AbstractPdo extends AbstractAdapter
          * Check if the current database system supports nested transactions
          */
         if (
+            0 === $this->transactionLevel ||
             false === $nesting ||
             false === $this->isNestedTransactionsWithSavepoints()
         ) {
@@ -867,7 +916,8 @@ abstract class AbstractPdo extends AbstractAdapter
         $this->fireManagerEvent("db:rollbackSavepoint", $savepointName);
 
         /**
-         * Reduce the transaction nesting level
+         * Reduce the transaction nesting level. The level stays reduced if
+         * the rollback fails
          */
         $this->transactionLevel--;
 
@@ -1020,5 +1070,21 @@ abstract class AbstractPdo extends AbstractAdapter
         }
 
         return $this->executePrepared($statement, $params, $types);
+    }
+
+    /**
+     * Resets the transaction nesting level when the connection has no active
+     * transaction. This occurs after an implicit commit, a reconnect or when
+     * the transaction ends outside of the adapter.
+     */
+    private function resetStaleTransactionLevel(): void
+    {
+        if (
+            $this->transactionLevel > 0 &&
+            null !== $this->pdo &&
+            false === $this->pdo->inTransaction()
+        ) {
+            $this->transactionLevel = 0;
+        }
     }
 }
