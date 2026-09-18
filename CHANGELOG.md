@@ -2,7 +2,45 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
-## [6.0.0 beta 11](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta11) (2026-xx-xx)
+## [6.0.0 RC 1](https://github.com/phalcon/phalcon/releases/tag/v6.0.0RC1) (2026-09-18)
+
+### Changed
+
+- `Phalcon\Db\Adapter\Pdo\AbstractPdo::commit()` and `rollback()` now throw `Phalcon\Db\Exceptions\NoActiveTransaction` when the connection has no active transaction, instead of sending a commit, rollback or savepoint statement to the server. [#17546](https://github.com/phalcon/cphalcon/issues/17546) [[doc]](https://docs.phalcon.io/6.0/db-layer/)
+
+### Added
+
+- `Phalcon\Mvc\Model::findFirst()` now recognizes the `eager` parameter, so relations can be eagerly loaded. [#17534](https://github.com/phalcon/cphalcon/issues/17534) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+
+### Fixed
+
+- PHQL `WITH` naming a model instead of a relation alias always throwing `RelationshipNotFound`; the fallback checked `Phalcon\Mvc\Model\Manager::getRelationsBetween()` for an object, but it returns an array. Ambiguous pairs now throw `AmbiguousJoinRelation`. [#17554](https://github.com/phalcon/cphalcon/issues/17554) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- PHQL string literals not resolving their escape sequences, so `\n` reached the database as a backslash and an `n`. [#17585](https://github.com/phalcon/cphalcon/issues/17585) [[doc]](https://docs.phalcon.io/6.0/db-phql/)
+- `Phalcon\Db\Adapter\Pdo\AbstractPdo` leaving the transaction nesting level wrong when `begin()`, `commit()` or `rollback()` fails. [#17546](https://github.com/phalcon/cphalcon/issues/17546) [[doc]](https://docs.phalcon.io/6.0/db-layer/)
+- `Phalcon\Filter\Validation\Validator\File\AbstractFile::checkUpload()` reporting success when the field value is not an uploaded file array; a missing file or a plain string now fails validation. [#17541](https://github.com/phalcon/cphalcon/issues/17541) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- `Phalcon\Filter\Validation\Validator\File\Resolution\Equal`, `Max`, `Min` and `AspectRatio` not checking the `false` returned by `getimagesize()`; a file that is not a readable image is now rejected. [#17542](https://github.com/phalcon/cphalcon/issues/17542) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- `Phalcon\Filter\Validation\Validator\Ip` ignoring per-field `allowPrivate` and `allowReserved` arrays; the option is now resolved for the field before it becomes a filter flag. [#17548](https://github.com/phalcon/cphalcon/issues/17548) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
+- `Phalcon\Forms\Element\CheckGroup` and `RadioGroup` storing their choices in the property `Phalcon\Forms\Element\AbstractElement` uses for user options, so `setUserOption()` added a choice and `setOptions()` removed every user option. [#17536](https://github.com/phalcon/cphalcon/issues/17536) [[doc]](https://docs.phalcon.io/6.0/forms/)
+- `Phalcon\Forms\Element\Select::addOption()` writing with an offset into an object or `null` options value; the write now happens only when the options value is an array (`null` becomes an empty array). [#17536](https://github.com/phalcon/cphalcon/issues/17536) [[doc]](https://docs.phalcon.io/6.0/forms/)
+- `Phalcon\Mvc\Model::__construct()` raising `TypeError` on a non-array `data` argument; it is ignored, as cphalcon does.
+- `Phalcon\Mvc\Model\Manager::getRelationRecords()` raising `TypeError` on a compound through-relation marked `reusable`, and reusing one key for every record. The key is now built from every field the relation covers. [#17560](https://github.com/phalcon/cphalcon/issues/17560) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
+- `Phalcon\Mvc\Model\Manager` relation guards throwing `TypeError` on a string field list, and the second check in `addHasManyToMany()` / `addHasOneThrough()` comparing the same pair twice. [#17556](https://github.com/phalcon/cphalcon/issues/17556) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- `Phalcon\Mvc\Model\MetaData::getColumnMap()` and `getReverseColumnMap()` raising `TypeError` from the reader on a corrupt column-map slot, so their `CorruptedMetaData` guard could never fire, as it does in cphalcon.
+- `Phalcon\Mvc\Model\Resultset::valid()` reporting no row for a resultset restored from cache; `Phalcon\Mvc\Model\Resultset\Complex` stores rows that are already hydrated, so they are objects and not arrays. [#17574](https://github.com/phalcon/cphalcon/issues/17574) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- `Phalcon\Mvc\Model\Resultset\Simple::current()` giving back `false` on a second call at a position with no row; the `false` it caches is a sentinel, and `null` is returned as the declared type says. [#17568](https://github.com/phalcon/cphalcon/issues/17568) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- `Phalcon\Mvc\Model` raising `TypeError` on a composite virtual foreign key violation, and when the case-insensitive column-map lookup ran without a column map. [#17558](https://github.com/phalcon/cphalcon/issues/17558) [[doc]](https://docs.phalcon.io/6.0/db-models/)
+- `Phalcon\Mvc\Router::loadFromConfig()` silently configuring nothing when the config was neither an array nor a `Phalcon\Config\ConfigInterface`; `InvalidConfigSource` is thrown, as cphalcon does.
+- `Phalcon\Mvc\View\Engine\Volt::isIncluded()` raising `TypeError` on a haystack that is neither an array nor a string; `InvalidHaystack` is thrown, as cphalcon does. A missing `mb_strpos()` falls back to `strpos()`.
+- `Phalcon\Mvc\View\Engine\Volt::preload()` raising an error when the engine has no container; the href is given back unchanged. `Phalcon\Mvc\View\Engine\Volt\Compiler::compileSource()` returning `null` in extends mode when the template contributes no blocks. [#17565](https://github.com/phalcon/cphalcon/issues/17565) [[doc]](https://docs.phalcon.io/6.0/volt/)
+- `Phalcon\Mvc\View\Engine\Volt\Compiler::$prefix` and `$extendedBlocks` typed more narrowly than the cphalcon properties, so a closure prefix generator could not be stored and an extends-mode sub-compilation raised `TypeError`.
+- `Phalcon\Storage\Adapter\Stream` and `Phalcon\Queue\Adapter\Stream\StreamContext` reporting a `mkdir(): File exists` warning when a different process makes the directory first. [#17561](https://github.com/phalcon/cphalcon/issues/17561) [[doc]](https://docs.phalcon.io/6.0/storage/)
+- `Phalcon\Support\Traits\FilePathTrait::prepareVirtualPath()` raising `TypeError` when `realpath()` returned `false` for a missing Volt template, before `TemplateFileNotFound` could be thrown.
+
+### Removed
+
+- `Phalcon\Mvc\Model\Query::ormSingleQuotes()`, private and unused since escaping moved into the dialect. It has no cphalcon counterpart.
+
+## [6.0.0 beta 11](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta11) (2026-08-26)
 
 ### Changed
 
@@ -10,7 +48,6 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - Cache file names of `Phalcon\Annotations\Adapter\Stream`, `Phalcon\Mvc\Model\MetaData\Stream` and `Phalcon\Storage\Adapter\Stream` get a hash suffix when the key contains the character that the separator replacement produces (`_` for class names; `/`, `\`, `:` for storage keys), so two different keys can no longer share one file. Names of all other keys are unchanged.
 - `Phalcon\Auth\Guard\Session` sets the `Secure` flag of the remember-me cookie from the new `rememberSecure` option (default `true`) instead of the request scheme, so a TLS-terminating proxy that reports plain HTTP to the backend cannot downgrade it.
 - `Phalcon\Auth\Guard\Session` validates the "remember me" token against the user agent of the current request instead of the one stored in the cookie; a browser user-agent change now ends a remembered session.
-- `Phalcon\Db\Adapter\Pdo\AbstractPdo::commit()` and `rollback()` now throw `Phalcon\Db\Exceptions\NoActiveTransaction` when the connection has no active transaction, instead of sending a commit, rollback or savepoint statement to the server. [#17546](https://github.com/phalcon/cphalcon/issues/17546) [[doc]](https://docs.phalcon.io/6.0/db-layer/)
 - `Phalcon\Encryption\Security::CRYPT_MD5`, `CRYPT_SHA256` and `CRYPT_SHA512` are documented as weak legacy algorithms to be removed in a future major version; use bcrypt or Argon2 and rehash on login.
 - `Phalcon\Storage\Adapter\Stream` creates its shard directories with mode `0755` instead of `0777`. Thanks to [Ilia Alshanetsky](https://ilia.ws)
 
@@ -20,7 +57,6 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Acl\Exceptions\ForbiddenDelimiter`, thrown when an ACL role, component or access name contains `!`.
 - `Phalcon\Auth\Exceptions\InvalidCredentialKey`, thrown when a credential key passed to `Phalcon\Auth\Adapter\Model::retrieveByCredentials()` is not a plain identifier.
 - `Phalcon\Http\Request\Bag\AbstractBag::clear()`, removing all elements of a request bag.
-- `Phalcon\Mvc\Model::findFirst()` now recognizes the `eager` parameter, so relations can be eagerly loaded. [#17534](https://github.com/phalcon/cphalcon/issues/17534) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 - `allowedClasses` option for the Storage adapters (`true`, `false` or a list of class names), forwarded to the new `Phalcon\Storage\Serializer\Php::setAllowedClasses()`: restricts the classes `unserialize()` may instantiate for stored values, including the nested content of the `Stream` adapter. A class outside the list makes the read fail instead of building an object. Thanks to [Ilia Alshanetsky](https://ilia.ws)
 - `rememberSecure` option for the session guard (`Phalcon\Auth\Guard\Config\SessionGuardConfig`, `Session::fromOptions()`).
 
@@ -39,26 +75,6 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - Malformed ACL snapshot loaded by `Phalcon\Acl\Adapter\Storage` raising `TypeError` or leaving the adapter half loaded, and deep or cyclic object graphs recursing without limit; `InvalidSnapshot` is now thrown before any state changes.
 - Namespace middleware bypass in the ADR `Router` through case-variant or separator-injected paths that PHP resolves to the canonical Action class; only the exact declared class name is a match.
 - Non-string elements passed to `Phalcon\Acl\Adapter\Memory::addInherit()` raising a warning and a `TypeError` instead of `InvalidRoleType`.
-- `Phalcon\Db\Adapter\Pdo\AbstractPdo` leaving the transaction nesting level wrong when `begin()`, `commit()` or `rollback()` fails. [#17546](https://github.com/phalcon/cphalcon/issues/17546) [[doc]](https://docs.phalcon.io/6.0/db-layer/)
-- `Phalcon\Filter\Validation\Validator\File\AbstractFile::checkUpload()` reporting success when the field value is not an uploaded file array; a missing file or a plain string now fails validation. [#17541](https://github.com/phalcon/cphalcon/issues/17541) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
-- `Phalcon\Filter\Validation\Validator\File\Resolution\Equal`, `Max`, `Min` and `AspectRatio` not checking the `false` returned by `getimagesize()`; a file that is not a readable image is now rejected. [#17542](https://github.com/phalcon/cphalcon/issues/17542) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
-- `Phalcon\Filter\Validation\Validator\Ip` ignoring per-field `allowPrivate` and `allowReserved` arrays; the option is now resolved for the field before it becomes a filter flag. [#17548](https://github.com/phalcon/cphalcon/issues/17548) [[doc]](https://docs.phalcon.io/6.0/filter-validation/)
-- `Phalcon\Forms\Element\CheckGroup` and `RadioGroup` storing their choices in the property `Phalcon\Forms\Element\AbstractElement` uses for user options, so `setUserOption()` added a choice and `setOptions()` removed every user option. [#17536](https://github.com/phalcon/cphalcon/issues/17536) [[doc]](https://docs.phalcon.io/6.0/forms/)
-- `Phalcon\Forms\Element\Select::addOption()` writing with an offset into an object or `null` options value; the write now happens only when the options value is an array (`null` becomes an empty array). [#17536](https://github.com/phalcon/cphalcon/issues/17536) [[doc]](https://docs.phalcon.io/6.0/forms/)
-- PHQL `WITH` naming a model instead of a relation alias always throwing `RelationshipNotFound`; the fallback checked `Phalcon\Mvc\Model\Manager::getRelationsBetween()` for an object, but it returns an array. Ambiguous pairs now throw `AmbiguousJoinRelation`. [#17554](https://github.com/phalcon/cphalcon/issues/17554) [[doc]](https://docs.phalcon.io/6.0/db-models/)
-- `Phalcon\Mvc\Model\Manager` relation guards throwing `TypeError` on a string field list, and the second check in `addHasManyToMany()` / `addHasOneThrough()` comparing the same pair twice. [#17556](https://github.com/phalcon/cphalcon/issues/17556) [[doc]](https://docs.phalcon.io/6.0/db-models/)
-- `Phalcon\Mvc\Model` raising `TypeError` on a composite virtual foreign key violation, and when the case-insensitive column-map lookup ran without a column map. [#17558](https://github.com/phalcon/cphalcon/issues/17558) [[doc]](https://docs.phalcon.io/6.0/db-models/)
-- `Phalcon\Mvc\Model\Manager::getRelationRecords()` raising `TypeError` on a compound through-relation marked `reusable`, and reusing one key for every record. The key is now built from every field the relation covers. [#17560](https://github.com/phalcon/cphalcon/issues/17560) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
-- `Phalcon\Mvc\Model::__construct()` raising `TypeError` on a non-array `data` argument; it is ignored, as cphalcon does.
-- `Phalcon\Mvc\Router::loadFromConfig()` silently configuring nothing when the config was neither an array nor a `Phalcon\Config\ConfigInterface`; `InvalidConfigSource` is thrown, as cphalcon does.
-- `Phalcon\Mvc\View\Engine\Volt::isIncluded()` raising `TypeError` on a haystack that is neither an array nor a string; `InvalidHaystack` is thrown, as cphalcon does. A missing `mb_strpos()` falls back to `strpos()`.
-- `Phalcon\Mvc\View\Engine\Volt\Compiler::$prefix` and `$extendedBlocks` typed more narrowly than the cphalcon properties, so a closure prefix generator could not be stored and an extends-mode sub-compilation raised `TypeError`.
-- `Phalcon\Support\Traits\FilePathTrait::prepareVirtualPath()` raising `TypeError` when `realpath()` returned `false` for a missing Volt template, before `TemplateFileNotFound` could be thrown.
-- `Phalcon\Mvc\Model\MetaData::getColumnMap()` and `getReverseColumnMap()` raising `TypeError` from the reader on a corrupt column-map slot, so their `CorruptedMetaData` guard could never fire, as it does in cphalcon.
-- `Phalcon\Mvc\View\Engine\Volt::preload()` raising an error when the engine has no container; the href is given back unchanged. `Phalcon\Mvc\View\Engine\Volt\Compiler::compileSource()` returning `null` in extends mode when the template contributes no blocks. [#17565](https://github.com/phalcon/cphalcon/issues/17565) [[doc]](https://docs.phalcon.io/6.0/volt/)
-- `Phalcon\Mvc\Model\Resultset\Simple::current()` raising `TypeError` on a second call at a position with no row; the `false` it caches is a sentinel, and `null` is returned as the declared type says. [#17568](https://github.com/phalcon/cphalcon/issues/17568) [[doc]](https://docs.phalcon.io/6.0/db-models/)
-- `Phalcon\Mvc\Model\Resultset::valid()` reporting no row for a resultset restored from cache; `Phalcon\Mvc\Model\Resultset\Complex` stores rows that are already hydrated, so they are objects and not arrays. [#17574](https://github.com/phalcon/cphalcon/issues/17574) [[doc]](https://docs.phalcon.io/6.0/db-models/)
-- `Phalcon\Storage\Adapter\Stream` and `Phalcon\Queue\Adapter\Stream\StreamContext` reporting a `mkdir(): File exists` warning when a different process makes the directory first. [#17561](https://github.com/phalcon/cphalcon/issues/17561) [[doc]](https://docs.phalcon.io/6.0/storage/)
 - Request attributes of the previous route surviving on a reused request in `Phalcon\ADR\Application::handle()`.
 - Scheme allow-list bypass in the Filter `url` sanitizer through HTML-entity obfuscated schemes (`java&#115;cript:`) and URLs that `parse_url()` cannot parse; the sanitizer now fails closed. Thanks to [Ilia Alshanetsky](https://ilia.ws)
 - Validators `Alpha`, `Alnum`, `Confirmation`, `CreditCard`, `Digit`, `Numericality`, `Regex`, `StringLength\Min` and `StringLength\Max` cast an array value to the constant `"Array"`, so `field[]=x` passed alphabetic, alphanumeric, length and confirmation checks; a value that cannot be a string is now rejected with the validator's message. Thanks to [Ilia Alshanetsky](https://ilia.ws)
@@ -71,15 +87,13 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Removed
 
-- `Phalcon\Mvc\Model\Query::ormSingleQuotes()`, private and unused since escaping moved into the dialect. It has no cphalcon counterpart.
-
 
 ## [6.0.0 beta 10](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta10) (2026-08-25)
 
 ### Changed
 
-- The PHPUnit configuration now fails the run on notices, deprecations and PHPUnit deprecations, and prints the details of every triggering test.
 - Added regression tests for the security hardening changes that had no failing-on-revert coverage.
+- The PHPUnit configuration now fails the run on notices, deprecations and PHPUnit deprecations, and prints the details of every triggering test.
 
 ### Added
 
@@ -245,7 +259,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Removed
 
-## [6.0.0 beta 2](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta1) (2026-07-26)
+## [6.0.0 beta 2](https://github.com/phalcon/phalcon/releases/tag/v6.0.0beta2) (2026-07-26)
 
 ### Changed
 
@@ -269,14 +283,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Changed
 
-- Changed `Phalcon\Mvc\Model::getRelated()` and `Phalcon\Mvc\Model::isRelationshipLoaded()` to test the relation cache with `array_key_exists()` instead of `isset()`, so a to-one relation that resolves to no record is no longer re-queried on every access [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
-- Changed `Phalcon\Mvc\Model\Manager::mergeFindParameters()` from `final protected` to `final public static` [#17331](https://github.com/phalcon/cphalcon/issues/17331)
-
 ### Added
-
-- Added `Phalcon\ADR\Responder\ViewResponder`, which renders a `.phtml` template and returns it as an HTML response. The action picks the template with `withTemplate()`, and the view receives `result`, `messages` and `status`. Any renderer implementing the new `Phalcon\Contracts\View\Renderer` can be used - `Phalcon\Mvc\View\Simple` now does. [#17379](https://github.com/phalcon/cphalcon/issues/17379) [[doc]](https://docs.phalcon.io/6.0/adr/)
-- Added opt-in route-parameter pre-filtering to the ADR convention router via the new `Phalcon\ADR\Router\AttributeFilter`. An Action that declares a static `params()` method has its positional route segments validated against a regex, cast to a scalar type (`int`, `float`, `string`) and optionally passed through a converter closure, then written to the request as named attributes - all before the Action runs. A regex miss is treated as a route miss (404). [#17393](https://github.com/phalcon/cphalcon/issues/17393) [[doc]](https://docs.phalcon.io/6.0/adr/)
-- Added eager loading of model relations: `Phalcon\Mvc\Model::find()` accepts an `eager` parameter - an array of dot-delimited relation paths, optionally `path => options` - which pre-loads the named relations with one query per relation instead of one per record. `Phalcon\Mvc\Model\Criteria::eager()` exposes the same on the criteria surface. [#17331](https://github.com/phalcon/cphalcon/issues/17331) [[doc]](https://docs.phalcon.io/6.0/db-models-relationships/)
 
 ### Fixed
 
@@ -285,7 +292,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Removed
 
-## [6.0.0 alpha 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha5) (2026-07-22)
+## [6.0.0 alpha 6](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha6) (2026-07-22)
 
 ### Changed
 
@@ -309,7 +316,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - Fixed `Phalcon\Mvc\Model` ignoring attributes registered with `skipAttributes()`, `skipAttributesOnCreate()` and `skipAttributesOnUpdate()`, so a skipped column was emitted in the generated `INSERT`/`UPDATE` (breaking, for instance, inserts into a table with a MySQL generated column). The skip list is keyed with `null` values, which `isset()` reports as absent, so every skipped attribute read as not registered; the checks in `doLowInsert()`, `doLowUpdate()` and the not-null validation now use `array_key_exists()`. [#17382](https://github.com/phalcon/cphalcon/issues/17382) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 - Fixed `Phalcon\Mvc\Model` inserting a literal `null` for a column the database can supply a value for, instead of the `DEFAULT` keyword (or omitting the column on an adapter without `DEFAULT` support, such as SQLite). A nullable column carrying no explicit default is registered in the metadata default values with a `null` value, which the `isset()` check in `doLowInsert()` read as absent; it now uses `array_key_exists()`. This makes inserts work against a MySQL `GENERATED ALWAYS AS (...) STORED` column, which rejects an explicit `null` with `SQLSTATE[HY000]: General error: 3105` but accepts `DEFAULT`. [#17382](https://github.com/phalcon/cphalcon/issues/17382) [[doc]](https://docs.phalcon.io/6.0/db-models/)
 
-## [6.0.0 alpha 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha1) (2026-07-13)
+## [6.0.0 alpha 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0alpha4) (2026-07-13)
 
 ### Changed
 
