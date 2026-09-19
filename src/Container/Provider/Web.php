@@ -34,7 +34,6 @@ declare(strict_types=1);
 namespace Phalcon\Container\Provider;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
-use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Auth\Access\AccessLocator;
 use Phalcon\Container\Resolver\Lazy\LazyFactory;
@@ -131,11 +130,7 @@ class Web implements Provider
             return new AccessLocator($c);
         });
 
-        $services->set(Annotations::class, Annotations::class);
-        $services->setAlias(Annotations::class, 'annotations');
-
-        $services->set(AnnotationsMemory::class, AnnotationsMemory::class)
-                 ->setArgument(0, LazyFactory::get(SerializerFactory::class));
+        $services->set(AnnotationsMemory::class, AnnotationsMemory::class);
         $services->setAlias(AnnotationsMemory::class, 'annotationsMemory');
 
         $services->set(AssetsManager::class, AssetsManager::class)

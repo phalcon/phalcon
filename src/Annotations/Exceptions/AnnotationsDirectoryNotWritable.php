@@ -11,11 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Annotations\Models\MetaData;
+namespace Phalcon\Annotations\Exceptions;
 
-use Attribute;
+use Phalcon\Annotations\Exception;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
-class Primary
+class AnnotationsDirectoryNotWritable extends Exception
 {
+    public function __construct()
+    {
+        parent::__construct("Annotations directory cannot be written");
+    }
 }

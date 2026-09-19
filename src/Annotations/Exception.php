@@ -11,15 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Annotations\Models\MetaData;
+namespace Phalcon\Annotations;
 
-use Attribute;
-
-#[Attribute(Attribute::TARGET_CLASS)]
-class Source
+/**
+ * Class for exceptions thrown by Phalcon\Annotations
+ */
+class Exception extends \Exception
 {
-    public function __construct(
-        public string $table
-    ) {
-    }
 }

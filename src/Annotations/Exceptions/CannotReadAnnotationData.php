@@ -11,11 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Annotations\Parser;
+namespace Phalcon\Annotations\Exceptions;
 
-/**
- * Class for exceptions thrown by Phalcon\Annotations
- */
-class Exception extends \Exception
+use RuntimeException;
+
+class CannotReadAnnotationData extends RuntimeException
 {
+    public function __construct()
+    {
+        parent::__construct("Cannot read annotation data");
+    }
 }

@@ -34,7 +34,6 @@ declare(strict_types=1);
 namespace Phalcon\Container\Provider;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
-use Phalcon\Annotations\Annotations;
 use Phalcon\Auth\Access\AccessLocator;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\DispatcherInterface;
@@ -101,9 +100,6 @@ class Cli implements Provider
         $services->set(AccessLocator::class, static function (Collection $c): AccessLocator {
             return new AccessLocator($c);
         });
-
-        $services->set(Annotations::class, Annotations::class);
-        $services->setAlias(Annotations::class, 'annotations');
 
         $services->set(AnnotationsMemory::class, AnnotationsMemory::class);
         $services->setAlias(AnnotationsMemory::class, 'annotationsMemory');

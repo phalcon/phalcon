@@ -13,10 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Contracts\Annotations;
 
-use Phalcon\Annotations\Parser\Annotation;
-use Phalcon\Annotations\Parser\Collection;
-use Phalcon\Annotations\Parser\Reflection;
-use ReflectionAttribute;
+use Phalcon\Annotations\Annotation;
+use Phalcon\Annotations\Collection;
+use Phalcon\Annotations\Reflection;
 
 /**
  * Central registry of the array shapes used across the Annotations namespace.
@@ -28,36 +27,53 @@ use ReflectionAttribute;
  *
  * Alias names are prefixed with `annotations_` because PHPStan resolves
  * imported type names per file and has no namespacing for them: the prefix is
- * what keeps generic names such as `arguments` or `list` from clashing with an
- * alias imported from another namespace into the same file.
+ * what keeps generic names such as `arguments` or `options` from clashing with
+ * an alias imported from another namespace into the same file.
  *
  * The list is alphabetical, with one exception: an alias that another alias
- * names must be defined before it.
+ * names must be defined before it. Psalm reads the aliases in file order and
+ * cannot resolve a forward reference; it reports the name as a missing class
+ * instead. PHPStan does not care about the order, so a forward reference is
+ * invisible until the stubs are analyzed. `annotations_expression` is hoisted
+ * for that reason.
  *
- * @phpstan-type annotations_arguments array<array-key, mixed>
- * @phpstan-type annotations_attributes array<string, Reflection>
+ * The node shapes below are what `ext/phalcon/annotations/parser.php.inc.h`
+ * builds: `phannot_ret_annotation()`, `phannot_ret_named_item()`,
+ * `phannot_ret_literal_zval()` and `phannot_ret_array()`.
+ *
+ * An expression is one of a literal node (`type` plus an optional string
+ * `value`), an array node (`type` plus optional `items`) or a nested
+ * annotation node, and `getExpression()` walks into `items` and into nested
+ * annotations. That makes the shape recursive, which neither PHPStan nor Psalm
+ * accepts, so the alias stays an untyped map, as `db_expression` does for the
+ * dialect intermediate. Each read narrows the value it needs.
+ *
+ * @phpstan-type annotations_expression array<array-key, mixed>
+ * @phpstan-type annotations_argument array{
+ *     expr: annotations_expression,
+ *     name?: string,
+ * }
+ * @phpstan-type annotations_arguments array<array-key, annotations_argument>
+ * @phpstan-type annotations_cache array<string, Reflection>
  * @phpstan-type annotations_collection_map array<string, Collection>
  * @phpstan-type annotations_list list<Annotation>
- * @phpstan-type annotations_reflection_attributes array<array-key, ReflectionAttribute<object>>
+ * @phpstan-type annotations_node array{
+ *     arguments?: annotations_arguments,
+ *     file: string,
+ *     line: int,
+ *     name?: string,
+ *     type: int,
+ * }
+ * @phpstan-type annotations_node_list list<annotations_node>
+ * @phpstan-type annotations_node_map array<string, annotations_node_list>
+ * @phpstan-type annotations_options array<string, mixed>
  * @phpstan-type annotations_reflection_data array{
- *     class?: Collection,
- *     constants?: annotations_collection_map,
- *     methods?: annotations_collection_map,
- *     properties?: annotations_collection_map,
+ *     class?: annotations_node_list,
+ *     constants?: annotations_node_map,
+ *     methods?: annotations_node_map,
+ *     properties?: annotations_node_map,
  * }
- * @phpstan-type annotations_route_before_match array<array-key, mixed>|string|null
- * @phpstan-type annotations_route_converters array<array-key, mixed>
- * @phpstan-type annotations_route_methods array<array-key, string>|string
- * @phpstan-type annotations_route_paths array<array-key, mixed>
- * @phpstan-type annotations_route_params array{
- *     0?: string,
- *     route?: string,
- *     methods?: annotations_route_methods,
- *     name?: string|null,
- *     paths?: annotations_route_paths,
- *     converters?: annotations_route_converters,
- *     beforeMatch?: annotations_route_before_match,
- * }
+ * @phpstan-type annotations_resolved_arguments array<array-key, mixed>
  */
 interface AnnotationsTypes
 {

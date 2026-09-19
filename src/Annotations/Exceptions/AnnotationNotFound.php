@@ -11,14 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Phalcon\Annotations\Router;
+namespace Phalcon\Annotations\Exceptions;
 
-use Attribute;
+use Phalcon\Annotations\Exception;
 
-#[Attribute(Attribute::TARGET_CLASS)]
-class RoutePrefix
+class AnnotationNotFound extends Exception
 {
-    public function __construct(public string $prefix)
+    public function __construct(string $name)
     {
+        parent::__construct(
+            "Collection does not have an annotation called '" . $name . "'"
+        );
     }
 }

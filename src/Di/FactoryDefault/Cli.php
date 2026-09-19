@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Di\FactoryDefault;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
-use Phalcon\Annotations\Annotations;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Di\FactoryDefault;
@@ -28,7 +27,6 @@ use Phalcon\Mvc\Model\Manager as ModelsManager;
 use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Queue\QueueFactory;
-use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
 
@@ -52,30 +50,7 @@ class Cli extends FactoryDefault
         $filter = new FilterFactory();
 
         $this->services = [
-            'annotations'        => new Service(
-                [
-                    'className' => Annotations::class,
-                    'arguments' => [
-                        [
-                            'type' => 'service',
-                            'name' => 'annotationsMemory',
-                        ],
-                    ],
-                ],
-                true
-            ),
-            'annotationsMemory'  => new Service(
-                [
-                    'className' => AnnotationsMemory::class,
-                    'arguments' => [
-                        [
-                            'type' => 'service',
-                            'name' => 'storageSerializer',
-                        ],
-                    ],
-                ],
-                true
-            ),
+            'annotations'        => new Service(AnnotationsMemory::class, true),
             'dispatcher'         => new Service(Dispatcher::class, true),
             'escaper'            => new Service(Escaper::class, true),
             'eventsManager'      => new Service(EventsManager::class, true),
@@ -87,7 +62,6 @@ class Cli extends FactoryDefault
             'router'             => new Service(Router::class, true),
             'security'           => new Service(Security::class, true),
             'settings'           => new Service(Settings::class, true),
-            'storageSerializer'  => new Service(SerializerFactory::class, true),
             'tag'                => new Service(
                 [
                     'className' => TagFactory::class,
