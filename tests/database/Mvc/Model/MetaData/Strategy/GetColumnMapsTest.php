@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Strategy;
 
+use Phalcon\Mvc\Model\MetaData\Strategy\Annotations;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\InvoicesAnnotated;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -45,6 +47,7 @@ final class GetColumnMapsTest extends AbstractDatabaseTestCase
     {
         return [
             'introspection' => [Introspection::class, Invoices::class],
+            'annotations'   => [Annotations::class, InvoicesAnnotated::class],
         ];
     }
 

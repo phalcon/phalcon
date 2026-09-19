@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\Fake;
 
 use Phalcon\Annotations\Adapter\Memory;
-use Phalcon\Annotations\Annotations;
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Cli\Router;
 use Phalcon\Encryption\Security;
@@ -26,7 +25,6 @@ use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData\Memory as MetadataMemory;
 use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Queue\QueueFactory;
-use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
 
@@ -91,10 +89,6 @@ trait CliTrait
         return [
             [
                 'service' => 'annotations',
-                'class'   => Annotations::class,
-            ],
-            [
-                'service' => 'annotationsMemory',
                 'class'   => Memory::class,
             ],
             [
@@ -140,10 +134,6 @@ trait CliTrait
             [
                 'service' => 'security',
                 'class'   => Security::class,
-            ],
-            [
-                'service' => 'storageSerializer',
-                'class'   => SerializerFactory::class,
             ],
             [
                 'service' => 'tag',

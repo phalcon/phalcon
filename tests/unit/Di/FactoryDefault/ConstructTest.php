@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di\FactoryDefault;
 
 use Phalcon\Annotations\Adapter\Memory as MemoryAnnotations;
-use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as ManagerAssets;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Encryption\Crypt;
@@ -35,7 +34,6 @@ use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Queue\QueueFactory;
-use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
@@ -51,10 +49,6 @@ final class ConstructTest extends AbstractUnitTestCase
         return [
             [
                 'annotations',
-                Annotations::class,
-            ],
-            [
-                'annotationsMemory',
                 MemoryAnnotations::class,
             ],
             [
@@ -130,10 +124,6 @@ final class ConstructTest extends AbstractUnitTestCase
                 Security::class,
             ],
             [
-                'storageSerializer',
-                SerializerFactory::class,
-            ],
-            [
                 'tag',
                 TagFactory::class,
             ],
@@ -156,7 +146,7 @@ final class ConstructTest extends AbstractUnitTestCase
     {
         $container = new FactoryDefault();
 
-        $expected = 24;
+        $expected = 22;
         $actual   = count($container->getServices());
         $this->assertSame($expected, $actual);
     }

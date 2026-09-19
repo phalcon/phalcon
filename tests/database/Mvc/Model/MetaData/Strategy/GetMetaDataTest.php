@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Strategy;
 
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Mvc\Model\MetaData\Strategy\Annotations;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models\Invoices;
+use Phalcon\Tests\Support\Models\InvoicesAnnotated;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -55,6 +57,13 @@ final class GetMetaDataTest extends AbstractDatabaseTestCase
             'introspection' => [
                 Introspection::class,
                 Invoices::class,
+                ['inv_id', 'inv_cst_id', 'inv_status_flag', 'inv_title', 'inv_total', 'inv_created_at'],
+                ['inv_id'],
+                'inv_id',
+            ],
+            'annotations'   => [
+                Annotations::class,
+                InvoicesAnnotated::class,
                 ['inv_id', 'inv_cst_id', 'inv_status_flag', 'inv_title', 'inv_total', 'inv_created_at'],
                 ['inv_id'],
                 'inv_id',
