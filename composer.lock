@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d73d9094157211f0bd4c5d6790342c43",
+    "content-hash": "b6d29b13a53a930b2afb3631edd03b9d",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -924,16 +924,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.25",
+            "version": "v3.95.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "2cdfc1f3daf173d83a1ebb6177949b58c95de6ff"
+                "reference": "11839dfaf25718e1617c522c3dde01ebf96c875f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/2cdfc1f3daf173d83a1ebb6177949b58c95de6ff",
-                "reference": "2cdfc1f3daf173d83a1ebb6177949b58c95de6ff",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/11839dfaf25718e1617c522c3dde01ebf96c875f",
+                "reference": "11839dfaf25718e1617c522c3dde01ebf96c875f",
                 "shasum": ""
             },
             "require": {
@@ -967,15 +967,15 @@
             "require-dev": {
                 "facile-it/paraunit": "^1.3.1 || ^2.11.0",
                 "infection/infection": "^0.32.7",
-                "justinrainbow/json-schema": "^6.10.0",
+                "justinrainbow/json-schema": "^6.12.0",
                 "keradus/cli-executor": "^2.3",
                 "php-coveralls/php-coveralls": "^2.9.1",
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.8",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.8",
-                "phpunit/phpunit": "^9.6.35 || ^10.5.64 || ^11.5.56 || ^12.5.31 || ^13.0.6",
-                "symfony/polyfill-php85": "^1.38",
-                "symfony/var-dumper": "^5.4.48 || ^6.4.36 || ^7.4.8 || ^8.1.1",
-                "symfony/yaml": "^5.4.53 || ^6.4.41 || ^7.4.13 || ^8.1.1"
+                "phpunit/phpunit": "^9.6.36 || ^10.5.64 || ^11.5.56 || ^12.5.35 || ^13.3.3",
+                "symfony/polyfill-php85": "^1.41",
+                "symfony/var-dumper": "^5.4.48 || ^6.4.45 || ^7.4.18 || ^8.1.7",
+                "symfony/yaml": "^5.4.53 || ^6.4.45 || ^7.4.18 || ^8.1.6"
             },
             "suggest": {
                 "ext-dom": "For handling output formats in XML",
@@ -1016,7 +1016,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.25"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.26"
             },
             "funding": [
                 {
@@ -1024,7 +1024,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-08T11:11:37+00:00"
+            "time": "2026-09-19T19:04:32+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -1333,6 +1333,91 @@
                 "source": "https://github.com/php-pds/skeleton/tree/1.x"
             },
             "time": "2017-01-25T23:30:41+00:00"
+        },
+        {
+            "name": "phalcon/annotations",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/annotations.git",
+                "reference": "9fe4e374b805dafba42128c6d40c4e5c3595bb02"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/annotations/zipball/9fe4e374b805dafba42128c6d40c4e5c3595bb02",
+                "reference": "9fe4e374b805dafba42128c6d40c4e5c3595bb02",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "phalcon/traits": "^4.0",
+                "php": ">=8.1 <9.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95",
+                "pds/composer-script-names": "^1.0",
+                "pds/skeleton": "^1.0",
+                "phalcon/code-quality": "^1.0",
+                "phalcon/talon": "^1.0.0",
+                "phpstan/phpstan": "^2.0",
+                "phpunit/phpunit": "^10.5",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "suggest": {
+                "ext-apcu": "Required by the Apcu annotations adapter",
+                "phalcon/phalcon": "The Phalcon framework this module integrates with"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\Annotations\\Docblock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalcon.io",
+                    "homepage": "https://phalcon.io/en/team"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/annotations/graphs/contributors"
+                }
+            ],
+            "description": "Docblock annotations parser for the Phalcon Framework",
+            "homepage": "https://phalcon.io",
+            "keywords": [
+                "annotations",
+                "docblock",
+                "framework",
+                "parser",
+                "phalcon",
+                "php"
+            ],
+            "support": {
+                "discussions": "https://phalcon.io/discussions/",
+                "docs": "https://phalcon.io/docs/",
+                "email": "support@phalcon.io",
+                "issues": "https://github.com/phalcon/annotations/issues",
+                "rss": "https://blog.phalcon.io/rss",
+                "source": "https://github.com/phalcon/annotations"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2026-09-19T02:21:59+00:00"
         },
         {
             "name": "phalcon/cli-options-parser",
@@ -6743,6 +6828,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "phalcon/annotations": 20,
         "phalcon/phql": 20,
         "phalcon/volt": 20
     },

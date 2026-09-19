@@ -22,6 +22,7 @@
     "friendsofphp/php-cs-fixer": "^3.95",
     "pds/composer-script-names": "^1.0",
     "pds/skeleton": "^1.0",
+    "phalcon/annotations": "1.0.x-dev",
     "phalcon/phql": "1.0.x-dev",
     "phalcon/quill": "^0.5.0",
     "phalcon/talon": "^1.0.0",

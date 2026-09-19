@@ -25,6 +25,26 @@ parameters:
             message: "#Parameter \\#1 \\$callback of function spl_autoload_register expects \\(callable\\(string\\): void\\)\\|null, array\\{\\$this\\(Phalcon\\\\Autoload\\\\Loader\\), 'autoload'\\} given#"
             path: ../src/Autoload/Loader.php
             reportUnmatched: false
+        # The Annotations namespace mirrors the Zephir sources. The Memory
+        # adapter accepts options and does not use them, the same as cphalcon.
+        -
+            message: "#Constructor of class Phalcon\\\\Annotations\\\\Adapter\\\\Memory has an unused parameter \\$options#"
+            path: ../src/Annotations/Adapter/Memory.php
+            reportUnmatched: false
+        # `Collection::current()` returns false after the last item, so the
+        # class cannot give Annotation as the Iterator value type. The class
+        # docblock explains this, the same as in cphalcon.
+        -
+            message: "#Class Phalcon\\\\Annotations\\\\Collection implements generic interface Iterator but does not specify its types#"
+            path: ../src/Annotations/Collection.php
+            reportUnmatched: false
+        # The reflection data comes from the caller and only a docblock gives
+        # its shape. The Zephir implementation checks for an array, and the
+        # guard is kept the same in both.
+        -
+            message: "#Call to function is_array\\(\\) with array<.*> will always evaluate to true#"
+            path: ../src/Annotations/Reflection.php
+            reportUnmatched: false
         # The dispatch loop sets `finished` to true, then fires events and
         # handler hooks. Any listener or hook may call forward(), which sets
         # it back to false. PHPStan cannot follow that re-entry, so it still
