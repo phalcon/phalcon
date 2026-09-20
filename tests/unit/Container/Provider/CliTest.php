@@ -89,7 +89,7 @@ final class CliTest extends AbstractUnitTestCase
     public function testContainerProviderCliAllServiceNamesResolvable(): void
     {
         $names = [
-            'annotations', 'annotationsMemory', 'dispatcher', 'escaper',
+            'annotationsMemory', 'dispatcher', 'escaper',
             'eventsManager', 'filter', 'helper', 'modelsManager', 'modelsMetadata',
             'router', 'security', 'settings', 'storageSerializer', 'tag', 'transactionManager',
         ];

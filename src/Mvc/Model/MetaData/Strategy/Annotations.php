@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\MetaData\Strategy;
 
-use Phalcon\Annotations\Parser\Annotation;
-use Phalcon\Annotations\Parser\Collection;
+use Phalcon\Annotations\Adapter\AdapterInterface;
+use Phalcon\Annotations\Collection;
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Db\Column;
 use Phalcon\Di\DiInterface;
@@ -33,7 +33,7 @@ class Annotations implements StrategyInterface
     /**
      * Read the model's column map, this can't be inferred
      *
-     * @throws \Phalcon\Annotations\Parser\Exception
+     * @throws \Phalcon\Annotations\Exception
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_index
@@ -90,7 +90,7 @@ class Annotations implements StrategyInterface
     /**
      * The meta-data is obtained by reading the column descriptions from the database information schema
      *
-     * @throws \Phalcon\Annotations\Parser\Exception
+     * @throws \Phalcon\Annotations\Exception
      * @throws Exception
      *
      * @phpstan-return mvc_metadata_index
@@ -231,21 +231,21 @@ class Annotations implements StrategyInterface
             /**
              * Column will be skipped on INSERT operation
              */
-            if ($columnAnnotations->getNamedParameter("skipOnInsert")) {
+            if ($columnAnnotations->getNamedParameter("skip_on_insert")) {
                 $skipOnInsert[$columnName] = true;
             }
 
             /**
              * Column will be skipped on UPDATE operation
              */
-            if ($columnAnnotations->getNamedParameter("skipOnUpdate")) {
+            if ($columnAnnotations->getNamedParameter("skip_on_update")) {
                 $skipOnUpdate[$columnName] = true;
             }
 
             /**
              * Allow empty strings for column
              */
-            if ($columnAnnotations->getNamedParameter("allowEmptyString")) {
+            if ($columnAnnotations->getNamedParameter("allow_empty_string")) {
                 $emptyStringValues[$columnName] = $columnName;
             }
 
@@ -299,7 +299,7 @@ class Annotations implements StrategyInterface
             throw new InvalidContainer();
         }
 
-        /** @var \Phalcon\Annotations\Annotations $annotations */
+        /** @var AdapterInterface $annotations */
         $annotations = $container->get("annotations");
 
         $className  = get_class($model);

@@ -31,8 +31,8 @@ final class LoadFromPhpTest extends AbstractUnitTestCase
         // load php
         $di->loadFromPhp(Talon::settings()->supportPath('assets/Di/services.php'));
 
-        // there are 3 new + 16 from Default
-        $this->assertCount(19, $di->getServices());
+        // there are 3 new + 14 from Default
+        $this->assertCount(17, $di->getServices());
 
         // check some services
         $actual = $di->get('config');

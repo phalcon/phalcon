@@ -13,19 +13,80 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Parser\Reflection;
-use Phalcon\Storage\Adapter\Apcu as StorageApcu;
+use Phalcon\Annotations\Reflection;
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
+
+use function apcu_fetch;
+use function apcu_store;
+use function strtolower;
 
 /**
- * Stores the parsed annotations in apcu.
+ * Stores the parsed annotations in APCu. This adapter is suitable for production
+ *
+ *```php
+ * use Phalcon\Annotations\Adapter\Apcu;
+ *
+ * $annotations = new Apcu();
+ *```
+ *
+ * @phpstan-import-type annotations_options from AnnotationsTypes
  */
-class Apcu extends StorageApcu implements AdapterInterface
+class Apcu extends AbstractAdapter
 {
+    protected string $prefix = "";
+
+    protected int $ttl = 172800;
+
     /**
-     * @return mixed|Reflection
+     * @param array $options = [
+     *                       'prefix' => 'phalcon'
+     *                       'lifetime' => 3600
+     *                       ]
+     *
+     * Phalcon\Annotations\Adapter\Apcu constructor
+     *
+     * @phpstan-param annotations_options $options
      */
-    public function get(string $key, mixed $defaultValue = null): mixed
+    public function __construct(array $options = [])
     {
-        return parent::get($key, $defaultValue);
+        if (isset($options["prefix"])) {
+            /** @var string $prefix */
+            $prefix       = $options["prefix"];
+            $this->prefix = $prefix;
+        }
+
+        if (isset($options["lifetime"])) {
+            /** @var int $ttl */
+            $ttl       = $options["lifetime"];
+            $this->ttl = $ttl;
+        }
+    }
+
+    /**
+     * Reads parsed annotations from APCu
+     */
+    public function read(string $key): bool | Reflection
+    {
+        /** @var bool|Reflection */
+        return apcu_fetch(
+            strtolower(
+                "_PHAN" . $this->prefix . $key
+            )
+        );
+    }
+
+    /**
+     * Writes parsed annotations to APCu
+     */
+    public function write(string $key, Reflection $data): bool
+    {
+        /** @var bool */
+        return apcu_store(
+            strtolower(
+                "_PHAN" . $this->prefix . $key
+            ),
+            $data,
+            $this->ttl
+        );
     }
 }

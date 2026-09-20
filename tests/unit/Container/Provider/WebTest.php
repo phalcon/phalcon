@@ -101,7 +101,7 @@ final class WebTest extends AbstractUnitTestCase
     public function testContainerProviderWebAllServiceNamesResolvable(): void
     {
         $names = [
-            'annotations', 'annotationsMemory', 'assets', 'cookies', 'crypt',
+            'annotationsMemory', 'assets', 'cookies', 'crypt',
             'dispatcher', 'escaper', 'eventsManager', 'filter', 'flash',
             'flashSession', 'helper', 'modelsManager',
             'modelsMetadata', 'request', 'response', 'router', 'security',

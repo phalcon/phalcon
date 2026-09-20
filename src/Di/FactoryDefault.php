@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phalcon\Di;
 
 use Phalcon\Annotations\Adapter\Memory as AnnotationsMemory;
-use Phalcon\Annotations\Annotations;
 use Phalcon\Assets\Manager as AssetsManager;
 use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
@@ -35,7 +34,6 @@ use Phalcon\Mvc\Model\Transaction\Manager as TransactionManager;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Url;
 use Phalcon\Queue\QueueFactory;
-use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\HelperFactory;
 use Phalcon\Support\Settings;
 
@@ -45,8 +43,7 @@ use Phalcon\Support\Settings;
  * developer does not need to register each service individually providing a
  * full stack framework
  *
- * @property Annotations        $annotations
- * @property AnnotationsMemory  $annotationsMemory
+ * @property AnnotationsMemory  $annotations
  * @property AssetsManager      $assets
  * @property Crypt              $crypt
  * @property Cookies            $cookies
@@ -65,7 +62,6 @@ use Phalcon\Support\Settings;
  * @property Router             $router
  * @property Security           $security
  * @property Settings           $settings
- * @property SerializerFactory  $storageSerializer
  * @property TagFactory         $tag
  * @property TransactionManager $transactionManager
  * @property Url                $url
@@ -82,30 +78,7 @@ class FactoryDefault extends Di
         $filterFactory = new FilterFactory();
 
         $this->services = [
-            'annotations'        => new Service(
-                [
-                    'className' => Annotations::class,
-                    'arguments' => [
-                        [
-                            'type' => 'service',
-                            'name' => 'annotationsMemory',
-                        ],
-                    ],
-                ],
-                true
-            ),
-            'annotationsMemory'  => new Service(
-                [
-                    'className' => AnnotationsMemory::class,
-                    'arguments' => [
-                        [
-                            'type' => 'service',
-                            'name' => 'storageSerializer',
-                        ],
-                    ],
-                ],
-                true
-            ),
+            'annotations'        => new Service(AnnotationsMemory::class, true),
             'assets'             => new Service(
                 [
                     'className' => AssetsManager::class,
@@ -135,7 +108,6 @@ class FactoryDefault extends Di
             'response'           => new Service(Response::class, true),
             'router'             => new Service(Router::class, true),
             'security'           => new Service(Security::class, true),
-            'storageSerializer'  => new Service(SerializerFactory::class, true),
             'tag'                => new Service(
                 [
                     'className' => TagFactory::class,

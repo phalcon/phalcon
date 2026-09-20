@@ -13,20 +13,49 @@ declare(strict_types=1);
 
 namespace Phalcon\Annotations\Adapter;
 
-use Phalcon\Annotations\Parser\Reflection;
-use Phalcon\Storage\Adapter\Memory as StorageMemory;
+use Phalcon\Annotations\Reflection;
+use Phalcon\Contracts\Annotations\AnnotationsTypes;
+
+use function strtolower;
 
 /**
  * Stores the parsed annotations in memory. This adapter is the suitable
  * development/testing
+ *
+ * @phpstan-import-type annotations_cache from AnnotationsTypes
+ * @phpstan-import-type annotations_options from AnnotationsTypes
  */
-class Memory extends StorageMemory implements AdapterInterface
+class Memory extends AbstractAdapter
 {
     /**
-     * @return mixed|Reflection
+     * The property has no initializer, so it is null until the first write.
+     *
+     * @phpstan-var annotations_cache|null
      */
-    public function get(string $key, mixed $defaultValue = null): mixed
+    protected mixed $data = null;
+
+    /**
+     * @phpstan-param annotations_options $options
+     */
+    public function __construct(array $options = [])
     {
-        return parent::get($key, $defaultValue);
+    }
+
+    /**
+     * Reads parsed annotations from memory
+     */
+    public function read(string $key): bool | Reflection
+    {
+        return $this->data[strtolower($key)] ?? false;
+    }
+
+    /**
+     * Writes parsed annotations to memory
+     */
+    public function write(string $key, Reflection $data): void
+    {
+        $lowercasedKey = strtolower($key);
+
+        $this->data[$lowercasedKey] = $data;
     }
 }
