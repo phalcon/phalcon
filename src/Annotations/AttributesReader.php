@@ -204,12 +204,7 @@ class AttributesReader implements ReaderInterface
         $nodes = [];
 
         foreach ($attributes as $attribute) {
-            $name = $attribute->getName();
-
-            if (str_starts_with($name, self::PHALCON_NAMESPACE)) {
-                $parts = explode("\\", $name);
-                $name  = (string) array_pop($parts);
-            }
+            $name = $this->resolveName($attribute->getName());
 
             /**
              * The node carries the same keys as the one the parser builds,
@@ -233,5 +228,27 @@ class AttributesReader implements ReaderInterface
         }
 
         return $nodes;
+    }
+
+    /**
+     * Gives the name that the collection matches on.
+     *
+     * An attribute of the Phalcon\Annotations namespace gets the short name,
+     * so that `#[Column]` and `@Column` give the same name. Every other
+     * attribute keeps the full class name, so that an attribute of another
+     * library cannot take the place of a Phalcon one.
+     *
+     * Extend this reader and override this method to give the same short
+     * name to the attributes of your own namespace.
+     */
+    protected function resolveName(string $name): string
+    {
+        if (str_starts_with($name, self::PHALCON_NAMESPACE)) {
+            $parts = explode("\\", $name);
+
+            return (string) array_pop($parts);
+        }
+
+        return $name;
     }
 }
