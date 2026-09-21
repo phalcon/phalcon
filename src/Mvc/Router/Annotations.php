@@ -383,7 +383,7 @@ class Annotations extends Router
         $paths["action"]     = $actionName;
 
         /** @var string|null $value */
-        $value = $annotation->getArgument(0);
+        $value = $this->resolveArgument($annotation, "route");
 
         /**
          * Create the route using the prefix
@@ -477,7 +477,7 @@ class Annotations extends Router
          */
         if ($annotation->getName() == "RoutePrefix") {
             /** @var string|null $routePrefix */
-            $routePrefix       = $annotation->getArgument(0);
+            $routePrefix       = $this->resolveArgument($annotation, "prefix");
             $this->routePrefix = $routePrefix;
         }
     }
@@ -552,5 +552,20 @@ class Annotations extends Router
         $this->controllerSuffix = $controllerSuffix;
 
         return $this;
+    }
+
+    /**
+     * Returns the argument at position 0, or the named one when position 0
+     * is not there.
+     *
+     * A docblock puts the value at position 0. An attribute puts it at
+     * position 0 too, unless the developer writes the name as a named
+     * argument.
+     */
+    protected function resolveArgument(
+        Annotation $annotation,
+        string $name
+    ): mixed {
+        return $annotation->getArgument(0) ?? $annotation->getArgument($name);
     }
 }

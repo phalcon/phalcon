@@ -230,22 +230,34 @@ class Annotations implements StrategyInterface
 
             /**
              * Column will be skipped on INSERT operation
+             *
+             * A docblock writes snake_case. An attribute writes camelCase,
+             * because PSR-12 does not allow snake_case parameter names.
              */
-            if ($columnAnnotations->getNamedParameter("skip_on_insert")) {
+            if (
+                $columnAnnotations->getNamedParameter("skip_on_insert") ||
+                $columnAnnotations->getNamedParameter("skipOnInsert")
+            ) {
                 $skipOnInsert[$columnName] = true;
             }
 
             /**
              * Column will be skipped on UPDATE operation
              */
-            if ($columnAnnotations->getNamedParameter("skip_on_update")) {
+            if (
+                $columnAnnotations->getNamedParameter("skip_on_update") ||
+                $columnAnnotations->getNamedParameter("skipOnUpdate")
+            ) {
                 $skipOnUpdate[$columnName] = true;
             }
 
             /**
              * Allow empty strings for column
              */
-            if ($columnAnnotations->getNamedParameter("allow_empty_string")) {
+            if (
+                $columnAnnotations->getNamedParameter("allow_empty_string") ||
+                $columnAnnotations->getNamedParameter("allowEmptyString")
+            ) {
                 $emptyStringValues[$columnName] = $columnName;
             }
 
@@ -260,7 +272,13 @@ class Annotations implements StrategyInterface
              * If column has default value or column is nullable and default
              * value is null
              */
-            $defaultValue = $columnAnnotations->getNamedParameter("default");
+            /**
+             * `default` is a Zephir keyword, so the attribute names it
+             * `defaultValue`.
+             */
+            $defaultValue = $columnAnnotations->getNamedParameter("default")
+                ?? $columnAnnotations->getNamedParameter("defaultValue");
+
             if ($defaultValue !== null || $columnAnnotations->getNamedParameter("nullable")) {
                 $defaultValues[$columnName] = $defaultValue;
             }
