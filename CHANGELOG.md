@@ -2,6 +2,20 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
+## [Unreleased](https://github.com/phalcon/phalcon/releases/tag/vx.x.x) (2026-xx-xx)
+
+### Changed
+
+### Added
+
+### Fixed
+
+- `Phalcon\Mvc\View::partial()` and `Phalcon\Mvc\View\Simple::render()` dropping a `..` path segment instead of resolving it. [#17606](https://github.com/phalcon/cphalcon/issues/17606) [[doc]](https://docs.phalcon.io/5.22/views/)
+- `Phalcon\Mvc\View::partial()` not detecting a Windows absolute path (`C:\...`) as absolute. [#17606](https://github.com/phalcon/cphalcon/issues/17606) [[doc]](https://docs.phalcon.io/5.22/views/)
+
+### Removed
+
+
 ## [6.0.0 RC 2](https://github.com/phalcon/phalcon/releases/tag/v6.0.0RC2) (2026-09-22)
 
 ### Changed
