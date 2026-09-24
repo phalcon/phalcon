@@ -675,8 +675,17 @@ abstract class MetaData extends Injectable implements MetaDataInterface
          */
         $adapter = $this->adapter;
 
-        /** @var mvc_metadata_index|null */
-        return $adapter->get($key);
+        $data = $adapter->get($key);
+
+        /**
+         * A cached value that is not an array is a cache miss
+         */
+        if (false === is_array($data)) {
+            return null;
+        }
+
+        /** @var mvc_metadata_index $data */
+        return $data;
     }
 
     /**
@@ -995,7 +1004,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         $data      = $this->read($prefixKey);
 
         /** @var mvc_metadata_column_maps|null $data */
-        if ($data !== null) {
+        if (true === is_array($data)) {
             $this->columnMap[$key] = $data;
 
             return true;
@@ -1045,7 +1054,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                 $data      = $this->read($prefixKey);
 
                 /** @var mvc_metadata_model|null $data */
-                if ($data !== null) {
+                if (true === is_array($data)) {
                     $this->metaData[$key] = $data;
                 } else {
                     /**

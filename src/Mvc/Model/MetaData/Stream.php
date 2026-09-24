@@ -22,6 +22,9 @@ use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_key_exists;
+use function getmypid;
+use function is_array;
+use function rename;
 use function var_export;
 
 /**
@@ -81,8 +84,22 @@ class Stream extends MetaData
         if (false === $this->phpFileExists($path)) {
             return null;
         }
-        /** @var mvc_metadata_index */
-        return require $path;
+
+        /**
+         * A file that is not valid is a cache miss
+         */
+        try {
+            $data = require $path;
+        } catch (\ParseError) {
+            return null;
+        }
+
+        if (false === is_array($data)) {
+            return null;
+        }
+
+        /** @var mvc_metadata_index $data */
+        return $data;
     }
 
     /**
@@ -103,11 +120,19 @@ class Stream extends MetaData
          */
         $option = Settings::get('orm.exception_on_failed_metadata_save');
         try {
-            $path = $this->getFilePath($key);
+            $path    = $this->getFilePath($key);
+            $tmpPath = $path . '.tmp.' . (string) getmypid();
 
+            /**
+             * Write to a temporary file, then move it into place with one
+             * rename(). Other processes then never read a partial file.
+             */
             if (
-                false === $this->phpFilePutContents($path, "<?php return " . var_export($data, true) . "; ")
+                false === $this->phpFilePutContents($tmpPath, "<?php return " . var_export($data, true) . "; ")
             ) {
+                $this->throwWriteException($option);
+            } elseif (false === rename($tmpPath, $path)) {
+                $this->phpUnlink($tmpPath);
                 $this->throwWriteException($option);
             }
         } catch (\Exception) {
