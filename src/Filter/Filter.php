@@ -156,9 +156,10 @@ class Filter implements FilterInterface
      */
     public function __call(string $name, array $args)
     {
+        /** @var callable $sanitizer */
         $sanitizer = $this->get($name);
 
-        return call_user_func_array([$sanitizer, "__invoke"], $args);
+        return call_user_func_array($sanitizer, $args);
     }
 
     /**
@@ -203,7 +204,7 @@ class Filter implements FilterInterface
      * Get a service. If it is not in the mapper array, create a new object,
      * set it and then return it.
      *
-     * @phpstan-return Sanitizer
+     * @phpstan-return callable-array|callable-object|Sanitizer
      *
      * @throws Exception
      */
@@ -303,7 +304,7 @@ class Filter implements FilterInterface
     /**
      * Set a new service to the mapper array
      *
-     * @phpstan-param class-string<Sanitizer>|Sanitizer $service
+     * @phpstan-param callable-array|callable-object|class-string<Sanitizer>|Sanitizer $service
      */
     public function set(string $name, mixed $service): void
     {
@@ -325,9 +326,9 @@ class Filter implements FilterInterface
     }
 
     /**
-     * @phpstan-param class-string<Sanitizer>|Sanitizer $definition
+     * @phpstan-param callable-array|callable-object|class-string<Sanitizer>|Sanitizer $definition
      *
-     * @phpstan-return Sanitizer
+     * @phpstan-return callable-array|callable-object|Sanitizer
      */
     private function createInstance(mixed $definition)
     {
@@ -495,10 +496,11 @@ class Filter implements FilterInterface
             return $value;
         }
 
+        /** @var callable $sanitizerObject */
         $sanitizerObject = $this->get($sanitizerName);
         $params          = array_merge([$value], $sanitizerParams);
 
-        return call_user_func_array([$sanitizerObject, "__invoke"], $params);
+        return call_user_func_array($sanitizerObject, $params);
     }
 
     /**

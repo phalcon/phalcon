@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Filter\Filter;
 use Closure;
 use Phalcon\Filter\Filter;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Tests\Support\Filter\CallableFilter;
 use Phalcon\Tests\Support\Service\HelloService;
 
 final class GetSetHasTest extends AbstractUnitTestCase
@@ -34,6 +35,22 @@ final class GetSetHasTest extends AbstractUnitTestCase
 
         $actual = $locator->trim('  hello world  ');
         $this->assertSame('hello world', $actual);
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/cphalcon/issues/17610
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-09-28
+     */
+    public function testFilterFilterCallCallable(): void
+    {
+        $locator = new Filter();
+        $locator->set('prefix', [new CallableFilter(), 'prefix']);
+
+        $expected = 'ok:admin';
+        $actual   = $locator->prefix('admin');
+        $this->assertSame($expected, $actual);
     }
 
     /**
