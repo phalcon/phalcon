@@ -302,6 +302,7 @@ class Route implements RouteInterface
         $notValid         = false;
         $parenthesesCount = 0;
         $prevCh           = '\0';
+        $runStart         = -1;
 
         if (strlen($pattern) === 0) {
             return false;
@@ -426,6 +427,15 @@ class Route implements RouteInterface
             }
 
             if ($bracketCount > 0) {
+                /**
+                 * A character in braces does not go into the route. Append
+                 * the open run of plain characters first.
+                 */
+                if ($runStart >= 0) {
+                    $route   .= substr($pattern, $runStart, $cursor - $runStart);
+                    $runStart = -1;
+                }
+
                 $intermediate++;
             } else {
                 if (
@@ -434,12 +444,31 @@ class Route implements RouteInterface
                         $ch === '|' ||
                         $ch === '#')
                 ) {
-                    $route .= '\\';
+                    /**
+                     * Append the open run, then the escape character. The
+                     * escaped character starts a new run.
+                     */
+                    if ($runStart >= 0) {
+                        $route .= substr($pattern, $runStart, $cursor - $runStart);
+                    }
+
+                    $route   .= '\\';
+                    $runStart = $cursor;
                 }
 
-                $route  .= $ch;
+                if ($runStart < 0) {
+                    $runStart = $cursor;
+                }
+
                 $prevCh = $ch;
             }
+        }
+
+        /**
+         * Append the last run of plain characters.
+         */
+        if ($runStart >= 0) {
+            $route .= substr($pattern, $runStart);
         }
 
         return [$route, $matches];
