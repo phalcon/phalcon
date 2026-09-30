@@ -219,8 +219,12 @@ class Di extends stdClass implements DiInterface
             $service  = $this->services[$name];
             $isShared = $service->isShared();
 
-            if (true === $isShared && isset($this->sharedInstances[$name])) {
-                return $this->sharedInstances[$name];
+            if (true === $isShared) {
+                $instance = $this->sharedInstances[$name] ?? null;
+
+                if (null !== $instance) {
+                    return $instance;
+                }
             }
         }
 
@@ -372,12 +376,17 @@ class Di extends stdClass implements DiInterface
          */
         $name = $this->resolveAlias($name);
 
-        if (!isset($this->sharedInstances[$name])) {
-            // Store the instance in the shared instances cache.
-            $this->sharedInstances[$name] = $this->get($name, $parameters);
+        $instance = $this->sharedInstances[$name] ?? null;
+
+        if (null !== $instance) {
+            return $instance;
         }
 
-        return $this->sharedInstances[$name];
+        // Store the instance in the shared instances cache.
+        $instance                     = $this->get($name, $parameters);
+        $this->sharedInstances[$name] = $instance;
+
+        return $instance;
     }
 
     /**

@@ -40,6 +40,8 @@ use Phalcon\Filter\Sanitize\UpperFirst;
 use Phalcon\Filter\Sanitize\UpperWords;
 use Phalcon\Filter\Sanitize\Url;
 
+use function array_diff_key;
+use function array_replace;
 use function call_user_func_array;
 use function is_array;
 use function is_string;
@@ -320,8 +322,10 @@ class Filter implements FilterInterface
      */
     protected function init(array $mapper): void
     {
-        foreach ($mapper as $name => $service) {
-            $this->set($name, $service);
+        $this->mapper = array_replace($this->mapper, $mapper);
+
+        if (!empty($this->services)) {
+            $this->services = array_diff_key($this->services, $mapper);
         }
     }
 

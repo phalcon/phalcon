@@ -20,7 +20,7 @@ use Phalcon\Di\FactoryDefault;
 use Phalcon\Di\Service;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
-use Phalcon\Filter\FilterFactory;
+use Phalcon\Filter\Filter;
 use Phalcon\Html\Escaper;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
@@ -47,14 +47,23 @@ class Cli extends FactoryDefault
     {
         parent::__construct();
 
-        $filter = new FilterFactory();
-
         $this->services = [
             'annotations'        => new Service(AnnotationsMemory::class, true),
             'dispatcher'         => new Service(Dispatcher::class, true),
             'escaper'            => new Service(Escaper::class, true),
             'eventsManager'      => new Service(EventsManager::class, true),
-            'filter'             => new Service($filter->newInstance(), true),
+            'filter'             => new Service(
+                [
+                    'className' => Filter::class,
+                    'arguments' => [
+                        [
+                            'type'  => 'parameter',
+                            'value' => Filter::getDefaultMapper(),
+                        ],
+                    ],
+                ],
+                true
+            ),
             'helper'             => new Service(HelperFactory::class, true),
             'modelsManager'      => new Service(ModelsManager::class, true),
             'modelsMetadata'     => new Service(MetadataMemory::class, true),

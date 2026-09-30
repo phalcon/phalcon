@@ -19,7 +19,6 @@ use Phalcon\Encryption\Crypt;
 use Phalcon\Encryption\Security;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Filter\Filter;
-use Phalcon\Filter\FilterFactory;
 use Phalcon\Flash\Direct;
 use Phalcon\Flash\Session;
 use Phalcon\Html\Escaper;
@@ -75,8 +74,6 @@ class FactoryDefault extends Di
     {
         parent::__construct();
 
-        $filterFactory = new FilterFactory();
-
         $this->services = [
             'annotations'        => new Service(AnnotationsMemory::class, true),
             'assets'             => new Service(
@@ -98,7 +95,18 @@ class FactoryDefault extends Di
             'eventsManager'      => new Service(EventsManager::class, true),
             'flash'              => new Service(Direct::class, true),
             'flashSession'       => new Service(Session::class, true),
-            'filter'             => new Service($filterFactory->newInstance(), true),
+            'filter'             => new Service(
+                [
+                    'className' => Filter::class,
+                    'arguments' => [
+                        [
+                            'type'  => 'parameter',
+                            'value' => Filter::getDefaultMapper(),
+                        ],
+                    ],
+                ],
+                true
+            ),
             'helper'             => new Service(HelperFactory::class, true),
             'settings'           => new Service(Settings::class, true),
             'modelsManager'      => new Service(ModelsManager::class, true),
