@@ -331,7 +331,11 @@ class Route implements RouteInterface
                         $regexp   = null;
                         $item     = substr($pattern, $marker, $cursor - $marker);
 
-                        $arrayItem = str_split($item);
+                        /**
+                         * Before PHP 8.2, str_split('') returns [''] and not
+                         * []. An empty item has no characters to check.
+                         */
+                        $arrayItem = '' === $item ? [] : str_split($item);
                         foreach ($arrayItem as $cursorVar => $char) {
                             if ($char == '\0') {
                                 break;
