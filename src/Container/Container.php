@@ -115,10 +115,15 @@ class Container implements Collection, Enumerable
     public function __construct()
     {
         $this->resolver   = new Resolver();
+
+        /**
+         * The checks of the processors exclude each other. Most
+         * definitions are class names, so the string processor is first.
+         */
         $this->processors = [
-            new ObjectProcessor(),
-            new ClosureProcessor(),
             new StringProcessor(),
+            new ClosureProcessor(),
+            new ObjectProcessor(),
         ];
     }
 
@@ -523,18 +528,24 @@ class Container implements Collection, Enumerable
     private function detectCircularAlias(string $alias, string $target): void
     {
         $current = $target;
-        $seen    = [];
+        $seen    = null;
 
         while (true) {
             if ($current === $alias) {
                 throw new CircularAliasFound($alias);
             }
 
-            if (array_key_exists($current, $seen)) {
+            if (!array_key_exists($current, $this->aliases)) {
                 break;
             }
 
-            if (!array_key_exists($current, $this->aliases)) {
+            /**
+             * Create the list of names at the first step only. Most
+             * names are not aliases and the loop stops above.
+             */
+            if ($seen === null) {
+                $seen = [];
+            } elseif (array_key_exists($current, $seen)) {
                 break;
             }
 
@@ -606,11 +617,17 @@ class Container implements Collection, Enumerable
      */
     private function resolveAlias(string $name): string
     {
-        $seen    = [];
+        $seen    = null;
         $current = $name;
 
         while (array_key_exists($current, $this->aliases)) {
-            if (array_key_exists($current, $seen)) {
+            /**
+             * Create the list of names at the first step only. Most
+             * names are not aliases and the loop does not run.
+             */
+            if ($seen === null) {
+                $seen = [];
+            } elseif (array_key_exists($current, $seen)) {
                 throw new CircularAliasFound($name);
             }
 
