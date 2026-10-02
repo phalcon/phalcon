@@ -1160,7 +1160,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         /**
          * Combined-regex fast path: one preg_match per chunk replaces N
          * per-route preg_matches. Disabled when events are attached or the
-         * bucket has hostname constraints or named groups.
+         * bucket has hostname constraints, named groups or a "|" outside a
+         * group.
          */
         if (
             !$routeFound
@@ -2375,7 +2376,19 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     break;
                 }
 
-                $combinedBody                       = $combinedBodyMatch[1];
+                $combinedBody = $combinedBodyMatch[1];
+
+                /**
+                 * A "|" outside a group splits the route into two alternatives
+                 * of the chunk. Both are anchored at the two ends, and only the
+                 * last one has the label. The bucket is not combined.
+                 */
+                if (str_contains($combinedBody, '|') && $this->hasTopLevelAlternation($combinedBody)) {
+                    $combinedRegexDisabled[$method] = true;
+                    $combinedAlternatives           = [];
+                    break;
+                }
+
                 $combinedAlternatives[]             = $combinedBody . '(*:' . $bucketIdx . ')';
                 $combinedMark[(string) $bucketIdx]  = $bucketIdx;
             }
@@ -2450,5 +2463,69 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $this->combinedRegexMarkMap   = $combinedRegexMarkMap;
         $this->combinedRegexDisabled  = $combinedRegexDisabled;
         $this->methodRoutesDirty      = false;
+    }
+
+    /**
+     * Checks if a regular expression body has a "|" outside a group. The
+     * check skips escaped characters and character classes.
+     */
+    private function hasTopLevelAlternation(string $body): bool
+    {
+        $classLength  = 0;
+        $classNegated = false;
+        $depth        = 0;
+        $escaped      = false;
+        $inClass      = false;
+        $length       = strlen($body);
+
+        for ($index = 0; $index < $length; $index++) {
+            $ch = $body[$index];
+
+            if ($escaped) {
+                $escaped = false;
+
+                if ($inClass) {
+                    $classLength++;
+                }
+
+                continue;
+            }
+
+            if ($ch === '\\') {
+                $escaped = true;
+
+                continue;
+            }
+
+            if ($inClass) {
+                /**
+                 * A "]" directly after "[" or "[^" is a character of the
+                 * class.
+                 */
+                if ($ch === '^' && $classLength === 0 && !$classNegated) {
+                    $classNegated = true;
+                } elseif ($ch === ']' && $classLength > 0) {
+                    $inClass = false;
+                } else {
+                    $classLength++;
+                }
+
+                continue;
+            }
+
+            if ($ch === '[') {
+                $inClass      = true;
+                $classLength  = 0;
+                $classNegated = false;
+            } elseif ($ch === '(') {
+                $depth++;
+            } elseif ($ch === ')') {
+                $depth--;
+            } elseif ($ch === '|' && $depth === 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
