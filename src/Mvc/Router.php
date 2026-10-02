@@ -1087,9 +1087,15 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             ) {
                 $staticBucketMethod = $requestMethod;
             } elseif (
-                isset($this->staticByMethod["*"][$handledUri])
+                !isset($this->candidatesByMethod[$requestMethod])
+                && isset($this->staticByMethod["*"][$handledUri])
                 && !isset($this->staticShadowedByMethod["*"][$handledUri])
             ) {
+                /**
+                 * Only a method with no bucket of its own uses the "*"
+                 * bucket. A method bucket has the "*" routes too, and its
+                 * shadow flags apply.
+                 */
                 $staticBucketMethod = "*";
             }
 
