@@ -1025,6 +1025,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $parts              = [];
         $params             = [];
         $vetoedRoutes       = [];
+        $this->matches      = [];
         $this->wasMatched   = false;
         $this->matchedRoute = null;
 
