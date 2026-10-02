@@ -1149,6 +1149,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
          * per-route preg_matches. Disabled when events are attached or the
          * bucket has hostname constraints.
          */
+        $vetoedRoute = null;
+
         if (
             !$routeFound
             && $this->eventsManager === null
@@ -1188,8 +1190,15 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                         throw new BeforeMatchNotCallable();
                     }
 
+                    /**
+                     * A veto sends the request to the per-route loop. The
+                     * next match can be an earlier-attached route of this
+                     * chunk, which the next chunk does not have.
+                     */
                     if (!$combinedBeforeMatch($handledUri, $combinedRoute, $this)) {
-                        continue;
+                        $vetoedRoute = $combinedRoute;
+
+                        break;
                     }
                 }
 
@@ -1236,6 +1245,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         if (!$routeFound) {
             foreach (array_reverse($candidateRoutes, true) as $routeIdx => $route) {
+                /**
+                 * The fast path called the beforeMatch of this route, and it
+                 * returned false.
+                 */
+                if ($route === $vetoedRoute) {
+                    continue;
+                }
+
                 $routeMeta = $this->routeMeta[$route->getRouteId()];
                 $params    = [];
                 $matches   = null;
