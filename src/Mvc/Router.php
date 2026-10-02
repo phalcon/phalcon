@@ -2411,9 +2411,28 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     $chunkSliceMap[$chunkMarkId] = $combinedMark[$chunkMarkId];
                 }
 
-                $chunkedPatterns[] = '#^(?|' . implode('|', $chunkSlice) . ')$#u';
+                $chunkPattern = '#^(?|' . implode('|', $chunkSlice) . ')$#u';
+
+                /**
+                 * A route pattern that does not compile breaks its chunk, and
+                 * the fast path would go to the next chunk. The per-route loop
+                 * must try the routes of this bucket in order, so the bucket
+                 * is not combined. A chunk that compiles here stays in the
+                 * PCRE cache for handle().
+                 */
+                if (preg_match($chunkPattern, '') === false) {
+                    $combinedRegexDisabled[$method] = true;
+
+                    break;
+                }
+
+                $chunkedPatterns[] = $chunkPattern;
                 $chunkedMarkMaps[] = $chunkSliceMap;
                 $chunkOffset      += self::REGEX_CHUNK_SIZE;
+            }
+
+            if (isset($combinedRegexDisabled[$method])) {
+                continue;
             }
 
             $combinedRegexByMethod[$method] = $chunkedPatterns;
