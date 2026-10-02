@@ -1024,6 +1024,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $routeFound         = false;
         $parts              = [];
         $params             = [];
+        $vetoedRoutes       = [];
         $this->wasMatched   = false;
         $this->matchedRoute = null;
 
@@ -1130,6 +1131,12 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                         $routeFound = $staticBeforeMatch($handledUri, $staticRoute, $this);
 
                         if (!$routeFound) {
+                            /**
+                             * The per-route loop does not call this
+                             * beforeMatch again.
+                             */
+                            $vetoedRoutes[$staticRoute->getRouteId()] = true;
+
                             continue;
                         }
                     }
@@ -1149,8 +1156,6 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
          * per-route preg_matches. Disabled when events are attached or the
          * bucket has hostname constraints.
          */
-        $vetoedRoute = null;
-
         if (
             !$routeFound
             && $this->eventsManager === null
@@ -1196,7 +1201,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                      * chunk, which the next chunk does not have.
                      */
                     if (!$combinedBeforeMatch($handledUri, $combinedRoute, $this)) {
-                        $vetoedRoute = $combinedRoute;
+                        $vetoedRoutes[$combinedRoute->getRouteId()] = true;
 
                         break;
                     }
@@ -1245,15 +1250,17 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
         if (!$routeFound) {
             foreach (array_reverse($candidateRoutes, true) as $routeIdx => $route) {
+                $routeId = $route->getRouteId();
+
                 /**
-                 * The fast path called the beforeMatch of this route, and it
+                 * A fast path called the beforeMatch of this route, and it
                  * returned false.
                  */
-                if ($route === $vetoedRoute) {
+                if (isset($vetoedRoutes[$routeId])) {
                     continue;
                 }
 
-                $routeMeta = $this->routeMeta[$route->getRouteId()];
+                $routeMeta = $this->routeMeta[$routeId];
                 $params    = [];
                 $matches   = null;
 
