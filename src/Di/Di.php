@@ -207,9 +207,12 @@ class Di extends stdClass implements DiInterface
         $instance = null;
 
         /**
-         * Resolve the alias, if any
+         * Resolve the alias, if any. Call resolveAlias() only when the name
+         * has an alias.
          */
-        $name = $this->resolveAlias($name);
+        if (isset($this->aliases[$name])) {
+            $name = $this->resolveAlias($name);
+        }
 
         /**
          * If the service is shared, and it already has a cached instance then
@@ -372,9 +375,12 @@ class Di extends stdClass implements DiInterface
     public function getShared(string $name, mixed $parameters = null): mixed
     {
         /**
-         * Resolve the alias, if any
+         * Resolve the alias, if any. Call resolveAlias() only when the name
+         * has an alias.
          */
-        $name = $this->resolveAlias($name);
+        if (isset($this->aliases[$name])) {
+            $name = $this->resolveAlias($name);
+        }
 
         $instance = $this->sharedInstances[$name] ?? null;
 
@@ -395,9 +401,12 @@ class Di extends stdClass implements DiInterface
     public function has(string $name): bool
     {
         /**
-         * Resolve the alias, if any
+         * Resolve the alias, if any. Call resolveAlias() only when the name
+         * has an alias.
          */
-        $name = $this->resolveAlias($name);
+        if (isset($this->aliases[$name])) {
+            $name = $this->resolveAlias($name);
+        }
 
         return isset($this->services[$name]);
     }
@@ -631,9 +640,12 @@ class Di extends stdClass implements DiInterface
         bool $shared = false
     ): ServiceInterface {
         /**
-         * Resolve the alias, if any
+         * Resolve the alias, if any. Call resolveAlias() only when the name
+         * has an alias.
          */
-        $name = $this->resolveAlias($name);
+        if (isset($this->aliases[$name])) {
+            $name = $this->resolveAlias($name);
+        }
 
         $this->services[$name] = new Service($definition, $shared);
 
