@@ -37,6 +37,7 @@ use function str_replace;
 use function time;
 
 use const E_NOTICE;
+use const E_WARNING;
 use const LOCK_EX;
 use const LOCK_SH;
 
@@ -360,6 +361,10 @@ class Stream extends AbstractAdapter
             return [];
         }
 
+        /**
+         * unserialize() reports a broken payload with E_NOTICE before PHP
+         * 8.3 and with E_WARNING from PHP 8.3.
+         */
         $warning = false;
         set_error_handler(
             function () use (&$warning): bool {
@@ -367,7 +372,7 @@ class Stream extends AbstractAdapter
 
                 return true;
             },
-            E_NOTICE
+            E_NOTICE | E_WARNING
         );
 
         try {
