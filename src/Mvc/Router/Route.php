@@ -33,6 +33,7 @@ use function substr;
  *
  * @phpstan-import-type mvc_router_converters from MvcTypes
  * @phpstan-import-type mvc_router_http_methods from MvcTypes
+ * @phpstan-import-type mvc_router_index_data from MvcTypes
  * @phpstan-import-type mvc_router_named_params from MvcTypes
  * @phpstan-import-type mvc_router_paths from MvcTypes
  * @phpstan-import-type mvc_router_reversed_paths from MvcTypes
@@ -593,20 +594,20 @@ class Route implements RouteInterface
      * compiled host name, the beforeMatch callback and the route id, in
      * this order.
      *
-     * @return array{
-     *     0: mvc_router_http_methods|string|null,
-     *     1: string|null,
-     *     2: string|null,
-     *     3: string|null,
-     *     4: mixed,
-     *     5: string
-     * }
+     * @phpstan-return mvc_router_index_data
      */
     public function getIndexData(): array
     {
+        /**
+         * The constructor calls reConfigure(), which always sets the
+         * compiled pattern.
+         */
+        /** @var string $compiledPattern */
+        $compiledPattern = $this->compiledPattern;
+
         return [
             $this->methods,
-            $this->compiledPattern,
+            $compiledPattern,
             $this->hostname,
             $this->getCompiledHostName(),
             $this->beforeMatch,

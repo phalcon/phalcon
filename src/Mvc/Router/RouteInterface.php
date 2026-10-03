@@ -21,9 +21,10 @@ use Phalcon\Contracts\Mvc\MvcTypes;
  * @phpstan-import-type mvc_router_http_methods from MvcTypes
  * @phpstan-import-type mvc_router_paths from MvcTypes
  * @phpstan-import-type mvc_router_converters from MvcTypes
+ * @phpstan-import-type mvc_router_index_data from MvcTypes
  * @phpstan-import-type mvc_router_reversed_paths from MvcTypes
  *
- * The route class carries these four members, and the router calls them on
+ * The route class carries these members, and the router calls them on
  * every route it holds. They join the interface in the next major; until
  * then the tags below record the contract that all implementations meet.
  *
@@ -31,6 +32,7 @@ use Phalcon\Contracts\Mvc\MvcTypes;
  * @method callable|null         getBeforeMatch()
  * @method string|null           getCompiledHostName()
  * @method mvc_router_converters getConverters()
+ * @method mvc_router_index_data getIndexData()
  * @method callable|null         getMatch()
  */
 interface RouteInterface

@@ -104,6 +104,14 @@ use Phalcon\Mvc\Router\RouteInterface;
  *     hostRegex: string|null,
  *     beforeMatch: callable|null,
  * }
+ * @phpstan-type mvc_router_index_data array{
+ *     0: mvc_router_http_methods|string|null,
+ *     1: string,
+ *     2: string|null,
+ *     3: string|null,
+ *     4: callable|null,
+ *     5: string,
+ * }
  * @phpstan-type mvc_router_method_buckets array<string, list<RouteInterface>>
  * @phpstan-type mvc_router_static_buckets array<string, array<string, list<RouteInterface>>>
  * @phpstan-type mvc_router_shadow_buckets array<string, array<string, bool>>
