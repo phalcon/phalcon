@@ -1055,10 +1055,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
          * with "*" routes at rebuild time). Routes are traversed in reversed
          * order (last registered wins).
          */
-        $requestMethod   = $request->getMethod();
-        $candidateRoutes = $this->candidatesByMethod[$requestMethod]
-            ?? $this->candidatesByMethod["*"]
-            ?? [];
+        $requestMethod = $request->getMethod();
+
+        /**
+         * The combined-regex fast path below reads the bucket that gave the
+         * candidates. A method with no bucket of its own uses the "*" bucket.
+         */
+        $candidateMethod = isset($this->candidatesByMethod[$requestMethod]) ? $requestMethod : "*";
+        $candidateRoutes = $this->candidatesByMethod[$candidateMethod] ?? [];
 
         /**
          * Resolve the current hostname once if any hostname-constrained
@@ -1167,11 +1171,11 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         if (
             !$routeFound
             && $this->eventsManager === null
-            && !isset($this->combinedRegexDisabled[$requestMethod])
-            && isset($this->combinedRegexByMethod[$requestMethod])
+            && !isset($this->combinedRegexDisabled[$candidateMethod])
+            && isset($this->combinedRegexByMethod[$candidateMethod])
         ) {
-            $combinedChunks   = $this->combinedRegexByMethod[$requestMethod];
-            $combinedMarkMaps = $this->combinedRegexMarkMap[$requestMethod];
+            $combinedChunks   = $this->combinedRegexByMethod[$candidateMethod];
+            $combinedMarkMaps = $this->combinedRegexMarkMap[$candidateMethod];
 
             foreach ($combinedChunks as $combinedChunkIdx => $combinedChunk) {
                 $combinedMatchesLocal = [];
@@ -2197,16 +2201,20 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         $routeHosts    = [];
 
         foreach ($this->routes as $routeIndex => $route) {
-            $methods          = $route->getHttpMethods();
-            $candidatePattern = $route->getCompiledPattern();
-            $candidateHost    = $route->getHostname();
+            /**
+             * One call for the data of the route.
+             */
+            $routeData        = $route->getIndexData();
+            $methods          = $routeData[0];
+            $candidatePattern = $routeData[1];
+            $candidateHost    = $routeData[2];
 
-            $routeMeta[$route->getRouteId()] = [
+            $routeMeta[$routeData[5]] = [
                 "pattern"     => $candidatePattern,
                 "isRegex"     => str_contains($candidatePattern, "^"),
                 "hostname"    => $candidateHost,
-                "hostRegex"   => $route->getCompiledHostName(),
-                "beforeMatch" => $route->getBeforeMatch(),
+                "hostRegex"   => $routeData[3],
+                "beforeMatch" => $routeData[4],
             ];
 
             $routePatterns[$routeIndex] = $candidatePattern;
@@ -2364,20 +2372,35 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     continue;
                 }
 
-                $combinedBodyMatch = [];
-
                 /**
-                 * A named group disables the bucket: in a (?|...) group two
-                 * names on one group number do not compile, and a name of one
-                 * route goes into the matches of another route.
+                 * The pattern must have the shape "#^<body>$#u", the shape of
+                 * the compiled route patterns. Another shape disables the
+                 * bucket.
                  */
-                if (!preg_match('/^#\\^(?!.*\\(\\?(?:P?<[^=!]|\'))(.+)\\$#u$/', $bucketPattern, $combinedBodyMatch)) {
+                if (!str_starts_with($bucketPattern, '#^') || !str_ends_with($bucketPattern, '$#u')) {
                     $combinedRegexDisabled[$method] = true;
                     $combinedAlternatives           = [];
                     break;
                 }
 
-                $combinedBody = $combinedBodyMatch[1];
+                $combinedBody = substr($bucketPattern, 2, -3);
+
+                /**
+                 * An empty body, a body on more than one line or a named group
+                 * disables the bucket. In a (?|...) group two names on one
+                 * group number do not compile, and a name of one route goes
+                 * into the matches of another route. A named group starts with
+                 * "(?", so the regular expression runs only for such a body.
+                 */
+                if (
+                    $combinedBody === ''
+                    || str_contains($combinedBody, "\n")
+                    || (str_contains($combinedBody, '(?') && preg_match('/\\(\\?(?:P?<[^=!]|\')/', $combinedBody))
+                ) {
+                    $combinedRegexDisabled[$method] = true;
+                    $combinedAlternatives           = [];
+                    break;
+                }
 
                 /**
                  * A "|" outside a group splits the route into two alternatives
