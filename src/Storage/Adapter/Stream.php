@@ -375,18 +375,14 @@ class Stream extends AbstractAdapter
             E_NOTICE | E_WARNING
         );
 
-        try {
-            /**
-             * The payload is only ever a metadata array (the stored value is a
-             * nested serialized string). Refuse to build any object so a
-             * crafted cache file cannot fire magic methods on read (CWE-502).
-             *
-             * @var false|storage_stream_payload $data
-             */
-            $data = unserialize($payload, ['allowed_classes' => false]);
-        } catch (\ValueError $e) {
-            $data = [];
-        }
+        /**
+         * The payload is only ever a metadata array (the stored value is a
+         * nested serialized string). Refuse to build any object so a crafted
+         * cache file cannot fire magic methods on read (CWE-502).
+         *
+         * @var false|storage_stream_payload $data
+         */
+        $data = unserialize($payload, ['allowed_classes' => false]);
 
         restore_error_handler();
 
