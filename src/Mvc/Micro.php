@@ -277,8 +277,27 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     public function getRouter(): RouterInterface
     {
         if (null === $this->router) {
-            /** @var RouterInterface $sharedRouter */
-            $sharedRouter = $this->getSharedService("router");
+            $this->checkDiContainer();
+
+            /** @var DiInterface $container */
+            $container = $this->container;
+
+            /**
+             * Get the default router service (the Router class name) without
+             * its two default routes. clear() removes them anyway. Get all
+             * other definitions as before.
+             */
+            if (
+                $container->has("router") &&
+                $container->getService("router")->getDefinition() === Router::class
+            ) {
+                /** @var RouterInterface $sharedRouter */
+                $sharedRouter = $container->getShared("router", [false]);
+            } else {
+                /** @var RouterInterface $sharedRouter */
+                $sharedRouter = $this->getSharedService("router");
+            }
+
             $this->router = $sharedRouter;
 
             /**
