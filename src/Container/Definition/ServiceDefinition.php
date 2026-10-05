@@ -103,7 +103,9 @@ class ServiceDefinition
      */
     public function addExtender(callable $extender): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->extenders[] = $extender;
 
         return $this;
@@ -116,7 +118,9 @@ class ServiceDefinition
      */
     public function addTag(string $tag): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
 
         if (!in_array($tag, $this->tags, true)) {
             $this->tags[] = $tag;
@@ -338,7 +342,9 @@ class ServiceDefinition
      */
     public function setArgument(mixed $param, mixed $value): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->arguments[$param] = $value;
 
         return $this;
@@ -351,7 +357,9 @@ class ServiceDefinition
      */
     public function setClass(string $className): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->className = $className;
 
         return $this;
@@ -377,7 +385,9 @@ class ServiceDefinition
      */
     public function setExtenders(array $extenders): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
 
         foreach ($extenders as $key => $extender) {
             if (!is_callable($extender)) {
@@ -398,7 +408,9 @@ class ServiceDefinition
      */
     public function setFactory(callable $factory): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->factory = $factory;
 
         return $this;
@@ -411,7 +423,9 @@ class ServiceDefinition
      */
     public function setIsCacheable(bool $isCacheable): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->isCacheable = $isCacheable;
 
         return $this;
@@ -424,7 +438,9 @@ class ServiceDefinition
      */
     public function setLifetime(string $lifetime): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->lifetime = $lifetime;
 
         return $this;
@@ -437,7 +453,9 @@ class ServiceDefinition
      */
     public function unsetClass(): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->className = null;
 
         return $this;
@@ -450,7 +468,9 @@ class ServiceDefinition
      */
     public function unsetExtenders(): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->extenders = [];
 
         return $this;
@@ -463,14 +483,17 @@ class ServiceDefinition
      */
     public function unsetFactory(): static
     {
-        $this->checkFrozen();
+        if ($this->frozen) {
+            $this->checkFrozen();
+        }
         $this->factory = null;
 
         return $this;
     }
 
     /**
-     * Check if frozen
+     * Check if frozen. The setters call this method only when the
+     * definition is frozen: the method call costs more than the check.
      *
      * @throws FrozenDefinition
      */
