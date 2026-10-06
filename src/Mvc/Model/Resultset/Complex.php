@@ -173,6 +173,12 @@ class Complex extends Resultset
         $dirtyState = 0;
 
         /**
+         * The first hydrated model of the row reads the late state binding
+         * setting. The next models of the row use the same value.
+         */
+        $lateStateBinding = null;
+
+        /**
          * Create every record according to the column types
          */
         /** @var array<string, mixed> $columnTypes */
@@ -233,7 +239,11 @@ class Complex extends Resultset
                     // Check if the resultset must keep snapshots
                     $keepSnapshots = $column["keepSnapshots"] ?? false;
 
-                    if (Settings::get("orm.late_state_binding")) {
+                    if ($lateStateBinding === null) {
+                        $lateStateBinding = Settings::get("orm.late_state_binding");
+                    }
+
+                    if ($lateStateBinding) {
                         if ($column["instance"] instanceof Model) {
                             $modelName = get_class($column["instance"]);
                         } else {
