@@ -367,7 +367,13 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function sendHeaders(): bool | ResponseInterface
     {
-        if (false === $this->fireManagerEvent('response:beforeSendHeaders')) {
+        /**
+         * Fire the events only when an events manager is set. With no events
+         * manager, fireManagerEvent() does nothing.
+         */
+        $eventsManager = $this->eventsManager;
+
+        if (null !== $eventsManager && false === $this->fireManagerEvent('response:beforeSendHeaders')) {
             return false;
         }
 
@@ -376,7 +382,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
          */
         $result = $this->headers->send();
 
-        if (true === $result) {
+        if (true === $result && null !== $eventsManager) {
             $this->fireManagerEvent('response:afterSendHeaders');
         }
 
