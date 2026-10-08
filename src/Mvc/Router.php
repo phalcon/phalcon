@@ -7,6 +7,14 @@
  *
  * For the full copyright and license information, please view the LICENSE.txt
  * file that was distributed with this source code.
+ *
+ * Additional enhancements inspired by FastRoute and Symfony
+ *
+ * @link    https://github.com/nikic/FastRoute
+ * @license https://github.com/nikic/FastRoute/blob/master/LICENSE
+ * @link    https://github.com/symfony/routing
+ * @license https://github.com/symfony/routing/blob/8.1/LICENSE
+ * @link    https://github.com/Jurigag/fast-micro-router-phalcon
  */
 
 declare(strict_types=1);

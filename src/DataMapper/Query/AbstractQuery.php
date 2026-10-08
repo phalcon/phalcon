@@ -11,7 +11,7 @@
  * Implementation of this file has been influenced by AtlasPHP
  *
  * @link    https://github.com/atlasphp/Atlas.Query
- * @license https://github.com/atlasphp/Atlas.Qyert/blob/1.x/LICENSE.md
+ * @license https://github.com/atlasphp/Atlas.Query/blob/1.x/LICENSE.md
  */
 
 declare(strict_types=1);
