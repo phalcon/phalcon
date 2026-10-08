@@ -1459,13 +1459,17 @@ class Query implements QueryInterface, InjectionAwareInterface
          * ":APL01") cannot corrupt the longer one. A callback keeps the value
          * literal, avoiding preg_replace back-reference expansion of a "$" or
          * "\" inside the RawValue.
+         *
+         * With zero or one wildcard, the sort cannot change the order.
          */
-        usort(
-            $rawWildcards,
-            function ($a, $b) {
-                return strlen((string) $b) - strlen((string) $a);
-            }
-        );
+        if (count($rawWildcards) > 1) {
+            usort(
+                $rawWildcards,
+                function ($a, $b) {
+                    return strlen((string) $b) - strlen((string) $a);
+                }
+            );
+        }
 
         foreach ($rawWildcards as $wildcard) {
             /** @var RawValue $rawWildcardValue */

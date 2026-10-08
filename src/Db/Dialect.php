@@ -34,7 +34,10 @@ use function in_array;
 use function is_array;
 use function is_string;
 use function range;
+use function str_contains;
+use function str_ends_with;
 use function str_replace;
+use function str_starts_with;
 use function strlen;
 use function strtoupper;
 use function trim;
@@ -140,7 +143,29 @@ abstract class Dialect implements DialectInterface
             return $input;
         }
 
-        $parts    = explode(".", trim($input, $escapeChar));
+        $trimmed = trim($input, $escapeChar);
+
+        /**
+         * A name with no escape character, no "*" and no empty part: put the
+         * escape character on the two sides of each part with one
+         * str_replace(). The result is the same as the result of the loop
+         * below, and no array is necessary.
+         */
+        if (
+            "" !== $escapeChar &&
+            "" !== $trimmed &&
+            true !== str_contains($trimmed, $escapeChar) &&
+            true !== str_contains($trimmed, "*") &&
+            true !== str_contains($trimmed, "..") &&
+            true !== str_starts_with($trimmed, ".") &&
+            true !== str_ends_with($trimmed, ".")
+        ) {
+            return $escapeChar
+                . str_replace(".", $escapeChar . "." . $escapeChar, $trimmed)
+                . $escapeChar;
+        }
+
+        $parts    = explode(".", $trimmed);
         $newParts = $parts;
         foreach ($parts as $key => $part) {
             if ("" === $escapeChar || "" === $part || "*" === $part) {
@@ -257,6 +282,8 @@ abstract class Dialect implements DialectInterface
         if (!isset($column["type"])) {
             /**
              * The index "0" is the column field
+             *
+             * @var array<array-key, mixed>|string $columnField
              */
             $columnField = $column[0];
             if (is_array($columnField)) {
@@ -269,10 +296,38 @@ abstract class Dialect implements DialectInterface
                     "type" => "all",
                 ];
             } else {
-                $columnExpression = [
-                    "type" => "qualified",
-                    "name" => $columnField,
-                ];
+                /**
+                 * A plain column. prepareQualified() gives the same SQL as
+                 * getSqlExpression() for a "qualified" expression. Thus, no
+                 * expression array is necessary.
+                 *
+                 * The index "1" is the domain column. An empty domain is no
+                 * domain.
+                 *
+                 * @var string $columnDomain
+                 */
+                $columnDomain = $column[1] ?? "";
+                $columnSql    = $this->prepareQualified(
+                    $columnField,
+                    $columnDomain,
+                    $escapeChar
+                );
+
+                /**
+                 * The index "2" is the column alias
+                 */
+                if (isset($column[2]) && $column[2]) {
+                    /** @var string $columnAlias */
+                    $columnAlias = $column[2];
+
+                    return $this->prepareColumnAlias($columnSql, $columnAlias, $escapeChar);
+                }
+
+                /**
+                 * With no alias, prepareColumnAlias() returns the SQL
+                 * unchanged
+                 */
+                return $columnSql;
             }
 
             /**
@@ -293,7 +348,7 @@ abstract class Dialect implements DialectInterface
         /**
          * Resolve column expressions
          */
-        $column = $this->getSqlExpression(
+        $columnSql = $this->getSqlExpression(
             $columnExpression,
             $escapeChar,
             $bindCounts
@@ -308,10 +363,13 @@ abstract class Dialect implements DialectInterface
             /** @var string $columnAlias */
             $columnAlias = (null === $columnAlias) ? $columnExpression["alias"] : $columnAlias;
 
-            return $this->prepareColumnAlias($column, $columnAlias, $escapeChar);
+            return $this->prepareColumnAlias($columnSql, $columnAlias, $escapeChar);
         }
 
-        return $this->prepareColumnAlias($column, "", $escapeChar);
+        /**
+         * With no alias, prepareColumnAlias() returns the SQL unchanged
+         */
+        return $columnSql;
     }
 
     /**
