@@ -52,7 +52,7 @@ jobs:
           token: ${{ github.token }}
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '8.5'
           extensions: ${{ env.EXTENSIONS }}
@@ -129,7 +129,7 @@ jobs:
         uses: ./.github/actions/redis-cluster
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
@@ -232,7 +232,7 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
@@ -340,7 +340,7 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
@@ -447,7 +447,7 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
@@ -539,7 +539,7 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: ${{ matrix.php }}
           extensions: ${{ env.EXTENSIONS }}
@@ -615,7 +615,7 @@ jobs:
           token: ${{ github.token }}
 
       - name: "Setup PHP"
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '8.3'
           extensions: ${{ env.EXTENSIONS }}
