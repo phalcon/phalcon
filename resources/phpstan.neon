@@ -12,11 +12,19 @@ parameters:
     ignoreErrors:
         - "#Unsafe usage of new static#"
         # The bundled phpredis stub declares RedisCluster::flushAll() as taking
-        # a string, while the extension also accepts the [host, port] pairs
+        # a string (an array or a string from PHPStan 2.3), and _masters() as
+        # returning a plain array. The extension accepts the [host, port] pairs
         # that _masters() returns.
         -
-            message: "#Parameter \\#1 \\$key_or_address of method RedisCluster::flushAll\\(\\) expects string, mixed given#"
+            message: "#Parameter \\#1 \\$key_or_address of method RedisCluster::flushAll\\(\\) expects (array\\|)?string, mixed given#"
             path: ../src/Storage/Adapter/RedisCluster.php
+            reportUnmatched: false
+        # The bundled phpredis stub declares the third parameter of
+        # Redis::set() as an options array, while the extension also accepts
+        # an int timeout. doSet() passes the TTL as an int, as in cphalcon.
+        -
+            message: "#Parameter \\#3 \\$options of method Redis::set\\(\\) expects array, int given#"
+            path: ../src/Storage/Adapter/Redis.php
             reportUnmatched: false
         # The bundled stub declares the spl_autoload_register() callback as
         # returning void, while PHP accepts any callable and discards the
@@ -440,6 +448,15 @@ parameters:
                 - ../src/Mvc/View.php
                 - ../src/Mvc/View/Simple.php
                 - ../src/Mvc/View/Engine/Volt/Compiler.php
+            reportUnmatched: false
+        # `compileSource()` resets the compilation state, then calls
+        # `statementList()`, which sets `extendedBlocks` for an `extends`
+        # statement. PHPStan cannot follow that, so it still believes the
+        # property holds the false assigned at the start. The Zephir source
+        # resets the state at the same place.
+        -
+            message: "#PHPDoc tag @var with type array<mixed> is not subtype of native type false#"
+            path: ../src/Mvc/View/Engine/Volt/Compiler.php
             reportUnmatched: false
         # The container is `var` in the Zephir sources, so the `instanceof
         # DiInterface` pair below is a live branch there. In the PHP mirror

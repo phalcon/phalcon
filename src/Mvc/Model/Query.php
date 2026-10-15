@@ -716,6 +716,8 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             /**
              * A valid AST must have a type
+             *
+             * @var mvc_query_ast $ast
              */
             if (isset($ast["type"])) {
                 $type       = $ast["type"];
@@ -4663,6 +4665,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                  * If "alias" is set, the user defined an alias for the column
                  */
                 if (isset($column["alias"])) {
+                    /** @var string $alias */
                     $alias = $column["alias"];
                     /**
                      * The best alias is the one provided by the user
