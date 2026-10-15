@@ -587,26 +587,29 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * sub-directories and absolute paths (CWE-22). A ".." removes the
          * previous segment. At the top level, or at the root of an absolute
          * path, the ".." is dropped. Backslashes are separators on Windows,
-         * so they are normalized first.
+         * so they are normalized first. A path with no "." and no backslash
+         * has no segment to resolve, and it does not change.
          */
-        $segments = [];
-        foreach (explode('/', str_replace('\\', '/', $partialPath)) as $segment) {
-            if ($segment === '.') {
-                continue;
-            }
-
-            if ($segment === '..') {
-                if (count($segments) > 0 && $segments[count($segments) - 1] !== '') {
-                    array_pop($segments);
+        if (str_contains($partialPath, '.') || str_contains($partialPath, '\\')) {
+            $segments = [];
+            foreach (explode('/', str_replace('\\', '/', $partialPath)) as $segment) {
+                if ($segment === '.') {
+                    continue;
                 }
 
-                continue;
+                if ($segment === '..') {
+                    if (count($segments) > 0 && $segments[count($segments) - 1] !== '') {
+                        array_pop($segments);
+                    }
+
+                    continue;
+                }
+
+                $segments[] = $segment;
             }
 
-            $segments[] = $segment;
+            $partialPath = implode('/', $segments);
         }
-
-        $partialPath = implode('/', $segments);
 
         $this->engineRender(
             $this->loadTemplateEngines(),

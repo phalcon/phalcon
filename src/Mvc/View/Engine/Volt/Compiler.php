@@ -169,6 +169,13 @@ class Compiler implements InjectionAwareInterface
     protected mixed $prefix = "";
 
     /**
+     * The virtual path of each template path (see compile())
+     *
+     * @phpstan-var array<string, string>
+     */
+    protected array $virtualPaths = [];
+
+    /**
      * Phalcon\Mvc\View\Engine\Volt\Compiler
      */
     public function __construct(
@@ -296,18 +303,6 @@ class Compiler implements InjectionAwareInterface
      */
     public function compile(string $templatePath, bool $extendsMode = false)
     {
-        /**
-         * Re-initialize some properties already initialized when the object is
-         * cloned
-         */
-        $this->extended       = false;
-        $this->extendedBlocks = false;
-        $this->blocks         = null;
-        $this->level          = 0;
-        $this->foreachLevel   = 0;
-        $this->blockLevel     = 0;
-        $this->exprLevel      = 0;
-
         $compilation = null;
 
         $options = $this->options;
@@ -365,12 +360,22 @@ class Compiler implements InjectionAwareInterface
             if (!empty($compiledPath)) {
                 /**
                  * Create the virtual path replacing the directory separator by
-                 * the compiled separator
+                 * the compiled separator. Keep it for the next calls when the
+                 * template file exists.
                  */
-                $templateSepPath = $this->prepareVirtualPath(
-                    realpath($templatePath),
-                    $compiledSeparator
-                );
+                if (isset($this->virtualPaths[$templatePath])) {
+                    $templateSepPath = $this->virtualPaths[$templatePath];
+                } else {
+                    $realTemplatePath = realpath($templatePath);
+                    $templateSepPath  = $this->prepareVirtualPath(
+                        $realTemplatePath,
+                        $compiledSeparator
+                    );
+
+                    if (is_string($realTemplatePath)) {
+                        $this->virtualPaths[$templatePath] = $templateSepPath;
+                    }
+                }
             } else {
                 $templateSepPath = $templatePath;
             }
@@ -2350,6 +2355,11 @@ class Compiler implements InjectionAwareInterface
     {
         $this->options[$option] = $value;
 
+        /**
+         * The virtual paths use the "separator" option
+         */
+        $this->virtualPaths = [];
+
         return $this;
     }
 
@@ -2363,6 +2373,11 @@ class Compiler implements InjectionAwareInterface
     public function setOptions(array $options): static
     {
         $this->options = $options;
+
+        /**
+         * The virtual paths use the "separator" option
+         */
+        $this->virtualPaths = [];
 
         return $this;
     }
@@ -2389,6 +2404,18 @@ class Compiler implements InjectionAwareInterface
         string $viewCode,
         bool $extendsMode = false
     ): array | string {
+        /**
+         * Reset the compilation state. A clone (extends, include) also gets
+         * the state of its parent.
+         */
+        $this->extended       = false;
+        $this->extendedBlocks = false;
+        $this->blocks         = null;
+        $this->level          = 0;
+        $this->foreachLevel   = 0;
+        $this->blockLevel     = 0;
+        $this->exprLevel      = 0;
+
         /**
          * Check for compilation options
          */
