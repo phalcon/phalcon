@@ -175,9 +175,9 @@ These sponsors and backers support Phalcon and Zephir. To join them, become a sp
 
 ## License
 
-Phalcon is open-source software licensed under the MIT License.
+Phalcon is open-source software licensed under the BSD 3-Clause License.
 
-Copyright © 2020-present, The Phalcon PHP Framework.
+Copyright (c) 2011-present, Phalcon Team.
 
 See the [LICENSE](LICENSE) file or [license.phalcon.io](https://license.phalcon.io) for details.
 
