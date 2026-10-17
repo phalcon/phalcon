@@ -430,49 +430,47 @@ class Compiler implements InjectionAwareInterface
                 $extendsMode
             );
         } else {
-            if ($stat === true) {
-                /**
-                 * Compare modification timestamps to check if the file
-                 * needs to be recompiled
-                 */
-                if (filemtime($templatePath) >= filemtime($compiledTemplatePath)) {
-                    $compilation = $this->compileFile(
-                        $templatePath,
-                        $compiledTemplatePath,
-                        $extendsMode
-                    );
-                } else {
-                    if ($extendsMode) {
+            /**
+             * Compare modification timestamps to check if the file
+             * needs to be recompiled
+             */
+            if ($stat === true && filemtime($templatePath) >= filemtime($compiledTemplatePath)) {
+                $compilation = $this->compileFile(
+                    $templatePath,
+                    $compiledTemplatePath,
+                    $extendsMode
+                );
+            } else {
+                if ($extendsMode) {
+                    /**
+                     * In extends mode we read the file that must
+                     * contains a serialized array of blocks
+                     */
+                    $blocksCode = $this->phpFileGetContents($compiledTemplatePath);
+
+                    if ($blocksCode === false) {
+                        throw new CannotOpenCompiledFile($compiledTemplatePath);
+                    }
+
+                    /**
+                     * Unserialize the array blocks code
+                     */
+                    if ($blocksCode) {
+                        $compilation = unserialize($blocksCode, ['allowed_classes' => false]);
+
                         /**
-                         * In extends mode we read the file that must
-                         * contains a serialized array of blocks
+                         * The cache holds nested arrays only. Anything
+                         * else is a damaged or planted file: recompile.
                          */
-                        $blocksCode = $this->phpFileGetContents($compiledTemplatePath);
-
-                        if ($blocksCode === false) {
-                            throw new CannotOpenCompiledFile($compiledTemplatePath);
+                        if (!is_array($compilation)) {
+                            $compilation = $this->compileFile(
+                                $templatePath,
+                                $compiledTemplatePath,
+                                $extendsMode
+                            );
                         }
-
-                        /**
-                         * Unserialize the array blocks code
-                         */
-                        if ($blocksCode) {
-                            $compilation = unserialize($blocksCode, ['allowed_classes' => false]);
-
-                            /**
-                             * The cache holds nested arrays only. Anything
-                             * else is a damaged or planted file: recompile.
-                             */
-                            if (!is_array($compilation)) {
-                                $compilation = $this->compileFile(
-                                    $templatePath,
-                                    $compiledTemplatePath,
-                                    $extendsMode
-                                );
-                            }
-                        } else {
-                            $compilation = [];
-                        }
+                    } else {
+                        $compilation = [];
                     }
                 }
             }
