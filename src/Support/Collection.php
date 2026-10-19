@@ -26,7 +26,6 @@ use Traversable;
 use function array_key_first;
 use function array_key_last;
 use function array_keys;
-use function array_map;
 use function array_values;
 use function arsort;
 use function asort;
@@ -350,12 +349,20 @@ class Collection implements
      */
     public function jsonSerialize(): array
     {
-        return array_map(
-            function ($value) {
-                return $this->checkSerializable($value);
-            },
-            $this->data
-        );
+        $records = [];
+
+        foreach ($this->data as $key => $value) {
+            if (
+                is_object($value) &&
+                true === method_exists($value, 'jsonSerialize')
+            ) {
+                $records[$key] = $value->jsonSerialize();
+            } else {
+                $records[$key] = $value;
+            }
+        }
+
+        return $records;
     }
 
     /**
@@ -426,9 +433,9 @@ class Collection implements
      */
     public function remove(string $element): void
     {
-        if ($this->has($element)) {
-            $element = $this->processKey($element);
+        $element = $this->processKey($element);
 
+        if (isset($this->lowerKeys[$element])) {
             $value = $this->lowerKeys[$element];
 
             unset($this->lowerKeys[$element]);
@@ -624,7 +631,12 @@ class Collection implements
      */
     protected function setData(string $element, mixed $value): void
     {
-        $this->validateType($value);
+        /**
+         * validateType() does nothing when there is no type.
+         */
+        if (null !== $this->type) {
+            $this->validateType($value);
+        }
 
         $key = $this->processKey($element);
 
@@ -672,17 +684,5 @@ class Collection implements
         if (!$ok) {
             throw new InvalidValueType($this->type, $value);
         }
-    }
-
-    private function checkSerializable(mixed $value): mixed
-    {
-        if (
-            is_object($value) &&
-            true === method_exists($value, 'jsonSerialize')
-        ) {
-            return $value->jsonSerialize();
-        }
-
-        return $value;
     }
 }
