@@ -18,6 +18,7 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Html\TagFactory;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\CallNotSupported;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CannotOpenCompiledFile;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\CorruptedStatementWithData;
@@ -521,11 +522,15 @@ class Compiler implements InjectionAwareInterface
      * Compiles calls to macros
      *
      * @phpstan-param mvc_volt_node $statement
+     *
+     * @throws Exception
      */
     public function compileCall(array $statement, bool $extendsMode): string
     {
-        // Not implemented?
-        return '';
+        throw new CallNotSupported(
+            (string) $statement['file'],
+            (int) $statement['line']
+        );
     }
 
     /**
