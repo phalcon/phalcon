@@ -527,6 +527,7 @@ class Compiler implements InjectionAwareInterface
      */
     public function compileCall(array $statement, bool $extendsMode): string
     {
+        /** @var array{file: string, line: int} $statement */
         throw new CallNotSupported(
             (string) $statement['file'],
             (int) $statement['line']
