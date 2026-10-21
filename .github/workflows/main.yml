@@ -100,8 +100,6 @@ jobs:
         ports:
           - "11300:11300"
 
-    continue-on-error: ${{ matrix.php == '8.6' }}
-
     strategy:
       fail-fast: true
       matrix:
@@ -187,8 +185,6 @@ jobs:
 
     needs:
       - phpcs
-
-    continue-on-error: ${{ matrix.php == '8.6' }}
 
     strategy:
       fail-fast: false
@@ -299,8 +295,6 @@ jobs:
     needs:
       - phpcs
 
-    continue-on-error: ${{ matrix.php == '8.6' }}
-
     strategy:
       fail-fast: false
       matrix:
@@ -410,8 +404,6 @@ jobs:
     needs:
       - phpcs
 
-    continue-on-error: ${{ matrix.php == '8.6' }}
-
     strategy:
       fail-fast: false
       matrix:
@@ -517,8 +509,6 @@ jobs:
 
     needs:
       - phpcs
-
-    continue-on-error: ${{ matrix.php == '8.6' }}
 
     strategy:
       fail-fast: false
