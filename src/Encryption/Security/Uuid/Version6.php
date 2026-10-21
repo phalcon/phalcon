@@ -34,7 +34,7 @@ class Version6 extends AbstractUuid implements TimeBasedUuidInterface
         $nowSec  = time();
         $sec     = $nowSec;
         $nowUsec = intval(
-            round((microtime(true) - doubleval($nowSec)) * 10000000.0)
+            round((microtime(true) - floatval($nowSec)) * 10000000.0)
         );
         $usec    = $nowUsec;
 
