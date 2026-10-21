@@ -37,7 +37,7 @@ use function is_object;
 use function lcfirst;
 use function method_exists;
 use function preg_split;
-use function spl_object_hash;
+use function spl_object_id;
 use function str_contains;
 use function str_ends_with;
 
@@ -383,7 +383,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
             }
 
             // Check if the handler is new (hasn't been initialized).
-            $handlerHash  = spl_object_hash($handler);
+            $handlerHash  = spl_object_id($handler);
             $isNewHandler = !isset($this->handlerHashes[$handlerHash]);
 
             if ($isNewHandler) {

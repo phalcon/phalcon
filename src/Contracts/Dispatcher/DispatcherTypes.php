@@ -25,7 +25,7 @@ namespace Phalcon\Contracts\Dispatcher;
  *     params?: dispatcher_params,
  * }
  * @phpstan-type dispatcher_method_map array<string, string>
- * @phpstan-type dispatcher_handler_hashes array<string, bool>
+ * @phpstan-type dispatcher_handler_hashes array<int, bool>
  * @phpstan-type dispatcher_handler_hooks array{0: bool, 1: bool, 2: bool, 3: bool}
  * @phpstan-type dispatcher_hook_cache array<string, dispatcher_handler_hooks>
  * @phpstan-type dispatcher_bound_models array<array-key, mixed>

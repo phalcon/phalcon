@@ -18,7 +18,7 @@ use Phalcon\Html\Link\Interfaces\LinkInterface;
 
 use function in_array;
 use function is_a;
-use function spl_object_hash;
+use function spl_object_id;
 
 /**
  * @phpstan-import-type link_collection from LinkTypes
@@ -127,12 +127,12 @@ abstract class AbstractLinkProvider
     }
 
     /**
-     * Returns the object hash key
+     * Returns the object id key
      *
      * @phpstan-param object $link
      */
-    protected function getKey(mixed $link): string
+    protected function getKey(mixed $link): int
     {
-        return spl_object_hash($link);
+        return spl_object_id($link);
     }
 }
