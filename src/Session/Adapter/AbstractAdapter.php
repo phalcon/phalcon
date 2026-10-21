@@ -16,9 +16,16 @@ namespace Phalcon\Session\Adapter;
 use Phalcon\Storage\Adapter\AdapterInterface;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use SessionHandlerInterface;
+use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;
 
-abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
+use function bin2hex;
+use function random_bytes;
+
+abstract class AbstractAdapter implements
+    SessionHandlerInterface,
+    SessionIdInterface,
+    SessionUpdateTimestampHandlerInterface
 {
     use GetTrait;
 
@@ -30,6 +37,14 @@ abstract class AbstractAdapter implements SessionHandlerInterface, SessionUpdate
     public function close(): bool
     {
         return true;
+    }
+
+    /**
+     * Create a new session id
+     */
+    public function create_sid(): string // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    {
+        return bin2hex(random_bytes(16));
     }
 
     /**

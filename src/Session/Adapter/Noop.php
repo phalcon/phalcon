@@ -14,7 +14,11 @@ declare(strict_types=1);
 namespace Phalcon\Session\Adapter;
 
 use SessionHandlerInterface;
+use SessionIdInterface;
 use SessionUpdateTimestampHandlerInterface;
+
+use function bin2hex;
+use function random_bytes;
 
 /**
  * Phalcon\Session\Adapter\Noop
@@ -32,7 +36,7 @@ use SessionUpdateTimestampHandlerInterface;
  * $session->setAdapter(new Noop());
  * ```
  */
-class Noop implements SessionHandlerInterface, SessionUpdateTimestampHandlerInterface
+class Noop implements SessionHandlerInterface, SessionIdInterface, SessionUpdateTimestampHandlerInterface
 {
     /**
      * Close
@@ -40,6 +44,14 @@ class Noop implements SessionHandlerInterface, SessionUpdateTimestampHandlerInte
     public function close(): bool
     {
         return true;
+    }
+
+    /**
+     * Create a new session id
+     */
+    public function create_sid(): string // phpcs:ignore PSR1.Methods.CamelCapsMethodName.NotCamelCaps
+    {
+        return bin2hex(random_bytes(16));
     }
 
     /**
