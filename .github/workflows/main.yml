@@ -100,6 +100,8 @@ jobs:
         ports:
           - "11300:11300"
 
+    continue-on-error: ${{ matrix.php == '8.6' }}
+
     strategy:
       fail-fast: true
       matrix:
@@ -109,6 +111,7 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
+          - '8.6'
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -185,6 +188,8 @@ jobs:
     needs:
       - phpcs
 
+    continue-on-error: ${{ matrix.php == '8.6' }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -194,6 +199,7 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
+          - '8.6'
 
     services:
       mariadb:
@@ -293,6 +299,8 @@ jobs:
     needs:
       - phpcs
 
+    continue-on-error: ${{ matrix.php == '8.6' }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -302,6 +310,7 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
+          - '8.6'
 
     services:
       mysql:
@@ -401,6 +410,8 @@ jobs:
     needs:
       - phpcs
 
+    continue-on-error: ${{ matrix.php == '8.6' }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -410,6 +421,7 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
+          - '8.6'
 
     services:
       postgres:
@@ -506,6 +518,8 @@ jobs:
     needs:
       - phpcs
 
+    continue-on-error: ${{ matrix.php == '8.6' }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -515,6 +529,7 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
+          - '8.6'
 
     services:
       redis:
