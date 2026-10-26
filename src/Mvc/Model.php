@@ -5176,8 +5176,9 @@ abstract class Model extends AbstractInjectionAware implements
              * We check if the model have sequences
              */
             $sequenceName = null;
+            $useSequences = (bool) $connection->supportSequences();
 
-            if ($connection->supportSequences()) {
+            if ($useSequences) {
                 if (method_exists($this, "getSequenceName")) {
                     /** @var string $sequenceName */
                     $sequenceName = $this->getSequenceName();
@@ -5199,11 +5200,17 @@ abstract class Model extends AbstractInjectionAware implements
              * used, so calling lastInsertId() would fail on PostgreSQL because
              * currval() requires nextval() to have been called in the session.
              * Reuse the value already present on the model in that case.
+             * Without sequences, lastInsertId() returns the stored id. MySQL
+             * can replace 0 with a generated id.
              */
             /** @var scalar|null $value */
             $value = $this->$attributeField ?? null;
 
-            if ($value !== null && $value !== "") {
+            if (
+                $value !== null &&
+                $value !== "" &&
+                ($useSequences || $value != 0)
+            ) {
                 $lastInsertedId = $value;
             } else {
                 $lastInsertedId = $connection->lastInsertId($sequenceName);
