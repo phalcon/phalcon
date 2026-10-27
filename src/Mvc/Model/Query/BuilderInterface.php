@@ -158,7 +158,7 @@ interface BuilderInterface
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag
      */
-    public function getDistinct(): bool;
+    public function getDistinct(): bool | null;
 
     /**
      * Return the models who makes part of the query

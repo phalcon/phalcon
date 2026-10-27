@@ -652,9 +652,9 @@ class Builder implements BuilderInterface, InjectionAwareInterface
     /**
      * Returns SELECT DISTINCT / SELECT ALL flag
      */
-    public function getDistinct(): bool
+    public function getDistinct(): bool | null
     {
-        /** @var bool $distinct */
+        /** @var bool|null $distinct */
         $distinct = $this->distinct;
 
         return $distinct;

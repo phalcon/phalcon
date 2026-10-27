@@ -555,12 +555,12 @@ class Query implements QueryInterface, InjectionAwareInterface
     public function getSingleResult(
         array $bindParams = [],
         array $bindTypes = []
-    ): ModelInterface {
+    ): ModelInterface | Row | null {
         /**
          * The query is already programmed to return just one row
          */
         if ($this->uniqueRow) {
-            /** @var ModelInterface $singleResult */
+            /** @var ModelInterface|Row|null $singleResult */
             $singleResult = $this->execute($bindParams, $bindTypes);
 
             return $singleResult;
@@ -569,7 +569,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         /** @var ResultsetInterface $resultset */
         $resultset = $this->execute($bindParams, $bindTypes);
 
-        /** @var ModelInterface $firstResult */
+        /** @var ModelInterface|Row|null $firstResult */
         $firstResult = $resultset->getFirst();
 
         return $firstResult;

@@ -58,10 +58,8 @@ use function substr;
  * @phpstan-import-type db_column_names from DbTypes
  * @phpstan-import-type db_describe_row from DbTypes
  * @phpstan-import-type db_error_info from DbTypes
- * @phpstan-import-type db_descriptor from DbTypes
  * @phpstan-import-type db_dsn_defaults from DbTypes
  * @phpstan-import-type db_index_build from DbTypes
- * @phpstan-import-type db_pdo_options from DbTypes
  * @phpstan-import-type db_reference_build from DbTypes
  */
 class Mysql extends PdoAdapter
@@ -96,48 +94,6 @@ class Mysql extends PdoAdapter
                 $reference
             )
         );
-    }
-
-    /**
-     * Constructor for Phalcon\Db\Adapter\Pdo
-     *
-     * @param array $descriptor = [
-     *                          'host' => 'localhost',
-     *                          'port' => '3306',
-     *                          'dbname' => 'blog',
-     *                          'username' => 'sigma'
-     *                          'password' => 'secret'
-     *                          'dialectClass' => null,
-     *                          'options' => [],
-     *                          'dsn' => null,
-     *                          'charset' => 'utf8mb4'
-     *                          ]
-     *
-     * @phpstan-param db_descriptor $descriptor
-     */
-    public function connect(array $descriptor = []): void
-    {
-        $descriptor = !empty($descriptor) ? $descriptor : $this->descriptor;
-
-        /**
-         * Returning numbers as numbers and not strings. If the user already
-         * set this option in the descriptor["options"], we do not have to set
-         * anything
-         *
-         * @var db_pdo_options $options
-         */
-        $options = $descriptor["options"] ?? [];
-
-        if (!isset($options[PDO::ATTR_EMULATE_PREPARES])) {
-            $options[PDO::ATTR_EMULATE_PREPARES] = false;
-        }
-        if (!isset($options[PDO::ATTR_STRINGIFY_FETCHES])) {
-            $options[PDO::ATTR_STRINGIFY_FETCHES] = false;
-        }
-
-        $descriptor["options"] = $options;
-
-        parent::connect($descriptor);
     }
 
     /**
