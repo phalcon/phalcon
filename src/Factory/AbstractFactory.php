@@ -15,7 +15,9 @@ namespace Phalcon\Factory;
 
 use Phalcon\Contracts\Factory\FactoryTypes;
 
+use function array_diff_key;
 use function array_merge;
+use function array_replace;
 
 /**
  * @phpstan-import-type factory_instances from FactoryTypes
@@ -61,12 +63,11 @@ abstract class AbstractFactory extends AbstractConfigFactory
      */
     protected function init(array $services = []): void
     {
-        $adapters = array_merge($this->getServices(), $services);
+        $adapters     = array_merge($this->getServices(), $services);
+        $this->mapper = array_replace($this->mapper, $adapters);
 
-        foreach ($adapters as $name => $service) {
-            $this->mapper[$name] = $service;
-
-            unset($this->services[$name]);
+        if (!empty($this->services)) {
+            $this->services = array_diff_key($this->services, $adapters);
         }
     }
 }
