@@ -592,7 +592,8 @@ class Route implements RouteInterface
      * Returns the data that the router needs for its method index, with
      * one call: the HTTP methods, the compiled pattern, the host name, the
      * compiled host name, the beforeMatch callback and the route id, in
-     * this order.
+     * this order. A route with no host name has no compiled host name, so
+     * there is no getCompiledHostName() call for it.
      *
      * @phpstan-return mvc_router_index_data
      */
@@ -603,13 +604,18 @@ class Route implements RouteInterface
          * compiled pattern.
          */
         /** @var string $compiledPattern */
-        $compiledPattern = $this->compiledPattern;
+        $compiledPattern  = $this->compiledPattern;
+        $compiledHostName = null;
+
+        if ($this->hostname !== null) {
+            $compiledHostName = $this->getCompiledHostName();
+        }
 
         return [
             $this->methods,
             $compiledPattern,
             $this->hostname,
-            $this->getCompiledHostName(),
+            $compiledHostName,
             $this->beforeMatch,
             $this->routeId,
         ];
