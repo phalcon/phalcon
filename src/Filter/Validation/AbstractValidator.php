@@ -17,11 +17,9 @@ use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\FieldNotPrintable;
 use Phalcon\Messages\Message;
-use Phalcon\Support\Helper\Arr\Whitelist;
 use Stringable;
 
 use function array_merge;
-use function current;
 use function get_class;
 use function implode;
 use function is_array;
@@ -70,9 +68,16 @@ abstract class AbstractValidator implements ValidatorInterface
      */
     public function __construct(array $options = [])
     {
-        $template = current(
-            (new Whitelist())($options, ["template", "message", 0])
-        );
+        $template = false;
+
+        // Find the first "template", "message" or 0 key, in the order of the options
+        foreach ($options as $key => $value) {
+            if ($key === "template" || $key === "message" || $key === 0) {
+                $template = $options[$key];
+
+                break;
+            }
+        }
 
         if (is_array($template)) {
             /** @phpstan-var filter_validator_templates $template */
