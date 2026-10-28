@@ -264,7 +264,9 @@ class Memory extends AbstractAdapter
         string $componentName,
         mixed $accessList
     ): bool {
-        $this->checkExists($this->componentsNames, $componentName, 'Component');
+        if (!isset($this->componentsNames[$componentName])) {
+            $this->checkExists($this->componentsNames, $componentName, 'Component');
+        }
 
         if (!is_array($accessList) && !is_string($accessList)) {
             throw new InvalidAccessList();
@@ -303,7 +305,9 @@ class Memory extends AbstractAdapter
         string $roleName,
         mixed $roleToInherits
     ): bool {
-        $this->checkExists($this->roles, $roleName, 'Role', 'role list');
+        if (!isset($this->roles[$roleName])) {
+            $this->checkExists($this->roles, $roleName, 'Role', 'role list');
+        }
 
         if (!isset($this->roleInherits[$roleName])) {
             $this->roleInherits[$roleName] = [];
@@ -790,8 +794,13 @@ class Memory extends AbstractAdapter
         mixed $action,
         mixed $func = null
     ): void {
-        $this->checkExists($this->roles, $roleName, 'Role');
-        $this->checkExists($this->componentsNames, $componentName, 'Component');
+        if (!isset($this->roles[$roleName])) {
+            $this->checkExists($this->roles, $roleName, 'Role');
+        }
+
+        if (!isset($this->componentsNames[$componentName])) {
+            $this->checkExists($this->componentsNames, $componentName, 'Component');
+        }
 
         $accessList = $this->accessList;
 
