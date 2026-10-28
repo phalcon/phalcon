@@ -259,9 +259,11 @@ class Config extends Collection implements ConfigInterface
          * The mixed signature mirrors the untyped Zephir parameter; a
          * collection key is always an int or a string.
          *
+         * validateType() does nothing when there is no type.
+         *
          * @var int|string $element
          */
-        if (!is_array($value)) {
+        if (!is_array($value) && null !== $this->type) {
             $this->validateType($value);
         }
 
