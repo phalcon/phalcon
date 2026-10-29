@@ -138,11 +138,19 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $key = $this->getKeyWithoutPrefix($key);
 
-        $this->fireManagerEvent($this->eventType . ":beforeDecrement", $key);
+        /**
+         * Fire the events only when an events manager is set. With no events
+         * manager, fireManagerEvent() does nothing.
+         */
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeDecrement", $key);
+        }
 
         $result = $this->doDecrement($key, $value);
 
-        $this->fireManagerEvent($this->eventType . ":afterDecrement", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterDecrement", $key);
+        }
 
         return $result;
     }
@@ -154,11 +162,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $key = $this->getKeyWithoutPrefix($key);
 
-        $this->fireManagerEvent($this->eventType . ":beforeDelete", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeDelete", $key);
+        }
 
         $result = $this->doDelete($key);
 
-        $this->fireManagerEvent($this->eventType . ":afterDelete", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterDelete", $key);
+        }
 
         return $result;
     }
@@ -177,11 +189,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
         $keys = $filteredKeys;
 
-        $this->fireManagerEvent($this->eventType . ":beforeDeleteMultiple", $keys);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeDeleteMultiple", $keys);
+        }
 
         $result = $this->doDeleteMultiple($keys);
 
-        $this->fireManagerEvent($this->eventType . ":afterDeleteMultiple", $keys);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterDeleteMultiple", $keys);
+        }
 
         return $result;
     }
@@ -193,11 +209,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $key = $this->getKeyWithoutPrefix($key);
 
-        $this->fireManagerEvent($this->eventType . ":beforeGet", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeGet", $key);
+        }
 
         $result = $this->doGet($key, $defaultValue);
 
-        $this->fireManagerEvent($this->eventType . ":afterGet", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterGet", $key);
+        }
 
         return $result;
     }
@@ -256,11 +276,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $key = $this->getKeyWithoutPrefix($key);
 
-        $this->fireManagerEvent($this->eventType . ":beforeHas", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeHas", $key);
+        }
 
         $result = $this->doHas($key);
 
-        $this->fireManagerEvent($this->eventType . ":afterHas", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterHas", $key);
+        }
 
         return $result;
     }
@@ -272,11 +296,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $key = $this->getKeyWithoutPrefix($key);
 
-        $this->fireManagerEvent($this->eventType . ":beforeIncrement", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeIncrement", $key);
+        }
 
         $result = $this->doIncrement($key, $value);
 
-        $this->fireManagerEvent($this->eventType . ":afterIncrement", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterIncrement", $key);
+        }
 
         return $result;
     }
@@ -292,11 +320,15 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $key = $this->getKeyWithoutPrefix($key);
 
-        $this->fireManagerEvent($this->eventType . ":beforeSet", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":beforeSet", $key);
+        }
 
         $result = $this->doSet($key, $value, $ttl);
 
-        $this->fireManagerEvent($this->eventType . ":afterSet", $key);
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent($this->eventType . ":afterSet", $key);
+        }
 
         return $result;
     }
