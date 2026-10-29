@@ -370,28 +370,23 @@ abstract class AbstractFlash extends AbstractInjectionAware implements FlashInte
      */
     private function getTemplate(string $cssClasses, string $cssIconClasses): string
     {
-        $template   = "<div%divString%>%iconString%%message%</div>" . PHP_EOL;
-        $divString  = "";
-        $iconString = "";
-
         if (!empty($this->customTemplate)) {
             return $this->customTemplate;
         }
 
-        if (!empty($cssClasses)) {
-            $divString = " class=\"%cssClass%\"";
-            if (!empty($cssIconClasses)) {
-                $iconString = "<i class=\"%cssIconClass%\"></i> ";
-            }
+        /**
+         * The default template. The icon part is in the template only when
+         * there are CSS classes and CSS icon classes.
+         */
+        if (empty($cssClasses)) {
+            return "<div>%message%</div>" . PHP_EOL;
         }
 
-        return $this->toInterpolate(
-            $template,
-            [
-                'divString'  => $divString,
-                'iconString' => $iconString,
-            ]
-        );
+        if (empty($cssIconClasses)) {
+            return "<div class=\"%cssClass%\">%message%</div>" . PHP_EOL;
+        }
+
+        return "<div class=\"%cssClass%\"><i class=\"%cssIconClass%\"></i> %message%</div>" . PHP_EOL;
     }
 
     /**
