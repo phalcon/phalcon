@@ -661,16 +661,25 @@ class Memory extends AbstractAdapter
         $funcAccess      = null;
         $roleObject      = null;
 
-        if ($roleName instanceof RoleAwareInterface) {
-            $roleObject = $roleName;
+        /**
+         * toRoleName() and toComponentName() give back a value that is not an
+         * object with no change. Call them only for objects.
+         */
+        if (is_object($roleName)) {
+            if ($roleName instanceof RoleAwareInterface) {
+                $roleObject = $roleName;
+            }
+
+            $roleName = $this->toRoleName($roleName);
         }
 
-        if ($componentName instanceof ComponentAwareInterface) {
-            $componentObject = $componentName;
-        }
+        if (is_object($componentName)) {
+            if ($componentName instanceof ComponentAwareInterface) {
+                $componentObject = $componentName;
+            }
 
-        $roleName      = $this->toRoleName($roleName);
-        $componentName = $this->toComponentName($componentName);
+            $componentName = $this->toComponentName($componentName);
+        }
 
         $this->activeRole      = $roleName;
         $this->activeComponent = $componentName;
