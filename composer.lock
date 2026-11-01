@@ -1341,12 +1341,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/annotations.git",
-                "reference": "9fe4e374b805dafba42128c6d40c4e5c3595bb02"
+                "reference": "4e25dc3f64acab17c5072c8c295da77a3aa09bf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/annotations/zipball/9fe4e374b805dafba42128c6d40c4e5c3595bb02",
-                "reference": "9fe4e374b805dafba42128c6d40c4e5c3595bb02",
+                "url": "https://api.github.com/repos/phalcon/annotations/zipball/4e25dc3f64acab17c5072c8c295da77a3aa09bf7",
+                "reference": "4e25dc3f64acab17c5072c8c295da77a3aa09bf7",
                 "shasum": ""
             },
             "require": {
@@ -1418,7 +1418,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-09-19T02:21:59+00:00"
+            "time": "2026-10-31T03:20:43+00:00"
         },
         {
             "name": "phalcon/cli-options-parser",
@@ -1565,12 +1565,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/phql.git",
-                "reference": "5d446bcc293724e214a04908e134541883f215d2"
+                "reference": "fa5b6388842ab1703425c10014351bfd0f376346"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/phql/zipball/5d446bcc293724e214a04908e134541883f215d2",
-                "reference": "5d446bcc293724e214a04908e134541883f215d2",
+                "url": "https://api.github.com/repos/phalcon/phql/zipball/fa5b6388842ab1703425c10014351bfd0f376346",
+                "reference": "fa5b6388842ab1703425c10014351bfd0f376346",
                 "shasum": ""
             },
             "require": {
@@ -1635,7 +1635,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-10-19T11:04:18+00:00"
+            "time": "2026-10-31T03:30:07+00:00"
         },
         {
             "name": "phalcon/quill",
@@ -1790,12 +1790,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/volt.git",
-                "reference": "2de3d7dde65ea98a785102563a633ecf90e9e8d0"
+                "reference": "4b6631fd4396fe6ff54a08716e00d7807396ab03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phalcon/volt/zipball/2de3d7dde65ea98a785102563a633ecf90e9e8d0",
-                "reference": "2de3d7dde65ea98a785102563a633ecf90e9e8d0",
+                "url": "https://api.github.com/repos/phalcon/volt/zipball/4b6631fd4396fe6ff54a08716e00d7807396ab03",
+                "reference": "4b6631fd4396fe6ff54a08716e00d7807396ab03",
                 "shasum": ""
             },
             "require": {
@@ -1868,7 +1868,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-10-28T09:40:18+00:00"
+            "time": "2026-10-31T03:19:22+00:00"
         },
         {
             "name": "phar-io/manifest",

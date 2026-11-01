@@ -47,7 +47,11 @@
   "autoload": {
     "psr-4": {
       "Phalcon\\": "src/"
-    }
+    },
+    "exclude-from-classmap": [
+      "tests/support/assets/",
+      "tests/_output/"
+    ]
   },
   "autoload-dev": {
     "psr-4": {

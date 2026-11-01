@@ -311,7 +311,9 @@ abstract class AbstractLogger
          * regardless of the level filter so a filtered-out message cannot
          * leave the exclusion armed for the next call.
          */
-        $this->excluded = [];
+        if (!empty($this->excluded)) {
+            $this->excluded = [];
+        }
 
         return true;
     }
