@@ -293,17 +293,26 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
             ) {
                 /** @var RouterInterface $sharedRouter */
                 $sharedRouter = $container->getShared("router", [false]);
+
+                /**
+                 * A new router has no routes, and clear() does not change it.
+                 * Clear only a router with routes, for example a router that
+                 * was resolved before.
+                 */
+                if (!empty($sharedRouter->getRoutes())) {
+                    $sharedRouter->clear();
+                }
             } else {
                 /** @var RouterInterface $sharedRouter */
                 $sharedRouter = $this->getSharedService("router");
+
+                /**
+                 * Clear the set routes if any
+                 */
+                $sharedRouter->clear();
             }
 
             $this->router = $sharedRouter;
-
-            /**
-             * Clear the set routes if any
-             */
-            $sharedRouter->clear();
 
             /**
              * Automatically remove extra slashes
