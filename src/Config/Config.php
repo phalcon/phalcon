@@ -17,7 +17,7 @@ use Phalcon\Config\Exceptions\InvalidMergeData;
 use Phalcon\Contracts\Config\ConfigTypes;
 use Phalcon\Support\Collection;
 
-use function array_shift;
+use function count;
 use function explode;
 use function is_array;
 use function is_object;
@@ -128,38 +128,42 @@ class Config extends Collection implements ConfigInterface
 
         /** @var non-empty-string $delimiter */
         $config = clone $this;
+        $index  = 0;
         $keys   = explode($delimiter, $path);
+        $last   = count($keys) - 1;
 
         /**
-         * `explode()` always yields at least one key, and the `empty($keys)`
-         * test below returns before the list can run out. The loop therefore
-         * only leaves through a `break` or a `return`.
+         * get() gives null for a missing key. Before the last key, a
+         * missing key or an empty value gives the default value.
          */
-        while (true) {
-            $key = array_shift($keys);
-
-            if (true !== $config->has($key)) {
-                break;
-            }
-
-            if (true === empty($keys)) {
-                return $config->get($key);
-            }
-
+        while ($index < $last) {
             /**
              * A leaf value here means the path goes deeper than the data;
              * it fails the same way in the Zephir implementation.
              *
              * @var ConfigInterface|null $config
              */
-            $config = $config->get($key);
+            $config = $config->get($keys[$index]);
 
             if (empty($config)) {
-                break;
+                return $defaultValue;
             }
+
+            $index++;
         }
 
-        return $defaultValue;
+        $key   = $keys[$last];
+        $value = $config->get($key);
+
+        /**
+         * get() gives null for a missing key and for a null value. Only a
+         * missing key gives the default value.
+         */
+        if (null === $value && null !== $defaultValue && true !== $config->has($key)) {
+            return $defaultValue;
+        }
+
+        return $value;
     }
 
     /**
