@@ -20,6 +20,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - Faster `Phalcon\Logger` calls with no excluded adapters. [#17713](https://github.com/phalcon/cphalcon/issues/17713)
 - Faster `Phalcon\Mvc\Micro` requests with the default router service. [#17715](https://github.com/phalcon/cphalcon/issues/17715)
 - Faster `Phalcon\Config\Config::path()`. [#17714](https://github.com/phalcon/cphalcon/issues/17714)
+- `Phalcon\Queue\Consumer\Worker::handleSignal()` now has a second optional parameter, `?array $info`. [#17719](https://github.com/phalcon/cphalcon/issues/17719)
 
 ### Added
 

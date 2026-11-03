@@ -49,9 +49,12 @@ class Worker
     }
 
     /**
-     * Signal handler: requests a graceful stop.
+     * Signal handler: requests a graceful stop. PHP sends the signal
+     * information as the second argument. This method does not use it.
+     *
+     * @param array<string, mixed>|null $info
      */
-    public function handleSignal(int $signal): void
+    public function handleSignal(int $signal, ?array $info = null): void
     {
         $this->consumer->stop();
     }
