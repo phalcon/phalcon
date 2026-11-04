@@ -360,7 +360,7 @@ class Postgresql extends PdoAdapter
                      * MEDIUMBLOB
                      */
                 case str_contains($columnType, "mediumblob"):
-                    $definition["type"] = Column::TYPE_TEXT;
+                    $definition["type"] = Column::TYPE_MEDIUMBLOB;
 
                     break;
 

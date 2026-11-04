@@ -165,6 +165,15 @@ class Sqlite extends PdoAdapter
                     $definition["bindType"]  = Column::BIND_PARAM_STR;
 
                     break;
+                case str_contains($lowerType, "tinyint(1)"):
+                    /**
+                     * Tinyint(1) is boolean
+                     */
+                    $definition["type"]     = Column::TYPE_BOOLEAN;
+                    $definition["bindType"] = Column::BIND_PARAM_BOOL;
+                    $columnType             = "boolean"; // Change column type to skip size check
+
+                    break;
                 case str_contains($lowerType, "int"):
                     /**
                      * Smallint/Integers/Int are int
@@ -176,15 +185,6 @@ class Sqlite extends PdoAdapter
                     if ($field[5]) {
                         $definition["autoIncrement"] = true;
                     }
-
-                    break;
-                case str_contains($lowerType, "tinyint(1)"):
-                    /**
-                     * Tinyint(1) is boolean
-                     */
-                    $definition["type"]     = Column::TYPE_BOOLEAN;
-                    $definition["bindType"] = Column::BIND_PARAM_BOOL;
-                    $columnType             = "boolean"; // Change column type to skip size check
 
                     break;
                     /**
@@ -235,7 +235,7 @@ class Sqlite extends PdoAdapter
                      */
                     $definition["type"]      = Column::TYPE_FLOAT;
                     $definition["isNumeric"] = true;
-                    $definition["bindType"]  = Column::TYPE_DECIMAL;
+                    $definition["bindType"]  = Column::BIND_PARAM_DECIMAL;
 
                     break;
                 case str_contains($lowerType, "real"):
@@ -279,6 +279,27 @@ class Sqlite extends PdoAdapter
                      */
                 case str_contains($lowerType, "text"):
                     $definition["type"] = Column::TYPE_TEXT;
+
+                    break;
+                    /**
+                     * TINYBLOB/MEDIUMBLOB/LONGBLOB/BLOB
+                     *
+                     * The `blob` check must be last because the other names contain it.
+                     */
+                case str_contains($lowerType, "tinyblob"):
+                    $definition["type"] = Column::TYPE_TINYBLOB;
+
+                    break;
+                case str_contains($lowerType, "mediumblob"):
+                    $definition["type"] = Column::TYPE_MEDIUMBLOB;
+
+                    break;
+                case str_contains($lowerType, "longblob"):
+                    $definition["type"] = Column::TYPE_LONGBLOB;
+
+                    break;
+                case str_contains($lowerType, "blob"):
+                    $definition["type"] = Column::TYPE_BLOB;
 
                     break;
                 default:
