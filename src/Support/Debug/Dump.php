@@ -369,7 +369,7 @@ class Dump implements TemplateAware
                     $message = $this->getTemplate('objectProperty');
                     $context = [
                         'style' => $this->getStyle('obj'),
-                        'key'   => $key,
+                        'key'   => htmlspecialchars((string) $key, ENT_QUOTES, 'utf-8'),
                         'type'  => 'public',
                     ];
 
