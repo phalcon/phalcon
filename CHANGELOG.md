@@ -36,6 +36,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Mvc\Model::doLowInsert()` not reading back the generated id on MySQL when the identity property is `0`. [#17689](https://github.com/phalcon/cphalcon/issues/17689)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compile()` rendering serialized blocks for the second child of a layout when `stat` is `false`. [#17674](https://github.com/phalcon/cphalcon/issues/17674)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compileCall()` silently dropping `{% call %}` blocks instead of throwing an exception. [#17676](https://github.com/phalcon/cphalcon/issues/17676)
+- `Phalcon\Support\Debug::onUncaughtException()` turning a warning raised while rendering into a fatal error and echoing later exception messages without escaping. [#17733](https://github.com/phalcon/cphalcon/issues/17733)
 - `Phalcon\Support\Debug\Dump::variable()` not escaping public property names in the HTML output. [#17729](https://github.com/phalcon/cphalcon/issues/17729)
 - `Phalcon\Support\Debug\Renderer\HtmlRenderer::render()` dropping invalid UTF-8 text and not escaping quotes, class names and file paths. [#17731](https://github.com/phalcon/cphalcon/issues/17731)
 - PHP 8.6 deprecation for session handlers without `create_sid()`: `Phalcon\Session\Adapter\AbstractAdapter` and `Phalcon\Session\Adapter\Noop` now implement `SessionIdInterface` and `create_sid()`. [#17687](https://github.com/phalcon/cphalcon/issues/17687)

@@ -221,7 +221,16 @@ class Debug
             /**
              * Print the HTML, @TODO, add an option to store the HTML
              */
-            echo $this->renderHtml($exception);
+            try {
+                echo $this->renderHtml($exception);
+            } catch (Throwable $ex) {
+                /**
+                 * Unlock the exception renderer if the render fails
+                 */
+                self::$isActive = false;
+
+                throw $ex;
+            }
 
             /**
              * Unlock the exception renderer
@@ -231,7 +240,11 @@ class Debug
             return true;
         }
 
-        echo $exception->getMessage();
+        echo htmlspecialchars(
+            $exception->getMessage(),
+            ENT_QUOTES | ENT_SUBSTITUTE,
+            'UTF-8'
+        );
 
         return false;
     }
