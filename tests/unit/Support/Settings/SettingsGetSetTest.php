@@ -172,6 +172,30 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
     }
 
     /**
+     * cphalcon's phalcon.orm.cache_level and phalcon.orm.unique_cache_id
+     * (both "3" by default) drive Lang::parsePHQL()'s AST cache.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-07
+     */
+    public function testSupportSettingsOrmCacheDefaults(): void
+    {
+        $this->assertSame([3, 3], [Settings::get('orm.cache_level'), Settings::get('orm.unique_cache_id')]);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-07
+     */
+    public function testSupportSettingsOrmCacheSetGet(): void
+    {
+        Settings::set('orm.cache_level', -1);
+        Settings::set('orm.unique_cache_id', 100);
+
+        $this->assertSame([-1, 100], [Settings::get('orm.cache_level'), Settings::get('orm.unique_cache_id')]);
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-04
      */
