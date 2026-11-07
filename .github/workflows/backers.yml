@@ -17,4 +17,4 @@ permissions:
 
 jobs:
   backers:
-    uses: phalcon/assets/.github/workflows/backers.yml@e34d769ef02ed21130a91bffbcf1b7a7c12a155e # master
+    uses: phalcon/assets/.github/workflows/backers.yml@47248831d0ed3b66c8b82ab968a62ec4dc291fab # master
