@@ -207,6 +207,10 @@ class ReportBuilder
         $result = [];
         foreach ($source as $key => $value) {
             if (!isset($blacklist[mb_strtolower((string) $key)])) {
+                if (is_array($value)) {
+                    $value = $this->filter($value, $blacklist);
+                }
+
                 $result[$key] = $value;
             }
         }
