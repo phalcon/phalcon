@@ -73,12 +73,12 @@ use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlStatement;
 use Phalcon\Mvc\Model\Query\Exceptions\UnsafeIdentifier;
 use Phalcon\Mvc\Model\Query\Exceptions\UpdateMultipleNotSupported;
 use Phalcon\Mvc\Model\Query\Exceptions\WriteConnectionMissing;
+use Phalcon\Mvc\Model\Query\Lang;
 use Phalcon\Mvc\Model\Query\Status;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Phql\Parser;
 use Phalcon\Phql\Scanner\Opcode;
 use Phalcon\Support\Settings;
 
@@ -214,8 +214,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     protected int $nestingLevel = -1;
 
-    protected Parser $parser;
-
     protected string $resultsetRowClass = "";
 
     protected bool $sharedLock = false;
@@ -285,15 +283,16 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $this->bindParams = [];
         $this->bindTypes  = [];
-        $this->parser     = new Parser();
     }
 
     /**
-     * Destroys the internal PHQL cache
+     * Destroys the internal PHQL cache, and the parsed statements it is keyed
+     * by (Lang::clean())
      */
     public static function clean(): void
     {
         self::$internalPhqlCache = [];
+        Lang::clean();
     }
 
     /**
@@ -669,9 +668,7 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         /** @var string $phql */
         $phql = $this->phql;
-        $ast  = $this->parser
-            ->setEnableLiterals((bool) Settings::get('orm.enable_literals'))
-            ->parse($phql);
+        $ast  = Lang::parsePHQL($phql);
 
         $irPhql   = null;
         $uniqueId = null;
