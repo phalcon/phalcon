@@ -29,7 +29,6 @@ use function htmlentities;
 use function implode;
 use function is_array;
 use function is_object;
-use function is_resource;
 use function is_scalar;
 use function is_string;
 use function method_exists;
@@ -282,12 +281,12 @@ class HtmlRenderer implements Renderer
                 $varDump = 'null';
             } else {
                 /**
-                 * Only resources reach this point; they stringify to
-                 * "Resource id #n".
+                 * Only resources reach this point; open and closed
+                 * resources stringify to "Resource id #n".
+                 *
+                 * @var resource $argument
                  */
-                $varDump = is_resource($argument)
-                    ? (string) $argument
-                    : gettype($argument);
+                $varDump = (string) $argument;
             }
 
             $dump[] = '[' . $this->escapeString((string) $index) . '] =&gt; ' . $varDump;
@@ -318,30 +317,7 @@ class HtmlRenderer implements Renderer
         }
 
         if (is_object($variable)) {
-            $className = $this->escapeString(get_class($variable));
-
-            /**
-             * Call dump() only if it is public, not static and has no
-             * required parameters. Use its result only if it is an array.
-             */
-            if (true === method_exists($variable, 'dump')) {
-                $method = new ReflectionMethod($variable, 'dump');
-
-                if (
-                    true === $method->isPublic() &&
-                    true !== $method->isStatic() &&
-                    0 === $method->getNumberOfRequiredParameters()
-                ) {
-                    $dumpedObject = $variable->dump();
-
-                    if (is_array($dumpedObject)) {
-                        /** @var support_debug_args $dumpedObject */
-                        return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
-                    }
-                }
-            }
-
-            return 'Object(' . $className . ')';
+            return $this->dumpObject($variable);
         }
 
         if (is_array($variable)) {
@@ -353,6 +329,38 @@ class HtmlRenderer implements Renderer
         }
 
         return gettype($variable);
+    }
+
+    /**
+     * Returns true when the dump() method of the object is public, is not
+     * static, and has no required parameters
+     */
+    private function canCallDump(object $variable): bool
+    {
+        $method = new ReflectionMethod($variable, 'dump');
+
+        return true === $method->isPublic() &&
+            true !== $method->isStatic() &&
+            0 === $method->getNumberOfRequiredParameters();
+    }
+
+    /**
+     * Uses the result of dump() only if it is an array
+     */
+    private function dumpObject(object $variable): string
+    {
+        $className = $this->escapeString(get_class($variable));
+
+        if (true === method_exists($variable, 'dump') && true === $this->canCallDump($variable)) {
+            $dumpedObject = $variable->dump();
+
+            if (is_array($dumpedObject)) {
+                /** @var support_debug_args $dumpedObject */
+                return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
+            }
+        }
+
+        return 'Object(' . $className . ')';
     }
 
     private function formatBytes(int $bytes): string
