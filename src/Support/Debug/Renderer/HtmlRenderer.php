@@ -37,7 +37,8 @@ use function rtrim;
 use function str_replace;
 use function strpos;
 
-use const ENT_COMPAT;
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const PHP_VERSION;
 
 /**
@@ -93,7 +94,7 @@ class HtmlRenderer implements Renderer
 
     public function render(ExceptionReport $report): string
     {
-        $className      = $report->getClassName();
+        $className      = $this->escapeString($report->getClassName());
         $escapedMessage = $this->escapeString($report->getMessage());
 
         $html = $this->toInterpolate(
@@ -115,7 +116,7 @@ class HtmlRenderer implements Renderer
             [
                 'className'      => $className,
                 'escapedMessage' => $escapedMessage,
-                'file'           => $report->getFile(),
+                'file'           => $this->escapeString($report->getFile()),
                 'line'           => (string)$report->getLine(),
                 'phpVersion'     => PHP_VERSION,
             ]
@@ -246,7 +247,7 @@ class HtmlRenderer implements Renderer
     {
         return htmlentities(
             str_replace("\n", "\\n", $value),
-            ENT_COMPAT,
+            ENT_QUOTES | ENT_SUBSTITUTE,
             'utf-8'
         );
     }
@@ -275,7 +276,7 @@ class HtmlRenderer implements Renderer
             } elseif (is_array($argument)) {
                 $varDump = 'Array(' . $this->getArrayDump($argument, $number + 1) . ')';
             } elseif (is_object($argument)) {
-                $varDump = 'Object(' . get_class($argument) . ')';
+                $varDump = 'Object(' . $this->escapeString(get_class($argument)) . ')';
             } elseif (null === $argument) {
                 $varDump = 'null';
             } else {
@@ -316,7 +317,7 @@ class HtmlRenderer implements Renderer
         }
 
         if (is_object($variable)) {
-            $className = get_class($variable);
+            $className = $this->escapeString(get_class($variable));
 
             if (true === method_exists($variable, 'dump')) {
                 /** @var support_debug_args $dumpedObject */
@@ -387,7 +388,7 @@ class HtmlRenderer implements Renderer
                     'num'     => (string)$counter,
                     'src'     => htmlentities(
                         str_replace("\t", '  ', $currentLine),
-                        ENT_COMPAT,
+                        ENT_QUOTES | ENT_SUBSTITUTE,
                         'UTF-8'
                     ),
                 ]
@@ -536,7 +537,7 @@ class HtmlRenderer implements Renderer
             $html .= $this->toInterpolate(
                 $this->getTemplate('frameFile'),
                 [
-                    'file' => $item->getFile(),
+                    'file' => $this->escapeString($item->getFile()),
                     'line' => (string)$item->getLine(),
                 ]
             );
