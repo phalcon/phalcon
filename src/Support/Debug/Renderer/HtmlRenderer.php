@@ -20,6 +20,7 @@ use Phalcon\Support\Debug\Report\ExceptionReport;
 use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
 use Phalcon\Support\Version;
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
+use ReflectionMethod;
 
 use function count;
 use function get_class;
@@ -319,11 +320,25 @@ class HtmlRenderer implements Renderer
         if (is_object($variable)) {
             $className = $this->escapeString(get_class($variable));
 
+            /**
+             * Call dump() only if it is public, not static and has no
+             * required parameters. Use its result only if it is an array.
+             */
             if (true === method_exists($variable, 'dump')) {
-                /** @var support_debug_args $dumpedObject */
-                $dumpedObject = $variable->dump();
+                $method = new ReflectionMethod($variable, 'dump');
 
-                return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
+                if (
+                    true === $method->isPublic() &&
+                    true !== $method->isStatic() &&
+                    0 === $method->getNumberOfRequiredParameters()
+                ) {
+                    $dumpedObject = $variable->dump();
+
+                    if (is_array($dumpedObject)) {
+                        /** @var support_debug_args $dumpedObject */
+                        return 'Object(' . $className . ': ' . $this->getArrayDump($dumpedObject) . ')';
+                    }
+                }
             }
 
             return 'Object(' . $className . ')';
