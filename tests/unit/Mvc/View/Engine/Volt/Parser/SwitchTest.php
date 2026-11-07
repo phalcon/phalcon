@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
+use Phalcon\Mvc\View\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use Phalcon\Volt\Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class SwitchTest extends AbstractUnitTestCase
