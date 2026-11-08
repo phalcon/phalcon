@@ -101,11 +101,11 @@ final class PhqlInjectionTest extends AbstractDatabaseTestCase
     }
 
     /**
-     * F1 - the compiled SQL must neutralize an embedded single quote, even
-     * when a backslash precedes it. The dialect escapes for its own syntax:
-     * standard engines double the quote; MySQL doubles the backslash too,
-     * because there the backslash is an escape character. Before the fix the
-     * quote was emitted as "\'" and the "OR 1=1" tail escaped the literal.
+     * F1 - the compiled SQL must neutralize an embedded single quote. The
+     * scanner resolves the PHQL escape `\'` to a quote (cphalcon #17585), and
+     * every dialect then doubles it, so the "OR 1=1" tail stays inside the
+     * literal. Same expectation as cphalcon's
+     * tests/database/Mvc/Model/Query/PhqlInjectionTest.php.
      */
     public function testF1CompiledSqlNeutralizesEmbeddedQuote(): void
     {
@@ -116,12 +116,7 @@ final class PhqlInjectionTest extends AbstractDatabaseTestCase
 
         $sql = (new Query($phql, $this->container))->getSql()['sql'];
 
-        // Standard: 'x\'' ...   MySQL: 'x\\'' ...   (quote is data, not a terminator)
-        $expected = 'mysql' === $this->getDatabaseDialect()
-            ? "x\\\\'' OR 1=1 -- '"
-            : "x\\'' OR 1=1 -- '";
-
-        $this->assertStringContainsString($expected, $sql);
+        $this->assertStringContainsString("'x'' OR 1=1 -- '", $sql);
     }
 
     /**
