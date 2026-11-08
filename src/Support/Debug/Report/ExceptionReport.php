@@ -20,6 +20,7 @@ use Phalcon\Contracts\Support\SupportTypes;
  * presentation logic.
  *
  * @phpstan-import-type support_debug_included_files from SupportTypes
+ * @phpstan-import-type support_debug_previous from SupportTypes
  * @phpstan-import-type support_debug_superglobal from SupportTypes
  * @phpstan-import-type support_debug_variables from SupportTypes
  */
@@ -38,6 +39,11 @@ final class ExceptionReport
     private int $memoryUsage     = 0;
 
     private int $peakMemoryUsage = 0;
+
+    /**
+     * @phpstan-var list<support_debug_previous>
+     */
+    private array $previousExceptions = [];
 
     /**
      * @phpstan-var support_debug_superglobal
@@ -111,6 +117,16 @@ final class ExceptionReport
     }
 
     /**
+     * The previous exceptions of the exception, from the nearest to the first.
+     *
+     * @phpstan-return list<support_debug_previous>
+     */
+    public function getPreviousExceptions(): array
+    {
+        return $this->previousExceptions;
+    }
+
+    /**
      * @phpstan-return support_debug_superglobal
      */
     public function getRequest(): array
@@ -179,6 +195,16 @@ final class ExceptionReport
     public function setPeakMemoryUsage(int $peakMemoryUsage): static
     {
         $this->peakMemoryUsage = $peakMemoryUsage;
+
+        return $this;
+    }
+
+    /**
+     * @phpstan-param list<support_debug_previous> $previousExceptions
+     */
+    public function setPreviousExceptions(array $previousExceptions): static
+    {
+        $this->previousExceptions = $previousExceptions;
 
         return $this;
     }

@@ -331,6 +331,8 @@ class Dump implements TemplateAware
                     true !== is_int($key) &&
                     $name === $key
                 ) {
+                    $output .= "\n";
+
                     continue;
                 }
 

@@ -25,6 +25,8 @@ use Throwable;
 
 use function mb_strtolower;
 
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+
 /**
  * Listens for uncaught exceptions and renders them. Acts as a thin coordinator
  * delegating data collection to ReportBuilder and presentation to a Renderer.
@@ -89,7 +91,7 @@ class Debug
     {
         $this->data[] = [
             $variable,
-            debug_backtrace(),
+            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS),
             time(),
         ];
 

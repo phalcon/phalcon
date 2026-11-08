@@ -16,6 +16,7 @@ namespace Phalcon\Support\Debug;
 use Phalcon\Contracts\Support\SupportTypes;
 use Phalcon\Support\Debug\Report\BacktraceItem;
 use Phalcon\Support\Debug\Report\ExceptionReport;
+use Phalcon\Support\Version;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use ReflectionClass;
@@ -53,6 +54,13 @@ class ReportBuilder
     use InfoTrait;
 
     /**
+     * The lines of each file that the current report read
+     *
+     * @var array<string, array<int, string>>
+     */
+    private array $fileLines = [];
+
+    /**
      * @phpstan-param support_debug_blacklist $blacklist
      * @phpstan-param support_debug_variables $data
      *
@@ -67,6 +75,8 @@ class ReportBuilder
         string $uri,
         array $data
     ): ExceptionReport {
+        $this->fileLines = [];
+
         $report = new ExceptionReport(
             get_class($exception),
             $exception->getMessage(),
@@ -75,6 +85,20 @@ class ReportBuilder
             $showBackTrace,
             $uri
         );
+
+        $previousExceptions = [];
+        $previous           = $exception->getPrevious();
+        while (null !== $previous) {
+            $previousExceptions[] = [
+                'className' => get_class($previous),
+                'message'   => $previous->getMessage(),
+                'file'      => $previous->getFile(),
+                'line'      => $previous->getLine(),
+            ];
+            $previous = $previous->getPrevious();
+        }
+
+        $report->setPreviousExceptions($previousExceptions);
 
         if (true !== $showBackTrace) {
             return $report;
@@ -107,19 +131,7 @@ class ReportBuilder
      */
     private function buildFragment(string $file, int $line, bool $showFileFragment): array
     {
-        /**
-         * Read the file only if it exists and is readable. This prevents a
-         * warning for eval()'d code.
-         */
-        $lines = false;
-        if (is_file($file) && is_readable($file)) {
-            $lines = file($file);
-        }
-
-        if (false === $lines) {
-            $lines = [];
-        }
-
+        $lines       = $this->readLines($file);
         $numberLines = count($lines);
 
         if (true === $showFileFragment) {
@@ -219,6 +231,26 @@ class ReportBuilder
     }
 
     /**
+     * Reads each file one time for each report. It reads the file only if it
+     * exists and is readable. This prevents a warning for eval()'d code.
+     *
+     * @return array<int, string>
+     */
+    private function readLines(string $file): array
+    {
+        if (!isset($this->fileLines[$file])) {
+            $lines = false;
+            if (is_file($file) && is_readable($file)) {
+                $lines = file($file);
+            }
+
+            $this->fileLines[$file] = (false === $lines) ? [] : $lines;
+        }
+
+        return $this->fileLines[$file];
+    }
+
+    /**
      * @phpstan-param class-string $className
      *
      * @throws ReflectionException
@@ -226,9 +258,13 @@ class ReportBuilder
     private function resolveClassLink(string $className): string | null
     {
         if (str_starts_with($className, 'Phalcon\\')) {
-            $parts = explode('\\', $className);
+            $parts   = explode('\\', $className);
+            $version = new Version();
 
-            return 'https://docs.phalcon.io/6.0/en/api/' . $parts[0] . '_' . $parts[1];
+            return 'https://docs.phalcon.io/'
+                . $version->getPart(Version::VERSION_MAJOR) . '.'
+                . $version->getPart(Version::VERSION_MEDIUM)
+                . '/api/' . mb_strtolower($parts[0] . '_' . $parts[1]) . '/';
         }
 
         $reflection = new ReflectionClass($className);
