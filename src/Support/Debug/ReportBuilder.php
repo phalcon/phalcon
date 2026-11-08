@@ -139,15 +139,12 @@ class ReportBuilder
             $firstLine  = ($beforeLine < 1) ? 1 : $beforeLine;
             $afterLine  = $line + 5;
             $lastLine   = ($afterLine > $numberLines) ? $numberLines : $afterLine;
-            $mode       = 'fragment';
         } else {
             $firstLine = 1;
             $lastLine  = $numberLines;
-            $mode      = 'full';
         }
 
         return [
-            'mode'      => $mode,
             'firstLine' => $firstLine,
             'line'      => $line,
             'lastLine'  => $lastLine,

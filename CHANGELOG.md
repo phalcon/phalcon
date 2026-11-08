@@ -53,6 +53,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Removed
 
+- Removed the unused `mode` key from the code fragment of `Phalcon\Support\Debug\Report\BacktraceItem::getFragment()`. [#17748](https://github.com/phalcon/cphalcon/issues/17748)
 
 ## [6.0.0 RC 4](https://github.com/phalcon/phalcon/releases/tag/v6.0.0RC4) (2026-10-15)
 
