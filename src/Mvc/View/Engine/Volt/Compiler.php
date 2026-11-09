@@ -39,11 +39,13 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltFilter;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltFilterType;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\UnknownVoltStatement;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
+use Phalcon\Mvc\View\Exception as ViewException;
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Volt\Compiler\Opcode;
+use Phalcon\Volt\Exception as VoltException;
 use Phalcon\Volt\Parser\Parser;
 
 use function addslashes;
@@ -2262,11 +2264,11 @@ class Compiler implements InjectionAwareInterface
      *```
      *
      * @phpstan-return mvc_volt_node
-     * @throws Exception
+     * @throws ViewException
      */
     public function parse(string $viewCode): array
     {
-        return $this->parser->parse($viewCode);
+        return $this->parseView($viewCode, 'eval code');
     }
 
     /**
@@ -2435,7 +2437,7 @@ class Compiler implements InjectionAwareInterface
             $this->autoescape = $autoescape;
         }
 
-        $intermediate = $this->parser->parse($viewCode, $this->currentPath ?? 'eval code');
+        $intermediate = $this->parseView($viewCode, $this->currentPath ?? 'eval code');
         $compilation  = $this->statementList($intermediate, $extendsMode);
 
         /**
@@ -2971,9 +2973,13 @@ class Compiler implements InjectionAwareInterface
                     /**
                      * Extends statement
                      */
-                    /** @var array{value: string} $path */
+                    /**
+                     * An expression path has no "value". Use an empty path, the same as cphalcon.
+                     *
+                     * @var array{value?: string} $path
+                     */
                     $path      = $statement["path"];
-                    $finalPath = $this->getFinalPath($path["value"]);
+                    $finalPath = $this->getFinalPath($path["value"] ?? "");
                     $extended  = true;
 
                     /**
@@ -3232,5 +3238,21 @@ class Compiler implements InjectionAwareInterface
         }
 
         return false;
+    }
+
+    /**
+     * Parses the view code. Parser and scanner errors are thrown as
+     * Phalcon\Mvc\View\Exception, the same as cphalcon.
+     *
+     * @phpstan-return mvc_volt_node
+     * @throws ViewException
+     */
+    private function parseView(string $viewCode, string $templatePath): array
+    {
+        try {
+            return $this->parser->parse($viewCode, $templatePath);
+        } catch (VoltException $ex) {
+            throw new ViewException($ex->getMessage(), $ex->getCode(), $ex);
+        }
     }
 }

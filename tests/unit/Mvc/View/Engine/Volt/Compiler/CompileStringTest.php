@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Mvc\View\Engine\Volt\Compiler;
 
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
+use Phalcon\Mvc\View\Engine\Volt\Exceptions\TemplateFileNotFound;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
@@ -867,6 +868,45 @@ class CompileStringTest extends AbstractUnitTestCase
     }
 
     /**
+     * An extends path that is an expression (not a string) has no file
+     * name. The compiler throws TemplateFileNotFound with an empty path.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-09
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringExtendsExpression(): void
+    {
+        $volt = new Compiler();
+
+        $this->expectException(TemplateFileNotFound::class);
+        $this->expectExceptionMessage('Template file  does not exist');
+
+        $volt->compileString('{% extends a ~ "b" %}');
+    }
+
+    /**
+     * Array literals are built in linear time; 40,000 items used to take
+     * seconds.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringLargeArrayLiteral(): void
+    {
+        $count    = 40000;
+        $template = '{{ [' . implode(',', array_fill(0, $count, '1')) . '] }}';
+        $volt     = new Compiler();
+
+        $start  = microtime(true);
+        $actual = $volt->compileString($template);
+        $spent  = microtime(true) - $start;
+
+        $this->assertStringStartsWith('<?= ', $actual);
+        $this->assertSame($count - 1, substr_count($actual, ', 1'));
+        $this->assertLessThan(3.0, $spent);
+    }
+
+    /**
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2017-01-17
      */
@@ -881,5 +921,30 @@ class CompileStringTest extends AbstractUnitTestCase
         $this->expectExceptionMessage($message);
 
         $volt->compileString($code);
+    }
+
+    /**
+     * A backslash as the last byte of a quoted string must be a scanning
+     * error, not an escape that swallows the terminator.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
+     */
+    public function testMvcViewEngineVoltCompilerCompileStringTrailingBackslash(): void
+    {
+        $volt = new Compiler();
+
+        foreach (['{{ "abc\\', "{{ 'abc\\"] as $template) {
+            $caught = null;
+
+            try {
+                $volt->compileString($template);
+            } catch (Exception $ex) {
+                $caught = $ex;
+            }
+
+            $this->assertNotNull($caught, $template);
+            $this->assertStringContainsString('Scanning error', $caught->getMessage());
+        }
     }
 }
