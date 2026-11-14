@@ -33,6 +33,7 @@ use Phalcon\Html\Attributes\AttributesInterface;
 use Phalcon\Html\TagFactory;
 use Phalcon\Messages\Messages;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function array_key_exists;
@@ -55,6 +56,7 @@ use function strtolower;
 class Form extends Injectable implements Countable, Iterator, AttributesInterface
 {
     use CamelizeTrait;
+    use WeakTypesTrait;
 
     protected Attributes $attributes;
 
@@ -293,7 +295,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                  */
                 $method = "set" . $this->toCamelize($key);
                 if (true === method_exists($entity, $method)) {
-                    $entity->{$method}($filteredValue);
+                    self::weakCall($entity, $method, $filteredValue);
 
                     continue;
                 }
@@ -302,13 +304,13 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                  * Use the public property if it does not have a setter
                  */
                 if (!Settings::get("form.strict_entity_property_check")) {
-                    $entity->{$key} = $filteredValue;
+                    self::weakWrite($entity, $key, $filteredValue);
 
                     continue;
                 }
 
                 if (property_exists($entity, $key)) {
-                    $entity->{$key} = $filteredValue;
+                    self::weakWrite($entity, $key, $filteredValue);
                 }
             }
         }

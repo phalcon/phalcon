@@ -81,6 +81,7 @@ use Phalcon\Mvc\Model\ValidationFailed;
 use Phalcon\Support\Collection;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 
@@ -195,6 +196,7 @@ abstract class Model extends AbstractInjectionAware implements
 {
     use CamelizeTrait;
     use UncamelizeTrait;
+    use WeakTypesTrait;
 
     public const DIRTY_STATE_DETACHED   = 2;
 
@@ -689,7 +691,7 @@ abstract class Model extends AbstractInjectionAware implements
             }
         }
 
-        $this->$property = $value;
+        self::weakWrite($this, $property, $value);
 
         return $value;
     }
@@ -760,7 +762,7 @@ abstract class Model extends AbstractInjectionAware implements
              * Update the objects properties
              */
             foreach ($properties as $key => $value) {
-                $this->$key = $value;
+                self::weakWrite($this, $key, $value);
             }
         }
 
@@ -1008,12 +1010,12 @@ abstract class Model extends AbstractInjectionAware implements
                         !isset($localMethods[$setter])
                     ) {
                         try {
-                            $instance->$setter($value);
+                            self::weakCall($instance, $setter, $value);
                         } catch (\TypeError) {
                             if (isset($privateProperties[$key])) {
                                 $privateProperties[$key]->setValue($instance, $value);
                             } else {
-                                self::assignCoercedValue($instance, $key, $value);
+                                self::weakWrite($instance, $key, $value);
                             }
                         }
 
@@ -1024,7 +1026,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (isset($privateProperties[$key])) {
                     $privateProperties[$key]->setValue($instance, $value);
                 } else {
-                    self::assignCoercedValue($instance, $key, $value);
+                    self::weakWrite($instance, $key, $value);
                 }
 
                 continue;
@@ -1070,7 +1072,7 @@ abstract class Model extends AbstractInjectionAware implements
                         !isset($localMethods[$setter])
                     ) {
                         try {
-                            $instance->$setter($value);
+                            self::weakCall($instance, $setter, $value);
                         } catch (\TypeError) {
                             if (isset($privateProperties[$attribute])) {
                                 $privateProperties[$attribute]->setValue(
@@ -1078,11 +1080,7 @@ abstract class Model extends AbstractInjectionAware implements
                                     $value
                                 );
                             } else {
-                                self::assignCoercedValue(
-                                    $instance,
-                                    $attribute,
-                                    $value
-                                );
+                                self::weakWrite($instance, $attribute, $value);
                             }
                         }
 
@@ -1093,7 +1091,7 @@ abstract class Model extends AbstractInjectionAware implements
                 if (isset($privateProperties[$attribute])) {
                     $privateProperties[$attribute]->setValue($instance, $value);
                 } else {
-                    self::assignCoercedValue($instance, $attribute, $value);
+                    self::weakWrite($instance, $attribute, $value);
                 }
 
                 continue;
@@ -1148,7 +1146,7 @@ abstract class Model extends AbstractInjectionAware implements
                     !isset($localMethods[$setter])
                 ) {
                     try {
-                        $instance->$setter($castValue);
+                        self::weakCall($instance, $setter, $castValue);
                     } catch (\TypeError) {
                         if (isset($privateProperties[$attributeName])) {
                             $privateProperties[$attributeName]->setValue(
@@ -1156,7 +1154,7 @@ abstract class Model extends AbstractInjectionAware implements
                                 $castValue
                             );
                         } else {
-                            $instance->$attributeName = $castValue;
+                            self::weakWrite($instance, $attributeName, $castValue);
                         }
                     }
 
@@ -1167,7 +1165,7 @@ abstract class Model extends AbstractInjectionAware implements
             if (isset($privateProperties[$attributeName])) {
                 $privateProperties[$attributeName]->setValue($instance, $castValue);
             } else {
-                $instance->$attributeName = $castValue;
+                self::weakWrite($instance, $attributeName, $castValue);
             }
         }
 
@@ -2022,44 +2020,6 @@ abstract class Model extends AbstractInjectionAware implements
         return $modelName::$type($params);
     }
 
-    /**
-     * Assigns a value to a model property replicating the coercive property
-     * write performed by the C extension. PDO adapters (notably PostgreSQL)
-     * return numeric columns as strings; cphalcon relies on the extension to
-     * coerce them to the property's declared scalar type on assignment. Under
-     * strict_types a direct write throws a TypeError, so when that happens we
-     * coerce the scalar value to the declared type and retry. Non-coercible
-     * cases are re-thrown unchanged.
-     */
-    private static function assignCoercedValue(
-        object $instance,
-        string $property,
-        mixed $value
-    ): void {
-        try {
-            $instance->$property = $value;
-        } catch (\TypeError $ex) {
-            if (!is_scalar($value) || !property_exists($instance, $property)) {
-                throw $ex;
-            }
-
-            $propertyType = (new \ReflectionProperty($instance, $property))
-                ->getType();
-
-            if (!$propertyType instanceof \ReflectionNamedType) {
-                throw $ex;
-            }
-
-            $instance->$property = match ($propertyType->getName()) {
-                "bool"   => (bool) $value,
-                "float"  => (float) $value,
-                "int"    => (int) $value,
-                "string" => (string) $value,
-                default  => throw $ex,
-            };
-        }
-    }
-
     private static function castSpatial(mixed $value): mixed
     {
         try {
@@ -2433,7 +2393,7 @@ abstract class Model extends AbstractInjectionAware implements
                     $disableAssignSetters ||
                     !$this->possibleSetter($attributeField, $value)
                 ) {
-                    $this->$attributeField = $value;
+                    self::weakWrite($this, $attributeField, $value);
                 }
             }
         }
@@ -4275,7 +4235,7 @@ abstract class Model extends AbstractInjectionAware implements
                  */
                 foreach ($properties as $key => $value) {
                     try {
-                        $this->$key = $value;
+                        self::weakWrite($this, $key, $value);
                     } catch (\TypeError) {
                     }
                 }
@@ -4406,7 +4366,7 @@ abstract class Model extends AbstractInjectionAware implements
      */
     public function writeAttribute(string $attribute, mixed $value): void
     {
-        $this->$attribute = $value;
+        self::weakWrite($this, $attribute, $value);
     }
 
     /**
@@ -5223,31 +5183,7 @@ abstract class Model extends AbstractInjectionAware implements
                 $lastInsertedId = intval($lastInsertedId, 10);
             }
 
-            /**
-             * PDO returns the auto-increment id as a numeric string. cphalcon
-             * relies on the C extension's coercive property write to convert it
-             * to the property's declared type. Under strict_types we coerce
-             * explicitly: cast to int only when the identity property is typed
-             * int, otherwise keep the original value so an unsigned BIGINT that
-             * overflows PHP's int range (mapped to a string property) keeps its
-             * full string representation.
-             */
-            if (
-                is_numeric($lastInsertedId) &&
-                property_exists($this, $attributeField)
-            ) {
-                $propertyType = (new \ReflectionProperty($this, $attributeField))
-                    ->getType();
-
-                if (
-                    $propertyType instanceof \ReflectionNamedType &&
-                    $propertyType->getName() === "int"
-                ) {
-                    $lastInsertedId = (int) $lastInsertedId;
-                }
-            }
-
-            $this->$attributeField     = $lastInsertedId;
+            self::weakWrite($this, $attributeField, $lastInsertedId);
             $snapshot[$attributeField] = $lastInsertedId;
 
             /**
@@ -5272,7 +5208,7 @@ abstract class Model extends AbstractInjectionAware implements
              * insert.
              */
             foreach ($unsetDefaultValues as $attributeField => $defaultValue) {
-                $this->$attributeField = $defaultValue;
+                self::weakWrite($this, $attributeField, $defaultValue);
             }
 
             if (
@@ -6251,9 +6187,9 @@ abstract class Model extends AbstractInjectionAware implements
         }
 
         try {
-            $this->$possibleSetter($value);
+            self::weakCall($this, $possibleSetter, $value);
         } catch (\TypeError) {
-            $this->$property = $value;
+            self::weakWrite($this, $property, $value);
         }
 
         return true;
@@ -7018,14 +6954,22 @@ abstract class Model extends AbstractInjectionAware implements
                             $columnA = $columns[$i];
                             $columnB = $referencedFields[$i];
 
-                            $this->$columnA = $record->readAttribute($columnB);
+                            self::weakWrite(
+                                $this,
+                                $columnA,
+                                $record->readAttribute($columnB)
+                            );
                         }
                     } else {
                         /**
                          * A single field pairs with a single referenced field.
                          */
                         /** @var string $referencedFields */
-                        $this->$columns = $record->readAttribute($referencedFields);
+                        self::weakWrite(
+                            $this,
+                            $columns,
+                            $record->readAttribute($referencedFields)
+                        );
                     }
                 }
             }
