@@ -35,12 +35,15 @@ namespace Phalcon\Container\Resolver\Lazy;
 
 use Phalcon\Contracts\Container\ContainerTypes;
 use Phalcon\Contracts\Container\Service\Collection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type container_arguments from ContainerTypes
  */
 class GetCall extends Lazy
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-param Lazy|string         $id
      * @phpstan-param container_arguments $arguments
@@ -68,6 +71,6 @@ class GetCall extends Lazy
         /** @var callable $callback */
         $callback  = [$service, $this->method];
 
-        return call_user_func_array($callback, $arguments);
+        return self::weakCallArray($callback, $arguments);
     }
 }

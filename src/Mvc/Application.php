@@ -23,6 +23,7 @@ use Phalcon\Mvc\Application\Exception;
 use Phalcon\Mvc\Application\Exceptions\ContainerRequired;
 use Phalcon\Mvc\Application\Exceptions\InvalidModuleDefinition;
 use Phalcon\Mvc\Application\Exceptions\ModuleDefinitionPathNotFound;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
@@ -78,6 +79,7 @@ use function is_string;
 class Application extends AbstractApplication
 {
     use FileTrait;
+    use WeakTypesTrait;
 
     protected bool $implicitView = true;
 
@@ -137,7 +139,7 @@ class Application extends AbstractApplication
                  * Directly call the match callback
                  */
                 /** @var callable $match */
-                $possibleResponse = call_user_func_array(
+                $possibleResponse = self::weakCallArray(
                     $match,
                     $router->getParams()
                 );

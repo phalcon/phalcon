@@ -19,10 +19,10 @@ use Phalcon\Contracts\Cli\CliTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Dispatcher\AbstractDispatcher as CliDispatcher;
 use Phalcon\Filter\FilterInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function array_values;
-use function call_user_func_array;
 
 /**
  * Dispatching is the process of taking the command-line arguments, extracting
@@ -50,6 +50,8 @@ use function call_user_func_array;
  */
 class Dispatcher extends CliDispatcher implements DispatcherInterface
 {
+    use WeakTypesTrait;
+
     protected string $defaultAction  = "main";
 
     protected string $defaultHandler = "main";
@@ -81,7 +83,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         /** @var callable $callable */
         $callable = [$handler, $actionMethod];
 
-        return call_user_func_array($callable, $params);
+        return self::weakCallArray($callable, $params);
     }
 
     /**

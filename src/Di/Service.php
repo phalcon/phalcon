@@ -19,9 +19,9 @@ use Phalcon\Di\Exception\ServiceResolutionException;
 use Phalcon\Di\Exceptions\DefinitionMustBeArrayForRead;
 use Phalcon\Di\Exceptions\DefinitionMustBeArrayForUpdate;
 use Phalcon\Di\Service\Builder;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function call_user_func;
-use function call_user_func_array;
 use function class_exists;
 use function is_array;
 use function is_object;
@@ -45,6 +45,8 @@ use function is_string;
  */
 class Service implements ServiceInterface
 {
+    use WeakTypesTrait;
+
     protected mixed $definition;
 
     protected bool $resolved = false;
@@ -134,7 +136,7 @@ class Service implements ServiceInterface
              */
             if (class_exists($definition)) {
                 if (is_array($parameters) && !empty($parameters)) {
-                    $instance = new $definition(...$parameters);
+                    $instance = self::weakNew($definition, $parameters);
                 } else {
                     $instance = new $definition();
                 }
@@ -156,7 +158,7 @@ class Service implements ServiceInterface
                     }
 
                     if (is_array($parameters)) {
-                        $instance = call_user_func_array($definition, $parameters);
+                        $instance = self::weakCallArray($definition, $parameters);
                     } else {
                         $instance = call_user_func($definition);
                     }

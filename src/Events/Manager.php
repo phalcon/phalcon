@@ -22,11 +22,11 @@ use Phalcon\Events\Exceptions\InvalidEventHandler;
 use Phalcon\Events\Exceptions\InvalidEventType;
 use Phalcon\Events\Exceptions\InvalidSubscriberConfiguration;
 use Phalcon\Events\Exceptions\NoListenersForEvent;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function array_splice;
 use function array_values;
-use function call_user_func_array;
 use function count;
 use function is_array;
 use function is_callable;
@@ -54,6 +54,8 @@ use function substr;
  */
 class Manager implements ManagerInterface, Enumerable
 {
+    use WeakTypesTrait;
+
     protected bool $collect = false;
 
     protected bool $enablePriorities = false;
@@ -1223,10 +1225,14 @@ class Manager implements ManagerInterface, Enumerable
 
             if (0 === $type) {
                 /** @phpstan-var Closure $handler */
-                $ret = $handler($event, $source, $data);
+                $ret = self::weakCallArray($handler, [$event, $source, $data]);
             } elseif (1 === $type) {
                 /** @phpstan-var array{0: object, 1: string} $handler */
-                $ret = $handler[0]->{$handler[1]}($event, $source, $data);
+                $ret = self::weakCallMethod(
+                    $handler[0],
+                    $handler[1],
+                    [$event, $source, $data]
+                );
             } elseif (2 === $type) {
                 /**
                  * @phpstan-var object                                     $handler
@@ -1250,10 +1256,14 @@ class Manager implements ManagerInterface, Enumerable
                     return $status;
                 }
 
-                $ret = $handler->{$eventName}($event, $source, $data);
+                $ret = self::weakCallMethod(
+                    $handler,
+                    $eventName,
+                    [$event, $source, $data]
+                );
             } else {
                 /** @phpstan-var callable $handler */
-                $ret = call_user_func_array($handler, [$event, $source, $data]);
+                $ret = self::weakCallArray($handler, [$event, $source, $data]);
             }
 
             if ($collect) {
@@ -1278,10 +1288,14 @@ class Manager implements ManagerInterface, Enumerable
             // that segfaults on mismatch.
             if (0 === $type) {
                 /** @phpstan-var Closure $handler */
-                $ret = $handler($event, $source, $data);
+                $ret = self::weakCallArray($handler, [$event, $source, $data]);
             } elseif (1 === $type) {
                 /** @phpstan-var array{0: object, 1: string} $handler */
-                $ret = $handler[0]->{$handler[1]}($event, $source, $data);
+                $ret = self::weakCallMethod(
+                    $handler[0],
+                    $handler[1],
+                    [$event, $source, $data]
+                );
             } elseif (2 === $type) {
                 /**
                  * @phpstan-var object                                     $handler
@@ -1305,10 +1319,14 @@ class Manager implements ManagerInterface, Enumerable
                     continue;
                 }
 
-                $ret = $handler->{$eventName}($event, $source, $data);
+                $ret = self::weakCallMethod(
+                    $handler,
+                    $eventName,
+                    [$event, $source, $data]
+                );
             } else {
                 /** @phpstan-var callable $handler */
-                $ret = call_user_func_array($handler, [$event, $source, $data]);
+                $ret = self::weakCallArray($handler, [$event, $source, $data]);
             }
 
             if ($collect) {

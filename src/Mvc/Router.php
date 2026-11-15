@@ -46,6 +46,7 @@ use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\GroupInterface;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Mvc\Router\RouteInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_merge;
@@ -110,6 +111,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 {
     use EventsAwareTrait;
     use FileTrait;
+    use WeakTypesTrait;
 
     public const POSITION_FIRST = 0;
 
@@ -1249,7 +1251,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                         if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
                             $combinedConverter      = $combinedConverters[$combinedPart];
-                            $parts[$combinedPart]   = $combinedConverter($combinedMatchPosition);
+                            $parts[$combinedPart]   = self::weakCallArray(
+                                $combinedConverter,
+                                [$combinedMatchPosition]
+                            );
                             continue;
                         }
 
@@ -1257,7 +1262,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     } else {
                         if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
                             $combinedConverter    = $combinedConverters[$combinedPart];
-                            $parts[$combinedPart] = $combinedConverter($combinedPosition);
+                            $parts[$combinedPart] = self::weakCallArray(
+                                $combinedConverter,
+                                [$combinedPosition]
+                            );
                         } elseif (is_int($combinedPosition)) {
                             unset($parts[$combinedPart]);
                         }
@@ -1386,7 +1394,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                                  */
                                 if (is_array($converters) && isset($converters[$part])) {
                                     $converter    = $converters[$part];
-                                    $parts[$part] = $converter($matchPosition);
+                                    $parts[$part] = self::weakCallArray(
+                                        $converter,
+                                        [$matchPosition]
+                                    );
 
                                     continue;
                                 }
@@ -1401,7 +1412,10 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                                  */
                                 if (is_array($converters) && isset($converters[$part])) {
                                     $converter    = $converters[$part];
-                                    $parts[$part] = $converter($position);
+                                    $parts[$part] = self::weakCallArray(
+                                        $converter,
+                                        [$position]
+                                    );
                                 } elseif (is_int($position)) {
                                     /**
                                      * Remove the path if the parameter was not

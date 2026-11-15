@@ -52,8 +52,7 @@ use Phalcon\Html\Helper\Ul;
 use Phalcon\Html\Helper\VoidTag;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Url\UrlInterface;
-
-use function call_user_func_array;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * ServiceLocator implementation for Tag helpers.
@@ -129,6 +128,8 @@ use function call_user_func_array;
  */
 class TagFactory
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var html_factory_services
      */
@@ -174,7 +175,10 @@ class TagFactory
     {
         $helper = $this->newInstance($name);
 
-        return call_user_func_array([$helper, '__invoke'], $arguments);
+        /** @var callable $invokable */
+        $invokable = [$helper, '__invoke'];
+
+        return self::weakCallArray($invokable, $arguments);
     }
 
     public function has(string $name): bool

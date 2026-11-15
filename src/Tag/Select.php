@@ -15,6 +15,7 @@ namespace Phalcon\Tag;
 
 use Closure;
 use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Tag as BaseTag;
 use Stringable;
 
@@ -36,6 +37,8 @@ use function str_contains;
  */
 abstract class Select
 {
+    use WeakTypesTrait;
+
     protected const OPTION_CLOSE = '</option>';
 
     protected const SELECT_CLOSE = '</select>';
@@ -343,7 +346,7 @@ abstract class Select
                     }
 
                     $params[0] = $option;
-                    $executed  = call_user_func_array($using, $params);
+                    $executed  = self::weakCallArray($using, $params);
                     $code      .= self::toStringValue($executed);
                 }
             }

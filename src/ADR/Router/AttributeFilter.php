@@ -25,8 +25,8 @@ namespace Phalcon\ADR\Router;
 use Phalcon\ADR\Exceptions\RouteNotFound;
 use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Router\AttributeFilter as AttributeFilterInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
-use function call_user_func;
 use function is_array;
 use function method_exists;
 use function preg_match;
@@ -45,6 +45,8 @@ use function preg_match;
  */
 final class AttributeFilter implements AttributeFilterInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-param class-string          $actionClass
      * @phpstan-param adr_route_attributes  $attributes
@@ -85,7 +87,7 @@ final class AttributeFilter implements AttributeFilterInterface
                 $value = $this->cast($segment, $rule['type'] ?? 'string');
 
                 if (isset($rule['convert'])) {
-                    $value = call_user_func($rule['convert'], $value);
+                    $value = self::weakCallArray($rule['convert'], [$value]);
                 }
 
                 $result[$name] = $value;
