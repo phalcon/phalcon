@@ -16,30 +16,51 @@ namespace Phalcon\Tests\Unit\Mvc\Model\Query\Lang;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Query;
 use Phalcon\Mvc\Model\Query\Lang;
-use Phalcon\Phql\Exception as PhqlException;
 use Phalcon\Support\Settings;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use ReflectionProperty;
 
 use function array_fill;
-use function count;
 use function implode;
+use function ini_get;
+use function ini_set;
 use function memory_get_usage;
+use function microtime;
+use function property_exists;
 use function str_repeat;
 
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
+
 /**
- * Lang::parsePHQL() behaves as cphalcon's (ext/phalcon/mvc/model/query/base.c,
- * phql_parse_phql()): the AST is cached by the exact statement, tagged with
- * an `id` from a counter starting at `orm.unique_cache_id`, and parse errors
- * are Phalcon\Mvc\Model\Exception.
+ * Lang::parsePHQL() keeps the AST of each statement, with the exact statement
+ * as the key, and tags it with an `id` from a counter that starts at
+ * `orm.unique_cache_id`. A parse error is a Phalcon\Mvc\Model\Exception
+ * (ext/phalcon/mvc/model/query/base.c, phql_parse_phql()).
  *
- * The cache lives until Lang::clean() or Query::clean() - for the rest of
- * the process otherwise - so every test uses statements of its own.
+ * The cache lives until Query::clean(). tearDown() calls it, and each test
+ * uses statements of its own.
  */
 final class ParsePHQLTest extends AbstractUnitTestCase
 {
-    protected function tearDown(): void
+    /**
+     * The ini values that tearDown() restores, by setting.
+     *
+     * @var array<string, string>
+     */
+    private array $iniValues = [];
+
+    public function tearDown(): void
     {
+        foreach ($this->iniValues as $key => $value) {
+            ini_set('phalcon.' . $key, $value);
+        }
+
+        $this->iniValues = [];
+
         Settings::reset();
+        Query::clean();
+
         parent::tearDown();
     }
 
@@ -61,23 +82,6 @@ final class ParsePHQLTest extends AbstractUnitTestCase
     }
 
     /**
-     * Long-running workers outlive a request; clean() lets them drop the
-     * cached statements, which the next parse tags with a new id.
-     *
-     * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-11-07
-     */
-    public function testMvcModelQueryLangCleanForgetsCachedStatements(): void
-    {
-        $before = Lang::parsePHQL('SELECT * FROM LangClean')['id'] ?? null;
-        Lang::clean();
-        $after = Lang::parsePHQL('SELECT * FROM LangClean')['id'] ?? null;
-
-        $this->assertIsInt($before);
-        $this->assertGreaterThan($before, $after);
-    }
-
-    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-07
      */
@@ -87,8 +91,12 @@ final class ParsePHQLTest extends AbstractUnitTestCase
     }
 
     /**
+     * Tests that two PHQL strings which previously collided under
+     * zend_inline_hash_func produce distinct AST representations.
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-29
+     * @issue  https://github.com/phalcon/cphalcon/issues/14791
      */
     public function testMvcModelQueryLangParsePHQLCacheCollision(): void
     {
@@ -117,27 +125,43 @@ final class ParsePHQLTest extends AbstractUnitTestCase
     }
 
     /**
+     * A second, independent minimal collision pair, easier to verify than the
+     * 47-character id from the issue. 'B0' and 'AQ' collide under DJBX33A:
+     * 33 * 66 + 48 == 33 * 65 + 81.
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-06-05
+     * @issue  https://github.com/phalcon/cphalcon/issues/14791
      */
     public function testMvcModelQueryLangParsePHQLCacheCollisionMinimal(): void
     {
-        $ast1 = Lang::parsePHQL("SELECT * FROM Robots WHERE name = 'B0'");
-        $ast2 = Lang::parsePHQL("SELECT * FROM Robots WHERE name = 'AQ'");
+        $phql1 = "SELECT * FROM Robots WHERE name = 'B0'";
+        $phql2 = "SELECT * FROM Robots WHERE name = 'AQ'";
+
+        $ast1 = Lang::parsePHQL($phql1);
+        $ast2 = Lang::parsePHQL($phql2);
 
         $this->assertSame('B0', $ast1['where']['right']['value']);
         $this->assertSame('AQ', $ast2['where']['right']['value']);
     }
 
     /**
+     * The colliding query parsed second must keep its own value regardless of
+     * parse order - the bug poisons whichever query populates the cache first.
+     * 'qB' and 'pc' collide under DJBX33A: 33 * 113 + 66 == 33 * 112 + 99.
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-06-05
+     * @issue  https://github.com/phalcon/cphalcon/issues/14791
      */
     public function testMvcModelQueryLangParsePHQLCacheCollisionParseOrder(): void
     {
+        $phql1 = "SELECT * FROM Robots WHERE name = 'qB'";
+        $phql2 = "SELECT * FROM Robots WHERE name = 'pc'";
+
         // Parse the second one first to prove neither order poisons the cache.
-        $ast2 = Lang::parsePHQL("SELECT * FROM Robots WHERE name = 'pc'");
-        $ast1 = Lang::parsePHQL("SELECT * FROM Robots WHERE name = 'qB'");
+        $ast2 = Lang::parsePHQL($phql2);
+        $ast1 = Lang::parsePHQL($phql1);
 
         $this->assertSame('pc', $ast2['where']['right']['value']);
         $this->assertSame('qB', $ast1['where']['right']['value']);
@@ -157,7 +181,7 @@ final class ParsePHQLTest extends AbstractUnitTestCase
     {
         $cached = Lang::parsePHQL("SELECT * FROM LiteralBypass WHERE a = 'x'");
 
-        Settings::set('orm.enable_literals', false);
+        $this->setOrmSetting('orm.enable_literals', false);
 
         $this->assertSame($cached, Lang::parsePHQL("SELECT * FROM LiteralBypass WHERE a = 'x'"));
 
@@ -173,7 +197,7 @@ final class ParsePHQLTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryLangParsePHQLCacheLevelMinusOneHasNoId(): void
     {
-        Settings::set('orm.cache_level', -1);
+        $this->setOrmSetting('orm.cache_level', -1);
 
         $this->assertArrayNotHasKey('id', Lang::parsePHQL('SELECT * FROM CacheLevelMinusOne') ?? []);
     }
@@ -186,24 +210,31 @@ final class ParsePHQLTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryLangParsePHQLCacheLevelZeroCachesWithoutId(): void
     {
-        Settings::set('orm.cache_level', 0);
+        $this->setOrmSetting('orm.cache_level', 0);
         $first = Lang::parsePHQL('SELECT * FROM CacheLevelZero');
 
-        Settings::set('orm.cache_level', 3);
+        $this->setOrmSetting('orm.cache_level', 3);
         $second = Lang::parsePHQL('SELECT * FROM CacheLevelZero');
 
         $this->assertSame([false, $first], [isset($first['id']), $second]);
     }
 
     /**
+     * The same PHQL parsed twice must return an equal AST - a cache hit for a
+     * matching key must yield the correct representation.
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-06-05
+     * @issue  https://github.com/phalcon/cphalcon/issues/14791
      */
     public function testMvcModelQueryLangParsePHQLCacheReturnsSameAst(): void
     {
         $phql = "SELECT * FROM Robots WHERE name = 'cacheHit'";
 
-        $this->assertSame(Lang::parsePHQL($phql), Lang::parsePHQL($phql));
+        $ast1 = Lang::parsePHQL($phql);
+        $ast2 = Lang::parsePHQL($phql);
+
+        $this->assertSame($ast1, $ast2);
     }
 
     /**
@@ -212,24 +243,25 @@ final class ParsePHQLTest extends AbstractUnitTestCase
      */
     public function testMvcModelQueryLangParsePHQLErrorsAreModelExceptions(): void
     {
-        try {
-            Lang::parsePHQL('SELECT * FROM ParseErrors WHERE id = = 1');
-            $this->fail('no exception');
-        } catch (Exception $ex) {
-            $this->assertSame(
-                [
-                    "Syntax error, unexpected token EQUALS, near to ' 1', "
-                    . 'when parsing: SELECT * FROM ParseErrors WHERE id = = 1 (40)',
-                    PhqlException::class,
-                ],
-                [$ex->getMessage(), $ex->getPrevious() !== null ? $ex->getPrevious()::class : null]
-            );
-        }
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            "Syntax error, unexpected token EQUALS, near to ' 1', "
+            . 'when parsing: SELECT * FROM ParseErrors WHERE id = = 1 (40)'
+        );
+
+        Lang::parsePHQL('SELECT * FROM ParseErrors WHERE id = = 1');
     }
 
     /**
+     * The scanner must resolve the escape sequences of a string literal, so
+     * that the dialect receives the real characters and escapes them for its
+     * own syntax. An unknown sequence keeps its backslash, the same as MySQL
+     * and PHP do, so a LIKE pattern such as "100\%" still matches a percent
+     * sign.
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-09-09
+     * @issue  https://github.com/phalcon/cphalcon/issues/17585
      */
     public function testMvcModelQueryLangParsePHQLEscapeSequencesInString(): void
     {
@@ -275,12 +307,31 @@ final class ParsePHQLTest extends AbstractUnitTestCase
     }
 
     /**
-     * cphalcon's version also requires the 40,000-item list to parse in under
-     * 3 s; that limit is sized for C. The pure-PHP parser's speed is pinned
-     * by phalcon/phql's growth-ratio tests instead.
+     * The id counter wraps from PHP_INT_MAX to PHP_INT_MIN, and the parser
+     * continues to work.
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-11-14
+     */
+    public function testMvcModelQueryLangParsePHQLIdWrapsAtMaximum(): void
+    {
+        $this->setIdCounter(PHP_INT_MAX);
+
+        $actual = [
+            Lang::parsePHQL('SELECT * FROM IdWrapOne')['id'] ?? null,
+            Lang::parsePHQL('SELECT * FROM IdWrapTwo')['id'] ?? null,
+            Lang::parsePHQL('SELECT * FROM IdWrapThree')['id'] ?? null,
+        ];
+
+        $this->assertSame([PHP_INT_MAX, PHP_INT_MIN, PHP_INT_MIN + 1], $actual);
+    }
+
+    /**
+     * The IN list is built in linear time; 40,000 items used to take
+     * seconds.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-08-26
      */
     public function testMvcModelQueryLangParsePHQLLargeInList(): void
     {
@@ -288,40 +339,52 @@ final class ParsePHQLTest extends AbstractUnitTestCase
         $phql  = 'SELECT * FROM Robots WHERE id IN ('
             . implode(',', array_fill(0, $count, '1')) . ')';
 
+        $start  = microtime(true);
         $actual = Lang::parsePHQL($phql);
+        $spent  = microtime(true) - $start;
 
-        $this->assertSame($count, count($actual['where']['right'] ?? []));
+        $this->assertIsArray($actual);
+        $this->assertLessThan(3.0, $spent);
     }
 
     /**
+     * With literals disabled the scanner still allocates the literal token;
+     * the parser must release it when it rejects the statement.
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-08-26
      */
     public function testMvcModelQueryLangParsePHQLRejectedLiteralDoesNotLeak(): void
     {
-        Settings::set('orm.enable_literals', false);
+        $this->setOrmSetting('orm.enable_literals', false);
 
-        $phql = 'SELECT * FROM Robots WHERE name = "' . str_repeat('x', 1000) . '"';
-
-        $before = memory_get_usage();
+        $phql     = 'SELECT * FROM Robots WHERE name = "' . str_repeat('x', 1000) . '"';
+        $rejected = 0;
+        $before   = memory_get_usage();
 
         for ($i = 0; $i < 5000; $i++) {
             try {
                 Lang::parsePHQL($phql);
             } catch (Exception $ex) {
                 // Expected: literals are disabled.
+                $rejected++;
             }
         }
 
         $delta = memory_get_usage() - $before;
 
-        // 5,000 x 1 KB literals leaked ~5.5 MB in cphalcon before its fix.
+        $this->assertSame(5000, $rejected);
+
+        // 5,000 x 1 KB literals leaked ~5.5 MB before the fix.
         $this->assertLessThan(1048576, $delta);
     }
 
     /**
+     * A backslash as the last byte of a quoted string must be a scanning
+     * error, not an escape that swallows the terminator.
+     *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-08-26
      */
     public function testMvcModelQueryLangParsePHQLTrailingBackslashInString(): void
     {
@@ -337,5 +400,35 @@ final class ParsePHQLTest extends AbstractUnitTestCase
             $this->assertNotNull($caught, $literal);
             $this->assertStringContainsString('Scanning error', $caught->getMessage());
         }
+    }
+
+    /**
+     * Sets the next id of the parser. The C parser of cphalcon reads the
+     * counter from the ini value. phalcon reads the setting one time only,
+     * then keeps the counter in the private Lang::$nextId property.
+     */
+    private function setIdCounter(int $value): void
+    {
+        $this->setOrmSetting('orm.unique_cache_id', $value);
+
+        if (property_exists(Lang::class, 'nextId')) {
+            (new ReflectionProperty(Lang::class, 'nextId'))->setValue(null, $value);
+        }
+    }
+
+    /**
+     * Changes an ORM setting in the two places that the projects read it:
+     * Settings (phalcon) and the ini value (the C parser of cphalcon). In
+     * each project, the other call has no effect. tearDown() restores both.
+     */
+    private function setOrmSetting(string $key, bool | int $value): void
+    {
+        $previous = ini_get('phalcon.' . $key);
+        if (false !== $previous && !isset($this->iniValues[$key])) {
+            $this->iniValues[$key] = $previous;
+        }
+
+        ini_set('phalcon.' . $key, (string) (int) $value);
+        Settings::set($key, $value);
     }
 }

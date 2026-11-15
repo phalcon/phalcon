@@ -175,12 +175,17 @@ final class SettingsGetSetTest extends AbstractUnitTestCase
      * cphalcon's phalcon.orm.cache_level and phalcon.orm.unique_cache_id
      * (both "3" by default) drive Lang::parsePHQL()'s AST cache.
      *
+     * In cphalcon, orm.unique_cache_id is also the live id counter, thus its
+     * value changes after each new parsed statement. The test checks only
+     * its type.
+     *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-07
      */
     public function testSupportSettingsOrmCacheDefaults(): void
     {
-        $this->assertSame([3, 3], [Settings::get('orm.cache_level'), Settings::get('orm.unique_cache_id')]);
+        $this->assertSame(3, Settings::get('orm.cache_level'));
+        $this->assertIsInt(Settings::get('orm.unique_cache_id'));
     }
 
     /**

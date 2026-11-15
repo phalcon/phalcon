@@ -17,16 +17,15 @@ use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Query\Lang;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
-use function str_repeat;
-
 final class StackOverflowTest extends AbstractUnitTestCase
 {
     /**
-     * cphalcon's Lemon parser has a 100-entry stack; nesting beyond it fails
-     * closed with an exception instead of crashing.
+     * A deeply nested PHQL statement must not silently drop the part of the
+     * query that overflowed the parser stack. The parser must fail closed and
+     * report the overflow instead of accepting a truncated statement.
      *
      * @author Phalcon Team <team@phalcon.io>
-     * @since  2026-04-29
+     * @since  2026-08-24
      */
     public function testMvcModelQueryLangParsePHQLStackOverflowFailsClosed(): void
     {
