@@ -55,6 +55,7 @@ class Settings
         'orm.call_setters_on_hydration'         => false,
         'orm.case_insensitive_column_map'       => false,
         'orm.cast_last_insert_id_to_int'        => false,
+        'orm.cache_level'                       => 3,
         'orm.cast_on_hydrate'                   => false,
         'orm.column_renaming'                   => true,
         'orm.disable_assign_setters'            => false,
@@ -68,6 +69,7 @@ class Settings
         'orm.not_null_validations'              => true,
         'orm.resultset_empty_left_join_model'   => true,
         'orm.resultset_prefetch_records'        => 0,
+        'orm.unique_cache_id'                   => 3,
         'orm.update_snapshot_on_save'           => true,
         'orm.virtual_foreign_keys'              => true,
         'orm.dynamic_update'                    => true,
@@ -93,7 +95,9 @@ class Settings
 
         if (false !== $value) {
             return match ($key) {
-                'orm.resultset_prefetch_records' => (int) $value,
+                'orm.cache_level',
+                'orm.resultset_prefetch_records',
+                'orm.unique_cache_id'            => (int) $value,
                 default                          => (bool) $value,
             };
         }
@@ -127,6 +131,7 @@ class Settings
             case 'orm.call_setters_on_hydration':
             case 'orm.case_insensitive_column_map':
             case 'orm.cast_last_insert_id_to_int':
+            case 'orm.cache_level':
             case 'orm.cast_on_hydrate':
             case 'orm.column_renaming':
             case 'orm.disable_assign_setters':
@@ -140,6 +145,7 @@ class Settings
             case 'orm.not_null_validations':
             case 'orm.resultset_empty_left_join_model':
             case 'orm.resultset_prefetch_records':
+            case 'orm.unique_cache_id':
             case 'orm.update_snapshot_on_save':
             case 'orm.virtual_foreign_keys':
             case 'orm.dynamic_update':

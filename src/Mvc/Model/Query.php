@@ -73,12 +73,12 @@ use Phalcon\Mvc\Model\Query\Exceptions\UnknownPhqlStatement;
 use Phalcon\Mvc\Model\Query\Exceptions\UnsafeIdentifier;
 use Phalcon\Mvc\Model\Query\Exceptions\UpdateMultipleNotSupported;
 use Phalcon\Mvc\Model\Query\Exceptions\WriteConnectionMissing;
+use Phalcon\Mvc\Model\Query\Lang;
 use Phalcon\Mvc\Model\Query\Status;
 use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
-use Phalcon\Phql\Parser;
 use Phalcon\Phql\Scanner\Opcode;
 use Phalcon\Support\Settings;
 
@@ -214,8 +214,6 @@ class Query implements QueryInterface, InjectionAwareInterface
 
     protected int $nestingLevel = -1;
 
-    protected Parser $parser;
-
     protected string $resultsetRowClass = "";
 
     protected bool $sharedLock = false;
@@ -285,15 +283,16 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         $this->bindParams = [];
         $this->bindTypes  = [];
-        $this->parser     = new Parser();
     }
 
     /**
-     * Destroys the internal PHQL cache
+     * Destroys the internal PHQL cache, and the parsed statements it is keyed
+     * by (Lang::clean())
      */
     public static function clean(): void
     {
         self::$internalPhqlCache = [];
+        Lang::clean();
     }
 
     /**
@@ -669,12 +668,10 @@ class Query implements QueryInterface, InjectionAwareInterface
          */
         /** @var string $phql */
         $phql = $this->phql;
-        $ast  = $this->parser
-            ->setEnableLiterals((bool) Settings::get('orm.enable_literals'))
-            ->parse($phql);
+        $ast  = Lang::parsePHQL($phql);
 
         $irPhql   = null;
-        $uniqueId = null;
+        $cacheKey = null;
 
         /**
          * The parser tags every statement with its own identifier and with
@@ -685,12 +682,14 @@ class Query implements QueryInterface, InjectionAwareInterface
         if (is_array($ast)) {
             /**
              * Check if the prepared PHQL is already cached
-             * Parsed ASTs have a unique id
+             * Parsed ASTs have a unique id. The implicit joins option
+             * changes the intermediate representation, thus it is part of
+             * the key.
              */
             if (isset($ast["id"])) {
-                $uniqueId = $ast['id'];
-                if (isset(self::$internalPhqlCache[$uniqueId])) {
-                    $irPhql = self::$internalPhqlCache[$uniqueId];
+                $cacheKey = $ast['id'] . ':' . (int) $this->enableImplicitJoins;
+                if (isset(self::$internalPhqlCache[$cacheKey])) {
+                    $irPhql = self::$internalPhqlCache[$cacheKey];
                     if (is_array($irPhql)) {
                         /**
                          * A statement reaches the cache only after it was
@@ -709,7 +708,9 @@ class Query implements QueryInterface, InjectionAwareInterface
                          * otherwise keep producing SQL with the stale value
                          * baked in at first parse. See issue #17020.
                          */
-                        return $this->refreshSchemasInIntermediate($irPhql);
+                        $this->intermediate = $this->refreshSchemasInIntermediate($irPhql);
+
+                        return $this->intermediate;
                     }
                 }
             }
@@ -741,8 +742,8 @@ class Query implements QueryInterface, InjectionAwareInterface
         /**
          * Store the prepared AST in the cache
          */
-        if (is_int($uniqueId)) {
-            self::$internalPhqlCache[$uniqueId] = $irPhql;
+        if (null !== $cacheKey) {
+            self::$internalPhqlCache[$cacheKey] = $irPhql;
         }
 
         $this->intermediate = $irPhql;
