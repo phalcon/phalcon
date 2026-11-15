@@ -1214,68 +1214,7 @@ class Manager implements ManagerInterface, Enumerable
         bool $collect,
         bool $stopOnFalse
     ): mixed {
-        $status    = null;
-        $queueSize = count($queue);
-
-        // Single-handler fast path.
-        if (1 === $queueSize) {
-            $tuple   = $queue[0];
-            $handler = $tuple[0];
-            $type    = $tuple[1];
-
-            if (0 === $type) {
-                /** @phpstan-var Closure $handler */
-                $ret = self::weakCallArray($handler, [$event, $source, $data]);
-            } elseif (1 === $type) {
-                /** @phpstan-var array{0: object, 1: string} $handler */
-                $ret = self::weakCallMethod(
-                    $handler[0],
-                    $handler[1],
-                    [$event, $source, $data]
-                );
-            } elseif (2 === $type) {
-                /**
-                 * @phpstan-var object                                     $handler
-                 * @phpstan-var array{0: object, 1: int, 2: int, 3: string} $tuple
-                 */
-                $handlerClass = $tuple[3];
-
-                if (!isset($this->methodExistsCache[$handlerClass][$eventName])) {
-                    if (
-                        !isset($this->methodExistsCache[$handlerClass])
-                        && $this->methodExistsCacheLimit > 0
-                        && count($this->methodExistsCache) >= $this->methodExistsCacheLimit
-                    ) {
-                        $this->methodExistsCache = [];
-                    }
-
-                    $this->methodExistsCache[$handlerClass][$eventName] = method_exists($handler, $eventName);
-                }
-
-                if (!$this->methodExistsCache[$handlerClass][$eventName]) {
-                    return $status;
-                }
-
-                $ret = self::weakCallMethod(
-                    $handler,
-                    $eventName,
-                    [$event, $source, $data]
-                );
-            } else {
-                /** @phpstan-var callable $handler */
-                $ret = self::weakCallArray($handler, [$event, $source, $data]);
-            }
-
-            if ($collect) {
-                $this->responses[] = $ret;
-            }
-
-            if ($stopOnFalse && $cancelable && false === $ret) {
-                return false;
-            }
-
-            return $ret;
-        }
+        $status = null;
 
         foreach ($queue as $tuple) {
             $handler = $tuple[0];
