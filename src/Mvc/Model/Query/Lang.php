@@ -18,6 +18,9 @@ use Phalcon\Phql\Exception as PhqlException;
 use Phalcon\Phql\Parser;
 use Phalcon\Support\Settings;
 
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
+
 /**
  * Phalcon\Mvc\Model\Query\Lang
  *
@@ -34,10 +37,13 @@ use Phalcon\Support\Settings;
  * `orm.unique_cache_id`), which Query uses to cache its intermediate
  * representation.
  *
+ * A cached statement is returned without the `orm.enable_literals` check,
+ * the same as in cphalcon.
+ *
  * cphalcon frees this cache at the end of every request. Here it lives as
  * long as the PHP process: long-running workers (Swoole, RoadRunner,
- * FrankenPHP) should call clean() - or Query::clean(), which calls it -
- * between requests, or set `orm.cache_level` to -1.
+ * FrankenPHP) should call Query::clean() between requests, or set
+ * `orm.cache_level` to -1.
  *
  * ```php
  * use Phalcon\Mvc\Model\Query\Lang;
@@ -66,6 +72,12 @@ abstract class Lang
     /**
      * Forgets every cached statement. Ids are never reused: a statement
      * parsed again gets a new one.
+     *
+     * Query::clean() calls this method, the same as cphalcon frees its parser
+     * cache. Use Query::clean(): this method does not empty the cache of
+     * intermediate representations in Query.
+     *
+     * @internal
      */
     public static function clean(): void
     {
@@ -105,7 +117,13 @@ abstract class Lang
 
         if ($cacheLevel >= 1) {
             self::$nextId ??= (int) Settings::get('orm.unique_cache_id');
-            $ast['id']    = self::$nextId++;
+            $ast['id']    = self::$nextId;
+
+            /**
+             * The counter wraps from PHP_INT_MAX to PHP_INT_MIN, the same as
+             * the C counter of cphalcon.
+             */
+            self::$nextId = PHP_INT_MAX === self::$nextId ? PHP_INT_MIN : self::$nextId + 1;
         }
 
         if ($cacheLevel >= 0) {
