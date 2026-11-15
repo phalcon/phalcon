@@ -6,7 +6,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Changed
 
-- `Phalcon\Mvc\Model\Query` parses through `Phalcon\Mvc\Model\Query\Lang`; its protected `$parser` property was removed.
+- `Phalcon\Mvc\Model\Query` parses through `Phalcon\Mvc\Model\Query\Lang`; its protected `$parser` property was removed. [#800](https://github.com/phalcon/phalcon/issues/800)
 - Faster item storage, lookup, removal and JSON serialization in `Phalcon\Support\Collection`. [#17683](https://github.com/phalcon/cphalcon/issues/17683)
 - Faster route index build in `Phalcon\Mvc\Router` for routes with no host name. [#17693](https://github.com/phalcon/cphalcon/issues/17693)
 - Faster service registration in `Phalcon\Factory\AbstractFactory` and the factories that extend it. [#17696](https://github.com/phalcon/cphalcon/issues/17696)
@@ -25,7 +25,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Added
 
-- `Phalcon\Mvc\Model\Query\Lang::parsePHQL()`, as in cphalcon: it caches each statement's AST and tags it with an `id` (settings `orm.cache_level` and `orm.unique_cache_id`, both `3` by default), so `Phalcon\Mvc\Model\Query` caches its intermediate representation per statement again. The cache lives as long as the PHP process; `Lang::clean()` (also called by `Query::clean()`) empties it, e.g. between requests of a long-running worker. `orm.unique_cache_id` is read once, at the first parse.
+- `Phalcon\Mvc\Model\Query\Lang::parsePHQL()`, as in cphalcon: it caches each statement's AST and tags it with an `id` (settings `orm.cache_level` and `orm.unique_cache_id`, both `3` by default), so `Phalcon\Mvc\Model\Query` caches its intermediate representation per statement again. The cache lives as long as the PHP process; `Query::clean()` empties it, e.g. between requests of a long-running worker. `orm.unique_cache_id` is read once, at the first parse. [#800](https://github.com/phalcon/phalcon/issues/800)
 
 ### Fixed
 
@@ -37,7 +37,9 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Forms\Form::bind()` and `Phalcon\Mvc\Model` (`__set()`, `assign()`, `writeAttribute()`, the setters, the hydration and `unserialize()`) throwing a `TypeError` for a value that cphalcon converts, such as `'42'` for an `int` property; they now use the PHP weak type rules, the same as cphalcon. [#804](https://github.com/phalcon/phalcon/issues/804)
 - `Phalcon\Forms\Form::getValue()` returning the tag factory for the name `tagFactory`. [#17727](https://github.com/phalcon/cphalcon/issues/17727)
 - `Phalcon\Mvc\Model::doLowInsert()` not reading back the generated id on MySQL when the identity property is `0`. [#17689](https://github.com/phalcon/cphalcon/issues/17689)
-- `Phalcon\Mvc\Model\Query` throwing `Phalcon\Phql\Exception` instead of `Phalcon\Mvc\Model\Exception` for PHQL errors; PHQL statements now parse exactly as in cphalcon (error messages, string escape sequences, nesting limit, empty statements), with the parser from `phalcon/phql`.
+- `Phalcon\Mvc\Model\Query::getIntermediate()` throwing a `TypeError` after `parse()` got the intermediate representation from the cache. [#800](https://github.com/phalcon/phalcon/issues/800)
+- `Phalcon\Mvc\Model\Query` reusing a cached intermediate representation that was built with the other value of the `enable_implicit_joins` option. [#800](https://github.com/phalcon/phalcon/issues/800)
+- `Phalcon\Mvc\Model\Query` throwing `Phalcon\Phql\Exception` instead of `Phalcon\Mvc\Model\Exception` for PHQL errors; PHQL statements now parse exactly as in cphalcon (error messages, string escape sequences, nesting limit, empty statements), with the parser from `phalcon/phql`. [#800](https://github.com/phalcon/phalcon/issues/800)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compile()` rendering serialized blocks for the second child of a layout when `stat` is `false`. [#17674](https://github.com/phalcon/cphalcon/issues/17674)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compileCall()` silently dropping `{% call %}` blocks instead of throwing an exception. [#17676](https://github.com/phalcon/cphalcon/issues/17676)
 - `Phalcon\Support\Debug::debugVar()` storing the arguments and objects of each backtrace frame. [#17746](https://github.com/phalcon/cphalcon/issues/17746)
