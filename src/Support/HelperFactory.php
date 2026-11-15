@@ -74,8 +74,7 @@ use Phalcon\Support\Helper\Str\Ucwords;
 use Phalcon\Support\Helper\Str\Uncamelize;
 use Phalcon\Support\Helper\Str\Underscore;
 use Phalcon\Support\Helper\Str\Upper;
-
-use function call_user_func_array;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * ServiceLocator implementation for helpers
@@ -146,6 +145,8 @@ use function call_user_func_array;
  */
 class HelperFactory extends AbstractFactory
 {
+    use WeakTypesTrait;
+
     /**
      * Constructor.
      *
@@ -168,7 +169,7 @@ class HelperFactory extends AbstractFactory
         /** @var callable $invokable */
         $invokable = [$helper, '__invoke'];
 
-        return call_user_func_array($invokable, $arguments);
+        return self::weakCallArray($invokable, $arguments);
     }
 
     /**

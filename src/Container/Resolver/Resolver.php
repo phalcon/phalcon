@@ -39,6 +39,7 @@ use Phalcon\Container\Resolver\Lazy\Lazy;
 use Phalcon\Contracts\Container\ContainerTypes;
 use Phalcon\Contracts\Container\Resolver\ResolverService;
 use Phalcon\Contracts\Container\Service\Collection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -48,7 +49,6 @@ use ReflectionParameter;
 use ReflectionType;
 
 use function array_key_exists;
-use function call_user_func_array;
 use function class_exists;
 use function method_exists;
 
@@ -59,6 +59,8 @@ use function method_exists;
  */
 class Resolver implements ResolverService
 {
+    use WeakTypesTrait;
+
     /**
      * Is this a resolvable class?
      */
@@ -90,7 +92,7 @@ class Resolver implements ResolverService
         $params     = $reflection->getParameters();
         $resolved   = $this->resolveParameters($ioc, $params, $arguments);
 
-        return call_user_func_array($callableObject, $resolved);
+        return self::weakCallArray($callableObject, $resolved);
     }
 
     /**

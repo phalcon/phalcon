@@ -25,6 +25,7 @@ use Phalcon\Di\Exceptions\AliasNameMustBeString;
 use Phalcon\Di\Exceptions\CircularAliasReference;
 use Phalcon\Di\Exceptions\ServiceCannotBeResolved;
 use Phalcon\Events\ManagerInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use stdClass;
 
 /**
@@ -70,6 +71,8 @@ use stdClass;
  */
 class Di extends stdClass implements DiInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Latest DI build
      */
@@ -270,7 +273,7 @@ class Di extends stdClass implements DiInterface
                 }
 
                 if (is_array($parameters) && !empty($parameters)) {
-                    $instance = new $name(...$parameters);
+                    $instance = self::weakNew($name, $parameters);
                 } else {
                     $instance = new $name();
                 }

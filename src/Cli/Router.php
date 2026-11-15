@@ -19,6 +19,7 @@ use Phalcon\Cli\Router\Route;
 use Phalcon\Cli\Router\RouteInterface;
 use Phalcon\Contracts\Cli\CliTypes;
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function array_reverse;
@@ -55,6 +56,8 @@ use function substr;
  */
 class Router extends AbstractInjectionAware implements RouterInterface
 {
+    use WeakTypesTrait;
+
     protected string $action        = "";
 
     protected string $defaultAction = "";
@@ -323,7 +326,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                                  * Check if the part has a converter
                                  */
                                 if (isset($converters[$part])) {
-                                    $parts[$part] = call_user_func_array(
+                                    $parts[$part] = self::weakCallArray(
                                         $converters[$part],
                                         [$matchPosition]
                                     );
@@ -338,7 +341,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                                  * Apply the converters anyway
                                  */
                                 if (isset($converters[$part])) {
-                                    $parts[$part] = call_user_func_array(
+                                    $parts[$part] = self::weakCallArray(
                                         $converters[$part],
                                         [$position]
                                     );

@@ -26,10 +26,10 @@ use Phalcon\Filter\FilterInterface;
 use Phalcon\Mvc\Model\Binder;
 use Phalcon\Mvc\Model\BinderInterface;
 use Phalcon\Support\Collection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_map;
 use function array_values;
-use function call_user_func_array;
 use function class_exists;
 use function implode;
 use function is_callable;
@@ -83,6 +83,7 @@ use function str_ends_with;
 abstract class AbstractDispatcher extends AbstractInjectionAware implements DispatcherInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
+    use WeakTypesTrait;
 
     protected string $actionName   = "";
 
@@ -207,7 +208,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
         $callable = [$altHandler, $altAction];
         /** @phpstan-var dispatcher_params $altParams */
 
-        $result = call_user_func_array(
+        $result = self::weakCallArray(
             $callable,
             array_values($altParams)
         );

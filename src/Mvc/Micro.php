@@ -38,6 +38,7 @@ use Phalcon\Mvc\Micro\LazyLoader;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 use Phalcon\Mvc\Model\BinderInterface;
 use Phalcon\Mvc\Router\RouteInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function is_array;
@@ -68,6 +69,7 @@ use function is_string;
 class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
 {
     use EventsAwareTrait;
+    use WeakTypesTrait;
 
     /**
      * @var callable|null
@@ -527,7 +529,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                     );
                 } else {
                     /** @var callable $handler */
-                    $lazyReturned = call_user_func_array($handler, $params);
+                    $lazyReturned = self::weakCallArray($handler, $params);
                 }
 
                 /**

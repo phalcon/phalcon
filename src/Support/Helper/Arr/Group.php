@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 
-use function call_user_func;
 use function is_array;
 use function is_callable;
 use function is_int;
@@ -28,6 +28,7 @@ use function is_string;
 class Group
 {
     use InfoTrait;
+    use WeakTypesTrait;
 
     /**
      * @param array<array-key, mixed> $collection
@@ -87,7 +88,7 @@ class Group
     {
         if (true === $this->isCallable($method)) {
             /** @var array-key $key */
-            $key              = call_user_func($method, $element);
+            $key              = self::weakCallArray($method, [$element]);
             $filtered[$key][] = $element;
         }
 

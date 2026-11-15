@@ -11,15 +11,17 @@
 
 namespace Phalcon\Support\Traits;
 
+use function call_user_func_array;
+use function is_callable;
+
 /**
  * Calls a setter or writes a property with the PHP weak type rules.
  *
  * This file has no declare(strict_types=1). Do not add it. PHP checks a call
  * or a property write in the mode of the file that holds the calling code.
  * cphalcon is compiled C, so PHP checks its setter calls and property writes
- * in weak mode. These methods give the same checks to the PHP code. The tests
- * in tests/database/Mvc/Model/WeakModeTypesTest.php fail if the declare is
- * added.
+ * in weak mode. These methods give the same checks to the PHP code. The
+ * WeakModeTypesTest tests fail if the declare is added.
  */
 trait WeakTypesTrait
 {
@@ -32,6 +34,52 @@ trait WeakTypesTrait
         mixed $value
     ): void {
         $object->$method($value);
+    }
+
+    /**
+     * Calls a callable with a list of arguments, in weak mode, and returns
+     * the result. A string key gives a named argument.
+     *
+     * @param array<array-key, mixed> $arguments
+     */
+    private static function weakCallArray(
+        callable $callable,
+        array $arguments
+    ): mixed {
+        return call_user_func_array($callable, $arguments);
+    }
+
+    /**
+     * Calls a method of the object with a list of arguments, in weak mode,
+     * and returns the result. If the method cannot be called from this
+     * scope, the direct call gives the same Error as cphalcon.
+     *
+     * @param array<array-key, mixed> $arguments
+     */
+    private static function weakCallMethod(
+        object $object,
+        string $method,
+        array $arguments
+    ): mixed {
+        $callable = [$object, $method];
+        if (!is_callable($callable)) {
+            return $object->$method(...$arguments);
+        }
+
+        return call_user_func_array($callable, $arguments);
+    }
+
+    /**
+     * Creates an instance of the class with a list of constructor arguments,
+     * in weak mode. A string key gives a named argument.
+     *
+     * @param array<array-key, mixed> $arguments
+     */
+    private static function weakNew(
+        string $className,
+        array $arguments
+    ): object {
+        return new $className(...$arguments);
     }
 
     /**

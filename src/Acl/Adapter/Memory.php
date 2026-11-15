@@ -33,6 +33,7 @@ use Phalcon\Acl\Role;
 use Phalcon\Acl\RoleAwareInterface;
 use Phalcon\Acl\RoleInterface;
 use Phalcon\Contracts\Acl\AclTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionFunction;
@@ -40,7 +41,6 @@ use ReflectionNamedType;
 
 use function array_keys;
 use function call_user_func;
-use function call_user_func_array;
 use function get_class;
 use function in_array;
 use function is_array;
@@ -123,6 +123,8 @@ use const E_USER_WARNING;
  */
 class Memory extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     /**
      * Access
      *
@@ -1134,7 +1136,7 @@ class Memory extends AbstractAdapter
         // Check necessary parameters
         if (count($parametersForFunction) >= $numberOfRequiredParameters) {
             return $haveAccess == Enum::ALLOW &&
-                call_user_func_array($funcAccess, $parametersForFunction);
+                self::weakCallArray($funcAccess, $parametersForFunction);
         }
 
         // We don't have enough parameters

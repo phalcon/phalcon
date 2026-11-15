@@ -32,6 +32,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` reporting blob columns as `Column::TYPE_VARCHAR`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` reporting `tinyint(1)` columns as `Column::TYPE_INTEGER`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` using `Column::TYPE_DECIMAL` as the bind type of `float` columns, which stored their values as blobs. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
+- `Phalcon\Forms\Form::bind()` and `Phalcon\Mvc\Model` (`__set()`, `assign()`, `writeAttribute()`, the setters, the hydration and `unserialize()`) throwing a `TypeError` for a value that cphalcon converts, such as `'42'` for an `int` property; they now use the PHP weak type rules, the same as cphalcon. [#804](https://github.com/phalcon/phalcon/issues/804)
 - `Phalcon\Forms\Form::getValue()` returning the tag factory for the name `tagFactory`. [#17727](https://github.com/phalcon/cphalcon/issues/17727)
 - `Phalcon\Mvc\Model::doLowInsert()` not reading back the generated id on MySQL when the identity property is `0`. [#17689](https://github.com/phalcon/cphalcon/issues/17689)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compile()` rendering serialized blocks for the second child of a layout when `stat` is `false`. [#17674](https://github.com/phalcon/cphalcon/issues/17674)

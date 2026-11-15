@@ -29,9 +29,9 @@ use Phalcon\Di\Exceptions\PropertyValueRequired;
 use Phalcon\Di\Exceptions\SetterInjectionRequiresInstance;
 use Phalcon\Di\Exceptions\SetterParametersMustBeArray;
 use Phalcon\Di\Exceptions\UnknownServiceType;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function call_user_func;
-use function call_user_func_array;
 use function is_array;
 use function is_object;
 
@@ -46,6 +46,8 @@ use function is_object;
  */
 class Builder
 {
+    use WeakTypesTrait;
+
     /**
      * Builds a service using a complex service definition
      *
@@ -75,7 +77,7 @@ class Builder
              * parameters
              */
             if (!empty($parameters)) {
-                $instance = new $className(...$parameters);
+                $instance = self::weakNew($className, $parameters);
             } else {
                 $instance = new $className();
             }
@@ -87,8 +89,9 @@ class Builder
                 /**
                  * Create the instance based on the parameters
                  */
-                $instance = new $className(
-                    ...$this->buildParameters($container, $definition['arguments'])
+                $instance = self::weakNew(
+                    $className,
+                    $this->buildParameters($container, $definition['arguments'])
                 );
             } else {
                 $instance = new $className();
@@ -141,8 +144,9 @@ class Builder
                         /**
                          * Call the method on the instance
                          */
-                        call_user_func_array(
-                            $methodCall,
+                        self::weakCallMethod(
+                            $instance,
+                            $method['method'],
                             $this->buildParameters($container, $arguments)
                         );
 
@@ -204,10 +208,14 @@ class Builder
                 $propertyName  = $property['name'];
                 $propertyValue = $property['value'];
 
-                $instance->$propertyName = $this->buildParameter(
-                    $container,
-                    $propertyPosition,
-                    $propertyValue
+                self::weakWrite(
+                    $instance,
+                    $propertyName,
+                    $this->buildParameter(
+                        $container,
+                        $propertyPosition,
+                        $propertyValue
+                    )
                 );
             }
         }

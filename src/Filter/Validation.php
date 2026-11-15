@@ -31,6 +31,7 @@ use Phalcon\Filter\Validation\ValidationInterface;
 use Phalcon\Filter\Validation\ValidatorInterface;
 use Phalcon\Messages\MessageInterface;
 use Phalcon\Messages\Messages;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function array_filter;
@@ -59,6 +60,7 @@ use function property_exists;
 class Validation extends Injectable implements ValidationInterface
 {
     use CamelizeTrait;
+    use WeakTypesTrait;
 
     /**
      * Default messages for validators, keyed by validator class name
@@ -317,11 +319,11 @@ class Validation extends Injectable implements ValidationInterface
             $method = "set" . $this->toCamelize($field);
 
             if (method_exists($entity, $method)) {
-                $entity->{$method}($value);
+                self::weakCall($entity, $method, $value);
             } elseif (method_exists($entity, "writeAttribute")) {
                 $entity->writeAttribute($field, $value);
             } elseif (property_exists($entity, $field)) {
-                $entity->{$field} = $value;
+                self::weakWrite($entity, $field, $value);
             }
         }
 
@@ -478,11 +480,11 @@ class Validation extends Injectable implements ValidationInterface
                 $method = "set" . $this->toCamelize($field);
 
                 if (true === method_exists($this->entity, $method)) {
-                    $this->entity->{$method}($value);
+                    self::weakCall($this->entity, $method, $value);
                 } elseif (true === method_exists($this->entity, "writeAttribute")) {
                     $this->entity->writeAttribute($field, $value);
                 } elseif (true === property_exists($this->entity, $field)) {
-                    $this->entity->{$field} = $value;
+                    self::weakWrite($this->entity, $field, $value);
                 }
             }
 

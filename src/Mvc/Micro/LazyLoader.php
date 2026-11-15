@@ -15,6 +15,7 @@ namespace Phalcon\Mvc\Micro;
 
 use Phalcon\Mvc\Micro\Exceptions\LazyHandlerNotFound;
 use Phalcon\Mvc\Model\BinderInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_values;
 
@@ -23,6 +24,8 @@ use function array_values;
  */
 class LazyLoader
 {
+    use WeakTypesTrait;
+
     protected object | null $handler = null;
 
     /**
@@ -76,7 +79,7 @@ class LazyLoader
         /** @var callable $callable */
         $callable = [$this->handler, $method];
 
-        return call_user_func_array(
+        return self::weakCallArray(
             $callable,
             array_values($params)
         );

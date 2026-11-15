@@ -39,10 +39,10 @@ use Phalcon\Filter\Sanitize\Upper;
 use Phalcon\Filter\Sanitize\UpperFirst;
 use Phalcon\Filter\Sanitize\UpperWords;
 use Phalcon\Filter\Sanitize\Url;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_diff_key;
 use function array_replace;
-use function call_user_func_array;
 use function is_array;
 use function is_string;
 
@@ -82,7 +82,9 @@ use function is_string;
  */
 class Filter implements FilterInterface
 {
-    public const FILTER_ABSINT        = 'absint';
+    use WeakTypesTrait;
+
+    public const FILTER_ABSINT       = 'absint';
 
     public const FILTER_ALNUM         = 'alnum';
 
@@ -161,7 +163,7 @@ class Filter implements FilterInterface
         /** @var callable $sanitizer */
         $sanitizer = $this->get($name);
 
-        return call_user_func_array($sanitizer, $args);
+        return self::weakCallArray($sanitizer, $args);
     }
 
     /**
@@ -504,7 +506,7 @@ class Filter implements FilterInterface
         $sanitizerObject = $this->get($sanitizerName);
         $params          = array_merge([$value], $sanitizerParams);
 
-        return call_user_func_array($sanitizerObject, $params);
+        return self::weakCallArray($sanitizerObject, $params);
     }
 
     /**

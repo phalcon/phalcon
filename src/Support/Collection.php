@@ -21,6 +21,7 @@ use Phalcon\Support\Collection\Exceptions\InvalidValueType;
 use Phalcon\Support\Collection\Traits\ArrayAccessTrait;
 use Phalcon\Support\Collection\Traits\GetSetHasTrait;
 use Phalcon\Support\Helper\Json\Encode;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Traversable;
 
 use function array_key_first;
@@ -77,6 +78,7 @@ class Collection implements
 
     /** @use GetSetHasTrait<T> */
     use GetSetHasTrait;
+    use WeakTypesTrait;
 
     /**
      * @var array<string, T>
@@ -187,7 +189,7 @@ class Collection implements
     public function each(callable $callback): static
     {
         foreach ($this->data as $key => $value) {
-            $callback($value, $key);
+            self::weakCallArray($callback, [$value, $key]);
         }
 
         return $this;
@@ -205,7 +207,7 @@ class Collection implements
         $result = [];
 
         foreach ($this->data as $key => $value) {
-            if ($callback($value, $key)) {
+            if (self::weakCallArray($callback, [$value, $key])) {
                 $result[$key] = $value;
             }
         }
@@ -405,7 +407,7 @@ class Collection implements
         $result = [];
 
         foreach ($this->data as $key => $value) {
-            $result[$key] = $callback($value, $key);
+            $result[$key] = self::weakCallArray($callback, [$value, $key]);
         }
 
         return $this->cloneEmpty($result);
@@ -422,7 +424,7 @@ class Collection implements
         $accumulator = $initial;
 
         foreach ($this->data as $key => $value) {
-            $accumulator = $callback($accumulator, $value, $key);
+            $accumulator = self::weakCallArray($callback, [$accumulator, $value, $key]);
         }
 
         return $accumulator;

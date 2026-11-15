@@ -17,12 +17,15 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\Model\Exceptions\InvalidDumpResultKey;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type mvc_model_data from MvcTypes
  */
 class CloneResult
 {
+    use WeakTypesTrait;
+
     /**
      * Assigns values to a model from an array returning a new model
      *
@@ -70,7 +73,7 @@ class CloneResult
             if (isset($privateProperties[$key])) {
                 $privateProperties[$key]->setValue($instance, $value);
             } else {
-                $instance->$key = $value;
+                self::weakWrite($instance, $key, $value);
             }
         }
 
