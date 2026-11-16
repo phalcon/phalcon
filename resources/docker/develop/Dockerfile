@@ -12,7 +12,8 @@ ARG GID=1000
 ARG USER=phalcon
 ARG GROUP=phalcon
 
-RUN <<EOT
+# PIE installs the PECL extensions. It is only available during this step.
+RUN --mount=type=bind,from=ghcr.io/php/pie:1-bin,source=/pie,target=/usr/local/bin/pie <<EOT
 set -eux
 # Add user and group
 groupadd -g "${GID}" "${GROUP}"
@@ -31,6 +32,7 @@ apt install -yq --no-install-recommends \
     libmemcached-dev \
     libpng-dev \
     libpq-dev \
+    libtool \
     libwebp-dev \
     libxpm-dev \
     libyaml-dev \
@@ -49,15 +51,30 @@ sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen
 dpkg-reconfigure --frontend=noninteractive locales
 update-locale LANG=en_US.UTF-8
 # Install base extensions
-pecl install \
-    igbinary \
-    msgpack \
-    apcu \
-    yaml \
-    imagick \
-    memcached \
-    xdebug \
-    redis
+# (PIE also enables each extension)
+if php -r 'exit(PHP_VERSION_ID < 80600 ? 0 : 1);'; then
+    # Packagist has only a release candidate of igbinary for PIE
+    pie install --no-cache "igbinary/igbinary:^3.2@RC"
+    pie install --no-cache msgpack/msgpack-php
+    pie install --no-cache apcu/apcu
+    pie install --no-cache pecl/yaml
+    pie install --no-cache imagick/imagick
+    pie install --no-cache php-memcached/php-memcached
+    pie install --no-cache phpredis/phpredis
+    pie install --no-cache xdebug/xdebug
+else
+    # The releases do not compile on PHP 8.6 yet. Use the development
+    # branches until there are releases that support PHP 8.6.
+    pie install --no-cache igbinary/igbinary:dev-master
+    pie install --no-cache msgpack/msgpack-php:dev-master
+    pie install --no-cache apcu/apcu:dev-master
+    pie install --no-cache pecl/yaml:dev-php7
+    pie install --no-cache imagick/imagick:dev-master
+    pie install --no-cache php-memcached/php-memcached:dev-master
+    pie install --no-cache phpredis/phpredis:dev-develop
+    # Only an alpha of Xdebug supports PHP 8.6
+    pie install --no-cache "xdebug/xdebug:^3.6@alpha"
+fi
 # Configure GD
 docker-php-ext-configure gd --with-freetype \
     --with-jpeg=/usr/include/ \
@@ -74,16 +91,6 @@ docker-php-ext-install \
     pdo_mysql \
     pdo_pgsql \
     zip
-# Install PHP extensions
-docker-php-ext-enable \
-    redis \
-    igbinary \
-    msgpack \
-    apcu \
-    imagick \
-    yaml \
-    memcached \
-    xdebug
 # Copy ini file
 cp -p /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 # Set correct pid file location and permissions
