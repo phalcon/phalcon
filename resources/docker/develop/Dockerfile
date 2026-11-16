@@ -30,6 +30,7 @@ apt install -yq --no-install-recommends \
     libicu-dev \
     libmagickwand-dev \
     libmemcached-dev \
+    libonig-dev \
     libpng-dev \
     libpq-dev \
     libtool \
@@ -91,6 +92,10 @@ docker-php-ext-install \
     pdo_mysql \
     pdo_pgsql \
     zip
+# The PHP 8.6 image does not have mbstring (the older images have it for PECL)
+if ! php -m | grep -qx mbstring; then
+    docker-php-ext-install mbstring
+fi
 # Copy ini file
 cp -p /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 # Set correct pid file location and permissions
