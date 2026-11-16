@@ -32,7 +32,7 @@ final class WeakModeTypesTest extends AbstractUnitTestCase
     public function testFilterFilterWeakModeCall(): void
     {
         $filter = new Filter();
-        $filter->set('double', [IntTarget::class, 'double']);
+        $filter->set('double', IntTarget::class);
 
         $actual = $filter->double('5');
 
