@@ -26,6 +26,7 @@ use Phalcon\Mvc\Model\Exceptions\InvalidResultsetCacheService;
 use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use SeekableIterator;
 
 use function call_user_func_array;
@@ -87,6 +88,8 @@ abstract class Resultset implements
     ArrayAccess,
     JsonSerializable
 {
+    use WeakTypesTrait;
+
     public const HYDRATE_ARRAYS      = 1;
 
     public const HYDRATE_OBJECTS     = 2;
@@ -340,11 +343,11 @@ abstract class Resultset implements
      * );
      *```
      *
-     * @return array|ModelInterface[]
+     * @return array|ModelInterface[]|null
      *
-     * @phpstan-return list<array<array-key, mixed>|object>
+     * @phpstan-return list<array<array-key, mixed>|object>|null
      */
-    public function filter(mixed $filter): array
+    public function filter(mixed $filter): ?array
     {
         $records = [];
 
@@ -353,11 +356,10 @@ abstract class Resultset implements
         while ($this->valid()) {
             $record = $this->current();
 
-            /**
-             * The caller passes a callable that takes one record.
-             *
-             * @var callable(mixed): mixed $filter
-             */
+            if (!self::isCallableOrWarn($filter)) {
+                return null;
+            }
+
             $processedRecord = call_user_func_array(
                 $filter,
                 [

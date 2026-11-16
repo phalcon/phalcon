@@ -68,8 +68,11 @@ class NewCall extends Lazy
          * @var object     $service
          */
         $service   = $ioc->new($id);
-        /** @var callable $callback */
         $callback  = [$service, $this->method];
+
+        if (!self::isCallableOrWarn($callback)) {
+            return null;
+        }
 
         return self::weakCallArray($callback, $arguments);
     }

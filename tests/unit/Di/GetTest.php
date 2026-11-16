@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Di;
 
+use Closure;
 use Phalcon\Di\Di;
 use Phalcon\Di\Exception;
 use Phalcon\Di\Service;
@@ -186,5 +187,63 @@ final class GetTest extends AbstractUnitTestCase
         $this->assertNull($container->get('nullService'));
         $this->assertNull($container->get('nullService'));
         $this->assertSame(2, $count);
+    }
+
+    /**
+     * The container cannot bind a static closure. Then the closure cannot be
+     * called: there is a warning and null, the same as cphalcon.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/815
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-16
+     */
+    public function testDiGetStaticClosure(): void
+    {
+        $container = new Di();
+        $container->set('static', static fn () => 1);
+
+        [$actual, $messages] = $this->collectErrors(
+            static fn () => $container->get('static')
+        );
+
+        $this->assertNull($actual);
+        $this->assertSame(
+            [$this->getStaticClosureBindMessage(), 'no array or string given'],
+            $messages
+        );
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/815
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-16
+     */
+    public function testDiGetStaticClosureParameters(): void
+    {
+        $container = new Di();
+        $container->set('static', static fn ($value) => $value);
+
+        [$actual, $messages] = $this->collectErrors(
+            static fn () => $container->get('static', ['one'])
+        );
+
+        $this->assertNull($actual);
+        $this->assertSame(
+            [$this->getStaticClosureBindMessage(), 'no array or string given'],
+            $messages
+        );
+    }
+
+    /**
+     * The warning of Closure::bind() for a static closure. The text changes
+     * with the PHP version (a PHP 9 notice from 8.5.x), thus get it from PHP.
+     */
+    private function getStaticClosureBindMessage(): string
+    {
+        [, $messages] = $this->collectErrors(
+            static fn () => Closure::bind(static fn () => 1, new Di())
+        );
+
+        return $messages[0];
     }
 }

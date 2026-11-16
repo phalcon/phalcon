@@ -68,8 +68,11 @@ class GetCall extends Lazy
          * @var object     $service
          */
         $service   = $ioc->get($id);
-        /** @var callable $callback */
         $callback  = [$service, $this->method];
+
+        if (!self::isCallableOrWarn($callback)) {
+            return null;
+        }
 
         return self::weakCallArray($callback, $arguments);
     }

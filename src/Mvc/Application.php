@@ -94,7 +94,7 @@ class Application extends AbstractApplication
      * @throws Exception
      * @throws EventsException
      */
-    public function handle(string $uri): bool | ResponseInterface
+    public function handle(string $uri): bool | ResponseInterface | null
     {
         if (null === $this->container) {
             throw new ContainerRequired();
@@ -135,10 +135,13 @@ class Application extends AbstractApplication
                     $match = Closure::bind($match, $this->container);
                 }
 
+                if (!self::isCallableOrWarn($match)) {
+                    return null;
+                }
+
                 /**
                  * Directly call the match callback
                  */
-                /** @var callable $match */
                 $possibleResponse = self::weakCallArray(
                     $match,
                     $router->getParams()

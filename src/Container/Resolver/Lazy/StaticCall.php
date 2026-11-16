@@ -63,8 +63,11 @@ class StaticCall extends Lazy
         $className = $this->resolveArgument($ioc, $this->className);
         $arguments = $this->resolveArguments($ioc, $this->arguments);
 
-        /** @var callable $callback */
         $callback = [$className, $this->method];
+
+        if (!self::isCallableOrWarn($callback)) {
+            return null;
+        }
 
         return self::weakCallArray($callback, $arguments);
     }

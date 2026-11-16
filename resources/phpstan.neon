@@ -208,6 +208,15 @@ parameters:
             message: "#Parameter \\#1 \\$function of class ReflectionFunction constructor expects Closure\\|string, callable\\(\\): mixed given#"
             path: ../src/Acl/Adapter/Memory.php
             reportUnmatched: false
+        # `method_exists()` is true for a private `params()` too, thus the
+        # pair can fail the check that gives the cphalcon warning. PHPStan
+        # treats an `array{class-string, 'params'}` as never callable.
+        -
+            identifier: staticMethod.impossibleType
+            paths:
+                - ../src/ADR/Router/AttributeFilter.php
+                - ../src/ADR/Router/Router.php
+            reportUnmatched: false
         # `newInstance()` is a service locator returning `object`. Every helper
         # it builds is invokable, but the registry is keyed by service name, so
         # the `__invoke()` on the resolved instance cannot be proven statically.

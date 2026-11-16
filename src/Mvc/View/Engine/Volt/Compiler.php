@@ -42,6 +42,7 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\VoltDirectoryNotWritable;
 use Phalcon\Mvc\View\Exception as ViewException;
 use Phalcon\Mvc\ViewBaseInterface;
 use Phalcon\Support\Traits\FilePathTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use Phalcon\Volt\Compiler\Opcode;
@@ -88,6 +89,7 @@ class Compiler implements InjectionAwareInterface
     use CamelizeTrait;
     use FilePathTrait;
     use FileTrait;
+    use WeakTypesTrait;
 
     protected bool $autoescape = false;
 
@@ -1845,9 +1847,15 @@ class Compiler implements InjectionAwareInterface
              * Check if the extension implements the required event name
              */
             if (method_exists($extension, $name)) {
-                // The method_exists() test above proves this pair is callable.
-                /** @var callable $callback */
                 $callback = [$extension, $name];
+
+                /**
+                 * method_exists() is also true for a private or protected
+                 * method, which cannot be called from here
+                 */
+                if (!self::isCallableOrWarn($callback)) {
+                    return null;
+                }
 
                 if (!empty($arguments)) {
                     $status = call_user_func_array(

@@ -51,16 +51,19 @@ final class AttributeFilter implements AttributeFilterInterface
      * @phpstan-param class-string          $actionClass
      * @phpstan-param adr_route_attributes  $attributes
      *
-     * @phpstan-return adr_filtered_attributes
+     * @phpstan-return adr_filtered_attributes|null
      */
-    public function filter(string $actionClass, array $attributes): array
+    public function filter(string $actionClass, array $attributes): ?array
     {
         if (!method_exists($actionClass, 'params')) {
             return $attributes;
         }
 
-        /** @var callable(): mixed $callback */
         $callback = [$actionClass, 'params'];
+
+        if (!self::isCallableOrWarn($callback)) {
+            return null;
+        }
 
         $declared = $callback();
         if (!is_array($declared)) {

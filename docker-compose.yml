@@ -66,6 +66,19 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
+  phalcon-dev-8.6:
+    container_name: phalcon-dev-8.6
+    hostname: phalcon-dev-86
+    build:
+      dockerfile: resources/docker/develop/Dockerfile
+      args:
+        PHP_VERSION: 8.6-rc
+    working_dir: /srv
+    volumes:
+      - .:/srv
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   mariadb:
     container_name: phalcon-mariadb
     image: mariadb:10.6

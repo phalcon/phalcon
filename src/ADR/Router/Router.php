@@ -22,12 +22,14 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Router;
 
+use Exception;
 use Phalcon\ADR\Exceptions\ActionDirectoryNotSet;
 use Phalcon\ADR\Exceptions\MethodNotAllowed;
 use Phalcon\Contracts\ADR\ADRTypes;
 use Phalcon\Contracts\ADR\Router\Router as RouterInterface;
 use Phalcon\Contracts\ADR\Router\RouterMatch as RouterMatchInterface;
 use Phalcon\Http\RequestInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use ReflectionClass;
 
 /**
@@ -90,6 +92,8 @@ use ReflectionClass;
  */
 final class Router implements RouterInterface
 {
+    use WeakTypesTrait;
+
     protected string $actionDirectory = '';
 
     protected string $baseNamespace   = '';
@@ -215,7 +219,17 @@ final class Router implements RouterInterface
             $path .= '/' . $this->decamelize($part);
         }
 
-        foreach (array_keys($this->actionParams($className)) as $name) {
+        $params = $this->actionParams($className);
+
+        /**
+         * A params() method that cannot be called gives null. cphalcon then
+         * throws this exception, because it cannot iterate the result.
+         */
+        if (null === $params) {
+            throw new Exception('The argument is not initialized or iterable()');
+        }
+
+        foreach (array_keys($params) as $name) {
             $path .= '/{' . $name . '}';
         }
 
@@ -263,16 +277,19 @@ final class Router implements RouterInterface
      * and casting, so nothing new is asked of an Action - but declaring it now
      * decides routing, not just validation.
      *
-     * @phpstan-return adr_action_params
+     * @phpstan-return adr_action_params|null
      */
-    protected function actionParams(string $className): array
+    protected function actionParams(string $className): ?array
     {
         if (!class_exists($className) || !method_exists($className, 'params')) {
             return [];
         }
 
-        /** @var callable(): mixed $callback */
         $callback = [$className, 'params'];
+
+        if (!self::isCallableOrWarn($callback)) {
+            return null;
+        }
 
         $declared = $callback();
 

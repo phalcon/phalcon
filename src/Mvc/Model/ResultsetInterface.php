@@ -40,9 +40,9 @@ interface ResultsetInterface
      * );
      *```
      *
-     * @return ModelInterface[]
+     * @return ModelInterface[]|null
      */
-    public function filter(mixed $filter): array;
+    public function filter(mixed $filter): ?array;
 
     /**
      * Returns the associated cache for the resultset
