@@ -18,9 +18,12 @@ use Phalcon\Filter\Filter;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Support\Filter\CallableFilter;
 use Phalcon\Tests\Support\Service\HelloService;
+use Phalcon\Tests\Support\Traits\ErrorHandlerTrait;
 
 final class GetSetHasTest extends AbstractUnitTestCase
 {
+    use ErrorHandlerTrait;
+
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
@@ -38,7 +41,12 @@ final class GetSetHasTest extends AbstractUnitTestCase
     }
 
     /**
+     * The magic call uses the __invoke() method of the sanitizer, the same
+     * as cphalcon. An array callable gives a warning and null. Use
+     * sanitize() for an array callable.
+     *
      * @issue  https://github.com/phalcon/cphalcon/issues/17610
+     * @issue  https://github.com/phalcon/phalcon/issues/808
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-09-28
@@ -48,9 +56,12 @@ final class GetSetHasTest extends AbstractUnitTestCase
         $locator = new Filter();
         $locator->set('prefix', [new CallableFilter(), 'prefix']);
 
-        $expected = 'ok:admin';
-        $actual   = $locator->prefix('admin');
-        $this->assertSame($expected, $actual);
+        [$actual, $messages] = $this->collectErrors(
+            static fn () => $locator->prefix('admin')
+        );
+
+        $this->assertNull($actual);
+        $this->assertSame(['first array member is not a valid class name or object'], $messages);
     }
 
     /**

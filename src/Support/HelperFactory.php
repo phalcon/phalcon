@@ -164,10 +164,12 @@ class HelperFactory extends AbstractFactory
      */
     public function __call(string $name, array $arguments): mixed
     {
-        $helper = $this->newInstance($name);
-
-        /** @var callable $invokable */
+        $helper    = $this->newInstance($name);
         $invokable = [$helper, '__invoke'];
+
+        if (!self::isCallableOrWarn($invokable)) {
+            return null;
+        }
 
         return self::weakCallArray($invokable, $arguments);
     }

@@ -141,20 +141,30 @@ class Builder
                     }
 
                     if (!empty($arguments)) {
+                        $callArguments = $this->buildParameters($container, $arguments);
+
+                        /**
+                         * A method that cannot be called gives a warning
+                         * and stops the build
+                         */
+                        if (!self::isCallableOrWarn($methodCall)) {
+                            return null;
+                        }
+
                         /**
                          * Call the method on the instance
                          */
-                        self::weakCallMethod(
-                            $instance,
-                            $method['method'],
-                            $this->buildParameters($container, $arguments)
-                        );
+                        self::weakCallArray($methodCall, $callArguments);
 
                         /**
                          * Go to next method call
                          */
                         continue;
                     }
+                }
+
+                if (!self::isCallableOrWarn($methodCall)) {
+                    return null;
                 }
 
                 /**
