@@ -80,8 +80,11 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
         $params = array_values($parameters);
         $params = array_merge($params, $this->options);
 
-        /** @var callable $callable */
         $callable = [$handler, $actionMethod];
+
+        if (!self::isCallableOrWarn($callable)) {
+            return null;
+        }
 
         return self::weakCallArray($callable, $params);
     }

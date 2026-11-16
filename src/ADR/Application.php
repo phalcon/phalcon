@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Phalcon\ADR;
 
 use Closure;
+use Exception;
 use Phalcon\ADR\Container\AdrProvider;
 use Phalcon\ADR\Events\Event;
 use Phalcon\ADR\Exceptions\RouteNotFound;
@@ -176,6 +177,15 @@ final class Application implements ApplicationInterface
             $attributeFilter = $this->container->get(AttributeFilterInterface::class);
 
             $attributes = $attributeFilter->filter($match->getAction(), $match->getAttributes());
+
+            /**
+             * A params() method that cannot be called gives null. cphalcon
+             * then throws this exception, because it cannot iterate the
+             * result.
+             */
+            if (null === $attributes) {
+                throw new Exception('The argument is not initialized or iterable()');
+            }
 
             foreach ($attributes as $key => $value) {
                 $request->getAttributes()->set((string) $key, $value);

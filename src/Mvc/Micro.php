@@ -27,6 +27,7 @@ use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Micro\CollectionInterface;
 use Phalcon\Mvc\Micro\Exception;
 use Phalcon\Mvc\Micro\Exceptions\ContainerRequired;
+use Phalcon\Mvc\Micro\Exceptions\ErrorHandlerNotCallable;
 use Phalcon\Mvc\Micro\Exceptions\HandlerNotCallable;
 use Phalcon\Mvc\Micro\Exceptions\InvalidRegisteredHandler;
 use Phalcon\Mvc\Micro\Exceptions\MissingCollectionMainHandler;
@@ -528,7 +529,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $this->modelBinder
                     );
                 } else {
-                    /** @var callable $handler */
+                    if (!self::isCallableOrWarn($handler)) {
+                        return null;
+                    }
+
                     $lazyReturned = self::weakCallArray($handler, $params);
                 }
 
@@ -682,6 +686,10 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
              * Check if an errorhandler is defined and it's callable
              */
             if (null !== $this->errorHandler) {
+                if (!is_callable($this->errorHandler)) {
+                    throw new ErrorHandlerNotCallable();
+                }
+
                 /**
                  * Call the Error handler
                  */

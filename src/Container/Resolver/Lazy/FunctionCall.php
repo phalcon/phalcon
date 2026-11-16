@@ -44,7 +44,6 @@ class FunctionCall extends Lazy
     use WeakTypesTrait;
 
     /**
-     * @phpstan-param callable-string     $functionName
      * @phpstan-param container_arguments $arguments
      */
     public function __construct(
@@ -59,7 +58,12 @@ class FunctionCall extends Lazy
     public function resolve(object $ioc): mixed
     {
         $arguments = $this->resolveArguments($ioc, $this->arguments);
+        $function  = $this->functionName;
 
-        return self::weakCallArray($this->functionName, $arguments);
+        if (!self::isCallableOrWarn($function)) {
+            return null;
+        }
+
+        return self::weakCallArray($function, $arguments);
     }
 }
