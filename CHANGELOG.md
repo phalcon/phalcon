@@ -22,6 +22,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - Faster `Phalcon\Mvc\Micro` requests with the default router service. [#17715](https://github.com/phalcon/cphalcon/issues/17715)
 - Faster `Phalcon\Config\Config::path()`. [#17714](https://github.com/phalcon/cphalcon/issues/17714)
 - `Phalcon\Queue\Consumer\Worker::handleSignal()` now has a second optional parameter, `?array $info`. [#17719](https://github.com/phalcon/cphalcon/issues/17719)
+- `Phalcon\ADR\Router\AttributeFilter::filter()` (and `Phalcon\Contracts\ADR\Router\AttributeFilter`), `Phalcon\Mvc\Application::handle()`, `Phalcon\Mvc\Model\Resultset::filter()` (and `Phalcon\Mvc\Model\ResultsetInterface`) and `Phalcon\Mvc\View::getRender()` can now return `null`, the same as cphalcon. [#815](https://github.com/phalcon/phalcon/issues/815)
 
 ### Added
 
@@ -29,6 +30,8 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Fixed
 
+- `Phalcon\ADR\Router\AttributeFilter::filter()` and `Phalcon\ADR\Router\Router::pathFor()` throwing an `Error` for an Action with a `params()` method that cannot be called; `filter()` now gives a warning and returns `null`, and `pathFor()` and `Phalcon\ADR\Application` throw the same exception as cphalcon. [#815](https://github.com/phalcon/phalcon/issues/815)
+- `Phalcon\Cli\Dispatcher::callActionMethod()`, `Phalcon\Cli\Router::handle()` (converters), `Phalcon\Container\Resolver\Lazy\FunctionCall`, `GetCall`, `NewCall` and `StaticCall`, `Phalcon\DataMapper\Pdo\Connection::__call()`, `Phalcon\Di\Di::get()` (a static closure), `Phalcon\Dispatcher\AbstractDispatcher::callActionMethod()`, `Phalcon\Mvc\Application::handle()` (match callback), `Phalcon\Mvc\Micro::handle()` (handler), `Phalcon\Mvc\Micro\LazyLoader::callMethod()`, `Phalcon\Mvc\Model\Resultset::filter()`, `Phalcon\Mvc\View::getRender()` (config callback) and `Phalcon\Mvc\View\Engine\Volt\Compiler::fireExtensionEvent()` throwing a `TypeError` or an `Error` for a value that cannot be called; they now give a warning and return `null`, the same as cphalcon. [#815](https://github.com/phalcon/phalcon/issues/815)
 - `Phalcon\Db\Adapter\Pdo\Postgresql::describeColumns()` reporting `mediumblob` columns as `Column::TYPE_TEXT`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Adapter\Pdo\Postgresql::describeReferences()` returning wrong column pairs for composite foreign keys. [#17680](https://github.com/phalcon/cphalcon/issues/17680)
 - `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` reporting blob columns as `Column::TYPE_VARCHAR`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
@@ -38,6 +41,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Filter\Filter::__call()`, `Phalcon\Filter\Filter::sanitize()`, `Phalcon\Html\TagFactory::__call()` and `Phalcon\Support\HelperFactory::__call()` throwing a `TypeError` for a sanitizer or helper that cannot be called; they now give a warning and return `null`, the same as cphalcon. `Phalcon\Filter\Filter::__call()` now calls the `__invoke()` method of the sanitizer, as cphalcon does. [#808](https://github.com/phalcon/phalcon/issues/808)
 - `Phalcon\Forms\Form::bind()` and `Phalcon\Mvc\Model` (`__set()`, `assign()`, `writeAttribute()`, the setters, the hydration and `unserialize()`) throwing a `TypeError` for a value that cphalcon converts, such as `'42'` for an `int` property; they now use the PHP weak type rules, the same as cphalcon. [#804](https://github.com/phalcon/phalcon/issues/804)
 - `Phalcon\Forms\Form::getValue()` returning the tag factory for the name `tagFactory`. [#17727](https://github.com/phalcon/cphalcon/issues/17727)
+- `Phalcon\Mvc\Micro::handle()` throwing a `TypeError` instead of `Phalcon\Mvc\Micro\Exceptions\ErrorHandlerNotCallable` for an error handler that cannot be called. [#815](https://github.com/phalcon/phalcon/issues/815)
 - `Phalcon\Mvc\Model::doLowInsert()` not reading back the generated id on MySQL when the identity property is `0`. [#17689](https://github.com/phalcon/cphalcon/issues/17689)
 - `Phalcon\Mvc\Model\Query::getIntermediate()` throwing a `TypeError` after `parse()` got the intermediate representation from the cache. [#800](https://github.com/phalcon/phalcon/issues/800)
 - `Phalcon\Mvc\Model\Query` reusing a cached intermediate representation that was built with the other value of the `enable_implicit_joins` option. [#800](https://github.com/phalcon/phalcon/issues/800)
