@@ -3044,7 +3044,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             foreach ($joinPrepared as $joinAliasName => $item) {
                 $joinType     = $joinTypes[$joinAliasName];
                 $joinSource   = $joinSources[$joinAliasName];
-                $preCondition = $joinPreCondition[$joinAliasName];
+                $preCondition = $joinPreCondition[$joinAliasName] ?? null;
                 $sqlJoins[]   = [
                     "type"       => $joinType,
                     "source"     => $joinSource,
