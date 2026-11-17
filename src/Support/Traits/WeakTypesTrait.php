@@ -14,6 +14,7 @@ namespace Phalcon\Support\Traits;
 use Error;
 use TypeError;
 
+use function call_user_func;
 use function call_user_func_array;
 use function explode;
 use function is_array;
@@ -110,6 +111,19 @@ trait WeakTypesTrait
         }
 
         return call_user_func_array($callable, $arguments);
+    }
+
+    /**
+     * Calls the value with call_user_func(), in weak mode, and returns the
+     * result. This is the same as call_user_func() in cphalcon. A value that
+     * cannot be called throws the TypeError of call_user_func().
+     */
+    private static function weakCallUserFunc(
+        mixed $callable,
+        mixed ...$arguments
+    ): mixed {
+        /** @var callable $callable */
+        return call_user_func($callable, ...$arguments);
     }
 
     /**

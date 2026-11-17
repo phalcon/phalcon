@@ -174,8 +174,8 @@ final class GetSqlColumnTest extends AbstractUnitTestCase
         );
 
         $expected = [
-            ['name', 'r', ''],
-            ['name', '', ''],
+            ['name', 'r', null],
+            ['name', '', null],
             ['name', 'r', '"'],
         ];
         $this->assertSame($expected, $dialect->calls);

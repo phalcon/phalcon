@@ -49,7 +49,7 @@ use Phalcon\Contracts\Auth\Access\Access;
  * }
  * @phpstan-type auth_access_context array{
  *     handler?: string,
- *     module?: string,
+ *     module?: string|null,
  *     params?: array<int|string, mixed>,
  * }
  * @phpstan-type auth_forward_target array{

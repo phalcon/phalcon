@@ -169,7 +169,7 @@ class Compiler implements InjectionAwareInterface
      *
      * @var string
      *
-     * @phpstan-var Closure|string
+     * @phpstan-var Closure|string|null
      */
     protected mixed $prefix = "";
 
@@ -1932,7 +1932,7 @@ class Compiler implements InjectionAwareInterface
             /**
              * Check if it's a user defined function
              */
-            if (!empty($this->functions) && isset($this->functions[$name])) {
+            if (!empty($this->functions) && array_key_exists($name, $this->functions)) {
                 $definition = $this->functions[$name];
 
                 /**
@@ -2696,7 +2696,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Check if it's a user defined filter
          */
-        if (isset($this->filters[$name])) {
+        if (array_key_exists($name, $this->filters)) {
             $definition = $this->filters[$name];
 
             /**
@@ -3159,10 +3159,14 @@ class Compiler implements InjectionAwareInterface
         return $statements;
     }
 
-    private function getUniquePathKey(string | null $path): string
+    private function getUniquePathKey(string | null $path): string | null
     {
-        if (!$path) {
-            return '';
+        /**
+         * Zephir's unique_path_key() returns null for a value that is not a
+         * string.
+         */
+        if (null === $path) {
+            return null;
         }
 
         /**

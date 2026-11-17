@@ -18,7 +18,9 @@ use Phalcon\Mvc\Model\Behavior;
 use Phalcon\Mvc\Model\Behavior\Exceptions\MissingRequiredOption;
 use Phalcon\Mvc\Model\Exception;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
+use function array_key_exists;
 use function is_array;
 use function is_object;
 
@@ -28,6 +30,8 @@ use function is_object;
  */
 class Timestampable extends Behavior
 {
+    use WeakTypesTrait;
+
     /**
      * Listens for notifications from the models manager
      *
@@ -83,14 +87,15 @@ class Timestampable extends Behavior
      */
     private function getTimestamp(array $options)
     {
-        if (isset($options['format'])) {
+        if (array_key_exists('format', $options)) {
             /**
-             * Format is a format for date()
+             * Format is a format for date(). cphalcon calls date() in weak
+             * mode: a null format gives a deprecation and an empty string.
              */
-            /** @var string $dateFormat */
-            $dateFormat = $options['format'];
+            /** @var string $formatted */
+            $formatted = self::weakCallArray('date', [$options['format']]);
 
-            return date($dateFormat);
+            return $formatted;
         }
 
         if (isset($options["generator"])) {
