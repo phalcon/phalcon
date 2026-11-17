@@ -23,6 +23,7 @@ use Phalcon\Contracts\Events\EventsAware;
 use Phalcon\DataMapper\Pdo\Connection\ConnectionInterface;
 use Phalcon\DataMapper\Pdo\Exception\ConnectionNotFound;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_rand;
 use function call_user_func;
@@ -40,6 +41,7 @@ use function call_user_func;
 class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
 {
     use EventsAwareTrait;
+    use WeakTypesTrait;
 
     /**
      * A default Connection connection factory/instance.
@@ -100,9 +102,10 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
     /**
      * Returns a read connection by name; if no name is given, picks a
      * random connection; if no read connections are present, returns the
-     * default connection.
+     * default connection. A factory that cannot be called gives a warning
+     * and null, the same as cphalcon.
      */
-    public function getRead(string $name = ""): ConnectionInterface
+    public function getRead(string $name = ""): ConnectionInterface | null
     {
         return $this->getConnection("read", $name);
     }
@@ -110,9 +113,10 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
     /**
      * Returns a write connection by name; if no name is given, picks a
      * random connection; if no write connections are present, returns the
-     * default connection.
+     * default connection. A factory that cannot be called gives a warning
+     * and null, the same as cphalcon.
      */
-    public function getWrite(string $name = ""): ConnectionInterface
+    public function getWrite(string $name = ""): ConnectionInterface | null
     {
         return $this->getConnection("write", $name);
     }
@@ -134,7 +138,7 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
      */
     public function setRead(
         string $name,
-        callable $callableObject
+        mixed $callableObject
     ): static {
         $this->read[$name] = $callableObject;
 
@@ -148,7 +152,7 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
      */
     public function setWrite(
         string $name,
-        callable $callableObject
+        mixed $callableObject
     ): static {
         $this->write[$name] = $callableObject;
 
@@ -163,7 +167,7 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
     protected function getConnection(
         string $type,
         string $name = ""
-    ): ConnectionInterface {
+    ): ConnectionInterface | null {
         $collection = $this->{$type};
         $requested  = $name;
         $instances  = $this->instances;
@@ -199,6 +203,10 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
         $instanceName = $type . "-" . $requested;
 
         if (!isset($instances[$instanceName])) {
+            if (!self::isCallableOrWarn($collection[$requested])) {
+                return null;
+            }
+
             $instances[$instanceName] = call_user_func($collection[$requested]);
             $this->instances          = $instances;
         }

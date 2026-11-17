@@ -34,6 +34,7 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 use ReflectionClass;
 use ReflectionException;
@@ -86,6 +87,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 {
     use EventsAwareTrait;
     use UncamelizeTrait;
+    use WeakTypesTrait;
 
     /**
      * @phpstan-var array<string, RelationInterface>
@@ -1644,16 +1646,18 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
          * Load the referenced model
          * Call the function in the model
          */
-        /** @var callable $retrieveCallable */
         $retrieveCallable = [
             $this->load($referencedModel),
             $retrieveMethod,
         ];
 
-        $records = call_user_func_array(
-            $retrieveCallable,
-            $arguments
-        );
+        /**
+         * A class that is not a model does not have the method: a warning
+         * and null, the same as cphalcon.
+         */
+        $records = self::isCallableOrWarn($retrieveCallable)
+            ? call_user_func_array($retrieveCallable, $arguments)
+            : null;
 
         /**
          * Store the result in the cache if it's reusable
@@ -1964,11 +1968,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
-     * Loads a model throwing an exception if it does not exist
+     * Loads a model throwing an exception if it does not exist. A class that
+     * is not a model is loaded too, the same as cphalcon.
+     *
+     * @phpstan-return ModelInterface
      *
      * @throws Exception
      */
-    public function load(string $modelName): ModelInterface
+    public function load(string $modelName): object
     {
         /**
          * The model does not exist throw an exception

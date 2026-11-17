@@ -35,12 +35,16 @@ namespace Phalcon\Container\Resolver\Lazy;
 
 use Phalcon\Contracts\Container\ContainerTypes;
 use Phalcon\Contracts\Container\Resolver\Resolvable;
+use Phalcon\Contracts\Container\Service\Collection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type container_arguments from ContainerTypes
  */
 abstract class Lazy implements Resolvable
 {
+    use WeakTypesTrait;
+
     public function __invoke(object $ioc): mixed
     {
         return $this->resolve($ioc);
@@ -70,5 +74,39 @@ abstract class Lazy implements Resolvable
         }
 
         return $resolved;
+    }
+
+    /**
+     * Gets the service from the container with the container method
+     * ('get' or 'new') and calls the method of the service.
+     *
+     * @phpstan-param Lazy|string         $id
+     * @phpstan-param container_arguments $arguments
+     */
+    protected function resolveServiceCall(
+        object $ioc,
+        string $iocMethod,
+        mixed $id,
+        string $method,
+        array $arguments
+    ): mixed {
+        /** @var string $id */
+        $id        = $this->resolveArgument($ioc, $id);
+        $arguments = $this->resolveArguments($ioc, $arguments);
+        /**
+         * cphalcon calls the method in weak mode: an id that is not a string
+         * is used as a string.
+         *
+         * @var Collection $ioc
+         * @var object     $service
+         */
+        $service   = self::weakCallMethod($ioc, $iocMethod, [$id]);
+        $callback  = [$service, $method];
+
+        if (!self::isCallableOrWarn($callback)) {
+            return null;
+        }
+
+        return self::weakCallArray($callback, $arguments);
     }
 }

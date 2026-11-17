@@ -31,6 +31,7 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Exceptions\FormNotInLocator;
 use Phalcon\Forms\Exceptions\UnknownFormElementType;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * A closure-based registry for named forms and element type factories.
@@ -52,6 +53,8 @@ use Phalcon\Forms\Exceptions\UnknownFormElementType;
  */
 class FormsLocator
 {
+    use WeakTypesTrait;
+
     /**
      * Element type → factory callable.
      *
@@ -91,19 +94,28 @@ class FormsLocator
      * Without an entity the result is lazily created and cached.
      * With an entity a fresh form is always produced.
      *
+     * A factory that cannot be called throws Error, the same as cphalcon.
+     *
      * @throws Exception
      */
-    public function get(string $name, object | null $entity = null): Form
+    public function get(string $name, mixed $entity = null): Form
     {
         if (!$this->has($name)) {
             throw new FormNotInLocator($name);
         }
 
         if ($entity !== null) {
-            return ($this->factories[$name])($entity);
+            /** @var Form */
+            return self::weakInvoke($this->factories[$name], [$entity]);
         }
 
-        return $this->instances[$name] ??= ($this->factories[$name])(null);
+        if (!isset($this->instances[$name])) {
+            /** @var Form $instance */
+            $instance               = self::weakInvoke($this->factories[$name], [null]);
+            $this->instances[$name] = $instance;
+        }
+
+        return $this->instances[$name];
     }
 
     // -----------------------------------------------------------------------
@@ -115,7 +127,7 @@ class FormsLocator
      *
      * @phpstan-return forms_locator_element_factory
      */
-    public function getElement(string $type): callable
+    public function getElement(string $type): mixed
     {
         if (!isset($this->elements[$type])) {
             throw new UnknownFormElementType($type);
@@ -149,7 +161,7 @@ class FormsLocator
      *
      * @phpstan-param forms_locator_factory $factory
      */
-    public function set(string $name, callable $factory): void
+    public function set(string $name, mixed $factory): void
     {
         unset($this->instances[$name]);
         $this->factories[$name] = $factory;
@@ -163,7 +175,7 @@ class FormsLocator
      *
      * @phpstan-param forms_locator_element_factory $factory
      */
-    public function setElement(string $type, callable $factory): void
+    public function setElement(string $type, mixed $factory): void
     {
         $this->elements[$type] = $factory;
     }

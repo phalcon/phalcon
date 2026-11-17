@@ -35,7 +35,7 @@ class Group
      *
      * @return array<array-key, list<mixed>>
      */
-    public function __invoke(array $collection, callable | string $method): array
+    public function __invoke(array $collection, mixed $method): array
     {
         $filtered = [];
         foreach ($collection as $element) {
@@ -50,9 +50,10 @@ class Group
     /**
      * @phpstan-assert-if-true callable $method
      */
-    private function isCallable(callable | string $method): bool
+    private function isCallable(mixed $method): bool
     {
-        return is_callable($method) || $this->phpFunctionExists($method);
+        return is_callable($method) ||
+            (is_string($method) && $this->phpFunctionExists($method));
     }
 
     /**
@@ -84,7 +85,7 @@ class Group
      *
      * @return array<array-key, list<mixed>>
      */
-    private function processCallable(array $filtered, callable | string $method, mixed $element): array
+    private function processCallable(array $filtered, mixed $method, mixed $element): array
     {
         if (true === $this->isCallable($method)) {
             /** @var array-key $key */
@@ -100,7 +101,7 @@ class Group
      *
      * @return array<array-key, list<mixed>>
      */
-    private function processObject(array $filtered, callable | string $method, mixed $element): array
+    private function processObject(array $filtered, mixed $method, mixed $element): array
     {
         if (
             true !== $this->isCallable($method) &&
@@ -119,7 +120,7 @@ class Group
      *
      * @return array<array-key, list<mixed>>
      */
-    private function processOther(array $filtered, callable | string $method, mixed $element): array
+    private function processOther(array $filtered, mixed $method, mixed $element): array
     {
         if (
             true !== $this->isCallable($method) &&

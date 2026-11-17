@@ -186,10 +186,10 @@ class Collection implements
      *
      * @phpstan-param callable(T, array-key): mixed $callback
      */
-    public function each(callable $callback): static
+    public function each(mixed $callback): static
     {
         foreach ($this->data as $key => $value) {
-            self::weakCallArray($callback, [$value, $key]);
+            self::weakInvoke($callback, [$value, $key]);
         }
 
         return $this;
@@ -202,12 +202,12 @@ class Collection implements
      * @phpstan-param  callable(T, array-key): bool $callback
      * @phpstan-return static<T>
      */
-    public function filter(callable $callback): static
+    public function filter(mixed $callback): static
     {
         $result = [];
 
         foreach ($this->data as $key => $value) {
-            if (self::weakCallArray($callback, [$value, $key])) {
+            if (self::weakInvoke($callback, [$value, $key])) {
                 $result[$key] = $value;
             }
         }
@@ -402,12 +402,12 @@ class Collection implements
      * @phpstan-param  callable(T, array-key): mixed $callback
      * @phpstan-return static<mixed>
      */
-    public function map(callable $callback): static
+    public function map(mixed $callback): static
     {
         $result = [];
 
         foreach ($this->data as $key => $value) {
-            $result[$key] = self::weakCallArray($callback, [$value, $key]);
+            $result[$key] = self::weakInvoke($callback, [$value, $key]);
         }
 
         return $this->cloneEmpty($result);
@@ -419,12 +419,12 @@ class Collection implements
      *
      * @phpstan-param callable(mixed, T, array-key): mixed $callback
      */
-    public function reduce(callable $callback, mixed $initial = null): mixed
+    public function reduce(mixed $callback, mixed $initial = null): mixed
     {
         $accumulator = $initial;
 
         foreach ($this->data as $key => $value) {
-            $accumulator = self::weakCallArray($callback, [$accumulator, $value, $key]);
+            $accumulator = self::weakInvoke($callback, [$accumulator, $value, $key]);
         }
 
         return $accumulator;

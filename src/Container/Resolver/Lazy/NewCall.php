@@ -34,22 +34,18 @@ declare(strict_types=1);
 namespace Phalcon\Container\Resolver\Lazy;
 
 use Phalcon\Contracts\Container\ContainerTypes;
-use Phalcon\Contracts\Container\Service\Collection;
-use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type container_arguments from ContainerTypes
  */
 class NewCall extends Lazy
 {
-    use WeakTypesTrait;
-
     /**
      * @phpstan-param Lazy|string         $id
      * @phpstan-param container_arguments $arguments
      */
     public function __construct(
-        protected Lazy | string $id,
+        protected mixed $id,
         protected string $method,
         protected array $arguments
     ) {
@@ -60,20 +56,12 @@ class NewCall extends Lazy
      */
     public function resolve(object $ioc): mixed
     {
-        /** @var string $id */
-        $id        = $this->resolveArgument($ioc, $this->id);
-        $arguments = $this->resolveArguments($ioc, $this->arguments);
-        /**
-         * @var Collection $ioc
-         * @var object     $service
-         */
-        $service   = $ioc->new($id);
-        $callback  = [$service, $this->method];
-
-        if (!self::isCallableOrWarn($callback)) {
-            return null;
-        }
-
-        return self::weakCallArray($callback, $arguments);
+        return $this->resolveServiceCall(
+            $ioc,
+            'new',
+            $this->id,
+            $this->method,
+            $this->arguments
+        );
     }
 }

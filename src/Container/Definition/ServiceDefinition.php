@@ -41,6 +41,7 @@ use Phalcon\Contracts\Container\ContainerTypes;
 use Phalcon\Contracts\Container\Ioc\IocContainer;
 use Phalcon\Contracts\Container\Resolver\Resolvable;
 use Phalcon\Contracts\Container\Service\Collection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use ReflectionClass;
 use ReflectionException;
 
@@ -54,6 +55,8 @@ use function method_exists;
  */
 class ServiceDefinition
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var container_arguments
      */
@@ -99,9 +102,14 @@ class ServiceDefinition
     /**
      * Adds an extender
      *
+     * A value that cannot be called fails when the service is built, the
+     * same as cphalcon.
+     *
+     * @phpstan-param callable $extender
+     *
      * @throws FrozenDefinition
      */
-    public function addExtender(callable $extender): static
+    public function addExtender(mixed $extender): static
     {
         if ($this->frozen) {
             $this->checkFrozen();
@@ -144,10 +152,8 @@ class ServiceDefinition
     public function buildService(object $container): object
     {
         if ($this->hasFactory()) {
-            /** @var callable $factory */
-            $factory = $this->factory;
             /** @var object $instance */
-            $instance = $factory($container);
+            $instance = self::weakInvoke($this->factory, [$container]);
         } else {
             /** @var class-string $className */
             $className  = $this->className ?? $this->serviceName;
@@ -158,7 +164,7 @@ class ServiceDefinition
 
         foreach ($this->extenders as $extender) {
             /** @var object $instance */
-            $instance = $extender($instance, $container);
+            $instance = self::weakInvoke($extender, [$instance, $container]);
         }
 
         return $instance;
@@ -404,9 +410,14 @@ class ServiceDefinition
     /**
      * Set a factory
      *
+     * A value that cannot be called fails when the service is built, the
+     * same as cphalcon.
+     *
+     * @phpstan-param callable $factory
+     *
      * @throws FrozenDefinition
      */
-    public function setFactory(callable $factory): static
+    public function setFactory(mixed $factory): static
     {
         if ($this->frozen) {
             $this->checkFrozen();
