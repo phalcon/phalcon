@@ -11,11 +11,14 @@
 
 namespace Phalcon\Support\Traits;
 
+use Error;
 use TypeError;
 
 use function call_user_func_array;
 use function explode;
+use function is_array;
 use function is_callable;
+use function is_string;
 use function trigger_error;
 
 use const E_USER_WARNING;
@@ -107,6 +110,34 @@ trait WeakTypesTrait
         }
 
         return call_user_func_array($callable, $arguments);
+    }
+
+    /**
+     * Calls the value with a list of arguments, in weak mode, and returns the
+     * result. This is the same as a dynamic call (`{value}(...)`) in
+     * cphalcon. A value that cannot be called throws Error with the cphalcon
+     * message.
+     *
+     * @param array<array-key, mixed> $arguments
+     */
+    private static function weakInvoke(
+        mixed $callable,
+        array $arguments
+    ): mixed {
+        /**
+         * For an array, the direct call below gives the same Error as
+         * cphalcon. For other values, cphalcon has its own message.
+         */
+        if (!is_array($callable) && !is_callable($callable)) {
+            throw new Error(
+                'Call to undefined function '
+                . (is_string($callable) ? $callable : 'undefined')
+                . '()'
+            );
+        }
+
+        /** @var callable $callable */
+        return $callable(...$arguments);
     }
 
     /**

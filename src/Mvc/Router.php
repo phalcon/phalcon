@@ -1251,7 +1251,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                         if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
                             $combinedConverter      = $combinedConverters[$combinedPart];
-                            $parts[$combinedPart]   = self::weakCallArray(
+                            $parts[$combinedPart]   = self::weakInvoke(
                                 $combinedConverter,
                                 [$combinedMatchPosition]
                             );
@@ -1262,7 +1262,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     } else {
                         if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
                             $combinedConverter    = $combinedConverters[$combinedPart];
-                            $parts[$combinedPart] = self::weakCallArray(
+                            $parts[$combinedPart] = self::weakInvoke(
                                 $combinedConverter,
                                 [$combinedPosition]
                             );
@@ -1394,7 +1394,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                                  */
                                 if (is_array($converters) && isset($converters[$part])) {
                                     $converter    = $converters[$part];
-                                    $parts[$part] = self::weakCallArray(
+                                    $parts[$part] = self::weakInvoke(
                                         $converter,
                                         [$matchPosition]
                                     );
@@ -1412,7 +1412,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                                  */
                                 if (is_array($converters) && isset($converters[$part])) {
                                     $converter    = $converters[$part];
-                                    $parts[$part] = self::weakCallArray(
+                                    $parts[$part] = self::weakInvoke(
                                         $converter,
                                         [$position]
                                     );

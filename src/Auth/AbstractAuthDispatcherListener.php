@@ -20,6 +20,7 @@ use Phalcon\Auth\Exceptions\AccessDenied;
 use Phalcon\Contracts\Auth\Access\Access;
 use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Contracts\Auth\Manager;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Shared enforcement algorithm for the Cli, Mvc and Micro auth listeners.
@@ -37,6 +38,8 @@ use Phalcon\Contracts\Auth\Manager;
  */
 abstract class AbstractAuthDispatcherListener
 {
+    use WeakTypesTrait;
+
     public function __construct(protected Manager $manager)
     {
     }
@@ -71,7 +74,7 @@ abstract class AbstractAuthDispatcherListener
         if ($forwardHandler !== null) {
             $target = $access->redirectTo();
             if ($target !== null) {
-                $forwardHandler($target);
+                self::weakInvoke($forwardHandler, [$target]);
 
                 return false;
             }
