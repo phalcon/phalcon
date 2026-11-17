@@ -698,11 +698,11 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                     [$ex]
                 );
 
-                if (is_object($returnedValue) && !($returnedValue instanceof ResponseInterface)) {
-                    throw $ex;
-                }
-
-                if (false !== $returnedValue) {
+                if (is_object($returnedValue)) {
+                    if (!($returnedValue instanceof ResponseInterface)) {
+                        throw $ex;
+                    }
+                } elseif (false !== $returnedValue) {
                     throw $ex;
                 }
             } elseif (false !== $returnedValue) {
@@ -714,7 +714,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
          * Check if a response handler is defined, else use default response
          * handler
          */
-        if (null !== $this->responseHandler) {
+        if ($this->responseHandler) {
             if (!is_callable($this->responseHandler)) {
                 throw new ResponseHandlerNotCallable();
             }

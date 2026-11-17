@@ -292,7 +292,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
                         /**
                          * Check first if the callback is callable
                          */
-                        $routeFound = call_user_func_array(
+                        $routeFound = (bool) call_user_func_array(
                             $beforeMatch,
                             [
                                 $arguments,
