@@ -27,6 +27,7 @@ use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Row;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use stdClass;
 
 use function count;
 use function get_class;
@@ -109,15 +110,16 @@ class Simple extends Resultset
     }
 
     /**
-     * Returns current row in the resultset
+     * Returns current row in the resultset. With the hydration mode arrays or
+     * objects, the row is an array or a stdClass.
      *
-     * @return ModelInterface|null
+     * @return ModelInterface|Row|array|stdClass|null
      *
-     * @phpstan-return ModelInterface|Row|null
+     * @phpstan-return ModelInterface|Row|array<array-key, mixed>|stdClass|null
      */
-    final public function current(): ModelInterface | Row | null
+    final public function current(): ModelInterface | Row | array | stdClass | null
     {
-        /** @var false|ModelInterface|Row|null $activeRow */
+        /** @var false|ModelInterface|Row|array<array-key, mixed>|stdClass|null $activeRow */
         $activeRow = $this->activeRow;
 
         if ($activeRow !== null) {
@@ -205,7 +207,7 @@ class Simple extends Resultset
 
         $this->activeRow = $activeRow;
 
-        /** @var ModelInterface|Row|null */
+        /** @var ModelInterface|Row|array<array-key, mixed>|stdClass|null */
         return $activeRow;
     }
 
