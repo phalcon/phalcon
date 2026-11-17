@@ -64,9 +64,12 @@ interface ResultsetInterface
     public function getHydrateMode(): int;
 
     /**
-     * Get last row in the resultset
+     * Get last row in the resultset. With the hydration mode arrays or
+     * objects, the row is an array or a stdClass.
+     *
+     * @phpstan-return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|array<array-key, mixed>|\stdClass|null
      */
-    public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | null;
+    public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | array | \stdClass | null;
 
     /**
      * Returns the error messages produced by a batch operation
