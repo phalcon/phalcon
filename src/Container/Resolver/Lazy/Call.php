@@ -33,8 +33,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Container\Resolver\Lazy;
 
+use Phalcon\Support\Traits\WeakTypesTrait;
+
 class Call extends Lazy
 {
+    use WeakTypesTrait;
+
     /**
      * @param callable $callableObject
      */
@@ -48,6 +52,6 @@ class Call extends Lazy
      */
     public function resolve(object $ioc): mixed
     {
-        return ($this->callableObject)($ioc);
+        return self::weakInvoke($this->callableObject, [$ioc]);
     }
 }

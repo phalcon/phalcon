@@ -27,6 +27,7 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\MetaDataInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_keys;
 use function get_class;
@@ -112,6 +113,8 @@ use function range;
  */
 class Uniqueness extends AbstractCombinedFieldsValidator
 {
+    use WeakTypesTrait;
+
     protected string | null $template = "Field :field must be unique";
 
     /**
@@ -221,10 +224,8 @@ class Uniqueness extends AbstractCombinedFieldsValidator
         if (null !== $convert) {
             /**
              * The `convert` option is a callable that reshapes the values.
-             *
-             * @var callable(array<array-key, mixed>): mixed $convert
              */
-            $values = $convert($values);
+            $values = self::weakInvoke($convert, [$values]);
 
             if (!is_array($values)) {
                 throw new UniquenessConversionMustBeArray();
