@@ -26,6 +26,7 @@ use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroNotFound;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
 use Phalcon\Traits\Php\InfoTrait;
 
+use function array_key_exists;
 use function array_slice;
 use function asort;
 use function call_user_func;
@@ -67,7 +68,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
      */
     public function callMacro(string $name, array $arguments = [])
     {
-        if (!isset($this->macros[$name])) {
+        if (!array_key_exists($name, $this->macros)) {
             throw new MacroNotFound($name);
         }
 

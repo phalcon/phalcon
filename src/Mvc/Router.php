@@ -49,6 +49,7 @@ use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
+use function array_key_exists;
 use function array_merge;
 use function array_reverse;
 use function explode;
@@ -1249,7 +1250,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     if (isset($combinedMatchesLocal[$combinedPosition])) {
                         $combinedMatchPosition = $combinedMatchesLocal[$combinedPosition];
 
-                        if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
+                        if (is_array($combinedConverters) && array_key_exists($combinedPart, $combinedConverters)) {
                             $combinedConverter      = $combinedConverters[$combinedPart];
                             $parts[$combinedPart]   = self::weakInvoke(
                                 $combinedConverter,
@@ -1260,7 +1261,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                         $parts[$combinedPart] = $combinedMatchPosition;
                     } else {
-                        if (is_array($combinedConverters) && isset($combinedConverters[$combinedPart])) {
+                        if (is_array($combinedConverters) && array_key_exists($combinedPart, $combinedConverters)) {
                             $combinedConverter    = $combinedConverters[$combinedPart];
                             $parts[$combinedPart] = self::weakInvoke(
                                 $combinedConverter,
@@ -1392,7 +1393,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                                 /**
                                  * Check if the part has a converter
                                  */
-                                if (is_array($converters) && isset($converters[$part])) {
+                                if (is_array($converters) && array_key_exists($part, $converters)) {
                                     $converter    = $converters[$part];
                                     $parts[$part] = self::weakInvoke(
                                         $converter,
@@ -1410,7 +1411,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                                 /**
                                  * Apply the converters anyway
                                  */
-                                if (is_array($converters) && isset($converters[$part])) {
+                                if (is_array($converters) && array_key_exists($part, $converters)) {
                                     $converter    = $converters[$part];
                                     $parts[$part] = self::weakInvoke(
                                         $converter,

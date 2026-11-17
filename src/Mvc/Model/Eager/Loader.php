@@ -606,7 +606,7 @@ class Loader
          * returned row unattributable. Refuse rather than inject a column the
          * caller did not ask for - it would surface in the returned Row.
          */
-        if (isset($findParams["columns"])) {
+        if (array_key_exists("columns", $findParams)) {
             /** @var mvc_query_columns $columns */
             $columns = $findParams["columns"];
 

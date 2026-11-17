@@ -90,7 +90,7 @@ final class AttributeFilter implements AttributeFilterInterface
                 $value = $this->cast($segment, $rule['type'] ?? 'string');
 
                 if (isset($rule['convert'])) {
-                    $value = self::weakCallArray($rule['convert'], [$value]);
+                    $value = self::weakCallUserFunc($rule['convert'], $value);
                 }
 
                 $result[$name] = $value;
