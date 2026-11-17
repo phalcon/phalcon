@@ -387,9 +387,12 @@ interface ManagerInterface
     ): void;
 
     /**
-     * Loads a model throwing an exception if it does not exist
+     * Loads a model throwing an exception if it does not exist. A class that
+     * is not a model is loaded too, the same as cphalcon.
+     *
+     * @phpstan-return ModelInterface
      */
-    public function load(string $modelName): ModelInterface;
+    public function load(string $modelName): object;
 
     /**
      * Dispatch an event to the listeners and behaviors

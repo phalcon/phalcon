@@ -48,7 +48,7 @@ class StaticCall extends Lazy
      * @phpstan-param container_arguments $arguments
      */
     public function __construct(
-        protected Lazy | string $className,
+        protected mixed $className,
         protected string $method,
         protected array $arguments
     ) {

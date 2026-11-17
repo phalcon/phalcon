@@ -189,13 +189,15 @@ class TagFactory
     }
 
     /**
-     * Create or return a cached instance of the helper.
+     * Create or return a cached instance of the helper. The value of the
+     * factory is returned as it is, also when it is not an object, the same
+     * as cphalcon.
      *
      * @throws \Phalcon\Html\Exception
      *
      * @phpstan-return ($name is 'doctype' ? Doctype : object)
      */
-    public function newInstance(string $name): object
+    public function newInstance(string $name): mixed
     {
         if (!isset($this->factories[$name])) {
             throw new ServiceNotRegistered($name);

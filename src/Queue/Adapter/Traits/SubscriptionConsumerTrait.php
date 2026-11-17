@@ -91,8 +91,12 @@ trait SubscriptionConsumerTrait
 
     /**
      * Subscribes a consumer; the callback receives each delivered message.
+     * A value that cannot be called fails in consume(), the same as
+     * cphalcon.
+     *
+     * @phpstan-param callable $callback
      */
-    public function subscribe(ConsumerInterface $consumer, callable $callback): void
+    public function subscribe(ConsumerInterface $consumer, mixed $callback): void
     {
         $this->subscriptions[$this->resolveQueueName($consumer)] = [$consumer, $callback];
     }

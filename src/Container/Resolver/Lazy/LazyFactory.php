@@ -49,7 +49,13 @@ class LazyFactory
         return new ArrayValues($values);
     }
 
-    public static function call(callable $callableObject): Call
+    /**
+     * A value that cannot be called fails when the service is resolved, the
+     * same as cphalcon.
+     *
+     * @phpstan-param callable $callableObject
+     */
+    public static function call(mixed $callableObject): Call
     {
         return new Call($callableObject);
     }

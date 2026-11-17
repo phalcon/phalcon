@@ -158,10 +158,15 @@ class Container implements Collection, Enumerable
     /**
      * Extends the definition
      *
+     * A value that cannot be called fails when the service is built, the
+     * same as cphalcon.
+     *
+     * @phpstan-param callable $callableObject
+     *
      * @throws CannotExtendResolved
      * @throws ServiceNotFound
      */
-    public function extend(string $name, callable $callableObject): void
+    public function extend(string $name, mixed $callableObject): void
     {
         if (array_key_exists($name, $this->aliases)) {
             $name = $this->resolveAlias($name);

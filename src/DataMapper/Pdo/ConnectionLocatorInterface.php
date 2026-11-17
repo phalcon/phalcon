@@ -38,14 +38,14 @@ interface ConnectionLocatorInterface
      * random connection; if no read connections are present, returns the
      * default connection.
      */
-    public function getRead(string $name = ""): ConnectionInterface;
+    public function getRead(string $name = ""): ConnectionInterface | null;
 
     /**
      * Returns a write connection by name; if no name is given, picks a
      * random connection; if no write connections are present, returns the
      * default connection.
      */
-    public function getWrite(string $name = ""): ConnectionInterface;
+    public function getWrite(string $name = ""): ConnectionInterface | null;
 
     /**
      * Sets the default connection registry entry.

@@ -794,7 +794,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             $options    = (array) ($definition['options'] ?? []);
 
             /** @var ElementInterface $element */
-            $element = ($locator->getElement($type))($name, $options, $attributes);
+            $element = self::weakInvoke($locator->getElement($type), [$name, $options, $attributes]);
 
             if (!empty($definition['label'])) {
                 $element->setLabel((string) $definition['label']);

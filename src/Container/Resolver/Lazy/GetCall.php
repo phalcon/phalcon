@@ -49,7 +49,7 @@ class GetCall extends Lazy
      * @phpstan-param container_arguments $arguments
      */
     public function __construct(
-        protected Lazy | string $id,
+        protected mixed $id,
         protected string $method,
         protected array $arguments
     ) {
@@ -64,10 +64,13 @@ class GetCall extends Lazy
         $id        = $this->resolveArgument($ioc, $this->id);
         $arguments = $this->resolveArguments($ioc, $this->arguments);
         /**
+         * cphalcon calls the method in weak mode: an id that is not a string
+         * is used as a string.
+         *
          * @var Collection $ioc
          * @var object     $service
          */
-        $service   = $ioc->get($id);
+        $service   = self::weakCallMethod($ioc, 'get', [$id]);
         $callback  = [$service, $this->method];
 
         if (!self::isCallableOrWarn($callback)) {

@@ -27,6 +27,7 @@ use Phalcon\Db\Exceptions\MissingDefinitionKey;
 use Phalcon\Db\Exceptions\ReturningNotSupported;
 use Phalcon\Db\Exceptions\UnsupportedOperator;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function explode;
 use function implode;
@@ -60,6 +61,8 @@ use function trim;
  */
 abstract class Dialect implements DialectInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @var db_custom_functions
      */
@@ -691,13 +694,16 @@ abstract class Dialect implements DialectInterface
     }
 
     /**
-     * Registers custom SQL functions
+     * Registers custom SQL functions. A value that cannot be called fails
+     * when the SQL is made, the same as cphalcon.
      *
      * @return $this
+     *
+     * @phpstan-param callable $customFunction
      */
     public function registerCustomFunction(
         string $name,
-        callable $customFunction
+        mixed $customFunction
     ): static {
         $this->customFunctions[$name] = $customFunction;
 
@@ -1273,7 +1279,7 @@ abstract class Dialect implements DialectInterface
             $customFunction = $this->customFunctions[$name];
 
             /** @var string $rendered */
-            $rendered = $customFunction($this, $expression, $escapeChar);
+            $rendered = self::weakInvoke($customFunction, [$this, $expression, $escapeChar]);
 
             return $rendered;
         }

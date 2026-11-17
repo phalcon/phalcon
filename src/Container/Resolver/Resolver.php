@@ -74,15 +74,17 @@ class Resolver implements ResolverService
     }
 
     /**
-     * Resolve a call
+     * Resolve a call. For a value that cannot be called,
+     * Closure::fromCallable() throws the same TypeError as cphalcon.
      *
+     * @phpstan-param callable            $callableObject
      * @phpstan-param container_arguments $arguments
      *
      * @throws ReflectionException
      */
     public function resolveCall(
         object $ioc,
-        callable $callableObject,
+        mixed $callableObject,
         array $arguments
     ): mixed {
         $closure    = $callableObject instanceof Closure
