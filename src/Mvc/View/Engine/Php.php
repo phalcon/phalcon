@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\View\Engine;
 
 use function extract;
+use function get_defined_vars;
 use function is_array;
 use function ob_clean;
 use function ob_get_contents;
@@ -38,14 +39,21 @@ class Php extends AbstractEngine
         /**
          * Include the template inside a closure whose only locals carry
          * reserved names, so a parameter cannot replace the file path. The
-         * closure is bound to $this, so templates keep using it.
+         * closure is bound to $this, so templates keep using it. The shared
+         * scope goes in first and the variables of the template go back to
+         * it, so the next templates can use them.
          */
         $include = function (string $__path, mixed $__params): void {
-            if (is_array($__params)) {
-                extract($__params, EXTR_SKIP);
-            }
+            extract(
+                is_array($__params) ? $__params + $this->templateScope : $this->templateScope,
+                EXTR_SKIP
+            );
 
             require $__path;
+
+            unset($__path, $__params);
+
+            $this->templateScope = get_defined_vars() + $this->templateScope;
         };
 
         $include->call($this, $path, $params);

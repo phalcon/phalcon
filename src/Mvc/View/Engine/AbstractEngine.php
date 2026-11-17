@@ -28,6 +28,14 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     use EventsAwareTrait;
 
     /**
+     * Variables that all the templates of this engine share, the same as
+     * the shared symbol table in cphalcon
+     *
+     * @phpstan-var array<string, mixed>
+     */
+    protected array $templateScope = [];
+
+    /**
      * Phalcon\Mvc\View\Engine constructor
      */
     public function __construct(
@@ -54,12 +62,20 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     }
 
     /**
-     * Renders a partial inside another view
+     * Renders a partial inside another view. The variables in $scope (the
+     * variables of the calling template) are visible in the partial.
+     *
+     * @phpstan-param array<string, mixed> $scope
      */
     public function partial(
         string $partialPath,
-        mixed $params = null
+        mixed $params = null,
+        array $scope = []
     ): void {
+        unset($scope['__path'], $scope['__params']);
+
+        $this->templateScope = $scope + $this->templateScope;
+
         // TODO: Make params array
         $this->view->partial($partialPath, $params);
     }

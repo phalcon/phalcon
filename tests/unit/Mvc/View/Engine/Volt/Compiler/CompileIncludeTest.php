@@ -31,6 +31,6 @@ class CompileIncludeTest extends AbstractUnitTestCase
          * rather than attempting to statically compile the file.
          */
         $actual = $compiler->compileString('{% include templatePath %}');
-        $this->assertSame('<?php $this->partial($templatePath); ?>', $actual);
+        $this->assertSame('<?php $this->partial($templatePath, scope: get_defined_vars()); ?>', $actual);
     }
 }

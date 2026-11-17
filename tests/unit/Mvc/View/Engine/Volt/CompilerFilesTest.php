@@ -130,7 +130,7 @@ class CompilerFilesTest extends AbstractUnitTestCase
 
         $expected = sprintf(
             $template,
-            PHP_EOL . '<?= $this->partial(\'blocks/partials/header\') ?>' . PHP_EOL,
+            PHP_EOL . '<?= $this->partial(\'blocks/partials/header\', scope: get_defined_vars()) ?>' . PHP_EOL,
             '<p>This is the main page</p>'
         );
         $this->assertFileContentsEqual($file, $expected);
@@ -269,7 +269,7 @@ class CompilerFilesTest extends AbstractUnitTestCase
 
         $file     = Talon::settings()->supportPath('assets/views/extends/nested/leaf.volt.php');
         $expected = '<!doctype html><html><body>'
-            . '<?= $this->partial(\'body\') ?> MID '
+            . '<?= $this->partial(\'body\', scope: get_defined_vars()) ?> MID '
             . '</body></html>';
 
         $this->assertFileContentsEqual($file, $expected);

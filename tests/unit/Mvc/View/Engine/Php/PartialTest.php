@@ -47,4 +47,23 @@ class PartialTest extends AbstractUnitTestCase
             $view->getContent()
         );
     }
+
+    /**
+     * A template that passes its variables as the scope makes them visible
+     * in the partial.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/810
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-17
+     */
+    public function testMvcViewEnginePhpPartialInheritsScope(): void
+    {
+        $this->newDi();
+        $this->setDiService('viewSimple');
+
+        /** @var Simple $view */
+        $view = $this->container->get('viewSimple');
+
+        $this->assertSame('upper', $view->render('scope/php-partial'));
+    }
 }
