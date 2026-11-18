@@ -2700,122 +2700,140 @@ abstract class Model extends AbstractInjectionAware implements
          */
         $hasRelatedToSave = !empty($relatedToSave);
 
-        if (
-            $hasRelatedToSave &&
-            $this->preSaveRelatedRecords($writeConnection, $relatedToSave, $visited) === false
-        ) {
-            $this->syncRelated = [];
-
-            return false;
-        }
-
-        $schema = $this->getSchema();
-        $source = $this->getSource();
-
-        if ($schema) {
-            $table = [$schema, $source];
-        } else {
-            $table = $source;
-        }
-
         /**
-         * We need to check if the record exists. Use the write connection
-         * to prevent replica lag
+         * preSaveRelatedRecords() begins the implicit transaction and
+         * postSaveRelatedRecords() commits it. An exception between the two
+         * must not leave the transaction open.
          */
-        $exists = $this->has($metaData, $writeConnection);
+        try {
+            if (
+                $hasRelatedToSave &&
+                $this->preSaveRelatedRecords($writeConnection, $relatedToSave, $visited) === false
+            ) {
+                $this->syncRelated = [];
 
-        if ($exists) {
-            $this->operationMade = self::OP_UPDATE;
-        } else {
-            $this->operationMade = self::OP_CREATE;
-        }
-
-        /**
-         * Clean the messages
-         */
-        $this->errorMessages = [];
-
-        /**
-         * Query the identity field
-         */
-        /** @var bool|string $identityField */
-        $identityField = $metaData->getIdentityField($this);
-
-        /**
-         * preSave() makes all the validations
-         */
-        if ($this->preSave($metaData, $exists, $identityField) === false) {
-            /**
-             * Rollback the current transaction if there was validation errors
-             */
-            if ($hasRelatedToSave) {
-                $writeConnection->rollback(false);
+                return false;
             }
 
-            $this->syncRelated = [];
+            $schema = $this->getSchema();
+            $source = $this->getSource();
 
-            /**
-             * Throw exceptions on failed saves?
-             */
-            if (Settings::get("orm.exception_on_failed_save")) {
-                /**
-                 * Launch a Phalcon\Mvc\Model\ValidationFailed to notify that
-                 * the save failed
-                 */
-                throw new ValidationFailed(
-                    $this,
-                    $this->getMessages()
-                );
-            }
-
-            return false;
-        }
-
-        /**
-         * Capture the current snapshot before the write so it can be restored
-         * if postSaveRelatedRecords later rolls back the transaction
-         */
-        $manager          = $this->getModelsManager();
-        $savedSnapshot    = $this->snapshot;
-        $savedOldSnapshot = $this->oldSnapshot;
-
-        /**
-         * Depending if the record exists we do an update or an insert operation
-         */
-        if ($exists) {
-            $success = $this->doLowUpdate($metaData, $writeConnection, $table);
-        } else {
-            $success = $this->doLowInsert(
-                $metaData,
-                $writeConnection,
-                $table,
-                $identityField
-            );
-        }
-
-        /**
-         * Change the dirty state to persistent
-         */
-        if (true === $success) {
-            $this->dirtyState = self::DIRTY_STATE_PERSISTENT;
-        }
-
-        if ($hasRelatedToSave) {
-            /**
-             * Rollbacks the implicit transaction if the master save has failed
-             */
-            if ($success === false) {
-                $writeConnection->rollback(false);
+            if ($schema) {
+                $table = [$schema, $source];
             } else {
+                $table = $source;
+            }
+
+            /**
+             * We need to check if the record exists. Use the write connection
+             * to prevent replica lag
+             */
+            $exists = $this->has($metaData, $writeConnection);
+
+            if ($exists) {
+                $this->operationMade = self::OP_UPDATE;
+            } else {
+                $this->operationMade = self::OP_CREATE;
+            }
+
+            /**
+             * Clean the messages
+             */
+            $this->errorMessages = [];
+
+            /**
+             * Query the identity field
+             */
+            /** @var bool|string $identityField */
+            $identityField = $metaData->getIdentityField($this);
+
+            /**
+             * preSave() makes all the validations
+             */
+            if ($this->preSave($metaData, $exists, $identityField) === false) {
+                $this->syncRelated = [];
+
                 /**
-                 * Save the post-related records
+                 * Throw exceptions on failed saves? The catch below rolls back
+                 * the current transaction
                  */
-                $success = $this->postSaveRelatedRecords(
+                if (Settings::get("orm.exception_on_failed_save")) {
+                    /**
+                     * Launch a Phalcon\Mvc\Model\ValidationFailed to notify that
+                     * the save failed
+                     */
+                    throw new ValidationFailed(
+                        $this,
+                        $this->getMessages()
+                    );
+                }
+
+                /**
+                 * Rollback the current transaction if there was validation errors
+                 */
+                if ($hasRelatedToSave) {
+                    $writeConnection->rollback(false);
+                }
+
+                return false;
+            }
+
+            /**
+             * Capture the current snapshot before the write so it can be restored
+             * if postSaveRelatedRecords later rolls back the transaction
+             */
+            $manager          = $this->getModelsManager();
+            $savedSnapshot    = $this->snapshot;
+            $savedOldSnapshot = $this->oldSnapshot;
+
+            /**
+             * Depending if the record exists we do an update or an insert operation
+             */
+            if ($exists) {
+                $success = $this->doLowUpdate($metaData, $writeConnection, $table);
+            } else {
+                $success = $this->doLowInsert(
+                    $metaData,
                     $writeConnection,
-                    $relatedToSave,
-                    $visited
+                    $table,
+                    $identityField
                 );
             }
+
+            /**
+             * Change the dirty state to persistent
+             */
+            if (true === $success) {
+                $this->dirtyState = self::DIRTY_STATE_PERSISTENT;
+            }
+
+            if ($hasRelatedToSave) {
+                /**
+                 * Rollbacks the implicit transaction if the master save has failed
+                 */
+                if ($success === false) {
+                    $writeConnection->rollback(false);
+                } else {
+                    /**
+                     * Save the post-related records
+                     */
+                    $success = $this->postSaveRelatedRecords(
+                        $writeConnection,
+                        $relatedToSave,
+                        $visited
+                    );
+                }
+            }
+        } catch (\Throwable $exception) {
+            /**
+             * Rollback the implicit transaction if it is still open. The
+             * paths that throw do not roll back before the throw.
+             */
+            if ($hasRelatedToSave && $writeConnection->isUnderTransaction()) {
+                $writeConnection->rollback(false);
+            }
+
+            throw $exception;
         }
 
         /**
@@ -6246,9 +6264,10 @@ abstract class Model extends AbstractInjectionAware implements
                     continue;
                 }
 
+                /**
+                 * doSave() rolls back the implicit transaction
+                 */
                 if (!is_object($record) && !is_array($record)) {
-                    $connection->rollback($nesting);
-
                     throw new RelationRequiresObjectOrArray($className, $name);
                 }
 
@@ -6597,9 +6616,10 @@ abstract class Model extends AbstractInjectionAware implements
                     }
                 }
             } else {
+                /**
+                 * doSave() rolls back the implicit transaction
+                 */
                 if (!is_array($record)) {
-                    $connection->rollback($nesting);
-
                     throw new RelationNotDefined($className, $name);
                 }
             }
@@ -6913,9 +6933,10 @@ abstract class Model extends AbstractInjectionAware implements
                  * Only belongsTo are stored before save the master record
                  */
                 if ($type == Relation::BELONGS_TO) {
+                    /**
+                     * doSave() rolls back the implicit transaction
+                     */
                     if (!is_object($record)) {
-                        $connection->rollback($nesting);
-
                         throw new BelongsToRequiresObject(get_class($this), $name);
                     }
 
