@@ -28,6 +28,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 ### Added
 
 - `Phalcon\Mvc\Model\Query\Lang::parsePHQL()`, as in cphalcon: it caches each statement's AST and tags it with an `id` (settings `orm.cache_level` and `orm.unique_cache_id`, both `3` by default), so `Phalcon\Mvc\Model\Query` caches its intermediate representation per statement again. The cache lives as long as the PHP process; `Query::clean()` empties it, e.g. between requests of a long-running worker. `orm.unique_cache_id` is read once, at the first parse. [#800](https://github.com/phalcon/phalcon/issues/800)
+- `Phalcon\Mvc\View\Engine\AbstractEngine::withScope()` to share the variables of a template with the next partial; Volt templates call it automatically. [#810](https://github.com/phalcon/phalcon/issues/810)
 
 ### Fixed
 

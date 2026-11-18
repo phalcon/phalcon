@@ -1050,17 +1050,17 @@ class Compiler implements InjectionAwareInterface
          * Use partial
          */
         if (!isset($statement["params"])) {
-            return '<?php $this->partial(' . $path . ', scope: get_defined_vars()); ?>';
+            return '<?php $this->withScope(get_defined_vars())->partial(' . $path . '); ?>';
         }
 
         /** @var array<array-key, mixed> $params */
         $params = $statement["params"];
 
-        return '<?php $this->partial('
+        return '<?php $this->withScope(get_defined_vars())->partial('
             . $path
             . ", "
             . $this->expression($params)
-            . ', scope: get_defined_vars()); ?>';
+            . '); ?>';
     }
 
     /**
@@ -1974,7 +1974,7 @@ class Compiler implements InjectionAwareInterface
              * dynamically
              */
             if ($name == "partial") {
-                return '$this->partial(' . $arguments . ', scope: get_defined_vars())';
+                return '$this->withScope(get_defined_vars())->partial(' . $arguments . ')';
             }
 
             /**

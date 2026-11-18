@@ -35,7 +35,7 @@ class FunctionCallTest extends AbstractUnitTestCase
             ],
             [
                 '{{ partial("abc.volt") }}',
-                '<?= $this->partial(\'abc.volt\', scope: get_defined_vars()) ?>',
+                '<?= $this->withScope(get_defined_vars())->partial(\'abc.volt\') ?>',
             ],
             // Phalcon\Tag
             [

@@ -62,21 +62,33 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     }
 
     /**
-     * Renders a partial inside another view. The variables in $scope (the
-     * variables of the calling template) are visible in the partial.
-     *
-     * @phpstan-param array<string, mixed> $scope
+     * Renders a partial inside another view
      */
     public function partial(
         string $partialPath,
-        mixed $params = null,
-        array $scope = []
+        mixed $params = null
     ): void {
+        // TODO: Make params array
+        $this->view->partial($partialPath, $params);
+    }
+
+    /**
+     * Adds the variables in $scope (the variables of the calling template) to
+     * the variables that the templates share, so that the next partial can
+     * use them. Returns the engine, so that a call to partial() can follow:
+     *
+     * ```php
+     * $this->withScope(get_defined_vars())->partial('footer');
+     * ```
+     *
+     * @phpstan-param array<string, mixed> $scope
+     */
+    public function withScope(array $scope): static
+    {
         unset($scope['__path'], $scope['__params']);
 
         $this->templateScope = $scope + $this->templateScope;
 
-        // TODO: Make params array
-        $this->view->partial($partialPath, $params);
+        return $this;
     }
 }
