@@ -28,7 +28,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 ### Added
 
 - `Phalcon\Mvc\Model\Query\Lang::parsePHQL()`, as in cphalcon: it caches each statement's AST and tags it with an `id` (settings `orm.cache_level` and `orm.unique_cache_id`, both `3` by default), so `Phalcon\Mvc\Model\Query` caches its intermediate representation per statement again. The cache lives as long as the PHP process; `Query::clean()` empties it, e.g. between requests of a long-running worker. `orm.unique_cache_id` is read once, at the first parse. [#800](https://github.com/phalcon/phalcon/issues/800)
-- `Phalcon\Mvc\View\Engine\AbstractEngine::withScope()` to share the variables of a template with the next partial (Volt templates call it automatically), and `getScope()` and `setScope()` for the views. [#810](https://github.com/phalcon/phalcon/issues/810)
+- `Phalcon\Mvc\View\Engine\AbstractEngine::withScope()`, `getScope()` and `setScope()` for the variables that the templates share. [#810](https://github.com/phalcon/phalcon/issues/810)
 
 ### Fixed
 
@@ -57,7 +57,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Mvc\Model\Query` reusing a cached intermediate representation that was built with the other value of the `enable_implicit_joins` option. [#800](https://github.com/phalcon/phalcon/issues/800)
 - `Phalcon\Mvc\Model\Query` throwing `Phalcon\Phql\Exception` instead of `Phalcon\Mvc\Model\Exception` for PHQL errors; PHQL statements now parse exactly as in cphalcon (error messages, string escape sequences, nesting limit, empty statements), with the parser from `phalcon/phql`. [#800](https://github.com/phalcon/phalcon/issues/800)
 - `Phalcon\Mvc\Model\Resultset\Simple` throwing a `TypeError` with `HYDRATE_ARRAYS` or `HYDRATE_OBJECTS`. [#819](https://github.com/phalcon/phalcon/issues/819)
-- `Phalcon\Mvc\View\Engine\Php` and `Phalcon\Mvc\View\Engine\Volt` not sharing the variables that a template sets with its layout and its partials in the same render, as cphalcon does; each render, and each partial with parameters, starts with a new scope. [#810](https://github.com/phalcon/phalcon/issues/810)
+- `Phalcon\Mvc\View\Engine\Php` and `Phalcon\Mvc\View\Engine\Volt` not sharing the variables of a template with its layout and partials, as cphalcon does. [#810](https://github.com/phalcon/phalcon/issues/810)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compile()` rendering serialized blocks for the second child of a layout when `stat` is `false`. [#17674](https://github.com/phalcon/cphalcon/issues/17674)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compileCall()` silently dropping `{% call %}` blocks instead of throwing an exception. [#17676](https://github.com/phalcon/cphalcon/issues/17676)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler` throwing `Phalcon\Volt\Exception` instead of `Phalcon\Mvc\View\Exception` for template syntax errors; Volt templates now parse exactly as in cphalcon (error messages, line numbers, nesting limit), with the parser from `phalcon/volt`. [#801](https://github.com/phalcon/phalcon/issues/801)
