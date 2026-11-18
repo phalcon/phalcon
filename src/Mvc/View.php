@@ -18,6 +18,7 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Mvc\View\Engine\AbstractEngine;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
@@ -577,6 +578,11 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             /** @var array<string, mixed> $mergedParams */
             $mergedParams     = array_merge($viewParams, $params);
             $this->viewParams = $mergedParams;
+
+            /**
+             * Start a new scope for the partial
+             */
+            $scopes = $this->newScope($this->loadTemplateEngines());
         }
 
         /**
@@ -628,9 +634,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          */
         if (is_array($params)) {
             /**
-             * Restore the original view params
+             * Restore the original view params and scope
              */
             $this->viewParams = $viewParams;
+            $this->restoreScope($scopes);
         }
     }
 
@@ -761,12 +768,20 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         }
 
         /**
+         * Start a new scope for the templates, the same as the new symbol
+         * table in cphalcon
+         */
+        $scopes = $this->newScope($engines);
+
+        /**
          * Call beforeRender if there is an events manager
          */
         if (
             $fireEvents &&
             false === $this->fireManagerEvent("view:beforeRender")
         ) {
+            $this->restoreScope($scopes);
+
             return false;
         }
 
@@ -891,6 +906,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         if ($fireEvents) {
             $this->fireManagerEvent("view:afterRender");
         }
+
+        $this->restoreScope($scopes);
 
         return true;
     }
@@ -1399,5 +1416,42 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         $loadedEngines = $this->engines;
 
         return $loadedEngines;
+    }
+
+    /**
+     * Gives each engine a new, empty scope, the same as a new symbol table in
+     * cphalcon. Returns the engines with their old scopes, for
+     * restoreScope().
+     *
+     * @phpstan-param array<array-key, mixed> $engines
+     *
+     * @phpstan-return array<int, array{0: AbstractEngine, 1: array<string, mixed>}>
+     */
+    private function newScope(array $engines): array
+    {
+        $scopes = [];
+        foreach ($engines as $engine) {
+            /**
+             * The same engine can be registered for more than one extension
+             */
+            if ($engine instanceof AbstractEngine && !isset($scopes[spl_object_id($engine)])) {
+                $scopes[spl_object_id($engine)] = [$engine, $engine->getScope()];
+                $engine->setScope([]);
+            }
+        }
+
+        return $scopes;
+    }
+
+    /**
+     * Gives each engine the scope that it had before newScope()
+     *
+     * @phpstan-param array<int, array{0: AbstractEngine, 1: array<string, mixed>}> $scopes
+     */
+    private function restoreScope(array $scopes): void
+    {
+        foreach ($scopes as [$engine, $scope]) {
+            $engine->setScope($scope);
+        }
     }
 }

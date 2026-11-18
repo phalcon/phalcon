@@ -20,6 +20,7 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Mvc\View\Engine\AbstractEngine;
 use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
@@ -172,6 +173,11 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
              * Merge or assign the new params as parameters
              */
             $mergedParams = array_merge($viewParams, $params);
+
+            /**
+             * Start a new scope for the partial
+             */
+            $scopes = $this->newScope(false === $this->engines ? [] : $this->engines);
         } else {
             $mergedParams = $params;
         }
@@ -186,9 +192,10 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
          */
         if (is_array($params)) {
             /**
-             * Restore the original view params
+             * Restore the original view params and scope
              */
             $this->viewParams = $viewParams;
+            $this->restoreScope($scopes);
         }
 
         ob_end_clean();
@@ -229,6 +236,12 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
      */
     public function render(string $path, array $params = []): string
     {
+        /**
+         * Start a new scope for the templates, the same as the new symbol
+         * table in cphalcon
+         */
+        $scopes = $this->newScope(false === $this->engines ? [] : $this->engines);
+
         ob_start();
 
         /**
@@ -242,6 +255,8 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
         $this->internalRender($path, $mergedParams);
 
         ob_end_clean();
+
+        $this->restoreScope($scopes);
 
         return $this->content;
     }
@@ -482,5 +497,42 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
         $loadedEngines = $this->engines;
 
         return $loadedEngines;
+    }
+
+    /**
+     * Gives each engine a new, empty scope, the same as a new symbol table in
+     * cphalcon. Returns the engines with their old scopes, for
+     * restoreScope().
+     *
+     * @phpstan-param array<array-key, mixed> $engines
+     *
+     * @phpstan-return array<int, array{0: AbstractEngine, 1: array<string, mixed>}>
+     */
+    private function newScope(array $engines): array
+    {
+        $scopes = [];
+        foreach ($engines as $engine) {
+            /**
+             * The same engine can be registered for more than one extension
+             */
+            if ($engine instanceof AbstractEngine && !isset($scopes[spl_object_id($engine)])) {
+                $scopes[spl_object_id($engine)] = [$engine, $engine->getScope()];
+                $engine->setScope([]);
+            }
+        }
+
+        return $scopes;
+    }
+
+    /**
+     * Gives each engine the scope that it had before newScope()
+     *
+     * @phpstan-param array<int, array{0: AbstractEngine, 1: array<string, mixed>}> $scopes
+     */
+    private function restoreScope(array $scopes): void
+    {
+        foreach ($scopes as [$engine, $scope]) {
+            $engine->setScope($scope);
+        }
     }
 }
