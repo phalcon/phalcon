@@ -636,6 +636,18 @@ class Compiler implements InjectionAwareInterface
             ) {
                 return $exprCode;
             }
+
+            /**
+             * partial() writes its output. After the call, the template gets
+             * the variables that the partial set, the same as the shared
+             * symbol table in cphalcon.
+             */
+            if (
+                $name["type"] == Opcode::IDENTIFIER->value &&
+                $name["value"] == "partial"
+            ) {
+                return '<?php ' . $exprCode . '; extract($this->getScope()); ?>';
+            }
         }
 
         /**
@@ -1050,7 +1062,8 @@ class Compiler implements InjectionAwareInterface
          * Use partial
          */
         if (!isset($statement["params"])) {
-            return '<?php $this->withScope(get_defined_vars())->partial(' . $path . '); ?>';
+            return '<?php $this->withScope(get_defined_vars())->partial(' . $path . '); '
+                . 'extract($this->getScope()); ?>';
         }
 
         /** @var array<array-key, mixed> $params */
@@ -1060,7 +1073,7 @@ class Compiler implements InjectionAwareInterface
             . $path
             . ", "
             . $this->expression($params)
-            . '); ?>';
+            . '); extract($this->getScope()); ?>';
     }
 
     /**

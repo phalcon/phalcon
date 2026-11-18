@@ -18,6 +18,7 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\ViewBaseInterface;
+use WeakMap;
 
 /**
  * All the template engine adapters must inherit this class. This provides
@@ -28,12 +29,13 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     use EventsAwareTrait;
 
     /**
-     * Variables that all the templates of this engine share, the same as
-     * the shared symbol table in cphalcon
+     * The variables that the templates share, one set for each view. All
+     * the engines of a view use the same set, the same as the symbol table
+     * in cphalcon. A set is removed when its view is destroyed.
      *
-     * @phpstan-var array<string, mixed>
+     * @phpstan-var WeakMap<ViewBaseInterface, array<string, mixed>>|null
      */
-    protected array $templateScope = [];
+    private static ?WeakMap $scopes = null;
 
     /**
      * Phalcon\Mvc\View\Engine constructor
@@ -54,13 +56,13 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     }
 
     /**
-     * Returns the variables that the templates of this engine share
+     * Returns the variables that the templates of the view share
      *
      * @phpstan-return array<string, mixed>
      */
     public function getScope(): array
     {
-        return $this->templateScope;
+        return self::$scopes[$this->view] ?? [];
     }
 
     /**
@@ -83,15 +85,17 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     }
 
     /**
-     * Sets the variables that the templates of this engine share. The views
-     * use it to start a new scope and to restore the old one, the same as a
-     * new symbol table in cphalcon.
+     * Sets the variables that the templates of the view share. The views use
+     * it to start a new scope and to restore the old one, the same as a new
+     * symbol table in cphalcon.
      *
      * @phpstan-param array<string, mixed> $scope
      */
     public function setScope(array $scope): static
     {
-        $this->templateScope = $scope;
+        self::$scopes ??= new WeakMap();
+
+        self::$scopes[$this->view] = $scope;
 
         return $this;
     }
@@ -111,8 +115,6 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     {
         unset($scope['__path'], $scope['__params']);
 
-        $this->templateScope = $scope + $this->templateScope;
-
-        return $this;
+        return $this->setScope($scope + $this->getScope());
     }
 }

@@ -1444,13 +1444,15 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
     }
 
     /**
-     * Gives each engine the scope that it had before newScope()
+     * Gives each engine the scope that it had before newScope(). The engines
+     * of a view share one scope, so the first saved scope must be the last
+     * one to go back.
      *
      * @phpstan-param array<int, array{0: AbstractEngine, 1: array<string, mixed>}> $scopes
      */
     private function restoreScope(array $scopes): void
     {
-        foreach ($scopes as [$engine, $scope]) {
+        foreach (array_reverse($scopes) as [$engine, $scope]) {
             $engine->setScope($scope);
         }
     }

@@ -277,7 +277,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
          */
         $include = function (string $__path, mixed $__params): void {
             extract(
-                is_array($__params) ? $__params + $this->templateScope : $this->templateScope,
+                is_array($__params) ? $__params + $this->getScope() : $this->getScope(),
                 EXTR_SKIP
             );
 
@@ -285,7 +285,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
             unset($__path, $__params);
 
-            $this->templateScope = get_defined_vars() + $this->templateScope;
+            $this->setScope(get_defined_vars() + $this->getScope());
         };
 
         $include->call($this, $compiledTemplatePath, $params);
