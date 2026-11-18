@@ -135,7 +135,7 @@ final class GetSqlColumnTest extends AbstractUnitTestCase
 
     /**
      * For a plain column, getSqlColumn() calls prepareQualified() with the
-     * field, the domain ("" for no domain) and the escape character.
+     * field, the domain (null for an empty domain) and the escape character.
      *
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-10-07
@@ -175,7 +175,7 @@ final class GetSqlColumnTest extends AbstractUnitTestCase
 
         $expected = [
             ['name', 'r', null],
-            ['name', '', null],
+            ['name', null, null],
             ['name', 'r', '"'],
         ];
         $this->assertSame($expected, $dialect->calls);

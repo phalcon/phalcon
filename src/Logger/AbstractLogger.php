@@ -85,7 +85,7 @@ abstract class AbstractLogger
         DateTimeZone | null $timezone = null,
         ClockInterface | null $clock = null
     ) {
-        if (null == $timezone) {
+        if (null === $timezone) {
             $defaultTimezone = date_default_timezone_get();
             if (empty($defaultTimezone)) {
                 $defaultTimezone = 'UTC';

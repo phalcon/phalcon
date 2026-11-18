@@ -2058,7 +2058,7 @@ abstract class Model extends AbstractInjectionAware implements
 
         $builder->from(get_called_class());
 
-        if ($limit != null) {
+        if ($limit !== null) {
             $builder->limit($limit);
         }
 
@@ -3717,7 +3717,7 @@ abstract class Model extends AbstractInjectionAware implements
 
         if (
             $manager->isKeepingSnapshots($this) &&
-            $this->snapshot != null &&
+            $this->snapshot !== null &&
             $attributes != $this->snapshot
         ) {
             $snapshot = $this->snapshot;

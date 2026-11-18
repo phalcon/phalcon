@@ -278,7 +278,7 @@ abstract class Dialect implements DialectInterface
         array $bindCounts = []
     ): string {
         if (is_string($column)) {
-            return $this->prepareQualified($column, "", $escapeChar);
+            return $this->prepareQualified($column, null, $escapeChar);
         }
 
         $columnExpression = $column;
@@ -307,10 +307,14 @@ abstract class Dialect implements DialectInterface
                  * The index "1" is the domain column. An empty domain is no
                  * domain.
                  *
-                 * @var string $columnDomain
+                 * @var string|null $columnDomain
                  */
-                $columnDomain = $column[1] ?? "";
-                $columnSql    = $this->prepareQualified(
+                $columnDomain = $column[1] ?? null;
+                if ($columnDomain === "") {
+                    $columnDomain = null;
+                }
+
+                $columnSql = $this->prepareQualified(
                     $columnField,
                     $columnDomain,
                     $escapeChar
@@ -588,7 +592,7 @@ abstract class Dialect implements DialectInterface
             return $this->prepareTable(
                 $tableName[0],
                 $tableName[1] ?? null,
-                $tableName[2] ?? '',
+                $tableName[2] ?? null,
                 $escapeChar
             );
         }
@@ -1099,8 +1103,8 @@ abstract class Dialect implements DialectInterface
         array $expression,
         string | null $escapeChar = null
     ): string {
-        /** @var string $domain */
-        $domain = $expression["domain"] ?? '';
+        /** @var string|null $domain */
+        $domain = $expression["domain"] ?? null;
 
         return $this->prepareQualified(
             "*",
@@ -1616,9 +1620,9 @@ abstract class Dialect implements DialectInterface
         /**
          * A domain could be a table/schema
          *
-         * @var string $domain
+         * @var string|null $domain
          */
-        $domain = $expression["domain"] ?? "";
+        $domain = $expression["domain"] ?? null;
 
         return $this->prepareQualified($column, $domain, $escapeChar);
     }
@@ -1733,7 +1737,7 @@ abstract class Dialect implements DialectInterface
      */
     protected function prepareColumnAlias(
         string $qualified,
-        string $alias = "",
+        string | null $alias = null,
         string | null $escapeChar = null
     ): string {
         if (!empty($alias)) {
@@ -1748,10 +1752,10 @@ abstract class Dialect implements DialectInterface
      */
     protected function prepareQualified(
         string $column,
-        string $domain = "",
+        string | null $domain = null,
         string | null $escapeChar = null
     ): string {
-        if ("" !== $domain) {
+        if (null !== $domain && "" !== $domain) {
             return $this->escape($domain . "." . $column, $escapeChar);
         }
 
@@ -1762,28 +1766,28 @@ abstract class Dialect implements DialectInterface
      * Prepares table for this RDBMS
      */
     protected function prepareTable(
-        string $tableName,
-        string | null $schemaName = null,
-        string $alias = "",
+        string $table,
+        string | null $schema = null,
+        string | null $alias = null,
         string | null $escapeChar = null
     ): string {
-        $tableName = $this->escape($tableName, $escapeChar);
+        $table = $this->escape($table, $escapeChar);
 
         /**
          * Schema
          */
-        if (!empty($schemaName)) {
-            $tableName = $this->escapeSchema($schemaName, $escapeChar)
-                . "." . $tableName;
+        if (!empty($schema)) {
+            $table = $this->escapeSchema($schema, $escapeChar)
+                . "." . $table;
         }
 
         /**
          * Alias
          */
         if (!empty($alias)) {
-            $tableName .= " AS " . $this->escape($alias, $escapeChar);
+            $table .= " AS " . $this->escape($alias, $escapeChar);
         }
 
-        return $tableName;
+        return $table;
     }
 }
