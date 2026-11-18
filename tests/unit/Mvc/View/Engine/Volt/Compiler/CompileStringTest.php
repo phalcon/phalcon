@@ -188,7 +188,7 @@ class CompileStringTest extends AbstractUnitTestCase
             ],
             [
                 "{{ partial('hello/x') }}",
-                '<?= $this->withScope(get_defined_vars())->partial(\'hello/x\') ?>',
+                '<?php $this->withScope(get_defined_vars())->partial(\'hello/x\'); extract($this->getScope()); ?>',
             ],
             [
                 '{{ dump(a) }}',

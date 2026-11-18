@@ -66,4 +66,23 @@ class PartialTest extends AbstractUnitTestCase
 
         $this->assertSame('upper', $view->render('scope/php-partial'));
     }
+
+    /**
+     * A template that extracts the scope after a partial gets the variables
+     * that the partial set.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/810
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-17
+     */
+    public function testMvcViewEnginePhpPartialSetsVariablesForCaller(): void
+    {
+        $this->newDi();
+        $this->setDiService('viewSimple');
+
+        /** @var Simple $view */
+        $view = $this->container->get('viewSimple');
+
+        $this->assertSame('upper', $view->render('scope/php-caller'));
+    }
 }
