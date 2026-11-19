@@ -1481,10 +1481,7 @@ abstract class Model extends AbstractInjectionAware implements
              */
             /** @var Resultset<int, static> $resultset */
             if (isset($params["hydration"])) {
-                /** @var int $hydration */
-                $hydration = $params["hydration"];
-
-                $resultset->setHydrateMode($hydration);
+                self::weakCall($resultset, 'setHydrateMode', $params["hydration"]);
             }
 
             /**

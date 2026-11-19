@@ -19,6 +19,7 @@ use Phalcon\Cache\Cache;
 use Phalcon\Db\RawValue;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Exception;
+use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\Model\Transaction\Manager;
 use Phalcon\Mvc\Router;
@@ -33,6 +34,7 @@ use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Models\Objects;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
+use TypeError;
 
 use function ob_end_clean;
 use function ob_get_contents;
@@ -118,6 +120,52 @@ final class FindTest extends AbstractDatabaseTestCase
         $this->assertStringNotContainsString($expected, $actual);
         $expected = 'Use of "static" in callables in deprecated';
         $this->assertStringNotContainsString($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/869
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelFindHydrationNotNumeric(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getPdoConnection();
+        $migration  = new ObjectsMigration($connection);
+        $migration->insert(1, 'random data', 1);
+
+        $this->expectException(TypeError::class);
+
+        Objects::find(['hydration' => 'abc']);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/869
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelFindHydrationNumericString(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getPdoConnection();
+        $migration  = new ObjectsMigration($connection);
+        $migration->insert(1, 'random data', 1);
+
+        $data = Objects::find(['hydration' => (string) Resultset::HYDRATE_ARRAYS]);
+
+        $this->assertSame(Resultset::HYDRATE_ARRAYS, $data->getHydrateMode());
+
+        $record = $data->getFirst();
+        $this->assertIsArray($record);
+        $this->assertEquals('random data', $record['obj_name']);
     }
 
     /**

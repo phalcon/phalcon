@@ -19,6 +19,7 @@ use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
+use TypeError;
 
 final class ConstructTest extends AbstractDatabaseTestCase
 {
@@ -132,6 +133,52 @@ final class ConstructTest extends AbstractDatabaseTestCase
         $expected = $expectedPhql;
         $actual   = $builderLimitWithOffset->getPhql();
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/869
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelQueryBuilderConstructNumericStrings(): void
+    {
+        $builder = new Builder(
+            [
+                'models'      => Invoices::class,
+                'offset'      => '15',
+                'for_update'  => '1',
+                'shared_lock' => '1',
+            ]
+        );
+
+        $this->assertSame(15, $builder->getOffset());
+        $this->assertStringEndsWith(' FOR UPDATE', $builder->getPhql());
+        $this->assertTrue($this->getProtectedProperty($builder, 'sharedLock'));
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/869
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelQueryBuilderConstructOffsetNotNumeric(): void
+    {
+        $this->expectException(TypeError::class);
+
+        new Builder(
+            [
+                'models' => Invoices::class,
+                'offset' => 'abc',
+            ]
+        );
     }
 
     /**

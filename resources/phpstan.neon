@@ -549,3 +549,10 @@ parameters:
             message: "#Property Phalcon\\\\Dispatcher\\\\AbstractDispatcher::\\$moduleName \\(string\\) does not accept string\\|null#"
             path: ../src/Dispatcher/AbstractDispatcher.php
             reportUnmatched: false
+        # The file has no strict_types. PHP checks the return type in weak
+        # mode, thus a scalar value becomes a bool and other values give
+        # TypeError.
+        -
+            message: "#Method [\\w\\\\]+::weakReturnBool\\(\\) should return bool but returns mixed#"
+            path: ../src/Support/Traits/WeakTypesTrait.php
+            reportUnmatched: false

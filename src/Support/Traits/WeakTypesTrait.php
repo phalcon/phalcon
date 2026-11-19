@@ -168,6 +168,16 @@ trait WeakTypesTrait
     }
 
     /**
+     * Returns the value as a bool, in weak mode. cphalcon does not check its
+     * return types and returns the value with no change. Here, a scalar value
+     * becomes a bool, and an array or an object gives TypeError.
+     */
+    private static function weakReturnBool(mixed $value): bool
+    {
+        return $value;
+    }
+
+    /**
      * Writes a property of the object, in weak mode.
      */
     private static function weakWrite(
