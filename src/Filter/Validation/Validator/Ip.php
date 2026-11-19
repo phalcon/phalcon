@@ -86,7 +86,7 @@ class Ip extends AbstractValidator
 
     public const VERSION_6 = FILTER_FLAG_IPV6;
 
-    protected string | null $template = "Field :field must be a valid IP address";
+    protected $template = "Field :field must be a valid IP address";
 
     /**
      * Constructor

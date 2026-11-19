@@ -115,7 +115,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 {
     use WeakTypesTrait;
 
-    protected string | null $template = "Field :field must be unique";
+    protected $template = "Field :field must be unique";
 
     /**
      * @phpstan-var filter_uniqueness_column_map|null

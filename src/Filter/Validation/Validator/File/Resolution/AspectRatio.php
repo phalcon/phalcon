@@ -69,7 +69,7 @@ use function is_array;
  */
 class AspectRatio extends AbstractFile
 {
-    protected string | null $template = "File :field does not have the exact aspect ratio of :ratio";
+    protected $template = "File :field does not have the exact aspect ratio of :ratio";
 
     /**
      * Constructor

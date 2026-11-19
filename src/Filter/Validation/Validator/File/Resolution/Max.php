@@ -71,7 +71,7 @@ use function is_array;
  */
 class Max extends AbstractFile
 {
-    protected string | null $template = "File :field exceeds the maximum resolution of :resolution";
+    protected $template = "File :field exceeds the maximum resolution of :resolution";
 
     /**
      * Constructor

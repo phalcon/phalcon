@@ -57,7 +57,7 @@ use function preg_match;
  */
 class Alpha extends AbstractValidator
 {
-    protected string | null $template = "Field :field must contain only letters";
+    protected $template = "Field :field must contain only letters";
 
     /**
      * Constructor

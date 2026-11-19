@@ -71,7 +71,7 @@ use function is_array;
  */
 class Min extends AbstractFile
 {
-    protected string | null $template = "File :field can not have the minimum resolution of :resolution";
+    protected $template = "File :field can not have the minimum resolution of :resolution";
 
     /**
      * Constructor

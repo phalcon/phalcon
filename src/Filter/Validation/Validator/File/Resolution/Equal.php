@@ -66,7 +66,7 @@ use function is_array;
  */
 class Equal extends AbstractFile
 {
-    protected string | null $template = "The resolution of the field :field has to be equal :resolution";
+    protected $template = "The resolution of the field :field has to be equal :resolution";
 
     /**
      * Constructor

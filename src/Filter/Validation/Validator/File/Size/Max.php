@@ -59,7 +59,7 @@ namespace Phalcon\Filter\Validation\Validator\File\Size;
  */
 class Max extends Equal
 {
-    protected string | null $template = "File :field exceeds the size of :size";
+    protected $template = "File :field exceeds the size of :size";
 
     /**
      * Executes the conditional

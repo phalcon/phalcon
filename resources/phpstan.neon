@@ -533,3 +533,19 @@ parameters:
             message: "#Parameter \\#1 \\$name of method Phalcon\\\\Di\\\\Di::setShared\\(\\) expects string, string\\|null given#"
             path: ../src/Di/Di.php
             reportUnmatched: false
+        # The property has the cphalcon type `?AccessLocator`. The constructor
+        # always sets it, the same as cphalcon.
+        -
+            message: "#Cannot call method (getAll|has|newInstance|register)\\(\\) on Phalcon\\\\Auth\\\\Access\\\\AccessLocator\\|null#"
+            path: ../src/Auth/Manager.php
+            reportUnmatched: false
+        # The properties have the cphalcon type `string`. A null value gives a
+        # TypeError, the same as cphalcon.
+        -
+            message: "#Property Phalcon\\\\Cli\\\\Router\\\\Route::\\$delimiter \\(string\\) does not accept string\\|null#"
+            path: ../src/Cli/Router/Route.php
+            reportUnmatched: false
+        -
+            message: "#Property Phalcon\\\\Dispatcher\\\\AbstractDispatcher::\\$moduleName \\(string\\) does not accept string\\|null#"
+            path: ../src/Dispatcher/AbstractDispatcher.php
+            reportUnmatched: false

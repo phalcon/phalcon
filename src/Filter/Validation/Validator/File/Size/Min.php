@@ -59,7 +59,7 @@ namespace Phalcon\Filter\Validation\Validator\File\Size;
  */
 class Min extends Equal
 {
-    protected string | null $template = "File :field can not have the minimum size of :size";
+    protected $template = "File :field can not have the minimum size of :size";
 
     /**
      * Executes the conditional

@@ -39,6 +39,8 @@ use Phalcon\Contracts\Auth\Manager as ManagerContract;
  */
 class Manager implements ManagerContract
 {
+    protected ?AccessLocator $accessFactory;
+
     protected ?Access $activeAccess = null;
 
     protected ?Guard $defaultGuard = null;
@@ -48,9 +50,9 @@ class Manager implements ManagerContract
      */
     protected array $guards = [];
 
-    public function __construct(
-        protected AccessLocator $accessFactory
-    ) {
+    public function __construct(AccessLocator $accessFactory)
+    {
+        $this->accessFactory = $accessFactory;
     }
 
     /**

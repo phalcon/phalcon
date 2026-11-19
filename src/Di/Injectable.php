@@ -83,8 +83,10 @@ abstract class Injectable extends stdClass implements InjectionAwareInterface
 {
     /**
      * Dependency Injector
+     *
+     * @var DiInterface|null
      */
-    protected DiInterface | null $container = null;
+    protected $container = null;
 
     /**
      * Magic method __get

@@ -59,7 +59,7 @@ use const FILTER_VALIDATE_URL;
  */
 class Url extends AbstractValidator
 {
-    protected string | null $template = "Field :field must be a url";
+    protected $template = "Field :field must be a url";
 
     /**
      * Constructor

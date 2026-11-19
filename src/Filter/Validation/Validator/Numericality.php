@@ -57,7 +57,7 @@ use function preg_match;
  */
 class Numericality extends AbstractValidator
 {
-    protected string | null $template = "Field :field does not have a valid numeric format";
+    protected $template = "Field :field does not have a valid numeric format";
 
     /**
      * Constructor

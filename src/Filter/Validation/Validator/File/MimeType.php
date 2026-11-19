@@ -81,7 +81,7 @@ class MimeType extends AbstractFile
 {
     use InfoTrait;
 
-    protected string | null $template = "File :field must be of type: :types";
+    protected $template = "File :field must be of type: :types";
 
     /**
      * Executes the validation
