@@ -797,6 +797,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Returns the n'th field of first row in a SQL query result
      *
+     * Returns false if the query returns no rows. The type of the value
+     * comes from the database driver.
+     *
      *```php
      * // Getting count of invoices
      * $invoicesCount = $connection->fetchColumn("SELECT count(*) FROM co_invoices");
@@ -819,14 +822,11 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     ): mixed {
         $row = $this->fetchOne($sqlQuery, Enum::FETCH_BOTH, $placeholders);
 
-        if (!is_array($row)) {
+        if (!is_array($row) || !array_key_exists($column, $row)) {
             return false;
         }
 
-        /** @var bool|string $value */
-        $value = $row[$column] ?? false;
-
-        return $value;
+        return $row[$column];
     }
 
     /**
