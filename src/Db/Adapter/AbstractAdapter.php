@@ -22,6 +22,7 @@ use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\CannotInsertWithoutData;
 use Phalcon\Db\Exceptions\IncompleteBindTypes;
 use Phalcon\Db\Exceptions\InvalidDialectClass;
+use Phalcon\Db\Exceptions\InvalidWhereConditions;
 use Phalcon\Db\Exceptions\NestedTransactionChangeBlocked;
 use Phalcon\Db\Exceptions\SavepointsNotSupported;
 use Phalcon\Db\Exceptions\TableMustHaveColumn;
@@ -1539,7 +1540,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         $setClause    = implode(", ", $placeholders);
 
         $updateSql = "UPDATE " . $escapedTable . " SET " . $setClause;
-        if (!empty($whereCondition)) {
+        if (null !== $whereCondition) {
             $updateSql .= " WHERE ";
 
             /**
@@ -1550,7 +1551,12 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             } else {
                 /**
                  * Array conditions may have bound params and bound types
-                 *
+                 */
+                if (!is_array($whereCondition)) {
+                    throw new InvalidWhereConditions();
+                }
+
+                /**
                  * If an index 'conditions' is present it contains string where
                  * conditions that are appended to the UPDATE SQL
                  */

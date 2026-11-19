@@ -53,6 +53,14 @@ parameters:
             message: "#Call to function is_array\\(\\) with array<.*> will always evaluate to true#"
             path: ../src/Annotations/Reflection.php
             reportUnmatched: false
+        # update() takes any value for the where condition, and only a
+        # docblock gives its shape. The Zephir implementation throws
+        # InvalidWhereConditions for a value that is not a string or an
+        # array, and the guard is kept the same in both.
+        -
+            message: "#Call to function is_array\\(\\) with array\\{bind\\?: mixed, bindTypes\\?: mixed, conditions\\?: string\\} will always evaluate to true#"
+            path: ../src/Db/Adapter/AbstractAdapter.php
+            reportUnmatched: false
         # The dispatch loop sets `finished` to true, then fires events and
         # handler hooks. Any listener or hook may call forward(), which sets
         # it back to false. PHPStan cannot follow that re-entry, so it still
