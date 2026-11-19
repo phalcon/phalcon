@@ -55,4 +55,19 @@ final class GetActiveFunctionTest extends AbstractUnitTestCase
         $actual   = $acl->getActiveFunctionCustomArgumentsCount();
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * Before isAllowed() there is no active function, as in cphalcon.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/838
+     */
+    public function testAclAdapterMemoryGetActiveFunctionBeforeIsAllowed(): void
+    {
+        $acl = new Memory();
+
+        $this->assertNull($acl->getActiveFunction());
+    }
 }

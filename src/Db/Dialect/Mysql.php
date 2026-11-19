@@ -40,7 +40,7 @@ class Mysql extends Dialect
 {
     use TextTrait;
 
-    protected string $escapeChar = "`";
+    protected string | null $escapeChar = "`";
 
     /**
      * @var list<string>

@@ -30,4 +30,19 @@ class GetHandlerTest extends AbstractUnitTestCase
         $collection->setHandler($handler);
         $this->assertSame($handler, $collection->getHandler());
     }
+
+    /**
+     * Before setHandler() there is no main handler, as in cphalcon.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/838
+     */
+    public function testMvcMicroCollectionGetHandlerBeforeSetHandler(): void
+    {
+        $collection = new Collection();
+
+        $this->assertNull($collection->getHandler());
+    }
 }

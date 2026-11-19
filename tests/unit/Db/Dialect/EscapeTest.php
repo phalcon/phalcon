@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Unit\Db\Dialect;
 use Phalcon\Db\Dialect\Mysql;
 use Phalcon\Support\Settings;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Db\Dialect\Fake\FakeDialect;
 
 final class EscapeTest extends AbstractUnitTestCase
 {
@@ -146,6 +147,25 @@ final class EscapeTest extends AbstractUnitTestCase
             '`phalcon`',
             $dialect->escapeSchema(str: 'phalcon')
         );
+    }
+
+    /**
+     * A dialect that does not set an escape character does not escape the
+     * name, as in cphalcon. An escape character in the call is used.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/838
+     */
+    public function testDbDialectEscapeWithoutEscapeChar(): void
+    {
+        $dialect = new FakeDialect();
+
+        $this->assertSame('robots', $dialect->escape('robots'));
+        $this->assertSame('robots.id', $dialect->escape('robots.id'));
+        $this->assertSame('"robots"."id"', $dialect->escape('robots.id', '"'));
+        $this->assertSame('phalcon', $dialect->escapeSchema('phalcon'));
     }
 
     /**
