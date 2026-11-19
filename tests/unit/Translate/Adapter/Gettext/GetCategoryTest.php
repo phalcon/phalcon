@@ -17,6 +17,7 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Translate\Fake\TranslateGettextTrait;
 use Phalcon\Translate\Adapter\Gettext;
 use Phalcon\Translate\InterpolatorFactory;
+use TypeError;
 
 use const LC_MESSAGES;
 
@@ -32,6 +33,39 @@ final class GetCategoryTest extends AbstractUnitTestCase
     {
 
         $params     = $this->getGettextConfig();
+        $translator = new Gettext(new InterpolatorFactory(), $params);
+
+        $actual = $translator->getCategory();
+        $this->assertSame(LC_MESSAGES, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/867
+     */
+    public function testTranslateAdapterGettextGetCategoryNotNumeric(): void
+    {
+        $params             = $this->getGettextConfig();
+        $params['category'] = 'abc';
+
+        $this->expectException(TypeError::class);
+
+        new Gettext(new InterpolatorFactory(), $params);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/867
+     */
+    public function testTranslateAdapterGettextGetCategoryNumericString(): void
+    {
+        $params             = $this->getGettextConfig();
+        $params['category'] = (string) LC_MESSAGES;
+
         $translator = new Gettext(new InterpolatorFactory(), $params);
 
         $actual = $translator->getCategory();

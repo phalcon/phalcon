@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use Phalcon\Contracts\Translate\TranslateTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\MissingGettextExtension;
@@ -58,6 +59,7 @@ use const LC_ALL;
 class Gettext extends AbstractAdapter
 {
     use InfoTrait;
+    use WeakTypesTrait;
 
     protected int $category         = LC_ALL;
 
@@ -303,7 +305,11 @@ class Gettext extends AbstractAdapter
 
         $options = array_merge($this->getOptionsDefault(), $options);
 
-        $this->setLocale($options['category'], $options['locale']);
+        self::weakCallMethod(
+            $this,
+            'setLocale',
+            [$options['category'], $options['locale']]
+        );
         $this->setDefaultDomain($options['defaultDomain']);
         $this->setDirectory($options['directory']);
         $this->setDomain($options['defaultDomain']);

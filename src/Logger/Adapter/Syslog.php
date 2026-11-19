@@ -17,6 +17,7 @@ use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Logger\Adapter\Exceptions\SyslogOpenFailed;
 use Phalcon\Logger\Enum;
 use Phalcon\Logger\Item;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function closelog;
 use function openlog;
@@ -45,6 +46,8 @@ use const LOG_WARNING;
  */
 class Syslog extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     protected int $facility = 0;
 
     protected bool $opened  = false;
@@ -60,8 +63,8 @@ class Syslog extends AbstractAdapter
         protected string $name,
         array $options = []
     ) {
-        $this->option   = $options['option'] ?? LOG_ODELAY;
-        $this->facility = $options['facility'] ?? LOG_USER;
+        self::weakWrite($this, 'option', $options['option'] ?? LOG_ODELAY);
+        self::weakWrite($this, 'facility', $options['facility'] ?? LOG_USER);
     }
 
     /**
