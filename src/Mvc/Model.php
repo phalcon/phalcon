@@ -303,7 +303,7 @@ abstract class Model extends AbstractInjectionAware implements
          * Inject the manager service from the DI
          */
         if ($modelsManager === null) {
-            $modelsManager = $container->get("modelsManager");
+            $modelsManager = $container->getShared("modelsManager");
             if ($modelsManager === null) {
                 throw new InvalidModelsManagerService(get_class($this));
             }
@@ -727,7 +727,7 @@ abstract class Model extends AbstractInjectionAware implements
         /**
          * Gets the default modelsManager service
          */
-        $manager = $container->get("modelsManager");
+        $manager = $container->getShared("modelsManager");
         if ($manager === null) {
             throw new InvalidModelsManagerService(get_class($this));
         }
@@ -1802,7 +1802,7 @@ abstract class Model extends AbstractInjectionAware implements
         $container = Di::getDefault();
 
         /** @var ManagerInterface $manager */
-        $manager = $container->get("modelsManager");
+        $manager = $container->getShared("modelsManager");
 
         if (!is_array($parameters)) {
             $params = [];
@@ -2046,7 +2046,7 @@ abstract class Model extends AbstractInjectionAware implements
         $container = Di::getDefault();
 
         /** @var ManagerInterface $manager */
-        $manager = $container->get("modelsManager");
+        $manager = $container->getShared("modelsManager");
 
         /**
          * Builds a query with the passed parameters. The callers normalize the
@@ -3139,7 +3139,7 @@ abstract class Model extends AbstractInjectionAware implements
             /** @var DiInterface $containerLocal */
             $containerLocal = $this->container;
 
-            $metaData = $containerLocal->get("modelsMetadata");
+            $metaData = $containerLocal->getShared("modelsMetadata");
 
             if (!is_object($metaData)) {
                 throw new InvalidModelsMetadataService(get_class($this));
@@ -4217,7 +4217,7 @@ abstract class Model extends AbstractInjectionAware implements
             /**
              * Gets the default modelsManager service
              */
-            $manager = $container->get("modelsManager");
+            $manager = $container->getShared("modelsManager");
 
             if (!is_object($manager)) {
                 throw new InvalidModelsManagerService(get_class($this));
