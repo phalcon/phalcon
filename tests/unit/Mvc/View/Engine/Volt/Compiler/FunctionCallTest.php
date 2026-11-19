@@ -456,4 +456,30 @@ class FunctionCallTest extends AbstractUnitTestCase
 
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * Before a compile there are no extended blocks, thus super() gives an
+     * empty string, as in cphalcon.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/838
+     */
+    public function testMvcViewEngineVoltCompilerFunctionCallSuperBeforeCompile(): void
+    {
+        $volt = new Compiler();
+
+        // 265 is the identifier type of the Volt parser
+        $actual = $volt->functionCall(
+            [
+                'name' => [
+                    'type'  => 265,
+                    'value' => 'super',
+                ],
+            ]
+        );
+
+        $this->assertSame("''", $actual);
+    }
 }

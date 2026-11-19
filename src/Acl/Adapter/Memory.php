@@ -142,7 +142,7 @@ class Memory extends AbstractAdapter
     /**
      * Returns the latest function used to acquire access
      */
-    protected mixed $activeFunction;
+    protected mixed $activeFunction = null;
 
     /**
      * Returns number of additional arguments(excluding role and resource) for

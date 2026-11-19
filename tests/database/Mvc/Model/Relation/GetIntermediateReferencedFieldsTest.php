@@ -36,4 +36,22 @@ final class GetIntermediateReferencedFieldsTest extends AbstractDatabaseTestCase
 
         $this->assertSame(['ref_a', 'ref_b'], $relation->getIntermediateReferencedFields());
     }
+
+    /**
+     * A relation that is not has-*-through has no intermediate referenced
+     * fields, as in cphalcon.
+     *
+     * Tests Phalcon\Mvc\Model\Relation :: getIntermediateReferencedFields() - not through
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/838
+     */
+    public function testMvcModelRelationGetIntermediateReferencedFieldsNotThrough(): void
+    {
+        $relation = new Relation(Relation::HAS_MANY, 'RefModel', 'id', 'ref', []);
+
+        $this->assertNull($relation->getIntermediateReferencedFields());
+    }
 }

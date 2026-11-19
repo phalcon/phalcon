@@ -103,7 +103,7 @@ class Compiler implements InjectionAwareInterface
      */
     protected array | null $blocks = null;
 
-    protected string | null $compiledTemplatePath;
+    protected string | null $compiledTemplatePath = null;
 
     protected DiInterface | null $container = null;
 
@@ -121,7 +121,7 @@ class Compiler implements InjectionAwareInterface
      *
      * TODO: Make it always array
      */
-    protected array | bool | string $extendedBlocks;
+    protected array | bool | string $extendedBlocks = false;
 
     /**
      * @phpstan-var list<object>

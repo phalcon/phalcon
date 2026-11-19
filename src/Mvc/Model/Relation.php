@@ -44,16 +44,16 @@ class Relation implements RelationInterface
     public const NO_ACTION        = 0;
 
     /**
-     * @phpstan-var mvc_relation_fields
+     * @phpstan-var mvc_relation_fields|null
      */
-    protected array | string $intermediateFields;
+    protected array | string | null $intermediateFields = null;
 
     protected string | null $intermediateModel = null;
 
     /**
-     * @phpstan-var mvc_relation_fields
+     * @phpstan-var mvc_relation_fields|null
      */
-    protected array | string $intermediateReferencedFields;
+    protected array | string | null $intermediateReferencedFields = null;
 
     /**
      * Phalcon\Mvc\Model\Relation constructor
@@ -109,6 +109,9 @@ class Relation implements RelationInterface
      */
     public function getIntermediateFields()
     {
+        // setIntermediateRelation() sets the fields of a has-*-through relation.
+        // Other relations give null, as in cphalcon.
+        /** @phpstan-var mvc_relation_fields */
         return $this->intermediateFields;
     }
 
@@ -131,6 +134,9 @@ class Relation implements RelationInterface
      */
     public function getIntermediateReferencedFields()
     {
+        // setIntermediateRelation() sets the fields of a has-*-through relation.
+        // Other relations give null, as in cphalcon.
+        /** @phpstan-var mvc_relation_fields */
         return $this->intermediateReferencedFields;
     }
 

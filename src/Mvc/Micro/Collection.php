@@ -37,9 +37,9 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 class Collection implements CollectionInterface
 {
     /**
-     * @var callable
+     * @var callable|null
      */
-    protected mixed $handler;
+    protected mixed $handler = null;
 
     /**
      * @phpstan-var mvc_micro_handlers

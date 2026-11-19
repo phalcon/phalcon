@@ -38,7 +38,7 @@ use function substr;
  */
 class Postgresql extends Dialect
 {
-    protected string $escapeChar = "\"";
+    protected string | null $escapeChar = "\"";
 
     /**
      * @var list<string>

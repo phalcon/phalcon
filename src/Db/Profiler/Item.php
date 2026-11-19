@@ -29,12 +29,12 @@ class Item
     /**
      * Timestamp when the profile ended
      */
-    protected float $finalTime;
+    protected float | null $finalTime = null;
 
     /**
      * Timestamp when the profile started
      */
-    protected float $initialTime;
+    protected float | null $initialTime = null;
 
     /**
      * SQL bind types related to the profile
@@ -60,6 +60,8 @@ class Item
      */
     public function getFinalTime(): float
     {
+        // setFinalTime() sets the value. Before that, the return type gives a TypeError, as in cphalcon.
+        /** @var float */
         return $this->finalTime;
     }
 
@@ -68,6 +70,8 @@ class Item
      */
     public function getInitialTime(): float
     {
+        // setInitialTime() sets the value. Before that, the return type gives a TypeError, as in cphalcon.
+        /** @var float */
         return $this->initialTime;
     }
 

@@ -68,7 +68,7 @@ abstract class Dialect implements DialectInterface
      */
     protected array $customFunctions = [];
 
-    protected string $escapeChar;
+    protected string | null $escapeChar = null;
 
     /**
      * Dialect-specific operators that a concrete dialect must opt into via
@@ -135,7 +135,7 @@ abstract class Dialect implements DialectInterface
             return $str;
         }
 
-        $escapeChar = (!empty($escapeChar)) ? $escapeChar : $this->escapeChar;
+        $escapeChar = (!empty($escapeChar)) ? $escapeChar : (string) $this->escapeChar;
         if (true !== str_contains($str, ".")) {
             if ("" !== $escapeChar && "*" !== $str) {
                 return $escapeChar
@@ -194,7 +194,7 @@ abstract class Dialect implements DialectInterface
         if (true !== $identifiers) {
             return $str;
         }
-        $escapeChar = (!empty($escapeChar)) ? $escapeChar : $this->escapeChar;
+        $escapeChar = (!empty($escapeChar)) ? $escapeChar : (string) $this->escapeChar;
 
         return $escapeChar . trim($str, $escapeChar) . $escapeChar;
     }
