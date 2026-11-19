@@ -29,6 +29,7 @@ use Phalcon\Mvc\Model\Query\Exceptions\Builder\OperatorNotAvailable;
 use Phalcon\Mvc\Model\QueryInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function explode;
 use function implode;
@@ -82,6 +83,8 @@ use function str_contains;
  */
 class Builder implements BuilderInterface, InjectionAwareInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var mvc_model_bind_params
      */
@@ -300,21 +303,21 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Assign OFFSET clause
              */
             if (isset($params["offset"])) {
-                $this->offset = $params["offset"];
+                self::weakWrite($this, 'offset', $params["offset"]);
             }
 
             /**
              * Assign FOR UPDATE clause
              */
             if (isset($params["for_update"])) {
-                $this->forUpdate = $params["for_update"];
+                self::weakWrite($this, 'forUpdate', $params["for_update"]);
             }
 
             /**
              * Assign SHARED LOCK clause
              */
             if (isset($params["shared_lock"])) {
-                $this->sharedLock = $params["shared_lock"];
+                self::weakWrite($this, 'sharedLock', $params["shared_lock"]);
             }
         } else {
             if (is_string($params) && $params !== "") {

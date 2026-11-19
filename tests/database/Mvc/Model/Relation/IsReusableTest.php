@@ -50,4 +50,21 @@ final class IsReusableTest extends AbstractDatabaseTestCase
 
         $this->assertSame($expected, $relation->isReusable());
     }
+
+    /**
+     * cphalcon returns the option value, phalcon returns a bool.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/869
+     */
+    public function testMvcModelRelationIsReusableNumericString(): void
+    {
+        $relation = new Relation(Relation::HAS_MANY, 'RefModel', 'id', 'ref', ['reusable' => '1']);
+        $this->assertEquals(true, $relation->isReusable());
+
+        $relation = new Relation(Relation::HAS_MANY, 'RefModel', 'id', 'ref', ['reusable' => '0']);
+        $this->assertEquals(false, $relation->isReusable());
+    }
 }

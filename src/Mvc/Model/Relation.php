@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Model;
 
 use Phalcon\Contracts\Mvc\MvcTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function call_user_func;
 use function is_callable;
@@ -27,6 +28,8 @@ use function is_callable;
  */
 class Relation implements RelationInterface
 {
+    use WeakTypesTrait;
+
     public const ACTION_CASCADE   = 2;
 
     public const ACTION_RESTRICT  = 1;
@@ -229,9 +232,7 @@ class Relation implements RelationInterface
      */
     public function isReusable(): bool
     {
-        // The "reusable" option holds a boolean flag.
-        /** @var bool */
-        return $this->options["reusable"] ?? false;
+        return self::weakReturnBool($this->options["reusable"] ?? false);
     }
 
     /**
