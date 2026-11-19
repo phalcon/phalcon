@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * This file is part of the Phalcon Framework.
+ *
+ * (c) Phalcon Team <team@phalcon.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace Phalcon\Tests\Unit\Storage\Fake;
+
+use Phalcon\Storage\Serializer\Php;
+
+/**
+ * Overrides getAllowedClasses() with the cphalcon signature
+ */
+class FakePhpSerializerOverride extends Php
+{
+    public function getAllowedClasses()
+    {
+        return parent::getAllowedClasses();
+    }
+}

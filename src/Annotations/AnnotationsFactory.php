@@ -53,8 +53,10 @@ class AnnotationsFactory extends AbstractFactory
      * @throws \Exception
      *
      * @phpstan-param array<string, mixed>|ConfigInterface $config
+     *
+     * @return AdapterInterface
      */
-    public function load(mixed $config): AdapterInterface
+    public function load(mixed $config)
     {
         $config = $this->checkConfig($config);
         $config = $this->checkConfigElement($config, "adapter");

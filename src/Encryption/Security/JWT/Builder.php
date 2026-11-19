@@ -377,8 +377,10 @@ class Builder
 
     /**
      * Sets a registered claim
+     *
+     * @return static
      */
-    protected function setClaim(string $name, mixed $value): static
+    protected function setClaim(string $name, mixed $value): Builder
     {
         $this->claims->set($name, $value);
 

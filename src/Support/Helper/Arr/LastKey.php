@@ -23,8 +23,10 @@ class LastKey extends AbstractArr
 {
     /**
      * @param array<array-key, mixed> $collection
+     *
+     * @return int|string|null
      */
-    public function __invoke(array $collection, callable | null $method = null): int | string | null
+    public function __invoke(array $collection, callable | null $method = null)
     {
         $filtered = $this->toFilter($collection, $method);
 

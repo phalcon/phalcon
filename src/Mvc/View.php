@@ -955,7 +955,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         string $controllerName,
         string $actionName,
         array $params = []
-    ): bool | static {
+    ): false | static {
         $result = $this->processRender($controllerName, $actionName, $params);
 
         if (!$result) {

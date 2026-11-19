@@ -969,11 +969,9 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     /**
      * Sets externally the handler that must be called by the matched route
      *
-     * @return Micro
-     *
      * @phpstan-return static
      */
-    public function setActiveHandler(mixed $activeHandler): static
+    public function setActiveHandler(mixed $activeHandler): self
     {
         /** @var array<array-key, mixed>|callable|null $handler */
         $handler = $activeHandler;
