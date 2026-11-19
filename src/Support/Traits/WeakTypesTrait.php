@@ -178,6 +178,16 @@ trait WeakTypesTrait
     }
 
     /**
+     * Returns the value as an int, in weak mode. cphalcon does not check its
+     * return types and returns the value with no change. Here, a numeric
+     * value becomes an int, and other values give TypeError.
+     */
+    private static function weakReturnInt(mixed $value): int
+    {
+        return $value;
+    }
+
+    /**
      * Writes a property of the object, in weak mode.
      */
     private static function weakWrite(

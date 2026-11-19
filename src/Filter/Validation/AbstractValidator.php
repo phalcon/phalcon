@@ -17,6 +17,7 @@ use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\FieldNotPrintable;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Stringable;
 
 use function array_merge;
@@ -36,6 +37,8 @@ use function method_exists;
  */
 abstract class AbstractValidator implements ValidatorInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var filter_validator_options
      */
@@ -313,7 +316,7 @@ abstract class AbstractValidator implements ValidatorInterface
             $code = $code[$field];
         }
 
-        return $code;
+        return self::weakReturnInt($code);
     }
 
     /**

@@ -20,6 +20,7 @@ use Phalcon\Messages\Messages;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
+use TypeError;
 
 use const FILTER_FLAG_PATH_REQUIRED;
 use const FILTER_FLAG_QUERY_REQUIRED;
@@ -241,6 +242,43 @@ final class ValidateTest extends AbstractUnitTestCase
             $validationMessages['anotherUrl'],
             $messages->offsetGet(1)->getMessage()
         );
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/871
+     */
+    public function testFilterValidationValidatorUrlOptionsNotNumeric(): void
+    {
+        $validation = new Validation();
+        $validation->add('url', new Url(['options' => 'abc']));
+
+        $this->expectException(TypeError::class);
+
+        $validation->validate(['url' => 'https://phalcon.io/path']);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/871
+     */
+    public function testFilterValidationValidatorUrlOptionsNumericString(): void
+    {
+        $validation = new Validation();
+        $validation->add(
+            'url',
+            new Url(['options' => (string) FILTER_FLAG_PATH_REQUIRED])
+        );
+
+        $messages = $validation->validate(['url' => 'https://phalcon.io/path']);
+        $this->assertCount(0, $messages);
+
+        $messages = $validation->validate(['url' => 'https://phalcon.io']);
+        $this->assertCount(1, $messages);
     }
 
     /**

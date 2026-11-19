@@ -20,6 +20,7 @@ use Phalcon\Messages\Messages;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
+use TypeError;
 
 final class ValidateTest extends AbstractUnitTestCase
 {
@@ -83,6 +84,38 @@ final class ValidateTest extends AbstractUnitTestCase
         );
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/871
+     */
+    public function testFilterValidationValidatorPresenceOfCodeNotNumeric(): void
+    {
+        $validation = new Validation();
+        $validation->add('name', new PresenceOf(['code' => 'abc']));
+
+        $this->expectException(TypeError::class);
+
+        $validation->validate(['name' => '']);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/871
+     */
+    public function testFilterValidationValidatorPresenceOfCodeNumericString(): void
+    {
+        $validation = new Validation();
+        $validation->add('name', new PresenceOf(['code' => '5']));
+
+        $messages = $validation->validate(['name' => '']);
+
+        $this->assertSame(5, $messages->offsetGet(0)->getCode());
     }
 
     /**
