@@ -114,4 +114,83 @@ final class GetAdapterTest extends AbstractUnitTestCase
             $this->assertInstanceOf($expected, $actual);
         }
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/863
+     */
+    public function testStorageAdapterGetAdapterLibmemcachedClientOptions(): void
+    {
+        $this->checkExtensionIsLoaded('memcached');
+
+        $adapter = new Libmemcached(
+            new SerializerFactory(),
+            [
+                'client'       => [
+                    NativeMemcached::OPT_POLL_TIMEOUT    => 500,
+                    NativeMemcached::OPT_CONNECT_TIMEOUT => 100,
+                ],
+                'persistentId' => uniqid('ph-mcid-client-'),
+                'servers'      => [
+                    Talon::settings()->getServiceOptions('memcached'),
+                ],
+            ]
+        );
+
+        $connection = $adapter->getAdapter();
+
+        $this->assertSame(500, $connection->getOption(NativeMemcached::OPT_POLL_TIMEOUT));
+        $this->assertSame(100, $connection->getOption(NativeMemcached::OPT_CONNECT_TIMEOUT));
+        $this->assertSame(2, $connection->getOption(NativeMemcached::OPT_SERVER_FAILURE_LIMIT));
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/863
+     */
+    public function testStorageAdapterGetAdapterLibmemcachedFailoverOptions(): void
+    {
+        $this->checkExtensionIsLoaded('memcached');
+
+        $adapter = new Libmemcached(
+            new SerializerFactory(),
+            [
+                'persistentId' => uniqid('ph-mcid-failover-'),
+                'servers'      => [
+                    Talon::settings()->getServiceOptions('memcached'),
+                ],
+            ]
+        );
+
+        $connection = $adapter->getAdapter();
+
+        $this->assertSame(50, $connection->getOption(NativeMemcached::OPT_CONNECT_TIMEOUT));
+        $this->assertSame(
+            NativeMemcached::DISTRIBUTION_CONSISTENT,
+            $connection->getOption(NativeMemcached::OPT_DISTRIBUTION)
+        );
+        $this->assertSame(2, $connection->getOption(NativeMemcached::OPT_SERVER_FAILURE_LIMIT));
+        $this->assertSame(1, $connection->getOption(NativeMemcached::OPT_REMOVE_FAILED_SERVERS));
+        $this->assertSame(1, $connection->getOption(NativeMemcached::OPT_RETRY_TIMEOUT));
+
+        /**
+         * The options that the adapter does not set keep the library value
+         */
+        $native  = new NativeMemcached();
+        $options = [
+            NativeMemcached::OPT_NO_BLOCK,
+            NativeMemcached::OPT_TCP_NODELAY,
+            NativeMemcached::OPT_HASH,
+        ];
+        foreach ($options as $option) {
+            $this->assertSame(
+                $native->getOption($option),
+                $connection->getOption($option)
+            );
+        }
+    }
 }

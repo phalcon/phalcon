@@ -73,6 +73,7 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compile()` rendering serialized blocks for the second child of a layout when `stat` is `false`. [#17674](https://github.com/phalcon/cphalcon/issues/17674)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler::compileCall()` silently dropping `{% call %}` blocks instead of throwing an exception. [#17676](https://github.com/phalcon/cphalcon/issues/17676)
 - `Phalcon\Mvc\View\Engine\Volt\Compiler` throwing `Phalcon\Volt\Exception` instead of `Phalcon\Mvc\View\Exception` for template syntax errors; Volt templates now parse exactly as in cphalcon (error messages, line numbers, nesting limit), with the parser from `phalcon/volt`. [#801](https://github.com/phalcon/phalcon/issues/801)
+- `Phalcon\Storage\Adapter\Libmemcached` setting the failover defaults and the `client` options on the wrong Memcached options. [#863](https://github.com/phalcon/phalcon/issues/863)
 - `Phalcon\Support\Debug::debugVar()` storing the arguments and objects of each backtrace frame. [#17746](https://github.com/phalcon/cphalcon/issues/17746)
 - `Phalcon\Support\Debug::onUncaughtException()` discarding only one output buffer level. [#17739](https://github.com/phalcon/cphalcon/issues/17739)
 - `Phalcon\Support\Debug::onUncaughtException()` turning a warning raised while rendering into a fatal error and echoing later exception messages without escaping. [#17733](https://github.com/phalcon/cphalcon/issues/17733)
