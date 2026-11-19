@@ -61,6 +61,18 @@ final class ServicesTest extends AbstractTagTestCase
         $this->assertNull(Tag::getEscaper(['escape' => false]));
     }
 
+    /**
+     * An "escape" key with a null value is a value, as in cphalcon.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/837
+     */
+    public function testGetEscaperReturnsNullWhenEscapeIsNull(): void
+    {
+        Tag::setAutoescape(true);
+
+        $this->assertNull(Tag::getEscaper(['escape' => null]));
+    }
+
     public function testGetEscaperReturnsNullWhenEscapeIsZero(): void
     {
         Tag::setAutoescape(true);

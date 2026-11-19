@@ -26,6 +26,7 @@ use Phalcon\Tag\Exception;
 use Phalcon\Tag\Select;
 use Stringable;
 
+use function array_key_exists;
 use function array_merge;
 use function array_reverse;
 use function htmlspecialchars;
@@ -290,7 +291,7 @@ class Tag
         /**
          * Check for extra parameters
          */
-        if (isset($params["parameters"])) {
+        if (array_key_exists("parameters", $params)) {
             $action .= "?" . self::toStringValue($params["parameters"]);
         }
 
@@ -393,7 +394,7 @@ class Tag
      */
     public static function getEscaper(array $params): EscaperInterface | null
     {
-        $autoescape = isset($params["escape"])
+        $autoescape = array_key_exists("escape", $params)
             ? $params["escape"]
             : self::$autoEscape;
 

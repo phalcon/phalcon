@@ -97,6 +97,25 @@ final class SelectStaticArrayTest extends AbstractUnitTestCase
         );
     }
 
+    /**
+     * An "emptyText" key with a null value is a value, as in cphalcon.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/837
+     */
+    public function testRendersAnEmptyOptionWithNullText(): void
+    {
+        $html = Tag::selectStatic(
+            [
+                'choices',
+                ['a' => 'Apple'],
+                'useEmpty'  => true,
+                'emptyText' => null,
+            ]
+        );
+
+        $this->assertStringContainsString('<option value=""></option>', $html);
+    }
+
     public function testRendersNestedArraysAsOptgroup(): void
     {
         $html = Tag::selectStatic(
@@ -114,6 +133,26 @@ final class SelectStaticArrayTest extends AbstractUnitTestCase
         $this->assertStringContainsString('<option value="b">Banana</option>', $html);
         $this->assertStringContainsString('</optgroup>', $html);
         $this->assertStringContainsString('<option value="c">Carrot</option>', $html);
+    }
+
+    /**
+     * A "useEmpty" key with a null value removes the empty option keys from
+     * the attributes and renders no empty option, as in cphalcon.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/837
+     */
+    public function testRendersNoEmptyOptionWithNullUseEmpty(): void
+    {
+        $html = Tag::selectStatic(
+            [
+                'choices',
+                ['a' => 'Apple'],
+                'useEmpty'  => null,
+                'emptyText' => 'Pick one',
+            ]
+        );
+
+        $this->assertStringNotContainsString('Pick one', $html);
     }
 
     public function testRendersOptionsFromAnArray(): void

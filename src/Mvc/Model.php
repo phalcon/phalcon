@@ -819,13 +819,13 @@ abstract class Model extends AbstractInjectionAware implements
         ];
 
         foreach ($map as $setting => $value) {
-            if (isset($options[$value])) {
+            if (array_key_exists($value, $options)) {
                 Settings::set($setting, (bool)$options[$value]);
             }
         }
 
-        if (isset($options["prefetchRecords"])) {
-            /** @var float|int|string $prefetchRecords */
+        if (array_key_exists("prefetchRecords", $options)) {
+            /** @var float|int|string|null $prefetchRecords */
             $prefetchRecords = $options["prefetchRecords"];
 
             Settings::set("orm.resultset_prefetch_records", (int)$prefetchRecords);
