@@ -15,7 +15,7 @@ use Phalcon\CodeQuality\PhpCsFixer\ConfigFactory;
 
 $root = dirname(__DIR__);
 
-return ConfigFactory::create(
+$config = ConfigFactory::create(
     [
         $root . '/src',
         $root . '/tests/unit',
@@ -23,3 +23,12 @@ return ConfigFactory::create(
     ],
     $root . '/tests/_output/.php-cs-fixer.cache'
 );
+
+/**
+ * The trait must not have declare(strict_types=1): its helpers use the PHP
+ * weak type rules, the same as cphalcon. When you give files on the command
+ * line, also give --path-mode=intersection, else this list is not used.
+ */
+$config->getFinder()->notPath('Support/Traits/WeakTypesTrait.php');
+
+return $config;
