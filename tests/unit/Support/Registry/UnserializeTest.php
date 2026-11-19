@@ -40,4 +40,21 @@ final class UnserializeTest extends AbstractRegistryTestCase
             $registry->toArray(),
         );
     }
+
+    /**
+     * The parameter has the cphalcon name.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     */
+    public function testSupportRegistryUnserializeNamedArguments(): void
+    {
+        $data     = ['one' => 'two'];
+        $registry = new Registry();
+
+        $registry->unserialize(data: serialize($data));
+
+        $this->assertSame($data, $registry->toArray());
+    }
 }

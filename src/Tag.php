@@ -389,12 +389,12 @@ class Tag
     /**
      * Obtains the 'escaper' service if required
      *
-     * @phpstan-param tag_parameters $parameters
+     * @phpstan-param tag_parameters $params
      */
-    public static function getEscaper(array $parameters): EscaperInterface | null
+    public static function getEscaper(array $params): EscaperInterface | null
     {
-        $autoescape = isset($parameters["escape"])
-            ? $parameters["escape"]
+        $autoescape = isset($params["escape"])
+            ? $params["escape"]
             : self::$autoEscape;
 
         if (!$autoescape) {
@@ -499,11 +499,11 @@ class Tag
      * Every helper calls this function to check whether a component has a
      * predefined value using Phalcon\Tag::setDefault() or value from $_POST
      *
-     * @phpstan-param tag_parameters $parameters
+     * @phpstan-param tag_parameters $params
      */
-    public static function getValue(int | string $name, array $parameters = []): mixed
+    public static function getValue(int | string $name, array $params = []): mixed
     {
-        $value = $parameters["value"] ?? null;
+        $value = $params["value"] ?? null;
         if (null === $value) {
             /**
              * Check if there is a predefined value for it

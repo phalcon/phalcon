@@ -53,4 +53,28 @@ final class ConstructTest extends AbstractDatabaseTestCase
             $result->getInternalResult()
         );
     }
+
+    /**
+     * Tests Phalcon\Db\Result\Pdo :: __construct() - the parameters have the
+     * cphalcon names
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     */
+    public function testDbResultPdoConstructNamedArguments(): void
+    {
+        $db        = $this->container->get('db');
+        $statement = $db->getInternalHandler()->prepare(
+            'SELECT * FROM co_invoices'
+        );
+
+        $result = new PdoResult(
+            connection: $db,
+            result: $statement
+        );
+
+        $this->assertSame($statement, $result->getInternalResult());
+    }
 }

@@ -128,6 +128,27 @@ final class EscapeTest extends AbstractUnitTestCase
     }
 
     /**
+     * escape() and escapeSchema() have the cphalcon parameter names.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     */
+    public function testDbDialectEscapeNamedArguments(): void
+    {
+        $dialect = new Mysql();
+
+        $this->assertSame(
+            '`robots`',
+            $dialect->escape(str: 'robots')
+        );
+        $this->assertSame(
+            '`phalcon`',
+            $dialect->escapeSchema(str: 'phalcon')
+        );
+    }
+
+    /**
      * With "db.escape_identifiers" off, the name does not change.
      *
      * @author Phalcon Team <team@phalcon.io>

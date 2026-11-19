@@ -25,12 +25,14 @@ use Phalcon\Factory\AbstractConfigFactory;
  */
 class CacheFactory extends AbstractConfigFactory
 {
+    protected AdapterFactory $adapterFactory;
+
     /**
      * Constructor
      */
-    public function __construct(
-        protected AdapterFactory $adapterFactory
-    ) {
+    public function __construct(AdapterFactory $factory)
+    {
+        $this->adapterFactory = $factory;
     }
 
     /**

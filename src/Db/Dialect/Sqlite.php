@@ -680,17 +680,17 @@ class Sqlite extends Dialect
      * );
      * ```
      *
-     * @param string $schemaName
+     * @param string $schema
      */
     public function listIndexesSql(
-        string $tableName,
-        string | null $schemaName = null,
+        string $table,
+        string | null $schema = null,
         string | null $keyName = null
     ): string {
         $sql = "SELECT sql "
             . "FROM sqlite_master "
             . "WHERE type = 'index' "
-            . "AND tbl_name = " . $this->escape($tableName) . " COLLATE NOCASE";
+            . "AND tbl_name = " . $this->escape($table) . " COLLATE NOCASE";
 
         if (!empty($keyName)) {
             $sql .= " AND name = " . $this->escape($keyName) . " COLLATE NOCASE";

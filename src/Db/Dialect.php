@@ -127,26 +127,26 @@ abstract class Dialect implements DialectInterface
      * Escape identifiers
      */
     final public function escape(
-        string $input,
+        string $str,
         string | null $escapeChar = null
     ): string {
         $identifiers = Settings::get("db.escape_identifiers");
         if (true !== $identifiers) {
-            return $input;
+            return $str;
         }
 
         $escapeChar = (!empty($escapeChar)) ? $escapeChar : $this->escapeChar;
-        if (true !== str_contains($input, ".")) {
-            if ("" !== $escapeChar && "*" !== $input) {
+        if (true !== str_contains($str, ".")) {
+            if ("" !== $escapeChar && "*" !== $str) {
                 return $escapeChar
-                    . str_replace($escapeChar, $escapeChar . $escapeChar, $input)
+                    . str_replace($escapeChar, $escapeChar . $escapeChar, $str)
                     . $escapeChar;
             }
 
-            return $input;
+            return $str;
         }
 
-        $trimmed = trim($input, $escapeChar);
+        $trimmed = trim($str, $escapeChar);
 
         /**
          * A name with no escape character, no "*" and no empty part: put the
@@ -187,16 +187,16 @@ abstract class Dialect implements DialectInterface
      * Escape Schema
      */
     final public function escapeSchema(
-        string $input,
+        string $str,
         string | null $escapeChar = null
     ): string {
         $identifiers = Settings::get("db.escape_identifiers");
         if (true !== $identifiers) {
-            return $input;
+            return $str;
         }
         $escapeChar = (!empty($escapeChar)) ? $escapeChar : $this->escapeChar;
 
-        return $escapeChar . trim($input, $escapeChar) . $escapeChar;
+        return $escapeChar . trim($str, $escapeChar) . $escapeChar;
     }
 
     /**
@@ -576,13 +576,13 @@ abstract class Dialect implements DialectInterface
      * Transform an intermediate representation of a schema/table into a
      * database system valid expression
      *
-     * @phpstan-param db_table_name $tableName
+     * @phpstan-param db_table_name $table
      */
     final public function getSqlTable(
-        array | string $tableName,
+        array | string $table,
         string | null $escapeChar = null
     ): string {
-        if (is_array($tableName)) {
+        if (is_array($table)) {
             /**
              * The index "0" is the table name
              * The index "1" is the schema name
@@ -590,14 +590,14 @@ abstract class Dialect implements DialectInterface
              */
 
             return $this->prepareTable(
-                $tableName[0],
-                $tableName[1] ?? null,
-                $tableName[2] ?? null,
+                $table[0],
+                $table[1] ?? null,
+                $table[2] ?? null,
                 $escapeChar
             );
         }
 
-        return $this->escape($tableName, $escapeChar);
+        return $this->escape($table, $escapeChar);
     }
 
     /**

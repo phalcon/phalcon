@@ -52,6 +52,11 @@ class PdoResult implements ResultInterface
     protected $fetchMode = Enum::FETCH_DEFAULT;
 
     /**
+     * Internal resultset
+     */
+    protected PDOStatement $pdoStatement;
+
+    /**
      * @var mixed
      *            TODO: Check if this property is used
      */
@@ -67,11 +72,12 @@ class PdoResult implements ResultInterface
      */
     public function __construct(
         protected AdapterInterface $connection,
-        protected PDOStatement $pdoStatement,
+        PDOStatement $result,
         protected string $sqlStatement = "",
         protected array $bindParams = [],
         protected array $bindTypes = []
     ) {
+        $this->pdoStatement = $result;
     }
 
     /**

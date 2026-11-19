@@ -73,12 +73,12 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
     public function callActionMethod(
         mixed $handler,
         string $actionMethod,
-        array $parameters = []
+        array $params = []
     ): mixed {
         // This is to make sure that the parameters are zero-indexed and
         // their order isn't overridden by any options when we merge the array.
-        $params = array_values($parameters);
-        $params = array_merge($params, $this->options);
+        $localParams = array_values($params);
+        $localParams = array_merge($localParams, $this->options);
 
         $callable = [$handler, $actionMethod];
 
@@ -86,7 +86,7 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
             return null;
         }
 
-        return self::weakCallArray($callable, $params);
+        return self::weakCallArray($callable, $localParams);
     }
 
     /**

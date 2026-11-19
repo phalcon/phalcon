@@ -401,7 +401,7 @@ abstract class AbstractPdo extends AbstractAdapter
      * );
      *```
      *
-     * @phpstan-param db_bind_params $parameters
+     * @phpstan-param db_bind_params $params
      *
      * @phpstan-return array{sql: string, params: list<mixed>}
      *
@@ -409,7 +409,7 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function convertBoundParams(
         string $sql,
-        array $parameters = []
+        array $params = []
     ): array {
         $placeHolders = [];
         $bindPattern  = "/\\?(\d+)|:(\w+):/";
@@ -422,18 +422,18 @@ abstract class AbstractPdo extends AbstractAdapter
         ) {
             foreach ($matches as $placeMatch) {
                 /** @var array<int, string> $placeMatch */
-                if (isset($parameters[$placeMatch[1]])) {
-                    $value = $parameters[$placeMatch[1]];
+                if (isset($params[$placeMatch[1]])) {
+                    $value = $params[$placeMatch[1]];
                 } else {
                     if (!isset($placeMatch[2])) {
                         throw new MatchedParameterNotFound();
                     }
 
-                    if (!isset($parameters[$placeMatch[2]])) {
+                    if (!isset($params[$placeMatch[2]])) {
                         throw new MatchedParameterNotFound();
                     }
 
-                    $value = $parameters[$placeMatch[2]];
+                    $value = $params[$placeMatch[2]];
                 }
 
                 $placeHolders[] = $value;

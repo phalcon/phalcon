@@ -60,6 +60,19 @@ final class ValuesTest extends AbstractTagTestCase
         $this->assertSame('Stored', Tag::getValue('name'));
     }
 
+    /**
+     * The parameters have the cphalcon names.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     */
+    public function testGetValueWithNamedArguments(): void
+    {
+        $this->assertSame(
+            'Given',
+            Tag::getValue(name: 'name', params: ['value' => 'Given'])
+        );
+    }
+
     public function testGetValueWithNothingStoredIsNull(): void
     {
         $this->assertNull(Tag::getValue('name'));

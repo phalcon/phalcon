@@ -45,4 +45,24 @@ final class ListIndexesSqlTest extends AbstractDatabaseTestCase
             $dialect->listIndexesSql('robots', null, 'idx_robots_name')
         );
     }
+
+    /**
+     * Tests Phalcon\Db\Dialect\Sqlite :: listIndexesSql() - the parameters
+     * have the cphalcon names
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     */
+    public function testDbDialectSqliteListIndexesSqlNamedArguments(): void
+    {
+        $dialect = new Sqlite();
+
+        $this->assertSame(
+            'SELECT sql FROM sqlite_master '
+            . 'WHERE type = \'index\' AND tbl_name = "robots" COLLATE NOCASE',
+            $dialect->listIndexesSql(table: 'robots', schema: null)
+        );
+    }
 }

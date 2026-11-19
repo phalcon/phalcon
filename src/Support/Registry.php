@@ -247,8 +247,8 @@ final class Registry extends Collection
     /**
      * Unserializes the object
      */
-    final public function unserialize(string $serialized): void
+    final public function unserialize(string $data): void
     {
-        parent::unserialize($serialized);
+        parent::unserialize($data);
     }
 }

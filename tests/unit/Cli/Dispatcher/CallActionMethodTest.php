@@ -47,6 +47,26 @@ final class CallActionMethodTest extends AbstractUnitTestCase
     }
 
     /**
+     * The parameters have the cphalcon names.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     */
+    public function testCliDispatcherCallActionMethodNamedArguments(): void
+    {
+        $dispatcher = new Dispatcher();
+
+        $actual = $dispatcher->callActionMethod(
+            handler: new MainTask(),
+            actionMethod: 'helloAction',
+            params: ['Sid', '.']
+        );
+
+        $this->assertSame('Hello Sid.', $actual);
+    }
+
+    /**
      * An action that cannot be called gives a warning and null, the same as
      * cphalcon.
      *

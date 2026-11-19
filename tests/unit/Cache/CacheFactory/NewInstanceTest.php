@@ -26,6 +26,25 @@ use function uniqid;
 final class NewInstanceTest extends AbstractUnitTestCase
 {
     /**
+     * The constructor parameter has the cphalcon name.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     */
+    public function testCacheCacheFactoryConstructNamedArguments(): void
+    {
+        $cacheFactory = new CacheFactory(
+            factory: new AdapterFactory(new SerializerFactory())
+        );
+
+        $this->assertInstanceOf(
+            Cache::class,
+            $cacheFactory->newInstance('apcu')
+        );
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */

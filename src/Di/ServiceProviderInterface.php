@@ -42,5 +42,5 @@ interface ServiceProviderInterface
     /**
      * Registers a service provider.
      */
-    public function register(DiInterface $container): void;
+    public function register(DiInterface $di): void;
 }
