@@ -69,6 +69,7 @@ use function realpath;
 use function serialize;
 use function sprintf;
 use function strlen;
+use function trigger_error;
 use function unserialize;
 
 /**
@@ -315,7 +316,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * This makes that templates will be compiled always
          */
-        $compileAlways = $options["always"] ?? false;
+        $compileAlways = $this->getCompileOption($options, "always", false, "compileAlways");
         if (!is_bool($compileAlways)) {
             throw new InvalidOptionType("always", "bool value");
         }
@@ -323,7 +324,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Prefix is prepended to the template name
          */
-        $prefix = $options["prefix"] ?? '';
+        $prefix = $this->getCompileOption($options, "prefix", '');
         if (!is_string($prefix)) {
             throw new InvalidOptionType("prefix", "string");
         }
@@ -332,12 +333,12 @@ class Compiler implements InjectionAwareInterface
          * Compiled path is a directory where the compiled templates will be
          * located
          */
-        $compiledPath = $options["path"] ?? '';
+        $compiledPath = $this->getCompileOption($options, "path", '', "compiledPath");
 
         /**
          * There is no compiled separator by default
          */
-        $compiledSeparator = $options["separator"] ?? '%%';
+        $compiledSeparator = $this->getCompileOption($options, "separator", '%%', "compiledSeparator");
         if (!is_string($compiledSeparator)) {
             throw new InvalidOptionType("separator", "string");
         }
@@ -345,7 +346,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * By default the compile extension is .php
          */
-        $compiledExtension = $options["extension"] ?? '.php';
+        $compiledExtension = $this->getCompileOption($options, "extension", '.php', "compiledExtension");
         if (!is_string($compiledExtension)) {
             throw new InvalidOptionType("extension", "string");
         }
@@ -353,7 +354,7 @@ class Compiler implements InjectionAwareInterface
         /**
          * Stat option assumes the compilation of the file
          */
-        $stat = $options["stat"] ?? true;
+        $stat = $this->getCompileOption($options, "stat", true);
 
         /**
          * Check if there is a compiled path
@@ -3170,6 +3171,36 @@ class Compiler implements InjectionAwareInterface
          * Is an array but not a statement list?
          */
         return $statements;
+    }
+
+    /**
+     * Returns a compile option, as cphalcon: the option, else the deprecated
+     * name of the option with a deprecation notice, else the default value.
+     * A `null` value is a value, as with Zephir `fetch`.
+     *
+     * @param array<array-key, mixed> $options
+     */
+    private function getCompileOption(
+        array $options,
+        string $name,
+        mixed $default,
+        string $deprecatedName = ""
+    ): mixed {
+        if (array_key_exists($name, $options)) {
+            return $options[$name];
+        }
+
+        if ("" !== $deprecatedName && array_key_exists($deprecatedName, $options)) {
+            trigger_error(
+                "The '" . $deprecatedName . "' option is deprecated. Use '"
+                . $name . "' instead.",
+                E_USER_DEPRECATED
+            );
+
+            return $options[$deprecatedName];
+        }
+
+        return $default;
     }
 
     private function getUniquePathKey(string | null $path): string | null
