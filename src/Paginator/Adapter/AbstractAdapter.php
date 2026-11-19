@@ -19,6 +19,7 @@ use Phalcon\Paginator\Exceptions\InvalidLimit;
 use Phalcon\Paginator\Exceptions\MissingRequiredParameter;
 use Phalcon\Paginator\Repository;
 use Phalcon\Paginator\RepositoryInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Phalcon\Paginator\Adapter\AbstractAdapter
@@ -28,6 +29,8 @@ use Phalcon\Paginator\RepositoryInterface;
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Number of rows to show in the paginator. By default is null
      */
@@ -59,16 +62,10 @@ abstract class AbstractAdapter implements AdapterInterface
             throw new MissingRequiredParameter("limit");
         }
 
-        /** @var int $limit */
-        $limit = $config["limit"];
-
-        $this->setLimit($limit);
+        self::weakCall($this, 'setLimit', $config["limit"]);
 
         if (isset($config["page"])) {
-            /** @var int $page */
-            $page = $config["page"];
-
-            $this->setCurrentPage($page);
+            self::weakCall($this, 'setCurrentPage', $config["page"]);
         }
 
         if (isset($config["repository"])) {
