@@ -136,7 +136,7 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
     protected bool $modelBinding            = false;
 
-    protected ?string $moduleName           = "";
+    protected string $moduleName            = "";
 
     protected string $namespaceName         = "";
 

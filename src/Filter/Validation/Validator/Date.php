@@ -63,7 +63,7 @@ use function is_string;
  */
 class Date extends AbstractValidator
 {
-    protected string | null $template = "Field :field is not a valid date";
+    protected $template = "Field :field is not a valid date";
 
     /**
      * Constructor

@@ -73,7 +73,7 @@ use function is_callable;
  */
 class Callback extends AbstractValidator
 {
-    protected string | null $template = "Field :field must match the callback function";
+    protected $template = "Field :field must match the callback function";
 
     /**
      * Constructor

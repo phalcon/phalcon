@@ -58,7 +58,10 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
     use CamelizeTrait;
     use WeakTypesTrait;
 
-    protected Attributes $attributes;
+    /**
+     * @var Attributes
+     */
+    protected $attributes;
 
     /**
      * @phpstan-var forms_data
@@ -75,7 +78,10 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      */
     protected array $elementsIndexed = [];
 
-    protected object | null $entity  = null;
+    /**
+     * @var object|null
+     */
+    protected $entity = null;
 
     /**
      * @phpstan-var forms_data

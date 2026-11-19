@@ -65,7 +65,7 @@ use Phalcon\Filter\Validation\Validator\File\AbstractFile;
  */
 class Equal extends AbstractFile
 {
-    protected string | null $template = "File :field does not have the exact :size file size";
+    protected $template = "File :field does not have the exact :size file size";
 
     /**
      * Executes the validation

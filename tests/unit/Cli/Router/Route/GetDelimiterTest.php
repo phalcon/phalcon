@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Cli\Router\Route;
 
 use Phalcon\Cli\Router\Route;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use TypeError;
 
 final class GetDelimiterTest extends AbstractUnitTestCase
 {
@@ -53,5 +54,33 @@ final class GetDelimiterTest extends AbstractUnitTestCase
         $route::delimiter("-");
 
         Route::delimiter($store);
+    }
+
+    /**
+     * The delimiter of a route is a string, thus a null delimiter gives a
+     * TypeError, as in cphalcon.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/840
+     */
+    public function testCliRouterRouteGetDelimiterNull(): void
+    {
+        $store = Route::getDelimiter();
+
+        Route::delimiter(null);
+
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage(
+            'Cannot assign null to property '
+            . 'Phalcon\Cli\Router\Route::$delimiter of type string'
+        );
+
+        try {
+            new Route("test");
+        } finally {
+            Route::delimiter($store);
+        }
     }
 }

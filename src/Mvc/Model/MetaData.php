@@ -140,7 +140,10 @@ abstract class MetaData extends Injectable implements MetaDataInterface
      */
     protected array $columnMap = [];
 
-    protected DiInterface | null $container = null;
+    /**
+     * @var DiInterface|null
+     */
+    protected $container = null;
 
     /**
      * @phpstan-var mvc_metadata_store

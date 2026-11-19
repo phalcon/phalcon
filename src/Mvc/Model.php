@@ -262,14 +262,20 @@ abstract class Model extends AbstractInjectionAware implements
      */
     protected array $syncRelated = [];
 
-    protected TransactionInterface | null $transaction = null;
+    /**
+     * @var TransactionInterface|null
+     */
+    protected $transaction = null;
 
-    protected string | null $uniqueKey = null;
+    /**
+     * @var string|null
+     */
+    protected $uniqueKey = null;
 
     /**
      * @phpstan-var mvc_model_bind_params
      */
-    protected array $uniqueParams = [];
+    protected $uniqueParams = [];
 
     /**
      * @phpstan-var mvc_model_bind_types

@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Cli\Dispatcher;
 
 use Phalcon\Cli\Dispatcher;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use TypeError;
 
 /**
  * Class GetSetModuleNameTest extends AbstractUnitTestCase
@@ -39,5 +40,27 @@ final class GetSetModuleNameTest extends AbstractUnitTestCase
         $expected = $moduleName;
         $actual   = $dispatcher->getModuleName();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * The module name is a string, thus null gives a TypeError, as in
+     * cphalcon.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/840
+     */
+    public function testCliDispatcherSetModuleNameNull(): void
+    {
+        $dispatcher = new Dispatcher();
+
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage(
+            'Cannot assign null to property '
+            . 'Phalcon\Dispatcher\AbstractDispatcher::$moduleName of type string'
+        );
+
+        $dispatcher->setModuleName(null);
     }
 }

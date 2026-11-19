@@ -73,7 +73,7 @@ abstract class AbstractElement implements ElementInterface
     /**
      * @var mixed|null
      */
-    protected mixed $value = null;
+    protected $value = null;
 
     /**
      * Constructor

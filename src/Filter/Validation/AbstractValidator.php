@@ -43,8 +43,10 @@ abstract class AbstractValidator implements ValidatorInterface
 
     /**
      * Message template
+     *
+     * @var string|null
      */
-    protected string | null $template = null;
+    protected $template = null;
 
     /**
      * Whether the template/message has been explicitly assigned on the

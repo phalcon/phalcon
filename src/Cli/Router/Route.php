@@ -66,7 +66,7 @@ class Route implements RouteInterface
      */
     protected array $converters = [];
 
-    protected ?string $delimiter;
+    protected string $delimiter;
 
     protected string $description = "";
 

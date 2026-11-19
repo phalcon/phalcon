@@ -32,7 +32,7 @@ trait ValidatorCompositeTrait
      *
      * @todo Use a default [] once Zephir supports array trait defaults
      */
-    protected array | null $validators = null;
+    protected $validators = null;
 
     /**
      * @phpstan-return filter_validators

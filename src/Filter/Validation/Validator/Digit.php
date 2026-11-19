@@ -57,7 +57,7 @@ use function is_int;
  */
 class Digit extends AbstractValidator
 {
-    protected string | null $template = "Field :field must be numeric";
+    protected $template = "Field :field must be numeric";
 
     /**
      * Constructor
