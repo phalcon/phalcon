@@ -20,6 +20,7 @@ use Phalcon\Factory\AbstractFactory;
 use Phalcon\Image\Adapter\AdapterInterface;
 use Phalcon\Image\Adapter\Gd;
 use Phalcon\Image\Adapter\Imagick;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Factory to create adapters for image manipulation
@@ -29,6 +30,8 @@ use Phalcon\Image\Adapter\Imagick;
  */
 class ImageFactory extends AbstractFactory
 {
+    use WeakTypesTrait;
+
     /**
      * Constructor
      *
@@ -67,7 +70,12 @@ class ImageFactory extends AbstractFactory
         $height = $config["height"] ?? null;
         $width  = $config["width"] ?? null;
 
-        return $this->newInstance($name, $file, $width, $height);
+        /** @var AdapterInterface */
+        return self::weakCallMethod(
+            $this,
+            'newInstance',
+            [$name, $file, $width, $height]
+        );
     }
 
     /**
