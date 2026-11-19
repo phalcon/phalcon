@@ -50,6 +50,12 @@ class Doctype
 
     private int $type = self::HTML5;
 
+    public function __construct()
+    {
+        $this->type      = self::HTML5;
+        $this->delimiter = PHP_EOL;
+    }
+
     /**
      * Produce a `<doctype>` tag
      */

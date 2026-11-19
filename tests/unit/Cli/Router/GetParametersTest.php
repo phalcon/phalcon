@@ -44,4 +44,28 @@ final class GetParametersTest extends AbstractUnitTestCase
         $actual   = $router->getParams();
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * A subclass reads the parameters from the cphalcon property name.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/833
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     */
+    public function testCliRouterGetParamsFromSubclassProperty(): void
+    {
+        $router = new class () extends Router {
+            /**
+             * @return array<array-key, mixed>
+             */
+            public function readParams(): array
+            {
+                return $this->params;
+            }
+        };
+
+        $router->handle("task action param1 param2");
+
+        $this->assertSame(["param1", "param2"], $router->readParams());
+    }
 }

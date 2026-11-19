@@ -330,6 +330,11 @@ class Column implements ColumnInterface
     protected ?string $after = null;
 
     /**
+     * Column is autoIncrement?
+     */
+    protected bool $autoIncrement = false;
+
+    /**
      * Bind Type
      */
     protected int $bindType = 2;
@@ -347,6 +352,11 @@ class Column implements ColumnInterface
     protected mixed $defaultValue = null;
 
     /**
+     * Position is first
+     */
+    protected bool $first = false;
+
+    /**
      * Generation expression for `GENERATED ALWAYS AS (...)`. Null when the
      * column is not generated.
      */
@@ -360,31 +370,14 @@ class Column implements ColumnInterface
     protected bool $generationStored = false;
 
     /**
+     * Whether the column is declared `INVISIBLE` (MySQL 8.0.23+).
+     */
+    protected bool $invisible = false;
+
+    /**
      * Whether the column is an array of its base type (PostgreSQL).
      */
     protected bool $isArray = false;
-
-    /**
-     * Column is autoIncrement?
-     */
-    protected bool $isAutoIncrement = false;
-
-    /**
-     * Position is first
-     */
-    protected bool $isFirst = false;
-
-    /**
-     * Whether the column is declared `INVISIBLE` (MySQL 8.0.23+).
-     */
-    protected bool $isInvisible = false;
-
-    /**
-     * Column not nullable?
-     *
-     * Default SQL definition is NOT NULL.
-     */
-    protected bool $isNotNull = true;
 
     /**
      * The column have some numeric type?
@@ -392,14 +385,16 @@ class Column implements ColumnInterface
     protected bool $isNumeric = false;
 
     /**
-     * Column is part of the primary key?
+     * Column not nullable?
+     *
+     * Default SQL definition is NOT NULL.
      */
-    protected bool $isPrimary = false;
+    protected bool $notNull = true;
 
     /**
-     * Integer column unsigned?
+     * Column is part of the primary key?
      */
-    protected bool $isUnsigned = false;
+    protected bool $primary = false;
 
     /**
      * Integer column number scale
@@ -429,6 +424,11 @@ class Column implements ColumnInterface
     protected array | int | string $typeValues = [];
 
     /**
+     * Integer column unsigned?
+     */
+    protected bool $unsigned = false;
+
+    /**
      * Phalcon\Db\Column constructor
      *
      * @phpstan-param db_column_definition $definition
@@ -450,11 +450,11 @@ class Column implements ColumnInterface
         $this->bindType      = $definition["bindType"] ?? 2;
         $this->comment       = $definition["comment"] ?? null;
         $this->defaultValue  = $definition["default"] ?? null;
-        $this->isFirst       = (bool)($definition["first"] ?? false);
-        $this->isNotNull     = (bool)($definition["notNull"] ?? true);
+        $this->first         = (bool)($definition["first"] ?? false);
+        $this->notNull       = (bool)($definition["notNull"] ?? true);
         $this->isNumeric     = (bool)($definition["isNumeric"] ?? false);
-        $this->isPrimary     = (bool)($definition["primary"] ?? false);
-        $this->isUnsigned    = (bool)($definition["unsigned"] ?? false);
+        $this->primary       = (bool)($definition["primary"] ?? false);
+        $this->unsigned      = (bool)($definition["unsigned"] ?? false);
         $this->size          = $definition["size"] ?? 0;
         $this->type          = $this->processColumnType($definition["type"]);
         $this->typeReference = $definition["typeReference"] ?? -1;
@@ -483,7 +483,7 @@ class Column implements ColumnInterface
         if (isset($definition["autoIncrement"])) {
             $autoIncrement = $definition["autoIncrement"];
             if (true === $autoIncrement) {
-                $this->isAutoIncrement = match ($this->type) {
+                $this->autoIncrement = match ($this->type) {
                     self::TYPE_BIGINTEGER,
                     self::TYPE_INTEGER,
                     self::TYPE_MEDIUMINTEGER,
@@ -506,7 +506,7 @@ class Column implements ColumnInterface
                 throw new InvalidGenerationExpression();
             }
 
-            if ($this->isAutoIncrement) {
+            if ($this->autoIncrement) {
                 throw new GeneratedAutoIncrementConflict();
             }
 
@@ -528,7 +528,7 @@ class Column implements ColumnInterface
          * Whether the column is INVISIBLE (MySQL 8.0.23+).
          */
         if (isset($definition["invisible"])) {
-            $this->isInvisible = (bool) $definition["invisible"];
+            $this->invisible = (bool) $definition["invisible"];
         }
 
         /**
@@ -635,7 +635,7 @@ class Column implements ColumnInterface
      */
     public function hasDefault(): bool
     {
-        if ($this->isAutoIncrement) {
+        if ($this->autoIncrement) {
             return false;
         }
 
@@ -657,7 +657,7 @@ class Column implements ColumnInterface
      */
     public function isAutoIncrement(): bool
     {
-        return $this->isAutoIncrement;
+        return $this->autoIncrement;
     }
 
     /**
@@ -665,7 +665,7 @@ class Column implements ColumnInterface
      */
     public function isFirst(): bool
     {
-        return $this->isFirst;
+        return $this->first;
     }
 
     /**
@@ -689,7 +689,7 @@ class Column implements ColumnInterface
      */
     public function isInvisible(): bool
     {
-        return $this->isInvisible;
+        return $this->invisible;
     }
 
     /**
@@ -697,7 +697,7 @@ class Column implements ColumnInterface
      */
     public function isNotNull(): bool
     {
-        return $this->isNotNull;
+        return $this->notNull;
     }
 
     /**
@@ -713,7 +713,7 @@ class Column implements ColumnInterface
      */
     public function isPrimary(): bool
     {
-        return $this->isPrimary;
+        return $this->primary;
     }
 
     /**
@@ -721,7 +721,7 @@ class Column implements ColumnInterface
      */
     public function isUnsigned(): bool
     {
-        return $this->isUnsigned;
+        return $this->unsigned;
     }
 
     /**

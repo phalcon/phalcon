@@ -83,7 +83,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
     /**
      * @phpstan-var cli_parameters
      */
-    protected array $parameters = [];
+    protected array $params = [];
 
     /**
      * @phpstan-var cli_routes
@@ -178,7 +178,7 @@ class Router extends AbstractInjectionAware implements RouterInterface
      */
     public function getParameters(): array
     {
-        return $this->parameters;
+        return $this->params;
     }
 
     /**
@@ -381,10 +381,10 @@ class Router extends AbstractInjectionAware implements RouterInterface
                 /**
                  * The route wasn't found, try to use the not-found paths
                  */
-                $this->module     = $this->defaultModule;
-                $this->task       = $this->defaultTask;
-                $this->action     = $this->defaultAction;
-                $this->parameters = $this->defaultParams;
+                $this->module = $this->defaultModule;
+                $this->task   = $this->defaultTask;
+                $this->action = $this->defaultAction;
+                $this->params = $this->defaultParams;
 
                 return $this;
             }
@@ -451,10 +451,10 @@ class Router extends AbstractInjectionAware implements RouterInterface
             $params = $parts;
         }
 
-        $this->module     = (string) $moduleName;
-        $this->task       = (string) $taskName;
-        $this->action     = (string) $actionName;
-        $this->parameters = $params;
+        $this->module = (string) $moduleName;
+        $this->task   = (string) $taskName;
+        $this->action = (string) $actionName;
+        $this->params = $params;
 
         return $this;
     }

@@ -51,6 +51,26 @@ use function strtolower;
  */
 abstract class AbstractLogger
 {
+    public const ALERT     = 2;
+
+    public const CRITICAL  = 1;
+
+    public const CUSTOM    = 8;
+
+    public const DEBUG     = 7;
+
+    public const EMERGENCY = 0;
+
+    public const ERROR     = 3;
+
+    public const INFO      = 6;
+
+    public const NOTICE    = 5;
+
+    public const TRACE     = 9;
+
+    public const WARNING   = 4;
+
     /**
      * The adapter stack
      *
