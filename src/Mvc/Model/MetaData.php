@@ -19,6 +19,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Model\MetaData\Exceptions\ContainerRequired;
 use Phalcon\Mvc\Model\MetaData\Exceptions\CorruptedMetaData;
+use Phalcon\Mvc\Model\MetaData\Exceptions\InvalidMetaDataForModel;
 use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataStrategyFailed;
 use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
@@ -1064,9 +1065,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
                         $modelMetadata = $model->metaData();
 
                         if (!is_array($modelMetadata)) {
-                            throw new Exception(
-                                "Invalid meta-data for model " . get_class($model)
-                            );
+                            throw new InvalidMetaDataForModel(get_class($model));
                         }
                     } else {
                         /**

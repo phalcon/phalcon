@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\MetaData\Memory;
 
 use PDO;
+use Phalcon\Mvc\Model\MetaData\Exceptions\InvalidMetaDataForModel;
 use Phalcon\Mvc\Model\MetaData\Memory;
 use Phalcon\Storage\Exception;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models\Invoices;
 use Phalcon\Tests\Support\Models\InvoicesMetaData;
+use Phalcon\Tests\Support\Models\InvoicesMetaDataInvalid;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -99,5 +101,29 @@ final class ConstructTest extends AbstractDatabaseTestCase
             $metaData->getNonPrimaryKeyAttributes($invoices)
         );
         $this->assertSame('inv_id', $metaData->getIdentityField($invoices));
+    }
+
+    /**
+     * A metaData() method that does not return an array gives the cphalcon
+     * exception.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/834
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelMetadataMemoryConstructManualNotArray(): void
+    {
+        $metaData = $this->container->getShared('modelsMetadata');
+
+        $this->expectException(InvalidMetaDataForModel::class);
+        $this->expectExceptionMessage(
+            'Invalid meta-data for model ' . InvoicesMetaDataInvalid::class
+        );
+
+        $metaData->getAttributes(new InvoicesMetaDataInvalid());
     }
 }

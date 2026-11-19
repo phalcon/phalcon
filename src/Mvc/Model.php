@@ -6720,14 +6720,10 @@ abstract class Model extends AbstractInjectionAware implements
                             !isset($columnMap[$field]) &&
                             !Settings::get("orm.ignore_unknown_columns")
                         ) {
-                            throw new Exception(
-                                "Column '"
-                                . $field . "' in '"
-                                . get_class($this) . "' isn't part of the column map"
-                            );
+                            throw new ColumnNotInTableMap($field, get_class($this));
                         }
 
-                        $attributeField = $columnMap[$field];
+                        $attributeField = $columnMap[$field] ?? "";
                     } else {
                         $attributeField = $field;
                     }
