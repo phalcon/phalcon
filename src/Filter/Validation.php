@@ -672,7 +672,7 @@ class Validation extends Injectable implements ValidationInterface
         mixed $data = null,
         mixed $entity = null,
         array $whitelist = []
-    ): false | Messages {
+    ): bool | Messages {
         /**
          * Clear pre-calculated values
          */

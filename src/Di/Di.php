@@ -690,8 +690,10 @@ class Di extends stdClass implements DiInterface
 
     /**
      * Sets the internal event manager
+     *
+     * @return void
      */
-    public function setInternalEventsManager(ManagerInterface $eventsManager): void
+    public function setInternalEventsManager(ManagerInterface $eventsManager)
     {
         $this->eventsManager = $eventsManager;
     }

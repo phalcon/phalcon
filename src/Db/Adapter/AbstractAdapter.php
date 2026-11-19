@@ -1343,8 +1343,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 
     /**
      * Sets the dialect used to produce the SQL
+     *
+     * @return void
      */
-    public function setDialect(DialectInterface $dialect): void
+    public function setDialect(DialectInterface $dialect)
     {
         $this->dialect = $dialect;
     }

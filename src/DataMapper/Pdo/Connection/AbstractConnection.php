@@ -708,7 +708,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
     public function prepare(
         string $statement,
         array $options = []
-    ): false | PDOStatement {
+    ): bool | PDOStatement {
         $this->connect();
 
         $this->profiler->start(__FUNCTION__);
@@ -734,7 +734,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * Queries the database and returns a PDOStatement. If the profiler is
      * enabled, the operation will be recorded.
      */
-    public function query(string $statement): false | PDOStatement
+    public function query(string $statement): bool | PDOStatement
     {
         $this->connect();
 

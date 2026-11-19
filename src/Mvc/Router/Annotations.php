@@ -515,7 +515,7 @@ class Annotations extends Router
      *
      * @phpstan-return static
      */
-    public function setActionPreformatCallback(mixed $callback = null): static
+    public function setActionPreformatCallback(mixed $callback = null): self
     {
         if (is_callable($callback)) {
             $this->actionPreformatCallback = $callback;
@@ -535,7 +535,7 @@ class Annotations extends Router
      *
      * @phpstan-return static
      */
-    public function setActionSuffix(string $actionSuffix): static
+    public function setActionSuffix(string $actionSuffix): self
     {
         $this->actionSuffix = $actionSuffix;
 
@@ -547,7 +547,7 @@ class Annotations extends Router
      *
      * @phpstan-return static
      */
-    public function setControllerSuffix(string $controllerSuffix): static
+    public function setControllerSuffix(string $controllerSuffix): self
     {
         $this->controllerSuffix = $controllerSuffix;
 

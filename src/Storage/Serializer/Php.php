@@ -40,7 +40,7 @@ class Php extends AbstractSerializer
     /**
      * @return array<int, string>|bool
      */
-    public function getAllowedClasses(): array | bool
+    public function getAllowedClasses()
     {
         return $this->allowedClasses;
     }
