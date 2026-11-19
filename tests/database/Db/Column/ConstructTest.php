@@ -50,4 +50,57 @@ final class ConstructTest extends AbstractDatabaseTestCase
         $this->assertInstanceOf(Column::class, $column);
         $this->assertInstanceOf(ColumnInterface::class, $column);
     }
+
+    /**
+     * Tests Phalcon\Db\Column :: __construct() - a subclass reads the
+     * properties with the cphalcon names
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/833
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testDbColumnConstructSubclassProperties(): void
+    {
+        $column = new class (
+            'field_primary',
+            [
+                'type'          => Column::TYPE_INTEGER,
+                'unsigned'      => true,
+                'notNull'       => true,
+                'autoIncrement' => true,
+                'primary'       => true,
+                'first'         => true,
+                'invisible'     => true,
+            ]
+        ) extends Column {
+            /**
+             * @return array<string, bool>
+             */
+            public function readProperties(): array
+            {
+                return [
+                    'autoIncrement' => $this->autoIncrement,
+                    'first'         => $this->first,
+                    'invisible'     => $this->invisible,
+                    'notNull'       => $this->notNull,
+                    'primary'       => $this->primary,
+                    'unsigned'      => $this->unsigned,
+                ];
+            }
+        };
+
+        $expected = [
+            'autoIncrement' => true,
+            'first'         => true,
+            'invisible'     => true,
+            'notNull'       => true,
+            'primary'       => true,
+            'unsigned'      => true,
+        ];
+        $this->assertSame($expected, $column->readProperties());
+    }
 }

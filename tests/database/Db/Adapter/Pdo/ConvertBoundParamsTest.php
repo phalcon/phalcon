@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Db\Adapter\Pdo;
 
+use Phalcon\Db\Adapter\Pdo\AbstractPdo;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
@@ -25,6 +26,39 @@ final class ConvertBoundParamsTest extends AbstractDatabaseTestCase
     {
         $this->setNewFactoryDefault();
         $this->setDatabase();
+    }
+
+    /**
+     * Tests Phalcon\Db\Adapter\Pdo :: BIND_PATTERN - the pattern of
+     * convertBoundParams(), as in cphalcon
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/833
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testDbAdapterPdoBindPattern(): void
+    {
+        $this->assertSame(
+            '/\?([0-9]+)|:([a-zA-Z0-9_]+):/',
+            AbstractPdo::BIND_PATTERN
+        );
+
+        $db = $this->container->get('db');
+
+        $result = $db->convertBoundParams(
+            'SELECT * FROM co_invoices WHERE inv_id = :id: AND inv_title = ?1',
+            ['id' => 10, 1 => 'foo']
+        );
+
+        $this->assertSame([10, 'foo'], $result['params']);
+        $this->assertSame(
+            'SELECT * FROM co_invoices WHERE inv_id = ? AND inv_title = ?',
+            $result['sql']
+        );
     }
 
     /**

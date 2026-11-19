@@ -67,6 +67,8 @@ use function preg_replace;
  */
 abstract class AbstractPdo extends AbstractAdapter
 {
+    public const BIND_PATTERN = "/\\?([0-9]+)|:([a-zA-Z0-9_]+):/";
+
     /**
      * Last affected rows
      */
@@ -412,7 +414,7 @@ abstract class AbstractPdo extends AbstractAdapter
         array $params = []
     ): array {
         $placeHolders = [];
-        $bindPattern  = "/\\?(\d+)|:(\w+):/";
+        $bindPattern  = self::BIND_PATTERN;
         $matches      = null;
         $setOrder     = 2;
 
