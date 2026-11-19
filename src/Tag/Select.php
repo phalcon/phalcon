@@ -19,6 +19,7 @@ use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Tag as BaseTag;
 use Stringable;
 
+use function array_key_exists;
 use function is_array;
 use function is_object;
 use function is_scalar;
@@ -97,15 +98,21 @@ abstract class Select
             unset($params["value"]);
         }
 
-        $useEmpty = $params["useEmpty"] ?? false;
-        if (isset($params["useEmpty"])) {
-            $emptyValue = $params["emptyValue"] ?? "";
-            if (isset($params["emptyValue"])) {
+        /**
+         * A key with a null value is a value, as with Zephir `fetch`
+         */
+        $useEmpty = false;
+        if (array_key_exists("useEmpty", $params)) {
+            $useEmpty   = $params["useEmpty"];
+            $emptyValue = "";
+            if (array_key_exists("emptyValue", $params)) {
+                $emptyValue = $params["emptyValue"];
                 unset($params["emptyValue"]);
             }
 
-            $emptyText = $params["emptyText"] ?? "Choose...";
-            if (isset($params["emptyText"])) {
+            $emptyText = "Choose...";
+            if (array_key_exists("emptyText", $params)) {
+                $emptyText = $params["emptyText"];
                 unset($params["emptyText"]);
             }
 
