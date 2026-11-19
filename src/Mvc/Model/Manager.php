@@ -2179,6 +2179,14 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     }
 
     /**
+     * Sets the events manager
+     */
+    public function setEventsManager(EventsManagerInterface $eventsManager): void
+    {
+        $this->eventsManager = $eventsManager;
+    }
+
+    /**
      * Sets the prefix for all model sources.
      *
      * ```php

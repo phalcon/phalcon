@@ -16,6 +16,7 @@ namespace Phalcon\Mvc\View\Engine;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\ViewBaseInterface;
 use WeakMap;
@@ -82,6 +83,14 @@ abstract class AbstractEngine extends Injectable implements EngineInterface, Eve
     ): void {
         // TODO: Make params array
         $this->view->partial($partialPath, $params);
+    }
+
+    /**
+     * Sets the events manager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->eventsManager = $eventsManager;
     }
 
     /**

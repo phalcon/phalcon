@@ -22,6 +22,7 @@ use Phalcon\Di\Injectable;
 use Phalcon\Di\ServiceInterface;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Micro\CollectionInterface;
@@ -980,6 +981,14 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
         $this->activeHandler = $handler;
 
         return $this;
+    }
+
+    /**
+     * Sets the events manager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->eventsManager = $eventsManager;
     }
 
     /**

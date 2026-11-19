@@ -15,7 +15,7 @@ namespace Phalcon\Mvc;
 
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
-use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Events\ManagerInterface;
 
 use function method_exists;
 
@@ -59,8 +59,6 @@ use function method_exists;
  */
 abstract class Controller extends Injectable implements ControllerInterface, EventsAwareInterface
 {
-    use EventsAwareTrait;
-
     /**
      * Phalcon\Mvc\Controller constructor
      */
@@ -69,5 +67,45 @@ abstract class Controller extends Injectable implements ControllerInterface, Eve
         if (method_exists($this, "onConstruct")) {
             $this->onConstruct();
         }
+    }
+
+    /**
+     * Returns the internal event manager
+     *
+     * The property is not declared, as in cphalcon: a read resolves the
+     * "eventsManager" service of the DI container, until a manager is set.
+     */
+    public function getEventsManager(): ManagerInterface | null
+    {
+        /** @var ManagerInterface|null $eventsManager */
+        $eventsManager = $this->{"eventsManager"};
+
+        return $eventsManager;
+    }
+
+    /**
+     * Sets the events manager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->{"eventsManager"} = $eventsManager;
+    }
+
+    /**
+     * Helper method to fire an event
+     */
+    protected function fireManagerEvent(
+        string $eventName,
+        mixed $data = null,
+        bool $cancellable = true
+    ): mixed {
+        /** @var ManagerInterface|null $eventsManager */
+        $eventsManager = $this->{"eventsManager"};
+
+        if (null !== $eventsManager) {
+            return $eventsManager->fire($eventName, $this, $data, $cancellable);
+        }
+
+        return true;
     }
 }
