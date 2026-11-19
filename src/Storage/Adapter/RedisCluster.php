@@ -17,6 +17,7 @@ use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Storage\Exceptions\ClusterConnectionFailed;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Redis as RedisConsts;
 use RedisCluster as RedisService;
 use Throwable;
@@ -43,6 +44,8 @@ use function mb_strtolower;
  */
 class RedisCluster extends Redis
 {
+    use WeakTypesTrait;
+
     protected string $prefix = 'ph-redc-';
 
     /**
@@ -122,14 +125,18 @@ class RedisCluster extends Redis
             $options = $this->options;
 
             try {
-                $connection = new RedisService(
-                    $options["name"],
-                    $options["hosts"],
-                    $options["timeout"],
-                    $options["readTimeout"],
-                    $options["persistent"],
-                    $options["auth"],
-                    $options["context"]
+                /** @var RedisService $connection */
+                $connection = self::weakNew(
+                    RedisService::class,
+                    [
+                        $options["name"],
+                        $options["hosts"],
+                        $options["timeout"],
+                        $options["readTimeout"],
+                        $options["persistent"],
+                        $options["auth"],
+                        $options["context"],
+                    ]
                 );
             } catch (Throwable $ex) {
                 throw new ClusterConnectionFailed(

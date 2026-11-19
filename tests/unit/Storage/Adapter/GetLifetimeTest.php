@@ -24,6 +24,7 @@ use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use PHPUnit\Framework\Attributes\DataProvider;
+use TypeError;
 
 use function array_merge;
 
@@ -120,6 +121,56 @@ final class GetLifetimeTest extends AbstractUnitTestCase
         $adapter    = new $class(
             $serializer,
             array_merge($options, ['lifetime' => 7200])
+        );
+
+        $expected = 7200;
+        $actual   = $adapter->getLifetime();
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    #[DataProvider('getExamples')]
+    public function testStorageAdapterGetLifetimeNotNumeric(
+        string $class,
+        array $options,
+        string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $this->expectException(TypeError::class);
+
+        new $class(
+            new SerializerFactory(),
+            array_merge($options, ['lifetime' => 'abc'])
+        );
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    #[DataProvider('getExamples')]
+    public function testStorageAdapterGetLifetimeNumericString(
+        string $class,
+        array $options,
+        string $extension
+    ): void {
+        if (!empty($extension)) {
+            $this->checkExtensionIsLoaded($extension);
+        }
+
+        $adapter = new $class(
+            new SerializerFactory(),
+            array_merge($options, ['lifetime' => '7200'])
         );
 
         $expected = 7200;

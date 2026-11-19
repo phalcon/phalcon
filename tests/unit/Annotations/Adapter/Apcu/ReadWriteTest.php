@@ -18,9 +18,11 @@ use Phalcon\Annotations\Reflection;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use TestClass;
+use TypeError;
 
 use function apcu_fetch;
 use function strtolower;
+use function uniqid;
 
 final class ReadWriteTest extends AbstractUnitTestCase
 {
@@ -51,6 +53,57 @@ final class ReadWriteTest extends AbstractUnitTestCase
         $keyApc = strtolower('_PHAN' . $prefix . $key);
         $actual = apcu_fetch($keyApc);
         $this->assertNotFalse($actual);
+        $this->assertEquals($classAnnotations, $actual);
+    }
+
+    /**
+     * cphalcon gives the TypeError when it writes, phalcon when it is
+     * constructed.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    public function testAnnotationsAdapterApcuReadWriteLifetimeNotNumeric(): void
+    {
+        require_once Talon::settings()->supportPath('assets/Annotations/TestClass.php');
+
+        $this->expectException(TypeError::class);
+
+        $adapter = new Apcu(
+            [
+                'prefix'   => uniqid('lifetime_abc_'),
+                'lifetime' => 'abc',
+            ]
+        );
+
+        $adapter->get(TestClass::class);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    public function testAnnotationsAdapterApcuReadWriteLifetimeNumericString(): void
+    {
+        require_once Talon::settings()->supportPath('assets/Annotations/TestClass.php');
+
+        $key     = 'testwrite';
+        $adapter = new Apcu(
+            [
+                'prefix'   => uniqid('lifetime_string_'),
+                'lifetime' => '3600',
+            ]
+        );
+
+        $classAnnotations = $adapter->get(TestClass::class);
+
+        $adapter->write($key, $classAnnotations);
+
+        $actual = $adapter->read($key);
         $this->assertEquals($classAnnotations, $actual);
     }
 }
