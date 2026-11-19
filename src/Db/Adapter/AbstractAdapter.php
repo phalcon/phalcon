@@ -33,6 +33,7 @@ use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Phalcon\Events\EventsAwareInterface;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Support\Settings;
 use Stringable;
@@ -1346,6 +1347,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     public function setDialect(DialectInterface $dialect): void
     {
         $this->dialect = $dialect;
+    }
+
+    /**
+     * Sets the events manager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->eventsManager = $eventsManager;
     }
 
     /**

@@ -28,6 +28,7 @@ use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Mvc\Router\Exception;
@@ -1970,6 +1971,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
         }
 
         return $this;
+    }
+
+    /**
+     * Sets the events manager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->eventsManager = $eventsManager;
     }
 
     /**

@@ -19,6 +19,7 @@ use Phalcon\Di\DiInterface;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
+use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Mvc\View\Engine\AbstractEngine;
 use Phalcon\Mvc\View\Engine\EngineInterface;
@@ -259,6 +260,14 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
         $this->restoreScope($scopes);
 
         return $this->content;
+    }
+
+    /**
+     * Sets the events manager
+     */
+    public function setEventsManager(ManagerInterface $eventsManager): void
+    {
+        $this->eventsManager = $eventsManager;
     }
 
     /**
