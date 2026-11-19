@@ -16,8 +16,10 @@ namespace Phalcon\Tests\Database\Mvc\Model;
 use PDO;
 use Phalcon\Events\Manager as EventsManager;
 use Phalcon\Mvc\Model;
+use Phalcon\Mvc\Model\Exceptions\ColumnNotInTableMap;
 use Phalcon\Mvc\Model\Manager;
 use Phalcon\Mvc\Model\MetaData;
+use Phalcon\Support\Settings;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\CustomersDefaultsMigration;
 use Phalcon\Tests\Support\Migrations\CustomersMigration;
@@ -33,12 +35,14 @@ use Phalcon\Tests\Support\Models\InvoicesBelongsToCustomers;
 use Phalcon\Tests\Support\Models\InvoicesHasOneKeepSnapshots;
 use Phalcon\Tests\Support\Models\InvoicesHasOneNotReusable;
 use Phalcon\Tests\Support\Models\InvoicesKeepSnapshots;
+use Phalcon\Tests\Support\Models\InvoicesMetaDataColumnMap;
 use Phalcon\Tests\Support\Models\InvoicesSchema;
 use Phalcon\Tests\Support\Models\InvoicesValidationFails;
 use Phalcon\Tests\Support\Models\OnlyIdentity;
 use Phalcon\Tests\Support\Models\Personers;
 use Phalcon\Tests\Support\Models\Sources;
 use Phalcon\Tests\Support\Traits\DiTrait;
+use Phalcon\Tests\Support\Traits\ErrorHandlerTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 
@@ -48,6 +52,7 @@ use function uniqid;
 final class SaveTest extends AbstractDatabaseTestCase
 {
     use DiTrait;
+    use ErrorHandlerTrait;
 
     public function setUp(): void
     {
@@ -427,6 +432,75 @@ final class SaveTest extends AbstractDatabaseTestCase
 
         $actual = $manager->getReusableRecords('SomeModel', 'key-abc');
         $this->assertNull($actual);
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: save() - a not null column that is not in
+     * the column map
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/834
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelSaveColumnNotInColumnMap(): void
+    {
+        $invoice              = new InvoicesMetaDataColumnMap();
+        $invoice->cst_id      = 1;
+        $invoice->status_flag = 1;
+
+        $this->expectException(ColumnNotInTableMap::class);
+        $this->expectExceptionMessage(
+            "Column 'inv_title' isn't part of the column map in '"
+            . InvoicesMetaDataColumnMap::class . "'"
+        );
+
+        $invoice->save();
+    }
+
+    /**
+     * Tests Phalcon\Mvc\Model :: save() - a not null column that is not in
+     * the column map, with "orm.ignore_unknown_columns" on, gives the
+     * cphalcon result and no "Undefined array key" warning
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/834
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelSaveColumnNotInColumnMapIgnored(): void
+    {
+        $invoice              = new InvoicesMetaDataColumnMap();
+        $invoice->cst_id      = 1;
+        $invoice->status_flag = 1;
+
+        Settings::set('orm.ignore_unknown_columns', true);
+
+        try {
+            [$result, $errors] = $this->collectErrors(
+                static fn () => $invoice->save()
+            );
+        } finally {
+            Settings::set('orm.ignore_unknown_columns', false);
+        }
+
+        foreach ($errors as $error) {
+            $this->assertStringNotContainsString('Undefined array key', $error);
+        }
+
+        $this->assertFalse($result);
+
+        $messages = $invoice->getMessages();
+        $this->assertCount(1, $messages);
+        $this->assertSame(' is required', $messages[0]->getMessage());
+        $this->assertSame('', $messages[0]->getField());
+        $this->assertSame('PresenceOf', $messages[0]->getType());
     }
 
     /**

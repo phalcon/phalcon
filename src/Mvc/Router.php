@@ -36,6 +36,7 @@ use Phalcon\Mvc\Router\Exceptions\ConfigKeyMustBeArray;
 use Phalcon\Mvc\Router\Exceptions\EmptyGroupOfRoutes;
 use Phalcon\Mvc\Router\Exceptions\GroupRoutesMustBeArray;
 use Phalcon\Mvc\Router\Exceptions\InvalidConfigSource;
+use Phalcon\Mvc\Router\Exceptions\InvalidNotFoundPaths;
 use Phalcon\Mvc\Router\Exceptions\InvalidRoutePosition;
 use Phalcon\Mvc\Router\Exceptions\MissingGroupRouteKey;
 use Phalcon\Mvc\Router\Exceptions\MissingRouteConfigKey;
@@ -1834,10 +1835,14 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
      */
     public function notFound(mixed $paths): static
     {
+        if (!is_array($paths) && !is_string($paths)) {
+            throw new InvalidNotFoundPaths();
+        }
+
         /**
-         * The paths are an array of route paths, a string or null.
+         * The paths are an array of route paths or a string.
          */
-        /** @var mvc_router_paths|string|null $notFoundPaths */
+        /** @var mvc_router_paths|string $notFoundPaths */
         $notFoundPaths = $paths;
 
         $this->notFoundPaths = $notFoundPaths;

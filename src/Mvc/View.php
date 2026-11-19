@@ -23,6 +23,7 @@ use Phalcon\Mvc\View\Engine\EngineInterface;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Exception;
 use Phalcon\Mvc\View\Exceptions\InvalidEngineRegistration;
+use Phalcon\Mvc\View\Exceptions\InvalidViewsDirType;
 use Phalcon\Mvc\View\Exceptions\ViewNotFound;
 use Phalcon\Mvc\View\Exceptions\ViewsDirItemMustBeString;
 use Phalcon\Mvc\View\Exceptions\ViewServicesUnavailable;
@@ -1178,6 +1179,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
      */
     public function setViewsDir(mixed $viewsDir): static
     {
+        if (!is_string($viewsDir) && !is_array($viewsDir)) {
+            throw new InvalidViewsDirType();
+        }
+
         if (is_string($viewsDir)) {
             $this->viewsDirs = $this->toDirSeparator($viewsDir);
         } else {
