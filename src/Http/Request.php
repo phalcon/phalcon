@@ -1811,7 +1811,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      *
      * @phpstan-param  array<array-key, mixed> $names
      * @phpstan-param  array<array-key, mixed> $types
-     * @phpstan-param  array<array-key, mixed> $tmpNames
+     * @phpstan-param  array<array-key, mixed> $tmp_names
      * @phpstan-param  array<array-key, mixed> $sizes
      * @phpstan-param  array<array-key, mixed> $errors
      * @phpstan-return list<http_smooth_file>
@@ -1819,7 +1819,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
     protected function smoothFiles(
         array $names,
         array $types,
-        array $tmpNames,
+        array $tmp_names,
         array $sizes,
         array $errors,
         string $prefix
@@ -1832,7 +1832,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                 $files[] = [
                     'name'     => $name,
                     'type'     => $types[$index],
-                    'tmp_name' => $tmpNames[$index],
+                    'tmp_name' => $tmp_names[$index],
                     'size'     => $sizes[$index],
                     'error'    => $errors[$index],
                     'key'      => $key,
@@ -1843,7 +1843,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                 /** @var array<array-key, mixed> $childTypes */
                 $childTypes = $types[$index];
                 /** @var array<array-key, mixed> $childTmpNames */
-                $childTmpNames = $tmpNames[$index];
+                $childTmpNames = $tmp_names[$index];
                 /** @var array<array-key, mixed> $childSizes */
                 $childSizes = $sizes[$index];
                 /** @var array<array-key, mixed> $childErrors */

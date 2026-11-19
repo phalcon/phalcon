@@ -111,6 +111,18 @@ final class ServicesTest extends AbstractTagTestCase
         $this->assertSame($escaper, Tag::getEscaperService());
     }
 
+    /**
+     * The parameter has the cphalcon name.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     */
+    public function testGetEscaperWithNamedArguments(): void
+    {
+        Tag::setAutoescape(true);
+
+        $this->assertNull(Tag::getEscaper(params: ['escape' => false]));
+    }
+
     public function testGetUrlServiceIsResolvedOnce(): void
     {
         $url = new Url();

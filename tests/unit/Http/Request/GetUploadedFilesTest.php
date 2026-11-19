@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Http\Request;
 
+use Phalcon\Http\Request;
 use Phalcon\Tests\Support\Page\Http;
 use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 
@@ -126,5 +127,45 @@ final class GetUploadedFilesTest extends AbstractHttpBase
         $expected = 't3';
         $actual   = $successful[3]->getTempName();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * The parameters of the protected smoothFiles() have the cphalcon names.
+     * A subclass can call it with named arguments.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     */
+    public function testHttpRequestSmoothFilesNamedArguments(): void
+    {
+        $request = new class () extends Request {
+            /**
+             * @return array<array-key, mixed>
+             */
+            public function callSmoothFiles(): array
+            {
+                return $this->smoothFiles(
+                    names: ['f0'],
+                    types: [Http::CONTENT_TYPE_PLAIN],
+                    tmp_names: ['t0'],
+                    sizes: [10],
+                    errors: [0],
+                    prefix: 'photo'
+                );
+            }
+        };
+
+        $expected = [
+            [
+                'name'     => 'f0',
+                'type'     => Http::CONTENT_TYPE_PLAIN,
+                'tmp_name' => 't0',
+                'size'     => 10,
+                'error'    => 0,
+                'key'      => 'photo.0',
+            ],
+        ];
+        $this->assertSame($expected, $request->callSmoothFiles());
     }
 }

@@ -51,4 +51,28 @@ final class ConvertBoundParamsTest extends AbstractDatabaseTestCase
         $this->assertSame([10, 'foo'], $result['params']);
         $this->assertStringContainsString('co_invoices', $result['sql']);
     }
+
+    /**
+     * Tests Phalcon\Db\Adapter\Pdo :: convertBoundParams() - the parameters
+     * have the cphalcon names
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-18
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/832
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testDbAdapterPdoConvertBoundParamsNamedArguments(): void
+    {
+        $db = $this->container->get('db');
+
+        $result = $db->convertBoundParams(
+            sql: 'SELECT * FROM co_invoices WHERE inv_id = ?0',
+            params: [10]
+        );
+
+        $this->assertSame([10], $result['params']);
+    }
 }
