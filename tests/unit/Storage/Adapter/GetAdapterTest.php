@@ -21,12 +21,16 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
+use Phalcon\Storage\Exceptions\ClusterConnectionFailed;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Redis as NativeRedis;
 use RedisCluster as NativeRedisCluster;
+use TypeError;
+
+use function array_merge;
 
 final class GetAdapterTest extends AbstractUnitTestCase
 {
@@ -85,6 +89,30 @@ final class GetAdapterTest extends AbstractUnitTestCase
                 null,
                 '',
             ],
+        ];
+    }
+
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
+    public static function getRedisClusterOptions(): array
+    {
+        return [
+            ['timeout', '2'],
+            ['readTimeout', '2'],
+        ];
+    }
+
+    /**
+     * @return array<int, array{0: string, 1: string, 2: int}>
+     */
+    public static function getRedisOptions(): array
+    {
+        return [
+            ['index', '1', 1],
+            ['timeout', '2', 0],
+            ['retryInterval', '1', 0],
+            ['readTimeout', '2', 0],
         ];
     }
 
@@ -192,5 +220,107 @@ final class GetAdapterTest extends AbstractUnitTestCase
                 $connection->getOption($option)
             );
         }
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    #[DataProvider('getRedisClusterOptions')]
+    public function testStorageAdapterGetAdapterRedisClusterNotNumeric(
+        string $option
+    ): void {
+        $this->checkExtensionIsLoaded('redis');
+
+        $adapter = new RedisCluster(
+            new SerializerFactory(),
+            array_merge(
+                Talon::settings()->getServiceOptions('redisCluster'),
+                [$option => 'abc']
+            )
+        );
+
+        $this->expectException(ClusterConnectionFailed::class);
+
+        $adapter->getAdapter();
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    #[DataProvider('getRedisClusterOptions')]
+    public function testStorageAdapterGetAdapterRedisClusterNumericString(
+        string $option,
+        string $value
+    ): void {
+        $this->checkExtensionIsLoaded('redis');
+
+        $adapter = new RedisCluster(
+            new SerializerFactory(),
+            array_merge(
+                Talon::settings()->getServiceOptions('redisCluster'),
+                [$option => $value]
+            )
+        );
+
+        $this->assertInstanceOf(NativeRedisCluster::class, $adapter->getAdapter());
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    #[DataProvider('getRedisOptions')]
+    public function testStorageAdapterGetAdapterRedisNotNumeric(
+        string $option
+    ): void {
+        $this->checkExtensionIsLoaded('redis');
+
+        $adapter = new Redis(
+            new SerializerFactory(),
+            array_merge(
+                Talon::settings()->getServiceOptions('redis'),
+                [$option => 'abc']
+            )
+        );
+
+        $this->expectException(TypeError::class);
+
+        $adapter->getAdapter();
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/865
+     */
+    #[DataProvider('getRedisOptions')]
+    public function testStorageAdapterGetAdapterRedisNumericString(
+        string $option,
+        string $value,
+        int $index
+    ): void {
+        $this->checkExtensionIsLoaded('redis');
+
+        $adapter = new Redis(
+            new SerializerFactory(),
+            array_merge(
+                Talon::settings()->getServiceOptions('redis'),
+                ['index' => 0, $option => $value]
+            )
+        );
+
+        $connection = $adapter->getAdapter();
+
+        $this->assertInstanceOf(NativeRedis::class, $connection);
+        $this->assertSame($index, $connection->getDbNum());
     }
 }

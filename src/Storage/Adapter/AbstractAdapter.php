@@ -21,6 +21,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Storage\Serializer\SerializerInterface;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 
 use function is_object;
@@ -37,6 +38,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
     use GetTrait;
+    use WeakTypesTrait;
 
     protected mixed $adapter = null;
 
@@ -105,9 +107,10 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          */
         $this->allowedClasses    = $allowedClasses;
         $this->defaultSerializer = mb_strtolower($defaultSerializer);
-        $this->lifetime          = $lifetime;
         $this->serializer        = $serializer;
         $this->stripPrefix       = (bool) $this->getArrVal($options, 'stripPrefix', true);
+
+        self::weakWrite($this, 'lifetime', $lifetime);
 
         if (isset($options['prefix'])) {
             /** @var string $prefix */

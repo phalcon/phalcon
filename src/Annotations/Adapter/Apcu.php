@@ -15,6 +15,7 @@ namespace Phalcon\Annotations\Adapter;
 
 use Phalcon\Annotations\Reflection;
 use Phalcon\Contracts\Annotations\AnnotationsTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function apcu_fetch;
 use function apcu_store;
@@ -33,6 +34,8 @@ use function strtolower;
  */
 class Apcu extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     protected string $prefix = "";
 
     protected int $ttl = 172800;
@@ -56,9 +59,7 @@ class Apcu extends AbstractAdapter
         }
 
         if (isset($options["lifetime"])) {
-            /** @var int $ttl */
-            $ttl       = $options["lifetime"];
-            $this->ttl = $ttl;
+            self::weakWrite($this, 'ttl', $options["lifetime"]);
         }
     }
 

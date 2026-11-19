@@ -21,6 +21,7 @@ use Phalcon\Storage\Exceptions\AuthenticationFailed;
 use Phalcon\Storage\Exceptions\ConnectionFailed;
 use Phalcon\Storage\Exceptions\DatabaseSelectionFailed;
 use Phalcon\Storage\SerializerFactory;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Redis as RedisService;
 use RedisException;
 
@@ -53,6 +54,8 @@ use function substr;
  */
 class Redis extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     protected string $prefix = 'ph-reds-';
 
     /**
@@ -408,14 +411,18 @@ class Redis extends AbstractAdapter
 
         /** @var storage_redis_context $connectionOptions */
         try {
-            $result = $connection->$method(
-                $host,
-                $port,
-                $timeout,
-                $parameter,
-                $retryInterval,
-                $readTimeout,
-                $connectionOptions
+            $result = self::weakCallMethod(
+                $connection,
+                $method,
+                [
+                    $host,
+                    $port,
+                    $timeout,
+                    $parameter,
+                    $retryInterval,
+                    $readTimeout,
+                    $connectionOptions,
+                ]
             );
         } catch (BaseException $ex) {
             throw new ConnectionFailed($ex->getMessage());
@@ -441,7 +448,7 @@ class Redis extends AbstractAdapter
     {
         $index = $this->options['index'];
 
-        if ($index > 0 && true !== $connection->select($index)) {
+        if ($index > 0 && true !== self::weakCallMethod($connection, 'select', [$index])) {
             throw new DatabaseSelectionFailed();
         }
 
