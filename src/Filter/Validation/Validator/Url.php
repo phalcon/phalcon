@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function filter_var;
 
@@ -59,6 +60,8 @@ use const FILTER_VALIDATE_URL;
  */
 class Url extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must be a url";
 
     /**
@@ -92,10 +95,9 @@ class Url extends AbstractValidator
             /** @phpstan-var array<string, mixed>|int $filterOptions */
             $filterOptions = $this->options["options"];
 
-            $result = filter_var(
-                $value,
-                FILTER_VALIDATE_URL,
-                $filterOptions
+            $result = self::weakCallArray(
+                'filter_var',
+                [$value, FILTER_VALIDATE_URL, $filterOptions]
             );
         } else {
             $result = filter_var($value, FILTER_VALIDATE_URL);

@@ -21,6 +21,7 @@ use Phalcon\Encryption\Security\Exceptions\UnknownHashAlgorithm;
 use Phalcon\Encryption\Security\Random;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\HashTrait;
 use ValueError;
 
@@ -47,6 +48,7 @@ use ValueError;
 class Security extends AbstractInjectionAware implements SecurityContract
 {
     use HashTrait;
+    use WeakTypesTrait;
 
     public const CRYPT_ARGON2I    = 10;
 
@@ -656,7 +658,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
             $cost = 31;
         }
 
-        return $cost;
+        return self::weakReturnInt($cost);
     }
 
     private function processTokenKey(string | null $tokenKey = null): string | null
