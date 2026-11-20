@@ -117,7 +117,7 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         $container->set(
             '1',
             function () {
-                return new ArrayObject([7]);
+                return [7];
             }
         );
         $container->set(

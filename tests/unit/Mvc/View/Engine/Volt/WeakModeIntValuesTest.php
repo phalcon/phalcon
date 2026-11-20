@@ -18,6 +18,7 @@ use Phalcon\Mvc\View\Engine\Volt;
 use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
+use function mb_convert_encoding;
 use function restore_error_handler;
 use function set_error_handler;
 
@@ -73,6 +74,7 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
     public function testMvcViewEngineVoltConvertEncodingFailedDetection(): void
     {
         $volt = new Volt(new View());
+        $text = "\xff\xfe\xfd";
 
         set_error_handler(
             function (): bool {
@@ -81,9 +83,14 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         );
 
         try {
-            $actual = $volt->convertEncoding("\xff\xfe\xfd", 'ASCII,JIS', 'UTF-8');
+            $native = mb_convert_encoding($text, 'UTF-8', 'ASCII,JIS');
+            $actual = $volt->convertEncoding($text, 'ASCII,JIS', 'UTF-8');
         } finally {
             restore_error_handler();
+        }
+
+        if (false !== $native) {
+            $this->markTestSkipped('The encoding detection does not fail on this PHP version');
         }
 
         $this->assertEquals(false, $actual);
