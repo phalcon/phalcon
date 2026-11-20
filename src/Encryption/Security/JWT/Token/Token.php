@@ -16,6 +16,7 @@ namespace Phalcon\Encryption\Security\JWT\Token;
 use Phalcon\Contracts\Encryption\EncryptionTypes;
 use Phalcon\Encryption\Security\JWT\Signer\SignerInterface;
 use Phalcon\Encryption\Security\JWT\Validator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Token Class.
@@ -33,6 +34,8 @@ use Phalcon\Encryption\Security\JWT\Validator;
  */
 class Token
 {
+    use WeakTypesTrait;
+
     private Item $claims;
 
     private Item $headers;
@@ -121,7 +124,7 @@ class Token
         foreach ($methods as $method => $claimValue) {
             if (null !== $claimValue) {
                 /** @phpstan-var string $method */
-                $validator->$method($claimValue);
+                self::weakCallMethod($validator, $method, [$claimValue]);
             }
         }
 

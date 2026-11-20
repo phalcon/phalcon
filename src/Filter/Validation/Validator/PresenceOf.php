@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Validates that a value is not null or empty string
@@ -55,6 +56,8 @@ use Phalcon\Filter\Validation\AbstractValidator;
  */
 class PresenceOf extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field is required";
 
     /**
@@ -79,7 +82,7 @@ class PresenceOf extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if (true === $this->allowEmpty($field, $value)) {
             return true;
         }

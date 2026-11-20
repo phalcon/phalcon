@@ -17,6 +17,7 @@ use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 
 use function is_array;
@@ -79,6 +80,7 @@ use function strlen;
 class Min extends AbstractValidator
 {
     use InfoTrait;
+    use WeakTypesTrait;
 
     protected $template = "Field :field must be at least :min characters long";
 
@@ -104,7 +106,7 @@ class Min extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

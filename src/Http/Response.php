@@ -33,6 +33,7 @@ use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Mvc\ViewInterface;
 use Phalcon\Support\Helper\File\Basename;
 use Phalcon\Support\Helper\Json\Encode;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 use Phalcon\Traits\Php\UrlTrait;
 use Stringable;
@@ -45,7 +46,6 @@ use function mb_detect_order;
 use function preg_match;
 use function readfile;
 use function strlen;
-use function strtolower;
 use function substr;
 
 // @todo this will also be removed when traits are available
@@ -70,6 +70,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
     use InfoTrait;
     use StatusPhrasesTrait;
     use UrlTrait;
+    use WeakTypesTrait;
 
     private const DATETIME_FORMAT = 'D, d M Y H:i:s';
 
@@ -559,11 +560,13 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
             // extended one to indicate charset
             if ('ASCII' !== $basePathEncoding) {
                 $basePath = $this->phpRawUrlEncode($basePath);
+                /** @var string $lowerEncoding */
+                $lowerEncoding = self::weakCallArray('strtolower', [$basePathEncoding]);
                 $this->setRawHeader(
                     'Content-Disposition: attachment; filename='
                     . $basePath
                     . "; filename*="
-                    . strtolower($basePathEncoding)
+                    . $lowerEncoding
                     . "''"
                     . $basePath
                 );
@@ -613,7 +616,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
         $data = $bag->toArray();
 
         foreach ($data as $name => $value) {
-            $this->headers->set($name, (string) $value);
+            self::weakCallMethod($this->headers, 'set', [$name, (string) $value]);
         }
 
         return $this;

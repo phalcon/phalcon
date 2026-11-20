@@ -18,6 +18,7 @@ use Phalcon\Filter\Validation\AbstractValidatorComposite;
 use Phalcon\Filter\Validation\Validator\StringLength\Max;
 use Phalcon\Filter\Validation\Validator\StringLength\Min;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Validates that a string has the specified maximum and minimum constraints
@@ -90,6 +91,8 @@ use Phalcon\Messages\Message;
  */
 class StringLength extends AbstractValidatorComposite
 {
+    use WeakTypesTrait;
+
     /**
      * Constructor
      *
@@ -117,7 +120,7 @@ class StringLength extends AbstractValidatorComposite
 
         // create individual validators
         foreach ($options as $key => $value) {
-            if (strcasecmp($key, "min") === 0) {
+            if (self::weakCallArray('strcasecmp', [$key, "min"]) === 0) {
                 // get custom message
                 $messageMinimum = $message;
 
@@ -145,7 +148,7 @@ class StringLength extends AbstractValidatorComposite
                 unset($options["messageMinimum"]);
                 unset($options["included"]);
                 unset($options["includedMinimum"]);
-            } elseif (strcasecmp($key, "max") === 0) {
+            } elseif (self::weakCallArray('strcasecmp', [$key, "max"]) === 0) {
                 // get custom message
                 $messageMaximum = $message;
 

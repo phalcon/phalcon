@@ -155,7 +155,7 @@ class Validation extends Injectable implements ValidationInterface
      */
     public static function getDefaultMessage(string $validatorClassName): string
     {
-        return self::$defaultMessages[$validatorClassName] ?? "";
+        return self::weakReturnString(self::$defaultMessages[$validatorClassName] ?? "");
     }
 
     /**
@@ -390,7 +390,7 @@ class Validation extends Injectable implements ValidationInterface
          *
          * @var string $field
          */
-        return $this->labels[$field] ?? $field;
+        return self::weakReturnString($this->labels[$field] ?? $field);
     }
 
     /**
@@ -524,14 +524,15 @@ class Validation extends Injectable implements ValidationInterface
         mixed $entity,
         string $field
     ): mixed {
-        /**
-         * The entity is only read when `getValue()` has one, so it is an
-         * object here. The parameter is mixed to match the untyped Zephir
-         * signature.
-         *
-         * @var object $entity
-         */
         $method = "get" . $this->toCamelize($field);
+
+        /**
+         * The parameter is mixed to match the untyped Zephir signature. For a
+         * value that is not an object, cphalcon gives null.
+         */
+        if (!is_object($entity)) {
+            return null;
+        }
 
         if (true === method_exists($entity, $method)) {
             return $entity->{$method}();
@@ -836,7 +837,7 @@ class Validation extends Injectable implements ValidationInterface
                  * Compatibility path for validators implementing
                  * ValidatorInterface without extending AbstractValidator
                  */
-                $value = $this->getValue($field);
+                $value = self::weakCallMethod($this, 'getValue', [$field]);
 
                 if (is_array($allowEmpty)) {
                     return in_array($value, $allowEmpty, true);

@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator\File\Resolution;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function explode;
 use function getimagesize;
@@ -69,6 +70,8 @@ use function is_array;
  */
 class AspectRatio extends AbstractFile
 {
+    use WeakTypesTrait;
+
     protected $template = "File :field does not have the exact aspect ratio of :ratio";
 
     /**
@@ -94,7 +97,7 @@ class AspectRatio extends AbstractFile
          * @var string $field
          */
         // Check file upload
-        if (false === $this->checkUpload($validation, $field)) {
+        if (false === self::weakCallMethod($this, 'checkUpload', [$validation, $field])) {
             return false;
         }
 
@@ -104,12 +107,12 @@ class AspectRatio extends AbstractFile
          *
          * @var filter_uploaded_file $value
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         $tmp   = getimagesize($value["tmp_name"]);
 
         // The file cannot be read as an image
         if (false === $tmp) {
-            $this->appendMessageValid($validation, $field);
+            self::weakCallMethod($this, 'appendMessageValid', [$validation, $field]);
 
             return false;
         }

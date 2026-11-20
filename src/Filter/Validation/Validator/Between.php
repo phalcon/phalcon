@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
 
@@ -68,6 +69,8 @@ use function is_array;
  */
 class Between extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must be within the range of :min to :max";
 
     /**
@@ -92,7 +95,7 @@ class Between extends AbstractValidator
          *
          * @var string $field
          */
-        $value   = $validation->getValue($field);
+        $value   = self::weakCallMethod($validation, 'getValue', [$field]);
         $minimum = $this->getOption("minimum");
         $maximum = $this->getOption("maximum");
 

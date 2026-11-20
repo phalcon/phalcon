@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function preg_match;
 
@@ -57,6 +58,8 @@ use function preg_match;
  */
 class Alpha extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must contain only letters";
 
     /**
@@ -81,7 +84,7 @@ class Alpha extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

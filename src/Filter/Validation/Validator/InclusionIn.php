@@ -19,6 +19,7 @@ use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exceptions\InvalidDomainOption;
 use Phalcon\Filter\Validation\Exceptions\InvalidStrictOption;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function implode;
 use function in_array;
@@ -68,6 +69,8 @@ use function is_bool;
  */
 class InclusionIn extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must be a part of list: :domain";
 
     /**
@@ -92,7 +95,7 @@ class InclusionIn extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

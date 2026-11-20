@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Http\Request;
 
 use Phalcon\Contracts\Http\HttpTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 
 use function defined;
@@ -21,7 +22,6 @@ use function finfo_file;
 use function finfo_open;
 use function is_uploaded_file;
 use function move_uploaded_file;
-use function pathinfo;
 
 use const FILEINFO_MIME_TYPE;
 use const PATHINFO_EXTENSION;
@@ -54,6 +54,7 @@ use const PATHINFO_EXTENSION;
 class File implements FileInterface
 {
     use GetTrait;
+    use WeakTypesTrait;
 
     protected int $error        = 0;
 
@@ -82,10 +83,14 @@ class File implements FileInterface
             /** @var string $name */
             $name = $file['name'];
 
-            $this->name = $name;
+            self::weakWrite($this, 'name', $name);
 
             if (defined('PATHINFO_EXTENSION')) {
-                $this->extension = pathinfo($name, PATHINFO_EXTENSION);
+                self::weakWrite(
+                    $this,
+                    'extension',
+                    self::weakCallArray('pathinfo', [$name, PATHINFO_EXTENSION])
+                );
             }
         }
 
@@ -98,10 +103,11 @@ class File implements FileInterface
         /** @var int $error */
         $error = $this->getArrVal($file, 'error', $this->error);
 
-        $this->tmpName = $tmpName;
-        $this->size    = $size;
-        $this->type    = $type;
-        $this->error   = $error;
+        $this->size  = $size;
+        $this->error = $error;
+
+        self::weakWrite($this, 'tmpName', $tmpName);
+        self::weakWrite($this, 'type', $type);
 
         if (!empty($key)) {
             $this->key = $key;

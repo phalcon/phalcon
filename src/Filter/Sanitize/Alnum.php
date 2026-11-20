@@ -14,14 +14,15 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Sanitize;
 
 use Phalcon\Contracts\Filter\Sanitizer;
-
-use function preg_replace;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Sanitizes a value to an alphanumeric value
  */
 class Alnum implements Sanitizer
 {
+    use WeakTypesTrait;
+
     /**
      * @param string|string[] $input The text to sanitize
      *
@@ -29,6 +30,7 @@ class Alnum implements Sanitizer
      */
     public function __invoke(mixed $input)
     {
-        return preg_replace("/[^A-Za-z0-9]/", "", $input);
+        /** @var string|string[]|null */
+        return self::weakCallArray('preg_replace', ["/[^A-Za-z0-9]/", "", $input]);
     }
 }

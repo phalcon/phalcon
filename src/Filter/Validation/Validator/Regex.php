@@ -17,6 +17,7 @@ use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
 use function preg_match;
@@ -64,6 +65,8 @@ use function preg_match;
  */
 class Regex extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field does not match the required format";
 
     /**
@@ -89,7 +92,7 @@ class Regex extends AbstractValidator
          * @var string $field
          */
         $matches = null;
-        $value   = $validation->getValue($field);
+        $value   = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

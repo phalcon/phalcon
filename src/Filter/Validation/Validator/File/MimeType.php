@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator\File;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\InvalidAllowedTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 
 use function finfo_file;
@@ -80,6 +81,7 @@ use const FILEINFO_MIME_TYPE;
 class MimeType extends AbstractFile
 {
     use InfoTrait;
+    use WeakTypesTrait;
 
     protected $template = "File :field must be of type: :types";
 
@@ -96,7 +98,7 @@ class MimeType extends AbstractFile
          * @var string $field
          */
         // Check file upload
-        if (false === $this->checkUpload($validation, $field)) {
+        if (false === self::weakCallMethod($this, 'checkUpload', [$validation, $field])) {
             return false;
         }
 
@@ -106,7 +108,7 @@ class MimeType extends AbstractFile
          *
          * @var filter_uploaded_file $value
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         /** @phpstan-var array<array-key, mixed>|null $types */
         $types = $this->getOption("types");
 

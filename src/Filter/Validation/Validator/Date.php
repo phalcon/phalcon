@@ -17,6 +17,7 @@ use DateTime;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_string;
 
@@ -63,6 +64,8 @@ use function is_string;
  */
 class Date extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field is not a valid date";
 
     /**
@@ -87,7 +90,7 @@ class Date extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }
@@ -122,7 +125,7 @@ class Date extends AbstractValidator
             return false;
         }
 
-        $date   = DateTime::createFromFormat($format, $value);
+        $date   = self::weakCallArray([DateTime::class, 'createFromFormat'], [$format, $value]);
         $errors = DateTime::getLastErrors();
 
         return $errors === false || ($errors["warning_count"] == 0 && $errors["error_count"] == 0);

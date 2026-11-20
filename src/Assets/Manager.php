@@ -30,6 +30,7 @@ use Phalcon\Html\Helper\Link;
 use Phalcon\Html\Helper\Script;
 use Phalcon\Html\TagFactory;
 use Phalcon\Mvc\Url;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function call_user_func_array;
@@ -53,6 +54,7 @@ use const PHP_EOL;
 class Manager extends AbstractInjectionAware
 {
     use FileTrait;
+    use WeakTypesTrait;
 
     /**
      * @var assets_collections
@@ -388,7 +390,8 @@ class Manager extends AbstractInjectionAware
             /**
              * Check if the collection have its own target base path
              */
-            $join = $this->getJoin($collection, $completeTargetPath);
+            /** @var bool $join */
+            $join = self::weakCallMethod($this, 'getJoin', [$collection, $completeTargetPath]);
         }
 
         /** @var Asset $asset */
@@ -406,14 +409,16 @@ class Manager extends AbstractInjectionAware
                     /**
                      * Get the complete path
                      */
-                    $sourcePath = $this->getSourcePath($asset, $completeSourcePath);
+                    /** @var string $sourcePath */
+                    $sourcePath = self::weakCallMethod($this, 'getSourcePath', [$asset, $completeSourcePath]);
                 }
 
                 /**
                  * Get the target path, we need to write the filtered content to
                  * a file
                  */
-                $targetPath = $asset->getRealTargetPath($completeTargetPath);
+                /** @var string $targetPath */
+                $targetPath = self::weakCallMethod($asset, 'getRealTargetPath', [$completeTargetPath]);
 
                 /**
                  * We need a valid final target path
@@ -459,7 +464,8 @@ class Manager extends AbstractInjectionAware
                 /**
                  * Gets the asset's content
                  */
-                $content = $asset->getContent($completeSourcePath);
+                /** @var string $content */
+                $content = self::weakCallMethod($asset, 'getContent', [$completeSourcePath]);
 
                 /**
                  * Apply the collection filters; the asset opts in via its own
@@ -526,17 +532,24 @@ class Manager extends AbstractInjectionAware
              * A symbolic link at the target file sends the write outside the
              * assets directory. Refuse it.
              */
-            if (true === is_link($completeTargetPath)) {
-                throw new InvalidAssetTargetPath($completeTargetPath);
+            if (true === self::weakCallArray('is_link', [$completeTargetPath])) {
+                /** @var InvalidAssetTargetPath $exception */
+                $exception = self::weakNew(InvalidAssetTargetPath::class, [$completeTargetPath]);
+                throw $exception;
             }
 
             /**
              * Write the file using file_put_contents. This respects the
              * openbase-dir also writes to streams
              */
-            $this->phpFilePutContents($completeTargetPath, $filteredJoinedContent);
+            self::weakCallMethod($this, 'phpFilePutContents', [$completeTargetPath, $filteredJoinedContent]);
 
-            $output = $this->getOutput($collection, $completeTargetPath, $callback, $output);
+            /** @var string $output */
+            $output = self::weakCallMethod(
+                $this,
+                'getOutput',
+                [$collection, $completeTargetPath, $callback, $output]
+            );
         }
 
         return $output;
@@ -1000,7 +1013,9 @@ class Manager extends AbstractInjectionAware
                 $url = $this->container->get("url");
                 $tag = $url->getStatic($tag);
             } else {
-                $tag = "/" . ltrim($tag, "/");
+                /** @var string $trimmedTag */
+                $trimmedTag = self::weakCallArray('ltrim', [$tag, "/"]);
+                $tag        = "/" . $trimmedTag;
             }
         }
 
