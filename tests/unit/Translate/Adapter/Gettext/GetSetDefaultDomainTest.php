@@ -38,4 +38,20 @@ final class GetSetDefaultDomainTest extends AbstractUnitTestCase
 
         $this->assertSame('options', $translator->getDefaultDomain());
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterGettextGetSetDefaultDomainInt(): void
+    {
+        $params                  = $this->getGettextConfig();
+        $params['defaultDomain'] = 1;
+
+        $translator = new Gettext(new InterpolatorFactory(), $params);
+
+        $this->assertSame('1', $translator->getDefaultDomain());
+    }
 }

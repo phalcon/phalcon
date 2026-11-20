@@ -18,6 +18,7 @@ use Exception as BaseException;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Logger\LoggerTypes;
 use Phalcon\Factory\AbstractConfigFactory;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Factory creating logger objects
@@ -28,6 +29,8 @@ use Phalcon\Factory\AbstractConfigFactory;
  */
 class LoggerFactory extends AbstractConfigFactory
 {
+    use WeakTypesTrait;
+
     private AdapterFactory $adapterFactory;
 
     /**
@@ -80,14 +83,15 @@ class LoggerFactory extends AbstractConfigFactory
             $adapterFileName = $adapter["name"];
             $adapterOptions  = $adapter["options"] ?? [];
 
-            $data[$adapterName] = $this->adapterFactory->newInstance(
-                $adapterClass,
-                $adapterFileName,
-                $adapterOptions
+            $data[$adapterName] = self::weakCallMethod(
+                $this->adapterFactory,
+                'newInstance',
+                [$adapterClass, $adapterFileName, $adapterOptions]
             );
         }
 
-        return $this->newInstance($name, $data, $timezone);
+        /** @var Logger */
+        return self::weakCallMethod($this, 'newInstance', [$name, $data, $timezone]);
     }
 
     /**

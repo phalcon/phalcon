@@ -20,6 +20,7 @@ use Phalcon\Storage\Adapter\Redis;
 use Phalcon\Storage\Adapter\RedisCluster;
 use Phalcon\Storage\Adapter\Stream;
 use Phalcon\Storage\Adapter\Weak;
+use Phalcon\Storage\Exception as StorageException;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
@@ -98,6 +99,21 @@ final class GetSetDefaultSerializerTest extends AbstractUnitTestCase
         $expected = 'base64';
         $actual   = $adapter->getDefaultSerializer();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterGetSetDefaultSerializerInt(): void
+    {
+        $this->expectException(StorageException::class);
+        $this->expectExceptionMessage('Service 1 is not registered');
+
+        $adapter = new Memory(new SerializerFactory(), ['defaultSerializer' => 1]);
+        $adapter->set('key', 'value');
     }
 
     /**

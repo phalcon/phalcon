@@ -17,6 +17,7 @@ use Phalcon\Cache\Exception\Exception;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Factory\AbstractConfigFactory;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Creates a new Cache class
@@ -25,6 +26,8 @@ use Phalcon\Factory\AbstractConfigFactory;
  */
 class CacheFactory extends AbstractConfigFactory
 {
+    use WeakTypesTrait;
+
     protected AdapterFactory $adapterFactory;
 
     /**
@@ -79,7 +82,8 @@ class CacheFactory extends AbstractConfigFactory
 
         /** @phpstan-var storage_adapter_options $options */
 
-        return $this->newInstance($name, $options);
+        /** @var CacheInterface */
+        return self::weakCallMethod($this, 'newInstance', [$name, $options]);
     }
 
     /**

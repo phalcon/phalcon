@@ -242,6 +242,19 @@ final class GetPrefixTest extends AbstractUnitTestCase
     }
 
     /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterGetPrefixInt(): void
+    {
+        $adapter = new Memory(new SerializerFactory(), ['prefix' => 123]);
+
+        $this->assertSame('123', $adapter->getPrefix());
+    }
+
+    /**
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2020-09-09
      */

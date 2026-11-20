@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use Phalcon\Contracts\Translate\TranslateTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\InvalidDataType;
 use Phalcon\Translate\Exceptions\MissingContent;
@@ -30,6 +31,8 @@ use function is_array;
  */
 class NativeArray extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var translate_data
      */
@@ -94,9 +97,11 @@ class NativeArray extends AbstractAdapter
             return $this->notFound($translateKey);
         }
 
-        return $this->replacePlaceholders(
-            $this->translate[$translateKey],
-            $placeholders
+        /** @var string */
+        return self::weakCallMethod(
+            $this,
+            'replacePlaceholders',
+            [$this->translate[$translateKey], $placeholders]
         );
     }
 

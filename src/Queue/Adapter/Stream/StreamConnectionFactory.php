@@ -25,6 +25,7 @@ namespace Phalcon\Queue\Adapter\Stream;
 use Phalcon\Contracts\Queue\ConnectionFactory as ConnectionFactoryInterface;
 use Phalcon\Contracts\Queue\Context as ContextInterface;
 use Phalcon\Contracts\Queue\QueueTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function sys_get_temp_dir;
 
@@ -40,6 +41,8 @@ use function sys_get_temp_dir;
  */
 class StreamConnectionFactory implements ConnectionFactoryInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-param queue_stream_options $options
      */
@@ -52,6 +55,7 @@ class StreamConnectionFactory implements ConnectionFactoryInterface
         $storageDir   = $this->options["storageDir"] ?? sys_get_temp_dir() . "/phalcon_queue";
         $pollInterval = (int) ($this->options["pollInterval"] ?? 200);
 
-        return new StreamContext($storageDir, $pollInterval);
+        /** @var StreamContext */
+        return self::weakNew(StreamContext::class, [$storageDir, $pollInterval]);
     }
 }

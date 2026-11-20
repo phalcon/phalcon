@@ -37,4 +37,20 @@ final class OffsetGetTest extends AbstractUnitTestCase
         $actual   = $translator->offsetGet('hi');
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterNativeArrayOffsetGetIntKey(): void
+    {
+        $translator = new NativeArray(
+            new InterpolatorFactory(),
+            ['content' => ['404' => 'Not found']]
+        );
+
+        $this->assertSame('Not found', $translator[404]);
+    }
 }

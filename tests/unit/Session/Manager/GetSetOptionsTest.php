@@ -13,9 +13,13 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Manager;
 
+use Phalcon\Session\Adapter\Stream;
 use Phalcon\Session\Manager;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Talon\Talon;
 use Phalcon\Tests\Support\Traits\DiTrait;
+
+use function array_keys;
 
 final class GetSetOptionsTest extends AbstractUnitTestCase
 {
@@ -36,7 +40,6 @@ final class GetSetOptionsTest extends AbstractUnitTestCase
         $options = [
             'test3' => 'option3',
         ];
-
 
         $manager->setOptions($options);
 
@@ -59,5 +62,28 @@ final class GetSetOptionsTest extends AbstractUnitTestCase
 
         $actual = $manager->getOptions();
         $this->assertEquals($options, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testSessionManagerGetSetOptionsUniqueIdInt(): void
+    {
+        $manager = new Manager(['uniqueId' => 123]);
+        $manager->setAdapter(
+            new Stream(['savePath' => Talon::settings()->outputPath()])
+        );
+
+        $this->assertTrue($manager->start());
+
+        $manager->set('test', 'value');
+
+        $this->assertSame(['123#test'], array_keys($_SESSION));
+        $this->assertSame('value', $manager->get('test'));
+
+        $manager->destroy();
     }
 }

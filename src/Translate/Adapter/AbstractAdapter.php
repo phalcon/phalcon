@@ -15,6 +15,7 @@ namespace Phalcon\Translate\Adapter;
 
 use ArrayAccess;
 use Phalcon\Contracts\Translate\TranslateTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\ImmutableObject;
 use Phalcon\Translate\Exceptions\KeyNotFound;
@@ -29,6 +30,8 @@ use Phalcon\Translate\InterpolatorFactory;
  */
 abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
 {
+    use WeakTypesTrait;
+
     protected string $defaultInterpolator                = '';
 
     protected InterpolatorInterface | null $interpolator = null;
@@ -44,7 +47,11 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
         protected InterpolatorFactory $interpolatorFactory,
         array $options = []
     ) {
-        $this->defaultInterpolator = $options['defaultInterpolator'] ?? 'associativeArray';
+        self::weakWrite(
+            $this,
+            'defaultInterpolator',
+            $options['defaultInterpolator'] ?? 'associativeArray'
+        );
         $this->triggerError        = (bool)($options['triggerError'] ?? false);
     }
 
@@ -78,7 +85,8 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
     public function offsetExists(mixed $offset): bool
     {
         /** @var string $offset */
-        return $this->has($offset);
+        /** @var bool */
+        return self::weakCallMethod($this, 'has', [$offset]);
     }
 
     /**
@@ -88,7 +96,8 @@ abstract class AbstractAdapter implements AdapterInterface, ArrayAccess
      */
     public function offsetGet(mixed $offset): string
     {
-        return $this->query($offset);
+        /** @var string */
+        return self::weakCallMethod($this, 'query', [$offset]);
     }
 
     /**

@@ -104,4 +104,20 @@ final class SetMultipleTest extends AbstractUnitTestCase
 
         $this->assertFalse($actual);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testCacheCacheSetMultipleIntKeys(): void
+    {
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = new Cache($factory->newInstance('memory'));
+
+        $this->assertTrue($adapter->setMultiple(['1' => 'one', '2' => 'two']));
+        $this->assertSame('one', $adapter->get('1'));
+        $this->assertSame('two', $adapter->get('2'));
+    }
 }

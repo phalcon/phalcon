@@ -42,6 +42,20 @@ final class LoadTest extends AbstractUnitTestCase
 
     /**
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testAnnotationsFactoryLoadAdapterInt(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Service 1 is not registered');
+
+        (new AnnotationsFactory())->load(['adapter' => 1]);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2019-05-18
      */
     public function testAnnotationsFactoryLoadArray(): void

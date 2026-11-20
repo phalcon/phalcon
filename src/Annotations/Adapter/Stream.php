@@ -20,6 +20,7 @@ use Phalcon\Annotations\Exceptions\CannotReadAnnotationData;
 use Phalcon\Annotations\Reflection;
 use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use Phalcon\Support\Traits\FilePathTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function restore_error_handler;
@@ -50,6 +51,7 @@ class Stream extends AbstractAdapter
 {
     use FilePathTrait;
     use FileTrait;
+    use WeakTypesTrait;
 
     protected string $annotationsDir = "./";
 
@@ -65,9 +67,7 @@ class Stream extends AbstractAdapter
     public function __construct(array $options = [])
     {
         if (isset($options["annotationsDir"])) {
-            /** @var string $annotationsDir */
-            $annotationsDir       = $options["annotationsDir"];
-            $this->annotationsDir = $annotationsDir;
+            self::weakWrite($this, 'annotationsDir', $options["annotationsDir"]);
         }
     }
 

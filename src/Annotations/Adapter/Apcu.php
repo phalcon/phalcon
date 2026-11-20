@@ -53,9 +53,7 @@ class Apcu extends AbstractAdapter
     public function __construct(array $options = [])
     {
         if (isset($options["prefix"])) {
-            /** @var string $prefix */
-            $prefix       = $options["prefix"];
-            $this->prefix = $prefix;
+            self::weakWrite($this, 'prefix', $options["prefix"]);
         }
 
         if (isset($options["lifetime"])) {

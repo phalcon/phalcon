@@ -24,6 +24,8 @@ use Phalcon\Translate\Exceptions\FileOpenError;
 use Phalcon\Translate\Exceptions\MissingRequiredParameter;
 use Phalcon\Translate\InterpolatorFactory;
 
+use function base64_encode;
+
 final class ConstructTest extends AbstractUnitTestCase
 {
     use TranslateCsvTrait;
@@ -40,6 +42,39 @@ final class ConstructTest extends AbstractUnitTestCase
 
         $this->assertInstanceOf(ArrayAccess::class, $translator);
         $this->assertInstanceOf(AdapterInterface::class, $translator);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterCsvConstructContentInt(): void
+    {
+        $this->expectException(FileOpenError::class);
+        $this->expectExceptionMessage("Error opening translation file '123'");
+
+        new FakeCsvFopen(new InterpolatorFactory(), ['content' => 123]);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterCsvConstructDelimiterInt(): void
+    {
+        $translator = new Csv(
+            new InterpolatorFactory(),
+            [
+                'content'   => 'data://text/plain;base64,' . base64_encode("hi1Hello\n"),
+                'delimiter' => 1,
+            ]
+        );
+
+        $this->assertSame('Hello', $translator->query('hi'));
     }
 
     /**
