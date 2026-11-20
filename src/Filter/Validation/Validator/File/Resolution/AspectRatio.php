@@ -16,11 +16,6 @@ namespace Phalcon\Filter\Validation\Validator\File\Resolution;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
-use Phalcon\Support\Traits\WeakTypesTrait;
-
-use function explode;
-use function getimagesize;
-use function is_array;
 
 /**
  * Checks if a file has the exact aspect ratio
@@ -66,12 +61,9 @@ use function is_array;
  * ```
  *
  * @phpstan-import-type filter_validator_options from FilterTypes
- * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 class AspectRatio extends AbstractFile
 {
-    use WeakTypesTrait;
-
     protected $template = "File :field does not have the exact aspect ratio of :ratio";
 
     /**
@@ -96,42 +88,18 @@ class AspectRatio extends AbstractFile
          *
          * @var string $field
          */
-        // Check file upload
-        if (false === self::weakCallMethod($this, 'checkUpload', [$validation, $field])) {
+        $size = $this->getUploadedImageSize($validation, $field);
+
+        if (false === $size) {
             return false;
         }
 
-        /**
-         * `checkUpload()` rejects anything that is not a usable uploaded
-         * file, so the value is a $_FILES entry from here on.
-         *
-         * @var filter_uploaded_file $value
-         */
-        $value = self::weakCallMethod($validation, 'getValue', [$field]);
-        $tmp   = getimagesize($value["tmp_name"]);
+        $width  = $size[0];
+        $height = $size[1];
 
-        // The file cannot be read as an image
-        if (false === $tmp) {
-            self::weakCallMethod($this, 'appendMessageValid', [$validation, $field]);
+        [$ratio, $ratioWidth, $ratioHeight] = $this->getDimensionsOption($field, "ratio");
 
-            return false;
-        }
-
-        $width  = $tmp[0];
-        $height = $tmp[1];
-
-        $ratio = $this->getOption("ratio");
-
-        if (is_array($ratio)) {
-            $ratio = $ratio[$field];
-        }
-
-        /** @phpstan-var string $ratio */
-        $ratioArray  = explode("x", $ratio);
-        $ratioWidth  = (int)$ratioArray[0];
-        $ratioHeight = (int)$ratioArray[1];
-
-        if ($width * $ratioHeight !== $height * $ratioWidth) {
+        if ($width * (int)$ratioHeight !== $height * (int)$ratioWidth) {
             $replacePairs = [
                 ":ratio" => $ratio,
             ];

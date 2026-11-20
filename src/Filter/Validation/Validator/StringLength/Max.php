@@ -15,14 +15,9 @@ namespace Phalcon\Filter\Validation\Validator\StringLength;
 
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
-use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
-use Phalcon\Support\Traits\WeakTypesTrait;
-use Phalcon\Traits\Php\InfoTrait;
 
 use function is_array;
-use function mb_strlen;
-use function strlen;
 
 /**
  * Validates that a string has the specified maximum constraints
@@ -77,11 +72,8 @@ use function strlen;
  *
  * @phpstan-import-type filter_validator_options from FilterTypes
  */
-class Max extends AbstractValidator
+class Max extends AbstractStringLength
 {
-    use InfoTrait;
-    use WeakTypesTrait;
-
     protected $template = "Field :field must not exceed :max characters long";
 
     /**
@@ -95,33 +87,15 @@ class Max extends AbstractValidator
     }
 
     /**
-     * Executes the validation
+     * Compares the length of the value with the maximum
+     *
+     * @param int|string $field
      */
-    public function validate(Validation $validation, mixed $field): bool
-    {
-        /**
-         * Validation iterates its validators by field name, so the field is
-         * a string here. The parameter is mixed to match the untyped Zephir
-         * signature.
-         *
-         * @var string $field
-         */
-        $value = self::weakCallMethod($validation, 'getValue', [$field]);
-        if ($this->allowEmpty($field, $value)) {
-            return true;
-        }
-
-        if ($this->rejectNonStringable($validation, $field, $value)) {
-            return false;
-        }
-
-        // Check if mbstring is available to calculate the correct length
-        if ($this->phpFunctionExists("mb_strlen")) {
-            $length = mb_strlen((string)$value);
-        } else {
-            $length = strlen((string)$value);
-        }
-
+    protected function validateLength(
+        Validation $validation,
+        mixed $field,
+        int $length
+    ): bool {
         $maximum = $this->getOption("max");
 
         if (is_array($maximum)) {

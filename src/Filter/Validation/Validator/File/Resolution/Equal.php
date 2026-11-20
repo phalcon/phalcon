@@ -17,11 +17,6 @@ use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
 use Phalcon\Messages\Message;
-use Phalcon\Support\Traits\WeakTypesTrait;
-
-use function explode;
-use function getimagesize;
-use function is_array;
 
 /**
  * Checks if a file has the right resolution
@@ -63,12 +58,9 @@ use function is_array;
  * ```
  *
  * @phpstan-import-type filter_validator_options from FilterTypes
- * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 class Equal extends AbstractFile
 {
-    use WeakTypesTrait;
-
     protected $template = "The resolution of the field :field has to be equal :resolution";
 
     /**
@@ -93,40 +85,16 @@ class Equal extends AbstractFile
          *
          * @var string $field
          */
-        // Check file upload
-        if (false === self::weakCallMethod($this, 'checkUpload', [$validation, $field])) {
+        $size = $this->getUploadedImageSize($validation, $field);
+
+        if (false === $size) {
             return false;
         }
 
-        /**
-         * `checkUpload()` rejects anything that is not a usable uploaded
-         * file, so the value is a $_FILES entry from here on.
-         *
-         * @var filter_uploaded_file $value
-         */
-        $value = self::weakCallMethod($validation, 'getValue', [$field]);
-        $tmp   = getimagesize($value["tmp_name"]);
+        $width  = $size[0];
+        $height = $size[1];
 
-        // The file cannot be read as an image
-        if (false === $tmp) {
-            self::weakCallMethod($this, 'appendMessageValid', [$validation, $field]);
-
-            return false;
-        }
-
-        $width  = $tmp[0];
-        $height = $tmp[1];
-
-        $resolution = $this->getOption("resolution");
-
-        if (is_array($resolution)) {
-            $resolution = $resolution[$field];
-        }
-
-        /** @phpstan-var string $resolution */
-        $resolutionArray = explode("x", $resolution);
-        $equalWidth      = $resolutionArray[0];
-        $equalHeight     = $resolutionArray[1];
+        [$resolution, $equalWidth, $equalHeight] = $this->getDimensionsOption($field, "resolution");
 
         if ($width != $equalWidth || $height != $equalHeight) {
             $replacePairs = [
