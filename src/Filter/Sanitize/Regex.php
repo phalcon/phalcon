@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Filter\Sanitize;
 
 use Phalcon\Contracts\Filter\Sanitizer;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function preg_replace;
 
@@ -22,6 +23,8 @@ use function preg_replace;
  */
 class Regex implements Sanitizer
 {
+    use WeakTypesTrait;
+
     /**
      * @param string|string[] $input
      * @param string|string[] $pattern
@@ -34,6 +37,7 @@ class Regex implements Sanitizer
         mixed $pattern,
         mixed $replace
     ) {
-        return preg_replace($pattern, $replace, $input);
+        /** @var string|string[]|null */
+        return self::weakCallArray('preg_replace', [$pattern, $replace, $input]);
     }
 }

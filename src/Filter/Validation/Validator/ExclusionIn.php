@@ -16,14 +16,11 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
-use Phalcon\Filter\Validation\Exceptions\InvalidDomainOption;
-use Phalcon\Filter\Validation\Exceptions\InvalidStrictOption;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function implode;
 use function in_array;
-use function is_array;
-use function is_bool;
 
 /**
  * Check if a value is not included into a list of values
@@ -74,6 +71,8 @@ use function is_bool;
  */
 class ExclusionIn extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must not be a part of list: :domain";
 
     /**
@@ -98,7 +97,7 @@ class ExclusionIn extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }
@@ -106,40 +105,14 @@ class ExclusionIn extends AbstractValidator
         /**
          * A domain is an array with a list of valid values
          */
-        /** @phpstan-var array<array-key, mixed>|null $domain */
-        $domain = $this->getOption("domain");
-
-        if (isset($domain[$field])) {
-            $fieldDomain = $domain[$field];
-            if (is_array($fieldDomain)) {
-                $domain = $fieldDomain;
-            }
-        }
-
-        if (!is_array($domain)) {
-            throw new InvalidDomainOption();
-        }
-
-        $strict = false;
-
-        if ($this->hasOption("strict")) {
-            $strict = $this->getOption("strict");
-
-            if (is_array($strict)) {
-                $strict = $strict[$field];
-            }
-
-            if (!is_bool($strict)) {
-                throw new InvalidStrictOption();
-            }
-        }
+        $domain = $this->getDomainOption($field);
 
         /**
          * Check if the value is contained by the array
          *
          * @phpstan-var array<array-key, string> $domain
          */
-        if (in_array($value, $domain, $strict)) {
+        if (in_array($value, $domain, $this->getStrictOption($field))) {
             $replacePairs = [
                 ":domain" => implode(", ", $domain),
             ];

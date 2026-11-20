@@ -218,7 +218,7 @@ class Uniqueness extends AbstractCombinedFieldsValidator
          * @var array<array-key, string> $field
          */
         foreach ($field as $singleField) {
-            $values[$singleField] = $validation->getValue($singleField);
+            $values[$singleField] = self::weakCallMethod($validation, 'getValue', [$singleField]);
         }
 
         if (null !== $convert) {
@@ -295,7 +295,8 @@ class Uniqueness extends AbstractCombinedFieldsValidator
 
             /** @var string $attribute */
             $attribute = $this->getOption("attribute", $singleField);
-            $attribute = $this->getColumnNameReal($record, $attribute);
+            /** @var string $attribute */
+            $attribute = self::weakCallMethod($this, 'getColumnNameReal', [$record, $attribute]);
 
             if (null !== $value) {
                 $params["conditions"][] = $attribute . " = ?" . $index;
@@ -314,9 +315,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                         $notInValues = [];
                         /** @var string $exceptAttribute */
                         $exceptAttribute = $this->getOption("attribute", $exceptKey);
-                        $attribute       = $this->getColumnNameReal(
-                            $record,
-                            $exceptAttribute
+                        /** @var string $attribute */
+                        $attribute = self::weakCallMethod(
+                            $this,
+                            'getColumnNameReal',
+                            [$record, $exceptAttribute]
                         );
 
                         if (is_array($fieldExcept)) {
@@ -339,9 +342,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                 } elseif (count($field) === 1) {
                     /** @var string $firstAttribute */
                     $firstAttribute = $this->getOption("attribute", $field[0]);
-                    $attribute      = $this->getColumnNameReal(
-                        $record,
-                        $firstAttribute
+                    /** @var string $attribute */
+                    $attribute = self::weakCallMethod(
+                        $this,
+                        'getColumnNameReal',
+                        [$record, $firstAttribute]
                     );
 
                     if (is_array($except)) {
@@ -364,9 +369,11 @@ class Uniqueness extends AbstractCombinedFieldsValidator
                     foreach ($field as $item) {
                         /** @var string $itemAttribute */
                         $itemAttribute = $this->getOption("attribute", $item);
-                        $attribute     = $this->getColumnNameReal(
-                            $record,
-                            $itemAttribute
+                        /** @var string $attribute */
+                        $attribute = self::weakCallMethod(
+                            $this,
+                            'getColumnNameReal',
+                            [$record, $itemAttribute]
                         );
 
                         if (is_array($except)) {

@@ -17,6 +17,7 @@ use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function filter_var;
 use function is_array;
@@ -82,6 +83,8 @@ use const FILTER_VALIDATE_IP;
  */
 class Ip extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     public const VERSION_4 = FILTER_FLAG_IPV4;
 
     public const VERSION_6 = FILTER_FLAG_IPV6;
@@ -110,7 +113,7 @@ class Ip extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

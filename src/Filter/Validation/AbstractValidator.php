@@ -16,6 +16,8 @@ namespace Phalcon\Filter\Validation;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Exceptions\FieldNotPrintable;
+use Phalcon\Filter\Validation\Exceptions\InvalidDomainOption;
+use Phalcon\Filter\Validation\Exceptions\InvalidStrictOption;
 use Phalcon\Messages\Message;
 use Phalcon\Support\Traits\WeakTypesTrait;
 use Stringable;
@@ -24,6 +26,7 @@ use function array_merge;
 use function get_class;
 use function implode;
 use function is_array;
+use function is_bool;
 use function is_object;
 use function is_string;
 use function method_exists;
@@ -302,6 +305,59 @@ abstract class AbstractValidator implements ValidatorInterface
         }
 
         return $value;
+    }
+
+    /**
+     * Returns the list of values of the "domain" option for the field
+     *
+     * @param int|string $field
+     *
+     * @return array<array-key, mixed>
+     * @throws InvalidDomainOption
+     */
+    protected function getDomainOption(mixed $field): array
+    {
+        /** @phpstan-var array<array-key, mixed>|null $domain */
+        $domain = $this->getOption("domain");
+
+        if (isset($domain[$field])) {
+            $fieldDomain = $domain[$field];
+            if (is_array($fieldDomain)) {
+                $domain = $fieldDomain;
+            }
+        }
+
+        if (!is_array($domain)) {
+            throw new InvalidDomainOption();
+        }
+
+        return $domain;
+    }
+
+    /**
+     * Returns the "strict" option for the field. The default is false.
+     *
+     * @param int|string $field
+     *
+     * @throws InvalidStrictOption
+     */
+    protected function getStrictOption(mixed $field): bool
+    {
+        $strict = false;
+
+        if ($this->hasOption("strict")) {
+            $strict = $this->getOption("strict");
+
+            if (is_array($strict)) {
+                $strict = $strict[$field];
+            }
+
+            if (!is_bool($strict)) {
+                throw new InvalidStrictOption();
+            }
+        }
+
+        return $strict;
     }
 
     /**

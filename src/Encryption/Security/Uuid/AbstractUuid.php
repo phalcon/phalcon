@@ -17,12 +17,15 @@ declare(strict_types=1);
 namespace Phalcon\Encryption\Security\Uuid;
 
 use DateTimeImmutable;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Shared base for all UUID version objects.
  */
 abstract class AbstractUuid implements UuidInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @var string
      */
@@ -102,12 +105,10 @@ abstract class AbstractUuid implements UuidInterface
      */
     protected function namespaceToBytes(string $uuid): string
     {
-        /** @phpstan-var string $bytes */
-        $bytes = hex2bin(
-            str_replace("-", "", $uuid)
-        );
-
-        return $bytes;
+        /**
+         * cphalcon returns the false of a failed conversion with no change
+         */
+        return self::weakReturnString(hex2bin(str_replace("-", "", $uuid)));
     }
 
     /**

@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function ctype_alnum;
 
@@ -57,6 +58,8 @@ use function ctype_alnum;
  */
 class Alnum extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must contain only letters and numbers";
 
     /**
@@ -81,7 +84,7 @@ class Alnum extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if (true === $this->allowEmpty($field, $value)) {
             return true;
         }

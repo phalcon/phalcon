@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator\File\Size;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\Validator\File\AbstractFile;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Checks if a value has a correct file
@@ -65,6 +66,8 @@ use Phalcon\Filter\Validation\Validator\File\AbstractFile;
  */
 class Equal extends AbstractFile
 {
+    use WeakTypesTrait;
+
     protected $template = "File :field does not have the exact :size file size";
 
     /**
@@ -82,7 +85,7 @@ class Equal extends AbstractFile
          * @var string $field
          */
         // Check file upload
-        if (true !== $this->checkUpload($validation, $field)) {
+        if (true !== self::weakCallMethod($this, 'checkUpload', [$validation, $field])) {
             return false;
         }
 
@@ -92,16 +95,19 @@ class Equal extends AbstractFile
          *
          * @var filter_uploaded_file $value
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         /** @phpstan-var string $size */
-        $size  = $this->checkArray($this->getOption("size"), $field);
+        $size  = self::weakCallMethod($this, 'checkArray', [$this->getOption("size"), $field]);
 
-        $bytes    = round($this->getFileSizeInBytes($size), 6);
-        $fileSize = round(floatval($value["size"]), 6);
+        /** @var float $sizeInBytes */
+        $sizeInBytes = self::weakCallMethod($this, 'getFileSizeInBytes', [$size]);
+        $bytes       = round($sizeInBytes, 6);
+        $fileSize    = round(floatval($value["size"]), 6);
 
-        $included = (bool)$this->checkArray(
-            $this->getOption("included", false),
-            $field
+        $included = (bool)self::weakCallMethod(
+            $this,
+            'checkArray',
+            [$this->getOption("included", false), $field]
         );
 
         if (true === $this->getConditional($bytes, $fileSize, $included)) {

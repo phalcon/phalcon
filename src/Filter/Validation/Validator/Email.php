@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function filter_var;
 
@@ -73,6 +74,8 @@ use const FILTER_VALIDATE_EMAIL;
  */
 class Email extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field must be an email address";
 
     /**
@@ -97,7 +100,7 @@ class Email extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if (true === $this->allowEmpty($field, $value)) {
             return true;
         }

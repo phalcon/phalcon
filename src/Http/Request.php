@@ -30,6 +30,7 @@ use Phalcon\Http\Request\Exceptions\SanitizerNotFound;
 use Phalcon\Http\Request\File;
 use Phalcon\Http\Request\FileInterface;
 use Phalcon\Support\Helper\Json\Decode;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 use stdClass;
 
@@ -99,6 +100,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
 {
     use EventsAwareTrait;
     use FileTrait;
+    use WeakTypesTrait;
 
     protected AttributeBag | null $attributes       = null;
 
@@ -466,10 +468,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         $name = strtoupper(strtr($header, '-', '_'));
 
         if (isset($_SERVER[$name])) {
-            /** @var string $value */
-            $value = $_SERVER[$name];
-
-            return $value;
+            /**
+             * cphalcon returns the value with no change
+             */
+            return self::weakReturnString($_SERVER[$name]);
         }
 
         if (isset($_SERVER['HTTP_' . $name])) {
@@ -926,10 +928,12 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
      */
     public function getServer(string $name): string | null
     {
-        /** @var string|null $value */
         $value = $_SERVER[$name] ?? null;
 
-        return $value;
+        /**
+         * cphalcon returns the value with no change
+         */
+        return null === $value ? null : self::weakReturnString($value);
     }
 
     /**
@@ -1401,8 +1405,10 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         /** @var Filter $filterService */
         $filterService = $this->getFilterService();
         foreach ($filters as $sanitizer) {
-            if (true !== $filterService->has($sanitizer)) {
-                throw new SanitizerNotFound($sanitizer);
+            if (true !== self::weakCallMethod($filterService, 'has', [$sanitizer])) {
+                /** @var SanitizerNotFound $exception */
+                $exception = self::weakNew(SanitizerNotFound::class, [$sanitizer]);
+                throw $exception;
             }
         }
 
@@ -1417,7 +1423,9 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         }
 
         foreach ($localScope as $scopeMethod) {
-            $this->queryFilters[strtoupper($scopeMethod)][$name] = $filters;
+            /** @var string $upperScope */
+            $upperScope                                 = self::weakCallArray('strtoupper', [$scopeMethod]);
+            $this->queryFilters[$upperScope][$name]     = $filters;
         }
 
         return $this;

@@ -204,6 +204,38 @@ final class UniquenessTest extends AbstractDatabaseTestCase
     }
 
     /**
+     * The except option with keys that are not a list gives int attribute
+     * names.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/886
+     */
+    #[Group('mysql')]
+    #[Group('sqlite')]
+    public function testFilterValidationValidatorUniquenessExceptNonListKeys(): void
+    {
+        /** @var PDO $connection */
+        $connection = self::getPdoConnection();
+        $migration  = new ObjectsMigration($connection);
+        $migration->insert(1, 'one', 1);
+
+        $validation = new Validation();
+        $validation->add(
+            'obj_name',
+            new Uniqueness(
+                [
+                    'model'  => new Objects(),
+                    'except' => [1 => 'two'],
+                ]
+            )
+        );
+
+        $this->assertCount(1, $validation->validate(['obj_name' => 'one']));
+    }
+
+    /**
      * Tests Filter\Validation\Validator\Uniqueness with single field and multiple except
      *
      * @author Wojciech Ślawski <jurigag@gmail.com>

@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Messages;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
 
@@ -50,6 +51,8 @@ use const UPLOAD_ERR_NO_FILE;
  */
 class Files extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     /**
      * Whole-field empty check: true when the field carries no uploaded files.
      */
@@ -90,7 +93,7 @@ class Files extends AbstractValidator
          *
          * @var string $field
          */
-        $value     = $validation->getValue($field);
+        $value     = self::weakCallMethod($validation, 'getValue', [$field]);
         $files     = $this->normalizeFiles($value);
         $validator = new File($this->options);
 

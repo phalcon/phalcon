@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function preg_match;
 
@@ -57,6 +58,8 @@ use function preg_match;
  */
 class Numericality extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field does not have a valid numeric format";
 
     /**
@@ -82,7 +85,7 @@ class Numericality extends AbstractValidator
          * @var string $field
          */
         // Dump spaces in the string if we have any
-        $value   = $validation->getValue($field);
+        $value   = self::weakCallMethod($validation, 'getValue', [$field]);
         //        $value   = str_replace(" ", "", $value);
         $pattern = "/((^[-]?[0-9,]+(\\.[0-9]+)?$)|(^[-]?[0-9.]+(,[0-9]+)?$))/";
 

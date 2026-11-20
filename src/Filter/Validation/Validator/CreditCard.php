@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_reverse;
 use function array_sum;
@@ -59,6 +60,8 @@ use function str_split;
  */
 class CreditCard extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field is not valid for a credit card number";
 
     /**
@@ -83,7 +86,7 @@ class CreditCard extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

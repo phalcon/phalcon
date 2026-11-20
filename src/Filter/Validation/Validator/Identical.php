@@ -16,6 +16,7 @@ namespace Phalcon\Filter\Validation\Validator;
 use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
 
@@ -62,6 +63,8 @@ use function is_array;
  */
 class Identical extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     protected $template = "Field :field does not have the expected value";
 
     /**
@@ -88,7 +91,7 @@ class Identical extends AbstractValidator
          */
         $accepted = false;
         $valid    = false;
-        $value    = $validation->getValue($field);
+        $value    = self::weakCallMethod($validation, 'getValue', [$field]);
         if ($this->allowEmpty($field, $value)) {
             return true;
         }

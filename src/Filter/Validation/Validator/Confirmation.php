@@ -18,6 +18,7 @@ use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Filter\Validation\Exceptions\MissingMbstring;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 
 use function is_array;
@@ -68,6 +69,7 @@ use function strcmp;
 class Confirmation extends AbstractValidator
 {
     use InfoTrait;
+    use WeakTypesTrait;
 
     protected $template = "Field :field must be the same as :with";
 
@@ -105,8 +107,8 @@ class Confirmation extends AbstractValidator
          * @var string $fieldWith
          */
 
-        $value     = $validation->getValue($field);
-        $valueWith = $validation->getValue($fieldWith);
+        $value     = self::weakCallMethod($validation, 'getValue', [$field]);
+        $valueWith = self::weakCallMethod($validation, 'getValue', [$fieldWith]);
 
         if (
             $this->rejectNonStringable($validation, $field, $value)

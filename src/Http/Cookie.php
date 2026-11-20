@@ -24,6 +24,7 @@ use Phalcon\Http\Cookie\Exceptions\CryptServiceUnavailable;
 use Phalcon\Http\Cookie\Exceptions\FilterServiceUnavailable;
 use Phalcon\Http\Traits\EncryptionAwareTrait;
 use Phalcon\Session\ManagerInterface as SessionManagerInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use Stringable;
 
@@ -43,6 +44,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
 {
     use EncryptionAwareTrait;
     use GetTrait;
+    use WeakTypesTrait;
 
     protected FilterInterface | null $filter = null;
 
@@ -353,7 +355,7 @@ class Cookie extends AbstractInjectionAware implements CookieInterface, Stringab
          */
         $options = $this->getCookieOptions($this->expire);
 
-        setcookie($this->name, $encryptValue, $options);
+        self::weakCallArray('setcookie', [$this->name, $encryptValue, $options]);
 
         return $this;
     }

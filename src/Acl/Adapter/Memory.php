@@ -47,7 +47,6 @@ use function is_array;
 use function is_callable;
 use function is_object;
 use function is_string;
-use function str_contains;
 use function trigger_error;
 
 use const E_USER_WARNING;
@@ -241,7 +240,8 @@ class Memory extends AbstractAdapter
         if ($componentValue instanceof ComponentInterface) {
             $componentObject = $componentValue;
         } else {
-            $componentObject = new Component($componentValue);
+            /** @var Component $componentObject */
+            $componentObject = self::weakNew(Component::class, [$componentValue]);
         }
 
         $componentName = $componentObject->getName();
@@ -280,11 +280,12 @@ class Memory extends AbstractAdapter
 
         /** @var array<int|string, string> $accessList */
         foreach ($accessList as $accessName) {
-            if (str_contains($accessName, '!')) {
+            if (self::weakCallArray('str_contains', [$accessName, '!'])) {
                 throw new ForbiddenDelimiter('access');
             }
 
-            $accessKey = $this->buildAccessKey($componentName, $accessName);
+            /** @var string $accessKey */
+            $accessKey = self::weakCallMethod($this, 'buildAccessKey', [$componentName, $accessName]);
             if (!isset($this->accessList[$accessKey])) {
                 $this->accessList[$accessKey] = true;
             }
@@ -354,7 +355,9 @@ class Memory extends AbstractAdapter
              */
             /** @var string $roleInheritName */
             if (!isset($this->roles[$roleInheritName])) {
-                throw new RoleNotFoundException($roleInheritName);
+                /** @var RoleNotFoundException $exception */
+                $exception = self::weakNew(RoleNotFoundException::class, [$roleInheritName]);
+                throw $exception;
             }
 
             if ($roleName === $roleInheritName) {
@@ -391,7 +394,9 @@ class Memory extends AbstractAdapter
 
                     $usedRoleToInherits[$checkRoleToInherit] = true;
                     if ($roleName === $checkRoleToInherit) {
-                        throw new CircularInheritanceError($roleInheritName);
+                        /** @var CircularInheritanceError $exception */
+                        $exception = self::weakNew(CircularInheritanceError::class, [$roleInheritName]);
+                        throw $exception;
                     }
 
                     /**
@@ -558,7 +563,8 @@ class Memory extends AbstractAdapter
 
         /** @var array<string> $localAccess */
         foreach ($localAccess as $accessName) {
-            $accessKey = $this->buildAccessKey($componentName, $accessName);
+            /** @var string $accessKey */
+            $accessKey = self::weakCallMethod($this, 'buildAccessKey', [$componentName, $accessName]);
             if (isset($this->accessList[$accessKey])) {
                 unset($this->accessList[$accessKey]);
             }
@@ -683,8 +689,8 @@ class Memory extends AbstractAdapter
             $componentName = $this->toComponentName($componentName);
         }
 
-        $this->activeRole      = $roleName;
-        $this->activeComponent = $componentName;
+        self::weakWrite($this, 'activeRole', $roleName);
+        self::weakWrite($this, 'activeComponent', $componentName);
         $this->activeAccess    = $access;
         $this->activeKey       = null;
         $this->activeFunction  = null;
@@ -711,7 +717,8 @@ class Memory extends AbstractAdapter
         /**
          * Check if there is a direct combination for role-component-access
          */
-        $accessKey = $this->canAccess($roleName, $componentName, $access);
+        /** @var false|string $accessKey */
+        $accessKey = self::weakCallMethod($this, 'canAccess', [$roleName, $componentName, $access]);
         if (false !== $accessKey && isset($this->access[$accessKey])) {
             $haveAccess = $this->access[$accessKey];
             $funcAccess = $this->functions[$accessKey] ?? null;
@@ -725,22 +732,31 @@ class Memory extends AbstractAdapter
              * Change activeKey to most narrow if there was no access for any
              * patterns found
              */
-            $this->activeKey = $this->buildKey($roleName, $componentName, $access);
+            self::weakWrite(
+                $this,
+                'activeKey',
+                self::weakCallMethod($this, 'buildKey', [$roleName, $componentName, $access])
+            );
 
             $allowed = $this->defaultAccess === Enum::ALLOW;
         } elseif (is_callable($funcAccess)) {
             /**
              * If we have funcAccess then do all the checks for it
              */
-            $allowed = $this->invokeRule(
-                $funcAccess,
-                $haveAccess,
-                $parameters,
-                $roleObject,
-                $componentObject,
-                $roleName,
-                $componentName,
-                $access
+            /** @var bool $allowed */
+            $allowed = self::weakCallMethod(
+                $this,
+                'invokeRule',
+                [
+                    $funcAccess,
+                    $haveAccess,
+                    $parameters,
+                    $roleObject,
+                    $componentObject,
+                    $roleName,
+                    $componentName,
+                    $access,
+                ]
             );
         } else {
             $allowed = $haveAccess == Enum::ALLOW;
@@ -826,14 +842,23 @@ class Memory extends AbstractAdapter
 
         if (is_array($access)) {
             foreach ($access as $accessName) {
-                $accessKey = $this->buildAccessKey($componentName, $accessName);
+                /** @var string $accessKey */
+                $accessKey = self::weakCallMethod($this, 'buildAccessKey', [$componentName, $accessName]);
                 if (!isset($accessList[$accessKey])) {
-                    throw new AccessRuleNotFound($accessName, $componentName);
+                    /** @var AccessRuleNotFound $exception */
+                    $exception = self::weakNew(AccessRuleNotFound::class, [$accessName, $componentName]);
+                    throw $exception;
                 }
             }
 
             foreach ($access as $accessName) {
-                $accessKey                = $this->buildKey($roleName, $componentName, $accessName);
+                /** @var string $accessKey */
+                $accessKey = self::weakCallMethod(
+                    $this,
+                    'buildKey',
+                    [$roleName, $componentName, $accessName]
+                );
+
                 $this->access[$accessKey] = $action;
                 if (null !== $func) {
                     $this->functions[$accessKey] = $func;
@@ -841,13 +866,17 @@ class Memory extends AbstractAdapter
             }
         } else {
             if ('*' !== $access) {
-                $accessKey = $this->buildAccessKey($componentName, $access);
+                /** @var string $accessKey */
+                $accessKey = self::weakCallMethod($this, 'buildAccessKey', [$componentName, $access]);
                 if (!isset($accessList[$accessKey])) {
-                    throw new AccessRuleNotFound($access, $componentName);
+                    /** @var AccessRuleNotFound $exception */
+                    $exception = self::weakNew(AccessRuleNotFound::class, [$access, $componentName]);
+                    throw $exception;
                 }
             }
 
-            $accessKey = $this->buildKey($roleName, $componentName, $access);
+            /** @var string $accessKey */
+            $accessKey = self::weakCallMethod($this, 'buildKey', [$roleName, $componentName, $access]);
 
             /**
              * Define the access action for the specified accessKey

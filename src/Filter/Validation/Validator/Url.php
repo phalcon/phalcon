@@ -86,7 +86,7 @@ class Url extends AbstractValidator
          *
          * @var string $field
          */
-        $value = $validation->getValue($field);
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
         if (true === $this->allowEmpty($field, $value)) {
             return true;
         }

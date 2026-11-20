@@ -13,13 +13,17 @@ declare(strict_types=1);
 
 namespace Phalcon\Filter\Validation\Validator\File;
 
+use Phalcon\Contracts\Filter\FilterTypes;
 use Phalcon\Filter\Validation;
 use Phalcon\Filter\Validation\AbstractValidator;
 use Phalcon\Messages\Message;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_keys;
+use function explode;
 use function floatval;
 use function get_class;
+use function getimagesize;
 use function implode;
 use function is_array;
 use function is_uploaded_file;
@@ -68,9 +72,13 @@ use const UPLOAD_ERR_OK;
  *     )
  * );
  * ```
+ *
+ * @phpstan-import-type filter_uploaded_file from FilterTypes
  */
 abstract class AbstractFile extends AbstractValidator
 {
+    use WeakTypesTrait;
+
     /**
      * Empty is empty
      */
@@ -340,5 +348,59 @@ abstract class AbstractFile extends AbstractValidator
     protected function checkIsUploadedFile(string $name): bool
     {
         return is_uploaded_file($name);
+    }
+
+    /**
+     * Returns the option value ("WIDTHxHEIGHT") of the field, the width and
+     * the height
+     *
+     * @param int|string $field
+     *
+     * @return array{0: string, 1: string, 2: string}
+     */
+    protected function getDimensionsOption(mixed $field, string $name): array
+    {
+        $option = $this->getOption($name);
+
+        if (is_array($option)) {
+            $option = $option[$field];
+        }
+
+        /** @phpstan-var string $option */
+        $parts = explode("x", $option);
+
+        return [$option, $parts[0], $parts[1]];
+    }
+
+    /**
+     * Returns the size of the uploaded image, or false if the upload is not
+     * valid or the file is not an image. If the file is not an image, appends
+     * the "file is not valid" message.
+     *
+     * @return array{0: int, 1: int}|false
+     */
+    protected function getUploadedImageSize(
+        Validation $validation,
+        mixed $field
+    ): array | false {
+        if (false === self::weakCallMethod($this, 'checkUpload', [$validation, $field])) {
+            return false;
+        }
+
+        /**
+         * `checkUpload()` rejects anything that is not a usable uploaded
+         * file, so the value is a $_FILES entry from here on.
+         *
+         * @var filter_uploaded_file $value
+         */
+        $value = self::weakCallMethod($validation, 'getValue', [$field]);
+        $size  = getimagesize($value["tmp_name"]);
+
+        // The file cannot be read as an image
+        if (false === $size) {
+            self::weakCallMethod($this, 'appendMessageValid', [$validation, $field]);
+        }
+
+        return $size;
     }
 }

@@ -20,6 +20,7 @@ use Phalcon\Acl\Role;
 use Phalcon\Contracts\Acl\AclTypes;
 use Phalcon\Contracts\Acl\Adapter\Persistable;
 use Phalcon\Storage\Adapter\AdapterInterface as StorageInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function array_keys;
@@ -49,6 +50,8 @@ use function is_object;
  */
 class Storage extends Memory implements Persistable
 {
+    use WeakTypesTrait;
+
     public const SNAPSHOT_VERSION = 1;
 
     public function __construct(
@@ -132,12 +135,16 @@ class Storage extends Memory implements Persistable
         try {
             $roles = [];
             foreach ($data['roles'] as $name => $description) {
-                $roles[$name] = new Role((string) $name, $description);
+                /** @var Role $role */
+                $role          = self::weakNew(Role::class, [(string) $name, $description]);
+                $roles[$name]  = $role;
             }
 
             $components = [];
             foreach ($data['components'] as $name => $description) {
-                $components[$name] = new Component((string) $name, $description);
+                /** @var Component $component */
+                $component         = self::weakNew(Component::class, [(string) $name, $description]);
+                $components[$name] = $component;
             }
         } catch (Throwable $e) {
             throw new InvalidSnapshot(

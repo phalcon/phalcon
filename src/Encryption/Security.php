@@ -177,7 +177,8 @@ class Security extends AbstractInjectionAware implements SecurityContract
          * The value is the same?
          */
         /** @phpstan-var string|null $tokenValue */
-        $userToken  = $this->processUserToken($tokenKey, $tokenValue);
+        /** @var string|null $userToken */
+        $userToken  = self::weakCallMethod($this, 'processUserToken', [$tokenKey, $tokenValue]);
         $knownToken = $this->getRequestToken();
         if (null === $knownToken || null === $userToken) {
             return false;
