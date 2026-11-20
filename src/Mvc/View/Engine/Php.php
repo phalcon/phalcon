@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
+use Phalcon\Support\Traits\WeakTypesTrait;
+
 use function extract;
 use function get_defined_vars;
 use function is_array;
@@ -24,6 +26,8 @@ use function ob_get_contents;
  */
 class Php extends AbstractEngine
 {
+    use WeakTypesTrait;
+
     /**
      * Renders a view using the template engine
      */
@@ -60,10 +64,7 @@ class Php extends AbstractEngine
 
         if (true === $mustClean) {
             // The view starts the buffer before it calls the engine.
-            /** @var string $contents */
-            $contents = ob_get_contents();
-
-            $this->view->setContent($contents);
+            self::weakCallMethod($this->view, 'setContent', [ob_get_contents()]);
         }
     }
 }

@@ -19,6 +19,7 @@ use Phalcon\Events\Exception as EventsException;
 use Phalcon\Mvc\Router;
 use Phalcon\Mvc\Router\Exceptions\AnnotationsServiceUnavailable;
 use Phalcon\Mvc\Router\Exceptions\InvalidCallbackParameter;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 
 use function array_pop;
@@ -64,6 +65,7 @@ use function substr;
 class Annotations extends Router
 {
     use UncamelizeTrait;
+    use WeakTypesTrait;
 
     /**
      * @phpstan-var callable|string|null
@@ -354,7 +356,8 @@ class Annotations extends Router
         }
 
         /** @var string $proxyActionName */
-        $actionName = strtolower($proxyActionName);
+        /** @var string $actionName */
+        $actionName = self::weakCallArray('strtolower', [$proxyActionName]);
 
         /**
          * Check for existing paths in the annotation
@@ -407,7 +410,8 @@ class Annotations extends Router
          *
          * @var array<string, int|string> $paths
          */
-        $route = $this->add($uri, $paths);
+        /** @var RouteInterface $route */
+        $route = self::weakCallMethod($this, 'add', [$uri, $paths]);
 
         /**
          * Add HTTP constraint methods
@@ -476,9 +480,11 @@ class Annotations extends Router
          * @RoutePrefix add a prefix for all the routes defined in the model
          */
         if ($annotation->getName() == "RoutePrefix") {
-            /** @var string|null $routePrefix */
-            $routePrefix       = $this->resolveArgument($annotation, "prefix");
-            $this->routePrefix = $routePrefix;
+            self::weakWrite(
+                $this,
+                'routePrefix',
+                $this->resolveArgument($annotation, "prefix")
+            );
         }
     }
 

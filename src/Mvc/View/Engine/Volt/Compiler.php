@@ -59,6 +59,7 @@ use function implode;
 use function is_array;
 use function is_bool;
 use function is_object;
+use function is_scalar;
 use function is_string;
 use function lcfirst;
 use function method_exists;
@@ -1962,13 +1963,9 @@ class Compiler implements InjectionAwareInterface
                  */
                 if ($definition instanceof Closure) {
                     // A user function closure returns the compiled call.
-                    /** @var string $compiled */
-                    $compiled = call_user_func_array(
-                        $definition,
-                        [$arguments, $funcArguments]
+                    return self::weakReturnString(
+                        call_user_func_array($definition, [$arguments, $funcArguments])
                     );
-
-                    return $compiled;
                 }
 
                 // The parser records the origin of every node.
@@ -2211,7 +2208,11 @@ class Compiler implements InjectionAwareInterface
         /** @var string|null $value */
         $value = $this->options[$option] ?? null;
 
-        return $value;
+        /**
+         * cphalcon returns the value with no change. In weak mode, a scalar
+         * value becomes a string.
+         */
+        return is_scalar($value) ? self::weakReturnString($value) : $value;
     }
 
     /**
@@ -2725,13 +2726,9 @@ class Compiler implements InjectionAwareInterface
              */
             if ($definition instanceof Closure) {
                 // A user filter closure returns the compiled call.
-                /** @var string $compiled */
-                $compiled = call_user_func_array(
-                    $definition,
-                    [$arguments, $funcArguments]
+                return self::weakReturnString(
+                    call_user_func_array($definition, [$arguments, $funcArguments])
                 );
-
-                return $compiled;
             }
 
             /**

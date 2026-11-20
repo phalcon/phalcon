@@ -807,19 +807,19 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
         // Check if we need to forward to another namespace
         if (isset($forward["namespace"])) {
-            $this->namespaceName = $forward["namespace"];
+            self::weakWrite($this, 'namespaceName', $forward["namespace"]);
         }
 
         // Check if we need to forward to another controller.
         if (isset($forward["controller"])) {
-            $this->handlerName = $forward["controller"];
+            self::weakWrite($this, 'handlerName', $forward["controller"]);
         } elseif (isset($forward["task"])) {
-            $this->handlerName = $forward["task"];
+            self::weakWrite($this, 'handlerName', $forward["task"]);
         }
 
         // Check if we need to forward to another action
         if (isset($forward["action"])) {
-            $this->actionName = $forward["action"];
+            self::weakWrite($this, 'actionName', $forward["action"]);
         }
 
         // Check if we need to forward changing the current parameters
