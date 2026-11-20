@@ -28,6 +28,7 @@ use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function array_merge;
@@ -67,6 +68,8 @@ use function preg_replace;
  */
 abstract class AbstractPdo extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     public const BIND_PATTERN = "/\\?([0-9]+)|:([a-zA-Z0-9_]+):/";
 
     /**
@@ -381,12 +384,12 @@ abstract class AbstractPdo extends AbstractAdapter
         $dsnAttributes = implode(";", $dsnParts);
 
         // Create the connection using PDO
-        $this->pdo = new PDO(
-            $this->type . ":" . $dsnAttributes,
-            $userName,
-            $password,
-            $options
+        /** @var PDO $pdo */
+        $pdo       = self::weakNew(
+            PDO::class,
+            [$this->type . ":" . $dsnAttributes, $userName, $password, $options]
         );
+        $this->pdo = $pdo;
     }
 
     /**

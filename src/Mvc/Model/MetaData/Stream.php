@@ -19,6 +19,7 @@ use Phalcon\Mvc\Model\MetaData;
 use Phalcon\Mvc\Model\MetaData\Exceptions\MetaDataDirectoryNotWritable;
 use Phalcon\Support\Settings;
 use Phalcon\Support\Traits\FilePathTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_key_exists;
@@ -46,6 +47,7 @@ class Stream extends MetaData
 {
     use FilePathTrait;
     use FileTrait;
+    use WeakTypesTrait;
 
     protected string $metaDataDir = "./";
 
@@ -57,10 +59,7 @@ class Stream extends MetaData
     public function __construct(array $options = [])
     {
         if (true === array_key_exists("metaDataDir", $options)) {
-            /** @var string $metaDataDir */
-            $metaDataDir = $options["metaDataDir"];
-
-            $this->metaDataDir = $metaDataDir;
+            self::weakWrite($this, 'metaDataDir', $options["metaDataDir"]);
         }
     }
 
@@ -75,12 +74,8 @@ class Stream extends MetaData
             return null;
         }
 
-        /**
-         * The interface declares the key as a string.
-         *
-         * @var string $key
-         */
-        $path = $this->getFilePath($key);
+        /** @var string $path */
+        $path = self::weakCallMethod($this, 'getFilePath', [$key]);
         if (false === $this->phpFileExists($path)) {
             return null;
         }
@@ -120,7 +115,8 @@ class Stream extends MetaData
          */
         $option = Settings::get('orm.exception_on_failed_metadata_save');
         try {
-            $path    = $this->getFilePath($key);
+            /** @var string $path */
+            $path    = self::weakCallMethod($this, 'getFilePath', [$key]);
             $tmpPath = $path . '.tmp.' . (string) getmypid();
 
             /**

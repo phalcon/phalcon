@@ -20,6 +20,7 @@ use Phalcon\Db\Exceptions\ColumnTypeRequired;
 use Phalcon\Db\Exceptions\GeneratedAutoIncrementConflict;
 use Phalcon\Db\Exceptions\GeneratedDefaultConflict;
 use Phalcon\Db\Exceptions\InvalidGenerationExpression;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Allows to define columns to be used on create or alter table operations
@@ -49,6 +50,8 @@ use Phalcon\Db\Exceptions\InvalidGenerationExpression;
  */
 class Column implements ColumnInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Bind Type Blob
      */
@@ -446,9 +449,7 @@ class Column implements ColumnInterface
             throw new ColumnTypeRequired();
         }
 
-        $this->after         = $definition["after"] ?? null;
         $this->bindType      = $definition["bindType"] ?? 2;
-        $this->comment       = $definition["comment"] ?? null;
         $this->defaultValue  = $definition["default"] ?? null;
         $this->first         = (bool)($definition["first"] ?? false);
         $this->notNull       = (bool)($definition["notNull"] ?? true);
@@ -459,6 +460,9 @@ class Column implements ColumnInterface
         $this->type          = $this->processColumnType($definition["type"]);
         $this->typeReference = $definition["typeReference"] ?? -1;
         $this->typeValues    = $definition["typeValues"] ?? [];
+
+        self::weakWrite($this, 'after', $definition["after"] ?? null);
+        self::weakWrite($this, 'comment', $definition["comment"] ?? null);
 
         /**
          * Check if the column has a decimal scale

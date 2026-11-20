@@ -25,6 +25,7 @@ use Phalcon\Db\Exceptions\MysqlOnConflictNotSupported;
 use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function implode;
 use function is_array;
@@ -39,6 +40,7 @@ use function substr;
 class Mysql extends Dialect
 {
     use TextTrait;
+    use WeakTypesTrait;
 
     protected string | null $escapeChar = "`";
 
@@ -692,9 +694,9 @@ class Mysql extends Dialect
                     if (is_array($typeValues)) {
                         $valueSql = "";
                         foreach ($typeValues as $value) {
-                            $valueSql .= "'"
-                                . $this->escapeStringLiteral($value)
-                                . "', ";
+                            /** @var string $escapedValue */
+                            $escapedValue = self::weakCallMethod($this, 'escapeStringLiteral', [$value]);
+                            $valueSql    .= "'" . $escapedValue . "', ";
                         }
 
                         $columnSql .= "("

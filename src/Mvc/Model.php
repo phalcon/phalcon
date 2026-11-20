@@ -112,6 +112,8 @@ use function substr;
 use function trigger_error;
 use function unserialize;
 
+use const E_USER_WARNING;
+
 /**
  * Phalcon\Mvc\Model connects business objects and database tables to create a
  * persistable domain model where logic and data are presented in one wrapping.
@@ -768,6 +770,11 @@ abstract class Model extends AbstractInjectionAware implements
              * Update the objects properties
              */
             foreach ($properties as $key => $value) {
+                if (!is_string($key)) {
+                    trigger_error('Property should be string', E_USER_WARNING);
+                    continue;
+                }
+
                 self::weakWrite($this, $key, $value);
             }
         }
@@ -4019,13 +4026,17 @@ abstract class Model extends AbstractInjectionAware implements
 
         if (is_array($elements)) {
             foreach ($elements as $alias) {
-                $this->syncRelated[strtolower($alias)] = $enabled;
+                /** @var string $lowerAlias */
+                $lowerAlias                     = self::weakCallArray('strtolower', [$alias]);
+                $this->syncRelated[$lowerAlias] = $enabled;
             }
 
             return $this;
         }
 
-        $this->syncRelated[strtolower($elements)] = $enabled;
+        /** @var string $lowerElements */
+        $lowerElements                     = self::weakCallArray('strtolower', [$elements]);
+        $this->syncRelated[$lowerElements] = $enabled;
 
         return $this;
     }
@@ -4255,6 +4266,11 @@ abstract class Model extends AbstractInjectionAware implements
                  * Update the objects properties
                  */
                 foreach ($properties as $key => $value) {
+                    if (!is_string($key)) {
+                        trigger_error('Property should be string', E_USER_WARNING);
+                        continue;
+                    }
+
                     try {
                         self::weakWrite($this, $key, $value);
                     } catch (\TypeError) {
@@ -4669,8 +4685,10 @@ abstract class Model extends AbstractInjectionAware implements
                     $messageField = $fields;
                 }
 
-                $this->appendMessage(
-                    new Message(
+                /** @var Message $constraintMessage */
+                $constraintMessage = self::weakNew(
+                    Message::class,
+                    [
                         $message,
                         $messageField,
                         "ConstraintViolation",
@@ -4678,9 +4696,10 @@ abstract class Model extends AbstractInjectionAware implements
                         [
                             "model"          => get_class($this),
                             "referenceModel" => $relation->getReferencedModel(),
-                        ]
-                    )
+                        ],
+                    ]
                 );
+                $this->appendMessage($constraintMessage);
 
                 $error = true;
 
@@ -4851,8 +4870,10 @@ abstract class Model extends AbstractInjectionAware implements
                     $messageField = $fields;
                 }
 
-                $this->appendMessage(
-                    new Message(
+                /** @var Message $constraintMessage */
+                $constraintMessage = self::weakNew(
+                    Message::class,
+                    [
                         $message,
                         $messageField,
                         "ConstraintViolation",
@@ -4860,9 +4881,10 @@ abstract class Model extends AbstractInjectionAware implements
                         [
                             "model"          => get_class($this),
                             "referenceModel" => $relationClass,
-                        ]
-                    )
+                        ],
+                    ]
                 );
+                $this->appendMessage($constraintMessage);
 
                 $error = true;
 

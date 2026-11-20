@@ -13,8 +13,12 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\Model\Hydration;
 
+use Phalcon\Support\Traits\WeakTypesTrait;
+
 class CaseInsensitiveColumnMap
 {
+    use WeakTypesTrait;
+
     /**
      * Attempts to find key case-insensitively
      */
@@ -31,11 +35,14 @@ class CaseInsensitiveColumnMap
          */
         $keys = array_keys($columnMap);
         foreach ($keys as $cmKey) {
-            if (strtolower($cmKey) == strtolower($key)) {
-                return $cmKey;
+            if (
+                self::weakCallArray('strtolower', [$cmKey])
+                == self::weakCallArray('strtolower', [$key])
+            ) {
+                return self::weakReturnString($cmKey);
             }
         }
 
-        return $key;
+        return self::weakReturnString($key);
     }
 }

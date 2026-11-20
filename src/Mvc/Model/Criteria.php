@@ -21,12 +21,14 @@ use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Mvc\Model\Exceptions\InvalidModelName;
 use Phalcon\Mvc\Model\Query\BuilderInterface;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function abs;
 use function array_merge;
 use function implode;
 use function is_array;
 use function is_object;
+use function is_scalar;
 use function is_string;
 
 /**
@@ -55,6 +57,8 @@ use function is_string;
  */
 class Criteria implements CriteriaInterface, InjectionAwareInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var mvc_model_bind_params
      */
@@ -445,7 +449,13 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function getColumns(): array | string | null
     {
-        return $this->params["columns"] ?? null;
+        $columns = $this->params["columns"] ?? null;
+
+        /**
+         * cphalcon returns the value with no change. In weak mode, a scalar
+         * value becomes a string.
+         */
+        return is_scalar($columns) ? self::weakReturnString($columns) : $columns;
     }
 
     /**

@@ -18,6 +18,7 @@ use Phalcon\Db\Exceptions\ForeignKeyColumnsRequired;
 use Phalcon\Db\Exceptions\ReferencedColumnCountMismatch;
 use Phalcon\Db\Exceptions\ReferencedColumnsRequired;
 use Phalcon\Db\Exceptions\ReferencedTableRequired;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Allows to define reference constraints on tables
@@ -45,6 +46,8 @@ use Phalcon\Db\Exceptions\ReferencedTableRequired;
  */
 class Reference implements ReferenceInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Local reference columns
      *
@@ -113,10 +116,10 @@ class Reference implements ReferenceInterface
 
         $this->referencedColumns = $definition["referencedColumns"];
 
-        $this->schemaName       = $definition["schema"] ?? null;
-        $this->referencedSchema = $definition["referencedSchema"] ?? null;
-        $this->onDelete         = $definition["onDelete"] ?? null;
-        $this->onUpdate         = $definition["onUpdate"] ?? null;
+        self::weakWrite($this, 'schemaName', $definition["schema"] ?? null);
+        self::weakWrite($this, 'referencedSchema', $definition["referencedSchema"] ?? null);
+        self::weakWrite($this, 'onDelete', $definition["onDelete"] ?? null);
+        self::weakWrite($this, 'onUpdate', $definition["onUpdate"] ?? null);
 
         if (count($this->columns) !== count($this->referencedColumns)) {
             throw new ReferencedColumnCountMismatch();

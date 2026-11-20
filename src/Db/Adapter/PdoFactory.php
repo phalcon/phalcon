@@ -22,6 +22,7 @@ use Phalcon\Db\Adapter\Pdo\Sqlite;
 use Phalcon\Db\Exception;
 use Phalcon\Factory\AbstractFactory;
 use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type db_descriptor from DbTypes
@@ -29,6 +30,8 @@ use Phalcon\Support\Exception as SupportException;
  */
 class PdoFactory extends AbstractFactory
 {
+    use WeakTypesTrait;
+
     /**
      * Constructor.
      *
@@ -72,7 +75,8 @@ class PdoFactory extends AbstractFactory
 
         $options = $config["options"] ?? [];
 
-        return $this->newInstance($name, $options);
+        /** @var AdapterInterface */
+        return self::weakCallMethod($this, 'newInstance', [$name, $options]);
     }
 
     /**

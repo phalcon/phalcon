@@ -36,6 +36,7 @@ use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Stringable;
 
 use function array_keys;
@@ -112,6 +113,7 @@ use function strpos;
 abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
+    use WeakTypesTrait;
 
     /**
      * Connection ID
@@ -636,19 +638,14 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         string $schemaName,
         mixed $indexName
     ): bool {
-        /**
-         * The dialect accepts a string only and rejects any other type, as
-         * in cphalcon.
-         *
-         * @phpstan-var string $indexName
-         */
-        return $this->execute(
-            $this->dialect->dropIndex(
-                $tableName,
-                $schemaName,
-                $indexName
-            )
+        /** @var string $sql */
+        $sql = self::weakCallMethod(
+            $this->dialect,
+            'dropIndex',
+            [$tableName, $schemaName, $indexName]
         );
+
+        return $this->execute($sql);
     }
 
     /**
