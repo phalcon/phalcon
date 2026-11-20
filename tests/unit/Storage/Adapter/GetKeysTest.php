@@ -172,6 +172,20 @@ final class GetKeysTest extends AbstractUnitTestCase
     }
 
     /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterMemoryGetKeysNumericKey(): void
+    {
+        $adapter = new Memory(new SerializerFactory(), ['prefix' => '']);
+        $adapter->set('1', 'one');
+
+        $this->assertSame([], $adapter->getKeys());
+    }
+
+    /**
      * @issue  https://github.com/phalcon/cphalcon/issues/14190
      * @author ekmst <https://github.com/ekmst>
      * @since  2020-09-09
@@ -281,7 +295,6 @@ final class GetKeysTest extends AbstractUnitTestCase
         $obj1 = new stdClass();
         $obj2 = new stdClass();
         $obj3 = new stdClass();
-
 
         $adapter->set('key-1', $obj1);
         $adapter->set('key-2', $obj2);

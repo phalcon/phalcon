@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Translate\Adapter;
 
 use Phalcon\Contracts\Translate\TranslateTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Translate\Exception;
 use Phalcon\Translate\Exceptions\FileOpenError;
@@ -30,6 +31,7 @@ use function is_resource;
 class Csv extends AbstractAdapter
 {
     use FileTrait;
+    use WeakTypesTrait;
 
     /**
      * @phpstan-var translate_data
@@ -57,7 +59,11 @@ class Csv extends AbstractAdapter
         $enclosure = $options['enclosure'] ?? "\"";
         $escape    = $options['escape'] ?? "\\";
 
-        $this->load($options['content'], 0, $delimiter, $enclosure, $escape);
+        self::weakCallMethod(
+            $this,
+            'load',
+            [$options['content'], 0, $delimiter, $enclosure, $escape]
+        );
     }
 
     /**

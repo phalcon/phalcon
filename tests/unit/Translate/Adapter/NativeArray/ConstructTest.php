@@ -18,6 +18,7 @@ use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Translate\Fake\TranslateNativeArrayTrait;
 use Phalcon\Translate\Adapter\AdapterInterface;
 use Phalcon\Translate\Adapter\NativeArray;
+use Phalcon\Translate\Exceptions\InterpolatorNotRegistered;
 use Phalcon\Translate\Exceptions\InvalidDataType;
 use Phalcon\Translate\Exceptions\MissingContent;
 use Phalcon\Translate\InterpolatorFactory;
@@ -40,6 +41,43 @@ final class ConstructTest extends AbstractUnitTestCase
         $this->assertInstanceOf(ArrayAccess::class, $translator);
 
         $this->assertInstanceOf(AdapterInterface::class, $translator);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterNativeArrayConstructDefaultInterpolatorInt(): void
+    {
+        $this->expectException(InterpolatorNotRegistered::class);
+        $this->expectExceptionMessage('Service 1 is not registered');
+
+        $translator = new NativeArray(
+            new InterpolatorFactory(),
+            [
+                'content'             => ['hi' => 'Hello'],
+                'defaultInterpolator' => 1,
+            ]
+        );
+        $translator->query('hi');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterNativeArrayConstructValueInt(): void
+    {
+        $translator = new NativeArray(
+            new InterpolatorFactory(),
+            ['content' => ['max' => 10]]
+        );
+
+        $this->assertSame('10', $translator->query('max'));
     }
 
     /**

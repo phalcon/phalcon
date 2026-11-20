@@ -20,6 +20,7 @@ use Phalcon\Annotations\Adapter\Stream;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Contracts\Annotations\AnnotationsTypes;
 use Phalcon\Factory\AbstractFactory;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Factory to create annotations components
@@ -28,6 +29,8 @@ use Phalcon\Factory\AbstractFactory;
  */
 class AnnotationsFactory extends AbstractFactory
 {
+    use WeakTypesTrait;
+
     /**
      * AdapterFactory constructor.
      *
@@ -69,7 +72,8 @@ class AnnotationsFactory extends AbstractFactory
         /** @var annotations_options $options */
         $options = $config["options"] ?? [];
 
-        return $this->newInstance($name, $options);
+        /** @var AdapterInterface */
+        return self::weakCallMethod($this, 'newInstance', [$name, $options]);
     }
 
     /**

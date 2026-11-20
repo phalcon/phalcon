@@ -50,4 +50,24 @@ final class GetSetDirectoryTest extends AbstractUnitTestCase
         $actual   = $translator->getDirectory();
         $this->assertSame($expected, $actual);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterGettextGetSetDirectoryInt(): void
+    {
+        $params              = $this->getGettextConfig();
+        $params['directory'] = 123;
+
+        $translator = new Gettext(new InterpolatorFactory(), $params);
+
+        $this->assertInstanceOf(Gettext::class, $translator);
+
+        $translator->setDirectory(['messages' => 123]);
+
+        $this->assertInstanceOf(Gettext::class, $translator);
+    }
 }

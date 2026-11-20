@@ -17,6 +17,7 @@ use Phalcon\Contracts\Session\SessionTypes;
 use Phalcon\Session\Adapter\Exceptions\AdapterRuntimeError;
 use Phalcon\Session\Adapter\Exceptions\InvalidSavePath;
 use Phalcon\Session\Adapter\Exceptions\SavePathUnavailable;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Php\IniTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
@@ -57,6 +58,7 @@ class Stream extends Noop
     use FileTrait;
     use GetTrait;
     use IniTrait;
+    use WeakTypesTrait;
 
     /**
      * Session options
@@ -85,10 +87,7 @@ class Stream extends Noop
      */
     public function __construct(array $options = [])
     {
-        /** @var string $prefix */
-        $prefix = $this->getArrVal($options, 'prefix', '');
-
-        $this->prefix  = $prefix;
+        self::weakWrite($this, 'prefix', $this->getArrVal($options, 'prefix', ''));
         $this->options = $options;
 
         /**
@@ -103,11 +102,17 @@ class Stream extends Noop
             throw new InvalidSavePath();
         }
 
-        if (true !== $this->phpIsWritable($path)) {
-            throw new SavePathUnavailable($path);
+        if (true !== self::weakCallMethod($this, 'phpIsWritable', [$path])) {
+            /** @var SavePathUnavailable $exception */
+            $exception = self::weakNew(SavePathUnavailable::class, [$path]);
+            throw $exception;
         }
 
-        $this->path = $this->toDirSeparator($path);
+        self::weakWrite(
+            $this,
+            'path',
+            self::weakCallMethod($this, 'toDirSeparator', [$path])
+        );
     }
 
     public function destroy(string $id): bool

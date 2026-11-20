@@ -19,6 +19,7 @@ use Phalcon\Annotations\Reader;
 use Phalcon\Annotations\ReaderInterface;
 use Phalcon\Annotations\Reflection;
 use Phalcon\Contracts\Annotations\AnnotationsTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function count;
 use function get_class;
@@ -36,9 +37,12 @@ use function strcasecmp;
  *
  * @phpstan-import-type annotations_cache from AnnotationsTypes
  * @phpstan-import-type annotations_collection_map from AnnotationsTypes
+ * @phpstan-import-type annotations_reflection_data from AnnotationsTypes
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var annotations_cache
      */
@@ -81,14 +85,15 @@ abstract class AbstractAdapter implements AdapterInterface
         /**
          * Try to read the annotations from the adapter
          */
-        $classAnnotations = $this->read($realClassName);
+        $classAnnotations = self::weakCallMethod($this, 'read', [$realClassName]);
 
         if ($classAnnotations === null || $classAnnotations === false) {
             /**
              * Get the annotations reader
              */
             $reader            = $this->getReader();
-            $parsedAnnotations = $reader->parse($realClassName);
+            /** @var annotations_reflection_data $parsedAnnotations */
+            $parsedAnnotations = self::weakCallMethod($reader, 'parse', [$realClassName]);
 
             if (
                 $this->annotationsLimit > 0 &&

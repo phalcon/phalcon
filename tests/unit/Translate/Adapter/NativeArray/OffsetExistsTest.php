@@ -35,4 +35,20 @@ final class OffsetExistsTest extends AbstractUnitTestCase
 
         $this->assertTrue($translator->offsetExists('hi'));
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testTranslateAdapterNativeArrayOffsetExistsIntKey(): void
+    {
+        $translator = new NativeArray(
+            new InterpolatorFactory(),
+            ['content' => ['404' => 'Not found']]
+        );
+
+        $this->assertTrue(isset($translator[404]));
+    }
 }

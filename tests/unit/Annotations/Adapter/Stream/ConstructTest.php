@@ -34,4 +34,17 @@ final class ConstructTest extends AbstractUnitTestCase
 
         $this->assertInstanceOf(AdapterInterface::class, $adapter);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testAnnotationsAdapterStreamConstructAnnotationsDirInt(): void
+    {
+        $adapter = new Stream(['annotationsDir' => 123]);
+
+        $this->assertFalse($adapter->read('missing'));
+    }
 }

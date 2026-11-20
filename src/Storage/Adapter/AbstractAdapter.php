@@ -25,6 +25,7 @@ use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 
 use function is_object;
+use function is_string;
 use function mb_strtolower;
 use function method_exists;
 
@@ -106,16 +107,18 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
          * Lets set some defaults and options here
          */
         $this->allowedClasses    = $allowedClasses;
-        $this->defaultSerializer = mb_strtolower($defaultSerializer);
+        self::weakWrite(
+            $this,
+            'defaultSerializer',
+            self::weakCallArray('mb_strtolower', [$defaultSerializer])
+        );
         $this->serializer        = $serializer;
         $this->stripPrefix       = (bool) $this->getArrVal($options, 'stripPrefix', true);
 
         self::weakWrite($this, 'lifetime', $lifetime);
 
         if (isset($options['prefix'])) {
-            /** @var string $prefix */
-            $prefix       = $options['prefix'];
-            $this->prefix = $prefix;
+            self::weakWrite($this, 'prefix', $options['prefix']);
         }
 
         unset(
@@ -187,7 +190,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     {
         $filteredKeys = [];
         foreach ($keys as $key) {
-            $filteredKeys[] = $this->getKeyWithoutPrefix($key);
+            /** @var string $filteredKey */
+            $filteredKey    = self::weakCallMethod($this, 'getKeyWithoutPrefix', [$key]);
+            $filteredKeys[] = $filteredKey;
         }
 
         $keys = $filteredKeys;
@@ -416,7 +421,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
     /**
      * Filters the keys array based on global and passed prefix
      *
-     * @phpstan-param storage_keys|false $keys
+     * @phpstan-param array<array-key, int|string>|false $keys
      *
      * @phpstan-return storage_keys
      */
@@ -427,7 +432,7 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
         $keys    = !$keys ? [] : $keys;
 
         foreach ($keys as $key) {
-            if (str_starts_with($key, $needle)) {
+            if (is_string($key) && str_starts_with($key, $needle)) {
                 $results[] = $key;
             }
         }

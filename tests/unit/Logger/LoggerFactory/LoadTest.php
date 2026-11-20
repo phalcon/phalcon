@@ -91,6 +91,33 @@ final class LoadTest extends AbstractUnitTestCase
 
     /**
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testLoggerLoggerFactoryLoadAdapterInt(): void
+    {
+        $this->expectException(LoggerException::class);
+        $this->expectExceptionMessage('Service 1 is not registered');
+
+        $factory = new LoggerFactory(new AdapterFactory());
+        $factory->load(
+            [
+                'name'    => 'my-logger',
+                'options' => [
+                    'adapters' => [
+                        'main' => [
+                            'adapter' => 1,
+                            'name'    => 'php://memory',
+                        ],
+                    ],
+                ],
+            ]
+        );
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2020-09-09
      */
     public function testLoggerLoggerFactoryLoadArray(): void
@@ -139,5 +166,57 @@ final class LoadTest extends AbstractUnitTestCase
         $class  = Stream::class;
         $actual = $logger->getAdapter('admin');
         $this->assertInstanceOf($class, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testLoggerLoggerFactoryLoadFileNameInt(): void
+    {
+        $factory = new LoggerFactory(new AdapterFactory());
+        $logger  = $factory->load(
+            [
+                'name'    => 'my-logger',
+                'options' => [
+                    'adapters' => [
+                        'main' => [
+                            'adapter' => 'stream',
+                            'name'    => 123,
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertInstanceOf(Stream::class, $logger->getAdapter('main'));
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testLoggerLoggerFactoryLoadNameInt(): void
+    {
+        $factory = new LoggerFactory(new AdapterFactory());
+        $logger  = $factory->load(
+            [
+                'name'    => 123,
+                'options' => [
+                    'adapters' => [
+                        'main' => [
+                            'adapter' => 'stream',
+                            'name'    => 'php://memory',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertSame('123', $logger->getName());
     }
 }

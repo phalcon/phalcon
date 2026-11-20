@@ -144,6 +144,23 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
     }
 
     /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterMemoryDeleteMultipleIntKeys(): void
+    {
+        $adapter = new Memory(new SerializerFactory());
+        $adapter->set('1', 'one');
+        $adapter->set('2', 'two');
+
+        $this->assertTrue($adapter->deleteMultiple([1, 2]));
+        $this->assertFalse($adapter->has('1'));
+        $this->assertFalse($adapter->has('2'));
+    }
+
+    /**
      * @author       Phalcon Team <team@phalcon.io>
      * @since        2025-01-01
      */

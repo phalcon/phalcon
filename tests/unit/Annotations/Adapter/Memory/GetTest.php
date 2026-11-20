@@ -18,6 +18,7 @@ use Phalcon\Annotations\Collection;
 use Phalcon\Annotations\Reflection;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
+use ReflectionException;
 use TestClass;
 
 final class GetTest extends AbstractUnitTestCase
@@ -37,5 +38,19 @@ final class GetTest extends AbstractUnitTestCase
         $this->assertIsObject($classAnnotations);
         $this->assertInstanceOf(Reflection::class, $classAnnotations);
         $this->assertInstanceOf(Collection::class, $classAnnotations->getClassAnnotations());
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testAnnotationsAdapterMemoryGetClassInt(): void
+    {
+        $this->expectException(ReflectionException::class);
+        $this->expectExceptionMessage('Class "123" does not exist');
+
+        (new Memory())->get(123);
     }
 }

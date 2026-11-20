@@ -19,6 +19,7 @@ use Phalcon\Contracts\Storage\StorageTypes;
 use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Traits\FilePathTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirFromFileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
@@ -60,6 +61,7 @@ class Stream extends AbstractAdapter
     use DirSeparatorTrait;
     use FilePathTrait;
     use FileTrait;
+    use WeakTypesTrait;
 
     protected string $prefix     = 'ph-strm';
 
@@ -87,7 +89,11 @@ class Stream extends AbstractAdapter
         /**
          * Lets set some defaults and options here
          */
-        $this->storageDir = $this->toDirSeparator($storageDir);
+        self::weakWrite(
+            $this,
+            'storageDir',
+            self::weakCallMethod($this, 'toDirSeparator', [$storageDir])
+        );
 
         parent::__construct($factory, $options);
 

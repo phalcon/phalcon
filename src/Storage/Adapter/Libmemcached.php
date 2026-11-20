@@ -22,6 +22,7 @@ use Phalcon\Storage\Exceptions\ConnectionFailed;
 use Phalcon\Storage\Exceptions\InvalidConfiguration;
 use Phalcon\Storage\SerializerFactory;
 use Phalcon\Support\Exception as SupportException;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_replace;
 use function is_int;
@@ -48,6 +49,8 @@ use function strtolower;
  */
 class Libmemcached extends AbstractAdapter
 {
+    use WeakTypesTrait;
+
     protected string $prefix = 'ph-memc-';
 
     /**
@@ -97,7 +100,8 @@ class Libmemcached extends AbstractAdapter
             $persistentId = $this->options['persistentId'] ?? 'ph-mcid-';
             /** @var storage_libmemcached_sasl $sasl */
             $sasl       = $this->options['saslAuthData'] ?? [];
-            $connection = new Memcached($persistentId);
+            /** @var Memcached $connection */
+            $connection = self::weakNew(Memcached::class, [$persistentId]);
             $serverList = $connection->getServerList();
 
             $connection->setOption(Memcached::OPT_PREFIX_KEY, $this->prefix);
@@ -121,8 +125,12 @@ class Libmemcached extends AbstractAdapter
                 $this
                     ->setOptions($connection, $client)
                     ->setServers($connection, $servers)
-                    ->setSasl($connection, $saslUser, $saslPass)
                 ;
+                self::weakCallMethod(
+                    $this,
+                    'setSasl',
+                    [$connection, $saslUser, $saslPass]
+                );
             }
 
             $this->setSerializer($connection);

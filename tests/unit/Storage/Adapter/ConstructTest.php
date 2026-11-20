@@ -168,4 +168,17 @@ final class ConstructTest extends AbstractUnitTestCase
         $serializer = new SerializerFactory();
         (new Stream($serializer));
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterStreamConstructStorageDirInt(): void
+    {
+        $adapter = new Stream(new SerializerFactory(), ['storageDir' => 123]);
+
+        $this->assertSame([], $adapter->getKeys());
+    }
 }

@@ -102,4 +102,23 @@ final class DeleteMultipleTest extends AbstractUnitTestCase
         $adapter = new Cache($instance);
         $adapter->deleteMultiple(['valid-key', 'abc$^']);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testCacheCacheDeleteMultipleIntKeys(): void
+    {
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = new Cache($factory->newInstance('memory'));
+
+        $adapter->set('1', 'one');
+        $adapter->set('2', 'two');
+
+        $this->assertTrue($adapter->deleteMultiple([1, 2]));
+        $this->assertFalse($adapter->has('1'));
+        $this->assertFalse($adapter->has('2'));
+    }
 }

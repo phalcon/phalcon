@@ -22,7 +22,6 @@ use Phalcon\Translate\Exceptions\MissingRequiredParameter;
 use Phalcon\Translate\InterpolatorFactory;
 
 use function array_merge;
-use function bindtextdomain;
 use function dngettext;
 use function gettext;
 use function is_array;
@@ -217,16 +216,16 @@ class Gettext extends AbstractAdapter
     public function setDirectory($directory): void
     {
         if (!empty($directory)) {
-            $this->directory = $directory;
+            self::weakWrite($this, 'directory', $directory);
 
             if (is_array($directory)) {
                 foreach ($directory as $index => $item) {
-                    bindtextdomain($index, $item);
+                    self::weakCallArray('bindtextdomain', [$index, $item]);
                 }
             } else {
-                bindtextdomain(
-                    $this->getDefaultDomain(),
-                    $directory
+                self::weakCallArray(
+                    'bindtextdomain',
+                    [$this->getDefaultDomain(), $directory]
                 );
             }
         }
@@ -310,8 +309,8 @@ class Gettext extends AbstractAdapter
             'setLocale',
             [$options['category'], $options['locale']]
         );
-        $this->setDefaultDomain($options['defaultDomain']);
+        self::weakCall($this, 'setDefaultDomain', $options['defaultDomain']);
         $this->setDirectory($options['directory']);
-        $this->setDomain($options['defaultDomain']);
+        self::weakCall($this, 'setDomain', $options['defaultDomain']);
     }
 }

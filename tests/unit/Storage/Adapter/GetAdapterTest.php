@@ -31,6 +31,7 @@ use RedisCluster as NativeRedisCluster;
 use TypeError;
 
 use function array_merge;
+use function uniqid;
 
 final class GetAdapterTest extends AbstractUnitTestCase
 {
@@ -220,6 +221,59 @@ final class GetAdapterTest extends AbstractUnitTestCase
                 $connection->getOption($option)
             );
         }
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterGetAdapterLibmemcachedPersistentIdInt(): void
+    {
+        $this->checkExtensionIsLoaded('memcached');
+
+        $adapter = new Libmemcached(
+            new SerializerFactory(),
+            [
+                'persistentId' => 123,
+                'servers'      => [
+                    Talon::settings()->getServiceOptions('memcached'),
+                ],
+            ]
+        );
+
+        $this->assertTrue($adapter->getAdapter()->isPersistent());
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testStorageAdapterGetAdapterLibmemcachedSaslInt(): void
+    {
+        $this->checkExtensionIsLoaded('memcached');
+
+        $adapter = new Libmemcached(
+            new SerializerFactory(),
+            [
+                'client'       => [
+                    NativeMemcached::OPT_BINARY_PROTOCOL => true,
+                ],
+                'persistentId' => uniqid('ph-mcid-sasl-'),
+                'saslAuthData' => [
+                    'user' => 123,
+                    'pass' => 456,
+                ],
+                'servers'      => [
+                    Talon::settings()->getServiceOptions('memcached'),
+                ],
+            ]
+        );
+
+        $this->assertInstanceOf(NativeMemcached::class, $adapter->getAdapter());
     }
 
     /**

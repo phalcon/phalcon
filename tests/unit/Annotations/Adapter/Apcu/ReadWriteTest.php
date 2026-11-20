@@ -17,9 +17,11 @@ use Phalcon\Annotations\Adapter\Apcu;
 use Phalcon\Annotations\Reflection;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Talon\Talon;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use TestClass;
 use TypeError;
 
+use function apcu_exists;
 use function apcu_fetch;
 use function strtolower;
 use function uniqid;
@@ -105,5 +107,21 @@ final class ReadWriteTest extends AbstractUnitTestCase
 
         $actual = $adapter->read($key);
         $this->assertEquals($classAnnotations, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    #[RequiresPhpExtension('apcu')]
+    public function testAnnotationsAdapterApcuReadWritePrefixInt(): void
+    {
+        $adapter = new Apcu(['prefix' => 123]);
+        $adapter->write('ReadWritePrefixInt', new Reflection());
+
+        $this->assertInstanceOf(Reflection::class, $adapter->read('ReadWritePrefixInt'));
+        $this->assertTrue(apcu_exists('_phan123readwriteprefixint'));
     }
 }

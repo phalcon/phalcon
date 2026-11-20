@@ -18,6 +18,7 @@ use Phalcon\Cache\Adapter\AdapterInterface;
 use Phalcon\Cache\Adapter\Redis;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Redis as RedisService;
 use Throwable;
 use Traversable;
@@ -37,6 +38,7 @@ use Traversable;
 abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 {
     use EventsAwareTrait;
+    use WeakTypesTrait;
 
     /**
      * Constructor.
@@ -145,7 +147,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
         $keysArray = [];
         /** @var string $key */
         foreach ($keys as $key) {
-            $this->checkKey($key);
+            self::weakCall($this, 'checkKey', $key);
             $keysArray[] = $key;
         }
 
@@ -213,7 +215,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
             $keysArray = [];
             /** @var string $element */
             foreach ($keys as $element) {
-                $this->checkKey($element);
+                self::weakCall($this, 'checkKey', $element);
                 $keysArray[] = $element;
             }
 
@@ -254,7 +256,11 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
             $results = [];
             /** @var string $element */
             foreach ($keys as $element) {
-                $results[$element] = $this->get($element, $defaultValue);
+                $results[$element] = self::weakCallMethod(
+                    $this,
+                    'get',
+                    [$element, $defaultValue]
+                );
             }
         }
 
@@ -323,7 +329,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
 
         $keys = array_keys((array)$values);
         foreach ($keys as $key) {
-            $this->checkKey($key);
+            self::weakCall($this, 'checkKey', $key);
         }
 
         if (null !== $this->eventsManager) {
@@ -336,7 +342,7 @@ abstract class AbstractCache implements CacheInterface, EventsAwareInterface
          * @var mixed  $value
          */
         foreach ($values as $key => $value) {
-            if (true !== $this->set($key, $value, $ttl)) {
+            if (true !== self::weakCallMethod($this, 'set', [$key, $value, $ttl])) {
                 $result = false;
             }
         }

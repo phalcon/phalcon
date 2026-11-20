@@ -65,6 +65,54 @@ final class GetMultipleTest extends AbstractUnitTestCase
 
     /**
      * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testCacheCacheGetMultipleIntKeys(): void
+    {
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = new Cache($factory->newInstance('memory'));
+
+        $adapter->set('1', 'one');
+
+        $expected = [
+            1 => 'one',
+            2 => 'default',
+        ];
+        $actual   = $adapter->getMultiple([1, 2], 'default');
+        $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    #[RequiresPhpExtension('redis')]
+    public function testCacheCacheGetMultipleIntKeysRedis(): void
+    {
+        $options           = Talon::settings()->getServiceOptions('redis');
+        $options['prefix'] = uniqid('ph-int-');
+
+        $factory = new AdapterFactory(new SerializerFactory());
+        $adapter = new Cache($factory->newInstance('redis', $options));
+
+        $adapter->set('1', 'one');
+
+        $expected = [
+            1 => 'one',
+            2 => 'default',
+        ];
+        $actual   = $adapter->getMultiple([1, 2], 'default');
+        $this->assertSame($expected, $actual);
+
+        $adapter->delete('1');
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
      * @since  2026-04-14
      */
     #[RequiresPhpExtension('apcu')]

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Session\Adapter;
 
+use Phalcon\Session\Adapter\Exceptions\SavePathUnavailable;
 use Phalcon\Session\Adapter\Libmemcached;
 use Phalcon\Session\Adapter\Redis;
 use Phalcon\Session\Adapter\Stream;
@@ -115,6 +116,38 @@ final class ConstructTest extends AbstractUnitTestCase
         $expected = 'test-data';
         $actual   = $redisStorage->get('my-session-prefixed-key');
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testSessionAdapterStreamConstructPrefixInt(): void
+    {
+        $adapter = new Stream(
+            [
+                'prefix'   => 123,
+                'savePath' => Talon::settings()->outputPath(),
+            ]
+        );
+
+        $this->assertInstanceOf(SessionHandlerInterface::class, $adapter);
+    }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/883
+     */
+    public function testSessionAdapterStreamConstructSavePathInt(): void
+    {
+        $this->expectException(SavePathUnavailable::class);
+        $this->expectExceptionMessage('The session save path [123] is not writable');
+
+        new Stream(['savePath' => 123]);
     }
 
     /**

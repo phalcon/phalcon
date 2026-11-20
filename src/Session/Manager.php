@@ -20,6 +20,7 @@ use Phalcon\Session\Exceptions\InvalidSessionId;
 use Phalcon\Session\Exceptions\InvalidSessionName;
 use Phalcon\Session\Exceptions\SessionAlreadyStarted;
 use Phalcon\Session\Exceptions\SessionModificationDenied;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\HeaderTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use SessionHandlerInterface;
@@ -41,6 +42,7 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
 {
     use GetTrait;
     use HeaderTrait;
+    use WeakTypesTrait;
 
     private SessionHandlerInterface | null $adapter = null;
 
@@ -299,11 +301,8 @@ class Manager extends AbstractInjectionAware implements ManagerInterface
      */
     public function setOptions(array $options): void
     {
-        /** @var string $uniqueId */
-        $uniqueId = $this->getArrVal($options, 'uniqueId', '');
-
-        $this->uniqueId = $uniqueId;
-        $this->options  = $options;
+        self::weakWrite($this, 'uniqueId', $this->getArrVal($options, 'uniqueId', ''));
+        $this->options = $options;
     }
 
     /**
