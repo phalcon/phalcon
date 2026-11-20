@@ -19,6 +19,7 @@ use Phalcon\Contracts\Messages\Messages as MessagesContract;
 use Phalcon\Contracts\Messages\MessagesTypes;
 use Phalcon\Messages\Exceptions\MessagesNotIterable;
 use Phalcon\Messages\Traits\MessagesHelperTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Traversable;
 
 use function array_merge;
@@ -42,6 +43,7 @@ use function method_exists;
 class Messages implements MessagesContract, JsonSerializable
 {
     use MessagesHelperTrait;
+    use WeakTypesTrait;
 
     /**
      * Phalcon\Messages\Messages constructor
@@ -134,10 +136,11 @@ class Messages implements MessagesContract, JsonSerializable
              * The constructor accepts any array, so an entry is not guaranteed
              * to be a message; the guard keeps malformed entries from fataling.
              *
-             * @var object $message
+             * @var mixed $message
              */
             if (
-                method_exists($message, 'getField')
+                is_object($message)
+                && method_exists($message, 'getField')
                 && $fieldName === $message->getField()
             ) {
                 /** @var MessageInterface $message */

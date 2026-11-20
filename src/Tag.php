@@ -22,6 +22,7 @@ use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\Url;
 use Phalcon\Mvc\Url\UrlInterface;
 use Phalcon\Support\Helper\Str\Friendly;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Tag\Exception;
 use Phalcon\Tag\Select;
 use Stringable;
@@ -54,6 +55,8 @@ use const PHP_EOL;
  */
 class Tag
 {
+    use WeakTypesTrait;
+
     public const HTML32               = 1;
 
     public const HTML401_FRAMESET     = 4;
@@ -442,7 +445,7 @@ class Tag
             if (!empty($documentPrependTitle)) {
                 $reverse = array_reverse($documentPrependTitle);
                 foreach ($reverse as $title) {
-                    $items[] = $escaper->html($title);
+                    $items[] = self::weakCallMethod($escaper, 'html', [$title]);
                 }
             }
         }
@@ -456,7 +459,7 @@ class Tag
 
             if (!empty($documentAppendTitle)) {
                 foreach ($documentAppendTitle as $title) {
-                    $items[] = $escaper->html($title);
+                    $items[] = self::weakCallMethod($escaper, 'html', [$title]);
                 }
             }
         }
@@ -466,6 +469,7 @@ class Tag
         }
 
         if (!empty($items)) {
+            /** @var array<string> $items */
             $output = implode($documentTitleSeparator, $items);
         }
 

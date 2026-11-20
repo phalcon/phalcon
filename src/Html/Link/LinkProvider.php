@@ -15,6 +15,7 @@ namespace Phalcon\Html\Link;
 
 use Phalcon\Contracts\Html\Link\LinkTypes;
 use Phalcon\Html\Link\Interfaces\LinkProviderInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type link_collection from LinkTypes
@@ -24,6 +25,8 @@ use Phalcon\Html\Link\Interfaces\LinkProviderInterface;
  */
 class LinkProvider extends AbstractLinkProvider implements LinkProviderInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Returns an iterable of LinkInterface objects.
      *
@@ -51,6 +54,7 @@ class LinkProvider extends AbstractLinkProvider implements LinkProviderInterface
      */
     public function getLinksByRel($rel): array
     {
-        return $this->doGetLinksByRel($rel);
+        /** @phpstan-var link_list */
+        return self::weakCallMethod($this, 'doGetLinksByRel', [$rel]);
     }
 }

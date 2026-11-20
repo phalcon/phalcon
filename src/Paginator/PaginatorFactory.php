@@ -21,6 +21,7 @@ use Phalcon\Paginator\Adapter\Model;
 use Phalcon\Paginator\Adapter\NativeArray;
 use Phalcon\Paginator\Adapter\QueryBuilder;
 use Phalcon\Paginator\Adapter\QueryBuilderCursor;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * @phpstan-import-type paginator_config from PaginatorTypes
@@ -29,6 +30,8 @@ use Phalcon\Paginator\Adapter\QueryBuilderCursor;
  */
 class PaginatorFactory extends AbstractFactory
 {
+    use WeakTypesTrait;
+
     /**
      * AdapterFactory constructor.
      *
@@ -75,7 +78,8 @@ class PaginatorFactory extends AbstractFactory
         /** @var paginator_config $options */
         $options = $config["options"] ?? [];
 
-        return $this->newInstance($name, $options);
+        /** @var AdapterInterface */
+        return self::weakCallMethod($this, 'newInstance', [$name, $options]);
     }
 
     /**

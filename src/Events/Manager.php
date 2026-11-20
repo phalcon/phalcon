@@ -198,7 +198,7 @@ class Manager implements ManagerInterface, Enumerable
         }
 
         foreach ($this->subscriberEventsCache[$className] as $eventName => $params) {
-            $this->processSubscriberEntry($subscriber, $eventName, $params, false);
+            self::weakCallMethod($this, 'processSubscriberEntry', [$subscriber, $eventName, $params, false]);
         }
     }
 
@@ -877,7 +877,7 @@ class Manager implements ManagerInterface, Enumerable
         }
 
         foreach ($this->subscriberEventsCache[$className] as $eventName => $params) {
-            $this->processSubscriberEntry($subscriber, $eventName, $params, true);
+            self::weakCallMethod($this, 'processSubscriberEntry', [$subscriber, $eventName, $params, true]);
         }
     }
 

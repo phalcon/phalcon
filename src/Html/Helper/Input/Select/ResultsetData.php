@@ -22,6 +22,7 @@ use Phalcon\Contracts\Html\HtmlTypes;
 use Phalcon\Html\Exceptions\InvalidResultsetValue;
 use Phalcon\Html\Exceptions\UsingRequiresTwoValues;
 use Phalcon\Mvc\Model\ResultsetInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function call_user_func;
 use function count;
@@ -36,6 +37,8 @@ use function method_exists;
  */
 class ResultsetData implements SelectData
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var html_select_attributes|null
      */
@@ -127,9 +130,9 @@ class ResultsetData implements SelectData
             }
 
             /** @phpstan-var array-key $optionValue */
-            $optionValue = $this->readField($option, $usingZero);
+            $optionValue = self::weakCallMethod($this, 'readField', [$option, $usingZero]);
             /** @phpstan-var string $optionText */
-            $optionText  = $this->readField($option, $usingOne);
+            $optionText  = self::weakCallMethod($this, 'readField', [$option, $usingOne]);
 
             $options[$optionValue] = $optionText;
 

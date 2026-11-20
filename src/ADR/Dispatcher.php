@@ -26,6 +26,7 @@ use Phalcon\Contracts\Container\Ioc\IocContainer;
 use Phalcon\Contracts\Events\Manager;
 use Phalcon\Contracts\Http\AttributeRequest;
 use Phalcon\Http\ResponseInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Resolves the Action (and middleware) through the container, wraps it in the
@@ -40,6 +41,8 @@ use Phalcon\Http\ResponseInterface;
  */
 final class Dispatcher implements DispatcherInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @var list<Middleware>|null
      */
@@ -92,7 +95,7 @@ final class Dispatcher implements DispatcherInterface
         $result = [];
         foreach ($classes as $className) {
             /** @var Middleware $middleware */
-            $middleware = $this->container->getService($className);
+            $middleware = self::weakCallMethod($this->container, 'getService', [$className]);
 
             $result[] = $middleware;
         }

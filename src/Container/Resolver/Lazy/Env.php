@@ -34,9 +34,12 @@ declare(strict_types=1);
 namespace Phalcon\Container\Resolver\Lazy;
 
 use Phalcon\Container\Exceptions\EnvNotDefined;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 class Env extends Lazy
 {
+    use WeakTypesTrait;
+
     public function __construct(
         protected string $varname,
         protected string | null $vartype = null
@@ -78,9 +81,6 @@ class Env extends Lazy
             throw new EnvNotDefined($this->varname);
         }
 
-        /** @var string $value */
-        $value = $envs[$this->varname];
-
-        return $value;
+        return self::weakReturnString($envs[$this->varname]);
     }
 }

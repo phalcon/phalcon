@@ -18,6 +18,7 @@ use Phalcon\Autoload\Exceptions\LoaderMethodNotCallable;
 use Phalcon\Contracts\Autoload\AutoloadTypes;
 use Phalcon\Events\Exception as EventsException;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\StartsWithTrait;
 
 use function array_merge;
@@ -47,6 +48,7 @@ class Loader
 {
     use EventsAwareTrait;
     use StartsWithTrait;
+    use WeakTypesTrait;
 
     private const EVENT_AFTER_CHECK_CLASS  = "loader:afterCheckClass";
 
@@ -357,7 +359,7 @@ class Loader
         }
 
         foreach ($classes as $name => $class) {
-            $this->addClass($name, $class);
+            self::weakCallMethod($this, 'addClass', [$name, $class]);
         }
 
         return $this;
@@ -391,7 +393,7 @@ class Loader
         }
 
         foreach ($extensions as $extension) {
-            $this->addExtension($extension);
+            self::weakCall($this, 'addExtension', $extension);
         }
 
         return $this;
@@ -543,7 +545,7 @@ class Loader
         }
 
         foreach ($collection as $element) {
-            $this->$method($element);
+            self::weakCall($this, $method, $element);
         }
 
         return $this;
@@ -663,7 +665,9 @@ class Loader
         $results = [];
         /** @var string $directory */
         foreach ($directories as $directory) {
-            $directory = rtrim($directory, $dirSeparator) . $dirSeparator;
+            /** @var string $trimmed */
+            $trimmed   = self::weakCallArray('rtrim', [$directory, $dirSeparator]);
+            $directory = $trimmed . $dirSeparator;
 
             $results[$directory] = $directory;
         }

@@ -19,11 +19,10 @@ use Phalcon\Support\Debug\Exceptions\RequestHalted;
 use Phalcon\Support\Debug\Exceptions\RuntimeWarning;
 use Phalcon\Support\Debug\Renderer\HtmlRenderer;
 use Phalcon\Support\Debug\ReportBuilder;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Arr\GetTrait;
 use ReflectionException;
 use Throwable;
-
-use function mb_strtolower;
 
 use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
@@ -38,6 +37,7 @@ use const DEBUG_BACKTRACE_IGNORE_ARGS;
 class Debug
 {
     use GetTrait;
+    use WeakTypesTrait;
 
     protected static bool $isActive = false;
 
@@ -306,7 +306,9 @@ class Debug
         $result   = [];
 
         foreach ($area as $value) {
-            $subArray[mb_strtolower($value)] = 1;
+            /** @var string $lower */
+            $lower            = self::weakCallArray('mb_strtolower', [$value]);
+            $subArray[$lower] = 1;
         }
 
         $result['request'] = $subArray;
@@ -315,7 +317,9 @@ class Debug
         $subArray          = [];
 
         foreach ($area as $value) {
-            $subArray[mb_strtolower($value)] = 1;
+            /** @var string $lower */
+            $lower            = self::weakCallArray('mb_strtolower', [$value]);
+            $subArray[$lower] = 1;
         }
 
         $result['server'] = $subArray;
