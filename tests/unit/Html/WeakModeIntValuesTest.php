@@ -20,7 +20,6 @@ use Phalcon\Html\Link\Link;
 use Phalcon\Html\Link\LinkProvider;
 use Phalcon\Html\TagFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
-use Phalcon\Tests\Support\Fake\FakeRow;
 use Phalcon\Tests\Unit\Html\Helper\Input\Select\Fake\FakeResultset;
 
 /**
@@ -38,11 +37,11 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
     public function testHtmlHelperInputSelectResultsetDataUsingInt(): void
     {
         $data = new ResultsetData(
-            new FakeResultset([new FakeRow(['id' => 1, 'name' => 'one'])]),
+            new FakeResultset([[0 => 5, 1 => 'five']]),
             [0, 1]
         );
 
-        $this->assertSame(['' => null], $data->getOptions());
+        $this->assertSame([5 => 'five'], $data->getOptions());
     }
 
     /**
