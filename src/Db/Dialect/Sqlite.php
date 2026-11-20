@@ -32,6 +32,7 @@ use Phalcon\Db\Exceptions\UnrecognizedDataType;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
 use function strtoupper;
@@ -43,6 +44,7 @@ use function substr;
 class Sqlite extends Dialect
 {
     use TextTrait;
+    use WeakTypesTrait;
 
     protected string | null $escapeChar = "\"";
 
@@ -652,9 +654,9 @@ class Sqlite extends Dialect
                 if (!empty($typeValues)) {
                     if (is_array($typeValues)) {
                         foreach ($typeValues as $value) {
-                            $valueSql .= "'"
-                                . $this->escapeStringLiteral($value)
-                                . "', ";
+                            /** @var string $escapedValue */
+                            $escapedValue = self::weakCallMethod($this, 'escapeStringLiteral', [$value]);
+                            $valueSql    .= "'" . $escapedValue . "', ";
                         }
 
                         $columnSql .= "("

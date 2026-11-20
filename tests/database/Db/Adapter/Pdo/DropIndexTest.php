@@ -66,4 +66,25 @@ final class DropIndexTest extends AbstractDatabaseTestCase
         }
         $this->assertNotContains(self::INDEX, $names);
     }
+
+    /**
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-19
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/884
+     */
+    #[Group('sqlite')]
+    public function testDbAdapterPdoDropIndexNameInt(): void
+    {
+        $db = $this->container->get('db');
+        $db->execute('CREATE INDEX "5" ON ' . self::TABLE . ' (id)');
+
+        $this->assertTrue($db->dropIndex(self::TABLE, '', 5));
+
+        $names = [];
+        foreach ($db->describeIndexes(self::TABLE) as $idx) {
+            $names[] = $idx->getName();
+        }
+        $this->assertNotContains('5', $names);
+    }
 }

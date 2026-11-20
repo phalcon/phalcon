@@ -25,10 +25,13 @@ use Phalcon\Mvc\Model\MetaData\Strategy\Introspection;
 use Phalcon\Mvc\Model\MetaData\Strategy\StrategyInterface;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\IniTrait;
 
 use function get_class;
 use function is_array;
+use function is_float;
+use function is_int;
 use function is_object;
 use function method_exists;
 use function spl_object_id;
@@ -100,6 +103,7 @@ use function trigger_error;
 abstract class MetaData extends Injectable implements MetaDataInterface
 {
     use IniTrait;
+    use WeakTypesTrait;
 
     public const MODELS_ATTRIBUTES                  = 0;
 
@@ -803,7 +807,15 @@ abstract class MetaData extends Injectable implements MetaDataInterface
     {
         $key = $this->getMetaDataUniqueKey($model);
         if ($key !== null) {
-            return $this->metaData[$key][$index];
+            $value = $this->metaData[$key][$index];
+
+            /**
+             * cphalcon returns the value with no change. In weak mode, an int
+             * or a float becomes a string.
+             */
+            return is_int($value) || is_float($value)
+                ? self::weakReturnString($value)
+                : $value;
         }
 
         return null;

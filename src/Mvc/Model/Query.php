@@ -81,6 +81,7 @@ use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Phql\Scanner\Opcode;
 use Phalcon\Support\Settings;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function class_exists;
@@ -151,6 +152,8 @@ use function str_replace;
  */
 class Query implements QueryInterface, InjectionAwareInterface
 {
+    use WeakTypesTrait;
+
     public const TYPE_DELETE = 303;
 
     public const TYPE_INSERT = 306;
@@ -360,13 +363,13 @@ class Query implements QueryInterface, InjectionAwareInterface
             $lifetime      = $cacheOptions["lifetime"] ?? $cacheLifetime;
 
             $result = false;
-            if ($cache->has($key)) {
+            if (true === self::weakCallMethod($cache, 'has', [$key])) {
                 /**
                  * Only a resultset of a SELECT reaches the cache.
                  *
                  * @var ResultsetInterface $result
                  */
-                $result = $cache->get($key);
+                $result = self::weakCallMethod($cache, 'get', [$key]);
             }
 
             if (!empty($result)) {
@@ -451,7 +454,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 throw new ResultsetNonCacheable();
             }
 
-            $cache->set($key, $result, $lifetime);
+            self::weakCallMethod($cache, 'set', [$key, $result, $lifetime]);
         }
 
         /**

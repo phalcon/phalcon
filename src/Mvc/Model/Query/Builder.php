@@ -246,7 +246,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Assign COLUMNS clause
              */
             if (isset($params["columns"])) {
-                $this->columns = $params["columns"];
+                self::weakWrite($this, 'columns', $params["columns"]);
             }
 
             /**
@@ -267,14 +267,14 @@ class Builder implements BuilderInterface, InjectionAwareInterface
              * Assign HAVING clause
              */
             if (isset($params["having"])) {
-                $this->having = $params["having"];
+                self::weakWrite($this, 'having', $params["having"]);
             }
 
             /**
              * Assign ORDER clause
              */
             if (isset($params["order"])) {
-                $this->order = $params["order"];
+                self::weakWrite($this, 'order', $params["order"]);
             }
 
             /**
@@ -535,12 +535,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function columns(mixed $columns): BuilderInterface
     {
-        /**
-         * The caller passes one column or a list of columns.
-         *
-         * @var mvc_query_columns|null $columns
-         */
-        $this->columns = $columns;
+        self::weakWrite($this, 'columns', $columns);
 
         return $this;
     }
@@ -1542,12 +1537,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
      */
     public function orderBy(mixed $orderBy): BuilderInterface
     {
-        /**
-         * The caller passes one order clause or a list of order clauses.
-         *
-         * @var array<array-key, int|string>|string|null $orderBy
-         */
-        $this->order = $orderBy;
+        self::weakWrite($this, 'order', $orderBy);
 
         return $this;
     }

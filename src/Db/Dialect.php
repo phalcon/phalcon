@@ -33,6 +33,7 @@ use function explode;
 use function implode;
 use function in_array;
 use function is_array;
+use function is_iterable;
 use function is_string;
 use function range;
 use function str_contains;
@@ -248,7 +249,13 @@ abstract class Dialect implements DialectInterface
         $columns = [];
 
         foreach ($columnList as $column) {
-            $columns[] = $this->getSqlColumn($column, $escapeChar, $bindCounts);
+            /** @var string $columnSql */
+            $columnSql = self::weakCallMethod(
+                $this,
+                'getSqlColumn',
+                [$column, $escapeChar, $bindCounts]
+            );
+            $columns[] = $columnSql;
         }
 
         return implode(", ", $columns);
@@ -314,20 +321,23 @@ abstract class Dialect implements DialectInterface
                     $columnDomain = null;
                 }
 
-                $columnSql = $this->prepareQualified(
-                    $columnField,
-                    $columnDomain,
-                    $escapeChar
+                /** @var string $columnSql */
+                $columnSql = self::weakCallMethod(
+                    $this,
+                    'prepareQualified',
+                    [$columnField, $columnDomain, $escapeChar]
                 );
 
                 /**
                  * The index "2" is the column alias
                  */
                 if (isset($column[2]) && $column[2]) {
-                    /** @var string $columnAlias */
-                    $columnAlias = $column[2];
-
-                    return $this->prepareColumnAlias($columnSql, $columnAlias, $escapeChar);
+                    /** @var string */
+                    return self::weakCallMethod(
+                        $this,
+                        'prepareColumnAlias',
+                        [$columnSql, $column[2], $escapeChar]
+                    );
                 }
 
                 /**
@@ -367,10 +377,14 @@ abstract class Dialect implements DialectInterface
         if (isset($columnExpression["sqlAlias"]) || isset($columnExpression["alias"])) {
             /** @var string|null $columnAlias */
             $columnAlias = $columnExpression["sqlAlias"] ?? null;
-            /** @var string $columnAlias */
             $columnAlias = (null === $columnAlias) ? $columnExpression["alias"] : $columnAlias;
 
-            return $this->prepareColumnAlias($columnSql, $columnAlias, $escapeChar);
+            /** @var string */
+            return self::weakCallMethod(
+                $this,
+                'prepareColumnAlias',
+                [$columnSql, $columnAlias, $escapeChar]
+            );
         }
 
         /**
@@ -430,14 +444,16 @@ abstract class Dialect implements DialectInterface
                  * Resolve literal OR placeholder expressions
                  */
             case "literal":
-                /** @var string $literal */
                 $literal = $expression["value"];
 
                 if (isset($expression["escape"]) && $expression["escape"]) {
-                    return "'" . $this->escapeStringLiteral($literal) . "'";
+                    /** @var string $escaped */
+                    $escaped = self::weakCallMethod($this, 'escapeStringLiteral', [$literal]);
+
+                    return "'" . $escaped . "'";
                 }
 
-                return $literal;
+                return self::weakReturnString($literal);
 
             case "placeholder":
                 /** @var string $value */
@@ -461,7 +477,7 @@ abstract class Dialect implements DialectInterface
                     return implode(", ", $placeholders);
                 }
 
-                return $value;
+                return self::weakReturnString($value);
 
                 /**
                  * Resolve binary operations expressions
@@ -568,8 +584,11 @@ abstract class Dialect implements DialectInterface
 
         /**
          * Expression type wasn't found
+         *
+         * @var InvalidSqlExpressionType $exception
          */
-        throw new InvalidSqlExpressionType($type);
+        $exception = self::weakNew(InvalidSqlExpressionType::class, [$type]);
+        throw $exception;
     }
 
     /**
@@ -589,11 +608,11 @@ abstract class Dialect implements DialectInterface
              * The index "2" is the table alias
              */
 
-            return $this->prepareTable(
-                $table[0],
-                $table[1] ?? null,
-                $table[2] ?? null,
-                $escapeChar
+            /** @var string */
+            return self::weakCallMethod(
+                $this,
+                'prepareTable',
+                [$table[0], $table[1] ?? null, $table[2] ?? null, $escapeChar]
             );
         }
 
@@ -775,8 +794,15 @@ abstract class Dialect implements DialectInterface
 
         /**
          * Resolve FROM
+         *
+         * @var string $fromSql
          */
-        $sql .= " " . $this->getSqlExpressionFrom($tableNames, $escapeChar);
+        $fromSql = self::weakCallMethod(
+            $this,
+            'getSqlExpressionFrom',
+            [$tableNames, $escapeChar]
+        );
+        $sql .= " " . $fromSql;
 
         /**
          * Resolve JOINs
@@ -802,8 +828,13 @@ abstract class Dialect implements DialectInterface
             /** @var db_expression|string $where */
             $where = $definition["where"];
 
-            $sql .= " "
-                . $this->getSqlExpressionWhere($where, $escapeChar, $bindCounts);
+            /** @var string $whereSql */
+            $whereSql = self::weakCallMethod(
+                $this,
+                'getSqlExpressionWhere',
+                [$where, $escapeChar, $bindCounts]
+            );
+            $sql .= " " . $whereSql;
         }
 
         /**
@@ -816,7 +847,13 @@ abstract class Dialect implements DialectInterface
             /** @var array<array-key, db_expression>|string $group */
             $group = $definition["group"];
 
-            $sql .= " " . $this->getSqlExpressionGroupBy($group, $escapeChar);
+            /** @var string $groupSql */
+            $groupSql = self::weakCallMethod(
+                $this,
+                'getSqlExpressionGroupBy',
+                [$group, $escapeChar]
+            );
+            $sql .= " " . $groupSql;
         }
 
         /**
@@ -843,8 +880,13 @@ abstract class Dialect implements DialectInterface
             /** @var array<array-key, db_expression>|string $order */
             $order = $definition["order"];
 
-            $sql .= " "
-                . $this->getSqlExpressionOrderBy($order, $escapeChar, $bindCounts);
+            /** @var string $orderSql */
+            $orderSql = self::weakCallMethod(
+                $this,
+                'getSqlExpressionOrderBy',
+                [$order, $escapeChar, $bindCounts]
+            );
+            $sql .= " " . $orderSql;
         }
 
         /**
@@ -1059,7 +1101,8 @@ abstract class Dialect implements DialectInterface
                     ? '(' . $column->getValue() . ')'
                     : $column->getValue();
             } else {
-                $rendered = $this->escape($column);
+                /** @var string $rendered */
+                $rendered = self::weakCallMethod($this, 'escape', [$column]);
             }
 
             if (!empty($directions)) {
@@ -1103,13 +1146,11 @@ abstract class Dialect implements DialectInterface
         array $expression,
         string | null $escapeChar = null
     ): string {
-        /** @var string|null $domain */
-        $domain = $expression["domain"] ?? null;
-
-        return $this->prepareQualified(
-            "*",
-            $domain,
-            $escapeChar
+        /** @var string */
+        return self::weakCallMethod(
+            $this,
+            'prepareQualified',
+            ["*", $expression["domain"] ?? null, $escapeChar]
         );
     }
 
@@ -1249,7 +1290,9 @@ abstract class Dialect implements DialectInterface
             $tables = [];
 
             foreach ($expression as $tableName) {
-                $tables[] = $this->getSqlTable($tableName, $escapeChar);
+                /** @var string $tableSql */
+                $tableSql = self::weakCallMethod($this, 'getSqlTable', [$tableName, $escapeChar]);
+                $tables[] = $tableSql;
             }
 
             return "FROM " . implode(", ", $tables);
@@ -1277,10 +1320,9 @@ abstract class Dialect implements DialectInterface
         if (isset($this->customFunctions[$name])) {
             $customFunction = $this->customFunctions[$name];
 
-            /** @var string $rendered */
-            $rendered = self::weakInvoke($customFunction, [$this, $expression, $escapeChar]);
-
-            return $rendered;
+            return self::weakReturnString(
+                self::weakInvoke($customFunction, [$this, $expression, $escapeChar])
+            );
         }
 
         if (
@@ -1363,14 +1405,20 @@ abstract class Dialect implements DialectInterface
      *
      * @throws Exception
      *
-     * @phpstan-param db_joins $expression
      * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionJoins(
-        array | string $expression,
+        mixed $expression,
         string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
+        /**
+         * The same exception as the loop of cphalcon
+         */
+        if (!is_iterable($expression)) {
+            throw new \Exception('The argument is not initialized or iterable()');
+        }
+
         $sql = "";
 
         /** @var db_joins $joins */
@@ -1415,9 +1463,8 @@ abstract class Dialect implements DialectInterface
                 $joinType = $type . " ";
             }
 
-            /** @var db_table_name $joinSource */
-            $joinSource = $join["source"];
-            $joinTable  = $this->getSqlTable($joinSource, $escapeChar);
+            /** @var string $joinTable */
+            $joinTable = self::weakCallMethod($this, 'getSqlTable', [$join["source"], $escapeChar]);
 
             $sql .= " " . $joinType
                 . "JOIN " . $joinTable
@@ -1624,7 +1671,8 @@ abstract class Dialect implements DialectInterface
          */
         $domain = $expression["domain"] ?? null;
 
-        return $this->prepareQualified($column, $domain, $escapeChar);
+        /** @var string */
+        return self::weakCallMethod($this, 'prepareQualified', [$column, $domain, $escapeChar]);
     }
 
     /**
@@ -1641,23 +1689,20 @@ abstract class Dialect implements DialectInterface
         array $bindCounts = []
     ): string {
         if (isset($expression["column"])) {
-            /** @var db_expression|string $column */
-            $column = $expression["column"];
-
-            return $this->getSqlColumn($column);
+            /** @var string */
+            return self::weakCallMethod($this, 'getSqlColumn', [$expression["column"]]);
         }
 
         if (!isset($expression["value"])) {
             throw new InvalidSqlExpression();
         }
 
-        /** @var db_expression|string $value */
         $value = $expression["value"];
         if (is_array($value)) {
             return $this->getSqlExpression($value, $escapeChar, $bindCounts);
         }
 
-        return $value;
+        return self::weakReturnString($value);
     }
 
     /**

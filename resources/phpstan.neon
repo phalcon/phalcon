@@ -550,9 +550,9 @@ parameters:
             path: ../src/Dispatcher/AbstractDispatcher.php
             reportUnmatched: false
         # The file has no strict_types. PHP checks the return type in weak
-        # mode, thus a scalar value becomes a bool, a numeric value becomes an
-        # int, and other values give TypeError.
+        # mode, thus a scalar value becomes a bool or a string, a numeric value
+        # becomes an int, and other values give TypeError.
         -
-            message: "#Method [\\w\\\\]+::weakReturn(Bool|Int)\\(\\) should return (bool|int) but returns mixed#"
+            message: "#Method [\\w\\\\]+::weakReturn(Bool|Int|String)\\(\\) should return (bool|int|string) but returns mixed#"
             path: ../src/Support/Traits/WeakTypesTrait.php
             reportUnmatched: false
