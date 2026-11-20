@@ -22,6 +22,7 @@ use function array_pop;
 use function explode;
 use function implode;
 use function is_array;
+use function is_scalar;
 use function is_string;
 use function str_replace;
 use function str_split;
@@ -105,7 +106,7 @@ class Route implements RouteInterface
          *
          * @var mvc_router_http_methods|string|null $methods
          */
-        $methods       = $httpMethods;
+        $methods       = self::checkHttpMethods($httpMethods);
         $this->methods = $methods;
 
         // Get the unique Id from the static member uniqueId
@@ -211,6 +212,21 @@ class Route implements RouteInterface
     public static function reset(): void
     {
         self::$uniqueId = 0;
+    }
+
+    /**
+     * cphalcon keeps a value that is not an array or a string. Its router then
+     * throws this exception when it reads the methods of the route.
+     *
+     * @throws \Exception
+     */
+    private static function checkHttpMethods(mixed $httpMethods): mixed
+    {
+        if (is_scalar($httpMethods) && !is_string($httpMethods)) {
+            throw new \Exception('The argument is not initialized or iterable()');
+        }
+
+        return $httpMethods;
     }
 
     /**
@@ -848,7 +864,7 @@ class Route implements RouteInterface
     public function via(mixed $httpMethods): RouteInterface
     {
         /** @var mvc_router_http_methods|string|null $methods */
-        $methods = $httpMethods;
+        $methods = self::checkHttpMethods($httpMethods);
 
         $this->methods = $methods;
 

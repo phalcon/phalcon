@@ -30,10 +30,15 @@ use Phalcon\Di\Exceptions\SetterInjectionRequiresInstance;
 use Phalcon\Di\Exceptions\SetterParametersMustBeArray;
 use Phalcon\Di\Exceptions\UnknownServiceType;
 use Phalcon\Support\Traits\WeakTypesTrait;
+use RuntimeException;
 
 use function call_user_func;
 use function is_array;
 use function is_object;
+use function is_string;
+use function trigger_error;
+
+use const E_USER_WARNING;
 
 /**
  * Phalcon\Di\Service\Builder
@@ -69,7 +74,15 @@ class Builder
             throw new MissingClassNameParameter();
         }
 
+        /** @var mixed $className */
         $className = $definition['className'];
+
+        /**
+         * The same exception as cphalcon, when it creates the instance
+         */
+        if (!is_string($className)) {
+            throw new RuntimeException('Invalid class name');
+        }
 
         if (is_array($parameters)) {
             /**
@@ -215,8 +228,17 @@ class Builder
                 /**
                  * Update the public property
                  */
+                /** @var mixed $propertyName */
                 $propertyName  = $property['name'];
                 $propertyValue = $property['value'];
+
+                /**
+                 * cphalcon gives a warning and does not set the property
+                 */
+                if (!is_string($propertyName)) {
+                    trigger_error('Property should be string', E_USER_WARNING);
+                    continue;
+                }
 
                 self::weakWrite(
                     $instance,
@@ -263,7 +285,7 @@ class Builder
                     throw new MissingParameterKey('name', $position);
                 }
 
-                return $container->get($argument['name']);
+                return self::weakCallMethod($container, 'get', [$argument['name']]);
 
             case 'parameter':
                 /**
@@ -287,9 +309,10 @@ class Builder
                     /**
                      * Build the instance with arguments
                      */
-                    return $container->get(
-                        $argument['className'],
-                        $argument['arguments']
+                    return self::weakCallMethod(
+                        $container,
+                        'get',
+                        [$argument['className'], $argument['arguments']]
                     );
                 }
 
@@ -297,7 +320,7 @@ class Builder
                  * The instance parameter does not have arguments for its
                  * constructor
                  */
-                return $container->get($argument['className']);
+                return self::weakCallMethod($container, 'get', [$argument['className']]);
 
             default:
                 /**

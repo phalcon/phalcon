@@ -21,6 +21,7 @@ use Phalcon\Cli\Console\Exceptions\ModuleDefinitionPathNotFound;
 use Phalcon\Cli\Router\Route;
 use Phalcon\Contracts\Cli\CliTypes;
 use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 
 use function array_merge;
@@ -46,6 +47,7 @@ use function trim;
 class Console extends AbstractApplication
 {
     use FileTrait;
+    use WeakTypesTrait;
 
     /**
      * @phpstan-var cli_arguments
@@ -131,8 +133,10 @@ class Console extends AbstractApplication
                  */
                 if (isset($module["path"])) {
                     $path = $module["path"];
-                    if (true !== $this->phpFileExists($path)) {
-                        throw new ModuleDefinitionPathNotFound($path);
+                    if (true !== self::weakCallMethod($this, 'phpFileExists', [$path])) {
+                        /** @var ModuleDefinitionPathNotFound $exception */
+                        $exception = self::weakNew(ModuleDefinitionPathNotFound::class, [$path]);
+                        throw $exception;
                     }
 
                     if (true !== class_exists($className, false)) {

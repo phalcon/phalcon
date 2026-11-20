@@ -16,11 +16,13 @@ namespace Phalcon\Mvc;
 use Phalcon\Contracts\Mvc\MvcTypes;
 use Phalcon\Di\AbstractInjectionAware;
 use Phalcon\Di\DiInterface;
+use Phalcon\Mvc\Router\RouteInterface;
 use Phalcon\Mvc\Url\Exception;
 use Phalcon\Mvc\Url\Exceptions\MissingRouteName;
 use Phalcon\Mvc\Url\Exceptions\RouteNotFound;
 use Phalcon\Mvc\Url\Exceptions\RouterServiceUnavailable;
 use Phalcon\Mvc\Url\UrlInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function http_build_query;
@@ -56,6 +58,8 @@ use function substr;
  */
 class Url extends AbstractInjectionAware implements UrlInterface
 {
+    use WeakTypesTrait;
+
     protected string | null $basePath      = null;
 
     protected string | null $baseUri       = null;
@@ -190,10 +194,13 @@ class Url extends AbstractInjectionAware implements UrlInterface
              */
             /** @var RouterInterface $router */
             $router = $this->router;
-            $route  = $router->getRouteByName($routeName);
+            /** @var bool|RouteInterface $route */
+            $route  = self::weakCallMethod($router, 'getRouteByName', [$routeName]);
 
             if (!is_object($route)) {
-                throw new RouteNotFound($routeName);
+                /** @var RouteNotFound $exception */
+                $exception = self::weakNew(RouteNotFound::class, [$routeName]);
+                throw $exception;
             }
 
             /**
@@ -219,7 +226,8 @@ class Url extends AbstractInjectionAware implements UrlInterface
             $hostname = $route->getHostname();
 
             if (null !== $hostname && "" !== $hostname) {
-                $uri   = '//' . $hostname . (substr($uri, 0, 1) !== '/' ? '/' . $uri : $uri);
+                $uri   = '//' . $hostname
+                    . (self::weakCallArray('substr', [$uri, 0, 1]) !== '/' ? '/' . $uri : $uri);
                 $local = false;
             }
         }

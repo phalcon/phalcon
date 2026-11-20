@@ -24,6 +24,7 @@ use Phalcon\Mvc\View\Engine\Volt\Compiler;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\InvalidHaystack;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MacroNotFound;
 use Phalcon\Mvc\View\Engine\Volt\Exceptions\MbstringRequired;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\InfoTrait;
 
 use function array_key_exists;
@@ -37,8 +38,6 @@ use function is_array;
 use function is_object;
 use function ob_clean;
 use function ob_get_contents;
-use function str_replace;
-use function strpos;
 
 /**
  * Designer friendly and fast template engine for PHP written in Zephir/C
@@ -46,6 +45,7 @@ use function strpos;
 class Volt extends AbstractEngine implements EventsAwareInterface
 {
     use InfoTrait;
+    use WeakTypesTrait;
 
     protected Compiler | null $compiler = null;
 
@@ -87,11 +87,9 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             throw new MbstringRequired();
         }
 
-        // PHP 8 throws on an unknown encoding, so the result is a string.
-        /** @var string $converted */
-        $converted = mb_convert_encoding($text, $to, $from);
-
-        return $converted;
+        // PHP 8 throws on an unknown encoding. cphalcon returns the false of a
+        // failed detection with no change.
+        return self::weakReturnString(mb_convert_encoding($text, $to, $from));
     }
 
     /**
@@ -147,10 +145,10 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             // A string haystack needs a string needle.
             /** @var string $needle */
             if ($this->phpFunctionExists("mb_strpos")) {
-                return mb_strpos($haystack, $needle) !== false;
+                return self::weakCallArray('mb_strpos', [$haystack, $needle]) !== false;
             }
 
-            return strpos($haystack, $needle) !== false;
+            return self::weakCallArray('strpos', [$haystack, $needle]) !== false;
         }
 
         throw new InvalidHaystack();
@@ -171,7 +169,8 @@ class Volt extends AbstractEngine implements EventsAwareInterface
             return count($item);
         }
 
-        return mb_strlen($item);
+        /** @var int */
+        return self::weakCallArray('mb_strlen', [$item]);
     }
 
     /**
@@ -221,17 +220,15 @@ class Volt extends AbstractEngine implements EventsAwareInterface
              */
             /** @var ResponseInterface $response */
             $response = $container->get("response");
-            $link     = new Link(
-                "preload",
-                str_replace("'", "", $href),
-                $attributes
-            );
+            /** @var string $linkHref */
+            $linkHref = self::weakCallArray('str_replace', ["'", "", $href]);
+            $link     = new Link("preload", $linkHref, $attributes);
             $header   = "Link: " . (new Header())->serialize([$link]);
 
             $response->setRawHeader($header);
         }
 
-        return $href;
+        return self::weakReturnString($href);
     }
 
     /**
@@ -292,10 +289,7 @@ class Volt extends AbstractEngine implements EventsAwareInterface
 
         if ($mustClean) {
             // The view starts the buffer before it calls the engine.
-            /** @var string $contents */
-            $contents = ob_get_contents();
-
-            $this->view->setContent($contents);
+            self::weakCallMethod($this->view, 'setContent', [ob_get_contents()]);
         }
     }
 
@@ -366,7 +360,8 @@ class Volt extends AbstractEngine implements EventsAwareInterface
         /**
          * Use mb_substr if available
          */
-        return mb_substr($value, $start, $length);
+        /** @var string */
+        return self::weakCallArray('mb_substr', [$value, $start, $length]);
     }
 
     /**

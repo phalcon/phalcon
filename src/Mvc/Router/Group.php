@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\Router;
 
 use Phalcon\Contracts\Mvc\MvcTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function is_array;
@@ -71,6 +72,8 @@ use function method_exists;
  */
 class Group implements GroupInterface
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var callable|null
      */
@@ -388,10 +391,7 @@ class Group implements GroupInterface
      */
     public function setPaths(mixed $paths): GroupInterface
     {
-        /** @var mvc_router_paths|string|null $routePaths */
-        $routePaths = $paths;
-
-        $this->paths = $routePaths;
+        self::weakWrite($this, 'paths', $paths);
 
         return $this;
     }

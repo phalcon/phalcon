@@ -672,7 +672,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             /** @var string $renderView */
             $layout = null;
 
-            if (str_contains($renderView, "/")) {
+            if (self::weakCallArray('str_contains', [$renderView, "/"])) {
                 $parts  = explode("/", $renderView);
                 $layout = $parts[0];
             }
@@ -710,9 +710,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * produced in the controller
          */
         if ($this->disabled !== false) {
-            /** @var string $bufferedContent */
-            $bufferedContent = ob_get_contents();
-            $this->content   = $bufferedContent;
+            self::weakWrite($this, 'content', ob_get_contents());
 
             return false;
         }
@@ -791,10 +789,8 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * Get the current content in the buffer maybe some output from the
          * controller?
          */
-        /** @var string $controllerContent */
-        $controllerContent = ob_get_contents();
-        $this->content     = $controllerContent;
-        $silence           = true;
+        self::weakWrite($this, 'content', ob_get_contents());
+        $silence = true;
 
         /**
          * Disabled levels allow to avoid an specific level of rendering
@@ -816,10 +812,10 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
             ) {
                 $this->currentRenderLevel = self::LEVEL_ACTION_VIEW;
 
-                $this->engineRender(
-                    $engines,
-                    $renderView,
-                    $silence
+                self::weakCallMethod(
+                    $this,
+                    'engineRender',
+                    [$engines, $renderView, $silence]
                 );
             }
 

@@ -1477,9 +1477,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                  * The matched value replaces the placeholder position, so
                  * these four parts hold strings here.
                  */
-                /** @var string $namespacePart */
-                $namespacePart       = $parts['namespace'];
-                $this->namespaceName = $namespacePart;
+                self::weakWrite($this, 'namespaceName', $parts['namespace']);
                 unset($parts['namespace']);
             }
 
@@ -1487,9 +1485,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * Check for a module
              */
             if (isset($parts['module'])) {
-                /** @var string $modulePart */
-                $modulePart   = $parts['module'];
-                $this->module = $modulePart;
+                self::weakWrite($this, 'module', $parts['module']);
                 unset($parts['module']);
             }
 
@@ -1497,9 +1493,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * Check for a controller
              */
             if (isset($parts['controller'])) {
-                /** @var string $controllerPart */
-                $controllerPart   = $parts['controller'];
-                $this->controller = $controllerPart;
+                self::weakWrite($this, 'controller', $parts['controller']);
                 unset($parts['controller']);
             }
 
@@ -1507,9 +1501,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
              * Check for an action
              */
             if (isset($parts['action'])) {
-                /** @var string $actionPart */
-                $actionPart   = $parts['action'];
-                $this->action = $actionPart;
+                self::weakWrite($this, 'action', $parts['action']);
                 unset($parts['action']);
             }
 
@@ -2108,7 +2100,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
             case 'put':
             case 'trace':
                 $methodCall = 'add' . ucfirst($method);
-                $route      = $this->{$methodCall}($pattern, $paths);
+                /** @var RouteInterface $route */
+                $route = self::weakCallMethod($this, $methodCall, [$pattern, $paths]);
                 break;
             default:
                 throw new UnknownHttpMethod($method);
@@ -2197,7 +2190,8 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                 case 'put':
                 case 'trace':
                     $methodCall = 'add' . ucfirst($method);
-                    $route      = $group->{$methodCall}($pattern, $routePaths);
+                    /** @var RouteInterface $route */
+                    $route = self::weakCallMethod($group, $methodCall, [$pattern, $routePaths]);
                     break;
                 default:
                     throw new UnknownHttpMethod($method);
@@ -2351,7 +2345,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
                     }
                 } elseif (isset($staticByMethod[$method])) {
                     foreach ($staticByMethod[$method] as $staticUri => $_unusedList) {
-                        if (preg_match($bucketPattern, $staticUri)) {
+                        if (self::weakCallArray('preg_match', [$bucketPattern, $staticUri])) {
                             $staticShadowedByMethod[$method][$staticUri] = true;
                         }
                     }

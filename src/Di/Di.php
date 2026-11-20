@@ -519,7 +519,8 @@ class Di extends stdClass implements DiInterface
      */
     public function offsetExists(mixed $name): bool
     {
-        return $this->has($name);
+        /** @var bool */
+        return self::weakCallMethod($this, 'has', [$name]);
     }
 
     /**
@@ -531,7 +532,7 @@ class Di extends stdClass implements DiInterface
      */
     public function offsetGet(mixed $name): mixed
     {
-        return $this->getShared($name);
+        return self::weakCallMethod($this, 'getShared', [$name]);
     }
 
     /**
@@ -543,7 +544,7 @@ class Di extends stdClass implements DiInterface
      */
     public function offsetSet(mixed $offset, mixed $value): void
     {
-        $this->setShared($offset, $value);
+        self::weakCallMethod($this, 'setShared', [$offset, $value]);
     }
 
     /**
@@ -551,7 +552,7 @@ class Di extends stdClass implements DiInterface
      */
     public function offsetUnset(mixed $name): void
     {
-        $this->remove($name);
+        self::weakCall($this, 'remove', $name);
     }
 
     /**

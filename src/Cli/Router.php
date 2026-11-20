@@ -497,9 +497,9 @@ class Router extends AbstractInjectionAware implements RouterInterface
      */
     public function setDefaults(array $defaults): static
     {
-        $this->defaultModule = $defaults["module"] ?? $this->defaultModule;
-        $this->defaultTask   = $defaults["task"] ?? $this->defaultTask;
-        $this->defaultAction = $defaults["action"] ?? $this->defaultAction;
+        self::weakWrite($this, 'defaultModule', $defaults["module"] ?? $this->defaultModule);
+        self::weakWrite($this, 'defaultTask', $defaults["task"] ?? $this->defaultTask);
+        self::weakWrite($this, 'defaultAction', $defaults["action"] ?? $this->defaultAction);
         $this->defaultParams = $defaults["params"] ?? $this->defaultParams;
 
         return $this;

@@ -886,7 +886,8 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         /** @var string $offset */
 
-        return $this->hasService($offset);
+        /** @var bool */
+        return self::weakCallMethod($this, 'hasService', [$offset]);
     }
 
     /**
@@ -903,7 +904,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         /** @var string $offset */
 
-        return $this->getService($offset);
+        return self::weakCallMethod($this, 'getService', [$offset]);
     }
 
     /**
@@ -918,7 +919,7 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
     {
         /** @var string $offset */
 
-        $this->setService($offset, $value);
+        self::weakCallMethod($this, 'setService', [$offset, $value]);
     }
 
     /**
