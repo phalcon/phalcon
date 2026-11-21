@@ -113,7 +113,7 @@ class Tag
      *
      * @phpstan-param tag_title_parts|string $title
      */
-    public static function appendTitle(array | string $title): void
+    public static function appendTitle(mixed $title): void
     {
         if (is_array($title)) {
             self::$documentAppendTitle = $title;
@@ -134,7 +134,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function checkField(array | string $parameters): string
+    public static function checkField(mixed $parameters): string
     {
         return self::inputFieldChecked("checkbox", $parameters);
     }
@@ -151,7 +151,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function colorField(array | string $parameters): string
+    public static function colorField(mixed $parameters): string
     {
         return self::inputField("color", $parameters);
     }
@@ -168,7 +168,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function dateField(array | string $parameters): string
+    public static function dateField(mixed $parameters): string
     {
         return self::inputField("date", $parameters);
     }
@@ -185,7 +185,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function dateTimeField(array | string $parameters): string
+    public static function dateTimeField(mixed $parameters): string
     {
         return self::inputField("datetime", $parameters);
     }
@@ -202,7 +202,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function dateTimeLocalField(array | string $parameters): string
+    public static function dateTimeLocalField(mixed $parameters): string
     {
         return self::inputField("datetime-local", $parameters);
     }
@@ -227,7 +227,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function emailField(array | string $parameters): string
+    public static function emailField(mixed $parameters): string
     {
         return self::inputField("email", $parameters);
     }
@@ -252,7 +252,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function fileField(array | string $parameters): string
+    public static function fileField(mixed $parameters): string
     {
         return self::inputField("file", $parameters);
     }
@@ -271,7 +271,7 @@ class Tag
      *                                 'id' => ''
      *                                 ]
      */
-    public static function formLegacy(array | string $parameters): string
+    public static function formLegacy(mixed $parameters): string
     {
         $params = !is_array($parameters) ? [$parameters] : $parameters;
 
@@ -286,16 +286,16 @@ class Tag
         $action = null;
 
         if (!empty($paramsAction)) {
-            $action = self::getUrlService()
-                          ->get(self::toStringValue($paramsAction))
-            ;
+            $action = self::getUrlService()->get($paramsAction);
         }
 
         /**
          * Check for extra parameters
          */
         if (array_key_exists("parameters", $params)) {
-            $action .= "?" . self::toStringValue($params["parameters"]);
+            /** @var string $extra */
+            $extra   = $params["parameters"];
+            $action .= "?" . $extra;
         }
 
         if (!empty($action)) {
@@ -314,7 +314,7 @@ class Tag
         string $text,
         string $separator = "-",
         bool $lowercase = true,
-        array | string $replace = []
+        mixed $replace = null
     ): string {
         try {
             return (new Friendly())->__invoke($text, $separator, $lowercase, $replace);
@@ -506,14 +506,22 @@ class Tag
      *
      * @phpstan-param tag_parameters $params
      */
-    public static function getValue(int | string $name, array $params = []): mixed
+    public static function getValue(mixed $name, array $params = []): mixed
     {
+        /**
+         * A name that is not a valid array key gives a TypeError, as in
+         * cphalcon
+         *
+         * @var array-key $name
+         */
         $value = $params["value"] ?? null;
         if (null === $value) {
             /**
              * Check if there is a predefined value for it
              */
-            $value = self::$displayValues[$name] ?? null;
+            $value = isset(self::$displayValues[$name])
+                ? self::$displayValues[$name]
+                : null;
             if (null === $value) {
                 /**
                  * Check if there is a post value for the item
@@ -529,10 +537,13 @@ class Tag
      * Check if a helper has a default value set using Phalcon\Tag::setDefault()
      * or value from $_POST
      */
-    public static function hasValue(int | string $name): bool
+    public static function hasValue(mixed $name): bool
     {
         /**
-         * Check if there is a predefined or a POST value for it
+         * Check if there is a predefined or a POST value for it. A name that
+         * is not a valid array key gives a TypeError, as in cphalcon
+         *
+         * @var array-key $name
          */
         return isset(self::$displayValues[$name]) || isset($_POST[$name]);
     }
@@ -550,7 +561,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function hiddenField(array | string $parameters): string
+    public static function hiddenField(mixed $parameters): string
     {
         return self::inputField("hidden", $parameters);
     }
@@ -568,7 +579,7 @@ class Tag
      *                                 ]
      */
     public static function image(
-        array | string $parameters = [],
+        mixed $parameters = null,
         bool $local = true
     ): string {
         $params = is_array($parameters) ? $parameters : [$parameters];
@@ -614,7 +625,7 @@ class Tag
      *                                 'id' => ''
      *                                 ]
      */
-    public static function imageInput(array | string $parameters): string
+    public static function imageInput(mixed $parameters): string
     {
         return self::inputField("image", $parameters, true);
     }
@@ -632,7 +643,7 @@ class Tag
      *                                 ]
      */
     public static function javascriptInclude(
-        array | string $parameters = [],
+        mixed $parameters = null,
         bool $local = true
     ): string {
         $params = is_array($parameters) ? $parameters : [$parameters];
@@ -686,35 +697,39 @@ class Tag
      *                                 ]
      */
     public static function linkTo(
-        array | string $parameters,
-        string | null $text = null,
-        bool $local = true
+        mixed $parameters,
+        mixed $text = null,
+        mixed $local = true
     ): string {
-        $params = is_string($parameters)
-            ? [$parameters, $text, $local]
-            : $parameters;
+        $params = is_array($parameters)
+            ? $parameters
+            : [$parameters, $text, $local];
 
-        if (!isset($params[0])) {
-            $action = $params["action"] ?? "";
-            if (isset($params["action"])) {
-                unset($params["action"]);
-            }
-        } else {
+        /**
+         * A key with a null value is a value, as with Zephir `fetch`
+         */
+        $action = "";
+        if (array_key_exists(0, $params)) {
             $action = $params[0];
+        } elseif (array_key_exists("action", $params)) {
+            $action = $params["action"];
+            unset($params["action"]);
         }
 
-        if (!isset($params[1])) {
-            $text = $params["text"] ?? "";
-            unset($params["text"]);
-        } else {
+        $text = "";
+        if (array_key_exists(1, $params)) {
             $text = $params[1];
+        } elseif (array_key_exists("text", $params)) {
+            $text = $params["text"];
+            unset($params["text"]);
         }
 
-        if (!isset($params[2])) {
-            $local = $params["local"] ?? true;
-            unset($params["local"]);
-        } else {
+        $local = true;
+        if (array_key_exists(2, $params)) {
             $local = $params[2];
+        } elseif (array_key_exists("local", $params)) {
+            $local = $params["local"];
+            unset($params["local"]);
         }
 
         $query = $params["query"] ?? null;
@@ -722,11 +737,10 @@ class Tag
             unset($params["query"]);
         }
 
-        $url            = self::getUrlService();
-        $params["href"] = $url->get(
-            self::toStringValue($action),
-            is_array($query) ? $query : null,
-            (bool)$local
+        $params["href"] = self::weakCallMethod(
+            self::getUrlService(),
+            "get",
+            [$action, is_array($query) ? $query : null, $local]
         );
 
         return self::renderAttributes("<a", $params)
@@ -746,7 +760,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function monthField(array | string $parameters): string
+    public static function monthField(mixed $parameters): string
     {
         return self::inputField("month", $parameters);
     }
@@ -764,7 +778,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function numericField(array | string $parameters): string
+    public static function numericField(mixed $parameters): string
     {
         return self::inputField("number", $parameters);
     }
@@ -782,7 +796,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function passwordField(array | string $parameters): string
+    public static function passwordField(mixed $parameters): string
     {
         return self::inputField("password", $parameters);
     }
@@ -792,7 +806,7 @@ class Tag
      *
      * @phpstan-param tag_parameters|string $parameters
      */
-    public static function preload(array | string $parameters): string
+    public static function preload(mixed $parameters): string
     {
         $params = is_array($parameters) ? $parameters : [$parameters];
 
@@ -836,7 +850,7 @@ class Tag
      *
      * @phpstan-param tag_title_parts|string $title
      */
-    public static function prependTitle(array | string $title): void
+    public static function prependTitle(mixed $title): void
     {
         if (is_array($title)) {
             self::$documentPrependTitle = $title;
@@ -858,7 +872,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function radioField(array | string $parameters): string
+    public static function radioField(mixed $parameters): string
     {
         return self::inputFieldChecked("radio", $parameters);
     }
@@ -876,7 +890,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function rangeField(array | string $parameters): string
+    public static function rangeField(mixed $parameters): string
     {
         return self::inputField("range", $parameters);
     }
@@ -941,9 +955,17 @@ class Tag
                     );
                 }
 
-                $escaped = (null !== $escaper)
-                    ? $escaper->attributes(self::toStringValue($value))
-                    : self::toStringValue($value);
+                /**
+                 * The value goes to the escaper as it is. An object that has
+                 * no `__toString()` gives an Error, as in cphalcon
+                 *
+                 * @var bool|float|int|string|Stringable $value
+                 */
+                $escaped = (string) $value;
+                if (null !== $escaper) {
+                    /** @var string $escaped */
+                    $escaped = self::weakCallMethod($escaper, "attributes", [$value]);
+                }
 
                 /**
                  * The key is an attribute name. Remove the characters that end
@@ -1000,7 +1022,7 @@ class Tag
      *                                 'value' => ''
      *                                 ]
      */
-    public static function searchField(array | string $parameters): string
+    public static function searchField(mixed $parameters): string
     {
         return self::inputField("search", $parameters);
     }
@@ -1019,7 +1041,7 @@ class Tag
      *                                 'emptyText' => '',
      *                                 ]
      */
-    public static function select(array | string $parameters, mixed $data = null): string
+    public static function select(mixed $parameters, mixed $data = null): string
     {
         return Select::selectField($parameters, $data);
     }
@@ -1038,7 +1060,7 @@ class Tag
      *                                 'emptyText' => '',
      *                                 ]
      */
-    public static function selectStatic(array | string $parameters, mixed $data = null): string
+    public static function selectStatic(mixed $parameters, mixed $data = null): string
     {
         return Select::selectField($parameters, $data);
     }
@@ -1121,7 +1143,7 @@ class Tag
      * @phpstan-param tag_parameters|string|null $parameters
      */
     public static function stylesheetLink(
-        array | string | null $parameters = null,
+        mixed $parameters = null,
         bool $local = true
     ): string {
         if (!is_array($parameters)) {
@@ -1171,7 +1193,7 @@ class Tag
      *
      * @phpstan-param tag_parameters|string $parameters
      */
-    public static function submitButton(array | string $parameters): string
+    public static function submitButton(mixed $parameters): string
     {
         return self::inputField("submit", $parameters, true);
     }
@@ -1183,7 +1205,7 @@ class Tag
      */
     public static function tagHtml(
         string $tagName,
-        array | string $parameters = [],
+        mixed $parameters = null,
         bool $selfClose = false,
         bool $onlyStart = false,
         bool $useEol = false
@@ -1244,7 +1266,7 @@ class Tag
      *                                 'class' => ''
      *                                 ]
      */
-    public static function telField(array | string $parameters): string
+    public static function telField(mixed $parameters): string
     {
         return self::inputField("tel", $parameters);
     }
@@ -1261,15 +1283,15 @@ class Tag
      *                                 'class' => ''
      *                                 ]
      */
-    public static function textArea(array | string $parameters): string
+    public static function textArea(mixed $parameters): string
     {
         $params = is_array($parameters) ? $parameters : [$parameters];
 
-        if (!isset($params[0]) && true === ($params["id"] ?? null)) {
+        if (!isset($params[0]) && isset($params["id"])) {
             $params[0] = $params["id"];
         }
 
-        $id = self::toStringValue($params[0]);
+        $id = $params[0] ?? null;
         if (!isset($params["name"])) {
             $params["name"] = $id;
         } else {
@@ -1317,7 +1339,7 @@ class Tag
      *                                 'class' => ''
      *                                 ]
      */
-    public static function textField(array | string $parameters): string
+    public static function textField(mixed $parameters): string
     {
         return self::inputField("text", $parameters);
     }
@@ -1334,7 +1356,7 @@ class Tag
      *                                 'class' => ''
      *                                 ]
      */
-    public static function timeField(array | string $parameters): string
+    public static function timeField(mixed $parameters): string
     {
         return self::inputField("time", $parameters);
     }
@@ -1351,7 +1373,7 @@ class Tag
      *                                 'class' => ''
      *                                 ]
      */
-    public static function urlField(array | string $parameters): string
+    public static function urlField(mixed $parameters): string
     {
         return self::inputField("url", $parameters);
     }
@@ -1368,7 +1390,7 @@ class Tag
      *                                 'class' => ''
      *                                 ]
      */
-    public static function weekField(array | string $parameters): string
+    public static function weekField(mixed $parameters): string
     {
         return self::inputField("week", $parameters);
     }
@@ -1411,7 +1433,7 @@ class Tag
      */
     final protected static function inputField(
         string $type,
-        array | string $parameters,
+        mixed $parameters,
         bool $asValue = false
     ): string {
         $params = [];
@@ -1473,15 +1495,15 @@ class Tag
      */
     final protected static function inputFieldChecked(
         string $type,
-        array | string $parameters
+        mixed $parameters
     ): string {
         $params = is_array($parameters) ? $parameters : [$parameters];
 
         if (!isset($params[0])) {
-            $params[0] = $params["id"] ?? "";
+            $params[0] = $params["id"] ?? null;
         }
 
-        $id = self::toStringValue($params[0]);
+        $id = $params[0];
 
         if (!isset($params["name"])) {
             $params["name"] = $id;
@@ -1494,9 +1516,10 @@ class Tag
         }
 
         /**
-         * Automatically assign the id if the name is not an array
+         * Automatically assign the id if the name is not an array. cphalcon
+         * also assigns it for an id that is not a string
          */
-        if (!str_contains($id, "[") && !isset($params["id"])) {
+        if ((!is_string($id) || !str_contains($id, "[")) && !isset($params["id"])) {
             $params["id"] = $id;
         }
 
