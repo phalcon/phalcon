@@ -45,6 +45,26 @@ final class ConstructTest extends AbstractUnitTestCase
     }
 
     /**
+     * A blank line in the file is ignored.
+     *
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/882
+     */
+    public function testTranslateAdapterCsvConstructBlankLine(): void
+    {
+        $translator = new Csv(
+            new InterpolatorFactory(),
+            [
+                'content' => 'data://text/plain;base64,' . base64_encode("a;b\n\nc;d\n"),
+            ]
+        );
+
+        $this->assertSame(['a' => 'b', 'c' => 'd'], $translator->toArray());
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-19
      *

@@ -137,7 +137,11 @@ class Csv extends AbstractAdapter
                 break;
             }
 
-            if (str_starts_with($data[0], '#') || !isset($data[1])) {
+            /**
+             * fgetcsv() returns [null] for a blank line, thus check the
+             * second column first
+             */
+            if (!isset($data[1]) || str_starts_with($data[0], '#')) {
                 continue;
             }
 
