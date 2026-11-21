@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Resultset\Simple;
 
 use Phalcon\Mvc\Model\Resultset\Simple;
+use Phalcon\Storage\Serializer\None;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Database\Mvc\Model\Resultset\ResultsetFixtureTrait;
 use PHPUnit\Framework\Attributes\Group;
@@ -48,5 +49,26 @@ final class SerializeTest extends AbstractDatabaseTestCase
         $restored->unserialize($original->serialize());
 
         $this->assertEquals($original->toArray(), $restored->toArray());
+    }
+
+    /**
+     * The value of the serializer service is returned with no change, also
+     * when it is not a string.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/879
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelResultsetSimpleSerializeNoneSerializer(): void
+    {
+        $this->container->setShared('serializer', new None());
+
+        $data = $this->getResultset('simple')->serialize();
+
+        $this->assertIsArray($data);
+        $this->assertCount(3, $data['rows']);
     }
 }

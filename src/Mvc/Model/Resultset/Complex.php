@@ -332,7 +332,7 @@ class Complex extends Resultset
      *
      * @throws Exception
      */
-    public function serialize(): string
+    public function serialize(): mixed
     {
         $container = Di::getDefault();
         if ($container === null) {
@@ -355,7 +355,6 @@ class Complex extends Resultset
             /** @var \Phalcon\Storage\Serializer\SerializerInterface $serializer */
             $serializer->setData($data);
 
-            /** @var string */
             return $serializer->serialize();
         }
 

@@ -214,7 +214,7 @@ class Simple extends Resultset
     /**
      * Serializing a resultset will dump all related rows into a big array
      */
-    public function serialize(): string
+    public function serialize(): mixed
     {
         $container = Di::getDefault();
         if ($container === null) {
@@ -239,7 +239,6 @@ class Simple extends Resultset
             /** @var \Phalcon\Storage\Serializer\SerializerInterface $serializer */
             $serializer->setData($data);
 
-            /** @var string */
             return $serializer->serialize();
         }
 
