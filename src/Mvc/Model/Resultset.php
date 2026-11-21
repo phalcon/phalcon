@@ -262,14 +262,14 @@ abstract class Resultset implements
         $this->rewind();
 
         while ($this->valid()) {
-            /** @var ModelInterface|Row $record */
+            /** @var mixed $record */
             $record = $this->current();
 
             if ($transaction === false) {
                 /**
                  * We only can delete resultsets if every element is a complete object
                  */
-                if (!method_exists($record, "getWriteConnection")) {
+                if (!is_object($record) || !method_exists($record, "getWriteConnection")) {
                     throw new InvalidReturnedRecord();
                 }
 
@@ -841,14 +841,14 @@ abstract class Resultset implements
         $this->rewind();
 
         while ($this->valid()) {
-            /** @var ModelInterface|Row $record */
+            /** @var mixed $record */
             $record = $this->current();
 
             if ($transaction === false) {
                 /**
                  * We only can update resultsets if every element is a complete object
                  */
-                if (!method_exists($record, "getWriteConnection")) {
+                if (!is_object($record) || !method_exists($record, "getWriteConnection")) {
                     throw new InvalidReturnedRecord();
                 }
 

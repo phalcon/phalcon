@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Database\Mvc\Model\Resultset;
 
 use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
+use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Models\Invoices;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -79,6 +80,27 @@ final class DeleteTest extends AbstractDatabaseTestCase
         }
 
         $this->assertTrue($resultset->delete());
+    }
+
+    /**
+     * A resultset with HYDRATE_ARRAYS has no model objects to delete.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/880
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelResultsetDeleteHydrateArrays(): void
+    {
+        $resultset = $this->getResultset('simple');
+        $resultset->setHydrateMode(Resultset::HYDRATE_ARRAYS);
+
+        $this->expectException(InvalidReturnedRecord::class);
+        $this->expectExceptionMessage('The returned record is not valid');
+
+        $resultset->delete();
     }
 
     /**
