@@ -509,24 +509,26 @@ class Tag
     public static function getValue(mixed $name, array $params = []): mixed
     {
         /**
-         * A name that is not a valid array key gives a TypeError, as in
-         * cphalcon
+         * A null name is the empty key, as in cphalcon (PHP 8.5 deprecates a
+         * null array offset). A name that is not a valid array key gives a
+         * TypeError, as in cphalcon
          *
-         * @var array-key $name
+         * @var array-key $key
          */
+        $key   = $name ?? "";
         $value = $params["value"] ?? null;
         if (null === $value) {
             /**
              * Check if there is a predefined value for it
              */
-            $value = isset(self::$displayValues[$name])
-                ? self::$displayValues[$name]
+            $value = isset(self::$displayValues[$key])
+                ? self::$displayValues[$key]
                 : null;
             if (null === $value) {
                 /**
                  * Check if there is a post value for the item
                  */
-                $value = $_POST[$name] ?? null;
+                $value = $_POST[$key] ?? null;
             }
         }
 
@@ -540,12 +542,16 @@ class Tag
     public static function hasValue(mixed $name): bool
     {
         /**
-         * Check if there is a predefined or a POST value for it. A name that
-         * is not a valid array key gives a TypeError, as in cphalcon
+         * Check if there is a predefined or a POST value for it. A null name
+         * is the empty key, as in cphalcon (PHP 8.5 deprecates a null array
+         * offset). A name that is not a valid array key gives a TypeError, as
+         * in cphalcon
          *
-         * @var array-key $name
+         * @var array-key $key
          */
-        return isset(self::$displayValues[$name]) || isset($_POST[$name]);
+        $key = $name ?? "";
+
+        return isset(self::$displayValues[$key]) || isset($_POST[$key]);
     }
 
     /**
