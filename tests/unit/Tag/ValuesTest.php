@@ -61,6 +61,26 @@ final class ValuesTest extends AbstractTagTestCase
     }
 
     /**
+     * A "value" parameter that is null is a value, as in cphalcon.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/843
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-21
+     */
+    public function testGetValueWithANullValueParameter(): void
+    {
+        $_POST['name'] = 'Posted';
+
+        Tag::setDefault('name', 'Stored');
+
+        $this->assertNull(Tag::getValue('name', ['value' => null]));
+        $this->assertSame(
+            '<input type="text" id="name" name="name">',
+            Tag::textField(['name', 'value' => null])
+        );
+    }
+
+    /**
      * The parameters have the cphalcon names.
      *
      * @issue  https://github.com/phalcon/phalcon/issues/832

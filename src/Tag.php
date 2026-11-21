@@ -275,8 +275,16 @@ class Tag
     {
         $params = !is_array($parameters) ? [$parameters] : $parameters;
 
-        $paramsAction = $params[0] ?? "";
-        $paramsAction = $params["action"] ?? $paramsAction;
+        /**
+         * The first parameter comes before the "action" parameter. A key with
+         * a null value is a value, as with Zephir `fetch`
+         */
+        $paramsAction = null;
+        if (array_key_exists(0, $params)) {
+            $paramsAction = $params[0];
+        } elseif (array_key_exists("action", $params)) {
+            $paramsAction = $params["action"];
+        }
 
         /**
          * By default, the method is POST
@@ -509,25 +517,26 @@ class Tag
     public static function getValue(mixed $name, array $params = []): mixed
     {
         /**
-         * A name that is not a valid array key gives a TypeError, as in
-         * cphalcon
+         * A "value" parameter that is null is a value, as with Zephir `fetch`
+         */
+        if (array_key_exists("value", $params)) {
+            return $params["value"];
+        }
+
+        /**
+         * Check if there is a predefined value for it. A name that is not a
+         * valid array key gives a TypeError, as in cphalcon
          *
          * @var array-key $name
          */
-        $value = $params["value"] ?? null;
+        $value = isset(self::$displayValues[$name])
+            ? self::$displayValues[$name]
+            : null;
         if (null === $value) {
             /**
-             * Check if there is a predefined value for it
+             * Check if there is a post value for the item
              */
-            $value = isset(self::$displayValues[$name])
-                ? self::$displayValues[$name]
-                : null;
-            if (null === $value) {
-                /**
-                 * Check if there is a post value for the item
-                 */
-                $value = $_POST[$name] ?? null;
-            }
+            $value = $_POST[$name] ?? null;
         }
 
         return $value;
@@ -1533,7 +1542,10 @@ class Tag
 
             $value = self::getValue($id, $params);
 
-            if (null !== $value && $currentValue === $value) {
+            /**
+             * A loose comparison, as in cphalcon: a POST value is a string
+             */
+            if (null !== $value && $currentValue == $value) {
                 $params["checked"] = "checked";
             }
 
