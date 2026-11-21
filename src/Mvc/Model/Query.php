@@ -3136,22 +3136,20 @@ class Query implements QueryInterface, InjectionAwareInterface
                         /**
                          * Generate the conditions based on the type of join
                          */
+                        $joinArguments = [
+                            $joinType,
+                            $joinSource,
+                            $modelAlias,
+                            $joinAlias,
+                            $relation,
+                        ];
+
                         if (!$relation->isThrough()) {
-                            $sqlJoin = $this->getSingleJoin(
-                                $joinType,
-                                $joinSource,
-                                $modelAlias,
-                                $joinAlias,
-                                $relation
-                            );
+                            /** @var array<array-key, mixed> $sqlJoin */
+                            $sqlJoin = self::weakCallMethod($this, 'getSingleJoin', $joinArguments);
                         } else {
-                            $sqlJoin = $this->getMultiJoin(
-                                $joinType,
-                                $joinSource,
-                                $modelAlias,
-                                $joinAlias,
-                                $relation
-                            );
+                            /** @var array<array-key, mixed> $sqlJoin */
+                            $sqlJoin = self::weakCallMethod($this, 'getMultiJoin', $joinArguments);
                         }
 
                         /**
@@ -3836,9 +3834,9 @@ class Query implements QueryInterface, InjectionAwareInterface
                     // Namespaced model names are kept verbatim so callers
                     // can readAttribute(Model::class). Only single-word
                     // model names get lcfirst'd (legacy behavior).
-                    "balias" => (strpos($modelName, '\\') !== false)
+                    "balias" => (self::weakCallArray('strpos', [$modelName, '\\']) !== false)
                         ? $modelName
-                        : lcfirst($modelName),
+                        : self::weakCallArray('lcfirst', [$modelName]),
                 ];
 
                 if ($eager !== null) {

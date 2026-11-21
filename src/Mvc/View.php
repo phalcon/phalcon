@@ -1407,7 +1407,9 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
                          * Engine can be a string representing a service in the DI
                          */
                         if (!is_string($engineService)) {
-                            throw new InvalidEngineRegistration($extension);
+                            /** @var InvalidEngineRegistration $exception */
+                            $exception = self::weakNew(InvalidEngineRegistration::class, [$extension]);
+                            throw $exception;
                         }
 
                         $engines[$extension] = $this->container->get(

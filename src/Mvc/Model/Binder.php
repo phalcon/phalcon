@@ -22,6 +22,7 @@ use Phalcon\Mvc\Model\Exceptions\InvalidGetModelNameReturn;
 use Phalcon\Mvc\Model\Exceptions\MissingMethodName;
 use Phalcon\Mvc\Model\Exceptions\MissingModelClassName;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use ReflectionException;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -38,6 +39,8 @@ use function is_subclass_of;
  */
 class Binder implements BinderInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Array for storing active bound models
      *
@@ -247,7 +250,9 @@ class Binder implements BinderInterface
 
                 if (is_array($realClasses)) {
                     if (!isset($realClasses[$paramKey])) {
-                        throw new MissingModelClassName($paramKey);
+                        /** @var MissingModelClassName $exception */
+                        $exception = self::weakNew(MissingModelClassName::class, [$paramKey]);
+                        throw $exception;
                     }
                     $className  = $realClasses[$paramKey];
                     $boundModel = $this->findBoundModel($paramValue, $className);

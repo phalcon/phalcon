@@ -1078,6 +1078,15 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             if (!is_array($attribute)) {
+                /**
+                 * cphalcon gives a warning and does not set a property with a
+                 * numeric name
+                 */
+                if (!is_string($attribute)) {
+                    trigger_error('Property should be string', E_USER_WARNING);
+                    continue;
+                }
+
                 if ($callSetters) {
                     $setter = "set" . self::toCamelize($attribute);
                     if (
@@ -2401,8 +2410,17 @@ abstract class Model extends AbstractInjectionAware implements
                     $rawValues[$attributeField] = $value;
                 } elseif (
                     $disableAssignSetters ||
-                    !$this->possibleSetter($attributeField, $value)
+                    !self::weakCallMethod($this, 'possibleSetter', [$attributeField, $value])
                 ) {
+                    /**
+                     * cphalcon gives a warning and does not set a property
+                     * with a numeric name
+                     */
+                    if (!is_string($attributeField)) {
+                        trigger_error('Property should be string', E_USER_WARNING);
+                        continue;
+                    }
+
                     self::weakWrite($this, $attributeField, $value);
                 }
             }
@@ -3029,9 +3047,10 @@ abstract class Model extends AbstractInjectionAware implements
 
             /**
              * If some attribute is not present in the model, we assume the
-             * record as changed
+             * record as changed. cphalcon cannot read a property with a
+             * numeric name, thus that attribute is also changed.
              */
-            if (!property_exists($this, $name)) {
+            if (!is_string($name) || !property_exists($this, $name)) {
                 $changed[] = $name;
 
                 continue;
@@ -4171,6 +4190,15 @@ abstract class Model extends AbstractInjectionAware implements
             }
 
             /**
+             * cphalcon cannot read a property with a numeric name
+             */
+            if (!is_string($attributeField)) {
+                $data[$attributeField] = null;
+
+                continue;
+            }
+
+            /**
              * Check if there is a getter for this property
              */
             $method = "get" . $this->toCamelize($attributeField);
@@ -5017,7 +5045,7 @@ abstract class Model extends AbstractInjectionAware implements
                     $values[]                  = $rawValue;
                     $bindTypes[]               = $bindType;
                     $snapshot[$attributeField] = $rawValue;
-                } elseif (property_exists($this, $attributeField)) {
+                } elseif (is_string($attributeField) && property_exists($this, $attributeField)) {
                     $value = $this->$attributeField;
                     if ($value === null && array_key_exists($field, $defaultValues)) {
                         $snapshot[$attributeField]           = $defaultValues[$field];
@@ -5251,6 +5279,15 @@ abstract class Model extends AbstractInjectionAware implements
              * insert.
              */
             foreach ($unsetDefaultValues as $attributeField => $defaultValue) {
+                /**
+                 * cphalcon gives a warning and does not set a property with a
+                 * numeric name
+                 */
+                if (!is_string($attributeField)) {
+                    trigger_error('Property should be string', E_USER_WARNING);
+                    continue;
+                }
+
                 self::weakWrite($this, $attributeField, $defaultValue);
             }
 
@@ -5341,7 +5378,7 @@ abstract class Model extends AbstractInjectionAware implements
                         $values[]                     = $rawValue;
                         $bindTypes[]                  = $bindType;
                         $newSnapshot[$attributeField] = $rawValue;
-                    } elseif (property_exists($this, $attributeField)) {
+                    } elseif (is_string($attributeField) && property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
                         /**
                          * If the field is not part of the snapshot we add them as changed
@@ -5475,7 +5512,7 @@ abstract class Model extends AbstractInjectionAware implements
                         $values[]                     = $rawValue;
                         $bindTypes[]                  = $bindType;
                         $newSnapshot[$attributeField] = $rawValue;
-                    } elseif (property_exists($this, $attributeField)) {
+                    } elseif (is_string($attributeField) && property_exists($this, $attributeField)) {
                         $value = $this->$attributeField;
 
                         /**
