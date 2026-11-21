@@ -73,11 +73,37 @@ final class GetSqlExpressionTest extends AbstractDatabaseTestCase
         ];
     }
 
+    /**
+     * `alias.*`: `column` first, then `domain`, only when it is not empty.
+     *
+     * @return array[]
+     */
+    public static function getObjectExpressions(): array
+    {
+        return [
+            'column'               => [['type' => 'object', 'column' => 'robots'], '`robots`.*'],
+            'domain'               => [['type' => 'object', 'domain' => 'r'], '`r`.*'],
+            'empty column, domain' => [['type' => 'object', 'column' => '', 'domain' => 'r'], '*'],
+            'no keys'              => [['type' => 'object'], '*'],
+        ];
+    }
+
     #[Group('mysql')]
     #[Group('pgsql')]
     #[Group('sqlite')]
     #[DataProvider('getExpressions')]
     public function testDbDialectGetSqlExpression(array $expression, string $expected): void
+    {
+        $dialect = new Mysql();
+
+        $this->assertSame($expected, $dialect->getSqlExpression($expression));
+    }
+
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    #[DataProvider('getObjectExpressions')]
+    public function testDbDialectGetSqlExpressionObject(array $expression, string $expected): void
     {
         $dialect = new Mysql();
 
