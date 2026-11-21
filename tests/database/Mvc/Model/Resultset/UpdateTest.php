@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Database\Mvc\Model\Resultset;
 
+use Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord;
+use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Support\Migrations\InvoicesMigration;
 use Phalcon\Tests\Support\Models\Invoices;
@@ -70,6 +72,27 @@ final class UpdateTest extends AbstractDatabaseTestCase
         $this->assertTrue(
             $invoices->update(['inv_status_flag' => 1])
         );
+    }
+
+    /**
+     * A resultset with HYDRATE_ARRAYS has no model objects to update.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/880
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelResultsetUpdateHydrateArrays(): void
+    {
+        $invoices = Invoices::find();
+        $invoices->setHydrateMode(Resultset::HYDRATE_ARRAYS);
+
+        $this->expectException(InvalidReturnedRecord::class);
+        $this->expectExceptionMessage('The returned record is not valid');
+
+        $invoices->update(['inv_status_flag' => 1]);
     }
 
     /**
