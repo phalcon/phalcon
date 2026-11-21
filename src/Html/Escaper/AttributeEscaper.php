@@ -18,13 +18,13 @@ declare(strict_types=1);
 namespace Phalcon\Html\Escaper;
 
 use Phalcon\Contracts\Html\HtmlTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function htmlspecialchars;
 use function implode;
 use function is_array;
 use function preg_replace;
 use function rtrim;
-use function trim;
 
 /**
  * Escapes either a single attribute value (string) or an associative array
@@ -35,6 +35,8 @@ use function trim;
  */
 class AttributeEscaper extends AbstractEscaper
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-param html_escaper_input $input
      */
@@ -62,7 +64,8 @@ class AttributeEscaper extends AbstractEscaper
                 continue;
             }
 
-            $key = trim($key);
+            /** @var string $key */
+            $key = self::weakCallArray('trim', [$key]);
 
             /**
              * The key is an attribute name. Remove the characters that end an

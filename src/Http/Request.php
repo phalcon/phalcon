@@ -510,8 +510,11 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
         ];
 
         foreach ($_SERVER as $name => $value) {
+            /** @var string $upperName */
+            $upperName = self::weakCallArray('strtoupper', [$name]);
+
             // Note: The starts_with uses case-insensitive search here
-            if (str_starts_with(strtoupper($name), 'HTTP_')) {
+            if (str_starts_with($upperName, 'HTTP_')) {
                 $name = ucwords(
                     strtolower(
                         str_replace(
@@ -530,7 +533,7 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
             }
 
             // The "CONTENT_" headers are not prefixed with "HTTP_".
-            $name = strtoupper($name);
+            $name = $upperName;
 
             if (isset($contentHeaders[$name])) {
                 $name = ucwords(
@@ -981,14 +984,15 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                     /** @var array<array-key, mixed> $errors */
                     $errors = $input["error"];
 
-                    $smoothInput = $this->smoothFiles(
+                    /** @var list<http_smooth_file> $smoothInput */
+                    $smoothInput = self::weakCallMethod($this, 'smoothFiles', [
                         $input["name"],
                         $types,
                         $tmpNames,
                         $sizes,
                         $errors,
-                        $prefix
-                    );
+                        $prefix,
+                    ]);
 
                     foreach ($smoothInput as $file) {
                         if (
@@ -1016,12 +1020,13 @@ class Request extends AbstractInjectionAware implements RequestInterface, Reques
                         false === $onlySuccessful ||
                         UPLOAD_ERR_OK === $input['error']
                     ) {
-                        $files = $this->processFiles(
+                        /** @var http_uploaded_files $files */
+                        $files = self::weakCallMethod($this, 'processFiles', [
                             $files,
                             $namedKeys,
                             $input,
-                            $prefix
-                        );
+                            $prefix,
+                        ]);
                     }
                 }
             }

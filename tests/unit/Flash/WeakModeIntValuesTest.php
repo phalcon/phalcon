@@ -20,6 +20,9 @@ use Phalcon\Session\Adapter\Noop;
 use Phalcon\Session\Manager;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
+use function ob_get_clean;
+use function ob_start;
+
 /**
  * cphalcon uses the PHP weak type rules for an int value that goes to a string
  * target, thus the int becomes a string.
@@ -55,5 +58,30 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         $flash = new Session(new Escaper(), $session);
 
         $this->assertSame([], $flash->getMessages(1));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testFlashSessionOutputTypeInt(): void
+    {
+        $session = new Manager();
+        $session->setAdapter(new Noop());
+        $session->start();
+
+        $flash = new Session(new Escaper(), $session);
+        $flash->message('5', 'hi');
+
+        ob_start();
+        try {
+            $flash->output();
+        } finally {
+            $actual = ob_get_clean();
+            $session->destroy();
+        }
+
+        $this->assertSame('<div>hi</div>' . PHP_EOL, $actual);
     }
 }

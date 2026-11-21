@@ -21,6 +21,7 @@ use Phalcon\Html\Link\LinkProvider;
 use Phalcon\Html\TagFactory;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use Phalcon\Tests\Unit\Html\Helper\Input\Select\Fake\FakeResultset;
+use stdClass;
 
 /**
  * cphalcon uses the PHP weak type rules for an int value that goes to a string
@@ -30,6 +31,16 @@ use Phalcon\Tests\Unit\Html\Helper\Input\Select\Fake\FakeResultset;
  */
 final class WeakModeIntValuesTest extends AbstractUnitTestCase
 {
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testHtmlEscaperAttributesIntName(): void
+    {
+        $this->assertSame('5="x"', (new Escaper())->attributes([5 => 'x']));
+    }
+
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-20
@@ -78,5 +89,24 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         $provider = new LinkProvider([new Link('1', 'href')]);
 
         $this->assertCount(1, $provider->getLinksByRel(1));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testHtmlTagFactoryServicesIntName(): void
+    {
+        $factory = new TagFactory(
+            new Escaper(),
+            [
+                '5' => function () {
+                    return new stdClass();
+                },
+            ]
+        );
+
+        $this->assertTrue($factory->has('5'));
     }
 }

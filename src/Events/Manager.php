@@ -735,7 +735,9 @@ class Manager implements ManagerInterface, Enumerable
         $map = [];
 
         foreach (array_keys($this->events) as $type) {
-            $map[$type] = $this->getListeners($type);
+            /** @var array<array-key, mixed> $listeners */
+            $listeners  = self::weakCallMethod($this, 'getListeners', [$type]);
+            $map[$type] = $listeners;
         }
 
         return $map;

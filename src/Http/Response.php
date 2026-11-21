@@ -723,7 +723,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
          * Before that we would like to unset any existing HTTP/x.y headers
          */
         foreach ($currentHeadersRaw as $key) {
-            if (str_contains($key, 'HTTP/')) {
+            if (self::weakCallArray('str_contains', [$key, 'HTTP/'])) {
                 $this->headers->remove($key);
             }
         }
