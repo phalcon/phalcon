@@ -20,6 +20,7 @@ namespace Phalcon\DataMapper\Query;
 
 use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function is_int;
@@ -35,6 +36,8 @@ use function is_int;
  */
 class Update extends AbstractConditions
 {
+    use WeakTypesTrait;
+
     /**
      * Update constructor.
      */
@@ -69,7 +72,7 @@ class Update extends AbstractConditions
     {
         foreach ($columns as $column => $value) {
             if (is_int($column)) {
-                $this->column($value);
+                self::weakCallMethod($this, 'column', [$value]);
             } else {
                 $this->column($column, $value);
             }
@@ -158,7 +161,9 @@ class Update extends AbstractConditions
         $assignments = [];
 
         foreach ($this->store["COLUMNS"] as $column => $value) {
-            $assignments[] = $this->quoteIdentifier($column) . " = " . $value;
+            /** @var string $quoted */
+            $quoted        = self::weakCallMethod($this, 'quoteIdentifier', [$column]);
+            $assignments[] = $quoted . " = " . $value;
         }
 
         return " SET" . $this->indent($assignments, ",");

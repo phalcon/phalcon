@@ -21,6 +21,7 @@ use Phalcon\Contracts\Support\SupportTypes;
 use Phalcon\Di\DiInterface;
 use Phalcon\Support\Debug\Traits\TemplateAwareTrait;
 use Phalcon\Support\Helper\Json\Encode;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 use Reflection;
 use ReflectionClass;
@@ -83,6 +84,7 @@ class Dump implements TemplateAware
 {
     use InterpolateTrait;
     use TemplateAwareTrait;
+    use WeakTypesTrait;
 
     protected bool $detailed = false;
 
@@ -284,7 +286,7 @@ class Dump implements TemplateAware
     protected function getStyle(string $type): string
     {
         if (isset($this->styles[$type])) {
-            return $this->styles[$type];
+            return self::weakReturnString($this->styles[$type]);
         }
 
         return 'color:gray';

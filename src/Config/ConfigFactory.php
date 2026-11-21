@@ -24,11 +24,11 @@ use Phalcon\Config\Exceptions\MissingConfigOption;
 use Phalcon\Config\Exceptions\MissingFileExtension;
 use Phalcon\Contracts\Config\ConfigTypes;
 use Phalcon\Factory\AbstractFactory;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
 use function is_string;
 use function pathinfo;
-use function strtolower;
 
 use const INI_SCANNER_RAW;
 use const PATHINFO_EXTENSION;
@@ -55,6 +55,8 @@ use const PATHINFO_EXTENSION;
  */
 class ConfigFactory extends AbstractFactory
 {
+    use WeakTypesTrait;
+
     /**
      * ConfigFactory constructor.
      *
@@ -76,10 +78,11 @@ class ConfigFactory extends AbstractFactory
     {
         $configArray = $this->parseConfig($config);
 
-        $adapter  = strtolower($configArray['adapter']);
+        /** @var string $adapter */
+        $adapter  = self::weakCallArray('strtolower', [$configArray['adapter']]);
         $filePath = $configArray['filePath'];
 
-        if (empty(pathinfo($filePath, PATHINFO_EXTENSION))) {
+        if (empty(self::weakCallArray('pathinfo', [$filePath, PATHINFO_EXTENSION]))) {
             $filePath .= '.' . $adapter;
         }
 

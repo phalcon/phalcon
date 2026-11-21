@@ -24,6 +24,7 @@ use Phalcon\DataMapper\Pdo\Connection\AbstractConnection;
 use Phalcon\DataMapper\Pdo\Exception\DriverNotSupported;
 use Phalcon\DataMapper\Pdo\Profiler\Profiler;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function explode;
 
@@ -37,6 +38,8 @@ use function explode;
  */
 class Connection extends AbstractConnection
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var datamapper_connection_arguments
      */
@@ -136,7 +139,7 @@ class Connection extends AbstractConnection
 
             // connection-time queries
             foreach ($queries as $query) {
-                $this->exec($query);
+                self::weakCallMethod($this, 'exec', [$query]);
             }
         }
     }

@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Phalcon\DataMapper\Query;
 
 use Phalcon\Contracts\DataMapper\DataMapperTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_key_last;
 use function array_merge;
@@ -36,6 +37,8 @@ use function ucfirst;
  */
 abstract class AbstractConditions extends AbstractQuery
 {
+    use WeakTypesTrait;
+
     /**
      * Sets a `AND` for a `WHERE` condition
      */
@@ -127,7 +130,7 @@ abstract class AbstractConditions extends AbstractQuery
     {
         foreach ($columnsValues as $key => $value) {
             if (is_numeric($key)) {
-                $this->where($value);
+                self::weakCallMethod($this, 'where', [$value]);
             } elseif (null === $value) {
                 $this->where($key . " IS NULL");
             } elseif (is_array($value)) {

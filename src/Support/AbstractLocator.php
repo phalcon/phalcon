@@ -18,6 +18,7 @@ namespace Phalcon\Support;
 
 use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function is_subclass_of;
@@ -32,6 +33,8 @@ use function is_subclass_of;
  */
 abstract class AbstractLocator
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var array<string, class-string<T>>
      */
@@ -47,7 +50,7 @@ abstract class AbstractLocator
         $this->services = $this->getServices();
 
         foreach ($services as $name => $definition) {
-            $this->register($name, $definition);
+            self::weakCallMethod($this, 'register', [$name, $definition]);
         }
     }
 

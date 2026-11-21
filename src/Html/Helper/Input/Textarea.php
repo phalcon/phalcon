@@ -17,11 +17,15 @@ declare(strict_types=1);
 
 namespace Phalcon\Html\Helper\Input;
 
+use Phalcon\Support\Traits\WeakTypesTrait;
+
 /**
  * Class Textarea
  */
 class Textarea extends AbstractInput
 {
+    use WeakTypesTrait;
+
     protected string $type = 'textarea';
 
     /**
@@ -37,10 +41,11 @@ class Textarea extends AbstractInput
         unset($attributes['type']);
         unset($attributes['value']);
 
-        return $this->renderFullElement(
-            $this->type,
-            $value,
-            $attributes
+        /** @var string */
+        return self::weakCallMethod(
+            $this,
+            'renderFullElement',
+            [$this->type, $value, $attributes]
         );
     }
 }

@@ -19,6 +19,7 @@ use Phalcon\Flash\Exceptions\EscaperServiceUnavailable;
 use Phalcon\Flash\Exceptions\FlashMessageNotStringOrArray;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface as SessionInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\InterpolateTrait;
 
 use function htmlspecialchars;
@@ -43,6 +44,7 @@ use const PHP_EOL;
 abstract class AbstractFlash extends AbstractInjectionAware implements FlashInterface
 {
     use InterpolateTrait;
+    use WeakTypesTrait;
 
     protected bool $autoescape    = true;
 
@@ -226,7 +228,8 @@ abstract class AbstractFlash extends AbstractInjectionAware implements FlashInte
 
         /** @var array<array-key, string> $message */
         foreach ($message as $item) {
-            $prepared = $this->prepareEscapedMessage($item);
+            /** @var string $prepared */
+            $prepared = self::weakCallMethod($this, 'prepareEscapedMessage', [$item]);
             $html     = $this->prepareHtmlMessage($type, $prepared);
 
             if (true === $this->implicitFlush) {

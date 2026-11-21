@@ -25,6 +25,7 @@ use Phalcon\Contracts\ADR\Responder\Responder;
 use Phalcon\Contracts\Logger\Logger;
 use Phalcon\Http\RequestInterface;
 use Phalcon\Http\ResponseInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 /**
@@ -41,6 +42,8 @@ use Throwable;
  */
 final class ErrorResponder
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var adr_exception_map
      */
@@ -155,7 +158,7 @@ final class ErrorResponder
         $className = get_class($exception);
 
         if (isset($this->exceptionMap[$className])) {
-            return $this->exceptionMap[$className];
+            return self::weakReturnString($this->exceptionMap[$className]);
         }
 
         $ancestors = array_merge(
@@ -165,7 +168,7 @@ final class ErrorResponder
 
         foreach ($ancestors as $ancestor) {
             if (isset($this->exceptionMap[$ancestor])) {
-                return $this->exceptionMap[$ancestor];
+                return self::weakReturnString($this->exceptionMap[$ancestor]);
             }
         }
 

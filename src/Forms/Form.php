@@ -39,6 +39,9 @@ use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 use function array_key_exists;
 use function is_string;
 use function strtolower;
+use function trigger_error;
+
+use const E_USER_WARNING;
 
 /**
  * This component allows to build forms using an object-oriented interface
@@ -299,7 +302,9 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                 /**
                  * Use the setter if any available
                  */
-                $method = "set" . $this->toCamelize($key);
+                /** @var string $camelized */
+                $camelized = self::weakCallMethod($this, 'toCamelize', [$key]);
+                $method    = "set" . $camelized;
                 if (true === method_exists($entity, $method)) {
                     self::weakCall($entity, $method, $filteredValue);
 
@@ -310,12 +315,32 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                  * Use the public property if it does not have a setter
                  */
                 if (!Settings::get("form.strict_entity_property_check")) {
+                    /**
+                     * cphalcon gives a warning and does not set a property
+                     * with a numeric name
+                     */
+                    if (!is_string($key)) {
+                        trigger_error('Property should be string', E_USER_WARNING);
+
+                        continue;
+                    }
+
                     self::weakWrite($entity, $key, $filteredValue);
 
                     continue;
                 }
 
-                if (property_exists($entity, $key)) {
+                if (self::weakCallArray('property_exists', [$entity, $key])) {
+                    /**
+                     * cphalcon gives a warning and does not set a property
+                     * with a numeric name
+                     */
+                    if (!is_string($key)) {
+                        trigger_error('Property should be string', E_USER_WARNING);
+
+                        continue;
+                    }
+
                     self::weakWrite($entity, $key, $filteredValue);
                 }
             }
@@ -553,7 +578,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
             return $this->getCustomValue($name, $this->entity, $this->data);
         }
 
-        if (null !== $this->entity) {
+        if (is_object($this->entity)) {
             /**
              * Check if the entity has a getter
              */

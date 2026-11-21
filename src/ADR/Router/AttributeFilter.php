@@ -87,7 +87,7 @@ final class AttributeFilter implements AttributeFilterInterface
                     throw new RouteNotFound();
                 }
 
-                $value = $this->cast($segment, $rule['type'] ?? 'string');
+                $value = self::weakCallMethod($this, 'cast', [$segment, $rule['type'] ?? 'string']);
 
                 if (isset($rule['convert'])) {
                     $value = self::weakCallUserFunc($rule['convert'], $value);

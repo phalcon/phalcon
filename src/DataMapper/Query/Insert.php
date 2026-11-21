@@ -20,6 +20,7 @@ namespace Phalcon\DataMapper\Query;
 
 use Phalcon\Contracts\DataMapper\DataMapperTypes;
 use Phalcon\DataMapper\Pdo\Connection;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_merge;
 use function array_values;
@@ -37,6 +38,8 @@ use function ltrim;
  */
 class Insert extends AbstractQuery
 {
+    use WeakTypesTrait;
+
     /**
      * Insert constructor.
      */
@@ -71,7 +74,7 @@ class Insert extends AbstractQuery
     {
         foreach ($columns as $column => $value) {
             if (is_int($column)) {
-                $this->column($value);
+                self::weakCallMethod($this, 'column', [$value]);
             } else {
                 $this->column($column, $value);
             }
@@ -159,7 +162,9 @@ class Insert extends AbstractQuery
         $columns = [];
 
         foreach ($this->store["COLUMNS"] as $column => $value) {
-            $columns[] = $this->quoteIdentifier($column);
+            /** @var string $quoted */
+            $quoted    = self::weakCallMethod($this, 'quoteIdentifier', [$column]);
+            $columns[] = $quoted;
         }
 
         return " ("

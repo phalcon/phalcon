@@ -15,6 +15,7 @@ namespace Phalcon\Html\Link;
 
 use Phalcon\Contracts\Html\Link\LinkTypes;
 use Phalcon\Html\Link\Interfaces\EvolvableLinkInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * Class Phalcon\Html\Link\EvolvableLink
@@ -23,6 +24,8 @@ use Phalcon\Html\Link\Interfaces\EvolvableLinkInterface;
  */
 class EvolvableLink extends Link implements EvolvableLinkInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Returns an instance with the specified attribute added.
      *
@@ -33,7 +36,8 @@ class EvolvableLink extends Link implements EvolvableLinkInterface
      */
     public function withAttribute(mixed $attribute, mixed $value): static
     {
-        return $this->doWithAttribute($attribute, $value);
+        /** @var static */
+        return self::weakCallMethod($this, 'doWithAttribute', [$attribute, $value]);
     }
 
     /**

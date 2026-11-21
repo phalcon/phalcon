@@ -21,7 +21,7 @@ use Phalcon\Forms\Form;
  * Central registry of the array shapes used across the Forms namespace.
  *
  * @phpstan-type forms_attributes array<array-key, mixed>
- * @phpstan-type forms_data array<string, mixed>
+ * @phpstan-type forms_data array<array-key, mixed>
  * @phpstan-type forms_elements array<string, ElementInterface>
  * @phpstan-type forms_elements_indexed list<ElementInterface>
  * @phpstan-type forms_filters array<array-key, array<array-key, mixed>|string>

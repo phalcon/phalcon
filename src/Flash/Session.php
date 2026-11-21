@@ -17,6 +17,7 @@ use Phalcon\Contracts\Flash\FlashTypes;
 use Phalcon\Flash\Exceptions\SessionServiceUnavailable;
 use Phalcon\Html\Escaper\EscaperInterface;
 use Phalcon\Session\ManagerInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 /**
  * This is an implementation of the Phalcon\Flash\FlashInterface that
@@ -31,6 +32,8 @@ use Phalcon\Session\ManagerInterface;
  */
 class Session extends AbstractFlash
 {
+    use WeakTypesTrait;
+
     /**
      * @var string
      */
@@ -72,7 +75,8 @@ class Session extends AbstractFlash
      */
     public function getMessages(mixed $type = null, bool $remove = true): array
     {
-        return $this->getSessionMessages($remove, $type);
+        /** @phpstan-var flash_session_messages|list<mixed> */
+        return self::weakCallMethod($this, 'getSessionMessages', [$remove, $type]);
     }
 
     /**
