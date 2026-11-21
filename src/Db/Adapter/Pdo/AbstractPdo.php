@@ -24,6 +24,8 @@ use Phalcon\Db\Exceptions\CannotPrepareStatement;
 use Phalcon\Db\Exceptions\InvalidBindParameter;
 use Phalcon\Db\Exceptions\MatchedParameterNotFound;
 use Phalcon\Db\Exceptions\NoActiveTransaction;
+use Phalcon\Db\Reference;
+use Phalcon\Db\ReferenceInterface;
 use Phalcon\Db\Result\PdoResult;
 use Phalcon\Db\ResultInterface;
 use Phalcon\Events\Exception as EventsException;
@@ -61,10 +63,12 @@ use function preg_replace;
  *
  * @phpstan-import-type db_bind_params from DbTypes
  * @phpstan-import-type db_bind_types from DbTypes
+ * @phpstan-import-type db_describe_row from DbTypes
  * @phpstan-import-type db_descriptor from DbTypes
  * @phpstan-import-type db_dsn_defaults from DbTypes
  * @phpstan-import-type db_error_info from DbTypes
  * @phpstan-import-type db_pdo_options from DbTypes
+ * @phpstan-import-type db_reference_build from DbTypes
  */
 abstract class AbstractPdo extends AbstractAdapter
 {
@@ -935,6 +939,67 @@ abstract class AbstractPdo extends AbstractAdapter
         $this->autoReconnect = $autoReconnect;
 
         return $this;
+    }
+
+    /**
+     * Builds the Phalcon\Db\Reference objects from the rows of the
+     * describeReferences() SQL statement (MySQL and PostgreSQL)
+     *
+     * @param array<array-key, mixed> $records
+     *
+     * @return array<array-key, ReferenceInterface>
+     */
+    protected function buildReferences(array $records): array
+    {
+        /** @var array<array-key, db_reference_build> $references */
+        $references = [];
+
+        foreach ($records as $reference) {
+            /**
+             * The constraint name is never null.
+             *
+             * @var db_describe_row $reference
+             * @var string          $constraintName
+             */
+            $constraintName    = $reference[2];
+            $columns           = $references[$constraintName]["columns"] ?? [];
+            $referenceDelete   = $references[$constraintName]["onDelete"] ?? $reference[7];
+            $referenceUpdate   = $references[$constraintName]["onUpdate"] ?? $reference[6];
+            $referencedColumns = $references[$constraintName]["referencedColumns"] ?? [];
+            $referencedSchema  = $references[$constraintName]["referencedSchema"] ?? $reference[3];
+            $referencedTable   = $references[$constraintName]["referencedTable"] ?? $reference[4];
+
+            $columns[]           = $reference[1];
+            $referencedColumns[] = $reference[5];
+
+            $references[$constraintName] = [
+                "referencedSchema"  => $referencedSchema,
+                "referencedTable"   => $referencedTable,
+                "columns"           => $columns,
+                "referencedColumns" => $referencedColumns,
+                "onUpdate"          => $referenceUpdate,
+                "onDelete"          => $referenceDelete,
+            ];
+        }
+
+        $referenceObjects = [];
+        foreach ($references as $name => $arrayReference) {
+            /** @var Reference $referenceObject */
+            $referenceObject         = self::weakNew(Reference::class, [
+                $name,
+                [
+                    "referencedSchema"  => $arrayReference["referencedSchema"],
+                    "referencedTable"   => $arrayReference["referencedTable"],
+                    "columns"           => $arrayReference["columns"],
+                    "referencedColumns" => $arrayReference["referencedColumns"],
+                    "onUpdate"          => $arrayReference["onUpdate"],
+                    "onDelete"          => $arrayReference["onDelete"],
+                ],
+            ]);
+            $referenceObjects[$name] = $referenceObject;
+        }
+
+        return $referenceObjects;
     }
 
     /**
