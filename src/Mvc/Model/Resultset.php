@@ -269,10 +269,7 @@ abstract class Resultset implements
                 /**
                  * We only can delete resultsets if every element is a complete object
                  */
-                if (
-                    !is_object($record) ||
-                    !method_exists($record, "getWriteConnection")
-                ) {
+                if (!is_object($record) || !method_exists($record, "getWriteConnection")) {
                     throw new InvalidReturnedRecord();
                 }
 
@@ -851,10 +848,7 @@ abstract class Resultset implements
                 /**
                  * We only can update resultsets if every element is a complete object
                  */
-                if (
-                    !is_object($record) ||
-                    !method_exists($record, "getWriteConnection")
-                ) {
+                if (!is_object($record) || !method_exists($record, "getWriteConnection")) {
                     throw new InvalidReturnedRecord();
                 }
 
