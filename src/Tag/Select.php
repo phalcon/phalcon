@@ -23,7 +23,6 @@ use function array_key_exists;
 use function is_array;
 use function is_object;
 use function is_scalar;
-use function is_string;
 use function method_exists;
 use function str_contains;
 
@@ -61,13 +60,13 @@ abstract class Select
      * @throws Exception
      */
     public static function selectField(
-        array | string $parameters,
+        mixed $parameters,
         mixed $data = null
     ): string {
         $emptyText  = '';
         $emptyValue = '';
         $params     = $parameters;
-        if (is_string($params)) {
+        if (!is_array($params)) {
             $params = [$parameters, $data];
         }
 
