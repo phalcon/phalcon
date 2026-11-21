@@ -14,8 +14,10 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Mvc\Router;
 
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Events\Manager;
 use Phalcon\Http\Request;
 use Phalcon\Mvc\Router;
+use Phalcon\Mvc\Router\Exceptions\WrongPathsKey;
 use Phalcon\Mvc\Router\Group;
 use Phalcon\Mvc\Router\Route;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
@@ -40,6 +42,17 @@ final class HandleTest extends AbstractUnitTestCase
             ['/a:1/test'],
             ['/1:a/test'],
             ['/a:a/test'],
+        ];
+    }
+
+    /**
+     * @return array<string, array{0: bool}>
+     */
+    public static function getWrongPathsKeyExamples(): array
+    {
+        return [
+            'combined regex' => [false],
+            'per-route loop' => [true],
         ];
     }
 
@@ -569,5 +582,30 @@ final class HandleTest extends AbstractUnitTestCase
         ];
         $actual   = $router->getParams();
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * A paths key that is not a string throws WrongPathsKey. An events
+     * manager disables the combined regex, thus the per-route loop runs.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/881
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[DataProvider('getWrongPathsKeyExamples')]
+    public function testMvcRouterHandleWrongPathsKeyInt(bool $events): void
+    {
+        $router = $this->getRouter(false);
+
+        if ($events) {
+            $router->setEventsManager(new Manager());
+        }
+
+        $router->add('/a/([0-9]+)', ['controller' => 'a', 1]);
+
+        $this->expectException(WrongPathsKey::class);
+        $this->expectExceptionMessage('Wrong key in paths: 0');
+
+        $router->handle('/a/5');
     }
 }
