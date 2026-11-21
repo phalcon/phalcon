@@ -16,6 +16,7 @@ namespace Phalcon\Tests\Database\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Resultset;
 use Phalcon\Mvc\Model\Resultset\Complex;
 use Phalcon\Mvc\Model\Row;
+use Phalcon\Storage\Serializer\None;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use Phalcon\Tests\Database\Mvc\Model\Resultset\ResultsetFixtureTrait;
 use PHPUnit\Framework\Attributes\Group;
@@ -54,6 +55,27 @@ final class SerializeTest extends AbstractDatabaseTestCase
         // row count rather than a deep object graph.
         $this->assertCount(4, $restored);
         $this->assertSame($original->count(), $restored->count());
+    }
+
+    /**
+     * The value of the serializer service is returned with no change, also
+     * when it is not a string.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/879
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testMvcModelResultsetComplexSerializeNoneSerializer(): void
+    {
+        $this->container->setShared('serializer', new None());
+
+        $data = $this->getResultset('complex')->serialize();
+
+        $this->assertIsArray($data);
+        $this->assertCount(4, $data['rows']);
     }
 
     /**
