@@ -93,6 +93,24 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
     }
 
     /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testAclAdapterMemoryWildcardIntRole(): void
+    {
+        $acl = new Memory();
+        $acl->addRole('2024');
+        $acl->addComponent('c', ['a']);
+
+        $acl->allow('*', 'c', 'a');
+        $this->assertTrue($acl->isAllowed('2024', 'c', 'a'));
+
+        $acl->deny('*', 'c', 'a');
+        $this->assertFalse($acl->isAllowed('2024', 'c', 'a'));
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-19
      */

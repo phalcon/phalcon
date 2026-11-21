@@ -84,7 +84,7 @@ class FormsLocator
         $this->elements = $this->getDefaultServices();
 
         foreach ($definitions as $name => $callable) {
-            $this->set($name, $callable);
+            self::weakCallMethod($this, 'set', [$name, $callable]);
         }
     }
 

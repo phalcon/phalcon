@@ -493,12 +493,10 @@ class Memory extends AbstractAdapter
         }
 
         foreach ($rolesArray as $role) {
-            $this->allowOrDeny(
-                $role,
-                $componentName,
-                $access,
-                Enum::ALLOW,
-                $func
+            self::weakCallMethod(
+                $this,
+                'allowOrDeny',
+                [$role, $componentName, $access, Enum::ALLOW, $func]
             );
         }
     }
@@ -537,12 +535,10 @@ class Memory extends AbstractAdapter
         }
 
         foreach ($rolesArray as $role) {
-            $this->allowOrDeny(
-                $role,
-                $componentName,
-                $access,
-                Enum::DENY,
-                $func
+            self::weakCallMethod(
+                $this,
+                'allowOrDeny',
+                [$role, $componentName, $access, Enum::DENY, $func]
             );
         }
     }

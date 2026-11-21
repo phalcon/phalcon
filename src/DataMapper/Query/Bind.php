@@ -20,6 +20,7 @@ namespace Phalcon\DataMapper\Query;
 
 use PDO;
 use Phalcon\Contracts\DataMapper\DataMapperTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function implode;
 use function is_array;
@@ -35,6 +36,8 @@ use function is_int;
  */
 class Bind
 {
+    use WeakTypesTrait;
+
     protected int $inlineCount = 0;
 
     /**
@@ -94,7 +97,7 @@ class Bind
     public function setValues(array $values, int $type = -1): void
     {
         foreach ($values as $key => $value) {
-            $this->setValue($key, $value, $type);
+            self::weakCallMethod($this, 'setValue', [$key, $value, $type]);
         }
     }
 

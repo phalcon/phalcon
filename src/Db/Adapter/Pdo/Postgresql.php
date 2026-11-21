@@ -21,7 +21,6 @@ use Phalcon\Db\Enum;
 use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\TableMustHaveColumn;
 use Phalcon\Db\RawValue;
-use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
 use Throwable;
 
@@ -53,7 +52,6 @@ use function trigger_error;
  * @phpstan-import-type db_describe_row from DbTypes
  * @phpstan-import-type db_descriptor from DbTypes
  * @phpstan-import-type db_dsn_defaults from DbTypes
- * @phpstan-import-type db_reference_build from DbTypes
  * @phpstan-import-type db_table_definition from DbTypes
  */
 class Postgresql extends PdoAdapter
@@ -656,58 +654,12 @@ class Postgresql extends PdoAdapter
         string $table,
         string | null $schema = null
     ): array {
-        /** @var array<string, db_reference_build> $references */
-        $references = [];
-        $records    = $this->fetchAll(
-            $this->dialect->describeReferences($table, $schema),
-            Enum::FETCH_NUM
+        return $this->buildReferences(
+            $this->fetchAll(
+                $this->dialect->describeReferences($table, $schema),
+                Enum::FETCH_NUM
+            )
         );
-
-        foreach ($records as $reference) {
-            /**
-             * PostgreSQL does not store a null constraint name.
-             *
-             * @var db_describe_row $reference
-             * @var string          $constraintName
-             */
-            $constraintName    = $reference[2];
-            $columns           = $references[$constraintName]["columns"] ?? [];
-            $referenceDelete   = $references[$constraintName]["onDelete"] ?? $reference[7];
-            $referenceUpdate   = $references[$constraintName]["onUpdate"] ?? $reference[6];
-            $referencedColumns = $references[$constraintName]["referencedColumns"] ?? [];
-            $referencedSchema  = $references[$constraintName]["referencedSchema"] ?? $reference[3];
-            $referencedTable   = $references[$constraintName]["referencedTable"] ?? $reference[4];
-
-            $columns[]           = $reference[1];
-            $referencedColumns[] = $reference[5];
-
-            $references[$constraintName] = [
-                "referencedSchema"  => $referencedSchema,
-                "referencedTable"   => $referencedTable,
-                "columns"           => $columns,
-                "referencedColumns" => $referencedColumns,
-                "onUpdate"          => $referenceUpdate,
-                "onDelete"          => $referenceDelete,
-            ];
-        }
-
-        $referenceObjects = [];
-        foreach ($references as $name => $arrayReference) {
-            /** @var db_reference_build $arrayReference */
-            $referenceObjects[$name] = new Reference(
-                $name,
-                [
-                    "referencedSchema"  => $arrayReference["referencedSchema"],
-                    "referencedTable"   => $arrayReference["referencedTable"],
-                    "columns"           => $arrayReference["columns"],
-                    "referencedColumns" => $arrayReference["referencedColumns"],
-                    "onUpdate"          => $arrayReference["onUpdate"],
-                    "onDelete"          => $arrayReference["onDelete"],
-                ]
-            );
-        }
-
-        return $referenceObjects;
     }
 
     /**

@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Forms;
 
 use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Form;
+use Phalcon\Forms\FormsLocator;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use stdClass;
 
@@ -73,5 +74,23 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         $form->setEntity(123);
 
         $this->assertNull($form->getValue('x'));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testFormsFormsLocatorListOfFactories(): void
+    {
+        $locator = new FormsLocator(
+            [
+                function () {
+                    return new Form();
+                },
+            ]
+        );
+
+        $this->assertTrue($locator->has('0'));
     }
 }

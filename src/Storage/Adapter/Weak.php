@@ -19,6 +19,7 @@ use Phalcon\Storage\SerializerFactory;
 use WeakReference;
 
 use function is_object;
+use function is_string;
 
 /**
  * Weak Adapter
@@ -39,7 +40,7 @@ class Weak extends AbstractAdapter
     protected string | null $fetching = null;
 
     /**
-     * @var array<string, WeakReference<object>>
+     * @var array<array-key, WeakReference<object>>
      *
      * @phpstan-var storage_weak_list
      */
@@ -81,7 +82,7 @@ class Weak extends AbstractAdapter
         if ('' !== $prefix) {
             $results = [];
             foreach ($keys as $key) {
-                if (str_starts_with($key, $prefix)) {
+                if (is_string($key) && str_starts_with($key, $prefix)) {
                     $results[] = $key;
                 }
             }

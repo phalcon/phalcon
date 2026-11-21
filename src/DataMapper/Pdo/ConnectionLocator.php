@@ -83,11 +83,11 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
         $this->setMaster($master);
 
         foreach ($read as $name => $callableObject) {
-            $this->setRead($name, $callableObject);
+            self::weakCallMethod($this, 'setRead', [$name, $callableObject]);
         }
 
         foreach ($write as $name => $callableObject) {
-            $this->setWrite($name, $callableObject);
+            self::weakCallMethod($this, 'setWrite', [$name, $callableObject]);
         }
     }
 

@@ -25,8 +25,8 @@ use Phalcon\Db\Exception;
 use Phalcon\Db\Exceptions\MissingForeignKeyChecks;
 use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
-use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function preg_match;
@@ -60,10 +60,11 @@ use function substr;
  * @phpstan-import-type db_error_info from DbTypes
  * @phpstan-import-type db_dsn_defaults from DbTypes
  * @phpstan-import-type db_index_build from DbTypes
- * @phpstan-import-type db_reference_build from DbTypes
  */
 class Mysql extends PdoAdapter
 {
+    use WeakTypesTrait;
+
     protected string $dialectType = "mysql";
 
     protected string $type = "mysql";
@@ -677,15 +678,17 @@ class Mysql extends PdoAdapter
                 $directions = [];
             }
 
-            $indexObjects[$name] = new Index(
+            /** @var Index $indexObject */
+            $indexObject         = self::weakNew(Index::class, [
                 $name,
                 [
                     "columns"    => $index["columns"],
                     "type"       => $index["type"],
                     "invisible"  => $invisible,
                     "directions" => $directions,
-                ]
-            );
+                ],
+            ]);
+            $indexObjects[$name] = $indexObject;
         }
 
         return $indexObjects;
@@ -709,54 +712,12 @@ class Mysql extends PdoAdapter
         string $table,
         string | null $schema = null
     ): array {
-        $records = $this->fetchAll(
-            $this->dialect->describeReferences($table, $schema),
-            Enum::FETCH_NUM
+        return $this->buildReferences(
+            $this->fetchAll(
+                $this->dialect->describeReferences($table, $schema),
+                Enum::FETCH_NUM
+            )
         );
-
-        /** @var array<string, db_reference_build> $references */
-        $references = [];
-
-        foreach ($records as $reference) {
-            /** @var db_column_names $reference */
-            $constraintName    = $reference[2];
-            $columns           = $references[$constraintName]["columns"] ?? [];
-            $referenceDelete   = $references[$constraintName]["onDelete"] ?? $reference[7];
-            $referenceUpdate   = $references[$constraintName]["onUpdate"] ?? $reference[6];
-            $referencedSchema  = $references[$constraintName]["referencedSchema"] ?? $reference[3];
-            $referencedColumns = $references[$constraintName]["referencedColumns"] ?? [];
-            $referencedTable   = $references[$constraintName]["referencedTable"] ?? $reference[4];
-
-            $columns[]           = $reference[1];
-            $referencedColumns[] = $reference[5];
-
-            $references[$constraintName] = [
-                "referencedSchema"  => $referencedSchema,
-                "referencedTable"   => $referencedTable,
-                "columns"           => $columns,
-                "referencedColumns" => $referencedColumns,
-                "onUpdate"          => $referenceUpdate,
-                "onDelete"          => $referenceDelete,
-            ];
-        }
-
-        $referenceObjects = [];
-        foreach ($references as $name => $arrayReference) {
-            /** @var db_reference_build $arrayReference */
-            $referenceObjects[$name] = new Reference(
-                $name,
-                [
-                    "referencedSchema"  => $arrayReference["referencedSchema"],
-                    "referencedTable"   => $arrayReference["referencedTable"],
-                    "columns"           => $arrayReference["columns"],
-                    "referencedColumns" => $arrayReference["referencedColumns"],
-                    "onUpdate"          => $arrayReference["onUpdate"],
-                    "onDelete"          => $arrayReference["onDelete"],
-                ]
-            );
-        }
-
-        return $referenceObjects;
     }
 
     /**
