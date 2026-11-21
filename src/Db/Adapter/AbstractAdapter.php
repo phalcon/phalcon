@@ -509,7 +509,9 @@ abstract class AbstractAdapter implements AdapterInterface, EventsAwareInterface
             /**
              * Every index is abstracted using a Phalcon\Db\Index instance
              */
-            $indexObjects[$name] = new Index($name, $indexColumns);
+            /** @var Index $indexObject */
+            $indexObject         = self::weakNew(Index::class, [$name, $indexColumns]);
+            $indexObjects[$name] = $indexObject;
         }
 
         return $indexObjects;

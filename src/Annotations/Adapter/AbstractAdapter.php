@@ -24,7 +24,6 @@ use Phalcon\Support\Traits\WeakTypesTrait;
 use function count;
 use function get_class;
 use function is_object;
-use function strcasecmp;
 
 /**
  * This is the base class for Phalcon\Annotations adapters
@@ -174,7 +173,7 @@ abstract class AbstractAdapter implements AdapterInterface
         }
 
         foreach ($methods as $methodKey => $method) {
-            if (!strcasecmp($methodKey, $methodName)) {
+            if (!self::weakCallArray('strcasecmp', [$methodKey, $methodName])) {
                 return $method;
             }
         }

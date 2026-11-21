@@ -461,7 +461,7 @@ class Loader
         }
 
         foreach ($namespaces as $name => $directories) {
-            $this->addNamespace($name, $directories);
+            self::weakCallMethod($this, 'addNamespace', [$name, $directories]);
         }
 
         return $this;

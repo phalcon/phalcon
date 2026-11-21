@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Di;
 
 use ArrayObject;
+use Phalcon\Config\Config;
+use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\Di;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 use RuntimeException;
@@ -48,6 +50,25 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         unset($container[1]);
 
         $this->assertFalse(isset($container[1]));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testDiLoadFromConfigIntServiceName(): void
+    {
+        $container = new class () extends Di {
+            public function load(ConfigInterface $config): void
+            {
+                $this->loadFromConfig($config);
+            }
+        };
+
+        $container->load(new Config(['2024' => ['className' => stdClass::class]]));
+
+        $this->assertInstanceOf(stdClass::class, $container->get('2024'));
     }
 
     /**

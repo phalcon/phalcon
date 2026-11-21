@@ -725,11 +725,11 @@ class Di extends stdClass implements DiInterface
         $services = $config->toArray();
 
         foreach ($services as $name => $service) {
-            $this->set(
+            self::weakCallMethod($this, 'set', [
                 $name,
                 $service,
-                is_array($service) && isset($service['shared']) && $service['shared']
-            );
+                is_array($service) && isset($service['shared']) && $service['shared'],
+            ]);
         }
     }
 

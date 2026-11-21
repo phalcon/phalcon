@@ -26,6 +26,7 @@ use Phalcon\Db\IndexInterface;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function preg_match;
 use function strcasecmp;
@@ -52,6 +53,8 @@ use function trigger_error;
  */
 class Sqlite extends PdoAdapter
 {
+    use WeakTypesTrait;
+
     protected string $dialectType = "sqlite";
 
     protected string $type = "sqlite";
@@ -462,11 +465,13 @@ class Sqlite extends PdoAdapter
         $indexObjects = [];
         foreach ($indexes as $name => $index) {
             /** @var array{columns: db_index_columns, type: string} $index */
-            $indexObjects[$name] = new Index(
+            /** @var Index $indexObject */
+            $indexObject         = self::weakNew(Index::class, [
                 $name,
                 $index["columns"],
-                $index["type"]
-            );
+                $index["type"],
+            ]);
+            $indexObjects[$name] = $indexObject;
         }
 
         return $indexObjects;

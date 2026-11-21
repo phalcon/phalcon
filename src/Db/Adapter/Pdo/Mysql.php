@@ -27,6 +27,7 @@ use Phalcon\Db\Index;
 use Phalcon\Db\IndexInterface;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function preg_match;
@@ -64,6 +65,8 @@ use function substr;
  */
 class Mysql extends PdoAdapter
 {
+    use WeakTypesTrait;
+
     protected string $dialectType = "mysql";
 
     protected string $type = "mysql";
@@ -677,15 +680,17 @@ class Mysql extends PdoAdapter
                 $directions = [];
             }
 
-            $indexObjects[$name] = new Index(
+            /** @var Index $indexObject */
+            $indexObject         = self::weakNew(Index::class, [
                 $name,
                 [
                     "columns"    => $index["columns"],
                     "type"       => $index["type"],
                     "invisible"  => $invisible,
                     "directions" => $directions,
-                ]
-            );
+                ],
+            ]);
+            $indexObjects[$name] = $indexObject;
         }
 
         return $indexObjects;
@@ -743,7 +748,8 @@ class Mysql extends PdoAdapter
         $referenceObjects = [];
         foreach ($references as $name => $arrayReference) {
             /** @var db_reference_build $arrayReference */
-            $referenceObjects[$name] = new Reference(
+            /** @var Reference $referenceObject */
+            $referenceObject         = self::weakNew(Reference::class, [
                 $name,
                 [
                     "referencedSchema"  => $arrayReference["referencedSchema"],
@@ -752,8 +758,9 @@ class Mysql extends PdoAdapter
                     "referencedColumns" => $arrayReference["referencedColumns"],
                     "onUpdate"          => $arrayReference["onUpdate"],
                     "onDelete"          => $arrayReference["onDelete"],
-                ]
-            );
+                ],
+            ]);
+            $referenceObjects[$name] = $referenceObject;
         }
 
         return $referenceObjects;

@@ -474,7 +474,7 @@ abstract class AbstractPdo extends AbstractAdapter
      */
     public function escapeString(string $str): string
     {
-        return $this->pdo->quote($str);
+        return self::weakReturnString($this->pdo->quote($str));
     }
 
     /**

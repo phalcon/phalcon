@@ -129,7 +129,7 @@ use WeakReference;
  *     created?: int,
  *     ttl?: int|string,
  * }
- * @phpstan-type storage_weak_list array<string, WeakReference<object>>
+ * @phpstan-type storage_weak_list array<array-key, WeakReference<object>>
  */
 interface StorageTypes
 {

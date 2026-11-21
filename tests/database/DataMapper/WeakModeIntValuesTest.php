@@ -15,6 +15,8 @@ namespace Phalcon\Tests\Database\DataMapper;
 
 use PDOException;
 use Phalcon\DataMapper\Pdo\Connection;
+use Phalcon\DataMapper\Pdo\ConnectionLocator;
+use Phalcon\DataMapper\Query\Bind;
 use Phalcon\DataMapper\Query\QueryFactory;
 use Phalcon\Tests\AbstractDatabaseTestCase;
 use PHPUnit\Framework\Attributes\Group;
@@ -33,6 +35,24 @@ use function sprintf;
 final class WeakModeIntValuesTest extends AbstractDatabaseTestCase
 {
     /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testDataMapperPdoConnectionLocatorListOfFactories(): void
+    {
+        $connection = self::getDataMapperConnection();
+        $factory    = function () use ($connection) {
+            return $connection;
+        };
+
+        $locator = new ConnectionLocator($connection, [$factory], [$factory]);
+
+        $this->assertSame($connection, $locator->getRead('0'));
+        $this->assertSame($connection, $locator->getWrite('0'));
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-20
      */
@@ -49,6 +69,24 @@ final class WeakModeIntValuesTest extends AbstractDatabaseTestCase
         $this->expectException(PDOException::class);
 
         $connection->connect();
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testDataMapperQueryBindSetValuesIntKeys(): void
+    {
+        $bind = new Bind();
+        $bind->setValues(['x']);
+
+        $this->assertSame([0 => ['x', 2]], $bind->toArray());
+
+        $select = (new QueryFactory())->newSelect(self::getDataMapperConnection());
+        $select->bindValues(['2024' => 'x']);
+
+        $this->assertSame([2024 => ['x', 2]], $select->getBindValues());
     }
 
     /**

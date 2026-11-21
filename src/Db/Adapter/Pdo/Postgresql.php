@@ -23,6 +23,7 @@ use Phalcon\Db\Exceptions\TableMustHaveColumn;
 use Phalcon\Db\RawValue;
 use Phalcon\Db\Reference;
 use Phalcon\Db\ReferenceInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
 
 use function explode;
@@ -58,6 +59,8 @@ use function trigger_error;
  */
 class Postgresql extends PdoAdapter
 {
+    use WeakTypesTrait;
+
     protected string $dialectType = "postgresql";
 
     protected string $type = "pgsql";
@@ -694,7 +697,8 @@ class Postgresql extends PdoAdapter
         $referenceObjects = [];
         foreach ($references as $name => $arrayReference) {
             /** @var db_reference_build $arrayReference */
-            $referenceObjects[$name] = new Reference(
+            /** @var Reference $referenceObject */
+            $referenceObject         = self::weakNew(Reference::class, [
                 $name,
                 [
                     "referencedSchema"  => $arrayReference["referencedSchema"],
@@ -703,8 +707,9 @@ class Postgresql extends PdoAdapter
                     "referencedColumns" => $arrayReference["referencedColumns"],
                     "onUpdate"          => $arrayReference["onUpdate"],
                     "onDelete"          => $arrayReference["onDelete"],
-                ]
-            );
+                ],
+            ]);
+            $referenceObjects[$name] = $referenceObject;
         }
 
         return $referenceObjects;

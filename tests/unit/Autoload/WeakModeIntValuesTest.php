@@ -110,4 +110,24 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
 
         $this->assertSame([123 => '123'], $loader->getFiles());
     }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testAutoloadLoaderSetNamespacesIntName(): void
+    {
+        $loader = new Loader();
+        $loader->setNamespaces(['2024' => '/srv/src']);
+
+        $this->assertSame(
+            [
+                '2024\\' => [
+                    '/srv/src/' => '/srv/src/',
+                ],
+            ],
+            $loader->getNamespaces()
+        );
+    }
 }

@@ -18,7 +18,8 @@ use PDOException;
 
 /**
  * PDO handle that counts the transaction calls the adapter makes and returns
- * or throws what the test asks for, so no server is necessary.
+ * or throws what the test asks for, so no server is necessary. `quote()`
+ * returns `quoteResult` when it is set.
  */
 final class FakePdo extends PDO
 {
@@ -26,6 +27,7 @@ final class FakePdo extends PDO
     public PDOException | null $commitError = null;
     public bool $commitResult = true;
     public bool $inTransaction = true;
+    public string | false | null $quoteResult = null;
     public int $rollbackCalls = 0;
     public PDOException | null $rollbackError = null;
     public bool $rollbackResult = true;
@@ -49,6 +51,11 @@ final class FakePdo extends PDO
     public function inTransaction(): bool
     {
         return $this->inTransaction;
+    }
+
+    public function quote(string $string, int $type = PDO::PARAM_STR): string | false
+    {
+        return $this->quoteResult ?? parent::quote($string, $type);
     }
 
     public function rollBack(): bool

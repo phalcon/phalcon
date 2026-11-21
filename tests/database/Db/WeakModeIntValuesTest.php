@@ -25,7 +25,10 @@ use Phalcon\Db\Exceptions\InvalidSqlExpressionType;
 use Phalcon\Db\Index;
 use Phalcon\Db\Reference;
 use Phalcon\Tests\AbstractDatabaseTestCase;
+use Phalcon\Tests\Support\Fake\FakePdo;
+use Phalcon\Tests\Support\Traits\DiTrait;
 use PHPUnit\Framework\Attributes\Group;
+use ReflectionObject;
 
 /**
  * cphalcon uses the PHP weak type rules for an int value that goes to a string
@@ -36,6 +39,91 @@ use PHPUnit\Framework\Attributes\Group;
  */
 final class WeakModeIntValuesTest extends AbstractDatabaseTestCase
 {
+    use DiTrait;
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    #[Group('sqlite')]
+    public function testDbAdapterDescribeIndexesIntName(): void
+    {
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
+
+        $db = $this->container->get('db');
+        $db->execute('DROP TABLE IF EXISTS ph_weak_int_index');
+        $db->execute('CREATE TABLE ph_weak_int_index (id INTEGER PRIMARY KEY, name VARCHAR(10))');
+
+        try {
+            $db->execute(
+                'CREATE INDEX ' . $db->escapeIdentifier('2024') . ' ON ph_weak_int_index (name)'
+            );
+            $indexes = $db->describeIndexes('ph_weak_int_index');
+        } finally {
+            $db->execute('DROP TABLE ph_weak_int_index');
+        }
+
+        $this->assertSame('2024', $indexes[2024]->getName());
+        $this->assertSame(['name'], $indexes[2024]->getColumns());
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('mysql')]
+    #[Group('pgsql')]
+    public function testDbAdapterDescribeReferencesIntName(): void
+    {
+        $this->setNewFactoryDefault();
+        $this->setDatabase();
+
+        $db = $this->container->get('db');
+        $db->execute('DROP TABLE IF EXISTS ph_weak_int_child');
+        $db->execute('DROP TABLE IF EXISTS ph_weak_int_parent');
+        $db->execute('CREATE TABLE ph_weak_int_parent (id INTEGER PRIMARY KEY)');
+
+        try {
+            $db->execute(
+                'CREATE TABLE ph_weak_int_child (id INTEGER PRIMARY KEY, parent_id INTEGER, '
+                . 'CONSTRAINT ' . $db->escapeIdentifier('2024') . ' '
+                . 'FOREIGN KEY (parent_id) REFERENCES ph_weak_int_parent (id))'
+            );
+            $references = $db->describeReferences('ph_weak_int_child');
+        } finally {
+            $db->execute('DROP TABLE IF EXISTS ph_weak_int_child');
+            $db->execute('DROP TABLE ph_weak_int_parent');
+        }
+
+        $this->assertSame('2024', $references[2024]->getName());
+        $this->assertSame(['parent_id'], $references[2024]->getColumns());
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/900
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    #[Group('sqlite')]
+    public function testDbAdapterPdoEscapeStringQuoteFalse(): void
+    {
+        $pdo              = new FakePdo();
+        $pdo->quoteResult = false;
+
+        $db = new Sqlite(['dbname' => ':memory:']);
+        (new ReflectionObject($db))->getProperty('pdo')->setValue($db, $pdo);
+
+        /**
+         * cphalcon returns false, phalcon returns an empty string
+         */
+        $this->assertEmpty($db->escapeString('x'));
+    }
+
     /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-19
