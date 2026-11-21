@@ -1242,7 +1242,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                 foreach ($combinedPaths as $combinedPart => $combinedPosition) {
                     if (!is_string($combinedPart)) {
-                        throw new WrongPathsKey($combinedPart);
+                        throw new WrongPathsKey((string) $combinedPart);
                     }
 
                     if (!is_string($combinedPosition) && !is_int($combinedPosition)) {
@@ -1383,7 +1383,7 @@ class Router extends AbstractInjectionAware implements RouterInterface, EventsAw
 
                         foreach ($paths as $part => $position) {
                             if (!is_string($part)) {
-                                throw new WrongPathsKey($part);
+                                throw new WrongPathsKey((string) $part);
                             }
 
                             if (!is_string($position) && !is_int($position)) {
