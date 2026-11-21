@@ -151,7 +151,7 @@ class Session extends AbstractFlash
         $messages = $this->getSessionMessages($remove);
 
         foreach ($messages as $type => $message) {
-            $this->outputMessage($type, $message);
+            self::weakCallMethod($this, 'outputMessage', [$type, $message]);
         }
 
         /**

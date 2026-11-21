@@ -160,7 +160,7 @@ class TagFactory
         $this->factories = $this->getDefaultServices();
 
         foreach ($services as $name => $definition) {
-            $this->set($name, $definition);
+            self::weakCallMethod($this, 'set', [$name, $definition]);
         }
     }
 

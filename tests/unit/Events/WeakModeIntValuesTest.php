@@ -17,6 +17,8 @@ use Phalcon\Contracts\Events\Subscriber;
 use Phalcon\Events\Manager;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
 
+use function array_keys;
+
 /**
  * cphalcon uses the PHP weak type rules for an int value that goes to a string
  * target, thus the int becomes a string.
@@ -35,6 +37,27 @@ final class WeakModeIntValuesTest extends AbstractUnitTestCase
         $manager->addSubscriber($this->newListSubscriber());
 
         $this->assertCount(1, $manager->getListeners('0'));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testEventsManagerGetListenerMapIntType(): void
+    {
+        $manager = new Manager();
+        $manager->attach(
+            '123',
+            function () {
+                return true;
+            }
+        );
+
+        $map = $manager->getListenerMap();
+
+        $this->assertSame([123], array_keys($map));
+        $this->assertCount(1, $map[123]);
     }
 
     /**

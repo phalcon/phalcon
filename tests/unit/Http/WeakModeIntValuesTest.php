@@ -23,6 +23,8 @@ use Phalcon\Tests\Unit\Http\Helper\AbstractHttpBase;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 
 use function array_keys;
+use function restore_error_handler;
+use function set_error_handler;
 
 /**
  * cphalcon uses the PHP weak type rules for an int value that goes to a string
@@ -69,6 +71,53 @@ final class WeakModeIntValuesTest extends AbstractHttpBase
     }
 
     /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testHttpRequestGetHeadersIntServerKey(): void
+    {
+        $_SERVER[5]               = 'five';
+        $_SERVER['HTTP_WEAK_INT'] = 'yes';
+
+        $headers = (new Request())->getHeaders();
+
+        $this->assertSame('yes', $headers['Weak-Int']);
+        $this->assertNotContains('five', $headers);
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testHttpRequestGetUploadedFilesIntFieldName(): void
+    {
+        $_FILES = [
+            5 => [
+                'name'     => 'a.txt',
+                'type'     => 'text/plain',
+                'tmp_name' => '',
+                'size'     => 1,
+                'error'    => 0,
+            ],
+            6 => [
+                'name'     => ['b.txt'],
+                'type'     => ['text/plain'],
+                'tmp_name' => [''],
+                'size'     => [1],
+                'error'    => [0],
+            ],
+        ];
+
+        $files = (new Request())->getUploadedFiles(false, true);
+
+        $this->assertSame([5, '6.0'], array_keys($files));
+        $this->assertSame('5', $files[5]->getKey());
+        $this->assertSame('b.txt', $files['6.0']->getName());
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-19
      */
@@ -100,6 +149,34 @@ final class WeakModeIntValuesTest extends AbstractHttpBase
     }
 
     /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testHttpResponseHeadersSendRawIntName(): void
+    {
+        $headers = new Headers();
+        $headers->setRaw('5');
+
+        /**
+         * cphalcon gives a warning for an int header name
+         */
+        set_error_handler(
+            function (): bool {
+                return true;
+            }
+        );
+
+        try {
+            $actual = $headers->send();
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertTrue($actual);
+    }
+
+    /**
      * @author Phalcon Team <team@phalcon.io>
      * @since  2026-11-19
      */
@@ -120,5 +197,26 @@ final class WeakModeIntValuesTest extends AbstractHttpBase
         $response->setHeaders($headers);
 
         $this->assertSame('one', $response->getHeaders()->get('1'));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/898
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-20
+     */
+    public function testHttpResponseSetStatusCodeIntHeaderName(): void
+    {
+        $response = new Response();
+        $response->setHeader('123', 'x');
+        $response->setStatusCode(200);
+
+        $this->assertSame(
+            [
+                123               => 'x',
+                'HTTP/1.1 200 OK' => null,
+                'Status'          => '200 OK',
+            ],
+            $response->getHeaders()->toArray()
+        );
     }
 }

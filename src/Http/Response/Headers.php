@@ -15,10 +15,10 @@ namespace Phalcon\Http\Response;
 
 use IteratorAggregate;
 use Phalcon\Contracts\Http\HttpTypes;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Traversable;
 
 use function array_key_exists;
-use function str_contains;
 
 /**
  * This class is a bag to manage the response headers
@@ -29,6 +29,8 @@ use function str_contains;
  */
 class Headers implements HeadersInterface, IteratorAggregate
 {
+    use WeakTypesTrait;
+
     /**
      * @phpstan-var http_response_headers
      */
@@ -108,8 +110,8 @@ class Headers implements HeadersInterface, IteratorAggregate
             if (null !== $value) {
                 $header .= ': ' . $value;
             } elseif (
-                !str_contains($header, ':') &&
-                !str_starts_with($header, 'HTTP/')
+                !self::weakCallArray('str_contains', [$header, ':']) &&
+                !self::weakCallArray('str_starts_with', [$header, 'HTTP/'])
             ) {
                 $header .= ': ';
             }
