@@ -24,6 +24,7 @@ use Phalcon\Mvc\Model\Relation;
 use Phalcon\Mvc\Model\RelationInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function array_column;
 use function array_key_exists;
@@ -37,7 +38,6 @@ use function is_object;
 use function str_replace;
 use function strlen;
 use function strpos;
-use function strtolower;
 
 /**
  * Loads model relations in bulk - a bounded number of queries per relation
@@ -54,6 +54,8 @@ use function strtolower;
  */
 class Loader
 {
+    use WeakTypesTrait;
+
     /**
      * Maximum number of rows a single relation node may return before the load
      * is refused. Guards against a to-many hop that follows a to-one hop, which
@@ -107,9 +109,9 @@ class Loader
             if ($record instanceof ModelInterface) {
                 // setRelated() is declared by the model class.
                 /** @var \Phalcon\Mvc\Model $record */
-                $record->setRelated($alias, $related);
+                self::weakCallMethod($record, 'setRelated', [$alias, $related]);
             } else {
-                $record->writeAttribute($alias, $related);
+                self::weakCallMethod($record, 'writeAttribute', [$alias, $related]);
             }
         }
     }
@@ -186,18 +188,20 @@ class Loader
 
         foreach ($tree as $alias => $node) {
             /** @var mvc_eager_node $node */
-            $relation = $this->manager->getRelationByAlias($modelName, $alias);
+            $relation = self::weakCallMethod($this->manager, 'getRelationByAlias', [$modelName, $alias]);
 
             if (!is_object($relation)) {
-                throw new UnknownEagerRelation($modelName, $alias);
+                /** @var UnknownEagerRelation $exception */
+                $exception = self::weakNew(UnknownEagerRelation::class, [$modelName, $alias]);
+                throw $exception;
             }
 
-            $map[strtolower($alias)] = $this->buildNode(
-                $relation,
-                $alias,
-                $parents,
-                $node
-            );
+            /** @var string $lowerAlias */
+            $lowerAlias = self::weakCallArray('strtolower', [$alias]);
+            /** @var mvc_eager_map_node $mapNode */
+            $mapNode = self::weakCallMethod($this, 'buildNode', [$relation, $alias, $parents, $node]);
+
+            $map[$lowerAlias] = $mapNode;
         }
 
         return $map;

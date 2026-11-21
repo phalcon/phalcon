@@ -29,6 +29,7 @@ use Phalcon\Mvc\View\Exceptions\SimpleViewNotFound;
 use Phalcon\Mvc\View\Exceptions\SimpleViewServicesUnavailable;
 use Phalcon\Mvc\View\Traits\ViewParamsTrait;
 use Phalcon\Mvc\ViewBaseInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\FileTrait;
 use Phalcon\Traits\Support\Helper\Str\DirSeparatorTrait;
 
@@ -71,6 +72,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
     use EventsAwareTrait;
     use FileTrait;
     use ViewParamsTrait;
+    use WeakTypesTrait;
 
     protected string $activeRenderPath;
 
@@ -382,7 +384,7 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
             if ($this->phpFileExists($viewsDirPath . $extension)) {
                 $viewEnginePath = $viewsDirPath . $extension;
             } elseif (
-                str_ends_with($viewsDirPath, $extension) &&
+                self::weakCallArray('str_ends_with', [$viewsDirPath, $extension]) &&
                 $this->phpFileExists($viewsDirPath)
             ) {
                 /**
@@ -491,7 +493,9 @@ class Simple extends Injectable implements ViewBaseInterface, EventsAwareInterfa
                             );
                         }
                     } else {
-                        throw new InvalidEngineRegistration($extension);
+                        /** @var InvalidEngineRegistration $exception */
+                        $exception = self::weakNew(InvalidEngineRegistration::class, [$extension]);
+                        throw $exception;
                     }
 
                     $engines[$extension] = $engineObject;
