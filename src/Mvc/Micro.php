@@ -530,10 +530,6 @@ class Micro extends Injectable implements ArrayAccess, EventsAwareInterface
                         $this->modelBinder
                     );
                 } else {
-                    if (!self::isCallableOrWarn($handler)) {
-                        return null;
-                    }
-
                     $lazyReturned = self::weakCallArray($handler, $params);
                 }
 

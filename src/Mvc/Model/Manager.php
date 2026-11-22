@@ -34,7 +34,6 @@ use Phalcon\Mvc\Model\Query\StatusInterface;
 use Phalcon\Mvc\Model\Resultset\Simple;
 use Phalcon\Mvc\ModelInterface;
 use Phalcon\Support\Settings;
-use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\UncamelizeTrait;
 use ReflectionClass;
 use ReflectionException;
@@ -87,7 +86,6 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 {
     use EventsAwareTrait;
     use UncamelizeTrait;
-    use WeakTypesTrait;
 
     /**
      * @phpstan-var array<string, RelationInterface>
@@ -1644,20 +1642,17 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
         /**
          * Load the referenced model
-         * Call the function in the model
+         * Call the function in the model. A class that is not a model does
+         * not have the method: call_user_func_array() throws its TypeError.
+         *
+         * @var callable $retrieveCallable
          */
         $retrieveCallable = [
             $this->load($referencedModel),
             $retrieveMethod,
         ];
 
-        /**
-         * A class that is not a model does not have the method: a warning
-         * and null, the same as cphalcon.
-         */
-        $records = self::isCallableOrWarn($retrieveCallable)
-            ? call_user_func_array($retrieveCallable, $arguments)
-            : null;
+        $records = call_user_func_array($retrieveCallable, $arguments);
 
         /**
          * Store the result in the cache if it's reusable

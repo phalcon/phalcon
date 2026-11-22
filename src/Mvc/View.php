@@ -465,11 +465,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
          * Perform extra configurations over the cloned object
          */
         if (is_object($configCallback)) {
-            if (!self::isCallableOrWarn($configCallback)) {
-                return null;
-            }
-
-            call_user_func_array($configCallback, [$view]);
+            self::weakCallArray($configCallback, [$view]);
         }
 
         /**

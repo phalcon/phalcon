@@ -60,10 +60,6 @@ class FunctionCall extends Lazy
         $arguments = $this->resolveArguments($ioc, $this->arguments);
         $function  = $this->functionName;
 
-        if (!self::isCallableOrWarn($function)) {
-            return null;
-        }
-
         return self::weakCallArray($function, $arguments);
     }
 }

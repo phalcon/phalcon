@@ -72,7 +72,7 @@ services:
     build:
       dockerfile: resources/docker/develop/Dockerfile
       args:
-        PHP_VERSION: 8.6-rc
+        PHP_VERSION: 8.6
     working_dir: /srv
     volumes:
       - .:/srv

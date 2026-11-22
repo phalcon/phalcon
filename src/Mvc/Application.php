@@ -135,10 +135,6 @@ class Application extends AbstractApplication
                     $match = Closure::bind($match, $this->container);
                 }
 
-                if (!self::isCallableOrWarn($match)) {
-                    return null;
-                }
-
                 /**
                  * Directly call the match callback
                  */

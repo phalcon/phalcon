@@ -22,7 +22,6 @@ declare(strict_types=1);
 
 namespace Phalcon\ADR\Router;
 
-use Exception;
 use Phalcon\ADR\Exceptions\ActionDirectoryNotSet;
 use Phalcon\ADR\Exceptions\MethodNotAllowed;
 use Phalcon\Contracts\ADR\ADRTypes;
@@ -221,14 +220,6 @@ final class Router implements RouterInterface
 
         $params = $this->actionParams($className);
 
-        /**
-         * A params() method that cannot be called gives null. cphalcon then
-         * throws this exception, because it cannot iterate the result.
-         */
-        if (null === $params) {
-            throw new Exception('The argument is not initialized or iterable()');
-        }
-
         foreach (array_keys($params) as $name) {
             $path .= '/{' . $name . '}';
         }
@@ -277,9 +268,9 @@ final class Router implements RouterInterface
      * and casting, so nothing new is asked of an Action - but declaring it now
      * decides routing, not just validation.
      *
-     * @phpstan-return adr_action_params|null
+     * @phpstan-return adr_action_params
      */
-    protected function actionParams(string $className): ?array
+    protected function actionParams(string $className): array
     {
         if (!class_exists($className) || !method_exists($className, 'params')) {
             return [];
@@ -287,11 +278,7 @@ final class Router implements RouterInterface
 
         $callback = [$className, 'params'];
 
-        if (!self::isCallableOrWarn($callback)) {
-            return null;
-        }
-
-        $declared = $callback();
+        $declared = self::weakCallUserFunc($callback);
 
         /** @phpstan-var adr_action_params $params */
         $params = is_array($declared) ? $declared : [];

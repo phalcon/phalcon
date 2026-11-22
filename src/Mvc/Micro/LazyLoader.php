@@ -78,10 +78,6 @@ class LazyLoader
          */
         $callable = [$this->handler, $method];
 
-        if (!self::isCallableOrWarn($callable)) {
-            return null;
-        }
-
         return self::weakCallArray(
             $callable,
             array_values($params)

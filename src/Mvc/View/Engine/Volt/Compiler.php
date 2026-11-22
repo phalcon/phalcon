@@ -1862,15 +1862,13 @@ class Compiler implements InjectionAwareInterface
              * Check if the extension implements the required event name
              */
             if (method_exists($extension, $name)) {
-                $callback = [$extension, $name];
-
                 /**
                  * method_exists() is also true for a private or protected
-                 * method, which cannot be called from here
+                 * method: the call then throws the TypeError of PHP
+                 *
+                 * @var callable $callback
                  */
-                if (!self::isCallableOrWarn($callback)) {
-                    return null;
-                }
+                $callback = [$extension, $name];
 
                 if (!empty($arguments)) {
                     $status = call_user_func_array(

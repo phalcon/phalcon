@@ -32,7 +32,7 @@ interface AttributeFilter
      * @phpstan-param class-string          $actionClass
      * @phpstan-param adr_route_attributes  $attributes
      *
-     * @phpstan-return adr_filtered_attributes|null
+     * @phpstan-return adr_filtered_attributes
      */
-    public function filter(string $actionClass, array $attributes): ?array;
+    public function filter(string $actionClass, array $attributes): array;
 }

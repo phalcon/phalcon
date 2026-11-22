@@ -167,10 +167,6 @@ class HelperFactory extends AbstractFactory
         $helper    = $this->newInstance($name);
         $invokable = [$helper, '__invoke'];
 
-        if (!self::isCallableOrWarn($invokable)) {
-            return null;
-        }
-
         return self::weakCallArray($invokable, $arguments);
     }
 

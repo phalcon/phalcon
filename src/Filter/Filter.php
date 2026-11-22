@@ -162,10 +162,6 @@ class Filter implements FilterInterface
     {
         $sanitizer = [$this->get($name), '__invoke'];
 
-        if (!self::isCallableOrWarn($sanitizer)) {
-            return null;
-        }
-
         return self::weakCallArray($sanitizer, $args);
     }
 
@@ -507,10 +503,6 @@ class Filter implements FilterInterface
 
         $sanitizerObject = $this->get($sanitizerName);
         $params          = array_merge([$value], $sanitizerParams);
-
-        if (!self::isCallableOrWarn($sanitizerObject)) {
-            return null;
-        }
 
         return self::weakCallArray($sanitizerObject, $params);
     }
