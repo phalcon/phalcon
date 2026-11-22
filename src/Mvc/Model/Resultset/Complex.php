@@ -77,8 +77,6 @@ class Complex extends Resultset
          */
         $records = $this->toArray();
 
-        $cache = $this->cache;
-
         /**
          * The constructor takes the column types as an array or as null.
          *
@@ -87,8 +85,11 @@ class Complex extends Resultset
         $columnTypes = $this->columnTypes;
         $hydrateMode = $this->hydrateMode;
 
+        /**
+         * The cache is not in the data. It can hold a connection that cannot
+         * be serialized.
+         */
         return [
-            "cache"       => $cache,
             "rows"        => $records,
             "columnTypes" => $columnTypes,
             "hydrateMode" => $hydrateMode,
@@ -107,7 +108,6 @@ class Complex extends Resultset
 
         $this->rows        = $data["rows"];
         $this->count       = count($data["rows"]);
-        $this->cache       = $data["cache"];
         $this->columnTypes = $data["columnTypes"];
         $this->hydrateMode = $data["hydrateMode"];
     }
@@ -339,8 +339,11 @@ class Complex extends Resultset
             throw new InvalidContainer();
         }
 
+        /**
+         * The cache is not in the data. It can hold a connection that cannot
+         * be serialized.
+         */
         $data = [
-            "cache"       => $this->cache,
             "rows"        => $this->toArray(),
             "columnTypes" => $this->columnTypes,
             "hydrateMode" => $this->hydrateMode,
@@ -425,7 +428,6 @@ class Complex extends Resultset
 
         $this->rows        = $resultset["rows"];
         $this->count       = count($resultset["rows"]);
-        $this->cache       = $resultset["cache"];
         $this->columnTypes = $resultset["columnTypes"];
         $this->hydrateMode = $resultset["hydrateMode"];
     }

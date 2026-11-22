@@ -82,9 +82,12 @@ class Simple extends Resultset
      */
     public function __serialize(): array
     {
+        /**
+         * The cache is not in the data. It can hold a connection that cannot
+         * be serialized.
+         */
         return [
             "model"         => $this->model,
-            "cache"         => $this->cache,
             "rows"          => $this->toArray(false),
             "columnMap"     => $this->columnMap,
             "hydrateMode"   => $this->hydrateMode,
@@ -100,7 +103,6 @@ class Simple extends Resultset
         $this->model       = $data["model"];
         $this->rows        = $data["rows"];
         $this->count       = count($data["rows"]);
-        $this->cache       = $data["cache"];
         $this->columnMap   = $data["columnMap"];
         $this->hydrateMode = $data["hydrateMode"];
 
@@ -221,9 +223,12 @@ class Simple extends Resultset
             throw new InvalidContainer();
         }
 
+        /**
+         * The cache is not in the data. It can hold a connection that cannot
+         * be serialized.
+         */
         $data = [
             "model"         => $this->model,
-            "cache"         => $this->cache,
             "rows"          => $this->toArray(false),
             "columnMap"     => $this->columnMap,
             "hydrateMode"   => $this->hydrateMode,
@@ -408,7 +413,6 @@ class Simple extends Resultset
         $this->model       = $resultset["model"];
         $this->rows        = $resultset["rows"];
         $this->count       = count($resultset["rows"]);
-        $this->cache       = $resultset["cache"];
         $this->columnMap   = $resultset["columnMap"];
         $this->hydrateMode = $resultset["hydrateMode"];
 

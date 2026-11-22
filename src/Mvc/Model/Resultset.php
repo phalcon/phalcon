@@ -340,11 +340,11 @@ abstract class Resultset implements
      * );
      *```
      *
-     * @return array|ModelInterface[]|null
+     * @return array|ModelInterface[]
      *
-     * @phpstan-return list<array<array-key, mixed>|object>|null
+     * @phpstan-return list<array<array-key, mixed>|object>
      */
-    public function filter(mixed $filter): ?array
+    public function filter(mixed $filter): array
     {
         $records = [];
 
@@ -353,7 +353,11 @@ abstract class Resultset implements
         while ($this->valid()) {
             $record = $this->current();
 
-            /** @var callable $filter */
+            /**
+             * The caller passes a callable that takes one record.
+             *
+             * @var callable(mixed): mixed $filter
+             */
             $processedRecord = call_user_func_array(
                 $filter,
                 [

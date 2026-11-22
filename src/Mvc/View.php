@@ -445,7 +445,7 @@ class View extends Injectable implements ViewInterface, EventsAwareInterface
         string $actionName,
         array $params = [],
         mixed $configCallback = null
-    ): ?string {
+    ): string {
         /**
          * We must to clone the current view to keep the old state
          */
