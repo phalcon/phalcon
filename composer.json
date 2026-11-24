@@ -30,7 +30,7 @@
     "phalcon/volt": "1.0.x-dev",
     "phpbench/phpbench": "^1.4",
     "phpstan/phpstan": "^2.2",
-    "phpunit/phpunit": "^10.5",
+    "phpunit/phpunit": "^13.4",
     "predis/predis": "^3.4",
     "squizlabs/php_codesniffer": "^4.0",
     "vlucas/phpdotenv": "^5.6"
