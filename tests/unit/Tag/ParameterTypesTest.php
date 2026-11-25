@@ -17,6 +17,7 @@ use Error;
 use Phalcon\Tag;
 use Phalcon\Tag\Select;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use stdClass;
 use TypeError;
 
@@ -127,6 +128,32 @@ final class ParameterTypesTest extends AbstractTagTestCase
     }
 
     /**
+     * @return array<string, array{0: callable, 1: mixed}>
+     */
+    public static function getNullNames(): array
+    {
+        return [
+            'getValue null' => [
+                static function (mixed $value): mixed {
+                    Tag::setDefault('5', 'five');
+                    $_POST = ['' => 'empty'];
+
+                    return Tag::getValue($value);
+                },
+                'empty',
+            ],
+            'hasValue null' => [
+                static function (mixed $value): bool {
+                    Tag::setDefault('5', 'five');
+
+                    return Tag::hasValue($value);
+                },
+                false,
+            ],
+        ];
+    }
+
+    /**
      * @return array<string, array{0: string, 1: class-string<Error>, 2: string|null}>
      */
     public static function getObjectHelpers(): array
@@ -168,16 +195,6 @@ final class ParameterTypesTest extends AbstractTagTestCase
                 5,
                 'Home5',
             ],
-            'getValue null' => [
-                static function (mixed $value): mixed {
-                    Tag::setDefault('5', 'five');
-                    $_POST = ['' => 'empty'];
-
-                    return Tag::getValue($value);
-                },
-                null,
-                'empty',
-            ],
             'getValue int' => [
                 static function (mixed $value): mixed {
                     Tag::setDefault('5', 'five');
@@ -187,15 +204,6 @@ final class ParameterTypesTest extends AbstractTagTestCase
                 },
                 5,
                 'five',
-            ],
-            'hasValue null' => [
-                static function (mixed $value): bool {
-                    Tag::setDefault('5', 'five');
-
-                    return Tag::hasValue($value);
-                },
-                null,
-                false,
             ],
             'hasValue int' => [
                 static function (mixed $value): bool {
@@ -359,6 +367,21 @@ final class ParameterTypesTest extends AbstractTagTestCase
         );
 
         Tag::linkTo('about', 'About', new stdClass());
+    }
+
+    /**
+     * On PHP 8.5 and later, a null name gives the deprecation "Using null as
+     * an array offset". cphalcon gives the same deprecation.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/843
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-25
+     */
+    #[DataProvider('getNullNames')]
+    #[IgnoreDeprecations]
+    public function testTagNullNames(callable $call, mixed $expected): void
+    {
+        $this->assertSame($expected, $call(null));
     }
 
     /**
