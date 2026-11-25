@@ -108,11 +108,12 @@ abstract class AbstractGuard implements Guard
     /**
      * user should be ?AuthUser
      *
+     * @phpstan-param AuthUser|null    $user
      * @phpstan-param auth_credentials $credentials
      *
      * @phpstan-assert-if-true !null $user
      */
-    protected function hasValidCredentials(?AuthUser $user, array $credentials): bool
+    protected function hasValidCredentials(mixed $user, array $credentials): bool
     {
         if ($user === null) {
             return false;

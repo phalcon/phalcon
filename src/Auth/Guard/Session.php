@@ -52,9 +52,13 @@ class Session extends AbstractGuard implements GuardStateful, BasicAuth
         protected RequestInterface $request,
         protected CookiesInterface $cookies,
         protected SessionManagerInterface $session,
-        SessionGuardConfig $config = new SessionGuardConfig(),
+        SessionGuardConfig | null $config = null,
         ClockInterface | null $clock = null,
     ) {
+        if (null === $config) {
+            $config = new SessionGuardConfig();
+        }
+
         if (null === $clock) {
             $clock = SystemClock::fromUTC();
         }
