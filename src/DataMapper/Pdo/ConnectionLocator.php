@@ -203,10 +203,6 @@ class ConnectionLocator implements ConnectionLocatorInterface, EventsAware
         $instanceName = $type . "-" . $requested;
 
         if (!isset($instances[$instanceName])) {
-            if (!self::isCallableOrWarn($collection[$requested])) {
-                return null;
-            }
-
             $instances[$instanceName] = call_user_func($collection[$requested]);
             $this->instances          = $instances;
         }

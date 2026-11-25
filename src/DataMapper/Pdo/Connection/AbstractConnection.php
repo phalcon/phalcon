@@ -29,7 +29,6 @@ use Phalcon\DataMapper\Pdo\Exception\OperationCancelled;
 use Phalcon\DataMapper\Pdo\Exception\UnknownDriverMethod;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
-use Phalcon\Support\Traits\WeakTypesTrait;
 use stdClass;
 use Throwable;
 
@@ -75,7 +74,6 @@ use function str_contains;
 abstract class AbstractConnection implements ConnectionInterface, EventsAware
 {
     use EventsAwareTrait;
-    use WeakTypesTrait;
 
     /**
      * Whether to transparently reconnect and retry once when a statement fails
@@ -119,14 +117,6 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
         }
 
         $callable = [$this->pdo, $name];
-
-        /**
-         * method_exists() is also true for a private or protected method,
-         * which cannot be called from here
-         */
-        if (!self::isCallableOrWarn($callable)) {
-            return null;
-        }
 
         return call_user_func_array($callable, $arguments);
     }

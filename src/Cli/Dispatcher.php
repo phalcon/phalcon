@@ -82,10 +82,6 @@ class Dispatcher extends CliDispatcher implements DispatcherInterface
 
         $callable = [$handler, $actionMethod];
 
-        if (!self::isCallableOrWarn($callable)) {
-            return null;
-        }
-
         return self::weakCallArray($callable, $localParams);
     }
 

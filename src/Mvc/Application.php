@@ -94,7 +94,7 @@ class Application extends AbstractApplication
      * @throws Exception
      * @throws EventsException
      */
-    public function handle(string $uri): bool | ResponseInterface | null
+    public function handle(string $uri): bool | ResponseInterface
     {
         if (null === $this->container) {
             throw new ContainerRequired();
@@ -133,10 +133,6 @@ class Application extends AbstractApplication
             if (null !== $match) {
                 if ($match instanceof Closure) {
                     $match = Closure::bind($match, $this->container);
-                }
-
-                if (!self::isCallableOrWarn($match)) {
-                    return null;
                 }
 
                 /**

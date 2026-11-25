@@ -58,7 +58,7 @@ class ObjectProcessor implements Processor
         object $container
     ): ServiceDefinition {
         $def = new ServiceDefinition($name, DefinitionType::OBJECT_TYPE, $definition);
-        $def->setFactory(static function () use ($definition) {
+        $def->setFactory(static function (mixed $container = null) use ($definition) {
             return $definition;
         });
 

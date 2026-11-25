@@ -157,14 +157,6 @@ class Service implements ServiceInterface
                         $definition = Closure::bind($definition, $container);
                     }
 
-                    /**
-                     * A static closure cannot be bound: Closure::bind() gives
-                     * a warning and null
-                     */
-                    if (!self::isCallableOrWarn($definition)) {
-                        return null;
-                    }
-
                     if (is_array($parameters)) {
                         $instance = self::weakCallArray($definition, $parameters);
                     } else {

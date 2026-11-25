@@ -103,10 +103,6 @@ abstract class Lazy implements Resolvable
         $service   = self::weakCallMethod($ioc, $iocMethod, [$id]);
         $callback  = [$service, $method];
 
-        if (!self::isCallableOrWarn($callback)) {
-            return null;
-        }
-
         return self::weakCallArray($callback, $arguments);
     }
 }

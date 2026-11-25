@@ -125,7 +125,13 @@ class Stream extends AbstractAdapter
             throw new CannotReadAnnotationData();
         }
 
-        /** @var bool|int|Reflection */
+        /**
+         * A file that does not hold a Reflection object is a miss
+         */
+        if (!$contents instanceof Reflection) {
+            return false;
+        }
+
         return $contents;
     }
 

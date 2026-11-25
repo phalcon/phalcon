@@ -659,7 +659,7 @@ class Security extends AbstractInjectionAware implements SecurityContract
             $cost = 31;
         }
 
-        return self::weakReturnInt($cost);
+        return (int) $cost;
     }
 
     private function processTokenKey(string | null $tokenKey = null): string | null

@@ -206,10 +206,6 @@ abstract class AbstractDispatcher extends AbstractInjectionAware implements Disp
 
         $callable = [$altHandler, $altAction];
 
-        if (!self::isCallableOrWarn($callable)) {
-            return null;
-        }
-
         /** @phpstan-var dispatcher_params $altParams */
         $result = self::weakCallArray(
             $callable,

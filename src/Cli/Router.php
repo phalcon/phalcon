@@ -326,10 +326,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
                                  * Check if the part has a converter
                                  */
                                 if (isset($converters[$part])) {
-                                    if (!self::isCallableOrWarn($converters[$part])) {
-                                        return null;
-                                    }
-
                                     $parts[$part] = self::weakCallArray(
                                         $converters[$part],
                                         [$matchPosition]
@@ -345,10 +341,6 @@ class Router extends AbstractInjectionAware implements RouterInterface
                                  * Apply the converters anyway
                                  */
                                 if (isset($converters[$part])) {
-                                    if (!self::isCallableOrWarn($converters[$part])) {
-                                        return null;
-                                    }
-
                                     $parts[$part] = self::weakCallArray(
                                         $converters[$part],
                                         [$position]

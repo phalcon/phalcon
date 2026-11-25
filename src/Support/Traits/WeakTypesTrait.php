@@ -12,17 +12,12 @@
 namespace Phalcon\Support\Traits;
 
 use Error;
-use TypeError;
 
 use function call_user_func;
 use function call_user_func_array;
-use function explode;
 use function is_array;
 use function is_callable;
 use function is_string;
-use function trigger_error;
-
-use const E_USER_WARNING;
 
 /**
  * Calls a setter or writes a property with the PHP weak type rules.
@@ -36,40 +31,6 @@ use const E_USER_WARNING;
 trait WeakTypesTrait
 {
     /**
-     * Returns true if the value can be called. If not, gives a warning with
-     * the reason of PHP and returns false. The caller then returns null.
-     *
-     * This is the same as call_user_func_array() in cphalcon. The level is
-     * E_USER_WARNING, not E_WARNING: PHP code cannot give E_WARNING.
-     *
-     * @phpstan-assert-if-true callable $callable
-     */
-    private static function isCallableOrWarn(mixed $callable): bool
-    {
-        if (is_callable($callable)) {
-            return true;
-        }
-
-        try {
-            /**
-             * The value cannot be called, thus this throws before a call.
-             *
-             * @var callable $callable
-             */
-            call_user_func_array($callable, []);
-        } catch (TypeError $ex) {
-            $message = $ex->getMessage();
-
-            trigger_error(
-                explode('must be a valid callback, ', $message, 2)[1] ?? $message,
-                E_USER_WARNING
-            );
-        }
-
-        return false;
-    }
-
-    /**
      * Calls a method of the object with one value, in weak mode.
      */
     private static function weakCall(
@@ -81,15 +42,18 @@ trait WeakTypesTrait
     }
 
     /**
-     * Calls a callable with a list of arguments, in weak mode, and returns
-     * the result. A string key gives a named argument.
+     * Calls the value with a list of arguments, in weak mode, and returns the
+     * result. A string key gives a named argument. This is the same as
+     * call_user_func_array() in cphalcon. A value that cannot be called
+     * throws the TypeError of call_user_func_array().
      *
      * @param array<array-key, mixed> $arguments
      */
     private static function weakCallArray(
-        callable $callable,
+        mixed $callable,
         array $arguments
     ): mixed {
+        /** @var callable $callable */
         return call_user_func_array($callable, $arguments);
     }
 

@@ -65,10 +65,6 @@ class StaticCall extends Lazy
 
         $callback = [$className, $this->method];
 
-        if (!self::isCallableOrWarn($callback)) {
-            return null;
-        }
-
         return self::weakCallArray($callback, $arguments);
     }
 }

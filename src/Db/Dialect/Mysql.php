@@ -734,7 +734,10 @@ class Mysql extends Dialect
     {
         $schema = empty($schemaName) ? "" : " FROM " . $this->escape($schemaName);
 
-        return "SHOW TABLES" . $schema;
+        /**
+         * MariaDB lists sequences in SHOW TABLES. Remove them.
+         */
+        return "SHOW FULL TABLES" . $schema . " WHERE Table_type <> 'SEQUENCE'";
     }
 
     /**
