@@ -120,9 +120,23 @@ abstract class AbstractAdapter implements AdapterInterface
     public function crop(
         int $width,
         int $height,
-        int | null $offsetX = null,
-        int | null $offsetY = null
+        mixed $offsetX = null,
+        mixed $offsetY = null
     ): AdapterInterface {
+        /**
+         * As in cphalcon: an offset that is not null is cast to int
+         *
+         * @var scalar|null $offsetX
+         * @var scalar|null $offsetY
+         */
+        if (null !== $offsetX) {
+            $offsetX = (int) $offsetX;
+        }
+
+        if (null !== $offsetY) {
+            $offsetY = (int) $offsetY;
+        }
+
         if (null === $offsetX) {
             $offsetX = (($this->width - $width) / 2);
         } else {

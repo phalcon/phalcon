@@ -35,7 +35,7 @@ class Php extends AbstractSerializer
      *
      * @var array<int, string>|bool
      */
-    protected array | bool $allowedClasses = true;
+    protected mixed $allowedClasses = true;
 
     /**
      * @return array<int, string>|bool
@@ -65,7 +65,7 @@ class Php extends AbstractSerializer
      *
      * @param array<int, string>|bool $allowedClasses
      */
-    public function setAllowedClasses(array | bool $allowedClasses): static
+    public function setAllowedClasses(mixed $allowedClasses): static
     {
         $this->allowedClasses = $allowedClasses;
 
