@@ -131,8 +131,7 @@ abstract class Dialect implements DialectInterface
         string $str,
         string | null $escapeChar = null
     ): string {
-        $identifiers = Settings::get("db.escape_identifiers");
-        if (true !== $identifiers) {
+        if (!Settings::get("db.escape_identifiers")) {
             return $str;
         }
 
@@ -191,8 +190,7 @@ abstract class Dialect implements DialectInterface
         string $str,
         string | null $escapeChar = null
     ): string {
-        $identifiers = Settings::get("db.escape_identifiers");
-        if (true !== $identifiers) {
+        if (!Settings::get("db.escape_identifiers")) {
             return $str;
         }
         $escapeChar = (!empty($escapeChar)) ? $escapeChar : (string) $this->escapeChar;

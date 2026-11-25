@@ -15,6 +15,7 @@ namespace Phalcon\Support;
 
 use ArrayIterator;
 use Countable;
+use InvalidArgumentException;
 use JsonSerializable;
 use Phalcon\Support\Collection\CollectionInterface;
 use Phalcon\Support\Collection\Exceptions\InvalidValueType;
@@ -33,6 +34,7 @@ use function asort;
 use function count;
 use function is_array;
 use function is_bool;
+use function is_callable;
 use function is_float;
 use function is_int;
 use function is_object;
@@ -480,11 +482,17 @@ class Collection implements
      *
      * @phpstan-return static<T>
      */
-    public function sort(callable | null $callback = null, int $order = SORT_ASC): static
+    public function sort(mixed $callback = null, int $order = SORT_ASC): static
     {
         $result = $this->data;
 
         if (null !== $callback) {
+            if (true !== is_callable($callback)) {
+                throw new InvalidArgumentException(
+                    "The sort callback must be callable or null"
+                );
+            }
+
             uasort($result, $callback);
         } elseif (SORT_DESC === $order) {
             arsort($result);

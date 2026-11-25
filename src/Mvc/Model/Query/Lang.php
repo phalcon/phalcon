@@ -97,7 +97,9 @@ abstract class Lang
      */
     public static function parsePHQL(string $phql): ?array
     {
-        $cacheLevel = (int) Settings::get('orm.cache_level');
+        /** @var scalar|null $setting */
+        $setting    = Settings::get('orm.cache_level');
+        $cacheLevel = (int) $setting;
         if ($cacheLevel >= 0 && isset(self::$cache[$phql])) {
             return self::$cache[$phql];
         }
@@ -116,7 +118,9 @@ abstract class Lang
         }
 
         if ($cacheLevel >= 1) {
-            self::$nextId ??= (int) Settings::get('orm.unique_cache_id');
+            /** @var scalar|null $uniqueId */
+            $uniqueId       = Settings::get('orm.unique_cache_id');
+            self::$nextId ??= (int) $uniqueId;
             $ast['id']    = self::$nextId;
 
             /**

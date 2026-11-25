@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
+use function is_callable;
+
 /**
  * Returns `true` if the provided function returns `true` for at least one
  * element of the collection, `false` otherwise.
@@ -22,8 +24,8 @@ class ValidateAny extends AbstractArr
     /**
      * @param array<array-key, mixed> $collection
      */
-    public function __invoke(array $collection, callable $method): bool
+    public function __invoke(array $collection, mixed $method): bool
     {
-        return !empty($this->toFilter($collection, $method));
+        return !empty($this->toFilter($collection, is_callable($method) ? $method : null));
     }
 }

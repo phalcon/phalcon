@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
+use Phalcon\Support\Traits\WeakTypesTrait;
+
 use function array_values;
 use function is_array;
 use function is_object;
@@ -26,6 +28,8 @@ use const SORT_REGULAR;
  */
 class Order
 {
+    use WeakTypesTrait;
+
     public const ORDER_ASC  = 1;
 
     public const ORDER_DESC = 2;
@@ -37,14 +41,22 @@ class Order
      */
     public function __invoke(
         array $collection,
-        string $attribute,
+        mixed $attribute,
         int $order = self::ORDER_ASC,
         int $flags = SORT_REGULAR
     ): array {
-        $sorted = [];
+        /**
+         * As in cphalcon: the attribute is given to the string parameter of
+         * the checks in weak mode. A null attribute is an empty string
+         * (cphalcon also gives a deprecation for it)
+         */
+        $attribute ??= '';
+        $sorted      = [];
         foreach ($collection as $item) {
-            $sorted = $this->checkObject($sorted, $attribute, $item);
-            $sorted = $this->checkNonObject($sorted, $attribute, $item);
+            /** @var array<array-key, mixed> $sorted */
+            $sorted = self::weakCallMethod($this, 'checkObject', [$sorted, $attribute, $item]);
+            /** @var array<array-key, mixed> $sorted */
+            $sorted = self::weakCallMethod($this, 'checkNonObject', [$sorted, $attribute, $item]);
         }
 
         $method = (self::ORDER_ASC === $order) ? 'ksort' : 'krsort';

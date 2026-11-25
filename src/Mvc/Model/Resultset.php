@@ -218,7 +218,9 @@ abstract class Resultset implements
          * The count is only worth asking for when the prefetch is switched on,
          * which it is not by default.
          */
-        $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
+        /** @var scalar|null $setting */
+        $setting         = Settings::get("orm.resultset_prefetch_records");
+        $prefetchRecords = (int) $setting;
 
         if ($prefetchRecords > 0 && $this->count() <= $prefetchRecords) {
             $this->materialize();
@@ -714,7 +716,9 @@ abstract class Resultset implements
         /**
          * Small result-sets with less equals 32 rows are fetched at once
          */
-        $prefetchRecords = (int)Settings::get("orm.resultset_prefetch_records");
+        /** @var scalar|null $setting */
+        $setting         = Settings::get("orm.resultset_prefetch_records");
+        $prefetchRecords = (int) $setting;
 
         if ($prefetchRecords > 0 && $this->count() <= $prefetchRecords) {
             $this->materialize();

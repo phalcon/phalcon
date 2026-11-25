@@ -17,6 +17,7 @@ use Phalcon\Support\Helper\Str\Exceptions\InvalidReplaceFormat;
 
 use function array_keys;
 use function array_values;
+use function is_array;
 use function is_string;
 use function preg_replace;
 use function str_replace;
@@ -38,7 +39,7 @@ class Friendly extends AbstractStr
         string $text,
         string $separator = "-",
         bool $lowercase = true,
-        array | string | null $replace = null
+        mixed $replace = null
     ): string {
         if (!empty($replace)) {
             $replace = $this->checkReplace($replace);
@@ -65,17 +66,22 @@ class Friendly extends AbstractStr
     }
 
     /**
-     * @param array<array-key, string>|string $replace
-     *
      * @return array<array-key, string>
      * @throws InvalidReplaceFormat
      */
-    private function checkReplace(array | string $replace): array
+    private function checkReplace(mixed $replace): array
     {
+        if (!is_array($replace) && !is_string($replace)) {
+            throw new InvalidReplaceFormat(
+                "Parameter replace must be an array or a string"
+            );
+        }
+
         if (is_string($replace)) {
             $replace = [$replace];
         }
 
+        /** @var array<array-key, string> $replace */
         return $replace;
     }
 

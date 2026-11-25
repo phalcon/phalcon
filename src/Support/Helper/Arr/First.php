@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Support\Helper\Arr;
 
+use function is_callable;
 use function reset;
 
 /**
@@ -24,9 +25,9 @@ class First extends AbstractArr
     /**
      * @param array<array-key, mixed> $collection
      */
-    public function __invoke(array $collection, callable | null $method = null): mixed
+    public function __invoke(array $collection, mixed $method = null): mixed
     {
-        $filtered = $this->toFilter($collection, $method);
+        $filtered = $this->toFilter($collection, is_callable($method) ? $method : null);
 
         return reset($filtered);
     }

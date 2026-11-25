@@ -37,7 +37,7 @@ class Settings
     /**
      * PHP-level overrides. Keys stored here take priority over ini_get().
      *
-     * @var array<string, bool|int>
+     * @var array<string, mixed>
      */
     protected static array $overrides = [];
 
@@ -85,7 +85,7 @@ class Settings
      *   3. Hardcoded default - mirrors the C extension's compiled-in defaults
      *   4. null - for unknown keys
      */
-    public static function get(string $key): bool | int | null
+    public static function get(string $key): mixed
     {
         if (isset(self::$overrides[$key])) {
             return self::$overrides[$key];
@@ -122,7 +122,7 @@ class Settings
      *
      * Unknown keys are silently ignored.
      */
-    public static function set(string $key, bool | int $value): void
+    public static function set(string $key, mixed $value): void
     {
         switch ($key) {
             case 'db.escape_identifiers':

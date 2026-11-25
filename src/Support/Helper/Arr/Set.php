@@ -26,7 +26,7 @@ class Set
     public function __invoke(
         array $collection,
         mixed $value,
-        int | string | null $index = null
+        mixed $index = null
     ): array {
         $collection = $this->checkNull($collection, $value, $index);
 
@@ -38,9 +38,15 @@ class Set
      *
      * @return array<array-key, mixed>
      */
-    private function checkNotNull(array $collection, mixed $value, int | string | null $index): array
+    private function checkNotNull(array $collection, mixed $value, mixed $index): array
     {
         if (null !== $index) {
+            /**
+             * An index that is not a valid array key gives a TypeError, as
+             * in cphalcon
+             *
+             * @var array-key $index
+             */
             $collection[$index] = $value;
         }
 
@@ -52,7 +58,7 @@ class Set
      *
      * @return array<array-key, mixed>
      */
-    private function checkNull(array $collection, mixed $value, int | string | null $index): array
+    private function checkNull(array $collection, mixed $value, mixed $index): array
     {
         if (null === $index) {
             $collection[] = $value;
