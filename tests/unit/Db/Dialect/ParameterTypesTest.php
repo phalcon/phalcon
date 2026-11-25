@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Phalcon\Tests\Unit\Db\Dialect;
 
 use Error;
-use Phalcon\Db\Dialect\Sqlite;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
+use Phalcon\Tests\Unit\Db\Dialect\Fake\FakeDialect;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use stdClass;
@@ -54,8 +54,8 @@ final class ParameterTypesTest extends AbstractUnitTestCase
     {
         $dialect = $this->getDialect();
 
-        $this->assertSame('"5"', $dialect->getSqlColumn(5));
-        $this->assertSame('"5"', $dialect->getSqlTable(5));
+        $this->assertSame('"5"', $dialect->getSqlColumn(5, '"'));
+        $this->assertSame('"5"', $dialect->getSqlTable(5, '"'));
     }
 
     /**
@@ -71,8 +71,8 @@ final class ParameterTypesTest extends AbstractUnitTestCase
     {
         $dialect = $this->getDialect();
 
-        $this->assertSame('""', $dialect->getSqlColumn(null));
-        $this->assertSame('""', $dialect->getSqlTable(null));
+        $this->assertSame('""', $dialect->getSqlColumn(null, '"'));
+        $this->assertSame('""', $dialect->getSqlTable(null, '"'));
     }
 
     /**
@@ -160,9 +160,9 @@ final class ParameterTypesTest extends AbstractUnitTestCase
         $this->getDialect()->getSqlTable(new stdClass());
     }
 
-    private function getDialect(): Sqlite
+    private function getDialect(): FakeDialect
     {
-        return new class () extends Sqlite {
+        return new class () extends FakeDialect {
             public function call(string $method, mixed $expression): string
             {
                 return $this->$method($expression);
