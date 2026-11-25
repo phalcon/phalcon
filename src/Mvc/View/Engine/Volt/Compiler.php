@@ -656,6 +656,42 @@ class Compiler implements InjectionAwareInterface
          * Echo statement
          */
         if ($this->autoescape) {
+            /**
+             * A built-in escape filter as the outermost node escapes the
+             * output already. A user filter or an extension can use the same
+             * name, thus the code must also start with the built-in code.
+             */
+            if ($expr["type"] == Opcode::PIPE->value) {
+                /** @var array<array-key, mixed> $filter */
+                $filter = $expr["right"];
+
+                if ($filter["type"] == Opcode::FCALL->value) {
+                    /** @var array<array-key, mixed> $functionName */
+                    $functionName = $filter["name"];
+                    /** @var string $filterName */
+                    $filterName   = $functionName["value"];
+                } else {
+                    /** @var string $filterName */
+                    $filterName = $filter["value"];
+                }
+
+                $escapers = [
+                    "e"           => '$this->escaper->html(',
+                    "escape"      => '$this->escaper->html(',
+                    "escape_attr" => '$this->escaper->attributes(',
+                    "escape_css"  => '$this->escaper->css(',
+                    "escape_js"   => '$this->escaper->js(',
+                    "url_encode"  => "urlencode(",
+                ];
+
+                if (
+                    isset($escapers[$filterName]) &&
+                    str_starts_with($exprCode, $escapers[$filterName])
+                ) {
+                    return '<?= ' . $exprCode . ' ?>';
+                }
+            }
+
             return '<?= $this->escaper->html(' . $exprCode . ') ?>';
         }
 
