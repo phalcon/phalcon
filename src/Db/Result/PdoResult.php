@@ -19,7 +19,10 @@ use Phalcon\Contracts\Db\DbTypes;
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Db\Enum;
 use Phalcon\Db\ResultInterface;
+use Phalcon\Support\Traits\WeakTypesTrait;
+use Stringable;
 
+use function is_array;
 use function is_object;
 
 /**
@@ -44,6 +47,8 @@ use function is_object;
  */
 class PdoResult implements ResultInterface
 {
+    use WeakTypesTrait;
+
     /**
      * Active fetch mode
      *
@@ -67,15 +72,15 @@ class PdoResult implements ResultInterface
     /**
      * Phalcon\Db\Result\Pdo constructor
      *
-     * @phpstan-param db_bind_params $bindParams
-     * @phpstan-param db_bind_types  $bindTypes
+     * @phpstan-param db_bind_params|null $bindParams
+     * @phpstan-param db_bind_types|null  $bindTypes
      */
     public function __construct(
         protected AdapterInterface $connection,
         PDOStatement $result,
-        protected string $sqlStatement = "",
-        protected array $bindParams = [],
-        protected array $bindTypes = []
+        protected mixed $sqlStatement = null,
+        protected mixed $bindParams = null,
+        protected mixed $bindTypes = null
     ) {
         $this->pdoStatement = $result;
     }
@@ -106,17 +111,17 @@ class PdoResult implements ResultInterface
          * statement
          */
         if (is_array($this->bindParams)) {
-            $statement = $pdo->prepare($this->sqlStatement);
+            $statement = self::weakCallMethod($pdo, 'prepare', [$this->sqlStatement]);
 
             if (is_object($statement)) {
-                $statement = $this->connection->executePrepared(
-                    $statement,
-                    $this->bindParams,
-                    $this->bindTypes
+                $statement = self::weakCallMethod(
+                    $this->connection,
+                    'executePrepared',
+                    [$statement, $this->bindParams, $this->bindTypes]
                 );
             }
         } else {
-            $statement = $pdo->query($this->sqlStatement);
+            $statement = self::weakCallMethod($pdo, 'query', [$this->sqlStatement]);
         }
 
         /** @var PDOStatement $statement */
@@ -196,7 +201,7 @@ class PdoResult implements ResultInterface
     public function fetchAll(
         int $mode = Enum::FETCH_DEFAULT,
         mixed $fetchArgument = Enum::FETCH_ORI_NEXT,
-        array | null $constructorArgs = null
+        mixed $constructorArgs = null
     ): array {
         if ($mode === Enum::FETCH_CLASS) {
             /** @var class-string $className */
@@ -292,10 +297,16 @@ class PdoResult implements ResultInterface
          * `SELECT COUNT(*) ... GROUP BY` report its number of groups instead of
          * a hard-coded 1.
          */
-        $result = $this->connection->query(
-            "SELECT COUNT(*) \"numrows\" FROM (" . $this->sqlStatement . ")",
-            $this->bindParams,
-            $this->bindTypes
+        /** @var scalar|Stringable|null $sqlStatement */
+        $sqlStatement = $this->sqlStatement;
+        $result       = self::weakCallMethod(
+            $this->connection,
+            'query',
+            [
+                "SELECT COUNT(*) \"numrows\" FROM (" . $sqlStatement . ")",
+                $this->bindParams,
+                $this->bindTypes,
+            ]
         );
 
         /** @var ResultInterface $result */
@@ -337,7 +348,7 @@ class PdoResult implements ResultInterface
      */
     public function setFetchMode(
         int $fetchMode,
-        object | string | null $colNoOrClassNameOrObject = null,
+        mixed $colNoOrClassNameOrObject = null,
         mixed $ctorargs = null
     ): bool {
         if (Enum::FETCH_CLASS === $fetchMode || Enum::FETCH_INTO === $fetchMode) {

@@ -28,6 +28,7 @@ use Phalcon\Db\Exceptions\ReturningNotSupported;
 use Phalcon\Db\Exceptions\UnsupportedOperator;
 use Phalcon\Support\Settings;
 use Phalcon\Support\Traits\WeakTypesTrait;
+use Stringable;
 
 use function explode;
 use function implode;
@@ -272,18 +273,28 @@ abstract class Dialect implements DialectInterface
     /**
      * Resolve Column expressions
      *
-     * @phpstan-param db_expression  $column
+     * @phpstan-param db_expression|scalar|null $column
      * @phpstan-param db_bind_counts $bindCounts
      *
      * @throws Exception
      */
     final public function getSqlColumn(
-        array | string $column,
+        mixed $column,
         string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
-        if (is_string($column)) {
-            return $this->prepareQualified($column, null, $escapeChar);
+        /**
+         * As in cphalcon: a value that is not an array goes to the string
+         * parameter of prepareQualified() in weak mode. A null value is an
+         * empty string (cphalcon also gives a deprecation for it)
+         */
+        if (!is_array($column)) {
+            /** @var string */
+            return self::weakCallMethod(
+                $this,
+                'prepareQualified',
+                [$column ?? '', null, $escapeChar]
+            );
         }
 
         $columnExpression = $column;
@@ -593,10 +604,10 @@ abstract class Dialect implements DialectInterface
      * Transform an intermediate representation of a schema/table into a
      * database system valid expression
      *
-     * @phpstan-param db_table_name $table
+     * @phpstan-param db_table_name|null $table
      */
     final public function getSqlTable(
-        array | string $table,
+        mixed $table,
         string | null $escapeChar = null
     ): string {
         if (is_array($table)) {
@@ -614,7 +625,13 @@ abstract class Dialect implements DialectInterface
             );
         }
 
-        return $this->escape($table, $escapeChar);
+        /**
+         * As in cphalcon: a value that is not an array goes to the string
+         * parameter of escape() in weak mode. A null value is an empty string
+         * (cphalcon also gives a deprecation for it)
+         */
+        /** @var string */
+        return self::weakCallMethod($this, 'escape', [$table ?? '', $escapeChar]);
     }
 
     /**
@@ -1281,7 +1298,7 @@ abstract class Dialect implements DialectInterface
      * @phpstan-param array<array-key, db_table_name>|string $expression
      */
     final protected function getSqlExpressionFrom(
-        array | string $expression,
+        mixed $expression,
         string | null $escapeChar = null
     ): string {
         if (is_array($expression)) {
@@ -1296,6 +1313,7 @@ abstract class Dialect implements DialectInterface
             return "FROM " . implode(", ", $tables);
         }
 
+        /** @var scalar|Stringable|null $expression */
         return "FROM " . $expression;
     }
 
@@ -1356,7 +1374,7 @@ abstract class Dialect implements DialectInterface
      * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionGroupBy(
-        array | string $expression,
+        mixed $expression,
         string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
@@ -1377,6 +1395,7 @@ abstract class Dialect implements DialectInterface
             return "GROUP BY " . implode(", ", $fields);
         }
 
+        /** @var scalar|Stringable|null $expression */
         return "GROUP BY " . $expression;
     }
 
@@ -1481,7 +1500,7 @@ abstract class Dialect implements DialectInterface
      * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionLimit(
-        array | string $expression,
+        mixed $expression,
         string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
@@ -1609,7 +1628,7 @@ abstract class Dialect implements DialectInterface
      * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionOrderBy(
-        array | string $expression,
+        mixed $expression,
         string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
@@ -1643,6 +1662,7 @@ abstract class Dialect implements DialectInterface
             return "ORDER BY " . implode(", ", $fields);
         }
 
+        /** @var scalar|Stringable|null $expression */
         return "ORDER BY " . $expression;
     }
 
@@ -1756,7 +1776,7 @@ abstract class Dialect implements DialectInterface
      * @phpstan-param db_bind_counts $bindCounts
      */
     final protected function getSqlExpressionWhere(
-        array | string $expression,
+        mixed $expression,
         string | null $escapeChar = null,
         array $bindCounts = []
     ): string {
@@ -1768,6 +1788,7 @@ abstract class Dialect implements DialectInterface
             );
         }
 
+        /** @var scalar|Stringable|null $expression */
         return "WHERE " . $expression;
     }
 
