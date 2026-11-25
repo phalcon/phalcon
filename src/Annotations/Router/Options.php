@@ -37,7 +37,7 @@ class Options extends Route
         string | null $name = null,
         array $paths = [],
         array $converters = [],
-        array | string | null $beforeMatch = null
+        mixed $beforeMatch = null
     ) {
         parent::__construct(
             $route,
