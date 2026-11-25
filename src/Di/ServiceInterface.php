@@ -49,7 +49,7 @@ interface ServiceInterface
      * @phpstan-param di_parameters|null $parameters
      */
     public function resolve(
-        array | null $parameters = null,
+        mixed $parameters = null,
         DiInterface | null $container = null
     ): mixed;
 

@@ -116,7 +116,7 @@ class Service implements ServiceInterface
      * @throws ServiceResolutionException
      */
     public function resolve(
-        array | null $parameters = null,
+        mixed $parameters = null,
         DiInterface | null $container = null
     ): mixed {
         /**

@@ -68,11 +68,21 @@ class ArrayValues extends Lazy implements ArrayAccess, Countable, IteratorAggreg
         return new ArrayIterator($this->values);
     }
 
-    /**
-     * @param iterable<array-key, mixed> $values
-     */
-    public function merge(iterable $values): void
+    public function merge(mixed $values): void
     {
+        /**
+         * As the cphalcon loop: a string gives its characters, and a value
+         * that cannot be iterated gives the cphalcon exception
+         */
+        if (is_string($values)) {
+            $values = '' === $values ? [] : str_split($values);
+        }
+
+        if (!is_iterable($values)) {
+            throw new \Exception('The argument is not initialized or iterable()');
+        }
+
+        /** @var iterable<array-key, mixed> $values */
         foreach ($values as $key => $value) {
             if (is_int($key)) {
                 $this->values[] = $value;
