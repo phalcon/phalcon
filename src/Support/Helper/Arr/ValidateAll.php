@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Arr;
 
 use function count;
+use function is_callable;
 
 /**
  * Returns `true` if the provided function returns `true` for all elements of
@@ -24,8 +25,8 @@ class ValidateAll extends AbstractArr
     /**
      * @param array<array-key, mixed> $collection
      */
-    public function __invoke(array $collection, callable $method): bool
+    public function __invoke(array $collection, mixed $method): bool
     {
-        return count($this->toFilter($collection, $method)) === count($collection);
+        return count($this->toFilter($collection, is_callable($method) ? $method : null)) === count($collection);
     }
 }

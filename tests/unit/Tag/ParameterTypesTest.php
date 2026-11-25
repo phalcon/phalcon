@@ -15,6 +15,7 @@ namespace Phalcon\Tests\Unit\Tag;
 
 use Error;
 use Phalcon\Tag;
+use Phalcon\Tag\Exception;
 use Phalcon\Tag\Select;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
@@ -195,6 +196,11 @@ final class ParameterTypesTest extends AbstractTagTestCase
                 5,
                 'Home5',
             ],
+            'friendlyTitle replace false' => [
+                static fn (mixed $value): string => Tag::friendlyTitle('Hello World 5', '-', true, $value),
+                false,
+                'hello-world-5',
+            ],
             'getValue int' => [
                 static function (mixed $value): mixed {
                     Tag::setDefault('5', 'five');
@@ -294,6 +300,19 @@ final class ParameterTypesTest extends AbstractTagTestCase
             Tag::stylesheetLink()
         );
         $this->assertSame('<div></div>', Tag::tagHtml('div'));
+    }
+
+    /**
+     * @issue  https://github.com/phalcon/phalcon/issues/846
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-25
+     */
+    public function testTagFriendlyTitleReplaceInt(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Parameter replace must be an array or a string');
+
+        Tag::friendlyTitle('Hello World 5', '-', true, 5);
     }
 
     /**

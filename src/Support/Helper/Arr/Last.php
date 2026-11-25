@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Support\Helper\Arr;
 
 use function end;
+use function is_callable;
 
 /**
  * Returns the last element of the collection. If a callable is passed, the
@@ -26,9 +27,9 @@ class Last extends AbstractArr
      *
      * @return mixed
      */
-    public function __invoke(array $collection, callable | null $method = null)
+    public function __invoke(array $collection, mixed $method = null)
     {
-        $filtered = $this->toFilter($collection, $method);
+        $filtered = $this->toFilter($collection, is_callable($method) ? $method : null);
 
         return end($filtered);
     }

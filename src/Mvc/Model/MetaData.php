@@ -749,7 +749,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         ModelInterface $model,
         int $index
     ): array | bool | string | null {
-        if (true !== Settings::get('orm.column_renaming')) {
+        if (!Settings::get('orm.column_renaming')) {
             return null;
         }
 
@@ -1004,7 +1004,7 @@ abstract class MetaData extends Injectable implements MetaDataInterface
         /**
          * Check for a column map, store in columnMap in order and reversed order
          */
-        if (false === Settings::get("orm.column_renaming")) {
+        if (!Settings::get("orm.column_renaming")) {
             return false;
         }
 

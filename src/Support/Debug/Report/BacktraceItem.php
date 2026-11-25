@@ -24,6 +24,11 @@ use Phalcon\Contracts\Support\SupportTypes;
 final class BacktraceItem
 {
     /**
+     * @phpstan-var support_debug_fragment|null
+     */
+    private readonly ?array $fragment;
+
+    /**
      * @phpstan-param support_debug_args          $args
      * @phpstan-param support_debug_fragment|null $fragment
      */
@@ -37,8 +42,9 @@ final class BacktraceItem
         private readonly array $args = [],
         private readonly ?string $file = null,
         private readonly ?int $line = null,
-        private readonly ?array $fragment = null,
+        mixed $fragment = null,
     ) {
+        $this->fragment = $fragment;
     }
 
     /**

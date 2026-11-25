@@ -20,6 +20,7 @@ use Phalcon\Contracts\Container\Service\Collection;
 use Phalcon\Di\DiInterface;
 use Phalcon\Support\Traits\WeakTypesTrait;
 use Throwable;
+use TypeError;
 
 use function is_subclass_of;
 
@@ -35,6 +36,8 @@ abstract class AbstractLocator
 {
     use WeakTypesTrait;
 
+    protected readonly Collection | DiInterface $container;
+
     /**
      * @phpstan-var array<string, class-string<T>>
      */
@@ -44,10 +47,15 @@ abstract class AbstractLocator
      * @phpstan-param array<string, class-string<T>> $services
      */
     public function __construct(
-        protected readonly Collection | DiInterface $container,
+        mixed $container,
         array $services = []
     ) {
-        $this->services = $this->getServices();
+        if (!($container instanceof Collection) && !($container instanceof DiInterface)) {
+            throw new TypeError("The parameter must be an instance of Collection or DiInterface");
+        }
+
+        $this->container = $container;
+        $this->services  = $this->getServices();
 
         foreach ($services as $name => $definition) {
             self::weakCallMethod($this, 'register', [$name, $definition]);

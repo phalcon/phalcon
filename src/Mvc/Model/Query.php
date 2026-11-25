@@ -277,11 +277,11 @@ class Query implements QueryInterface, InjectionAwareInterface
         if (isset($options["enable_implicit_joins"])) {
             $this->enableImplicitJoins = ($options["enable_implicit_joins"] == true);
         } else {
-            /** @var bool $implicitJoins */
-            $implicitJoins             = Settings::get(
-                "orm.enable_implicit_joins"
+            self::weakWrite(
+                $this,
+                "enableImplicitJoins",
+                Settings::get("orm.enable_implicit_joins")
             );
-            $this->enableImplicitJoins = $implicitJoins;
         }
 
         $this->bindParams = [];
