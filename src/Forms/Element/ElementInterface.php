@@ -88,7 +88,7 @@ interface ElementInterface
      *
      * @phpstan-return forms_filters
      */
-    public function getFilters(): array;
+    public function getFilters();
 
     /**
      * Returns the parent form to the element
@@ -178,10 +178,8 @@ interface ElementInterface
 
     /**
      * Sets the element's filters
-     *
-     * @phpstan-param forms_filters|string $filters
      */
-    public function setFilters(array | string $filters): ElementInterface;
+    public function setFilters(mixed $filters): ElementInterface;
 
     /**
      * Sets the parent form to the element

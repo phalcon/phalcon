@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Forms;
 
 use Countable;
+use Error;
 use Iterator;
 use Phalcon\Contracts\Forms\FormsTypes;
 use Phalcon\Contracts\Forms\Schema;
@@ -37,6 +38,8 @@ use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Support\Helper\Str\CamelizeTrait;
 
 use function array_key_exists;
+use function get_debug_type;
+use function is_object;
 use function is_string;
 use function strtolower;
 use function trigger_error;
@@ -200,12 +203,11 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      * Binds data to the entity
      *
      * @phpstan-param forms_data      $data
-     * @phpstan-param object|null     $entity
      * @phpstan-param forms_whitelist $whitelist
      */
     public function bind(
         array $data,
-        ?object $entity = null,
+        mixed $entity = null,
         array $whitelist = []
     ): static {
         if (empty($this->elements)) {
@@ -300,6 +302,22 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
             if (null !== $entity) {
                 /**
+                 * As in cphalcon: a value that is not an object has no setter
+                 * and no property. A property write on it gives an Error,
+                 * unless the strict property check is on
+                 */
+                if (!is_object($entity)) {
+                    if (!Settings::get("form.strict_entity_property_check")) {
+                        throw new Error(
+                            'Attempt to assign property "' . $key . '" on '
+                            . get_debug_type($entity)
+                        );
+                    }
+
+                    continue;
+                }
+
+                /**
                  * Use the setter if any available
                  */
                 /** @var string $camelized */
@@ -364,7 +382,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
      *
      * @phpstan-param array<array-key, string>|string|null $fields
      */
-    public function clear(array | string | null $fields = null): static
+    public function clear(mixed $fields = null): static
     {
         $data = $this->data;
 
@@ -380,7 +398,7 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
                 $data[$element->getName()] = $element->getDefault();
             }
         } else {
-            if (is_string($fields)) {
+            if (!is_array($fields)) {
                 $fields = [$fields];
             }
 
@@ -470,8 +488,10 @@ class Form extends Injectable implements Countable, Iterator, AttributesInterfac
 
     /**
      * Returns the entity related to the model
+     *
+     * @return mixed
      */
-    public function getEntity(): object | null
+    public function getEntity()
     {
         return $this->entity;
     }

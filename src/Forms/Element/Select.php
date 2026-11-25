@@ -104,7 +104,7 @@ class Select extends AbstractElement
      *
      * @phpstan-param forms_select_options|object $options
      */
-    public function setOptions(array | object $options): ElementInterface
+    public function setOptions(mixed $options): ElementInterface
     {
         $this->optionsValues = $options;
 
