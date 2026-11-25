@@ -25,6 +25,8 @@ use Traversable;
 use function array_key_exists;
 use function count;
 use function is_array;
+use function is_int;
+use function is_string;
 
 /**
  * Shared base for the HTTP request bags. A bag is a string- or integer-keyed
@@ -89,7 +91,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an element of the bag, or the default value if it is not set
      */
-    public function get(int | string $key, mixed $defaultValue = null): mixed
+    public function get(mixed $key, mixed $defaultValue = null): mixed
     {
         return $this->items[$this->normalizeKey($key)] ?? $defaultValue;
     }
@@ -101,7 +103,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      * @phpstan-param  http_bag_items $defaultValue
      * @phpstan-return http_bag_items
      */
-    public function getArray(int | string $key, array $defaultValue = []): array
+    public function getArray(mixed $key, array $defaultValue = []): array
     {
         $value = $this->items[$this->normalizeKey($key)] ?? null;
 
@@ -112,7 +114,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      * Returns an element of the bag cast to bool, or the default value if
      * it is not set
      */
-    public function getBool(int | string $key, bool $defaultValue = false): bool
+    public function getBool(mixed $key, bool $defaultValue = false): bool
     {
         $key = $this->normalizeKey($key);
 
@@ -125,7 +127,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      * Returns an element of the bag cast to float, or the default value if
      * it is not set
      */
-    public function getFloat(int | string $key, float $defaultValue = 0.0): float
+    public function getFloat(mixed $key, float $defaultValue = 0.0): float
     {
         $key = $this->normalizeKey($key);
 
@@ -139,7 +141,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      * Returns an element of the bag cast to int, or the default value if
      * it is not set
      */
-    public function getInt(int | string $key, int $defaultValue = 0): int
+    public function getInt(mixed $key, int $defaultValue = 0): int
     {
         $key = $this->normalizeKey($key);
 
@@ -163,7 +165,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
      * Returns an element of the bag cast to string, or the default value if
      * it is not set
      */
-    public function getString(int | string $key, string $defaultValue = ''): string
+    public function getString(mixed $key, string $defaultValue = ''): string
     {
         $key = $this->normalizeKey($key);
 
@@ -176,7 +178,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Checks whether an element exists in the bag
      */
-    public function has(int | string $key): bool
+    public function has(mixed $key): bool
     {
         return array_key_exists($this->normalizeKey($key), $this->items);
     }
@@ -233,7 +235,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Removes an element from the bag
      */
-    public function remove(int | string $key): void
+    public function remove(mixed $key): void
     {
         unset($this->items[$this->normalizeKey($key)]);
     }
@@ -241,7 +243,7 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Sets an element in the bag
      */
-    public function set(int | string $key, mixed $value): void
+    public function set(mixed $key, mixed $value): void
     {
         $this->items[$this->normalizeKey($key)] = $value;
     }
@@ -259,11 +261,19 @@ abstract class AbstractBag implements ArrayAccess, Countable, IteratorAggregate
     }
 
     /**
-     * Normalizes a key for lookups and writes. Identity in the base;
-     * subclasses can override it to change key handling
+     * Normalizes a key for lookups and writes. An int or a string key stays
+     * as it is, another value is cast to string, as in cphalcon; subclasses
+     * can override it to change key handling
      */
-    protected function normalizeKey(int | string $key): int | string
+    protected function normalizeKey(mixed $key): int | string
     {
-        return $key;
+        if (is_int($key) || is_string($key)) {
+            return $key;
+        }
+
+        /** @var scalar|Stringable|null $value */
+        $value = $key;
+
+        return (string) $value;
     }
 }

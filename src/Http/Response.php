@@ -95,8 +95,8 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function __construct(
         string | null $content = null,
-        int | null $code = null,
-        string | null $status = null
+        mixed $code = null,
+        mixed $status = null
     ) {
         // A Phalcon\Http\Response\Headers bag is temporary used to manage
         // the headers before sent them to the client
@@ -107,8 +107,19 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
             $this->setContent($content);
         }
 
+        /**
+         * As in cphalcon: the code is given to setStatusCode() in weak mode,
+         * and a status that is not null is cast to string
+         */
         if (null !== $code) {
-            $this->setStatusCode($code, $status);
+            /** @var scalar|Stringable|null $message */
+            $message = $status;
+
+            self::weakCallMethod(
+                $this,
+                'setStatusCode',
+                [$code, null === $message ? null : (string) $message]
+            );
         }
     }
 
@@ -242,7 +253,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      *```
      */
     public function redirect(
-        string | null $location = null,
+        mixed $location = null,
         bool $externalRedirect = false,
         int $statusCode = 302
     ): ResponseInterface {
@@ -261,7 +272,10 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
              * redirect (CWE-601). Drop such a target and route through the local
              * url service instead.
              */
-            if (preg_match("~^(?:[a-z][a-z0-9+.\\-]*:|//)~i", $location)) {
+            if (
+                is_string($location) &&
+                preg_match("~^(?:[a-z][a-z0-9+.\\-]*:|//)~i", $location)
+            ) {
                 $location = '';
             }
         }
@@ -529,7 +543,7 @@ class Response implements ResponseInterface, InjectionAwareInterface, EventsAwar
      */
     public function setFileToSend(
         string $filePath,
-        string | null $attachmentName = null,
+        mixed $attachmentName = null,
         bool $attachment = true
     ): ResponseInterface {
         $basePathEncoding = 'ASCII';
