@@ -39,11 +39,11 @@ class Route
      */
     public function __construct(
         public string $route,
-        public array | string | null $methods = null,
+        public mixed $methods = null,
         public string | null $name = null,
         public array $paths = [],
         public array $converters = [],
-        public array | string | null $beforeMatch = null
+        public mixed $beforeMatch = null
     ) {
     }
 }

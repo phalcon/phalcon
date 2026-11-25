@@ -98,9 +98,15 @@ class Annotation
      *
      * @phpstan-param int|string $position
      */
-    public function getArgument(int | string $position): mixed
+    public function getArgument(mixed $position): mixed
     {
-        return $this->arguments[$position] ?? null;
+        /**
+         * As the Zephir `fetch`: a position that is not a valid array key
+         * gives the TypeError of isset
+         */
+        return isset($this->arguments[$position])
+            ? $this->arguments[$position]
+            : null;
     }
 
     /**
@@ -225,7 +231,7 @@ class Annotation
      *
      * @phpstan-param int|string $position
      */
-    public function hasArgument(int | string $position): bool
+    public function hasArgument(mixed $position): bool
     {
         return isset($this->arguments[$position]);
     }
