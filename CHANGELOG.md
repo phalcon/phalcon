@@ -2,28 +2,28 @@
 
 All notable changes are documented here. The format is based on [Keep a Changelog][keep_a_changelog] and this project adheres to [Semantic Versioning][semantic_versioning].
 
-## [Unreleased](https://github.com/phalcon/phalcon/releases/tag/vx.x.x) (2026-xx-xx)
+## [6.0.0](https://github.com/phalcon/phalcon/releases/tag/v6.0.0) (2026-11-26)
 
 ### Changed
 
-- `Phalcon\Mvc\Model\Query` parses through `Phalcon\Mvc\Model\Query\Lang`; its protected `$parser` property was removed. [#800](https://github.com/phalcon/phalcon/issues/800)
+- A callback that cannot be called throws `TypeError` instead of a warning and `null`, the same as cphalcon with Zephir 1.9.0. [#17766](https://github.com/phalcon/cphalcon/issues/17766)
+- Faster ACL build in `Phalcon\Acl\Adapter\Memory`. [#17701](https://github.com/phalcon/cphalcon/issues/17701)
+- Faster HTML output of the `Phalcon\Flash` messages with no icon classes. [#17712](https://github.com/phalcon/cphalcon/issues/17712)
+- Faster HTML output of the `Phalcon\Flash` messages. [#17704](https://github.com/phalcon/cphalcon/issues/17704)
+- Faster `Phalcon\Acl\Adapter\Memory::isAllowed()`. [#17711](https://github.com/phalcon/cphalcon/issues/17711)
+- Faster `Phalcon\Cache\Cache`, the `Phalcon\Storage` adapters and `Phalcon\Acl\Adapter\Memory::isAllowed()` when no events manager is set. [#17703](https://github.com/phalcon/cphalcon/issues/17703)
+- Faster `Phalcon\Config\Config::path()`. [#17714](https://github.com/phalcon/cphalcon/issues/17714)
+- Faster `Phalcon\Logger` calls with no excluded adapters. [#17713](https://github.com/phalcon/cphalcon/issues/17713)
+- Faster `Phalcon\Mvc\Micro` requests with the default router service. [#17715](https://github.com/phalcon/cphalcon/issues/17715)
+- Faster base64url decode in the JWT parser and `Phalcon\Encryption\Crypt::decryptBase64()`. [#17705](https://github.com/phalcon/cphalcon/issues/17705)
+- Faster construction of `Phalcon\Config\Config` and its adapters when the config has no type. [#17702](https://github.com/phalcon/cphalcon/issues/17702)
+- Faster construction of the validators in `Phalcon\Filter\Validation`. [#17697](https://github.com/phalcon/cphalcon/issues/17697)
 - Faster item storage, lookup, removal and JSON serialization in `Phalcon\Support\Collection`. [#17683](https://github.com/phalcon/cphalcon/issues/17683)
 - Faster route index build in `Phalcon\Mvc\Router` for routes with no host name. [#17693](https://github.com/phalcon/cphalcon/issues/17693)
 - Faster service registration in `Phalcon\Factory\AbstractFactory` and the factories that extend it. [#17696](https://github.com/phalcon/cphalcon/issues/17696)
-- Faster construction of the validators in `Phalcon\Filter\Validation`. [#17697](https://github.com/phalcon/cphalcon/issues/17697)
-- Faster ACL build in `Phalcon\Acl\Adapter\Memory`. [#17701](https://github.com/phalcon/cphalcon/issues/17701)
-- Faster construction of `Phalcon\Config\Config` and its adapters when the config has no type. [#17702](https://github.com/phalcon/cphalcon/issues/17702)
-- Faster `Phalcon\Cache\Cache`, the `Phalcon\Storage` adapters and `Phalcon\Acl\Adapter\Memory::isAllowed()` when no events manager is set. [#17703](https://github.com/phalcon/cphalcon/issues/17703)
-- Faster HTML output of the `Phalcon\Flash` messages. [#17704](https://github.com/phalcon/cphalcon/issues/17704)
-- Faster base64url decode in the JWT parser and `Phalcon\Encryption\Crypt::decryptBase64()`. [#17705](https://github.com/phalcon/cphalcon/issues/17705)
-- Faster `Phalcon\Acl\Adapter\Memory::isAllowed()`. [#17711](https://github.com/phalcon/cphalcon/issues/17711)
-- Faster HTML output of the `Phalcon\Flash` messages with no icon classes. [#17712](https://github.com/phalcon/cphalcon/issues/17712)
-- Faster `Phalcon\Logger` calls with no excluded adapters. [#17713](https://github.com/phalcon/cphalcon/issues/17713)
-- Faster `Phalcon\Mvc\Micro` requests with the default router service. [#17715](https://github.com/phalcon/cphalcon/issues/17715)
-- Faster `Phalcon\Config\Config::path()`. [#17714](https://github.com/phalcon/cphalcon/issues/17714)
-- `Phalcon\Queue\Consumer\Worker::handleSignal()` now has a second optional parameter, `?array $info`. [#17719](https://github.com/phalcon/cphalcon/issues/17719)
 - `Phalcon\Mvc\Model::serialize()` now stores the snapshot also when it is empty, for a model that keeps snapshots, the same as cphalcon. [#17750](https://github.com/phalcon/cphalcon/issues/17750)
-- A callback that cannot be called throws `TypeError` instead of a warning and `null`, the same as cphalcon with Zephir 1.9.0. [#17766](https://github.com/phalcon/cphalcon/issues/17766)
+- `Phalcon\Mvc\Model\Query` parses through `Phalcon\Mvc\Model\Query\Lang`; its protected `$parser` property was removed. [#800](https://github.com/phalcon/phalcon/issues/800)
+- `Phalcon\Queue\Consumer\Worker::handleSignal()` now has a second optional parameter, `?array $info`. [#17719](https://github.com/phalcon/cphalcon/issues/17719)
 
 ### Added
 
@@ -32,6 +32,9 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 
 ### Fixed
 
+- PHP 8.6 deprecation for session handlers without `create_sid()`: `Phalcon\Session\Adapter\AbstractAdapter` and `Phalcon\Session\Adapter\Noop` now implement `SessionIdInterface` and `create_sid()`. [#17687](https://github.com/phalcon/cphalcon/issues/17687)
+- PHP 8.6 deprecation of `doubleval()`: `Phalcon\Encryption\Security\Uuid\Version1` and `Phalcon\Encryption\Security\Uuid\Version6` now use `floatval()`. [#17687](https://github.com/phalcon/cphalcon/issues/17687)
+- PHP 8.6 deprecation of `spl_object_hash()`: `Phalcon\Dispatcher\AbstractDispatcher` and `Phalcon\Html\Link\AbstractLinkProvider` now use `spl_object_id()`; the keys returned by `getLinks()` are now integers. [#17687](https://github.com/phalcon/cphalcon/issues/17687)
 - `Phalcon\ADR\Router\AttributeFilter::filter()` and `Phalcon\ADR\Router\Router::pathFor()` throwing an `Error` for an Action with a `params()` method that cannot be called; they now throw the `TypeError` of `call_user_func()`, the same as cphalcon. [#815](https://github.com/phalcon/phalcon/issues/815)
 - `Phalcon\ADR\Router\AttributeFilter`, `Phalcon\Auth\Mvc\AuthDispatcherListener`, `Phalcon\Db\Dialect`, `Phalcon\Mvc\Model\Behavior\Timestampable`, `Phalcon\Mvc\Model\Eager\Loader`, `Phalcon\Mvc\Router` and `Phalcon\Mvc\View\Engine\Volt` behaving differently than cphalcon in rare cases, such as a `null` value in an options array. [#821](https://github.com/phalcon/phalcon/issues/821)
 - `Phalcon\ADR`, `Phalcon\Acl\Adapter\Memory`, `Phalcon\Cli\Dispatcher`, `Phalcon\Cli\Router`, `Phalcon\Container`, `Phalcon\Di`, `Phalcon\Dispatcher\AbstractDispatcher`, `Phalcon\Events\Manager`, `Phalcon\Filter`, `Phalcon\Html\TagFactory`, `Phalcon\Mvc\Application`, `Phalcon\Mvc\Micro`, `Phalcon\Mvc\Model::cloneResult()`, `Phalcon\Mvc\Router`, `Phalcon\Support\Collection`, `Phalcon\Support\Helper\Arr\Group`, `Phalcon\Support\HelperFactory` and `Phalcon\Tag\Select` throwing a `TypeError` for a value that cphalcon converts, such as `'42'` for an `int` parameter of a handler, listener, action, callback or service; they now call user code with the PHP weak type rules, the same as cphalcon. [#805](https://github.com/phalcon/phalcon/issues/805)
@@ -48,10 +51,10 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Auth\Manager`, `Phalcon\Cli\Router\Route`, `Phalcon\Di\Injectable`, `Phalcon\Dispatcher\AbstractDispatcher`, `Phalcon\Filter\Validation\AbstractValidator` and its validators, `Phalcon\Filter\Validation\AbstractValidatorComposite`, `Phalcon\Forms\Element\AbstractElement`, `Phalcon\Forms\Form` and `Phalcon\Mvc\Model` giving a fatal error for a subclass that declares a property with no type or with the cphalcon type, such as `public $transaction` in a model. [#840](https://github.com/phalcon/phalcon/issues/840)
 - `Phalcon\Auth` (`Guard\AbstractGuard::hasValidCredentials()`, `Guard\Session::__construct()`, `Guard\UserRemember` and `Exceptions\ConfigRequiresNonEmptyValue::assert()`) throwing a `TypeError` for a parameter value that cphalcon accepts, such as a `null` session guard configuration. [#848](https://github.com/phalcon/phalcon/issues/848)
 - `Phalcon\Cache\CacheFactory`, `Phalcon\Cli\Dispatcher`, `Phalcon\Db\Adapter\Pdo\AbstractPdo`, `Phalcon\Db\Dialect`, `Phalcon\Db\Dialect\Sqlite`, `Phalcon\Db\Result\PdoResult`, `Phalcon\Di\ServiceProviderInterface`, `Phalcon\Http\Request`, `Phalcon\Support\Registry` and `Phalcon\Tag` using parameter names that differ from cphalcon, thus a call with named arguments failed. [#832](https://github.com/phalcon/phalcon/issues/832)
-- `Phalcon\Cli`, `Phalcon\Di`, `Phalcon\Dispatcher`, `Phalcon\Mvc\Micro`, `Phalcon\Mvc\Router`, `Phalcon\Mvc\Url` and `Phalcon\Mvc\View` throwing a `TypeError` for an `int` value where a string is expected, such as `'pattern' => 2024` or a route converter that returns an int, which cphalcon converts. [#885](https://github.com/phalcon/phalcon/issues/885)
 - `Phalcon\Cli\Dispatcher::callActionMethod()`, `Phalcon\Cli\Router::handle()` (converters), `Phalcon\Container\Resolver\Lazy\FunctionCall`, `GetCall`, `NewCall` and `StaticCall`, `Phalcon\DataMapper\Pdo\Connection::__call()`, `Phalcon\Di\Di::get()` (a static closure), `Phalcon\Dispatcher\AbstractDispatcher::callActionMethod()`, `Phalcon\Mvc\Application::handle()` (match callback), `Phalcon\Mvc\Micro::handle()` (handler), `Phalcon\Mvc\Micro\LazyLoader::callMethod()`, `Phalcon\Mvc\Model\Resultset::filter()`, `Phalcon\Mvc\View::getRender()` (config callback) and `Phalcon\Mvc\View\Engine\Volt\Compiler::fireExtensionEvent()` throwing a `TypeError` or an `Error` for a value that cannot be called; they now give a warning and return `null`, the same as cphalcon. [#815](https://github.com/phalcon/phalcon/issues/815)
 - `Phalcon\Cli\Router` and `Phalcon\Mvc\Micro` checking the result of a callback differently than cphalcon. [#820](https://github.com/phalcon/phalcon/issues/820)
 - `Phalcon\Cli\Router`, `Phalcon\Db\Adapter\Pdo\AbstractPdo`, `Phalcon\Db\Column`, `Phalcon\Html\Helper\Doctype` and `Phalcon\Logger\AbstractLogger` missing constants, protected properties or the constructor that cphalcon has. [#833](https://github.com/phalcon/phalcon/issues/833)
+- `Phalcon\Cli`, `Phalcon\Di`, `Phalcon\Dispatcher`, `Phalcon\Mvc\Micro`, `Phalcon\Mvc\Router`, `Phalcon\Mvc\Url` and `Phalcon\Mvc\View` throwing a `TypeError` for an `int` value where a string is expected, such as `'pattern' => 2024` or a route converter that returns an int, which cphalcon converts. [#885](https://github.com/phalcon/phalcon/issues/885)
 - `Phalcon\Container\Definition\Processor\ObjectProcessor::process()` setting a factory closure with no parameters, although the factory is called with the container. [#17777](https://github.com/phalcon/cphalcon/issues/17777)
 - `Phalcon\Container\Resolver\Lazy` (`CallableGet`, `CallableNew`, `Get`, `NewInstance`, `ArrayValues::merge()`) and `Phalcon\Di` (`Di::setAlias()`, `Service::resolve()`, `Service\Builder::build()`) throwing a `TypeError` for a parameter value that cphalcon accepts, such as a `null` service id or alias. [#849](https://github.com/phalcon/phalcon/issues/849)
 - `Phalcon\Container`, `Phalcon\DataMapper\Pdo\ConnectionLocator`, `Phalcon\Db\Dialect`, `Phalcon\Forms\FormsLocator`, `Phalcon\Html\TagFactory`, `Phalcon\Mvc\Model\Manager`, the `Phalcon\Queue` adapters, `Phalcon\Support\Collection` and `Phalcon\Support\Helper\Arr\Group` throwing a `TypeError` for a parameter or return value that cphalcon accepts. [#818](https://github.com/phalcon/phalcon/issues/818)
@@ -59,8 +62,8 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Db\Adapter\AbstractAdapter::update()` and `updateAsDict()` changing every row for an empty where condition (`''`, `[]` or `'0'`), and not throwing `Phalcon\Db\Exceptions\InvalidWhereConditions` for a condition that is not a string or an array. [#831](https://github.com/phalcon/phalcon/issues/831)
 - `Phalcon\Db\Adapter\Pdo\Postgresql::describeColumns()` reporting `mediumblob` columns as `Column::TYPE_TEXT`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Adapter\Pdo\Postgresql::describeReferences()` returning wrong column pairs for composite foreign keys. [#17680](https://github.com/phalcon/cphalcon/issues/17680)
-- `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` reporting blob columns as `Column::TYPE_VARCHAR`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` reporting `tinyint(1)` columns as `Column::TYPE_INTEGER`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
+- `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` reporting blob columns as `Column::TYPE_VARCHAR`. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Adapter\Pdo\Sqlite::describeColumns()` using `Column::TYPE_DECIMAL` as the bind type of `float` columns, which stored their values as blobs. [#17724](https://github.com/phalcon/cphalcon/issues/17724)
 - `Phalcon\Db\Dialect::getSqlExpression()` dropping the table name of an `object` expression (`alias.*` in a PHQL subquery) and giving an `Undefined array key "domain"` warning. [#897](https://github.com/phalcon/phalcon/issues/897)
 - `Phalcon\Db\Dialect::prepareColumnAlias()`, `prepareQualified()` and `prepareTable()` declaring `string` instead of `?string` for the `$alias` and `$domain` parameters, and `getSqlColumn()`, `getSqlTable()` and the `*` and qualified expressions passing `""` instead of `null` for no domain or no alias; a subclass that overrides these methods now has the same signature and gets the same values as in cphalcon. [#821](https://github.com/phalcon/phalcon/issues/821)
@@ -90,8 +93,8 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Mvc\Model\Query` reusing a cached intermediate representation that was built with the other value of the `enable_implicit_joins` option. [#800](https://github.com/phalcon/phalcon/issues/800)
 - `Phalcon\Mvc\Model\Query` throwing `Phalcon\Phql\Exception` instead of `Phalcon\Mvc\Model\Exception` for PHQL errors; PHQL statements now parse exactly as in cphalcon (error messages, string escape sequences, nesting limit, empty statements), with the parser from `phalcon/phql`. [#800](https://github.com/phalcon/phalcon/issues/800)
 - `Phalcon\Mvc\Model\Resultset::delete()` and `Phalcon\Mvc\Model\Resultset::update()` throwing a `TypeError` instead of `Phalcon\Mvc\Model\Exceptions\InvalidReturnedRecord` for a resultset with `HYDRATE_ARRAYS`. [#880](https://github.com/phalcon/phalcon/issues/880)
-- `Phalcon\Mvc\Model\Resultset\Complex` and `Phalcon\Mvc\Model\Resultset\Simple` putting their cache in the serialized data, which failed for a cache that cannot be serialized, such as a Redis connection. A resultset from the cache now has no cache (`getCache()` returns `null`). [#17766](https://github.com/phalcon/cphalcon/issues/17766)
 - `Phalcon\Mvc\Model\Resultset\Complex::serialize()` and `Phalcon\Mvc\Model\Resultset\Simple::serialize()` throwing a `TypeError` when the `serializer` service does not return a string, such as `Phalcon\Storage\Serializer\None`. [#879](https://github.com/phalcon/phalcon/issues/879)
+- `Phalcon\Mvc\Model\Resultset\Complex` and `Phalcon\Mvc\Model\Resultset\Simple` putting their cache in the serialized data, which failed for a cache that cannot be serialized, such as a Redis connection. A resultset from the cache now has no cache (`getCache()` returns `null`). [#17766](https://github.com/phalcon/cphalcon/issues/17766)
 - `Phalcon\Mvc\Model\Resultset\Simple` throwing a `TypeError` with `HYDRATE_ARRAYS` or `HYDRATE_OBJECTS`. [#819](https://github.com/phalcon/phalcon/issues/819)
 - `Phalcon\Mvc\Model` getting the `modelsManager` and `modelsMetadata` services with `get()` instead of `getShared()`, thus a service that is not shared gave a new instance for each call. [#839](https://github.com/phalcon/phalcon/issues/839)
 - `Phalcon\Mvc\Model`, `Phalcon\Mvc\Model\Binder`, `Phalcon\Mvc\Model\Eager\Loader`, `Phalcon\Mvc\Model\Query`, `Phalcon\Mvc\View` and `Phalcon\Mvc\View\Simple` throwing a `TypeError` for a numeric array key where a string is expected, such as an `int` column map value, a numeric relation alias or a numeric PHQL alias, which cphalcon converts. [#899](https://github.com/phalcon/phalcon/issues/899)
@@ -119,9 +122,6 @@ All notable changes are documented here. The format is based on [Keep a Changelo
 - `Phalcon\Tag` and `Phalcon\Tag\Select` throwing a `TypeError` for a parameter value that cphalcon accepts, such as `null` or an `int` for the parameters of a helper, the title, the link text or the `local` flag of `linkTo()`; `checkField()`, `formLegacy()`, `getValue()`, `radioField()` and `textArea()` also give the cphalcon result for some parameter arrays, such as a `textArea()` with only an `id`. [#843](https://github.com/phalcon/phalcon/issues/843)
 - `Phalcon\Translate\Adapter\Csv` throwing a `TypeError` for a blank line in the translation file. [#882](https://github.com/phalcon/phalcon/issues/882)
 - `composer cs-fixer-fix` adding `declare(strict_types=1)` to `Phalcon\Support\Traits\WeakTypesTrait`, which must use the PHP weak type rules. [#875](https://github.com/phalcon/phalcon/issues/875)
-- PHP 8.6 deprecation for session handlers without `create_sid()`: `Phalcon\Session\Adapter\AbstractAdapter` and `Phalcon\Session\Adapter\Noop` now implement `SessionIdInterface` and `create_sid()`. [#17687](https://github.com/phalcon/cphalcon/issues/17687)
-- PHP 8.6 deprecation of `spl_object_hash()`: `Phalcon\Dispatcher\AbstractDispatcher` and `Phalcon\Html\Link\AbstractLinkProvider` now use `spl_object_id()`; the keys returned by `getLinks()` are now integers. [#17687](https://github.com/phalcon/cphalcon/issues/17687)
-- PHP 8.6 deprecation of `doubleval()`: `Phalcon\Encryption\Security\Uuid\Version1` and `Phalcon\Encryption\Security\Uuid\Version6` now use `floatval()`. [#17687](https://github.com/phalcon/cphalcon/issues/17687)
 
 ### Removed
 

@@ -22,8 +22,7 @@ performance, low overhead and a clean, expressive API.
 > This repository is the **pure PHP** implementation of Phalcon (v6). Unlike
 > [cphalcon](https://github.com/phalcon/cphalcon), it is **not** a C extension:
 > there is nothing to compile and no PECL/PIE installation required - just add it
-> to your project with Composer. Phalcon v6 is currently in **alpha**; APIs may
-> change before the stable release.
+> to your project with Composer.
 
 A big thank you to [our Backers](https://opencollective.com/phalcon#backer); you rock!
 
@@ -58,12 +57,6 @@ Install the framework with [Composer](https://getcomposer.org/):
 
 ```bash
 composer require phalcon/phalcon
-```
-
-While v6 is in alpha you may need to allow pre-release versions:
-
-```bash
-composer require phalcon/phalcon:^6.0@alpha
 ```
 
 For detailed instructions see the [installation](https://docs.phalcon.io/6.0/installation/)
