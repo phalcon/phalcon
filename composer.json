@@ -24,7 +24,7 @@
     "friendsofphp/php-cs-fixer": "^3.95",
     "pds/composer-script-names": "^1.0",
     "pds/skeleton": "^1.0",
-    "phalcon/annotations": "1.0.x-dev",
+    "phalcon/annotations": "^1.0",
     "phalcon/quill": "^0.5.0",
     "phalcon/talon": "^1.0.0",
     "phalcon/code-quality": "^1.0",
@@ -74,7 +74,8 @@
     "ext-openssl": "to use Encryption\\Crypt",
     "ext-pcntl": "to use signal-based graceful shutdown in Queue\\Consumer\\Worker",
     "ext-redis": "to use Cache\\Adapter\\Redis, Session\\Adapter\\Redis, Storage\\Adapter\\Redis",
-    "ext-yaml": "to use Config\\Adapter\\Yaml"
+    "ext-yaml": "to use Config\\Adapter\\Yaml",
+    "phalcon/annotations": "to read docblock annotations with Annotations\\Adapter\\*, Mvc\\Router\\Annotations, Mvc\\Model\\MetaData\\Strategy\\Annotations"
   },
   "scripts": {
     "analyze": "vendor/bin/phpstan analyse -c resources/phpstan.neon --memory-limit 1024M",

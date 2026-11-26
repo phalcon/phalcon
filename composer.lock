@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6752d310dd9ca6d6dd1a5a71d31e9496",
+    "content-hash": "32d259c78a54f3b3ca45f1d89b70e3ba",
     "packages": [
         {
             "name": "matthiasmullie/minify",
@@ -1510,7 +1510,7 @@
         },
         {
             "name": "phalcon/annotations",
-            "version": "1.0.x-dev",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phalcon/annotations.git",
@@ -1541,7 +1541,6 @@
                 "ext-apcu": "Required by the Apcu annotations adapter",
                 "phalcon/phalcon": "The Phalcon framework this module integrates with"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1592,7 +1591,7 @@
                 }
             ],
             "time": "2026-11-24T21:04:44+00:00",
-            "published-time": "2026-11-24T21:04:49+00:00"
+            "published-time": "2026-11-26T15:20:01+00:00"
         },
         {
             "name": "phalcon/cli-options-parser",
@@ -6914,9 +6913,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "phalcon/annotations": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
