@@ -19,6 +19,7 @@ namespace Phalcon\Auth\Guard;
 use InvalidArgumentException;
 use Phalcon\Contracts\Auth\AuthTypes;
 use Phalcon\Support\Helper\Json\Decode;
+use TypeError;
 
 /**
  * Value object representing the contents of a remember-me cookie.
@@ -37,11 +38,13 @@ final class UserRemember
      * Accepts either the raw JSON cookie value (string) or the already
      * decoded associative array. Malformed input degrades to an empty
      * payload so callers can read getters without null-guarding.
-     *
-     * @param array<string, mixed>|string $payload
      */
-    public function __construct(array | string $payload)
+    public function __construct(mixed $payload)
     {
+        if (!is_array($payload) && !is_string($payload)) {
+            throw new TypeError("The parameter must be 'array' or 'string'");
+        }
+
         try {
             $data = is_string($payload) ? (new Decode())->__invoke($payload, true) : $payload;
         } catch (InvalidArgumentException) {

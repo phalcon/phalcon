@@ -43,7 +43,7 @@ class ConfigRequiresNonEmptyValue extends Exception
      * @throws self
      */
     public static function assert(
-        ?string $value,
+        mixed $value,
         string $configName,
         string $configKey,
         string $suffix = ''
