@@ -223,17 +223,6 @@ trait TextTrait
         return $exists ? 'IF EXISTS ' : '';
     }
 
-    protected function getExistsSql(
-        string $table,
-        string $viewName,
-        string | null $schemaName
-    ): string {
-        return 'SELECT IF(COUNT(*) > 0, 1, 0) '
-            . 'FROM `INFORMATION_SCHEMA`.' . $this->delimit($table) . ' '
-            . 'WHERE `TABLE_NAME` = ' . $this->delimit($viewName, "'") . ' '
-            . 'AND `TABLE_SCHEMA` = ' . $this->getMysqlSchemaString($schemaName);
-    }
-
     protected function getMysqlSchemaString(string | null $schemaName): string
     {
         return empty($schemaName)
