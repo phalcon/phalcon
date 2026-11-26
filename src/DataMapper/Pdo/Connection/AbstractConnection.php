@@ -29,6 +29,7 @@ use Phalcon\DataMapper\Pdo\Exception\OperationCancelled;
 use Phalcon\DataMapper\Pdo\Exception\UnknownDriverMethod;
 use Phalcon\DataMapper\Pdo\Profiler\ProfilerInterface;
 use Phalcon\Events\Traits\EventsAwareTrait;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use stdClass;
 use Throwable;
 
@@ -41,7 +42,6 @@ use function implode;
 use function is_array;
 use function is_bool;
 use function is_int;
-use function method_exists;
 use function str_contains;
 
 /**
@@ -74,6 +74,7 @@ use function str_contains;
 abstract class AbstractConnection implements ConnectionInterface, EventsAware
 {
     use EventsAwareTrait;
+    use WeakTypesTrait;
 
     /**
      * Whether to transparently reconnect and retry once when a statement fails
@@ -99,16 +100,22 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
      * Proxies to PDO methods created for specific drivers; in particular,
      * `sqlite` and `pgsql`.
      *
+     * @param mixed $name
+     *
      * @phpstan-param datamapper_call_arguments $arguments
      *
      * @return mixed
      * @throws BadMethodCallException
      */
-    public function __call(string $name, array $arguments)
+    public function __call($name, array $arguments)
     {
         $this->connect();
 
-        if (!method_exists($this->pdo, $name)) {
+        /**
+         * As in cphalcon: the name is given to method_exists() in weak mode
+         */
+        if (!self::weakCallArray('method_exists', [$this->pdo, $name])) {
+            /** @var scalar|null $name */
             $className = get_class($this);
             $message   = "Class '" . $className
                        . "' does not have a method '" . $name . "'";
@@ -116,6 +123,7 @@ abstract class AbstractConnection implements ConnectionInterface, EventsAware
             throw new UnknownDriverMethod($message);
         }
 
+        /** @var callable $callable */
         $callable = [$this->pdo, $name];
 
         return call_user_func_array($callable, $arguments);

@@ -263,10 +263,11 @@ class BeanstalkConnection
      *
      * @phpstan-return queue_beanstalk_job|null
      */
-    public function reserve(?int $timeout = null): array | null
+    public function reserve(mixed $timeout = null): array | null
     {
         if ($timeout !== null) {
-            $command = "reserve-with-timeout " . $timeout;
+            /** @var scalar $timeout */
+            $command = "reserve-with-timeout " . (int) $timeout;
         } else {
             $command = "reserve";
         }

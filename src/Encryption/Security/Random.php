@@ -15,6 +15,7 @@ namespace Phalcon\Encryption\Security;
 
 use Exception as BaseException;
 use Phalcon\Encryption\Security\Exceptions\InvalidRandomInput;
+use Phalcon\Support\Traits\WeakTypesTrait;
 use Phalcon\Traits\Php\Base64Trait;
 
 /**
@@ -91,6 +92,7 @@ use Phalcon\Traits\Php\Base64Trait;
 class Random
 {
     use Base64Trait;
+    use WeakTypesTrait;
 
     /**
      * Generates a random base58 string
@@ -321,11 +323,18 @@ class Random
      *
      * @throws BaseException If secure random number generator is not available or unexpected partial read
      */
-    protected function base(string $alphabet, int $base, int $number = 16): string
+    protected function base(string $alphabet, int $base, mixed $number = 16): string
     {
-        $byteString = '';
+        /**
+         * As in cphalcon: the number is given to bytes() in weak mode. A null
+         * number is 0 (cphalcon also gives a deprecation for it)
+         *
+         * @var string $randomBytes
+         */
+        $randomBytes = self::weakCallMethod($this, 'bytes', [$number ?? 0]);
+        $byteString  = '';
         /** @phpstan-var array<array-key, int> $bytes */
-        $bytes = unpack('C*', $this->bytes($number));
+        $bytes = unpack('C*', $randomBytes);
         foreach ($bytes as $index) {
             $index = $index % 64;
 

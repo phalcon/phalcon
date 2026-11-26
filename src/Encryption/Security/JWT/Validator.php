@@ -142,7 +142,7 @@ class Validator
     /**
      * Validate a claim
      */
-    public function validateClaim(string $name, bool | int | string $value): static
+    public function validateClaim(string $name, mixed $value): static
     {
         $claimValue = $this->token->getClaims()->get($name);
 
