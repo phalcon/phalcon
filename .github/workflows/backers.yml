@@ -11,10 +11,11 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: { }
 
 jobs:
   backers:
+    permissions:
+      contents: write
+      pull-requests: write
     uses: phalcon/assets/.github/workflows/backers.yml@fded4f96a920b87c435d1bddc0510c0b52879a77 # master
