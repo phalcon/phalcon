@@ -38,7 +38,7 @@ use Phalcon\Contracts\Container\Service\Collection;
 class CallableNew extends Lazy
 {
     public function __construct(
-        protected Lazy | string $id
+        protected mixed $id
     ) {
     }
 

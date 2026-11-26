@@ -65,7 +65,7 @@ class Builder
     public function build(
         DiInterface $container,
         array $definition,
-        array | null $parameters = null
+        mixed $parameters = null
     ) {
         /**
          * The class name is required

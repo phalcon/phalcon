@@ -664,12 +664,16 @@ class Di extends stdClass implements DiInterface
      * @return $this
      * @throws DiException
      */
-    public function setAlias(string $name, array | string $aliases): self
+    public function setAlias(string $name, mixed $aliases): self
     {
         if (true !== $this->has($name)) {
             throw Exception::serviceNotFound($name);
         }
 
+        /**
+         * As in cphalcon: the aliases are stored when all of them are valid
+         */
+        $currentAliases = $this->aliases;
         if (true !== is_array($aliases)) {
             $aliases = [$aliases];
         }
@@ -679,12 +683,14 @@ class Di extends stdClass implements DiInterface
                 throw new AliasNameMustBeString();
             }
 
-            if (true === isset($this->aliases[$alias]) || true === $this->has($alias)) {
+            if (true === isset($currentAliases[$alias]) || true === $this->has($alias)) {
                 throw new AliasAlreadyInUse($alias);
             }
 
-            $this->aliases[$alias] = $name;
+            $currentAliases[$alias] = $name;
         }
+
+        $this->aliases = $currentAliases;
 
         return $this;
     }
