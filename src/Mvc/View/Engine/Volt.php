@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Phalcon\Mvc\View\Engine;
 
 use Countable;
+use Error;
 use Iterator;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\Exception as EventsException;
@@ -273,6 +274,14 @@ class Volt extends AbstractEngine implements EventsAwareInterface
          * back to it, so the next templates can use them.
          */
         $include = function (string $__path, mixed $__params): void {
+            /**
+             * As in cphalcon: a parameter named "this" cannot become a
+             * variable of the template
+             */
+            if (is_array($__params) && array_key_exists("this", $__params)) {
+                throw new Error('Cannot re-assign $this');
+            }
+
             extract(
                 is_array($__params) ? $__params + $this->getScope() : $this->getScope(),
                 EXTR_SKIP

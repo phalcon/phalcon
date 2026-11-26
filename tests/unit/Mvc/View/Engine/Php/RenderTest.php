@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Phalcon\Tests\Unit\Mvc\View\Engine\Php;
 
+use Error;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Simple;
 use Phalcon\Talon\PHPUnit\AbstractUnitTestCase;
@@ -68,5 +69,33 @@ class RenderTest extends AbstractUnitTestCase
         ob_end_clean();
 
         $this->assertSame('We are here', $view->getContent());
+    }
+
+    /**
+     * A parameter named "this" throws, as in cphalcon.
+     *
+     * @issue  https://github.com/phalcon/phalcon/issues/921
+     * @author Phalcon Team <team@phalcon.io>
+     * @since  2026-11-26
+     */
+    public function testMvcViewEnginePhpRenderThisParameter(): void
+    {
+        $this->newDi();
+        $this->setDiService('viewSimple');
+
+        /** @var Simple $view */
+        $view   = $this->container->get('viewSimple');
+        $engine = new PhpEngine($view);
+        $path   = $view->getViewsDir() . 'simple/index.phtml';
+
+        $this->expectException(Error::class);
+        $this->expectExceptionMessage('Cannot re-assign $this');
+
+        ob_start();
+        try {
+            $engine->render($path, ['this' => 'x'], true);
+        } finally {
+            ob_end_clean();
+        }
     }
 }
