@@ -197,7 +197,7 @@ abstract class AbstractElement implements ElementInterface
      *
      * @phpstan-return forms_filters
      */
-    public function getFilters(): array
+    public function getFilters()
     {
         return $this->filters;
     }
@@ -395,11 +395,9 @@ abstract class AbstractElement implements ElementInterface
 
     /**
      * Sets the element filters
-     *
-     * @phpstan-param forms_filters|string $filters
      */
     public function setFilters(
-        array | string $filters
+        mixed $filters
     ): ElementInterface {
         if (!is_string($filters) && !is_array($filters)) {
             throw new InvalidFilterType();
@@ -409,6 +407,7 @@ abstract class AbstractElement implements ElementInterface
             $filters = [$filters];
         }
 
+        /** @var forms_filters $filters */
         $this->filters = $filters;
 
         return $this;

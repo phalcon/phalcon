@@ -39,7 +39,7 @@ class Manager
     /**
      * Creates a form registering it in the forms manager
      */
-    public function create(string $name, object | null $entity = null): Form
+    public function create(string $name, mixed $entity = null): Form
     {
         $form               = new Form($entity);
         $this->forms[$name] = $form;
@@ -84,7 +84,7 @@ class Manager
     public function loadForm(
         string $name,
         Schema $schema,
-        object | null $entity = null
+        mixed $entity = null
     ): Form {
         $locator            = $this->locator;
         $form               = (new Form($entity))->load($schema, $locator);
@@ -92,7 +92,7 @@ class Manager
 
         $this->locator->set(
             $name,
-            fn (object | null $e) => (new Form($e))->load($schema, $locator)
+            fn (mixed $e) => (new Form($e))->load($schema, $locator)
         );
 
         return $form;
