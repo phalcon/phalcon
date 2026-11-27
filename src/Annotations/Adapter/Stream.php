@@ -28,7 +28,9 @@ use function serialize;
 use function set_error_handler;
 use function sha1;
 use function str_contains;
+use function str_starts_with;
 use function strlen;
+use function substr;
 use function unserialize;
 
 use const E_WARNING;
@@ -53,6 +55,14 @@ class Stream extends AbstractAdapter
     use FilePathTrait;
     use FileTrait;
     use WeakTypesTrait;
+
+    /**
+     * The start of each cache file. PHP stops at __halt_compiler(), so a web
+     * request to a cache file shows nothing.
+     *
+     * @var string
+     */
+    public const FILE_HEADER = "<?php __halt_compiler();";
 
     protected string $annotationsDir = "./";
 
@@ -92,6 +102,13 @@ class Stream extends AbstractAdapter
 
         if (empty($contents)) {
             return false;
+        }
+
+        /**
+         * A file with no header, from an earlier version, is read as it is
+         */
+        if (str_starts_with($contents, self::FILE_HEADER)) {
+            $contents = substr($contents, strlen(self::FILE_HEADER));
         }
 
         $warning = false;
@@ -147,7 +164,7 @@ class Stream extends AbstractAdapter
          * Paths must be normalized before be used as keys
          */
         $path = $this->getFilePath($key);
-        $code = serialize($data);
+        $code = self::FILE_HEADER . serialize($data);
 
         if (false === $this->phpFilePutContents($path, $code)) {
             throw new AnnotationsDirectoryNotWritable();
