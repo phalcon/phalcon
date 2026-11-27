@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Phalcon\Mvc\View\Engine;
 
+use Error;
 use Phalcon\Support\Traits\WeakTypesTrait;
 
+use function array_key_exists;
 use function extract;
 use function get_defined_vars;
 use function is_array;
@@ -48,6 +50,14 @@ class Php extends AbstractEngine
          * it, so the next templates can use them.
          */
         $include = function (string $__path, mixed $__params): void {
+            /**
+             * As in cphalcon: a parameter named "this" cannot become a
+             * variable of the template
+             */
+            if (is_array($__params) && array_key_exists("this", $__params)) {
+                throw new Error('Cannot re-assign $this');
+            }
+
             extract(
                 is_array($__params) ? $__params + $this->getScope() : $this->getScope(),
                 EXTR_SKIP
