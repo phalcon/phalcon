@@ -496,9 +496,14 @@ class Sqlite extends PdoAdapter
             Enum::FETCH_NUM
         );
 
-        foreach ($records as $number => $reference) {
+        /**
+         * PRAGMA foreign_key_list gives one row for each column of a key. The
+         * rows of one key have the same id (column 0), in the order of the
+         * key columns (column 1).
+         */
+        foreach ($records as $reference) {
             /** @var db_describe_row $reference */
-            $constraintName = "foreign_key_" . $number;
+            $constraintName = "foreign_key_" . $reference[0];
 
             $referencedSchema  = $references[$constraintName]["referencedSchema"] ?? null;
             $referencedTable   = $references[$constraintName]["referencedTable"] ?? $reference[2];
