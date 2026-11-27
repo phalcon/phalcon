@@ -490,8 +490,9 @@ class Sqlite extends PdoAdapter
         string | null $schema = null
     ): array {
         /** @var array<string, db_reference_build> $references */
-        $references = [];
-        $records    = $this->fetchAll(
+        $references  = [];
+        $primaryKeys = [];
+        $records     = $this->fetchAll(
             $this->dialect->describeReferences($table, $schema),
             Enum::FETCH_NUM
         );
@@ -510,8 +511,39 @@ class Sqlite extends PdoAdapter
             $columns           = $references[$constraintName]["columns"] ?? [];
             $referencedColumns = $references[$constraintName]["referencedColumns"] ?? [];
 
+            $referencedColumn = $reference[4];
+
+            /**
+             * A key with no referenced columns references the primary key of
+             * the referenced table, and its rows have null in column 4. The
+             * primary key columns come in the order of pk (column 5 of
+             * PRAGMA table_xinfo), and match the key columns by position.
+             */
+            if (null === $referencedColumn) {
+                if (!isset($primaryKeys[$referencedTable])) {
+                    $primaryKey = [];
+                    $rows       = $this->fetchAll(
+                        $this->dialect->describeColumns((string) $referencedTable),
+                        Enum::FETCH_NUM
+                    );
+
+                    foreach ($rows as $column) {
+                        /** @var db_describe_row $column */
+                        $position = (int) $column[5];
+
+                        if ($position > 0) {
+                            $primaryKey[$position - 1] = $column[1];
+                        }
+                    }
+
+                    $primaryKeys[$referencedTable] = $primaryKey;
+                }
+
+                $referencedColumn = $primaryKeys[$referencedTable][(int) $reference[1]] ?? null;
+            }
+
             $columns[]           = $reference[3];
-            $referencedColumns[] = $reference[4];
+            $referencedColumns[] = $referencedColumn;
 
             $references[$constraintName] = [
                 "referencedSchema"  => $referencedSchema,
