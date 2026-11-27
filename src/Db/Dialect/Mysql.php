@@ -875,9 +875,13 @@ class Mysql extends Dialect
         string $tableName,
         string $schemaName = ''
     ): string {
-        $schema = empty($schemaName) ? '' : $this->delimit($schemaName) . '.';
+        /**
+         * Double the backtick in the names, so that a name cannot end the
+         * identifier
+         */
+        $schema = empty($schemaName) ? '' : $this->delimit(str_replace('`', '``', $schemaName)) . '.';
 
-        return "TRUNCATE TABLE " . $schema . $this->delimit($tableName);
+        return "TRUNCATE TABLE " . $schema . $this->delimit(str_replace('`', '``', $tableName));
     }
 
     /**

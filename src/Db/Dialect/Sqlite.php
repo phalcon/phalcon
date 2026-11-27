@@ -35,6 +35,7 @@ use Phalcon\Db\ReferenceInterface;
 use Phalcon\Support\Traits\WeakTypesTrait;
 
 use function is_array;
+use function str_replace;
 use function strtoupper;
 use function substr;
 
@@ -827,12 +828,16 @@ class Sqlite extends Dialect
         string $tableName,
         string | null $schemaName = ''
     ): string {
+        /**
+         * Double the double quote in the names, so that a name cannot end
+         * the identifier
+         */
         $schema = "";
         if (!empty($schemaName)) {
-            $schema = "\"" . $schemaName . "\".";
+            $schema = "\"" . str_replace("\"", "\"\"", $schemaName) . "\".";
         }
 
-        return "DELETE FROM " . $schema . "\"" . $tableName . "\"";
+        return "DELETE FROM " . $schema . "\"" . str_replace("\"", "\"\"", $tableName) . "\"";
     }
 
     /**
