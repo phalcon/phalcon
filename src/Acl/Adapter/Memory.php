@@ -41,12 +41,15 @@ use ReflectionNamedType;
 
 use function array_keys;
 use function call_user_func;
+use function class_exists;
 use function get_class;
 use function in_array;
+use function interface_exists;
 use function is_array;
 use function is_callable;
 use function is_object;
 use function is_string;
+use function str_contains;
 use function trigger_error;
 
 use const E_USER_WARNING;
@@ -245,6 +248,14 @@ class Memory extends AbstractAdapter
         }
 
         $componentName = $componentObject->getName();
+
+        /**
+         * A custom ComponentInterface can return any name. The "!" separates
+         * the parts of the access keys, as in the Component class.
+         */
+        if (str_contains($componentName, '!')) {
+            throw new ForbiddenDelimiter('component');
+        }
 
         if (!isset($this->componentsNames[$componentName])) {
             $this->components[$componentName]      = $componentObject;
@@ -446,6 +457,15 @@ class Memory extends AbstractAdapter
         }
 
         $roleName = $roleObject->getName();
+
+        /**
+         * A custom RoleInterface can return any name. The "!" separates the
+         * parts of the access keys, as in the Role class.
+         */
+        if (str_contains($roleName, '!')) {
+            throw new ForbiddenDelimiter('role');
+        }
+
         if (isset($this->roles[$roleName])) {
             return false;
         }
@@ -707,7 +727,12 @@ class Memory extends AbstractAdapter
          * Check if the role exists
          */
         if (!isset($this->roles[$roleName])) {
-            return $this->defaultAccess == Enum::ALLOW;
+            return $this->reportAccess(
+                $roleName,
+                $componentName,
+                $access,
+                $this->defaultAccess == Enum::ALLOW
+            );
         }
 
         /**
@@ -754,36 +779,17 @@ class Memory extends AbstractAdapter
                     $access,
                 ]
             );
+        } elseif (null !== $funcAccess) {
+            /**
+             * The rule has a callback that cannot be called. Deny the access,
+             * so that the rule does not grant it without its condition.
+             */
+            $allowed = false;
         } else {
             $allowed = $haveAccess == Enum::ALLOW;
         }
 
-        /**
-         * Report the final decision - after the default action and the rule
-         * callback are applied - so listeners see the same result as the
-         * caller.
-         */
-        $this->accessGranted = $allowed ? Enum::ALLOW : Enum::DENY;
-
-        /**
-         * Fire the event only when an events manager is set. With no events
-         * manager, fireManagerEvent() does nothing. The beforeCheckAccess
-         * call above has no such check, because an override of
-         * fireManagerEvent() can deny access there.
-         */
-        if (null !== $this->eventsManager) {
-            $this->fireManagerEvent(
-                'acl:afterCheckAccess',
-                [
-                    'role'      => $roleName,
-                    'component' => $componentName,
-                    'access'    => $access,
-                    'granted'   => $this->accessGranted,
-                ]
-            );
-        }
-
-        return $allowed;
+        return $this->reportAccess($roleName, $componentName, $access, $allowed);
     }
 
     /**
@@ -1055,10 +1061,15 @@ class Memory extends AbstractAdapter
             $reflectionType   = $reflectionParameter->getType();
             $parameterToCheck = $reflectionParameter->getName();
 
+            /**
+             * A type that is not a class or an interface that exists is
+             * handled as a parameter with no class.
+             */
             if (
                 null !== $reflectionType
                 && $reflectionType instanceof ReflectionNamedType
                 && !$reflectionType->isBuiltin()
+                && (class_exists($reflectionType->getName()) || interface_exists($reflectionType->getName()))
             ) {
                 /** @var class-string $className */
                 $className       = $reflectionType->getName();
@@ -1170,6 +1181,43 @@ class Memory extends AbstractAdapter
             "defined function when checking if '" . $roleName . "' can '" .
             $access . "' for '" . $componentName . "'."
         );
+    }
+
+    /**
+     * Keeps the final decision - after the default action and the rule
+     * callback are applied - and reports it to the listeners, so that they
+     * see the same result as the caller.
+     *
+     * @phpstan-param acl_role_name      $roleName
+     * @phpstan-param acl_component_name $componentName
+     */
+    private function reportAccess(
+        mixed $roleName,
+        mixed $componentName,
+        string $access,
+        bool $allowed
+    ): bool {
+        $this->accessGranted = $allowed ? Enum::ALLOW : Enum::DENY;
+
+        /**
+         * Fire the event only when an events manager is set. With no events
+         * manager, fireManagerEvent() does nothing. The beforeCheckAccess
+         * call in isAllowed() has no such check, because an override of
+         * fireManagerEvent() can deny access there.
+         */
+        if (null !== $this->eventsManager) {
+            $this->fireManagerEvent(
+                'acl:afterCheckAccess',
+                [
+                    'role'      => $roleName,
+                    'component' => $componentName,
+                    'access'    => $access,
+                    'granted'   => $this->accessGranted,
+                ]
+            );
+        }
+
+        return $allowed;
     }
 
     /**

@@ -25,8 +25,11 @@ use Throwable;
 
 use function array_keys;
 use function get_object_vars;
+use function gettype;
 use function is_array;
+use function is_int;
 use function is_object;
+use function is_string;
 
 /**
  * ACL adapter that persists its policy to any Phalcon\Storage backend
@@ -84,8 +87,17 @@ class Storage extends Memory implements Persistable
             return false;
         }
 
-        /** @var int|string $version */
         $version = $data['version'];
+
+        /**
+         * Only an integer or a string can go in the message below
+         */
+        if (!is_int($version) && !is_string($version)) {
+            throw new InvalidSnapshot(
+                "Incompatible ACL snapshot version of type '" . gettype($version)
+                . "'; expected '" . self::SNAPSHOT_VERSION . "'"
+            );
+        }
 
         if ($version != self::SNAPSHOT_VERSION) {
             throw new InvalidSnapshot(
