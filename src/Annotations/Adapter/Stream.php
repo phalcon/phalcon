@@ -28,6 +28,7 @@ use function serialize;
 use function set_error_handler;
 use function sha1;
 use function str_contains;
+use function strlen;
 use function unserialize;
 
 use const E_WARNING;
@@ -156,13 +157,15 @@ class Stream extends AbstractAdapter
     /**
      * Builds the cache file path. Namespace separators become "_", so a
      * name that itself contains "_" gets a hash suffix; otherwise "A\\B"
-     * and "A_B" would share one file.
+     * and "A_B" would share one file. The name also stops at a NUL byte,
+     * which is in the name of each anonymous class, so a shorter name gets
+     * the hash suffix too.
      */
     private function getFilePath(string $key): string
     {
         $name = $this->prepareVirtualPath($key);
 
-        if (str_contains($key, "_")) {
+        if (str_contains($key, "_") || strlen($name) !== strlen($key)) {
             $name = $name . "_" . sha1($key);
         }
 
