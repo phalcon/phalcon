@@ -80,6 +80,7 @@ class Collection implements
 
     /** @use GetSetHasTrait<T> */
     use GetSetHasTrait;
+
     use WeakTypesTrait;
 
     /**

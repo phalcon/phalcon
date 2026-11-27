@@ -115,13 +115,11 @@ class Simple extends Resultset
      * Returns current row in the resultset. With the hydration mode arrays or
      * objects, the row is an array or a stdClass.
      *
-     * @return ModelInterface|Row|array|stdClass|null
-     *
      * @phpstan-return ModelInterface|Row|array<array-key, mixed>|stdClass|null
      */
-    final public function current(): ModelInterface | Row | array | stdClass | null
+    final public function current(): array | ModelInterface | Row | stdClass | null
     {
-        /** @var false|ModelInterface|Row|array<array-key, mixed>|stdClass|null $activeRow */
+        /** @var array<array-key, mixed>|false|ModelInterface|Row|stdClass|null $activeRow */
         $activeRow = $this->activeRow;
 
         if ($activeRow !== null) {
@@ -209,7 +207,7 @@ class Simple extends Resultset
 
         $this->activeRow = $activeRow;
 
-        /** @var ModelInterface|Row|array<array-key, mixed>|stdClass|null */
+        /** @var array<array-key, mixed>|ModelInterface|Row|stdClass|null */
         return $activeRow;
     }
 

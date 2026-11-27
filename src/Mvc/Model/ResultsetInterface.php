@@ -69,7 +69,7 @@ interface ResultsetInterface
      *
      * @phpstan-return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|array<array-key, mixed>|\stdClass|null
      */
-    public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | array | \stdClass | null;
+    public function getLast(): array | \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | \stdClass | null;
 
     /**
      * Returns the error messages produced by a batch operation

@@ -418,7 +418,7 @@ abstract class Resultset implements
      * With the hydration mode arrays or objects, the row is an array or a
      * stdClass.
      *
-     * @return ModelInterface|Row|array|\stdClass|null
+     * @return array|ModelInterface|Row|\stdClass|null
      *
      * @phpstan-return ModelInterface|Row|array<array-key, mixed>|\stdClass|null
      */
@@ -434,7 +434,7 @@ abstract class Resultset implements
             return null;
         }
 
-        /** @var ModelInterface|Row|array<array-key, mixed>|\stdClass|null */
+        /** @var array<array-key, mixed>|ModelInterface|Row|\stdClass|null */
         return $this->current();
     }
 
@@ -452,7 +452,7 @@ abstract class Resultset implements
      *
      * @phpstan-return \Phalcon\Mvc\Model\Row|\Phalcon\Mvc\ModelInterface|array<array-key, mixed>|\stdClass|null
      */
-    public function getLast(): \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | array | \stdClass | null
+    public function getLast(): array | \Phalcon\Mvc\Model\Row | \Phalcon\Mvc\ModelInterface | \stdClass | null
     {
         $count = $this->count();
 
@@ -462,7 +462,7 @@ abstract class Resultset implements
 
         $this->seek($count - 1);
 
-        /** @var ModelInterface|Row|array<array-key, mixed>|\stdClass|null */
+        /** @var array<array-key, mixed>|ModelInterface|Row|\stdClass|null */
         return $this->current();
     }
 
